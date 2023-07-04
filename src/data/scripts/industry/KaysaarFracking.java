@@ -1,0 +1,82 @@
+package data.scripts.industry;
+
+import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.impl.campaign.ids.Conditions;
+import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.api.util.Pair;
+import data.Ids.AodCommodities;
+import data.plugins.AoDUtilis;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class KaysaarFracking extends BaseIndustry {
+
+    @Override
+    public void apply() {
+
+        super.apply(true);
+        int size = market.getSize();
+        if(this.special!=null){
+            Misc.getStorageCargo(this.getMarket()).addSpecial(this.special, 1);
+            this.special=null;
+        }
+        demand(Commodities.HEAVY_MACHINERY, size - 2);
+        demand(Commodities.DRUGS,  size - 2);
+        demand(AodCommodities.WATER,3);
+        if(AoDUtilis.getOrganicsAmount(market)>=-1){
+            supply(Commodities.ORGANICS,AoDUtilis.getOrganicsAmount(market)+(market.getSize()+2));
+        }
+        if(AoDUtilis.getNormalOreAmount(market)>=-1){
+            supply(Commodities.ORE,AoDUtilis.getNormalOreAmount(market)+(market.getSize()+2));
+        }
+        if(AoDUtilis.getRareOreAmount(market)>=-1){
+            supply(Commodities.RARE_ORE,AoDUtilis.getRareOreAmount(market)+(market.getSize()+2));
+        }
+        if(AoDUtilis.getVolatilesAmount(market)>=-1){
+            supply(Commodities.VOLATILES,AoDUtilis.getVolatilesAmount(market)+(market.getSize()+2));
+        }
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.DRUGS, Commodities.HEAVY_MACHINERY);
+        int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
+        if (deficit.two > maxDeficit) deficit.two = maxDeficit;
+        applyDeficitToProduction(2, deficit,
+                Commodities.ORE,Commodities.ORGANICS,AodCommodities.WATER,Commodities.RARE_ORE);
+        if (!isFunctional()) {
+            supply.clear();
+            unapply();
+        }
+    }
+
+    @Override
+    public void unapply() {
+        super.unapply();
+
+    }
+
+    @Override
+    protected boolean canImproveToIncreaseProduction() {
+        return true;
+    }
+
+    @Override
+    public boolean isAvailableToBuild() {
+            return  (AoDUtilis.getOrganicsAmount(market)>=-1 || AoDUtilis.getNormalOreAmount(market) >=-1 || AoDUtilis.getRareOreAmount(market) >= -1 ||AoDUtilis.getVolatilesAmount(market)>=-1);
+
+    }
+
+    @Override
+    public String getUnavailableReason() {
+        return "There is no ore present on this planet";
+
+    }
+
+    @Override
+    public boolean showWhenUnavailable() {
+        Map<String,Boolean> researchSaved = (HashMap<String, Boolean>) Global.getSector().getPersistentData().get("researchsaved");
+        return researchSaved != null ?  researchSaved.get(this.getId()) :(AoDUtilis.getOrganicsAmount(market)>=-1 || AoDUtilis.getNormalOreAmount(market) >=-1 || AoDUtilis.getRareOreAmount(market) >= -1);
+    }
+
+
+}

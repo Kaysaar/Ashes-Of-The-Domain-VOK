@@ -1,0 +1,33 @@
+{
+	
+	"parked_cryosleeper":{
+		"defaultName":"Domain-era Cryosleeper", 
+		"nameInText":"Domain-era cryosleeper",
+		"shortName":"cryosleeper",
+		"aOrAn":"a",
+		"isOrAre":"is",
+		"defaultRadius":96, 
+		"customDescriptionId":"parked_cryosleeper",
+		"interactionImage":"graphics/illustrations/cryosleeper_interior.jpg",
+		"icon":"graphics/icons/cryosleeper.png",
+		"iconWidth":32,
+		"iconHeight":32,
+		"sprite":"graphics/stations/cryosleeper.png",
+		"spriteWidth":108,
+		"spriteHeight":108,
+		"renderShadow":true,
+		"useLightColor":true,
+		"showInCampaign":true,
+		"showIconOnMap":true,
+		"showNameOnMap":false,
+		"scaleNameWithZoom":false,
+		"scaleIconWithZoom":true,
+		"tags":["has_interaction_dialog", "salvageable", "neutrino_high", "parked_cryosleeper"],
+		"layers":[STATIONS],
+		"renderCircleIndicator":true,
+		"renderCircleIndicatorSelectionFlash":true,
+		"pluginClass":"com.fs.starfarer.api.impl.campaign.CryosleeperEntityPlugin",
+	}
+}
+
+

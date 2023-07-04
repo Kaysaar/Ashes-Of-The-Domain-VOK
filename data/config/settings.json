@@ -1,0 +1,11 @@
+{
+	"graphics":{
+		"misc":{
+			"AotD_rings":"graphics/planets/AotD_rings.png"
+		},
+		"characters": {
+			"sophia":"graphics/portraits/characters/sophia.png",
+		}
+	}
+}
+

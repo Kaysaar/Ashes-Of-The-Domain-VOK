@@ -1,0 +1,3 @@
+command,class,tags,syntax,help
+TestRing,data.console.TestRing,"campaign, testring",testring [one] [two] [three] [four] [five] [six],PLACEHOLDER
+FinishResearch,data.console.FinishResearch,"campaign, aotd",finish_research (no arguments),PLACEHOLDER

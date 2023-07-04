@@ -1,0 +1,45 @@
+{
+  "hullName": "Cryosleeper",
+  "hullId": "ca_cryosleeper",
+  "hullSize": "CAPITAL_SHIP",
+  "spriteName": "graphics/ships/CA_cryosleeper.png",
+  "style": "MIDLINE",
+  "height": 220,
+  "width": 90,
+  "center": [45, 110],
+  "collisionRadius": 136,
+  "shieldCenter": [0, 0],
+  "shieldRadius": 117,
+  "viewOffset": 0,
+  "weaponSlots": [],
+  "engineSlots": [
+    {
+      "location": [-102, 11.5],
+      "length": 30,
+      "width": 10,
+      "angle": 180,
+      "contrailSize": 30,
+      "style": "LOW_TECH"
+    },
+    {
+      "location": [-102, -11.5],
+      "length": 30,
+      "width": 10,
+      "angle": -180,
+      "contrailSize": 30,
+      "style": "LOW_TECH"
+    }
+  ],
+  "bounds": [
+    -98.5, -18.5,
+    -74, -20,
+    -69, -38,
+    72.5, -37.5,
+    99, -17.5,
+    99, 17.5,
+    72.5, 37.5,
+    -69, 38,
+    -74, 20,
+    -98.5, 18.5
+  ]
+}
