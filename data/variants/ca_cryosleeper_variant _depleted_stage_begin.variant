@@ -1,0 +1,14 @@
+{
+  "variantId": "ca_cryosleeper_variant_depleted_stage_begin",
+  "hullId": "ca_cryosleeper",
+  "displayName": "Population",
+  "goalVariant": false,
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [],
+  "weaponGroups": [],
+  "modules": [],
+  "wings": []
+}

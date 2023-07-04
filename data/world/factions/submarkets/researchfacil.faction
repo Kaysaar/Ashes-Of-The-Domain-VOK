@@ -1,0 +1,35 @@
+{
+	id:"researchfacil",
+    "color":[133,171,195,255],
+	"displayName":"rssa",
+	"displayNameWithArticle":"rssa",
+	"displayNameLong":"rssa",
+	"displayNameLongWithArticle":"rssa",
+	"entityNamePrefix":"rssa",
+	"personNamePrefix":"ddbc",
+	"personNamePrefixAOrAn":"a",
+	"displayNameIsOrAre":"are",
+	"showInIntelTab":false,
+	"logo":"graphics/factions/neutral.png",
+	"crest":"graphics/factions/crest_neutral.png",
+	"shipNamePrefix":"ddbc",
+	"shipNameSources":{
+		"GENERAL":1,
+	},
+	"description":"No description yet.",
+	"names":{
+		"modern":1,
+	},
+	"portraits":{
+		"standard_male":[
+			"graphics/portraits/portrait_hegemony02.png",
+		],
+		"standard_female":[
+			"graphics/portraits/portrait_hegemony03.png",
+		],
+	},
+	"custom":{
+		"offersCommissions":false,
+		"engagesInHostilities":false,
+	},
+},	

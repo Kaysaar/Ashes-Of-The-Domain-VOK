@@ -1,0 +1,37 @@
+id,trigger,conditions,script,text,options,notes
+#RULESET_NAME aotd,,,,,,
+sophiaEncounters,DialogOptionSelected,"$faction.id != pirates
+$faction.id != luddic_path
+$option == marketVisitBar
+$global.aotd_sophia == false
+$global.aotd_can_scientist == true","FireBest BarShuttleDownPrintDesc
+BarCMD playAmbience
+AddText ""You make your way inside a bar when suddenly you are approached by a woman with white hair. First thing that catches your attention is a golden mark on her face and a uniform typical for a researcher. As you consider what to say, your thoughts are interrupted by her gentle voice asking you for a drink and 5 minutes of your time""",,"aotdSophiaTalk:Follow
+aotdSophiaDontTalk:Don't follow",
+aotdSophiaTalk,DialogOptionSelected,$option == aotdSophiaTalk,"SaveCurrentVisual
+BeginConversation sophia ",Both of you sit in the bar ordering a small glass of fine booze. After a moment you hear that her name is Sophia and she is one of researchers from Galatia as you guessed it earlier. “I have heard stories about technological advancements of your faction and  I have come with a proposition for you”,aotdSophiaListen: Listen to proposition,
+aotdSophiaListen,DialogOptionSelected,$option == aotdSophiaListen,,"So getting to the point, I am a seeker of knowledge, Galatia limits me with regulations, but you? You pursue knowledge without any bounds and I want to be part of it . So my question is will you allow my humble person to help you in that matter?
+","aotdSophiaAgree:Accept Propostion 
+aotdSophiaInfo:See her skills
+aotdReturn:Decline ,and leave the bar",
+aotdSophiaAgree,DialogOptionSelected,$option == aotdSophiaAgree,"SophiaAgreed  
+AddTextSmall ""Sophia joined your faction"" highlight",,aotdReturn: Leave the bar,
+aotdSophiaInfo,DialogOptionSelected,$option == aotdSophiaInfo,"AddTextSmall ""Skill - Resourceful."" highlight
+AddTextSmall  ""Decrease cost of item for initial research by 1 unit. This does not include special databanks"" highlight
+",,,
+aotdReturn,DialogOptionSelected,$option == aotdReturn," EndConversation DO_NOT_FIRE
+RestoreSavedVisual
+BarCMD showOptions",You return to the bar.,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+aotdSophiaDontTalk,DialogOptionSelected,$option == aotdSophiaDontTalk,"BarCMD showOptions 
+$global.aotd_sophia = true",,,
+aotdSophiaIgnore,DialogOptionSelected,$option == aotdSophiaIgnore,"EndConversation DO_NOT_FIRE
+RestoreSavedVisual
+BarCMD showOptions
+$global.aotd_sophia = true",,,
+,,,,,,
+,,,,,,
+,,,,,,

@@ -1,0 +1,12 @@
+{
+	"id":"aotd_resourceful",
+	"governingAptitude":"leadership",
+	"compressHullmods":false,
+	"scope":"GOVERNED_OUTPOST",
+	"effectGroups":[
+		{
+			"requiredSkillLevel":1,
+			"effectBasedOnLevel":false,
+		},
+	],
+}
