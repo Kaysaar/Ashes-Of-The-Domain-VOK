@@ -1718,7 +1718,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         currResearching = null;
                     }
                     researchAPI.startResearch(tokens[1]);
-                    researchAPI.setCurrentResearching(currResearching);
+                    currResearching = researchAPI.getCurrentResearching();
                     MessageIntel intel = new MessageIntel("Started Research - " + currResearching.industryName, Misc.getBasePlayerColor());
                     intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
                     intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
