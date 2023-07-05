@@ -58,7 +58,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
         } else {
             market.getStability().unmodifyFlat("IndSynergyStab");
         }
-        if (hasTwoIndustriesForSynergy(AoDIndustries.SUBLIMATION, AoDIndustries.POLICRYSTALIZATOR)) {
+        if (hasTwoIndustriesForSynergy(AoDIndustries.BENEFICATION, AoDIndustries.POLICRYSTALIZATOR)) {
             Industry poli = market.getIndustry(AoDIndustries.POLICRYSTALIZATOR);
             poli.getSupply(AodCommodities.REFINED_METAL).getQuantity().modifyFlat("IndSynergyCascade", +1, "Industry Synergy");
             poli.getUpkeep().modifyMult("Oh boi that can be broken ", 0.75f, "Industry Synergy");
@@ -70,7 +70,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                 poli.getSupply(AodCommodities.REFINED_METAL).getQuantity().unmodifyFlat("IndSynergyCascade");
             }
         }
-        if (hasTwoIndustriesForSynergy(AoDIndustries.BENEFICATION, AoDIndustries.CASCADE_REPROCESSOR)) {
+        if (hasTwoIndustriesForSynergy(AoDIndustries.SUBLIMATION, AoDIndustries.CASCADE_REPROCESSOR)) {
             Industry cascade = market.getIndustry(AoDIndustries.CASCADE_REPROCESSOR);
             cascade.getUpkeep().modifyMult("Oh boi that can be broken part 2", 0.75f, "Industry Synergy");
             cascade.getSupply(AodCommodities.PURIFIED_TRANSPLUTONICS).getQuantity().modifyFlat("IndSynergyPoli", +1, "Industry Synergy");
@@ -115,7 +115,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
             );
 
         }
-        if (hasTwoIndustriesForSynergy(AoDIndustries.SUBLIMATION, AoDIndustries.POLICRYSTALIZATOR)) {
+        if (hasTwoIndustriesForSynergy(AoDIndustries.BENEFICATION, AoDIndustries.POLICRYSTALIZATOR)) {
             tooltip.addPara(
                     "Policrystalizator and Sublimation: %s",
                     10f,
@@ -124,12 +124,12 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
             );
 
         }
-        if (hasTwoIndustriesForSynergy(AoDIndustries.BENEFICATION, AoDIndustries.CASCADE_REPROCESSOR)) {
+        if (hasTwoIndustriesForSynergy(AoDIndustries.SUBLIMATION, AoDIndustries.CASCADE_REPROCESSOR)) {
             tooltip.addPara(
                     "Policrystalizator and Benefication: %s ",
                     10f,
                     Misc.getStoryBrightColor(),
-                    "Decrease upkeep of Cascade Reprocessor by 25% +1 Production to Cascade Reprocessor"
+                    "Decrease upkeep of Cascade Reprocessor by 25% and +1 Production to Cascade Reprocessor"
             );
 
         }
@@ -142,11 +142,10 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
 
     @Override
     public boolean showIcon() {
-        return hasTwoIndustriesForSynergy(AoDIndustries.POLICRYSTALIZATOR, AoDIndustries.CASCADE_REPROCESSOR) ||
-                hasTwoIndustriesForSynergy(AoDIndustries.TERMINUS, AoDIndustries.MILITARY_HEAVY) ||
+        return hasTwoIndustriesForSynergy(AoDIndustries.TERMINUS, AoDIndustries.MILITARY_HEAVY) ||
                 hasTwoIndustriesForSynergy(AoDIndustries.TERMINUS, AoDIndustries.SUPPLY_HEAVY) ||
-                hasTwoIndustriesForSynergy(AoDIndustries.SUBLIMATION, AoDIndustries.POLICRYSTALIZATOR) ||
-                hasTwoIndustriesForSynergy(AoDIndustries.BENEFICATION, AoDIndustries.CASCADE_REPROCESSOR);
+                hasTwoIndustriesForSynergy(AoDIndustries.BENEFICATION, AoDIndustries.POLICRYSTALIZATOR) ||
+                hasTwoIndustriesForSynergy(AoDIndustries.SUBLIMATION, AoDIndustries.CASCADE_REPROCESSOR);
     }
 
     public static void applyRessourceCond(MarketAPI marketAPI) {
