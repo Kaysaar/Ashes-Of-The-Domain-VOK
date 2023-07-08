@@ -3,14 +3,18 @@ package data.scripts.industry;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
+import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.Ids.AodCommodities;
+import data.Ids.AodResearcherSkills;
+import data.plugins.AoDUtilis;
 
-public class KaysaarResearchFacility extends BaseIndustry {
+public class KaysaarResearchFacility extends BaseIndustry implements EconomyTickListener {
     public static final float IMMIGRATION_BONUS = 10f;
     public static String subMarketId = "researchfacil";
     protected transient SubmarketAPI saved = null;
@@ -33,10 +37,18 @@ public class KaysaarResearchFacility extends BaseIndustry {
                 market.removeSubmarket(subMarketId);
             }
         }
-
+        if(AoDUtilis.getResearchAPI().getCurrentResearching()!=null){
+            this.getUpkeep().unmodifyMult("no_research");
+            this.getUpkeep().modifyMult("research",0.3f*AoDUtilis.getResearchAPI().getCurrentResearching().researchTier,"Ongoing Research");
+        }
+        else{
+            this.getUpkeep().unmodifyMult("research");
+            this.getUpkeep().modifyMult("no_research",0.1f,"No ongoing research");
+        }
 
 
     }
+
 
 
     @Override
@@ -89,6 +101,22 @@ public class KaysaarResearchFacility extends BaseIndustry {
 
         if (IndustryTooltipMode.ADD_INDUSTRY.equals(mode)) {
             tooltip.addPara("Building that structure will enable your faction to research new technologies", Misc.getHighlightColor(), 10f);
+        }
+        if(AoDUtilis.getResearchAPI().getCurrentResearching()!=null){
+            tooltip.addPara("Researching: "+AoDUtilis.getResearchAPI().getCurrentResearching().industryName, Misc.getHighlightColor(), 10f);
+        }
+    }
+
+    @Override
+    public void reportEconomyTick(int iterIndex) {
+
+    }
+
+    @Override
+    public void reportEconomyMonthEnd() {
+        if(AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.EXPLORER)){
+            SubmarketAPI open = market.getSubmarket(subMarketId);
+            open.getCargo().addCommodity("research_databank",1);
         }
     }
 }

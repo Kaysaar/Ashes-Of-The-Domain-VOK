@@ -12,21 +12,22 @@ import data.scripts.research.ResearchAPI;
 import java.util.List;
 import java.util.Map;
 
-public class SophiaAgreed extends BaseCommandPlugin{
+public class OpScientistAgreed extends BaseCommandPlugin{
     @Override
     public boolean execute(String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
         if(dialog==null) return false;
-        if(!ruleId.equals("aotdSophiaAgree"))return false;
+        if(!ruleId.equals("opScientistAgree"))return false;
         ResearchAPI researchAPI = AoDUtilis.getResearchAPI();
         if(researchAPI==null) return false;
-        PersonAPI personAPI = Global.getSector().getImportantPeople().getPerson("sophia");
-        personAPI.getTags().add(AodResearcherSkills.RESOURCEFUL);
-        personAPI.addTag(AodResearcherSkills.RESOURCEFUL);
+        PersonAPI personAPI = Global.getSector().getImportantPeople().getPerson("opScientist");
+        personAPI.getTags().add(AodResearcherSkills.SEEKER_OF_KNOWLEDGE);
+        personAPI.addTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE);
         researchAPI.addResearchersInPossetion(personAPI);
         if(researchAPI.getCurrentResearcher()==null){
             researchAPI.setCurrentResearcher(personAPI);
         }
-        Global.getSector().getMemory().set("$aotd_sophia",true);
+        Global.getSector().getMemory().set("$aotd_op_scientist",true);
         return true;
+
     }
 }

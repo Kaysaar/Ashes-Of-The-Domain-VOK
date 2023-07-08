@@ -13,6 +13,8 @@ import com.fs.starfarer.api.campaign.listeners.*;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.ui.*;
 import data.Ids.AoDIndustries;
+import data.plugins.AoDUtilis;
+import data.ui.HeadOfResearchCenterUI;
 import data.ui.ResearchUIDP;
 import data.ui.UpgradeListUI;
 
@@ -23,7 +25,7 @@ public class UpgradeOptionsListener extends BaseIndustryOptionProvider{
     public ResearchAPI researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
     public static Object CUSTOM_PLUGIN = new Object();
     public static Object IMMEDIATE_ACTION = new Object();
-    public static Object TESTING = new Object();
+    public static Object CUSTOM_PLUGIN_RESEARCHER = new Object();
     int handleFarming(MarketAPI market){
 
         int quantity = market.getSize();
@@ -47,9 +49,13 @@ public class UpgradeOptionsListener extends BaseIndustryOptionProvider{
             List<IndustryOptionData> result = new ArrayList<IndustryOptionData>();
             IndustryOptionData opt = new IndustryOptionData("Research Interface", IMMEDIATE_ACTION, ind, this);
             opt.color = new Color(8, 219, 239, 255);
-//            opt2.color = new Color(245, 240, 240, 255);
-//            opt3.color = new Color(93, 81, 245, 255);
             result.add(opt);
+            if(AoDUtilis.getResearchAPI().getResearchersInPossetion().size()>1){
+                opt = new IndustryOptionData("Change Main Researcher", CUSTOM_PLUGIN_RESEARCHER, ind, this);
+                opt.color = new Color(241, 189, 23, 255);
+                result.add(opt);
+            }
+
             return result;
         }
 
@@ -85,7 +91,10 @@ public class UpgradeOptionsListener extends BaseIndustryOptionProvider{
             tooltip.addPara("Show Research Interface",0f);
 
         }
+        if(opt.id == CUSTOM_PLUGIN_RESEARCHER && opt.ind.getMarket().getFaction().isPlayerFaction()){
+            tooltip.addPara("Change current Head of Research Center",0f);
 
+        }
 
     }
 
@@ -97,6 +106,10 @@ public class UpgradeOptionsListener extends BaseIndustryOptionProvider{
         }
         if( opt.id == IMMEDIATE_ACTION){
             ui.showDialog(null, (new ResearchUIDP()));
+        }
+        if( opt.id == CUSTOM_PLUGIN_RESEARCHER){
+            CustomDialogDelegate delegate = new HeadOfResearchCenterUI(AoDUtilis.getResearchAPI().getCurrentResearcher());
+            ui.showDialog(HeadOfResearchCenterUI.WIDTH, HeadOfResearchCenterUI.HEIGHT, delegate);
         }
     }
 

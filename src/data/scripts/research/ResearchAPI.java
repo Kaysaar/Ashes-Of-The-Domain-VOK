@@ -13,6 +13,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
+import data.Ids.AodResearcherSkills;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -257,12 +258,15 @@ public class ResearchAPI {
     public boolean hasMetReq(Map.Entry<String, Integer> req) {
         if (req == null) return true;
         int reqAmount = req.getValue();
-        boolean isNotSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank");
-        if (!isNotSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
+        boolean isSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank");
+        if (!isSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
             reqAmount -= 1;
             if (req.getKey().equals("domain_artifacts") || req.getKey().equals("water")) {
                 reqAmount -= 100;
             }
+        }
+        if(isSpecial&&currentResearcher!=null&&currentResearcher.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)){
+            reqAmount -= 1;
         }
 
         for (MarketAPI allMarketsWithResearch : getAllMarketsWithResearch()) {
@@ -415,9 +419,7 @@ public class ResearchAPI {
     }
 
 
-    public ResearchOption getCurrentlyReseearch() {
-        return currentResearching;
-    }
+
 
     public String getIndustryName(String industryId) {
         if (Global.getSettings().getIndustrySpec(industryId) != null) {
@@ -819,7 +821,16 @@ public class ResearchAPI {
         currentResearching = getResearchOption(industryId);
         if (!currentResearching.initalized) {
             currentResearching.initalized = true;
-            currentResearching.currentResearchDays = currentResearching.researchCost;
+            if(currentResearcher!=null&&currentResearcher.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)){
+                if(currentResearching.industryId.equals("triheavy")||currentResearching.industryId.equals("hegeheavy")||currentResearching.industryId.equals("ii_stellacastellum")){
+                    currentResearching.currentResearchDays = currentResearching.researchCost*3;
+                }
+            }
+            else{
+                currentResearching.currentResearchDays = currentResearching.researchCost;
+            }
+
+
 
         }
         if (currentResearching.requieredItems != null) {

@@ -1,13 +1,21 @@
 package data.scripts.campaign.econ.listeners;
 
+import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.CustomProductionPickerDelegate;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.FleetInflater;
 import com.fs.starfarer.api.campaign.listeners.FleetInflationListener;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.impl.campaign.econ.impl.MilitaryBase;
+import com.fs.starfarer.api.impl.campaign.econ.impl.TechMining;
 import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
+import com.fs.starfarer.api.impl.campaign.intel.misc.ProductionReportIntel;
+import com.fs.starfarer.api.impl.campaign.missions.CustomProductionContract;
+import com.fs.starfarer.api.impl.campaign.missions.hub.BaseHubMission;
+import com.fs.starfarer.api.util.Misc;
 import data.plugins.AoDUtilis;
 
 import java.util.ArrayList;
@@ -34,6 +42,7 @@ public class AodAdvancedHeavyIndustryApplier implements FleetInflationListener {
         SHullmods.add(HullMods.STABILIZEDSHIELDEMITTER);
         SHullmods.add(HullMods.AUTOREPAIR);
         if (fleet.isPlayerFleet()) return;
+        if(fleet.getFleetData().getCommander().equals(Global.getSector().getPlayerPerson())) return;
         if (!AoDUtilis.isFactionPossesingTriTachyonShipyards(fleet.getFaction())) return;
 
         for (FleetMemberAPI fleetMemberAPI : fleet.getMembersWithFightersCopy()) {
@@ -41,7 +50,6 @@ public class AodAdvancedHeavyIndustryApplier implements FleetInflationListener {
             if(fleetMemberAPI.isStation())continue;
             if(fleetMemberAPI.isCivilian())continue;
             if(fleetMemberAPI.isMothballed())continue;
-
             int SModsAmount = determineAmountofSmods(fleet.getFaction());
             fleetMemberAPI.getStats().getDynamic().getMod(Stats.MAX_PERMANENT_HULLMODS_MOD).modifyFlat("Advanced Heavy Industry", SModsAmount);
             Collections.shuffle(SHullmods);
@@ -53,6 +61,7 @@ public class AodAdvancedHeavyIndustryApplier implements FleetInflationListener {
                         break;
                     }
                 }
+
 
                 if (variant != null) {
                     fleetMemberAPI.getVariant().addPermaMod(variant, true);
@@ -70,6 +79,6 @@ public class AodAdvancedHeavyIndustryApplier implements FleetInflationListener {
 
 
     public int determineAmountofSmods(FactionAPI factionAPI) {
-        return getRandomNumber(0,3);
+        return getRandomNumber(1,3);
     }
 }
