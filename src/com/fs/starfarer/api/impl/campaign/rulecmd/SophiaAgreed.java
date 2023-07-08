@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.Ids.AodResearcherSkills;
 import data.plugins.AoDUtilis;
 import data.scripts.research.ResearchAPI;
 
@@ -19,8 +20,12 @@ public class SophiaAgreed extends BaseCommandPlugin{
         ResearchAPI researchAPI = AoDUtilis.getResearchAPI();
         if(researchAPI==null) return false;
         PersonAPI personAPI = Global.getSector().getImportantPeople().getPerson("sophia");
+        personAPI.getTags().add(AodResearcherSkills.RESOURCEFUL);
+        personAPI.addTag(AodResearcherSkills.RESOURCEFUL);
         researchAPI.addResearchersInPossetion(personAPI);
-        researchAPI.setCurrentResearcher(personAPI);
+        if(researchAPI.getCurrentResearcher()==null){
+            researchAPI.setCurrentResearcher(personAPI);
+        }
         Global.getSector().getMemory().set("$aotd_sophia",true);
         return true;
     }

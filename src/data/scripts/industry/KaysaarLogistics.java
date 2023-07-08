@@ -29,9 +29,9 @@ public class KaysaarLogistics extends Waystation {
 
         int size = market.getSize();
 
-        demand(Commodities.FUEL, size+4);
-        demand(Commodities.SUPPLIES, size+4);
-        demand(Commodities.CREW, size+4);
+        demand(Commodities.FUEL, size+1);
+        demand(Commodities.SUPPLIES, size+1);
+        demand(Commodities.CREW, size);
         demand(Commodities.VOLATILES, 2);
         demand(Commodities.RARE_METALS, 2);
         String desc = getNameForModifier();
@@ -213,7 +213,7 @@ public class KaysaarLogistics extends Waystation {
 
     @Override
     public boolean canImprove() {
-        return true;
+        return false;
     }
 
     public void addImproveDesc(TooltipMakerAPI info, ImprovementDescriptionMode mode) {

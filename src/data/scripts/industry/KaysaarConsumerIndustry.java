@@ -14,10 +14,6 @@ public class KaysaarConsumerIndustry extends BaseIndustry {
         super.apply(true);
 
         int size = market.getSize();
-        if(this.special!=null){
-            Misc.getStorageCargo(this.getMarket()).addSpecial(this.special, 1);
-            this.special=null;
-        }
         demand(Commodities.ORGANICS, size+2);
         demand(AodCommodities.POLYMERS,size-2);
         demand(Commodities.HEAVY_MACHINERY,size);

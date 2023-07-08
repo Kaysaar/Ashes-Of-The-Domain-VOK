@@ -2,17 +2,19 @@ package data.plugins;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
+import com.fs.starfarer.api.campaign.PersonImportance;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.impl.campaign.ids.Conditions;
-import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.impl.campaign.ids.Stats;
+import com.fs.starfarer.api.characters.ImportantPeopleAPI;
+import com.fs.starfarer.api.characters.PersonAPI;
+import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.Ids.AoDConditions;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
+import data.Ids.AodResearcherSkills;
 import data.scripts.research.ResearchAPI;
 import org.jetbrains.annotations.NotNull;
 import org.magiclib.util.MagicSettings;
@@ -236,5 +238,18 @@ public class AoDUtilis {
         }
 
     }
+    public static void insertOPScientist(PersonAPI person) {
+        ImportantPeopleAPI ip = Global.getSector().getImportantPeople();
+        person.setId(AoDCoreModPlugin.opScientist);
+        person.setVoice(Voices.SCIENTIST);
+        person.getTags().add("aotd_researcher");
+        Global.getSector().getMemory().set("$aotd_researcher_done",true);
+        Global.getSector().getMemory().set("$aotd_researcher_name",person.getName().getFirst());
+        person.getTags().add(AodResearcherSkills.SEEKER_OF_KNOWLEDGE);
+        if (!ip.containsPerson(person)) {
+            ip.addPerson(person);
+        }
+    }
+
 
 }

@@ -12,7 +12,9 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import data.Ids.AoDConditions;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
+import data.Ids.AodResearcherSkills;
 import data.scripts.NexerlinColonyStartNerf;
+import data.scripts.ScientistPersonAPIInterceptor;
 import data.scripts.campaign.econ.listeners.*;
 import data.scripts.research.*;
 import com.fs.starfarer.api.campaign.*;
@@ -35,6 +37,8 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     public static String aodTech = "$Aodtecha";
     public static boolean isInColony = false;
     public static String sophia = "sophia";
+    public static String opScientist = "opScientist";
+    public static String explorer = "explorer";
     public int configSize = 6;
 
     public void setIndustryOnPlanet(String SystemName, String Planetname, String industryId, String removeIndustry, String potentialSwitch, boolean toImprove, String aiCore) {
@@ -106,6 +110,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             l.addListener(new AodAdvancedHeavyIndustryApplier(), true);
         if (!l.hasListenerOfClass(AoDIndustrialMightListener.class))
             l.addListener(new AoDIndustrialMightListener(), true);
+
     }
 
     private void setVanilaIndustriesDowngrades() {
@@ -173,20 +178,20 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         Global.getSector().getPersistentData().put(aodTech, researchAPI);
         ImportantPeopleAPI ip = Global.getSector().getImportantPeople();
 
-        PersonAPI sfckweenPerson = Global.getFactory().createPerson();
-        sfckweenPerson.setId(sophia);
-        sfckweenPerson.setFaction(Factions.INDEPENDENT);
-        sfckweenPerson.setGender(FullName.Gender.FEMALE);
-        sfckweenPerson.setRankId(Ranks.POST_SCIENTIST);
-        sfckweenPerson.setPostId(Ranks.POST_SCIENTIST);
-        sfckweenPerson.setImportance(PersonImportance.HIGH);
-        sfckweenPerson.setVoice(Voices.SCIENTIST);
-        sfckweenPerson.getName().setFirst("Sophia");
-        sfckweenPerson.getName().setLast("Ashley");
-        sfckweenPerson.getTags().add("aotd_researcher");
-        sfckweenPerson.setPortraitSprite(Global.getSettings().getSpriteName("characters", "sophia"));
-        sfckweenPerson.getStats().setSkillLevel("aotd_resourceful", 0);
-        ip.addPerson(sfckweenPerson);
+        PersonAPI sophiaPerson = Global.getFactory().createPerson();
+        sophiaPerson.setId(sophia);
+        sophiaPerson.setFaction(Factions.INDEPENDENT);
+        sophiaPerson.setGender(FullName.Gender.FEMALE);
+        sophiaPerson.setRankId(Ranks.POST_SCIENTIST);
+        sophiaPerson.setPostId(Ranks.POST_SCIENTIST);
+        sophiaPerson.setImportance(PersonImportance.HIGH);
+        sophiaPerson.setVoice(Voices.SCIENTIST);
+        sophiaPerson.getName().setFirst("Sophia");
+        sophiaPerson.getName().setLast("Ashley");
+        sophiaPerson.getTags().add("aotd_researcher");
+        sophiaPerson.setPortraitSprite(Global.getSettings().getSpriteName("characters", "sophia"));
+        sophiaPerson.getStats().setSkillLevel(AodResearcherSkills.RESOURCEFUL, 0);
+        ip.addPerson(sophiaPerson);
 
 
     }
@@ -274,10 +279,16 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             Global.getSector().getPersistentData().remove(AodMemFlags.RESEARCH_SAVED);
             Global.getSector().getPersistentData().put(aodTech, researchAPI);
         }
-
         insertSophia();
-        if(!Global.getSector().getMemory().contains("$aotd_sophia")){
-            Global.getSector().getMemory().set("$aotd_sophia",false);
+        insertExplorer();
+        if (!Global.getSector().getMemory().contains("$aotd_sophia")) {
+            Global.getSector().getMemory().set("$aotd_sophia", false);
+        }
+        if (!Global.getSector().getMemory().contains("$aotd_op_scientist")) {
+            Global.getSector().getMemory().set("$aotd_op_scientist", false);
+        }
+        if (!Global.getSector().getMemory().contains("$aotd_explorer")) {
+            Global.getSector().getMemory().set("$aotd_explorer", false);
         }
         setVanilaIndustriesDowngrades();
         setVanilaSpecialItemNewIndustries(Items.SOIL_NANITES, "subfarming");
@@ -287,10 +298,12 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         setVanilaSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
         setVanilaSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy");
         setVanilaSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
-        if(!Global.getSector().getMemory().contains("$aotd_can_scientist")){
-            Global.getSector().getMemory().set("$aotd_can_scientist",false);
+        if (!Global.getSector().getMemory().contains("$aotd_can_scientist")) {
+            Global.getSector().getMemory().set("$aotd_can_scientist", false);
         }
-
+        if (!Global.getSector().getMemory().contains("$aotd_can_op_scientist")) {
+            Global.getSector().getMemory().set("$aotd_can_op_scientist", false);
+        }
         Global.getSettings().getIndustrySpec(Industries.FUELPROD).addTag("starter");
         Global.getSettings().getIndustrySpec(Industries.WAYSTATION).addTag("starter");
         Global.getSettings().getIndustrySpec(Industries.ORBITALWORKS).addTag("casual_upgrade");
@@ -365,7 +378,10 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             @Override
             public void reportPlayerClosedMarket(MarketAPI market) {
                 isInColony = false;
+
+
             }
+
 
             @Override
             public void reportPlayerOpenedMarketAndCargoUpdated(MarketAPI market) {
@@ -466,6 +482,12 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         };
 
         Global.getSector().addListener(customlistener);
+        if(!Global.getSector().getMemory().contains("$aotd_researcher_done")){
+            Global.getSector().addListener(new ScientistPersonAPIInterceptor());
+        }
+        if(!Global.getSector().getMemory().contains("$aotd_give_core")){
+            Global.getSector().getMemory().set("$aotd_give_core",false);
+        }
         if (!Global.getSector().getMemory().contains("$update_1.2.0_aotdhot1")) {
             Global.getSector().getMemory().set("$update_1.2.0_aotdhot1", true);
             Global.getSector().removeScriptsOfClass(RemnantSeededFleetManager.class);
@@ -474,6 +496,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             Global.getSector().addScript(new ResearchProgressScript());
 
         }
+
 
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(false)) {
             if (playerMarket.hasCondition("AodIndUpgrade")) {
@@ -506,6 +529,25 @@ public class AoDCoreModPlugin extends BaseModPlugin {
 
         if (!ip.containsPerson(sophiaAshley)) {
             ip.addPerson(sophiaAshley);
+        }
+    }
+
+
+
+    private static void insertExplorer() {
+        ImportantPeopleAPI ip = Global.getSector().getImportantPeople();
+        PersonAPI person = Global.getSector().getFaction(Factions.INDEPENDENT).createRandomPerson();
+        person.setRankId(Ranks.POST_SCIENTIST);
+        person.setPostId(Ranks.POST_SCIENTIST);
+        person.setId(explorer);
+        person.setRankId(Ranks.POST_SCIENTIST);
+        person.setPostId(Ranks.POST_SCIENTIST);
+        person.setImportance(PersonImportance.HIGH);
+        person.setVoice(Voices.SCIENTIST);
+        person.getTags().add("aotd_researcher");
+        person.getTags().add(AodResearcherSkills.EXPLORER);
+        if (!ip.containsPerson(person)) {
+            ip.addPerson(person);
         }
     }
 
@@ -596,4 +638,5 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         if (prevParams.contains(listOfAdditionalIndustries)) return;
         spec.setParams(prevParams + "," + listOfAdditionalIndustries);
     }
+
 }

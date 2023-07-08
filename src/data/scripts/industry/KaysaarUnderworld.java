@@ -19,7 +19,7 @@ public class KaysaarUnderworld extends BaseIndustry implements MarketImmigration
     public static float ALPHA_CORE_BONUS = 40f;
     public static float IMPROVE_BONUS = 25f;
 
-    public static float STABILITY_PELANTY = 6f;
+    public static float STABILITY_PELANTY = 4f;
 
 
     protected transient SubmarketAPI saved = null;

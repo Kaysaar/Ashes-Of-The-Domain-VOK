@@ -11,11 +11,17 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Skills;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
+import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityEventIntel;
+import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityFactor;
+import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityManager;
+import com.fs.starfarer.api.impl.campaign.shared.SharedData;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.Ids.AodCommodities;
+import data.Ids.AodResearcherSkills;
+import data.plugins.AoDUtilis;
 import data.scripts.research.ResearchAPI;
 import data.scripts.research.ResearchOption;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +48,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     float progressionScroller = 0;
     List<CustomPanelAPI> techPannels = new ArrayList<>();
     List<String> itemsAoTD = new ArrayList<>();
+
     HashMap<CustomPanelAPI, String> tracker = new HashMap<>();
     public static List<String> TECH_LIST = MagicSettings.getList("aod_core", "TECH_TREE_LABELS");
     protected InteractionDialogAPI dialog;
@@ -135,7 +142,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
     public void init(CustomPanelAPI panel, CustomVisualDialogDelegate.DialogCallbacks callbacks, InteractionDialogAPI dialog) {
         //so we can get back to the original InteractionDialogPlugin and do stuff with it or close it
-        currResearching = researchAPI.getCurrentlyReseearch();
+        currResearching = researchAPI.getCurrentResearching();
         this.panel = panel;
         this.callbacks = callbacks;
         this.dialog = dialog;
@@ -563,6 +570,19 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             buttons.add(buttonOther);
             buttonMap.put(buttonOther, "PROGRESSION:" + "other");
             buttonOther.getPosition().setLocation(0, 0).inTL(2, 610);
+            if(currResearching!=null){
+                float percent = (currResearching.currentResearchDays - currResearching.researchCost) / currResearching.researchCost;
+                if(AoDUtilis.getResearchAPI().getCurrentResearcher()!=null&&AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)&&(currResearching.industryId.equals("triheavy")||currResearching.industryId.equals("hegeheavy")||currResearching.industryId.equals("ii_stellacastellum"))){
+                    percent = (currResearching.currentResearchDays - currResearching.researchCost*3) / currResearching.researchCost*3;
+                }
+                float true_percent = Math.abs(percent)*100f;
+                if (currResearching.currentResearchDays == currResearching.researchCost) {
+                    true_percent = 0;
+                }
+                String formattedString = String.format("%.02f", true_percent);
+                optionsPanelTT.addPara("Researching : "+currResearching.industryName+"\nProgress:"+formattedString+"%",Color.ORANGE,10f).getPosition().setLocation(0, 0).inTL(5, 165);
+            }
+
         }
         if (currentUIMode.equals(UIMode.RESEARCH_CENTER)) {
             labelAPI = optionsPanelTT.addSectionHeading("Vault Of Knowledge", Alignment.MID, 10f);
@@ -1022,11 +1042,14 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             String tier = tierDecider(currResearching.researchTier);
 
             float percent = (currResearching.currentResearchDays - currResearching.researchCost) / currResearching.researchCost;
-
-            float true_percent = percent * -100f;
+            if(AoDUtilis.getResearchAPI().getCurrentResearcher()!=null&&AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)&&(currResearching.industryId.equals("triheavy")||currResearching.industryId.equals("hegeheavy")||currResearching.industryId.equals("ii_stellacastellum"))){
+                percent = (currResearching.currentResearchDays - currResearching.researchCost*3) / currResearching.researchCost*3;
+            }
+            float true_percent =Math.abs(percent)*100f;
             if (currResearching.currentResearchDays == currResearching.researchCost) {
                 true_percent = 0;
             }
+
             currentlyResearchingInfoTT.addPara("Curently Researching : " + Global.getSettings().getIndustrySpec(industryID).getName(), Color.ORANGE, 10f).getPosition().setLocation(0, 0).inTL(185, 5);
             currentlyResearchingInfoTT.addPara("Tier : " + tier, Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(185, 30);
             String formattedString = String.format("%.02f", true_percent);
@@ -1072,6 +1095,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             int spacerY = 60;
             Color base = Misc.getStoryOptionColor();
             Color bg = Misc.getStoryBrightColor();
+            boolean triple = false;
             for (ResearchOption s : allreq) {
                 if (s.isDisabled) continue;
 
@@ -1133,6 +1157,18 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                             }
 
                         }
+                        if (person.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)) {
+                            newCalculus = items.getValue() - 1;
+                            boolean cutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank");
+                            if (!cutting) {
+                                newCalculus += 1;
+                            }
+                            if (newCalculus == 0 && cutting) {
+                                continue;
+                            }
+                            triple= true;
+
+                        }
                     }
 
                     if (Global.getSettings().getSpecialItemSpec(items.getKey()) != null) {
@@ -1171,7 +1207,15 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
             }
             if (!wantsToHaveInfoAbout.isResearched) {
-                wantsToKnowResearchReqTT.addPara("It would take " + wantsToHaveInfoAbout.researchCost + " days to complete research ", 10f).getPosition().setLocation(0, 0).inTL(5, 175 + (float) availableHeight / 6.5f);
+                float cost = wantsToHaveInfoAbout.researchCost;
+                float secondaryCost  = wantsToHaveInfoAbout.currentResearchDays;
+                if(secondaryCost!=-1){
+                    cost =secondaryCost;
+                }
+                if(AoDUtilis.getResearchAPI().getCurrentResearcher()!=null&&AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)&&triple){
+                    cost*=3;
+                }
+                wantsToKnowResearchReqTT.addPara("It would take " + cost + " days to complete research ", 10f).getPosition().setLocation(0, 0).inTL(5, 175 + (float) availableHeight / 6.5f);
                 if (currResearching == null || !wantsToHaveInfoAbout.industryId.equals(currResearching.industryId)) {
                     ButtonAPI buttonAPI = wantsToKnowResearchReqTT.addButton("Start Research ", null, 120, 20, 10f);
                     if (!researchAPI.canResearch(wantsToHaveInfoAbout.industryId, true)) {
@@ -1245,6 +1289,11 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 scientistSpecAbilityPanelTT.addPara("Resourceful", Color.ORANGE, 10f);
                 scientistSpecAbilityPanelTT.addPara("Description: That scientist is very cautious and wants to use as little resources to accomplish task as possible\n\nDecrease cost of item for inital research by 1 unit.\n\nThis does not include special databanks", Color.WHITE, 10f);
             }
+            if (personAPI.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)) {
+                scientistSpecAbilityPanelTT.addPara("Special Ability", Color.CYAN, 10f);
+                scientistSpecAbilityPanelTT.addPara("Seeker of Knowledge", Color.ORANGE, 10f);
+                scientistSpecAbilityPanelTT.addPara("Description: That scientist possesses knowledge that for many has been already deemed to be lost in sands of time\n\nNegate need for special type of databanks for research, but increase amount of days to research technologies that requieres special databank three times more", Color.WHITE, 10f);
+            }
         }
 
         scientistSpecAbilityPanel.addUIElement(scientistSpecAbilityPanelTT).inTL(0, 0);
@@ -1262,6 +1311,10 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         if (researchAPI.getCurrentResearcher() != null) {
             if (researchAPI.getCurrentResearcher().hasTag("aotd_resourceful")) {
                 bonusPanelTT.addPara("Bonus from Head of Research Center Skill - Resourceful\n", Color.ORANGE, 10f);
+                bonus = true;
+            }
+            if (researchAPI.getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)) {
+                bonusPanelTT.addPara("Bonus from Head of Research Center Skill - Seeker of Knowledge\n", Color.ORANGE, 10f);
                 bonus = true;
             }
         }
@@ -1778,11 +1831,14 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 event.consume();
                 callbacks.dismissDialog();
                 dialog.dismiss();
+
                 return;
 
             }
         }
     }
+
+
 
     @Override
     public void buttonPressed(Object buttonId) {

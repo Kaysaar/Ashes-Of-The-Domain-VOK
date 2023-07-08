@@ -6,6 +6,7 @@ public class AoDIndustries {
     public static final String RESORT = "tourism";
     public static final String UNDERWORLD = "underworld";
     public static final String TERMINUS = "logisitcbureau";
+
     public static final String CLEANROOM_MANUFACTORY = "cleanroom";
     public static final String PLANETARY_DEFENCE_FORCE = "militarygarrison";
     public static final String SPACE_ELEVATOR = "kaysaarcapital_space_elevator";
@@ -35,4 +36,5 @@ public class AoDIndustries {
     public static final String HEAVY_PRODUCTION = "shityheavy";
     public static final String MILITARY_HEAVY = "weaponheavy";
     public static final String SUPPLY_HEAVY = "supplyheavy";
+    public static final String CONSUMER_INDUSTRY = "consumerindustry";
 }

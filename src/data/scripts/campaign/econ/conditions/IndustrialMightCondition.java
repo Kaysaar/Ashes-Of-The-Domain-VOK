@@ -3,6 +3,7 @@ package data.scripts.campaign.econ.conditions;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.econ.MutableCommodityQuantity;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -24,9 +25,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
             if(researchAPI.alreadyResearchedAmount()>=10){
                 handleBonuses();
             }
-            if(researchAPI.alreadyResearchedAmount()>=7){
-                Global.getSector().getMemory().set("$aotd_can_scientist",true);
-            }
+
         }
 
 
@@ -34,14 +33,9 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
 
     @Override
     public void unapply(String id) {
-        handleBonuses();
         super.unapply(id);
 
     }
-
-
-    //SPAGETTTHHHHIIII
-
 
     public void handleBonuses() {
         if (hasTwoIndustriesForSynergy(AoDIndustries.TERMINUS, AoDIndustries.MILITARY_HEAVY)) {
@@ -80,6 +74,63 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                 cascade.getUpkeep().unmodifyMult("Oh boi that can be broken part 2");
                 cascade.getSupply(AodCommodities.PURIFIED_TRANSPLUTONICS).getQuantity().unmodifyFlat("IndSynergyPoli");
             }
+        }
+        if (hasTwoIndustriesForSynergy(AoDIndustries.CASCADE_REPROCESSOR, AoDIndustries.TRI_TACHYON_HEAVY)) {
+            Industry triHeavy = market.getIndustry(AoDIndustries.TRI_TACHYON_HEAVY);
+            for (MutableCommodityQuantity mutableCommodityQuantity : triHeavy.getAllSupply()) {
+                triHeavy.getSupply(mutableCommodityQuantity.getCommodityId()).getQuantity().modifyFlat("IndSynergyTri", +1, "Industry Synergy");
+            }
+
+        } else {
+            Industry triHeavy = market.getIndustry(AoDIndustries.TRI_TACHYON_HEAVY);
+            if (triHeavy != null) {
+                for (MutableCommodityQuantity mutableCommodityQuantity : triHeavy.getAllSupply()) {
+                    triHeavy.getSupply(mutableCommodityQuantity.getCommodityId()).getQuantity().unmodifyFlat("IndSynergyTri");
+                }
+            }
+        }
+
+        if (hasTwoIndustriesForSynergy(AoDIndustries.POLICRYSTALIZATOR, AoDIndustries.HEGEMONY_HEAVY)) {
+            Industry hegeHeavy = market.getIndustry(AoDIndustries.HEGEMONY_HEAVY);
+            for (MutableCommodityQuantity mutableCommodityQuantity : hegeHeavy.getAllSupply()) {
+                hegeHeavy.getSupply(mutableCommodityQuantity.getCommodityId()).getQuantity().modifyFlat("IndSynergyHege", +1, "Industry Synergy");
+            }
+        } else {
+            Industry hegeHeavy = market.getIndustry(AoDIndustries.HEGEMONY_HEAVY);
+            if (hegeHeavy != null) {
+                for (MutableCommodityQuantity mutableCommodityQuantity : hegeHeavy.getAllSupply()) {
+                    hegeHeavy.getSupply(mutableCommodityQuantity.getCommodityId()).getQuantity().unmodifyFlat("IndSynergyHege");
+                }
+            }
+        }
+        if (hasTwoIndustriesForSynergy(AoDIndustries.RESORT, AoDIndustries.CONSUMER_INDUSTRY)) {
+            Industry resort = market.getIndustry(AoDIndustries.RESORT);
+            resort.getIncome().modifyMult("IndSynergyResortIncome",1.1f,"Industry Synergy");
+        } else {
+            Industry resort = market.getIndustry(AoDIndustries.HEGEMONY_HEAVY);
+            if (resort != null) {
+                resort.getIncome().unmodifyMult("IndSynergyResortIncome");
+            }
+        }
+
+        if (hasTwoIndustriesForSynergy(AoDIndustries.ARTISANAL_FARMING, AoDIndustries.RESORT)) {
+            Industry resort = market.getIndustry(AoDIndustries.ARTISANAL_FARMING);
+            resort.getIncome().modifyMult("IndSynergyArtiIncome",1.1f,"Industry Synergy");
+        } else {
+            Industry resort = market.getIndustry(AoDIndustries.ARTISANAL_FARMING);
+            if (resort != null) {
+                resort.getIncome().unmodifyMult("IndSynergyArtiIncome");
+            }
+        }
+        if (hasTwoIndustriesForSynergy(AoDIndustries.UNDERWORLD, AoDIndustries.RESORT)) {
+            market.getIncomeMult().modifyMult("IndSynergyUnderworldIncome",1.1f,"Industry Synergy");
+        } else {
+            market.getIncomeMult().unmodifyMult("IndSynergyUnderworldIncome");
+        }
+        if (hasTwoIndustriesForSynergy(AoDIndustries.TERMINUS, AoDIndustries.RESORT)) {
+            market.getAccessibilityMod().modifyFlat("IndSynergyAcessbility",0.1f,"Industry Synergy");
+        } else {
+            market.getAccessibilityMod().unmodifyFlat("IndSynergyAcessbility");
         }
 
     }
@@ -133,6 +184,60 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
             );
 
         }
+        if (hasTwoIndustriesForSynergy(AoDIndustries.CASCADE_REPROCESSOR, AoDIndustries.TRI_TACHYON_HEAVY)) {
+            tooltip.addPara(
+                    "Policrystalizator and Orbital Skunkwork Facility: %s ",
+                    10f,
+                    Misc.getStoryBrightColor(),
+                    "+1 To Orbital Skunkwork Facility Production"
+            );
+
+        }
+        if (hasTwoIndustriesForSynergy(AoDIndustries.POLICRYSTALIZATOR, AoDIndustries.HEGEMONY_HEAVY)) {
+            tooltip.addPara(
+                    "Policrystalizator and Orbital Fleetwork Facility: %s ",
+                    10f,
+                    Misc.getStoryBrightColor(),
+                    "+1 To Orbital Fleetwork Facility"
+            );
+
+        }
+        if (hasTwoIndustriesForSynergy(AoDIndustries.CONSUMER_INDUSTRY, AoDIndustries.RESORT)) {
+            tooltip.addPara(
+                    "Consumer Industry and Resort Center: %s ",
+                    10f,
+                    Misc.getStoryBrightColor(),
+                    "Increase Resort income by 10%"
+            );
+
+        }
+        if (hasTwoIndustriesForSynergy(AoDIndustries.ARTISANAL_FARMING, AoDIndustries.RESORT)) {
+            tooltip.addPara(
+                    "Artisanal Farming and Resort Center: %s ",
+                    10f,
+                    Misc.getStoryBrightColor(),
+                    "Increase Artisanal Farming's income by 10%"
+            );
+
+        }
+        if (hasTwoIndustriesForSynergy(AoDIndustries.UNDERWORLD, AoDIndustries.RESORT)) {
+            tooltip.addPara(
+                    "Underworld and Resort Center: %s ",
+                    10f,
+                    Misc.getStoryBrightColor(),
+                    "Increase planet income by 5% "
+            );
+
+        }
+        if (hasTwoIndustriesForSynergy(AoDIndustries.TERMINUS, AoDIndustries.RESORT)) {
+            tooltip.addPara(
+                    "Terminus and Resort Center: %s ",
+                    10f,
+                    Misc.getStoryBrightColor(),
+                    "Increase planet accessibility by 10% "
+            );
+
+        }
 
     }
 
@@ -142,10 +247,23 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
 
     @Override
     public boolean showIcon() {
-        return hasTwoIndustriesForSynergy(AoDIndustries.TERMINUS, AoDIndustries.MILITARY_HEAVY) ||
+        boolean firstarg = (hasTwoIndustriesForSynergy(AoDIndustries.TERMINUS, AoDIndustries.MILITARY_HEAVY) ||
                 hasTwoIndustriesForSynergy(AoDIndustries.TERMINUS, AoDIndustries.SUPPLY_HEAVY) ||
                 hasTwoIndustriesForSynergy(AoDIndustries.BENEFICATION, AoDIndustries.POLICRYSTALIZATOR) ||
-                hasTwoIndustriesForSynergy(AoDIndustries.SUBLIMATION, AoDIndustries.CASCADE_REPROCESSOR);
+                hasTwoIndustriesForSynergy(AoDIndustries.SUBLIMATION, AoDIndustries.CASCADE_REPROCESSOR)||
+                hasTwoIndustriesForSynergy(AoDIndustries.CASCADE_REPROCESSOR, AoDIndustries.TRI_TACHYON_HEAVY)||
+                hasTwoIndustriesForSynergy(AoDIndustries.POLICRYSTALIZATOR, AoDIndustries.HEGEMONY_HEAVY)||
+                hasTwoIndustriesForSynergy(AoDIndustries.CONSUMER_INDUSTRY, AoDIndustries.RESORT)||
+                hasTwoIndustriesForSynergy(AoDIndustries.ARTISANAL_FARMING, AoDIndustries.RESORT)||
+                hasTwoIndustriesForSynergy(AoDIndustries.UNDERWORLD, AoDIndustries.RESORT)||
+                hasTwoIndustriesForSynergy(AoDIndustries.TERMINUS, AoDIndustries.RESORT));
+        ResearchAPI researchAPI = AoDUtilis.getResearchAPI();
+        boolean secondArg = false;
+        if(researchAPI!=null){
+             secondArg = researchAPI.alreadyResearchedAmount()>=10;
+        }
+        return firstarg&&secondArg;
+
     }
 
     public static void applyRessourceCond(MarketAPI marketAPI) {
