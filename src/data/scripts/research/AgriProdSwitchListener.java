@@ -299,8 +299,6 @@ public class AgriProdSwitchListener extends BaseIndustryOptionProvider {
             @Override
             public void customDialogConfirm() {
                 MarketAPI market = opt.ind.getMarket();
-
-
                 market.addIndustry(AoDIndustries.AGRI_SWITCH);
                 Industry inBetween = market.getIndustry(AoDIndustries.AGRI_SWITCH);
                 inBetween.getSpec().setName(opt.ind.getCurrentName());

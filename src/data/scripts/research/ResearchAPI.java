@@ -770,6 +770,7 @@ public class ResearchAPI {
         for (ResearchOption researchOption : researchOptions) {
             if (researchOption.researchTier == 0) continue;
             if (!researchOption.isResearched) continue;
+            if(researchOption.isDisabled)continue;
             counter++;
         }
         return counter;
@@ -778,7 +779,7 @@ public class ResearchAPI {
     public int alreadyResearchedAmountCertainTier(int tier) {
         int counter = 0;
         for (ResearchOption researchOption : researchOptions) {
-
+            if(researchOption.isDisabled)continue;
             if (researchOption.researchTier != tier && tier != 3) continue;
             if (tier == 3) {
                 if (researchOption.researchTier <= 2) {

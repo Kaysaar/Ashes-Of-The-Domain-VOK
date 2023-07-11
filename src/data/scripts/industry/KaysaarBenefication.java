@@ -27,10 +27,10 @@ public class KaysaarBenefication extends BaseIndustry {
         demand(Commodities.HEAVY_MACHINERY, size-2);
         demand(AodCommodities.RECITIFICATES,  size);
         if(AoDUtilis.getRareOreAmount(market)>=0){
-            supply(AodCommodities.PURIFIED_RARE_ORE,AoDUtilis.getRareOreAmount(market)+(market.getSize()-4)); //for ideal size 6: 6
+            supply(AodCommodities.PURIFIED_RARE_ORE,AoDUtilis.getRareOreAmount(market)+(market.getSize()-4)); //for ideal size 6 with alpha core 6
         }
         if(AoDUtilis.getNormalOreAmount(market)>=0){
-            supply(AodCommodities.PURIFIED_ORE,AoDUtilis.getNormalOreAmount(market)+(market.getSize()-4)); //for ideal size 6 : 7
+            supply(AodCommodities.PURIFIED_ORE,AoDUtilis.getNormalOreAmount(market)+(market.getSize()-4)); ///for ideal size 6 with alpha core: 7
         }
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.DRUGS, Commodities.HEAVY_MACHINERY);
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state

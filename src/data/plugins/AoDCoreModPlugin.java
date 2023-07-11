@@ -309,9 +309,6 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         Global.getSettings().getIndustrySpec(Industries.ORBITALWORKS).addTag("casual_upgrade");
         if (!Global.getSector().getPlayerFaction().getMemory().is(AodMemFlags.AOD_INITALIZED, true)) {
             Global.getSector().getPersistentData().put(AodMemFlags.RESEARCH_SAVED, new HashMap<String, Boolean>());
-
-            researchAPI.handleOtherModsAvailbility();
-
             researchAPI.saveResearch(true);
             boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
