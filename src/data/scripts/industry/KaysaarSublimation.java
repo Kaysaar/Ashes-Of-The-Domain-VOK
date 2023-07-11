@@ -25,7 +25,7 @@ public class KaysaarSublimation extends BaseIndustry {
         demand(AodCommodities.BIOTICS,  size);
         demand(Commodities.ORGANICS,  size);
         if(AoDUtilis.getOrganicsAmount(market)>=0){
-            supply(AodCommodities.POLYMERS,AoDUtilis.getOrganicsAmount(market)+(market.getSize()-4)); //4+1+1+3
+            supply(AodCommodities.POLYMERS,AoDUtilis.getOrganicsAmount(market)+(market.getSize()-4));
         }
         if(AoDUtilis.getVolatilesAmount(market)>=0){
             supply(AodCommodities.COMPOUNDS,AoDUtilis.getVolatilesAmount(market)+(market.getSize()-4));

@@ -11,10 +11,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Skills;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
-import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityEventIntel;
-import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityFactor;
-import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityManager;
-import com.fs.starfarer.api.impl.campaign.shared.SharedData;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
@@ -60,7 +56,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     ResearchOption wantsToHaveInfoAbout = null;
     Color bgColor = new Color(6, 35, 40, 42);
     float size_section = 155;
-    HashMap<ButtonAPI, TooltipMakerAPI> researchButtonsInfoPoper = new HashMap<>();
+    HashMap<ButtonAPI, TooltipMakerAPI> makerAPIHashMap = new HashMap<>();
     CustomPanelAPI techPanel;
     TooltipMakerAPI techPanelTT;
     boolean wantsInfoAboutCurrentlyResearching = false;
@@ -913,7 +909,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     button.getPosition().setLocation(0, 0).inTL(95, 42);
                     if (research.isResearched) {
                         button.setEnabled(false);
-                        researchButtonsInfoPoper.put(button, vTT);
+                        makerAPIHashMap.put(button, vTT);
                     }
 
                 }
@@ -977,6 +973,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 if (research.researchTier <= 2 && i == 3) {
                     continue;
                 }
+                if(research.isDisabled)continue;
                 CustomPanelAPI vPanel = main.createCustomPanel(190, 70, null);
                 vPanel.getPosition().setLocation(0, 0).inTL(5 + xmover * research.researchTier, 10 + index * spacerY);
                 TooltipMakerAPI vTT = vPanel.createUIElement(190, 70, false);
@@ -1008,14 +1005,14 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     button.getPosition().setLocation(0, 0).inTL(95, 42);
                     if (research.isResearched) {
                         button.setEnabled(false);
-                        researchButtonsInfoPoper.put(button, vTT);
+                        makerAPIHashMap.put(button, vTT);
                     }
 
                 }
 
                 vPanel.addUIElement(vTT).inTL(0, 0);
                 section.addComponent(vPanel).inTL(10 + xmover * research.researchTier, (10 + index * spacerY));
-
+                section.addSpacer(10);
                 techPannels.add(vPanel);
                 tracker.put(vPanel, research.industryId);
                 index++;
@@ -1690,7 +1687,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         for (ButtonAPI b : buttons) {
             String buttonContent = buttonMap.get(b);
             String[] tokens = buttonContent.split(":");
-            if (b.isHighlighted() && researchButtonsInfoPoper.containsKey(b)) {
+            if (b.isHighlighted() && makerAPIHashMap.containsKey(b)) {
                 TooltipMakerAPI.TooltipCreator infoTooltip = new TooltipMakerAPI.TooltipCreator() {
                     public boolean isTooltipExpandable(Object tooltipParam) {
                         return false;
@@ -1705,7 +1702,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     }
 
                 };
-                researchButtonsInfoPoper.get(b).addTooltipToPrevious(infoTooltip, TooltipMakerAPI.TooltipLocation.LEFT, true);
+                makerAPIHashMap.get(b).addTooltipToPrevious(infoTooltip, TooltipMakerAPI.TooltipLocation.LEFT, true);
 
             }
 
