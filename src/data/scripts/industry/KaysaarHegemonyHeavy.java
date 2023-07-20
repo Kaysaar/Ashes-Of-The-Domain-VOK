@@ -73,7 +73,7 @@ public class KaysaarHegemonyHeavy extends BaseIndustry {
             supply.clear();
             unapply();
         } else {
-            if (!market.hasCondition(Conditions.POLLUTION)) {
+            if (!market.hasCondition(Conditions.POLLUTION)&&market.hasCondition(Conditions.HABITABLE)) {
                 market.addCondition(Conditions.POLLUTION);
             }
             for (MarketAPI factionMarket : Misc.getFactionMarkets(market.getFaction())) {

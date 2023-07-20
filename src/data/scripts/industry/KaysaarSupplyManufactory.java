@@ -17,7 +17,7 @@ public class KaysaarSupplyManufactory extends HeavyIndustry {
         demand(Commodities.METALS, size);
         demand(Commodities.RARE_METALS, size - 2);
         supply(Commodities.HEAVY_MACHINERY, size);
-        supply(Commodities.SUPPLIES, size);
+        supply(Commodities.SUPPLIES, size+2);
         supply(Commodities.HAND_WEAPONS, size - 3);
         supply(Commodities.SHIPS, size  - 3);
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.METALS,Commodities.RARE_ORE);

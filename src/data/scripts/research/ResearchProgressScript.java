@@ -32,6 +32,8 @@ public class ResearchProgressScript implements EveryFrameScript {
 
     public boolean canResearchAnything(){
         for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getResearchOptions()) {
+            if(researchOption.isDisabled)continue;
+            if(researchOption.isResearched)continue;
             if(AoDUtilis.getResearchAPI().canResearch(researchOption.industryId,false)){
                 return true;
             }

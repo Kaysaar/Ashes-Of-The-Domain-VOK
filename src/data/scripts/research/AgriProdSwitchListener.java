@@ -133,15 +133,21 @@ public class AgriProdSwitchListener extends BaseIndustryOptionProvider {
 
                 int normal = qty;
                 if (normal > 0) {
-                    if (opt.id.equals(AoDSwitches.SWITCH_RECTIFICATES)) {
-                        tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), normal, IconRenderMode.NORMAL);
+                    if(curr.getCommodityId().equals(Commodities.LUXURY_GOODS)){
+                        tooltip.addIcons(marketAPI.getCommodityData(Commodities.LUXURY_GOODS), normal, IconRenderMode.NORMAL);
                     }
-                    if (opt.id.equals(AoDSwitches.SWITCH_BIOTICS)) {
-                        tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), normal, IconRenderMode.NORMAL);
+                    else{
+                        if (opt.id.equals(AoDSwitches.SWITCH_RECTIFICATES)) {
+                            tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), normal, IconRenderMode.NORMAL);
+                        }
+                        if (opt.id.equals(AoDSwitches.SWITCH_BIOTICS)) {
+                            tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), normal, IconRenderMode.NORMAL);
+                        }
+                        if (opt.id.equals(AoDSwitches.SWITCH_FOOD)) {
+                            tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), normal, IconRenderMode.NORMAL);
+                        }
                     }
-                    if (opt.id.equals(AoDSwitches.SWITCH_FOOD)) {
-                        tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), normal, IconRenderMode.NORMAL);
-                    }
+
 
                 }
 

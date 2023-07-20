@@ -15,7 +15,7 @@ public class KaysaarIsotopeSeparator extends BaseIndustry {
         demand(Commodities.HEAVY_MACHINERY, size - 2); // have to keep it low since it can be circular
         demand(Commodities.RARE_ORE, size + 4);
         demand(AodCommodities.COMPOUNDS, size - 2);
-        supply(Commodities.RARE_METALS, size);
+        supply(Commodities.RARE_METALS, size+2);
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.RARE_ORE,AodCommodities.POLYMERS);
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state

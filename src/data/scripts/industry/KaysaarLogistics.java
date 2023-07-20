@@ -216,20 +216,4 @@ public class KaysaarLogistics extends Waystation {
         return false;
     }
 
-    public void addImproveDesc(TooltipMakerAPI info, ImprovementDescriptionMode mode) {
-        float opad = 10f;
-        Color highlight = Misc.getHighlightColor();
-
-        float a = IMPROVE_ACCESSIBILITY;
-        String aStr = "" + (int)Math.round(a * 100f) + "%";
-
-        if (mode == ImprovementDescriptionMode.INDUSTRY_TOOLTIP) {
-            info.addPara("Accessibility increased by %s.", 0f, highlight, aStr);
-        } else {
-            info.addPara("Increases accessibility by %s.", 0f, highlight, aStr);
-        }
-
-        info.addSpacer(opad);
-        super.addImproveDesc(info, mode);
-    }
 }
