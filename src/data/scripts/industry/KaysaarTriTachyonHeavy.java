@@ -28,10 +28,10 @@ public class KaysaarTriTachyonHeavy extends HeavyIndustry {
         demand(AodCommodities.PURIFIED_TRANSPLUTONICS, size - 2);
         demand(Commodities.RARE_METALS, size - 2);
 
-        supply(Commodities.HEAVY_MACHINERY, size);
-        supply(Commodities.SUPPLIES, size);
-        supply(Commodities.HAND_WEAPONS, size);
-        supply(Commodities.SHIPS, size);
+        supply(Commodities.HEAVY_MACHINERY, size+1);
+        supply(Commodities.SUPPLIES, size+1);
+        supply(Commodities.HAND_WEAPONS, size+1);
+        supply(Commodities.SHIPS, size+1);
         market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(getModId(1), qualityBonus, "Orbital Skunkworks Facility");
 
 
@@ -58,7 +58,7 @@ public class KaysaarTriTachyonHeavy extends HeavyIndustry {
             supply.clear();
             unapply();
         } else {
-            if (!market.hasCondition(Conditions.POLLUTION)) {
+            if (!market.hasCondition(Conditions.POLLUTION)&&market.hasCondition(Conditions.HABITABLE)) {
                 market.addCondition(Conditions.POLLUTION);
             }
         }

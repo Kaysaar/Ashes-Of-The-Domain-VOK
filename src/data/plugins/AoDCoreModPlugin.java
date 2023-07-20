@@ -3,12 +3,18 @@ package data.plugins;
 
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.*;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.characters.ImportantPeopleAPI;
+import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseInstallableItemEffect;
+import com.fs.starfarer.api.impl.campaign.econ.impl.BoostIndustryInstallableItemEffect;
+import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.procgen.themes.RemnantSeededFleetManager;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.Ids.AoDConditions;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
@@ -18,8 +24,6 @@ import data.scripts.ScientistPersonAPIInterceptor;
 import data.scripts.campaign.econ.listeners.*;
 import data.scripts.research.*;
 import com.fs.starfarer.api.campaign.*;
-import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.AbilityPlugin;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
@@ -27,9 +31,7 @@ import com.fs.starfarer.api.util.Misc;
 
 import org.json.JSONException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class AoDCoreModPlugin extends BaseModPlugin {
 
@@ -259,7 +261,6 @@ public class AoDCoreModPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
-        super.onGameLoad(newGame);
         if (Global.getSector().hasScript(NexerlinColonyStartNerf.class)) {
             Global.getSector().removeScriptsOfClass(NexerlinColonyStartNerf.class);
 
@@ -479,11 +480,11 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         };
 
         Global.getSector().addListener(customlistener);
-        if(!Global.getSector().getMemory().contains("$aotd_researcher_done")){
+        if (!Global.getSector().getMemory().contains("$aotd_researcher_done")) {
             Global.getSector().addListener(new ScientistPersonAPIInterceptor());
         }
-        if(!Global.getSector().getMemory().contains("$aotd_give_core")){
-            Global.getSector().getMemory().set("$aotd_give_core",false);
+        if (!Global.getSector().getMemory().contains("$aotd_give_core")) {
+            Global.getSector().getMemory().set("$aotd_give_core", false);
         }
         if (!Global.getSector().getMemory().contains("$update_1.2.0_aotdhot1")) {
             Global.getSector().getMemory().set("$update_1.2.0_aotdhot1", true);
@@ -505,6 +506,20 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                 playerMarket.addCondition("aotd_industrial_might");
             }
         }
+        ItemEffectsRepo.ITEM_EFFECTS.put(Items.MANTLE_BORE, new BoostIndustryInstallableItemEffect(
+                Items.MANTLE_BORE, ItemEffectsRepo.MANTLE_BORE_MINING_BONUS, 0) {
+            @Override
+            public String[] getSimpleReqs(Industry industry) {
+                return new String[]{"not extreme weather","not habitable","not a gas giant"};
+            }
+        });
+        ItemEffectsRepo.ITEM_EFFECTS.put(Items.CATALYTIC_CORE, new BoostIndustryInstallableItemEffect(
+                Items.CATALYTIC_CORE, ItemEffectsRepo.CATALYTIC_CORE_BONUS, 0) {
+            @Override
+            public String[] getSimpleReqs(Industry industry) {
+                return new String[]{"not extreme weather","not extreme tectonic activity"};
+            }
+        });
     }
 
     private static void insertSophia() {
@@ -528,7 +543,6 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             ip.addPerson(sophiaAshley);
         }
     }
-
 
 
     private static void insertExplorer() {

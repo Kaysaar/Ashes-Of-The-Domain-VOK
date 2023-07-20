@@ -15,7 +15,7 @@ public class KaysaarCrystalizator extends BaseIndustry {
         demand(Commodities.HEAVY_MACHINERY, size - 2); // have to keep it low since it can be circular
         demand(Commodities.ORE, size + 3);
         demand(AodCommodities.POLYMERS, size - 2);
-        supply(Commodities.METALS, size+2);
+        supply(Commodities.METALS, size+4);
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.ORE,AodCommodities.POLYMERS);
 

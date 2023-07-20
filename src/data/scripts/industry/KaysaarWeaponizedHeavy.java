@@ -18,8 +18,8 @@ public class KaysaarWeaponizedHeavy extends HeavyIndustry {
 
         supply(Commodities.HEAVY_MACHINERY, size-3);
         supply(Commodities.SUPPLIES, size-3);
-        supply(Commodities.HAND_WEAPONS, size );
-        supply(Commodities.SHIPS, size  );
+        supply(Commodities.HAND_WEAPONS, size+2 );
+        supply(Commodities.SHIPS, size-2 );
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.METALS,Commodities.RARE_ORE);
         int maxDeficit =  size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;

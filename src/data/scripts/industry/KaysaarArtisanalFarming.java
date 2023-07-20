@@ -34,6 +34,7 @@ public class KaysaarArtisanalFarming extends BaseIndustry {
         }
 
         supply(Commodities.FOOD,quantity);
+        supply(Commodities.LUXURY_GOODS,quantity);
         demand(Commodities.HEAVY_MACHINERY, market.getSize()-3);
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY);
         //applyDeficitToProduction(0, deficit, Commodities.FOOD, Commodities.ORGANICS);
