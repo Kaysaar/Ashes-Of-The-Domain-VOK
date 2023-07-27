@@ -29,6 +29,7 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.util.Misc;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
 import java.util.*;
@@ -331,19 +332,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             }
 
         } else {
-
-            researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
-            if (!Global.getSector().getMemory().contains("$update_1.2.0_aotd")) {
-                Global.getSector().getMemory().set("$update_1.2.0_aotd", true);
-                researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
-                ResearchAPI updatedApi = new ResearchAPI();
-                updatedApi.setCurrentResearching(researchAPI.getCurrentResearching());
-                updatedApi.getResearchOptions().addAll(researchAPI.getAllResearchedOptions());
-                updatedApi.setResearching(researchAPI.isResearching());
-                researchAPI = updatedApi;
-                Global.getSector().getPersistentData().remove(aodTech);
-                Global.getSector().getPersistentData().put(aodTech, researchAPI);
-            }
+            researchAPI = updateAPI();
             researchAPI.loadMergedCSV();
             try {
                 researchAPI.updateResearchListFromCSV();
@@ -508,6 +497,24 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         }
         ItemEffectsRepo.ITEM_EFFECTS.put(Items.MANTLE_BORE, new BoostIndustryInstallableItemEffect(
                 Items.MANTLE_BORE, ItemEffectsRepo.MANTLE_BORE_MINING_BONUS, 0) {
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+                List<String> commodities = new ArrayList<String>();
+                for (String curr : ItemEffectsRepo.MANTLE_BORE_COMMODITIES) {
+                    CommoditySpecAPI c = Global.getSettings().getCommoditySpec(curr);
+                    commodities.add(c.getName().toLowerCase());
+                }
+                text.addPara(pre + "Increases " + Misc.getAndJoined(commodities) + " production by %s units.",
+                        pad, Misc.getHighlightColor(),
+                        "" + ItemEffectsRepo.MANTLE_BORE_MINING_BONUS);
+//				text.addPara(pre + "Increases " + Misc.getAndJoined(commodities) + " production by %s units. " +
+//						"Increases demand for heavy machinery by %s units.",
+//						pad, Misc.getHighlightColor(),
+//						"" + MANTLE_BORE_MINING_BONUS,
+//						"" + MANTLE_BORE_MINING_BONUS);
+            }
+
+
             @Override
             public String[] getSimpleReqs(Industry industry) {
                 return new String[]{"not extreme weather","not habitable","not a gas giant"};
@@ -515,11 +522,29 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         });
         ItemEffectsRepo.ITEM_EFFECTS.put(Items.CATALYTIC_CORE, new BoostIndustryInstallableItemEffect(
                 Items.CATALYTIC_CORE, ItemEffectsRepo.CATALYTIC_CORE_BONUS, 0) {
+
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+                text.addPara(pre + "Increases refining production by %s units.",
+                        pad, Misc.getHighlightColor(),
+                        "" + (int) ItemEffectsRepo.CATALYTIC_CORE_BONUS);
+            }
             @Override
             public String[] getSimpleReqs(Industry industry) {
                 return new String[]{"not extreme weather","not extreme tectonic activity"};
             }
         });
+    }
+
+    @NotNull
+    private static ResearchAPI updateAPI() {
+        ResearchAPI updatedApi = new ResearchAPI();
+        updatedApi.setCurrentResearching(AoDUtilis.getResearchAPI().getCurrentResearching());
+        updatedApi.getResearchOptions().addAll(AoDUtilis.getResearchAPI().getAllResearchedOptions());
+        updatedApi.setResearching(AoDUtilis.getResearchAPI().isResearching());
+        Global.getSector().getPersistentData().remove(aodTech);
+        Global.getSector().getPersistentData().put(aodTech, updatedApi);
+        return updatedApi;
     }
 
     private static void insertSophia() {

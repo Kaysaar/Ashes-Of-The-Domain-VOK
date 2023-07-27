@@ -13,7 +13,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class KaysaarFracking extends BaseIndustry {
-
+    private boolean isCryovolcanicOrFrozen() {
+        boolean isCryovolcanicOrFrozen = false;
+        if(market.getPlanetEntity()!=null){
+            if(market.getPlanetEntity().getTypeId().equals("frozen") ||market.getPlanetEntity().getTypeId().equals("cryovolcanic")||market.getPlanetEntity().getTypeId().equals("frozen1")){
+                isCryovolcanicOrFrozen= true;
+            }
+        }
+        return isCryovolcanicOrFrozen;
+    }
     @Override
     public void apply() {
 
@@ -25,7 +33,14 @@ public class KaysaarFracking extends BaseIndustry {
         }
         demand(Commodities.HEAVY_MACHINERY, size - 2);
         demand(Commodities.DRUGS,  size - 2);
-        demand(AodCommodities.WATER,3);
+        if(isCryovolcanicOrFrozen()) {
+            demand(AodCommodities.WATER,5);
+        }
+        else{
+            demand(AodCommodities.WATER,0);
+
+        }
+
         if(AoDUtilis.getOrganicsAmount(market)>=-1){
             supply(Commodities.ORGANICS,AoDUtilis.getOrganicsAmount(market)+(market.getSize()+2));
         }
