@@ -301,6 +301,9 @@ public class ResearchAPI {
             if (Global.getSettings().getSpecialItemSpec(req.getKey()) != null) {
                 SpecialItemData sec = new SpecialItemData(Global.getSettings().getSpecialItemSpec(req.getKey()).getId(), null);
                 float amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().getQuantity(CargoAPI.CargoItemType.SPECIAL, sec);
+                if (reqAmount <= 0) {
+                    break;
+                }
                 if (amountFromOneMarket <= reqAmount) {
                     allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeItems(CargoAPI.CargoItemType.SPECIAL, sec, amountFromOneMarket);
 
@@ -321,9 +324,7 @@ public class ResearchAPI {
                 reqAmount -= amountFromOneMarket;
             }
 
-            if (reqAmount <= 0) {
-                break;
-            }
+
         }
     }
 

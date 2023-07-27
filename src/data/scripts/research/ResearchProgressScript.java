@@ -8,6 +8,7 @@ import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.util.Misc;
 import data.plugins.AoDUtilis;
+import lunalib.lunaSettings.LunaSettings;
 
 import static data.plugins.AoDCoreModPlugin.aodTech;
 
@@ -43,9 +44,22 @@ public class ResearchProgressScript implements EveryFrameScript {
     public void advance(float amount) {
         researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
         if(researchAPI.alreadyResearchedAmount()>=7){
-            Global.getSector().getMemory().set("$aotd_can_scientist",true);
+            if (Global.getSettings().getModManager().isModEnabled("lunalib"))
+            {
+                boolean enabled = Boolean.TRUE.equals(LunaSettings.getBoolean("aod_core", "aoTDVOK_OP_SCIENTIST_ENABLED"));
+                if(enabled){
+                    Global.getSector().getMemory().set("$aotd_can_op_scientist",true);
+                }
+            }
         }
         if(researchAPI.alreadyResearchedAmount()>=12&&researchAPI.alreadyResearchedAmountCertainTier(3)>=1){
+            if (Global.getSettings().getModManager().isModEnabled("lunalib"))
+            {
+                 boolean enabled = Boolean.TRUE.equals(LunaSettings.getBoolean("aod_core", "aoTDVOK_OP_SCIENTIST_ENABLED"));
+                 if(enabled){
+                     Global.getSector().getMemory().set("$aotd_can_op_scientist",true);
+                 }
+            }
             Global.getSector().getMemory().set("$aotd_can_op_scientist",true);
         }
 
