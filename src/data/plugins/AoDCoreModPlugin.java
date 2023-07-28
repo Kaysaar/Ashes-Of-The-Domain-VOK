@@ -541,7 +541,12 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         ResearchAPI updatedApi = new ResearchAPI();
         updatedApi.setCurrentResearching(AoDUtilis.getResearchAPI().getCurrentResearching());
         updatedApi.getResearchOptions().addAll(AoDUtilis.getResearchAPI().getAllResearchedOptions());
+
         updatedApi.setResearching(AoDUtilis.getResearchAPI().isResearching());
+        updatedApi.setCurrentResearcher(AoDUtilis.getResearchAPI().getCurrentResearcher());
+        for (PersonAPI personAPI : AoDUtilis.getResearchAPI().getResearchersInPossetion()) {
+            updatedApi.addResearchersInPossetion(personAPI);
+        }
         Global.getSector().getPersistentData().remove(aodTech);
         Global.getSector().getPersistentData().put(aodTech, updatedApi);
         return updatedApi;
