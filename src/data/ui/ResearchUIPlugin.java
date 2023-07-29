@@ -566,17 +566,17 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             buttons.add(buttonOther);
             buttonMap.put(buttonOther, "PROGRESSION:" + "other");
             buttonOther.getPosition().setLocation(0, 0).inTL(2, 610);
-            if(currResearching!=null){
+            if (currResearching != null) {
                 float percent = (currResearching.currentResearchDays - currResearching.researchCost) / currResearching.researchCost;
-                if(AoDUtilis.getResearchAPI().getCurrentResearcher()!=null&&AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)&&(currResearching.industryId.equals("triheavy")||currResearching.industryId.equals("hegeheavy")||currResearching.industryId.equals("ii_stellacastellum"))){
-                    percent = (currResearching.currentResearchDays - currResearching.researchCost*3) / currResearching.researchCost*3;
+                if (AoDUtilis.getResearchAPI().getCurrentResearcher() != null && AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE) && (currResearching.industryId.equals("triheavy") || currResearching.industryId.equals("hegeheavy") || currResearching.industryId.equals("ii_stellacastellum"))) {
+                    percent = (currResearching.currentResearchDays - currResearching.researchCost * 3) / currResearching.researchCost * 3;
                 }
-                float true_percent = Math.abs(percent)*100f;
+                float true_percent = Math.abs(percent) * 100f;
                 if (currResearching.currentResearchDays == currResearching.researchCost) {
                     true_percent = 0;
                 }
                 String formattedString = String.format("%.02f", true_percent);
-                optionsPanelTT.addPara("Researching : "+currResearching.industryName+"\nProgress:"+formattedString+"%",Color.ORANGE,10f).getPosition().setLocation(0, 0).inTL(5, 165);
+                optionsPanelTT.addPara("Researching : " + currResearching.industryName + "\nProgress:" + formattedString + "%", Color.ORANGE, 10f).getPosition().setLocation(0, 0).inTL(5, 165);
             }
 
         }
@@ -973,7 +973,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 if (research.researchTier <= 2 && i == 3) {
                     continue;
                 }
-                if(research.isDisabled)continue;
+                if (research.isDisabled) continue;
                 CustomPanelAPI vPanel = main.createCustomPanel(190, 70, null);
                 vPanel.getPosition().setLocation(0, 0).inTL(5 + xmover * research.researchTier, 10 + index * spacerY);
                 TooltipMakerAPI vTT = vPanel.createUIElement(190, 70, false);
@@ -1039,10 +1039,10 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             String tier = tierDecider(currResearching.researchTier);
 
             float percent = (currResearching.currentResearchDays - currResearching.researchCost) / currResearching.researchCost;
-            if(AoDUtilis.getResearchAPI().getCurrentResearcher()!=null&&AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)&&(currResearching.industryId.equals("triheavy")||currResearching.industryId.equals("hegeheavy")||currResearching.industryId.equals("ii_stellacastellum"))){
-                percent = (currResearching.currentResearchDays - currResearching.researchCost*3) / currResearching.researchCost*3;
+            if (AoDUtilis.getResearchAPI().getCurrentResearcher() != null && AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE) && (currResearching.industryId.equals("triheavy") || currResearching.industryId.equals("hegeheavy") || currResearching.industryId.equals("ii_stellacastellum"))) {
+                percent = (currResearching.currentResearchDays - currResearching.researchCost * 3) / currResearching.researchCost * 3;
             }
-            float true_percent =Math.abs(percent)*100f;
+            float true_percent = Math.abs(percent) * 100f;
             if (currResearching.currentResearchDays == currResearching.researchCost) {
                 true_percent = 0;
             }
@@ -1163,7 +1163,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                             if (newCalculus == 0 && cutting) {
                                 continue;
                             }
-                            triple= true;
+                            triple = true;
 
                         }
                     }
@@ -1205,12 +1205,12 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             }
             if (!wantsToHaveInfoAbout.isResearched) {
                 float cost = wantsToHaveInfoAbout.researchCost;
-                float secondaryCost  = wantsToHaveInfoAbout.currentResearchDays;
-                if(secondaryCost!=-1){
-                    cost =secondaryCost;
+                float secondaryCost = wantsToHaveInfoAbout.currentResearchDays;
+                if (secondaryCost != -1) {
+                    cost = secondaryCost;
                 }
-                if(AoDUtilis.getResearchAPI().getCurrentResearcher()!=null&&AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)&&triple){
-                    cost*=3;
+                if (AoDUtilis.getResearchAPI().getCurrentResearcher() != null && AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE) && triple) {
+                    cost *= 3;
                 }
                 wantsToKnowResearchReqTT.addPara("It would take " + cost + " days to complete research ", 10f).getPosition().setLocation(0, 0).inTL(5, 175 + (float) availableHeight / 6.5f);
                 if (currResearching == null || !wantsToHaveInfoAbout.industryId.equals(currResearching.industryId)) {
@@ -1834,7 +1834,6 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             }
         }
     }
-
 
 
     @Override

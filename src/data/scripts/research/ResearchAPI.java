@@ -173,11 +173,6 @@ public class ResearchAPI {
             researchOptions.remove(getResearchOption(researchOption.industryId));
             researchOption.currentResearchDays = curr;
             researchOption.isResearched = isResearched;
-            if (hasMetCriteriaInCost) {
-                researchOption.requieredItems.clear();
-            } else {
-
-            }
             researchOptions.add(researchOption);
 
 
@@ -257,6 +252,7 @@ public class ResearchAPI {
 
     public boolean hasMetReq(Map.Entry<String, Integer> req) {
         if (req == null) return true;
+
         int reqAmount = req.getValue();
         boolean isSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank");
         if (!isSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
@@ -366,7 +362,7 @@ public class ResearchAPI {
         if (getResearchFacilitiesQuantity() == 0) {
             return false;
         }
-        if (getResearchOption(industryId).requieredItems != null && !getResearchOption(industryId).requieredItems.isEmpty()) {
+        if (getResearchOption(industryId).requieredItems != null && !getResearchOption(industryId).requieredItems.isEmpty()&&!getResearchOption(industryId).hasTakenResearchCost) {
             for (Map.Entry<String, Integer> requieredItem : getResearchOption(industryId).requieredItems.entrySet()) {
                 if (!hasMetReq(requieredItem)) {
                     return false;
@@ -506,7 +502,9 @@ public class ResearchAPI {
             }
             if (getResearchOption(id) != null) {
                 isResearched = getResearchOption(id).isResearched;
-
+                if(getResearchOption(id).requieredItems==null||getResearchOption(id).requieredItems.isEmpty()){
+                    itemsReqToStartResearch = null;
+                }
             }
             boolean isHidden = jsonObject.getBoolean(isDissabled);
             String modId = jsonObject.getString(modIdLabel);
