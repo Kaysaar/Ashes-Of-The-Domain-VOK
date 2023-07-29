@@ -342,7 +342,6 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             }
             researchAPI.handleOtherModsAvailbility();
             researchAPI.clearResearchFromErrors();
-            researchAPI.removeCopies();
             setAoDTier0UpgradesIfResearched(researchAPI);
 
             researchAPI.saveResearch(true);
@@ -540,8 +539,9 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     private static ResearchAPI updateAPI() {
         ResearchAPI updatedApi = new ResearchAPI();
         updatedApi.setCurrentResearching(AoDUtilis.getResearchAPI().getCurrentResearching());
-        updatedApi.getResearchOptions().addAll(AoDUtilis.getResearchAPI().getAllResearchedOptions());
-
+        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getResearchOptions()) {
+            updatedApi.getResearchOptions().add(researchOption);
+        }
         updatedApi.setResearching(AoDUtilis.getResearchAPI().isResearching());
         updatedApi.setCurrentResearcher(AoDUtilis.getResearchAPI().getCurrentResearcher());
         for (PersonAPI personAPI : AoDUtilis.getResearchAPI().getResearchersInPossetion()) {
