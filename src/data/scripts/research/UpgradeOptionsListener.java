@@ -16,6 +16,7 @@ import data.Ids.AoDIndustries;
 import data.plugins.AoDUtilis;
 import data.ui.HeadOfResearchCenterUI;
 import data.ui.ResearchUIDP;
+import data.ui.StellaManufactoriumUI;
 import data.ui.UpgradeListUI;
 
 import static data.plugins.AoDCoreModPlugin.aodTech;
@@ -26,6 +27,7 @@ public class UpgradeOptionsListener extends BaseIndustryOptionProvider{
     public static Object CUSTOM_PLUGIN = new Object();
     public static Object IMMEDIATE_ACTION = new Object();
     public static Object CUSTOM_PLUGIN_RESEARCHER = new Object();
+    public static Object STELLA = new Object();
     int handleFarming(MarketAPI market){
 
         int quantity = market.getSize();
@@ -55,10 +57,16 @@ public class UpgradeOptionsListener extends BaseIndustryOptionProvider{
                 opt.color = new Color(241, 189, 23, 255);
                 result.add(opt);
             }
-
             return result;
         }
-
+        if(ind.getId().equals("stella_manufactorium")){
+            List<IndustryOptionData> result = new ArrayList<IndustryOptionData>();
+            IndustryOptionData opt;
+            opt = new IndustryOptionData("Access Stellar Forge", STELLA, ind, this);
+            opt.color = new Color(246, 94, 0, 255);
+            result.add(opt);
+            return result;
+        }
         boolean hasUprade = false;
         for (String tag : ind.getSpec().getTags()) {
             if(tag.contains("starter")){
@@ -78,8 +86,7 @@ public class UpgradeOptionsListener extends BaseIndustryOptionProvider{
         IndustryOptionData opt = new IndustryOptionData("Choose Upgrade", CUSTOM_PLUGIN, ind, this);
         opt.color = new Color(203, 127, 3, 255);
         result.add(opt);
-
-        return result;
+      return  result;
     }
 
     @Override
@@ -93,6 +100,10 @@ public class UpgradeOptionsListener extends BaseIndustryOptionProvider{
         }
         if(opt.id == CUSTOM_PLUGIN_RESEARCHER && opt.ind.getMarket().getFaction().isPlayerFaction()){
             tooltip.addPara("Change current Head of Research Center",0f);
+
+        }
+        if(opt.id == STELLA ){
+            tooltip.addPara("Access Stellar Forge where special equipment for industries is being forged",0f);
 
         }
 
@@ -110,6 +121,10 @@ public class UpgradeOptionsListener extends BaseIndustryOptionProvider{
         if( opt.id == CUSTOM_PLUGIN_RESEARCHER){
             CustomDialogDelegate delegate = new HeadOfResearchCenterUI(AoDUtilis.getResearchAPI().getCurrentResearcher());
             ui.showDialog(HeadOfResearchCenterUI.WIDTH, HeadOfResearchCenterUI.HEIGHT, delegate);
+        }
+        if( opt.id == STELLA){
+            CustomDialogDelegate delegate = new StellaManufactoriumUI(opt.ind);
+            ui.showDialog(StellaManufactoriumUI.WIDTH, StellaManufactoriumUI.HEIGHT, delegate);
         }
     }
 
