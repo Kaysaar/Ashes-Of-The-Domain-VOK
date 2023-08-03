@@ -1,32 +1,36 @@
 {
 	
-	"parked_cryosleeper":{
-		"defaultName":"Domain-era Cryosleeper", 
-		"nameInText":"Domain-era cryosleeper",
-		"shortName":"cryosleeper",
-		"aOrAn":"a",
-		"isOrAre":"is",
-		"defaultRadius":96, 
-		"customDescriptionId":"parked_cryosleeper",
-		"interactionImage":"graphics/illustrations/cryosleeper_interior.jpg",
-		"icon":"graphics/icons/cryosleeper.png",
-		"iconWidth":32,
-		"iconHeight":32,
-		"sprite":"graphics/stations/cryosleeper.png",
-		"spriteWidth":108,
-		"spriteHeight":108,
+	"bifrost_gate":{
+		"defaultName":"Bifrost Gate", # used if name=null in addCustomEntity()
+		"nameInText":"bifrost gate",
+		"aOrAn":"an",
+		"defaultRadius":60, # used if radius<0 in addCustomEntity()
+		"interactionImage":"graphics/illustrations/dead_gate.jpg",
+		"icon":"graphics/icons/gate0.png",
+		"iconWidth":20,
+		"iconHeight":20,
+		"sprite":"graphics/stations/bifrost.png",
+		"spriteWidth":96,
+		"spriteHeight":96,
+		#"sprite":"graphics/ships/com_relay.png",
+		#"spriteWidth":178,
+		#"spriteHeight":96,
 		"renderShadow":true,
 		"useLightColor":true,
 		"showInCampaign":true,
 		"showIconOnMap":true,
-		"showNameOnMap":false,
+		"showNameOnMap":true,
 		"scaleNameWithZoom":false,
 		"scaleIconWithZoom":true,
-		"tags":["has_interaction_dialog", "salvageable", "neutrino_high", "parked_cryosleeper"],
-		"layers":[STATIONS],
+		"nameColor":[70,200,255,255],
+		"nameShadowColor":[0,0,0,255],
+		#"renderCircleIndicator":false,
 		"renderCircleIndicator":true,
 		"renderCircleIndicatorSelectionFlash":true,
-		"pluginClass":"com.fs.starfarer.api.impl.campaign.CryosleeperEntityPlugin",
+		"customDescriptionId":"bifrost_gate",
+		"tags":["bifrost", "neutrino"],
+		"layers":[STATIONS, BELOW_STATIONS], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
+		"pluginClass":"com.fs.starfarer.api.impl.campaign.GateEntityPlugin",
 	}
 }
 
