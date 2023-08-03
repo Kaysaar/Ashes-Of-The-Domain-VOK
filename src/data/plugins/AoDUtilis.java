@@ -3,6 +3,7 @@ package data.plugins;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.PersonImportance;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -15,10 +16,16 @@ import data.Ids.AoDConditions;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
 import data.Ids.AodResearcherSkills;
+import data.scripts.campaign.econ.SMSpecialItem;
 import data.scripts.research.ResearchAPI;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.magiclib.util.MagicSettings;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -250,6 +257,51 @@ public class AoDUtilis {
             ip.addPerson(person);
         }
     }
+    public static ArrayList<SMSpecialItem> getSpecItemsForManufactoriumData(){
+        return (ArrayList<SMSpecialItem>) Global.getSector().getPersistentData().get("$stella_manufactorium_items");
+    }
+    public static void InsertSpecItemsForManufactoriumData() throws JSONException, IOException {
+        JSONArray json =Global.getSettings().getMergedSpreadsheetDataForMod("id", "data/campaign/stella_manufactorium.csv", "aod_core");
+        ArrayList<SMSpecialItem> insertedSpecItemForManufactorium = new ArrayList<SMSpecialItem>();
+        for(int i=0;i<json.length();i++){
+            JSONObject obj = json.getJSONObject(i);
+            String id = obj.getString("id");
+            if(id==null||id.isEmpty()) continue;
 
+            String itemCostRaw = obj.getString("resoruces_to_make_one");
+            float dayCost = Float.parseFloat(obj.getString("time_to_make_one"));
+            HashMap<String,Integer> itemCost = getItemCost(itemCostRaw);
+            insertedSpecItemForManufactorium.add(new SMSpecialItem(itemCost,id,dayCost));
+
+        }
+        Global.getSector().getPersistentData().put("$stella_manufactorium_items",insertedSpecItemForManufactorium);
+    }
+    public static HashMap<String,Integer>getItemCost(String reqItems){
+        String[] splitedAll = reqItems.split(",");
+        HashMap<String, Integer> itemsReq = new HashMap<>();
+        for (String s : splitedAll) {
+            String[] splitedInstance = s.split(":");
+            if (Integer.parseInt(splitedInstance[1]) > 0) {
+                itemsReq.put(splitedInstance[0], Integer.parseInt(splitedInstance[1]));
+            }
+
+        }
+
+        return itemsReq;
+    }
+    public static ArrayList<SectorEntityToken> getAllBifrostGates(){
+        ArrayList<SectorEntityToken> toReturn = new ArrayList<>();
+        for (MarketAPI factionMarket : Misc.getFactionMarkets(Global.getSector().getPlayerFaction())) {
+            for (SectorEntityToken connectedEntity : factionMarket.getConnectedEntities()) {
+                if(connectedEntity.hasTag("bifrost")){
+                    toReturn.add(connectedEntity);
+                }
+            }
+        }
+        if(toReturn.isEmpty()){
+            return null;
+        }
+        return toReturn;
+    }
 
 }

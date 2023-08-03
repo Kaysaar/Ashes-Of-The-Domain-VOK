@@ -7,6 +7,7 @@ public enum ProgressionTreeUiMode {
     MINING,
     LIGHT_INDUSTRY,
     HEAVY_INDUSTRY,
-    REFINING
+    REFINING,
+    EXPERIMENTAL
 
 }

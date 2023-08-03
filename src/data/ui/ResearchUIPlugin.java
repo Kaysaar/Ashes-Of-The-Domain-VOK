@@ -420,10 +420,16 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         techTierNamesTT = techTierNames.createUIElement(availabileWidith - 175, 30, false);
         techTierNamesTT.getPosition().setLocation(0, 0).inTL(0, 0);
         techTierNamesTT.setParaInsigniaLarge();
-        techTierNamesTT.addPara("Primitive", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(50, 5);
-        techTierNamesTT.addPara("Basic", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(size_section + 50, 5);
-        techTierNamesTT.addPara("Sophisticated", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(size_section * 2 + 10, 5);
-        techTierNamesTT.addPara("Pre Collapse", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(size_section * 3 - 20, 5);
+        if(currentCategory.equals(ProgressionTreeUiMode.EXPERIMENTAL)){
+            techTierNamesTT.addPara("Experimental", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(size_section + 120, 5);
+        }
+        else{
+            techTierNamesTT.addPara("Primitive", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(50, 5);
+            techTierNamesTT.addPara("Basic", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(size_section + 50, 5);
+            techTierNamesTT.addPara("Sophisticated", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(size_section * 2 + 10, 5);
+            techTierNamesTT.addPara("Pre Collapse", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(size_section * 3 - 20, 5);
+        }
+
 
         HashMap<List<ResearchOption>, Integer> farmingGroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("farming"));
         HashMap<List<ResearchOption>, Integer> heavyIndustryGroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("heavyindustry"));
@@ -431,6 +437,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         HashMap<List<ResearchOption>, Integer> lightindustrygroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("lightindustry"));
         HashMap<List<ResearchOption>, Integer> refininggroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("refining"));
         HashMap<List<ResearchOption>, Integer> mininggroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("mining"));
+        HashMap<List<ResearchOption>, Integer> experimentalgroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("experimental"));
         int so_far = 0;
         int rest = 0;
         switch (currentCategory) {
@@ -465,6 +472,10 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 break;
             case REFINING:
                 so_far = showTierSection(techPanel, techPanelTT, refininggroup, so_far);
+                rest = so_far;
+                break;
+            case EXPERIMENTAL:
+                so_far = showTierSection(techPanel, techPanelTT, experimentalgroup, so_far);
                 rest = so_far;
                 break;
         }
@@ -566,6 +577,12 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             buttons.add(buttonOther);
             buttonMap.put(buttonOther, "PROGRESSION:" + "other");
             buttonOther.getPosition().setLocation(0, 0).inTL(2, 610);
+
+            ButtonAPI buttonExperimental = optionsPanelTT.addButton("Experimental", null, 152, 40, 10f);
+            buttons.add(buttonExperimental);
+            buttonMap.put(buttonExperimental, "PROGRESSION:" + "experimental");
+            buttonExperimental.getPosition().setLocation(0, 0).inTL(2, 710);
+
             if (currResearching != null) {
                 float percent = (currResearching.currentResearchDays - currResearching.researchCost) / currResearching.researchCost;
                 if (AoDUtilis.getResearchAPI().getCurrentResearcher() != null && AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE) && (currResearching.industryId.equals("triheavy") || currResearching.industryId.equals("hegeheavy") || currResearching.industryId.equals("ii_stellacastellum"))) {
@@ -700,6 +717,9 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         }
         if (uiModeId.contains("other")) {
             return ProgressionTreeUiMode.OTHER;
+        }
+        if (uiModeId.contains("experimental")) {
+            return ProgressionTreeUiMode.EXPERIMENTAL;
         }
         return ProgressionTreeUiMode.FARMING;
     }
@@ -950,7 +970,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         List<ResearchOption> filteredResearch = new ArrayList<>();
         for (ResearchOption research : researchAPI.getResearchOptions()) {
             IndustrySpecAPI indspec = Global.getSettings().getIndustrySpec(research.industryId);
-            if (indspec.hasTag("farming") || indspec.hasTag("aquaculture") || indspec.hasTag("lightindustry") || indspec.hasTag("heavyindustry") || indspec.hasTag("mining") || indspec.hasTag("refining")) {
+            if (indspec.hasTag("farming") || indspec.hasTag("aquaculture") || indspec.hasTag("lightindustry") || indspec.hasTag("heavyindustry") || indspec.hasTag("mining") || indspec.hasTag("refining")||indspec.hasTag("experimental")) {
                 continue;
             }
             filteredResearch.add(research);
@@ -1376,6 +1396,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 IndOrStructure = " - Industry";
             }
             String tier = tierDecider(researchAPI.getResearchOption(industryID).researchTier);
+            if(Global.getSettings().getIndustrySpec(industryID).hasTag("experimental")) tier = "Experimental";
             wantsToKnowResearchTT.addPara(Global.getSettings().getIndustrySpec(industryID).getName() + IndOrStructure, Color.ORANGE, 10f).getPosition().setLocation(0, 0).inTL(190, 5);
             wantsToKnowResearchTT.addPara("Tier : " + tier, Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(190, 30);
             if (researchAPI.getResearchOption(industryID).isResearched) {

@@ -6,6 +6,7 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.rulecmd.CallEvent;
+import com.fs.starfarer.api.impl.campaign.rulecmd.missions.GateCMD;
 import com.fs.starfarer.api.util.Pair;
 
 public class KaysaarSupplyManufactory extends HeavyIndustry {
@@ -49,6 +50,7 @@ public class KaysaarSupplyManufactory extends HeavyIndustry {
                     }
                 }
             }
+
         }
     }
 

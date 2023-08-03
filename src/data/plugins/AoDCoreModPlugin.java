@@ -32,6 +32,7 @@ import com.fs.starfarer.api.util.Misc;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.*;
 
 public class AoDCoreModPlugin extends BaseModPlugin {
@@ -347,7 +348,13 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             researchAPI.saveResearch(true);
 
         }
-
+        try {
+            AoDUtilis.InsertSpecItemsForManufactoriumData();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         setListenersIfNeeded();
         configSize = Misc.MAX_COLONY_SIZE;
