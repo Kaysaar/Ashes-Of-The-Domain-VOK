@@ -9,17 +9,18 @@ BarCMD playAmbience
 AddText ""You make your way inside a bar when suddenly you are approached by a woman with white hair. First thing that catches your attention is a golden mark on her face and a uniform typical for a researcher. As you consider what to say, your thoughts are interrupted by her gentle voice asking you for a drink and 5 minutes of your time""",,"aotdSophiaTalk:Follow
 aotdSophiaDontTalk:Don't follow",
 aotdSophiaTalk,DialogOptionSelected,$option == aotdSophiaTalk,"SaveCurrentVisual
-BeginConversation sophia ",Both of you sit in the bar ordering a small glass of fine booze. After a moment you hear that her name is Sophia and she is one of researchers from Galatia as you guessed it earlier. “I have heard stories about technological advancements of your faction and  I have come with a proposition for you”,aotdSophiaListen: Listen to proposition,
+BeginConversation sophia 
+$global.aotd_sophia",Both of you sit in the bar ordering a small glass of fine booze. After a moment you hear that her name is Sophia and she is one of researchers from Galatia as you guessed it earlier. “I have heard stories about technological advancements of your faction and  I have come with a proposition for you”,aotdSophiaListen: Listen to proposition,
 aotdSophiaListen,DialogOptionSelected,$option == aotdSophiaListen,,"So getting to the point, I am a seeker of knowledge, Galatia limits me with regulations, but you? You pursue knowledge without any bounds and I want to be part of it . So my question is will you allow my humble person to help you in that matter?
 ","aotdSophiaAgree:Accept Propostion 
 aotdSophiaInfo:See her skills
 aotdReturn:Decline ,and leave the bar",
 aotdSophiaAgree,DialogOptionSelected,$option == aotdSophiaAgree,"SophiaAgreed  
-AddTextSmall ""Sophia joined your faction"" highlight",,aotdReturn: Leave the bar,
+AddTextSmall ""$personName joined your faction"" highlight",,aotdReturn: Leave the bar,
 aotdSophiaInfo,DialogOptionSelected,$option == aotdSophiaInfo,"AddTextSmall ""Skill - Resourceful."" highlight
 AddTextSmall  ""Decrease cost of item for initial research by 1 unit. This does not include special databanks"" highlight
 ",,,
-aotdReturn,DialogOptionSelected,$option == aotdReturn," EndConversation DO_NOT_FIRE
+aotdReturn,DialogOptionSelected,$option == aotdReturn,"EndConversation DO_NOT_FIRE
 RestoreSavedVisual
 BarCMD showOptions",You return to the bar.,,
 ,,,,,,
@@ -32,6 +33,40 @@ aotdSophiaIgnore,DialogOptionSelected,$option == aotdSophiaIgnore,"EndConversati
 RestoreSavedVisual
 BarCMD showOptions
 $global.aotd_sophia = true",,,
+#RT ,,,,,,
+haveGivenCore,DialogOptionSelected,$option == saic_continueGiveCore score:10000,"$global.aotd_give_core = true 
+CallEvent $saic_eventRef genLootNoCore",,,
+haveTakenCore,DialogOptionSelected,$option == saic_continueTakeCore score:10000,"$global.aotd_give_core = false 
+CallEvent $saic_eventRef genLootWithCore",,,
 ,,,,,,
+opScientistEncounter,DialogOptionSelected,"$faction.id == tritachyon
+$option == marketVisitBar
+$global.aotd_op_scientist==false
+$global.aotd_can_op_scientist == true
+$global.aotd_give_core == true","FireBest BarShuttleDownPrintDesc
+BarCMD playAmbience
+AddText ""Before you enter the bar a person that looks like an scientist interrupts you""",,opScientistFollow:Continue,
+opScientistFollow,DialogOptionSelected,$option == opScientistFollow,"SaveCurrentVisual
+BeginConversation opScientist 
+$global.$aotd_op_scientist = true","""Ahh, it has been a while since we met. I hope you still recognize me do you ?""","scientistRecognied: Yea, I remember you 
+scientistNotRecognied: I don't know who you are",
+scientistRecognied: ,DialogOptionSelected,$option == scientistRecognied,,"
+""So you still remember , that is refreshing. I can’t simply say how thankful I am to you for sending me that specific Alpha Core. With it I have decoded lost knowledge of Domain’s past. And now as my token of gratitude I would like to help you in your endeavors of rediscovering Domain’s lost secrets. What do you think about my offer ?"" 
+","opScientistAgree:Accept Propostion 
+opScientistInfo:See skills of that scientist
+aotdReturn:Decline ,and leave the bar",
+scientistNotRecognied: ,DialogOptionSelected,$option == scientistNotRecognied,,"""Well can’t blame you , a lot of time passed since i hired you to retrieve that Technology Cache. I hope that the rest of the cache's content was useful for you. I was that one scientist back then who hired you to retrieve a special Alpha Core, which helped me to decipher lost knowledge of Domain’s Past. And now as my token of gratitude I would like to help you in your endeavors of rediscovering Domain’s lost secrets. What do you think about my offer?""","opScientistAgree:Accept Propostion 
+opScientistInfo:See skills of that scientist 
+aotdReturn:Decline ,and leave the bar",
+opScientistAgree,DialogOptionSelected,$option == opScientistAgree,"OpScientistAgreed  
+AddTextSmall ""$personName joined your faction"" highlight",,aotdReturn: Leave the bar,
+opScientistInfo,DialogOptionSelected,$option == opScientistInfo,"AddTextSmall ""Skill - Seeker of Knowledge."" highlight
+AddTextSmall  ""Negate need for special type of databanks for research, but increase amount of days to research technologies that requieres special databank three times more"" highlight
+",,,
+,,,,,,
+#BIFROST SECTION,,,,,,
+bifrostAccess,OpenInteractionDialog,$customType == bifrost_gate score:1000,SetShortcut defaultLeave ESCAPE ,Bifrost Gates are prototype of replicating Domain's gate technology . Though being very limiting due to enourmous energy upkeep it enables traveling via Bifrost Network,"0:bifrostUse:Use Bifrost Network
+1:defaultLeave:Leave",
+bifrostUse,DialogOptionSelected,$option == bifrostUse,BiFrostCMD selectDestination,,,
 ,,,,,,
 ,,,,,,

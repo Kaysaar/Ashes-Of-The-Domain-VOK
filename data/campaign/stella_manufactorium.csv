@@ -1,0 +1,15 @@
+id,time_to_make_one,resoruces_to_make_one
+pristine_nanoforge,120,"electronics:2,polymer:3,refined_metal:3,purified_rare_metal:3"
+synchrotron,90,"electronics:2,polymer:3,purified_rare_metal:3,compound:2"
+orbital_fusion_lamp,30,"electronics:1,polymer:2,compound:3"
+coronal_portal,150,"electronics:4,compound:4,refined_metal:2,purified_rare_metal:4"
+mantle_bore,60,"electronics:2,polymer:2,refined_metal:2"
+catalytic_core,60,"electronics:3,refined_metal:2,purified_rare_metal:4"
+soil_nanites,30,"electronics:3,compound:4,refined_metal:2,purified_rare_metal:4"
+biofactory_embryo,30,"electronics:3,compound:4,refined_metal:2,purified_rare_metal:4"
+fullerene_spool,30,"electronics:1,polymer:3,refined_metal:2"
+plasma_dynamo,60,"electronics:2,compound:4,purified_rare_metal:2"
+cryoarithmetic_engine,60,"electronics:3,compound:4,refined_metal:2,purified_rare_metal:4"
+drone_replicator,30,"electronics:3,compound:4,refined_metal:2,purified_rare_metal:4"
+dealmaker_holosuite,30,"electronics:3,compound:4,refined_metal:2,purified_rare_metal:4"
+,,

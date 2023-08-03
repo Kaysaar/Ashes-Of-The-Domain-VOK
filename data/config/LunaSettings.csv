@@ -1,0 +1,24 @@
+fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+aoTDVOK_HEADER,Settings,Header,Project Settings,,,,,Vaults of Knowledge
+aoTDVOK_SOPHIA_ENABLED,Enable Sophia  - The Scientst,Boolean,true,,Set this to false to disable event regarding White haired scientist with Resourceful skill,,,Vaults of Knowledge
+aoTDVOK_OP_SCIENTIST_ENABLED,Enable Seeker of Knowledge Scientist,Boolean,true,,Set this to false to disable event regarding meeting scientist that nullifies need for special databanks,,,Vaults of Knowledge
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
