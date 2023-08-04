@@ -13,6 +13,7 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.RedPlanet;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.plugins.AoDUtilis;
 import data.scripts.campaign.econ.SMSpecialItem;
 
 import java.awt.*;
@@ -70,6 +71,11 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
     }
 
     @Override
+    public boolean showWhenUnavailable() {
+        return AoDUtilis.isResearched(this.getId());
+    }
+
+    @Override
     public void apply() {
         super.apply(true);
         canProduce = applyDemand();
@@ -104,5 +110,8 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
 
     }
 
-
+    @Override
+    public boolean isAvailableToBuild() {
+      return AoDUtilis.isResearched(this.getId());
+    }
 }

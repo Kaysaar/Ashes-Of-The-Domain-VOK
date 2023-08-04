@@ -56,7 +56,9 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
         if (Global.getSector().getIntelManager().hasIntelOfClass(PlanetaryShieldIntel.class)) {
             return false;
         }
-
+        if(   Global.getSector().getMemory().is("$aotd_veil_accepted",true)){
+            return false;
+        }
         if (Global.getSector().getPlayerStats().getLevel() < 10 && !DebugFlags.BAR_DEBUG) return false;
 
         return true;
@@ -131,7 +133,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
                 options.addOption("Suggest " + getHeOrShe() + "mistook you for someone else.", OptionId.LEAVE);
                 break;
             case INTRUIGED:
-                text.addPara("\"Look, space isn't that big a place you can't hear about "+Global.getSector().getPlayerPerson().getName()+
+                text.addPara("\"Look, space isn't that big a place you can't hear about "+Global.getSector().getPlayerPerson().getName().getFullName()+
                                 "\"\n\" Believe it or not, some people even started calling you the \"Seeker of Knowledge\". Your deeds haven't gone unnoticed.\"");
 
                 options.addOption("What does that mean?", OptionId.CONTINUE_1);
@@ -164,6 +166,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
                 options.addOption("Leave", OptionId.LEAVE);
                 BarEventManager.getInstance().notifyWasInteractedWith(this);
                 addIntel();
+                Global.getSector().getMemory().set("$aotd_veil_accepted",true);
                 break;
             case LEAVE:
                 noContinue = true;

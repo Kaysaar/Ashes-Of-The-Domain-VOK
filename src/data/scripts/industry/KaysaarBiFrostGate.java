@@ -9,6 +9,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.Ids.AodCommodities;
+import data.plugins.AoDUtilis;
 
 public class KaysaarBiFrostGate extends BaseIndustry {
     public SectorEntityToken gate ;
@@ -23,6 +24,10 @@ public class KaysaarBiFrostGate extends BaseIndustry {
         if(max.two==0&&gate!=null){
             gate.getMemory().set("$supplied",true);
         }
+    }
+    @Override
+    public boolean showWhenUnavailable() {
+        return AoDUtilis.isResearched(this.getId());
     }
 
     @Override
@@ -71,7 +76,7 @@ public class KaysaarBiFrostGate extends BaseIndustry {
                 return false;
             }
         }
-        return true;
+        return AoDUtilis.isResearched(this.getId());
     }
 
     @Override

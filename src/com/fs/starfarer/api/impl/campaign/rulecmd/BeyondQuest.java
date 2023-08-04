@@ -124,6 +124,9 @@ public class BeyondQuest  extends BaseCommandPlugin {
                     intel.endAfterDelay();
                     //intel.sendUpdate(PSIStage.DONE, textPanel);
                 }
+                planet.getMemoryWithoutUpdate().unset("$aotd_quest_veil");
+                Global.getSector().getPersistentData().remove("$aotd_v_planet");
+                Global.getSector().getMemory().set("$aotd_veil_done",true);
                 long xp = BeyondVeilIntel.FINISHED_XP;
                 Global.getSector().getPlayerPerson().getStats().addXP(xp);
             }

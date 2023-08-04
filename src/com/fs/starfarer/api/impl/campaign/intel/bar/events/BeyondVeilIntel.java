@@ -35,12 +35,20 @@ public class BeyondVeilIntel extends BaseIntelPlugin {
         this.planet = planet;
         this.event = event;
         Misc.makeImportant(planet, "veil");
+
+
         //cache.getMemoryWithoutUpdate().set("$saic_eventRef", this);
         //Global.getSector().addScript(this);
 
 
 
     }
+
+    @Override
+    public boolean isImportant() {
+        return true;
+    }
+
     @Override
     public boolean callEvent(String ruleId, InteractionDialogAPI dialog,
                              List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
@@ -49,7 +57,6 @@ public class BeyondVeilIntel extends BaseIntelPlugin {
         CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
         CargoAPI cargo = playerFleet.getCargo();
         //MemoryAPI memory = planet.getMemoryWithoutUpdate();
-        sendUpdate(PlanetaryShieldIntel.PSIStage.GO_TO_PLANET, dialog.getTextPanel());
 
         return true;
         }
@@ -102,7 +109,7 @@ public class BeyondVeilIntel extends BaseIntelPlugin {
 
     @Override
     public boolean shouldRemoveIntel() {
-        return super.shouldRemoveIntel();
+        return Global.getSector().getMemory().contains("$aotd_veil_done");
         //return false;
     }
 
