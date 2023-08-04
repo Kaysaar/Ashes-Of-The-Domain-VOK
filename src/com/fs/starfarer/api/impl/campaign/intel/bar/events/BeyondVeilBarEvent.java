@@ -91,7 +91,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
 //		Color c = Misc.getHighlightColor();
 //		c = Misc.getHighlightedOptionColor();
 
-        dialog.getOptionPanel().addOption("Ask what this stranger is looking at", this,
+        dialog.getOptionPanel().addOption("Ask this stranger why is staring at you ", this,
                 null);
     }
 
