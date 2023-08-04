@@ -51,6 +51,7 @@ public class BiFrostCMD extends BaseCommandPlugin {
         return true;
     }
 
+
     protected void selectDestination() {
         final ArrayList<SectorEntityToken> gates =
                 new ArrayList<SectorEntityToken>(AoDUtilis.getAllBifrostGates());
@@ -60,11 +61,15 @@ public class BiFrostCMD extends BaseCommandPlugin {
                 new BaseCampaignEntityPickerListener() {
                     public void pickedEntity(SectorEntityToken entityToTravel) {
                         dialog.dismiss();
+                        entity.getMemoryWithoutUpdate().set("$used",true);
+                        entityToTravel.getMemoryWithoutUpdate().set("$used",true);
+                        entity.getMemoryWithoutUpdate().set("$cooldown",30f);
+                        entityToTravel.getMemoryWithoutUpdate().set("$cooldown",30f);
                         Global.getSector().setPaused(false);
-                        JumpPointAPI.JumpDestination dest = new JumpPointAPI.JumpDestination(entity, null);
+                        JumpPointAPI.JumpDestination dest = new JumpPointAPI.JumpDestination(entityToTravel, null);
                         Global.getSector().doHyperspaceTransition(playerFleet, entity, dest, 2f);
 
-                        float distLY = Misc.getDistanceLY(entity, entity);
+                        float distLY = Misc.getDistanceLY(entityToTravel, entity);
                         if (entity.getCustomPlugin() instanceof BiFrostGateEntity) {
                             BiFrostGateEntity plugin = (BiFrostGateEntity) entity.getCustomPlugin();
                             plugin.showBeingUsed(distLY);

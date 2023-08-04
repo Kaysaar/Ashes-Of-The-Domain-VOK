@@ -56,7 +56,6 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
                 Vector2f loc = entity.getLocation();
 
                 float glowAlpha = 1f;
-                scaleGlowSprites();
 
                 glowAlpha *= beingUsedFader.getBrightness();
 
@@ -102,7 +101,6 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
 
             boolean beingUsed = !beingUsedFader.isFadedOut();
 
-            scaleGlowSprites();
 
             if (jitterFader != null && jitter != null) {
                 Color c = jitterColor;
@@ -156,25 +154,7 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
             }
         }
     }
-    protected void scaleGlowSprites() {
-        if (scaledSprites) return;
-        CustomEntitySpecAPI spec = entity.getCustomEntitySpec();
-        if (spec != null) {
-            baseSprite = Global.getSettings().getSprite(spec.getSpriteName());
-            baseSprite.setSize(spec.getSpriteWidth(), spec.getSpriteHeight());
 
-            scaledSprites = true;
-            float scale = spec.getSpriteWidth() / Global.getSettings().getSprite(spec.getSpriteName()).getWidth();
-            scannedGlow.setSize(scannedGlow.getWidth() * scale, scannedGlow.getHeight() * scale);
-            activeGlow.setSize(activeGlow.getWidth() * scale, activeGlow.getHeight() * scale);
-
-            rays.setSize(rays.getWidth() * scale, rays.getHeight() * scale);
-            whirl1.setSize(whirl1.getWidth() * scale, whirl1.getHeight() * scale);
-            whirl2.setSize(whirl2.getWidth() * scale, whirl2.getHeight() * scale);
-            starfield.setSize(starfield.getWidth() * scale, starfield.getHeight() * scale);
-            concentric.setSize(concentric.getWidth() * scale, concentric.getHeight() * scale);
-        }
-    }
     public void showBeingUsed(float transitDistLY) {
         showBeingUsed(10f, transitDistLY);
     }
