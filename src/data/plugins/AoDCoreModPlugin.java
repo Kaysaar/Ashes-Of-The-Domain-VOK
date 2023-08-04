@@ -14,6 +14,7 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.BarEventManager;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.BeyondVeilBarEventCreator;
+import com.fs.starfarer.api.impl.campaign.intel.bar.events.BeyondVeilIntel;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.ScientistAICoreBarEvent;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.impl.campaign.procgen.themes.RemnantSeededFleetManager;
@@ -371,22 +372,18 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         if (!Global.getSector().getMemory().contains("$update_1.4.0_aotd")) {
             Global.getSector().getMemory().set("$update_1.4.0_aotd", true);
             for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
-                if (starSystem.getTags().contains(Tags.THEME_REMNANT)) {
+                if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
                     for (PlanetAPI planet : starSystem.getPlanets()) {
                             if(planet.hasTag(Tags.MISSION_ITEM))continue;
                             if(planet.isStar())continue;
                             if(planet.isGasGiant())continue;
-                            if(planet.getMemory().is("$IndEvo_ArtilleryStation",true)) continue;
+                            if(planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
                             long seed = StarSystemGenerator.random.nextLong();
                             planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SEED, seed);
                             planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_beyond_veil");
                             planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
                             Global.getSector().getPersistentData().put("$aotd_v_planet",planet);
                              planet.getMemoryWithoutUpdate().set("$aotd_quest_veil", true);
-                            BarEventManager bar = BarEventManager.getInstance();
-                            if(!bar.hasEventCreator(BeyondVeilBarEventCreator.class)){
-                                bar.addEventCreator(new BeyondVeilBarEventCreator());
-                            }
                             break;
                     }
                 }
@@ -504,6 +501,10 @@ public class AoDCoreModPlugin extends BaseModPlugin {
 
             }
         };
+        BarEventManager bar = BarEventManager.getInstance();
+        if(!bar.hasEventCreator(BeyondVeilBarEventCreator.class)){
+            bar.addEventCreator(new BeyondVeilBarEventCreator());
+        }
 
         Global.getSector().addListener(customlistener);
         if (!Global.getSector().getMemory().contains("$aotd_researcher_done")) {
