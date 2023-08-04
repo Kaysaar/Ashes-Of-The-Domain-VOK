@@ -437,48 +437,90 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         HashMap<List<ResearchOption>, Integer> lightindustrygroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("lightindustry"));
         HashMap<List<ResearchOption>, Integer> refininggroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("refining"));
         HashMap<List<ResearchOption>, Integer> mininggroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("mining"));
-        HashMap<List<ResearchOption>, Integer> experimentalgroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("experimental"));
         int so_far = 0;
         int rest = 0;
-        switch (currentCategory) {
-            case ALL:
-                so_far = showTierSection(techPanel, techPanelTT, farmingGroup, so_far);
-                so_far = showTierSection(techPanel, techPanelTT, aquagroup, so_far - 1);
-                so_far = showTierSection(techPanel, techPanelTT, lightindustrygroup, so_far);
-                so_far = showTierSection(techPanel, techPanelTT, mininggroup, so_far + 1);
-                so_far = showTierSection(techPanel, techPanelTT, refininggroup, so_far);
-                so_far = showTierSection(techPanel, techPanelTT, heavyIndustryGroup, so_far + 1);
-                rest = showRest(techPanel, techPanelTT, so_far);
-                break;
-            case OTHER:
-                rest = showRest(techPanel, techPanelTT, so_far);
-                break;
-            case FARMING:
-                so_far = showTierSection(techPanel, techPanelTT, farmingGroup, so_far);
-                so_far = showTierSection(techPanel, techPanelTT, aquagroup, so_far - 1);
-                rest = so_far;
-                break;
-            case HEAVY_INDUSTRY:
-                so_far = showTierSection(techPanel, techPanelTT, heavyIndustryGroup, so_far + 1);
-                rest = so_far;
-                break;
-            case MINING:
-                so_far = showTierSection(techPanel, techPanelTT, mininggroup, so_far + 1);
-                rest = so_far;
-                break;
-            case LIGHT_INDUSTRY:
-                so_far = showTierSection(techPanel, techPanelTT, lightindustrygroup, so_far);
-                rest = so_far;
-                break;
-            case REFINING:
-                so_far = showTierSection(techPanel, techPanelTT, refininggroup, so_far);
-                rest = so_far;
-                break;
-            case EXPERIMENTAL:
-                so_far = showTierSection(techPanel, techPanelTT, experimentalgroup, so_far);
-                rest = so_far;
-                break;
+        if(AoDUtilis.canExperimental()){
+            HashMap<List<ResearchOption>, Integer> experimentalgroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("experimental"));
+            switch (currentCategory) {
+                case ALL:
+                    so_far = showTierSection(techPanel, techPanelTT, farmingGroup, so_far);
+                    so_far = showTierSection(techPanel, techPanelTT, aquagroup, so_far - 1);
+                    so_far = showTierSection(techPanel, techPanelTT, lightindustrygroup, so_far);
+                    so_far = showTierSection(techPanel, techPanelTT, mininggroup, so_far + 1);
+                    so_far = showTierSection(techPanel, techPanelTT, refininggroup, so_far);
+                    so_far = showTierSection(techPanel, techPanelTT, heavyIndustryGroup, so_far + 1);
+                    rest = showRest(techPanel, techPanelTT, so_far);
+                    break;
+                case OTHER:
+                    rest = showRest(techPanel, techPanelTT, so_far);
+                    break;
+                case FARMING:
+                    so_far = showTierSection(techPanel, techPanelTT, farmingGroup, so_far);
+                    so_far = showTierSection(techPanel, techPanelTT, aquagroup, so_far - 1);
+                    rest = so_far;
+                    break;
+                case HEAVY_INDUSTRY:
+                    so_far = showTierSection(techPanel, techPanelTT, heavyIndustryGroup, so_far + 1);
+                    rest = so_far;
+                    break;
+                case MINING:
+                    so_far = showTierSection(techPanel, techPanelTT, mininggroup, so_far + 1);
+                    rest = so_far;
+                    break;
+                case LIGHT_INDUSTRY:
+                    so_far = showTierSection(techPanel, techPanelTT, lightindustrygroup, so_far);
+                    rest = so_far;
+                    break;
+                case REFINING:
+                    so_far = showTierSection(techPanel, techPanelTT, refininggroup, so_far);
+                    rest = so_far;
+                    break;
+                case EXPERIMENTAL:
+                    so_far = showTierSection(techPanel, techPanelTT, experimentalgroup, so_far);
+                    rest = so_far;
+                    break;
+            }
         }
+        else{
+
+            switch (currentCategory) {
+                case ALL:
+                    so_far = showTierSection(techPanel, techPanelTT, farmingGroup, so_far);
+                    so_far = showTierSection(techPanel, techPanelTT, aquagroup, so_far - 1);
+                    so_far = showTierSection(techPanel, techPanelTT, lightindustrygroup, so_far);
+                    so_far = showTierSection(techPanel, techPanelTT, mininggroup, so_far + 1);
+                    so_far = showTierSection(techPanel, techPanelTT, refininggroup, so_far);
+                    so_far = showTierSection(techPanel, techPanelTT, heavyIndustryGroup, so_far + 1);
+                    rest = showRest(techPanel, techPanelTT, so_far);
+                    break;
+                case OTHER:
+                    rest = showRest(techPanel, techPanelTT, so_far);
+                    break;
+                case FARMING:
+                    so_far = showTierSection(techPanel, techPanelTT, farmingGroup, so_far);
+                    so_far = showTierSection(techPanel, techPanelTT, aquagroup, so_far - 1);
+                    rest = so_far;
+                    break;
+                case HEAVY_INDUSTRY:
+                    so_far = showTierSection(techPanel, techPanelTT, heavyIndustryGroup, so_far + 1);
+                    rest = so_far;
+                    break;
+                case MINING:
+                    so_far = showTierSection(techPanel, techPanelTT, mininggroup, so_far + 1);
+                    rest = so_far;
+                    break;
+                case LIGHT_INDUSTRY:
+                    so_far = showTierSection(techPanel, techPanelTT, lightindustrygroup, so_far);
+                    rest = so_far;
+                    break;
+                case REFINING:
+                    so_far = showTierSection(techPanel, techPanelTT, refininggroup, so_far);
+                    rest = so_far;
+                    break;
+            }
+        }
+
+
 
 
         for (int i = 0; i < rest; i++) {
@@ -577,11 +619,14 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             buttons.add(buttonOther);
             buttonMap.put(buttonOther, "PROGRESSION:" + "other");
             buttonOther.getPosition().setLocation(0, 0).inTL(2, 610);
+            if(AoDUtilis.canExperimental()){
+                ButtonAPI buttonExperimental = optionsPanelTT.addButton("Experimental", null, 152, 40, 10f);
+                buttons.add(buttonExperimental);
+                buttonMap.put(buttonExperimental, "PROGRESSION:" + "experimental");
+                buttonExperimental.getPosition().setLocation(0, 0).inTL(2, 710);
+            }
 
-            ButtonAPI buttonExperimental = optionsPanelTT.addButton("Experimental", null, 152, 40, 10f);
-            buttons.add(buttonExperimental);
-            buttonMap.put(buttonExperimental, "PROGRESSION:" + "experimental");
-            buttonExperimental.getPosition().setLocation(0, 0).inTL(2, 710);
+
 
             if (currResearching != null) {
                 float percent = (currResearching.currentResearchDays - currResearching.researchCost) / currResearching.researchCost;
@@ -655,6 +700,11 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         int index = 0;
         int spacerY = 65;
         for (ResearchOption research : researchAPI.getResearchOptionsSorted()) {
+            if(Global.getSettings().getIndustrySpec(research.industryId).hasTag("experimental")){
+                if(!AoDUtilis.canExperimental()){
+                    continue;
+                }
+            }
             CustomPanelAPI vPanel = techPanel.createCustomPanel(size_section - 20, 120, null);
             vPanel.getPosition().setLocation(0, 0).inTL(5, index * spacerY);
             TooltipMakerAPI vTT = vPanel.createUIElement(size_section - 20, 140, false);

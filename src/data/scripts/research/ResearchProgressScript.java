@@ -69,6 +69,13 @@ public class ResearchProgressScript implements EveryFrameScript {
                 hasResearchedin30Days=true;
                 counter=0;
                 ResearchOption currResearch = researchAPI.getCurrentResearching();
+                if(Global.getSettings().getIndustrySpec(currResearch.industryId).hasTag("experimental")&&!AoDUtilis.canExperimental()){
+                    MessageIntel intel = new MessageIntel("Halted Research - " + currResearch.industryName, Misc.getBasePlayerColor());
+                    intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
+                    intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+                    Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+                    researchAPI.stopResearch();
+                }
                 currResearch.currentResearchDays -= AoDUtilis.researchBonusCurrent();
                 if (currResearch.currentResearchDays <= 0) {
                     researchAPI.finishResearch();

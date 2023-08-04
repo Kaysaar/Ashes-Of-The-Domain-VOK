@@ -303,5 +303,14 @@ public class AoDUtilis {
         }
         return toReturn;
     }
+    public static boolean canExperimental(){
+        for (MarketAPI factionMarket : Misc.getFactionMarkets(Global.getSector().getPlayerFaction())) {
+            if(!factionMarket.hasIndustry(AoDIndustries.RESEARCH_CENTER))continue;
+            if(factionMarket.getIndustry(AoDIndustries.RESEARCH_CENTER).getSpecialItem()!=null){
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

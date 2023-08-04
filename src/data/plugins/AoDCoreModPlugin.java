@@ -12,9 +12,14 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.BaseInstallableItemEffect;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BoostIndustryInstallableItemEffect;
 import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.*;
+import com.fs.starfarer.api.impl.campaign.intel.bar.events.BarEventManager;
+import com.fs.starfarer.api.impl.campaign.intel.bar.events.BeyondVeilBarEventCreator;
+import com.fs.starfarer.api.impl.campaign.intel.bar.events.ScientistAICoreBarEvent;
+import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.impl.campaign.procgen.themes.RemnantSeededFleetManager;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.ui.P;
 import data.Ids.AoDConditions;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
@@ -44,6 +49,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     public static String opScientist = "opScientist";
     public static String explorer = "explorer";
     public int configSize = 6;
+
 
     public void setIndustryOnPlanet(String SystemName, String Planetname, String industryId, String removeIndustry, String potentialSwitch, boolean toImprove, String aiCore) {
         if (Global.getSector().getStarSystem(SystemName) == null) return;
@@ -196,6 +202,8 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         sophiaPerson.setPortraitSprite(Global.getSettings().getSpriteName("characters", "sophia"));
         sophiaPerson.getStats().setSkillLevel(AodResearcherSkills.RESOURCEFUL, 0);
         ip.addPerson(sophiaPerson);
+
+
 
 
     }
@@ -355,13 +363,36 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         setListenersIfNeeded();
         configSize = Misc.MAX_COLONY_SIZE;
         RescourceCondition.applyResourceConditionToAllMarkets();
         IndUpgradeListener.applyIndustyUpgradeCondition();
         Global.getSector().getPlayerFaction().getMemory().set(AodMemFlags.AOD_INITALIZED, true);
-        Global.getSector().getMemory().set("$update_1.2.0_aotd", true);
+        if (!Global.getSector().getMemory().contains("$update_1.4.0_aotd")) {
+            Global.getSector().getMemory().set("$update_1.4.0_aotd", true);
+            for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
+                if (starSystem.getTags().contains(Tags.THEME_REMNANT)) {
+                    for (PlanetAPI planet : starSystem.getPlanets()) {
+                            if(planet.hasTag(Tags.MISSION_ITEM))continue;
+                            if(planet.isStar())continue;
+                            if(planet.isGasGiant())continue;
+                            if(planet.getMemory().is("$IndEvo_ArtilleryStation",true)) continue;
+                            long seed = StarSystemGenerator.random.nextLong();
+                            planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SEED, seed);
+                            planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_beyond_veil");
+                            planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
+                            Global.getSector().getPersistentData().put("$aotd_v_planet",planet);
+                             planet.getMemoryWithoutUpdate().set("$aotd_quest_veil", true);
+                            BarEventManager bar = BarEventManager.getInstance();
+                            if(!bar.hasEventCreator(BeyondVeilBarEventCreator.class)){
+                                bar.addEventCreator(new BeyondVeilBarEventCreator());
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
         CampaignEventListener customlistener = new CampaignEventListener() {
             @Override
             public void reportPlayerOpenedMarket(MarketAPI market) {
@@ -523,7 +554,25 @@ public class AoDCoreModPlugin extends BaseModPlugin {
 
             @Override
             public String[] getSimpleReqs(Industry industry) {
-                return new String[]{"not extreme weather","not habitable","not a gas giant"};
+                return new String[]{"not extreme weather", "not habitable", "not a gas giant"};
+            }
+        });
+        ItemEffectsRepo.ITEM_EFFECTS.put("omega_processor", new BoostIndustryInstallableItemEffect(
+                "omega_processor", ItemEffectsRepo.MANTLE_BORE_MINING_BONUS, 0) {
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+                List<String> commodities = new ArrayList<String>();
+                for (String curr : ItemEffectsRepo.MANTLE_BORE_COMMODITIES) {
+                    CommoditySpecAPI c = Global.getSettings().getCommoditySpec(curr);
+                    commodities.add(c.getName().toLowerCase());
+                }
+                text.addPara(pre + "Unlocks Experimental Tier of Tech Tree",
+                        pad);
+//				text.addPara(pre + "Increases " + Misc.getAndJoined(commodities) + " production by %s units. " +
+//						"Increases demand for heavy machinery by %s units.",
+//						pad, Misc.getHighlightColor(),
+//						"" + MANTLE_BORE_MINING_BONUS,
+//						"" + MANTLE_BORE_MINING_BONUS);
             }
         });
         ItemEffectsRepo.ITEM_EFFECTS.put(Items.CATALYTIC_CORE, new BoostIndustryInstallableItemEffect(
@@ -535,9 +584,10 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                         pad, Misc.getHighlightColor(),
                         "" + (int) ItemEffectsRepo.CATALYTIC_CORE_BONUS);
             }
+
             @Override
             public String[] getSimpleReqs(Industry industry) {
-                return new String[]{"not extreme weather","not extreme tectonic activity"};
+                return new String[]{"not extreme weather", "not extreme tectonic activity"};
             }
         });
     }
