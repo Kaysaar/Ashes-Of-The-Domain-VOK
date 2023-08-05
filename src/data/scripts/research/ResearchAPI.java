@@ -255,7 +255,7 @@ public class ResearchAPI {
 
         int reqAmount = req.getValue();
         boolean isSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank");
-        if (!isSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
+        if (!isSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")&&!req.getKey().equals("research_databank")) {
             reqAmount -= 1;
             if (req.getKey().equals("domain_artifacts") || req.getKey().equals("water")) {
                 reqAmount -= 100;
@@ -287,7 +287,7 @@ public class ResearchAPI {
     public void removeItemReqFromMarkets(Map.Entry<String, Integer> req) {
         int reqAmount = req.getValue();
         boolean isNotSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank");
-        if (isNotSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
+        if (isNotSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")&& !req.getKey().equals("research_databank")) {
             reqAmount -= 1;
             if (req.getKey().equals("domain_artifacts") || req.getKey().equals("water")) {
                 reqAmount -= 100;

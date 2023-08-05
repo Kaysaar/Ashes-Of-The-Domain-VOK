@@ -383,12 +383,30 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                             planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_beyond_veil");
                             planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
                             Global.getSector().getPersistentData().put("$aotd_v_planet",planet);
-                             planet.getMemoryWithoutUpdate().set("$aotd_quest_veil", true);
+                            planet.getMemoryWithoutUpdate().set("$aotd_quest_veil", true);
                             break;
                     }
                 }
+                if(Global.getSector().getPersistentData().containsKey("$aotd_v_planet")){
+                    break;
+                }
             }
         }
+        if(!Global.getSector().getMemory().contains("$aotd_cleanup")){
+            Global.getSector().getMemory().set("$aotd_cleanup",true);
+            PlanetAPI questPlanet =   (PlanetAPI)  Global.getSector().getPersistentData().get("$aotd_v_planet");
+            for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
+                    for (PlanetAPI planet : starSystem.getPlanets()) {
+                        if(questPlanet!=null&&questPlanet.getId().equals(planet.getId())){
+                            continue;
+                        }
+                        if(planet.getMemory().contains("$aotd_quest_veil")){
+                            planet.getMemory().unset("$aotd_quest_veil");
+                        }
+                    }
+            }
+        }
+
 
         CampaignEventListener customlistener = new CampaignEventListener() {
             @Override
