@@ -111,6 +111,21 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
     }
 
     @Override
+    protected void applyAlphaCoreModifiers() {
+        super.applyAlphaCoreModifiers();
+    }
+
+    @Override
+    protected void applyBetaCoreModifiers() {
+        super.applyBetaCoreModifiers();
+    }
+
+    @Override
+    protected void applyGammaCoreModifiers() {
+        super.applyGammaCoreModifiers();
+    }
+
+    @Override
     public boolean isAvailableToBuild() {
       return AoDUtilis.isResearched(this.getId());
     }

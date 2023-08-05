@@ -15,11 +15,11 @@ import java.awt.*;
 
 public class KaysaarUnderworld extends BaseIndustry implements MarketImmigrationModifier {
 
-    public static float BASE_BONUS = 50f;
+    public static float BASE_BONUS = 40f;
     public static float ALPHA_CORE_BONUS = 40f;
     public static float IMPROVE_BONUS = 25f;
 
-    public static float STABILITY_PELANTY = 4f;
+    public static float STABILITY_PELANTY = 5f;
 
 
     protected transient SubmarketAPI saved = null;
