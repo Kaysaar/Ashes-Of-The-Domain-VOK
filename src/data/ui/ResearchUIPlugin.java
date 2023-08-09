@@ -15,6 +15,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.ui.P;
 import data.Ids.AodCommodities;
 import data.Ids.AodResearcherSkills;
 import data.plugins.AoDUtilis;
@@ -91,6 +92,9 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     TooltipMakerAPI scientistDescrpPanelTT;
     CustomPanelAPI scientistSpecAbilityPanel;
     TooltipMakerAPI scientistSpecAbilityPanelTT;
+    CustomPanelAPI queuePanel;
+    TooltipMakerAPI queuePanelTT;
+    TooltipMakerAPI queuePanelOptionsTT;
     CustomPanelAPI bonusPanel;
     TooltipMakerAPI bonusPanelTT;
     CustomPanelAPI statisticsPanel;
@@ -103,6 +107,9 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     ResearchOption currResearching;
     List<ButtonAPI> buttons = new ArrayList<>();
     HashMap<ButtonAPI, String> buttonMap = new HashMap<>();
+    int defaultSizeOfExampleMarket = 6;
+
+
 
     public static ResearchUIPlugin createDefault() {
         return new ResearchUIPlugin();
@@ -116,7 +123,22 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         }
         return "";
     }
-
+    public void changeDefaultSizeOfExampleMarket(boolean isUp){
+        int prev = defaultSizeOfExampleMarket;
+        if(isUp){
+            prev++;
+            if(prev>10){
+                prev=10;
+            }
+        }
+        else{
+            prev--;
+            if(prev<=2){
+                prev=3;
+            }
+        }
+        defaultSizeOfExampleMarket = prev;
+    }
     private void adjustDem(@NotNull List<MutableCommodityQuantity> dem, List<MutableCommodityQuantity> demAdjusted) {
         if (dem.isEmpty()) return;
         for (MutableCommodityQuantity mutableCommodityQuantity : dem) {
@@ -165,7 +187,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         pH = (int) this.panel.getPosition().getHeight();
         pWX = (int) this.panel.getPosition().getCenterX();
         pHY = (int) this.panel.getPosition().getCenterY();
-        copy = Global.getFactory().createMarket("to_delete_aotd", "deletion", 6);
+        copy = Global.getFactory().createMarket("to_delete_aotd", "deletion", defaultSizeOfExampleMarket);
         copy.setFactionId(Global.getSector().getPlayerFaction().getId());
         copy.setFreePort(true);
         copy.setHidden(true);
@@ -219,6 +241,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             showSpecAbilityDescrp();
             showBonuses();
             showStats();
+            showQueue();
         }
 
         if (currentUIMode.equals(UIMode.HELP)) {
@@ -317,6 +340,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             drawPanelBorder(scientistSpecAbilityPanel);
             drawPanelBorder(bonusPanel);
             drawPanelBorder(statisticsPanel);
+            drawPanelBorder(queuePanel);
         }
         if (currentUIMode == UIMode.HELP) {
             drawPanelBorder(helpPanel);
@@ -420,10 +444,9 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         techTierNamesTT = techTierNames.createUIElement(availabileWidith - 175, 30, false);
         techTierNamesTT.getPosition().setLocation(0, 0).inTL(0, 0);
         techTierNamesTT.setParaInsigniaLarge();
-        if(currentCategory.equals(ProgressionTreeUiMode.EXPERIMENTAL)){
+        if (currentCategory.equals(ProgressionTreeUiMode.EXPERIMENTAL)) {
             techTierNamesTT.addPara("Experimental", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(size_section + 120, 5);
-        }
-        else{
+        } else {
             techTierNamesTT.addPara("Primitive", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(50, 5);
             techTierNamesTT.addPara("Basic", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(size_section + 50, 5);
             techTierNamesTT.addPara("Sophisticated", Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(size_section * 2 + 10, 5);
@@ -439,7 +462,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         HashMap<List<ResearchOption>, Integer> mininggroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("mining"));
         int so_far = 0;
         int rest = 0;
-        if(AoDUtilis.canExperimental()){
+        if (AoDUtilis.canExperimental()) {
             HashMap<List<ResearchOption>, Integer> experimentalgroup = researchAPI.parentGroup(researchAPI.reesarchOptionsFromSameGroup("experimental"));
             switch (currentCategory) {
                 case ALL:
@@ -480,8 +503,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     rest = so_far;
                     break;
             }
-        }
-        else{
+        } else {
 
             switch (currentCategory) {
                 case ALL:
@@ -519,8 +541,6 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     break;
             }
         }
-
-
 
 
         for (int i = 0; i < rest; i++) {
@@ -619,13 +639,12 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             buttons.add(buttonOther);
             buttonMap.put(buttonOther, "PROGRESSION:" + "other");
             buttonOther.getPosition().setLocation(0, 0).inTL(2, 610);
-            if(AoDUtilis.canExperimental()){
+            if (AoDUtilis.canExperimental()) {
                 ButtonAPI buttonExperimental = optionsPanelTT.addButton("Experimental", null, 152, 40, 10f);
                 buttons.add(buttonExperimental);
                 buttonMap.put(buttonExperimental, "PROGRESSION:" + "experimental");
                 buttonExperimental.getPosition().setLocation(0, 0).inTL(2, 710);
             }
-
 
 
             if (currResearching != null) {
@@ -700,8 +719,8 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         int index = 0;
         int spacerY = 65;
         for (ResearchOption research : researchAPI.getResearchOptionsSorted()) {
-            if(Global.getSettings().getIndustrySpec(research.industryId).hasTag("experimental")){
-                if(!AoDUtilis.canExperimental()){
+            if (Global.getSettings().getIndustrySpec(research.industryId).hasTag("experimental")) {
+                if (!AoDUtilis.canExperimental()) {
                     continue;
                 }
             }
@@ -967,17 +986,26 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
                     buttons.add(button);
                     buttonMap.put(button, "stop_research:" + research.industryId);
-                } else {
+                } else if (researchAPI.isResearching()&&!researchAPI.isInQueue(research.industryId)) {
+
+                    button = vTT.addButton("Queue", null, 95, 18, 10f);
+                    button.setEnabled(researchAPI.canResearch(research.industryId, true));
+                    buttons.add(button);
+                    buttonMap.put(button, "queue_research:" + research.industryId);
+                    if(researchAPI.isInQueue(research.industryId)){
+                        button.setEnabled(false);
+                    }
+                }
+                else{
                     button = vTT.addButton("Research", null, 95, 18, 10f);
                     button.setEnabled(researchAPI.canResearch(research.industryId, true));
                     buttons.add(button);
                     buttonMap.put(button, "start_research:" + research.industryId);
-
                 }
 
                 if (button != null) {
                     button.getPosition().setLocation(0, 0).inTL(95, 42);
-                    if (research.isResearched) {
+                    if (research.isResearched||researchAPI.isInQueue(research.industryId)) {
                         button.setEnabled(false);
                         makerAPIHashMap.put(button, vTT);
                     }
@@ -1020,7 +1048,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         List<ResearchOption> filteredResearch = new ArrayList<>();
         for (ResearchOption research : researchAPI.getResearchOptions()) {
             IndustrySpecAPI indspec = Global.getSettings().getIndustrySpec(research.industryId);
-            if (indspec.hasTag("farming") || indspec.hasTag("aquaculture") || indspec.hasTag("lightindustry") || indspec.hasTag("heavyindustry") || indspec.hasTag("mining") || indspec.hasTag("refining")||indspec.hasTag("experimental")) {
+            if (indspec.hasTag("farming") || indspec.hasTag("aquaculture") || indspec.hasTag("lightindustry") || indspec.hasTag("heavyindustry") || indspec.hasTag("mining") || indspec.hasTag("refining") || indspec.hasTag("experimental")) {
                 continue;
             }
             filteredResearch.add(research);
@@ -1063,17 +1091,26 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
                     buttons.add(button);
                     buttonMap.put(button, "stop_research:" + research.industryId);
-                } else {
+                } else if (researchAPI.isResearching()&&!researchAPI.isInQueue(research.industryId)) {
+
+                    button = vTT.addButton("Queue", null, 95, 18, 10f);
+                    button.setEnabled(researchAPI.canResearch(research.industryId, true));
+                    buttons.add(button);
+                    buttonMap.put(button, "queue_research:" + research.industryId);
+                    if(researchAPI.isInQueue(research.industryId)|| researchAPI.canResearch(research.industryId,true)){
+                        button.setEnabled(false);
+                    }
+                }
+                else{
                     button = vTT.addButton("Research", null, 95, 18, 10f);
                     button.setEnabled(researchAPI.canResearch(research.industryId, true));
                     buttons.add(button);
                     buttonMap.put(button, "start_research:" + research.industryId);
-
                 }
 
                 if (button != null) {
                     button.getPosition().setLocation(0, 0).inTL(95, 42);
-                    if (research.isResearched) {
+                    if (research.isResearched||researchAPI.isInQueue(research.industryId)) {
                         button.setEnabled(false);
                         makerAPIHashMap.put(button, vTT);
                     }
@@ -1212,7 +1249,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         if (person.hasTag("aotd_resourceful")) {
                             newCalculus = items.getValue() - 1;
 
-                            boolean notCutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank")|| items.getKey().equals("research_databank");
+                            boolean notCutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank");
                             if (notCutting) {
                                 newCalculus += 1;
                             }
@@ -1283,13 +1320,22 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     cost *= 3;
                 }
                 wantsToKnowResearchReqTT.addPara("It would take " + cost + " days to complete research ", 10f).getPosition().setLocation(0, 0).inTL(5, 175 + (float) availableHeight / 6.5f);
-                if (currResearching == null || !wantsToHaveInfoAbout.industryId.equals(currResearching.industryId)) {
+                if (currResearching == null) {
                     ButtonAPI buttonAPI = wantsToKnowResearchReqTT.addButton("Start Research ", null, 120, 20, 10f);
                     if (!researchAPI.canResearch(wantsToHaveInfoAbout.industryId, true)) {
                         buttonAPI.setEnabled(false);
                     }
                     buttons.add(buttonAPI);
                     buttonMap.put(buttonAPI, "start_research:" + wantsToHaveInfoAbout.industryId);
+                    buttonAPI.getPosition().setLocation(0, 0).inTL(405, 173 + (float) availableHeight / 6.5f);
+                }
+                else if (!researchAPI.isInQueue(wantsToHaveInfoAbout.industryId) && !wantsToHaveInfoAbout.industryId.equals(currResearching.industryId)){
+                    ButtonAPI buttonAPI = wantsToKnowResearchReqTT.addButton("Queue", null, 120, 20, 10f);
+                    if (!researchAPI.canResearch(wantsToHaveInfoAbout.industryId, true)) {
+                        buttonAPI.setEnabled(false);
+                    }
+                    buttons.add(buttonAPI);
+                    buttonMap.put(buttonAPI, "queue_research:" + wantsToHaveInfoAbout.industryId);
                     buttonAPI.getPosition().setLocation(0, 0).inTL(405, 173 + (float) availableHeight / 6.5f);
                 }
 
@@ -1354,7 +1400,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             if (personAPI.hasTag("aotd_resourceful")) {
                 scientistSpecAbilityPanelTT.addPara("Special Ability", Color.CYAN, 10f);
                 scientistSpecAbilityPanelTT.addPara("Resourceful", Color.ORANGE, 10f);
-                scientistSpecAbilityPanelTT.addPara("Description: That scientist is very cautious and wants to use as little resources to accomplish task as possible\n\nDecrease cost of item for inital research by 1 unit.\n\nThis does not include special databanks and research databanks", Color.WHITE, 10f);
+                scientistSpecAbilityPanelTT.addPara("Description: That scientist is very cautious and wants to use as little resources to accomplish task as possible\n\nDecrease cost of item for inital research by 1 unit.\n\nThis does not include special databanks", Color.WHITE, 10f);
             }
             if (personAPI.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)) {
                 scientistSpecAbilityPanelTT.addPara("Special Ability", Color.CYAN, 10f);
@@ -1369,9 +1415,9 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
     void showBonuses() {
         float sizeSection = availabileWidith - 175;
-        bonusPanel = panel.createCustomPanel((sizeSection / 2) - 18, 330, null);
+        bonusPanel = panel.createCustomPanel((sizeSection / 2) - 18, 230, null);
         bonusPanel.getPosition().setLocation(0, 0).inTL(0, 0);
-        bonusPanelTT = bonusPanel.createUIElement((sizeSection / 2) - 18, 330, true);
+        bonusPanelTT = bonusPanel.createUIElement((sizeSection / 2) - 18, 230, true);
         bonusPanelTT.getPosition().setLocation(0, 0).inTL(0, 0);
         bonusPanelTT.addPara("Current Bonuses\n", Color.CYAN, 10f);
         boolean bonus = false;
@@ -1399,10 +1445,11 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
     void showStats() {
         float sizeSection = availabileWidith - 175;
-        statisticsPanel = panel.createCustomPanel((sizeSection / 2) - 18, 337, null);
+        statisticsPanel = panel.createCustomPanel((sizeSection / 2) - 18, (337/2)+1, null);
         statisticsPanel.getPosition().setLocation(0, 0).inTL(0, 0);
-        statisticsPanelTT = statisticsPanel.createUIElement((sizeSection / 2) - 18, 337, true);
+        statisticsPanelTT = statisticsPanel.createUIElement((sizeSection / 2) - 18, (337/2)+1, true);
         statisticsPanelTT.getPosition().setLocation(0, 0).inTL(0, 0);
+        int tier0 = researchAPI.alreadyResearchedAmountCertainTier(0);
         int tier1 = researchAPI.alreadyResearchedAmountCertainTier(1);
         int tier2 = researchAPI.alreadyResearchedAmountCertainTier(2);
         int tier3 = researchAPI.alreadyResearchedAmountCertainTier(3);
@@ -1428,9 +1475,77 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             statisticsPanelTT.addPara("We have researched all technologies and advanced ourselves to the point that we can be called without any doubt \"Domain's true successor\". A new hope of the Persean Sector", Color.CYAN, 10f);
         }
         statisticsPanel.addUIElement(statisticsPanelTT).inTL(0, 0);
-        mainTooltip.addComponent(statisticsPanel).inTL(185 + sizeSection / 2, 5 + 60 + 330 + 107);
+        mainTooltip.addComponent(statisticsPanel).inTL(185 + sizeSection / 2, 502+(337/2));
     }
+    void showQueue() {
+        float sizeSection = availabileWidith - 175;
+        queuePanel = panel.createCustomPanel((sizeSection / 2) - 18, (337/2)+100, null);
+        queuePanel.getPosition().setLocation(0, 0).inTL(0, 0);
+        queuePanelTT = queuePanel.createUIElement((sizeSection / 2) - 18, (337/2)+100, true);
+        queuePanelTT.getPosition().setLocation(0, 0).inTL(0, 0);
+        queuePanelOptionsTT = queuePanel.createUIElement((sizeSection / 2) - 18, (337/2)+50, true);
+        queuePanelOptionsTT.getPosition().setLocation(0, 0).inTL(0, 0);
+        queuePanelTT.addPara("Research Queue System\nCurrently Queue holds "+ researchAPI.getResearchQueue().size()+ " Research Options",Color.CYAN,10f).getPosition().setLocation(0,0).inTL(5,10);
+        ButtonAPI buttonApi = queuePanelTT.addButton("Clear Queue",null,150,30,10f);
+        buttonApi.getPosition().setLocation(0,0).inTL(340,10);
+        buttons.add(buttonApi);
+        buttonMap.put(buttonApi, "clear_queue");
+        int index = 0;
+        int spacerY = 65;
+        for (ResearchOption research : researchAPI.getResearchQueue()) {
+            CustomPanelAPI vPanel = queuePanel.createCustomPanel((sizeSection / 2) - 18, 120, null);
+            vPanel.getPosition().setLocation(0, 0).inTL(5, index * spacerY);
+            TooltipMakerAPI vTT = vPanel.createUIElement((sizeSection / 2) - 18, 140, false);
+            vTT.getPosition().inTL(5, 0);
+            vTT.setForceProcessInput(true);
+            ButtonAPI boxBorder;
+            boxBorder = queuePanelOptionsTT.addAreaCheckbox("", null, Color.ORANGE,
+                    Misc.getDarkPlayerColor(), Misc.getStoryBrightColor(), (sizeSection / 2) - 18, 56, 0);
+            queuePanelOptionsTT.addSpacer(spacerY - 56);
+            boxBorder.setHighlightBrightness(0f);
+            boxBorder.setHighlightBounceDown(false);
+            boxBorder.setFlashBrightness(0f);
+            boxBorder.setGlowBrightness(0f);
+            boxBorder.setEnabled(false);
+            boxBorder.setChecked(false);
+            boxBorder.setClickable(false);
+            boxBorder.setMouseOverSound(null);
+            boxBorder.setButtonPressedSound(null);
+            ButtonAPI up;
+            ButtonAPI down;
+            ButtonAPI prioritize;
+            ButtonAPI unprioritize;
+            ButtonAPI delete;
+            vTT.addPara(research.industryName, Color.ORANGE, 0).getPosition().setLocation(0, 0).inTL(10, 5);
+             up = vTT.addButton("Down",null,60,20,10f);
+             up.getPosition().setLocation(0,0).inTL(140,25);
+            down = vTT.addButton("Up",null,60,20,10f);
+            down.getPosition().setLocation(0,0).inTL(210,25);
+            prioritize = vTT.addButton("Move to top",null,100,20,10f);
+            prioritize.getPosition().setLocation(0,0).inTL(280,25);
+            unprioritize = vTT.addButton("Move to bottom ",null,110,20,10f);
+            unprioritize.getPosition().setLocation(0,0).inTL(390,25);
+            delete = vTT.addButton("Remove",null,110,20,10f);
 
+            delete.getPosition().setLocation(0,0).inTL(10,25);
+            vPanel.addUIElement(vTT).inTL(0, 0);
+            buttons.add(up);
+            buttonMap.put(up, "queue_up:"+research.industryId);
+            buttons.add(down);
+            buttonMap.put(down, "queue_down:"+research.industryId);
+            buttons.add(prioritize);
+            buttonMap.put(prioritize, "queue_prioritize:"+research.industryId);
+            buttons.add(unprioritize);
+            buttonMap.put(unprioritize, "queue_unprioritize:"+research.industryId);
+            buttons.add(delete);
+            buttonMap.put(delete, "queue_delete:"+research.industryId);
+            queuePanelOptionsTT.addComponent(vPanel).inTL(0, index * spacerY);
+            index++;
+        }
+        queuePanel.addUIElement(queuePanelTT).inTL(0, 0);
+        queuePanel.addUIElement(queuePanelOptionsTT).inTL(0, 50);
+        mainTooltip.addComponent(queuePanel).inTL(185 + sizeSection / 2, 402);
+    }
     void showMoreInfoContainer(String industryID) {
         float sizeSection = availabileWidith - 175;
         float height = (int) this.pH / 1.45f;
@@ -1446,7 +1561,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 IndOrStructure = " - Industry";
             }
             String tier = tierDecider(researchAPI.getResearchOption(industryID).researchTier);
-            if(Global.getSettings().getIndustrySpec(industryID).hasTag("experimental")) tier = "Experimental";
+            if (Global.getSettings().getIndustrySpec(industryID).hasTag("experimental")) tier = "Experimental";
             wantsToKnowResearchTT.addPara(Global.getSettings().getIndustrySpec(industryID).getName() + IndOrStructure, Color.ORANGE, 10f).getPosition().setLocation(0, 0).inTL(190, 5);
             wantsToKnowResearchTT.addPara("Tier : " + tier, Color.CYAN, 10f).getPosition().setLocation(0, 0).inTL(190, 30);
             if (researchAPI.getResearchOption(industryID).isResearched) {
@@ -1454,7 +1569,29 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             } else {
                 wantsToKnowResearchTT.addPara("Researched : No", Color.RED, 10f).getPosition().setLocation(0, 0).inTL(190, 55);
             }
+            ButtonAPI buttonDownSize = wantsToKnowResearchTT.addButton("Down", null, 40, 15, 10f);
+            buttonDownSize.getPosition().setLocation(0, 0).inTL(330, 54);
+            buttons.add(buttonDownSize);
+            buttonMap.put(buttonDownSize, "down_size");
+            ButtonAPI buttonUpSize = wantsToKnowResearchTT.addButton("Up", null, 40, 15, 10f);
+            buttonUpSize.getPosition().setLocation(0, 0).inTL(470, 54);
+            ButtonAPI sizeBox = wantsToKnowResearchTT.addAreaCheckbox("",null,Misc.getBasePlayerColor(),
+              Misc.getDarkPlayerColor(), Misc.getBasePlayerColor(),90,20,10f);
+            wantsToKnowResearchTT.addPara("Size of Example Market ",Color.WHITE,10f).getPosition().setLocation(0,0).inTL(340,30);
+            wantsToKnowResearchTT.addPara("Size : "+defaultSizeOfExampleMarket,Color.CYAN,10f).getPosition().setLocation(0,0).inTL(395,54);
+            sizeBox.getPosition().setLocation(0,0).inTL(375,52);
+            sizeBox.setHighlightBrightness(0f);
+            sizeBox.setHighlightBounceDown(false);
+            sizeBox.setFlashBrightness(0f);
+            sizeBox.setGlowBrightness(0f);
+            sizeBox.setEnabled(false);
+            sizeBox.setChecked(false);
+            sizeBox.setClickable(false);
+            sizeBox.setMouseOverSound(null);
+            sizeBox.setButtonPressedSound(null);
 
+            buttons.add(buttonUpSize);
+            buttonMap.put(buttonUpSize, "up_size");
         }
 
         wantsToKnowResearch.addUIElement(wantsToKnowResearchTT).inTL(0, 0);
@@ -1539,6 +1676,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             } else {
                 industryPanelDescrpTT.addPara("\n[" + Global.getSettings().getModManager().getModSpec(modId).getName() + "]" + getIndustryDesc(industryID), 1);
             }
+            copy.setSize(defaultSizeOfExampleMarket);
             procesingMakret = true;
             List<MarketConditionAPI> copyConditions = copy.getConditions();
             ArrayList<String> conditionIds = new ArrayList<>();
@@ -1666,7 +1804,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
             }
 
-            industryPanelDescrpTT.addPara("*Shown production and demand values are adjusted as if industry was on market with size 6 population without any production bonuses .*\n", gray, opad);
+            industryPanelDescrpTT.addPara("*Shown production and demand values are adjusted as if industry was on market with size "+defaultSizeOfExampleMarket+" population without any production bonuses .*\n", gray, opad);
             ResearchOption currOption = researchAPI.getResearchOption(industryID);
             if (currOption.hasDowngrade) {
                 industryPanelDescrpTT.addPara("This industry is an upgrade from: " + Global.getSettings().getIndustrySpec(currOption.downgradeId).getName() + "\n", Color.ORANGE, opad);
@@ -1777,7 +1915,6 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
             }
 
-
             if (b.isChecked()) {
 
                 b.setChecked(false);
@@ -1787,6 +1924,42 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     needsReset = true;
                     break;
                 }
+                if(tokens[0].equals("up_size")){
+                    changeDefaultSizeOfExampleMarket(true);
+                    needsReset = true;
+                    break;
+                }
+                if(tokens[0].equals("down_size")){
+                    changeDefaultSizeOfExampleMarket(false);
+                    needsReset = true;
+                    break;
+                }
+                if(tokens[0].equals("queue_up")){
+                   researchAPI.moveUpOrDownInQueue(tokens[1],false);
+                    needsReset = true;
+                    break;
+                }
+                if(tokens[0].equals("queue_down")){
+                    researchAPI.moveUpOrDownInQueue(tokens[1],true);
+                    needsReset = true;
+                    break;
+                }
+                if(tokens[0].equals("queue_prioritize")){
+                 ;  researchAPI.moveToTopOfQueue(tokens[1]);
+                    needsReset = true;
+                    break;
+                }
+                if(tokens[0].equals("queue_unprioritize")){
+                    researchAPI.moveToBottomOfQueue(tokens[1]);
+                    needsReset = true;
+                    break;
+                }
+                if(tokens[0].equals("queue_delete")){
+                     researchAPI.removeFromQueue(tokens[1]);
+                    needsReset = true;
+                    break;
+                }
+
                 if (tokens[0].contains("HELP")) {
                     if (tokens[1].equals("what")) {
                         scroller = 0;
@@ -1826,6 +1999,9 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     if (researchAPI.getCurrentResearching() != null && researchAPI.getCurrentResearching().industryId.equals(wantsToHaveInfoAbout.industryId)) {
                         wantsInfoAboutCurrentlyResearching = true;
                     }
+                    else{
+                        wantsInfoAboutCurrentlyResearching = false;
+                    }
                     needsReset = true;
                     break;
                 }
@@ -1850,6 +2026,16 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
                     break;
                 }
+                if (tokens[0].contains("queue_research")) {
+                    researchAPI.addResearchToQueue(tokens[1]);
+                    needsReset = true;
+                    break;
+                }
+                if (tokens[0].contains("clear_queue")) {
+                    researchAPI.clearEntireResearchQueue();
+                    needsReset = true;
+                    break;
+                }
                 if (tokens[0].contains("archive_show")) {
                     wantsToHaveInfoAbout = researchAPI.getResearchOption(tokens[1]);
                     if (researchAPI.getCurrentResearching() != null && researchAPI.getCurrentResearching().industryId.equals(wantsToHaveInfoAbout.industryId)) {
@@ -1867,6 +2053,17 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
                     researchAPI.stopResearch();
                     currResearching = null;
+                    if(!researchAPI.getResearchQueue().isEmpty()){
+                        researchAPI.startResearch(researchAPI.getResearchQueue().get(0).industryId);
+                        currResearching = researchAPI.getCurrentResearching();
+                         intel = new MessageIntel("Start Queued Research - " + currResearching.industryName, Misc.getBasePlayerColor());
+                        intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
+                        intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+                        Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+                        wantsInfoAboutCurrentlyResearching = true;
+                        wantsToHaveInfoAbout = null;
+                        researchAPI.getResearchQueue().remove(0);
+                    }
                     needsReset = true;
                     break;
                 }

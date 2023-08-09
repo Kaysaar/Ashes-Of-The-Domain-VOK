@@ -46,11 +46,12 @@ public class ResearchProgressScript implements EveryFrameScript {
         if(researchAPI.alreadyResearchedAmount()>=7){
             if (Global.getSettings().getModManager().isModEnabled("lunalib"))
             {
-                boolean enabled = Boolean.TRUE.equals(LunaSettings.getBoolean("aod_core", "aoTDVOK_OP_SCIENTIST_ENABLED"));
+                boolean enabled = Boolean.TRUE.equals(LunaSettings.getBoolean("aod_core", "aoTDVOK_SOPHIA_ENABLED"));
                 if(enabled){
                     Global.getSector().getMemory().set("$aotd_can_op_scientist",true);
                 }
             }
+            Global.getSector().getMemory().set("$aotd_can_scientist",true);
         }
         if(researchAPI.alreadyResearchedAmount()>=12&&researchAPI.alreadyResearchedAmountCertainTier(3)>=1){
             if (Global.getSettings().getModManager().isModEnabled("lunalib"))
@@ -68,6 +69,7 @@ public class ResearchProgressScript implements EveryFrameScript {
             if (researchAPI.isResearching()) {
                 hasResearchedin30Days=true;
                 counter=0;
+                boolean stopedResearch = false;
                 ResearchOption currResearch = researchAPI.getCurrentResearching();
                 if(Global.getSettings().getIndustrySpec(currResearch.industryId).hasTag("experimental")&&!AoDUtilis.canExperimental()){
                     MessageIntel intel = new MessageIntel("Halted Research - " + currResearch.industryName, Misc.getBasePlayerColor());
@@ -75,10 +77,22 @@ public class ResearchProgressScript implements EveryFrameScript {
                     intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
                     Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
                     researchAPI.stopResearch();
+                    stopedResearch = true;
                 }
                 currResearch.currentResearchDays -= AoDUtilis.researchBonusCurrent();
                 if (currResearch.currentResearchDays <= 0) {
                     researchAPI.finishResearch();
+                    stopedResearch = true;
+                }
+                if(stopedResearch){
+                    if(!researchAPI.getResearchQueue().isEmpty()){
+                        researchAPI.startResearch(researchAPI.getResearchQueue().get(0).industryId);
+                        MessageIntel intel = new MessageIntel("Start Queued Research - " + researchAPI.getCurrentResearching().industryName, Misc.getBasePlayerColor());
+                        intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
+                        intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+                        Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+                        researchAPI.getResearchQueue().remove(0);
+                    }
                 }
             }
             else{

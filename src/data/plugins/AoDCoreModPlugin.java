@@ -369,11 +369,11 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         RescourceCondition.applyResourceConditionToAllMarkets();
         IndUpgradeListener.applyIndustyUpgradeCondition();
         Global.getSector().getPlayerFaction().getMemory().set(AodMemFlags.AOD_INITALIZED, true);
-        if (!Global.getSector().getMemory().contains("$update_1.4.0_aotd")) {
-            Global.getSector().getMemory().set("$update_1.4.0_aotd", true);
+        if(!Global.getSector().getPersistentData().containsKey("$aotd_v_planet")){
             for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
                 if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
                     for (PlanetAPI planet : starSystem.getPlanets()) {
+
                             if(planet.hasTag(Tags.MISSION_ITEM))continue;
                             if(planet.isStar())continue;
                             if(planet.isGasGiant())continue;
@@ -384,6 +384,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                             planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
                             Global.getSector().getPersistentData().put("$aotd_v_planet",planet);
                             planet.getMemoryWithoutUpdate().set("$aotd_quest_veil", true);
+                            planet.setName("Veil of Knowledge");
                             break;
                     }
                 }
@@ -617,6 +618,9 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         updatedApi.setCurrentResearching(AoDUtilis.getResearchAPI().getCurrentResearching());
         for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getResearchOptions()) {
             updatedApi.getResearchOptions().add(researchOption);
+        }
+        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getResearchQueue()) {
+            updatedApi.getResearchQueue().add(researchOption);
         }
         updatedApi.setResearching(AoDUtilis.getResearchAPI().isResearching());
         updatedApi.setCurrentResearcher(AoDUtilis.getResearchAPI().getCurrentResearcher());

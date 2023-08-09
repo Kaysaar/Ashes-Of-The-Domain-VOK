@@ -11,6 +11,7 @@ import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.util.Misc;
+import com.fs.util.A;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
 import data.Ids.AodResearcherSkills;
@@ -38,6 +39,7 @@ public class ResearchAPI {
     public String modIdLabel = "mod_id";
     public String dissabledFactor = "disabled_factor";
     public ArrayList<ResearchOption> researchOptions = new ArrayList<>();
+    public  ArrayList<ResearchOption> researchQueue = new ArrayList<>();
     public ResearchOption currentResearching = null;
     JSONArray allResearches;
     public boolean researching = false;
@@ -255,7 +257,7 @@ public class ResearchAPI {
 
         int reqAmount = req.getValue();
         boolean isSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank");
-        if (!isSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")&&!req.getKey().equals("research_databank")) {
+        if (!isSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
             reqAmount -= 1;
             if (req.getKey().equals("domain_artifacts") || req.getKey().equals("water")) {
                 reqAmount -= 100;
@@ -287,7 +289,7 @@ public class ResearchAPI {
     public void removeItemReqFromMarkets(Map.Entry<String, Integer> req) {
         int reqAmount = req.getValue();
         boolean isNotSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank");
-        if (isNotSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")&& !req.getKey().equals("research_databank")) {
+        if (isNotSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
             reqAmount -= 1;
             if (req.getKey().equals("domain_artifacts") || req.getKey().equals("water")) {
                 reqAmount -= 100;
@@ -353,9 +355,9 @@ public class ResearchAPI {
         }
     }
 
-    public boolean canResearch(String industryId, boolean forUi) {
+    public boolean canResearch(String industryId, boolean forQueue) {
 
-        if (isResearching() && !forUi) {
+        if (isResearching() && !forQueue) {
             return false;
         }
         ResearchOption wantsToResearch = getResearchOption(industryId);
@@ -423,6 +425,87 @@ public class ResearchAPI {
             return Global.getSettings().getIndustrySpec(industryId).getName();
         }
         return null;
+    }
+    public boolean isInQueue(String id){
+        for (ResearchOption researchOption : researchQueue) {
+            if(researchOption.industryId.equals(id)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean canMoveUpOrDown(boolean up,String id){
+        int index = 0;
+        for (ResearchOption researchOption : researchQueue) {
+            if(researchOption.industryId.equals(id)){
+                break;
+            }
+            index++;
+        }
+        if(!up){
+            index++;
+            if(index>=researchQueue.size()){
+                return false;
+            }
+        }
+        else{
+            index--;
+            if(index<0){
+                return false;
+            }
+        }
+        return true;
+    }
+    public void moveUpOrDownInQueue(String id,boolean up){
+        if(!canMoveUpOrDown(up,id)){
+            return;
+        }
+        if(!up){
+            int index = 0;
+            for (ResearchOption researchOption : researchQueue) {
+                if(researchOption.industryId.equals(id)){
+                    break;
+                }
+                index++;
+            }
+            int highindex = index+1;
+            ResearchOption lower = getResearchOption(researchQueue.get(highindex).industryId);
+            ResearchOption higher = getResearchOption(researchQueue.get(index).industryId);;
+            researchQueue.set(highindex,higher);
+            researchQueue.set(index,lower);
+        }
+        else{
+            int index = 0;
+            for (ResearchOption researchOption : researchQueue) {
+                if(researchOption.industryId.equals(id)){
+                    break;
+                }
+                index++;
+            }
+            int lowindex = index-1;
+            ResearchOption lower = getResearchOption(researchQueue.get(lowindex).industryId);
+            ResearchOption higher = getResearchOption(researchQueue.get(index).industryId);;
+            researchQueue.set(lowindex,higher);
+            researchQueue.set(index,lower);
+        }
+
+    }
+    public void moveToTopOfQueue(String id ){
+        int index = researchQueue.indexOf(getResearchOption(id));
+        ResearchOption prevTop = researchQueue.get(0);
+        ResearchOption newTop = researchQueue.get(index);
+        researchQueue.set(index,prevTop);
+        researchQueue.set(0,newTop);
+    }
+    public void moveToBottomOfQueue(String id ){
+        int index = researchQueue.indexOf(getResearchOption(id));
+        ResearchOption prevBot = researchQueue.get(researchQueue.size()-1);
+        ResearchOption newBot = researchQueue.get(index);
+        researchQueue.set(index,prevBot);
+        researchQueue.set(researchQueue.size()-1,newBot);
+    }
+    public void removeFromQueue(String id ){
+        researchQueue.remove(getResearchOption(id));
     }
 
     public boolean loadMergedCSV() {
@@ -767,12 +850,14 @@ public class ResearchAPI {
     public int alreadyResearchedAmount() {
         int counter = 0;
         for (ResearchOption researchOption : researchOptions) {
-            if (researchOption.researchTier == 0) continue;
             if (!researchOption.isResearched) continue;
             if(researchOption.isDisabled)continue;
             counter++;
         }
         return counter;
+    }
+    public ArrayList<ResearchOption> getResearchQueue(){
+        return this.researchQueue;
     }
 
     public int alreadyResearchedAmountCertainTier(int tier) {
@@ -809,7 +894,26 @@ public class ResearchAPI {
 //
 //        }
 //    }
+public void addResearchToQueue(String id){
+        ResearchOption researchOptionToInsert = getResearchOption(id);
+        if (researchOptionToInsert.requieredItems != null) {
+        for (Map.Entry<String, Integer> stringIntegerEntry : researchOptionToInsert.requieredItems.entrySet()) {
+            removeItemReqFromMarkets(stringIntegerEntry);
+        }
+            researchOptionToInsert.requieredItems.clear();
+            researchOptionToInsert.hasTakenResearchCost = true;
 
+        removeReq(researchOptionToInsert);
+
+    }
+        researchQueue.add(researchOptionToInsert);
+}
+public void removeResearchFromQueue(String id ){
+        researchQueue.remove(getResearchOption(id));
+}
+public void clearEntireResearchQueue(){
+        researchQueue.clear();
+}
 
     public void startResearch(String industryId) {
         if (!canResearch(industryId, false)) {
