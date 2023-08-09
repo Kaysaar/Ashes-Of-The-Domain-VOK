@@ -63,10 +63,30 @@ AddTextSmall ""$personName joined your faction"" highlight",,aotdReturn: Leave t
 opScientistInfo,DialogOptionSelected,$option == opScientistInfo,"AddTextSmall ""Skill - Seeker of Knowledge."" highlight
 AddTextSmall  ""Negate need for special type of databanks for research, but increase amount of days to research technologies that requieres special databank three times more"" highlight
 ",,,
-,,,,,,
 #BIFROST SECTION,,,,,,
-bifrostAccess,OpenInteractionDialog,$customType == bifrost_gate score:1000,SetShortcut defaultLeave ESCAPE ,Bifrost Gates are prototype of replicating Domain's gate technology . Though being very limiting due to enourmous energy upkeep it enables traveling via Bifrost Network,"0:bifrostUse:Use Bifrost Network
+,,,,,,
+bifrostAccess,OpenInteractionDialog,$customType == bifrost_gate score:1000,"SetShortcut defaultLeave ESCAPE  
+SetEnabled bifrostUse false
+FireBest bifrostCanBeUsed","A dull hum begins to sound in your ear, emanating from the gate as space-time begins to rumble and roil. The dull interior of the gigantic ring slowly lightens, unnatural purple light drifting inwards even as the humming begins to rise in tempo, rising a roar. Waves and distortions, barely visible from a distance echo from the structure, sensor reports streaming in about conflicting celestial objects, before it reaches a crescendo, in a tide, space normalizes and a tunnel in reality itself completes forming, giving a complete glimpse to the other side.
+
+The Bifrost bridge has opened…","0:bifrostUse:Use Bifrost Network
 1:defaultLeave:Leave",
 bifrostUse,DialogOptionSelected,$option == bifrostUse,BiFrostCMD selectDestination,,,
+bifrostCanBeUsed,bifrostCanBeUsed,"$used==false
+$cooldown <=0
+$supplied == true",SetEnabled bifrostUse true,,,
+#BEYOND VEIL,,,,,,
+veil_open_dialog,OpenInteractionDialog,$aotd_quest_veil ,"SalvageGenFromSeed
+ShowDefaultVisual
+FireBest SalvageCheckHostile","Your $shipOrFleet approaches $entityName.
+
+The sensors are having a hard time evaluating the tenuous megastructure enveloping its entire surface. Your sensors officer takes the initiative and applies some exotic parameters to the interferometer feed; inputs go green and a few seconds later the sub-AI tentatively identifies a stable planetary-scale energy field with highly unusual properties.",,
+veil_defenderDesc,TriggerAutomatedDefenses,$aotd_quest_veil,SalvageDefenderInteraction,"As your fleet moves in closer, sensors detect multiple contacts rising up from the depths of the planet",,
+veil_continueAfterDefeating,BeatDefendersContinue,$aotd_quest_veil ,,Your fleet finishes its approach to $entityName without further incident.,0:salBeatDefendersContinue:Continue,
+veil_beatDefenders,BeginSalvage,$aotd_quest_veil ,SetShortcut defaultLeave ESCAPE,The transmission is set on repeat and garbled in ways that are indicative of aging equipment. You make out enough to gather that part of a research team was stranded here - at a secret Tri-Tachyon research facility - after the fully automated defenses over-weighed certain executive security contingency orders in the wake of one of the AI Wars and decided it was now imperative to shoot down any craft attempting to leave the planet.,"0:veil_explore:Send a salvage team down to the facility
+100:defaultLeave:Leave",
+veil_exploreFacility,DialogOptionSelected,$option == veil_explore,,"A tiny shuttle with a jury-rigged shield generator darts through a spot failure in the shield. A landing at the primary control center is achieved without incident and the crew is able to deactivate the shield entirely upon breaching the facility. Follow-up shuttles with heavier equipment launch quickly thereafter, and soon the salvage operation is in full swing.",0:veil_salvage:Pick through the salvage,
+veil_salvage,DialogOptionSelected,$option == veil_salvage,BeyondQuest genLoot,,,
+,,,,,,
 ,,,,,,
 ,,,,,,
