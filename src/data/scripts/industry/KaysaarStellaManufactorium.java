@@ -105,24 +105,24 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
             }
         }
         else{
-            tooltip.addPara("This industry enables forging special colony items", Color.ORANGE,10f);
+            tooltip.addPara("This Industry specializes in production of colony items by using advanced resources",Color.ORANGE,10f);
         }
 
+
     }
 
-    @Override
-    protected void applyAlphaCoreModifiers() {
-        super.applyAlphaCoreModifiers();
-    }
 
     @Override
-    protected void applyBetaCoreModifiers() {
-        super.applyBetaCoreModifiers();
+    protected void addGammaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        tooltip.addPara("Reduces cost of forging equipment by 1 unit ",10f);
     }
-
     @Override
-    protected void applyGammaCoreModifiers() {
-        super.applyGammaCoreModifiers();
+    protected void addBetaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        tooltip.addPara("Reduces cost of forging equipment by 1 unit.\nLowers cost of upkeep by 5%",10f);
+    }
+    @Override
+    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        tooltip.addPara("Reduces cost of forging equipment by 1 unit.Lowers cost of upkeep by 5%. Reduces time to forge equipment by 50%",10f);
     }
 
     @Override
