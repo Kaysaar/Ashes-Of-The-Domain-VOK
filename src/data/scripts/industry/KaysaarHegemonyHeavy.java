@@ -96,10 +96,13 @@ public class KaysaarHegemonyHeavy extends BaseIndustry {
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
-        if (mode != IndustryTooltipMode.NORMAL || isFunctional()) {
-            boolean works = Industries.ORBITALWORKS.equals(getId());
-            if (works) {
-                float total = WIDE_FACTION_PRODUCTION_BONUS;
+        if (mode != IndustryTooltipMode.ADD_INDUSTRY || isFunctional()) {
+                float total = 0;
+            for (MarketAPI factionMarket : Misc.getFactionMarkets(market.getFaction())) {
+                if(factionMarket.hasIndustry("hegeheavy")){
+                    total+=WIDE_FACTION_PRODUCTION_BONUS;
+                }
+            }
                 String totalStr = "+" + (int) Math.round(total * 100f) + "%";
                 Color h = Misc.getHighlightColor();
                 if (total < 0) {
@@ -113,7 +116,7 @@ public class KaysaarHegemonyHeavy extends BaseIndustry {
                             Misc.getGrayColor(), opad);
                 }
             }
-        }
+
     }
 
     public boolean isDemandLegal(CommodityOnMarketAPI com) {
@@ -140,6 +143,7 @@ public class KaysaarHegemonyHeavy extends BaseIndustry {
         return market.getIndustry(Industries.ORBITALWORKS).getSpecialItem().getId().equals(Items.PRISTINE_NANOFORGE);
 
     }
+
     @Override
     public String getUnavailableReason() {
         return "Pristine Nanoforge must be installed on Orbital Works to update";
