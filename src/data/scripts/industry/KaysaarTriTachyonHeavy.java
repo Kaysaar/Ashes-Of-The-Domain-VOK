@@ -2,6 +2,7 @@ package data.scripts.industry;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.missions.DelayedFleetEncounter;
@@ -99,6 +100,26 @@ public class KaysaarTriTachyonHeavy extends HeavyIndustry {
     }
 
     @Override
+    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+        //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
+        if (mode != IndustryTooltipMode.ADD_INDUSTRY || isFunctional()) {
+            float total = 0;
+            String totalStr;
+            Color h = Misc.getHighlightColor();
+            h = Misc.getNegativeHighlightColor();
+            totalStr = "From 1 to 3 ";
+
+            float opad = 10f;
+
+            tooltip.addPara("Allowing Patrol fleets to have %s S-mods", opad, h, totalStr);
+            tooltip.addPara("*This bonus applies for every planet of " + market.getFaction().getDisplayName(),
+                    Misc.getGrayColor(), opad);
+
+        }
+
+
+    }
+        @Override
     public String getUnavailableReason() {
         return "Pristine Nanoforge must be installed on Orbital Works to update";
     }

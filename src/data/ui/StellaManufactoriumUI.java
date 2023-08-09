@@ -137,7 +137,7 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
             }
             int rows = 1;
             anchor.addIconGroup(32, rows, opad);
-            anchor.addPara("It takes "+specItemToProduce.costInDays+ " days to produce",Color.ORANGE,10f);
+            anchor.addPara("It takes "+(int)specItemToProduce.costInDays+ " days to produce",Color.ORANGE,10f);
             subIndustryButtonPanel.addUIElement(anchor).inTL(5 + adjustedWidth + 15, 5);
 
             panelTooltip.addCustom(subIndustryButtonPanel, 0f);
