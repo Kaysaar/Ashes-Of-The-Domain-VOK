@@ -102,6 +102,11 @@ public class BeyondQuest  extends BaseCommandPlugin {
         d.group = "rare_tech";
         planet.addDropRandom(d);
 
+        d = new SalvageEntityGenDataSpec.DropData();
+        d.chances = 9;
+        d.group = "ashes_research";
+        planet.addDropRandom(d);
+
         CargoAPI salvage = SalvageEntity.generateSalvage(random, 1f, 1f, 1f, 1f, planet.getDropValue(), planet.getDropRandom());
         CargoAPI extra = BaseSalvageSpecial.getCombinedExtraSalvage(memoryMap);
         salvage.addAll(extra);
@@ -110,6 +115,7 @@ public class BeyondQuest  extends BaseCommandPlugin {
             ListenerUtil.reportExtraSalvageShown(planet);
         }
         salvage.addSpecial(new SpecialItemData("omega_processor", null), 1);
+
         salvage.sort();
 
         dialog.getVisualPanel().showLoot("Salvaged", salvage, false, true, true, new CoreInteractionListener() {
