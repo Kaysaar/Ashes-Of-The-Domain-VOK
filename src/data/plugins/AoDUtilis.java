@@ -203,7 +203,7 @@ public class AoDUtilis {
             if(industry.getId().equals(industryIdToIgnoire))continue;
 
             for (String tag : industry.getSpec().getTags()) {
-                if(tag.contains(category)&&!industry.getId().equals(Base)){
+                if(tag.equals(category)&&!industry.getId().equals(Base)){
                     return true;
                 }
             }
