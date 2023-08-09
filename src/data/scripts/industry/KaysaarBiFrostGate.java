@@ -13,6 +13,7 @@ import data.plugins.AoDUtilis;
 
 public class KaysaarBiFrostGate extends BaseIndustry {
     public SectorEntityToken gate ;
+    public float  BASE_ACCESSIBILITY = 0.5f;
     @Override
     public void apply() {
         super.apply(true );
@@ -23,6 +24,12 @@ public class KaysaarBiFrostGate extends BaseIndustry {
         }
         if(max.two==0&&gate!=null){
             gate.getMemory().set("$supplied",true);
+        }
+        String desc = getNameForModifier();
+
+        float a = BASE_ACCESSIBILITY;
+        if (a > 0) {
+            market.getAccessibilityMod().modifyFlat(getModId(0), a, desc);
         }
     }
     @Override
@@ -44,6 +51,12 @@ public class KaysaarBiFrostGate extends BaseIndustry {
                }
            }
        }
+    }
+
+    @Override
+    public void unapply() {
+        super.unapply();
+        market.getAccessibilityMod().unmodifyFlat(getModId(0));
     }
 
     @Override
@@ -85,9 +98,15 @@ public class KaysaarBiFrostGate extends BaseIndustry {
         if(mode.equals(IndustryTooltipMode.NORMAL)){
             if(gate!=null){
                 if(gate.getMemory().is("$used",true)){
-                    tooltip.addPara("Curently gateway in "+market.getName()+" is inactive",Misc.getNegativeHighlightColor(),10f);
+                    float value = gate.getMemory().getFloat("$cooldown");
+                    String days = " days";
+                    if (value<=1){
+                        days=" day";
+                    }
+                    tooltip.addPara("Curently gateway in "+market.getName()+" is inactive for "+(int)value + days,Misc.getNegativeHighlightColor(),10f);
                 }
             }
+            tooltip.addPara("Accessibility bonus : 50%" ,10f);
         }
     }
 }
