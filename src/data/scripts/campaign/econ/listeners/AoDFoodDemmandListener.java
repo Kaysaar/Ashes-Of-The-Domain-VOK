@@ -6,12 +6,14 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
 import data.scripts.campaign.econ.conditions.AoDFoodDemand;
+import data.scripts.campaign.econ.conditions.AodFoodSup;
 
 public class AoDFoodDemmandListener implements PlayerColonizationListener, EconomyTickListener {
     public static void applyAdditionalFoodDemmand() {
 
         for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
             AoDFoodDemand.applyRessourceCond(m);
+            AodFoodSup.applyCondition(m);
         }
 
     }
@@ -20,7 +22,7 @@ public class AoDFoodDemmandListener implements PlayerColonizationListener, Econo
     public void reportPlayerColonizedPlanet(PlanetAPI planetAPI) {
         MarketAPI m = planetAPI.getMarket();
         AoDFoodDemand.applyRessourceCond(m);
-
+        AodFoodSup.applyCondition(m);
     }
 
     @Override

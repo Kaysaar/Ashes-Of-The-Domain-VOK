@@ -82,6 +82,9 @@ public class KaysaarSwitchAgricultureSection extends BaseIndustry {
                 if(market.hasCondition(AoDConditions.SWITCH_RECITIFICATES)){
                     market.removeCondition(AoDConditions.SWITCH_RECITIFICATES);
                 }
+                if(market.hasCondition(AoDConditions.SWITCH_FOOD)){
+                    market.removeCondition(AoDConditions.SWITCH_FOOD);
+                }
             }
 
         }
@@ -92,6 +95,9 @@ public class KaysaarSwitchAgricultureSection extends BaseIndustry {
                     market.removeCondition(AoDConditions.SWITCH_BIOTICS);
                 }
             }
+            if(market.hasCondition(AoDConditions.SWITCH_FOOD)){
+                market.removeCondition(AoDConditions.SWITCH_FOOD);
+            }
         }
         else{
             if(market.hasCondition(AoDConditions.SWITCH_RECITIFICATES)){
@@ -99,6 +105,9 @@ public class KaysaarSwitchAgricultureSection extends BaseIndustry {
             }
             if(market.hasCondition(AoDConditions.SWITCH_BIOTICS)){
                 market.removeCondition(AoDConditions.SWITCH_BIOTICS);
+            }
+            if(!market.hasCondition(AoDConditions.SWITCH_FOOD)) {
+                market.addCondition(AoDConditions.SWITCH_FOOD);
             }
         }
 

@@ -10,6 +10,7 @@ import data.Ids.AodCommodities;
 import data.plugins.AoDUtilis;
 
 public class AodReci extends BaseMarketConditionPlugin {
+    float production =0.0f;
     @Override
     public void apply(String id) {
         super.apply(id);
@@ -17,7 +18,8 @@ public class AodReci extends BaseMarketConditionPlugin {
             if(industry.getId().equals(AoDIndustries.ARTISANAL_FARMING)
                     ||industry.getId().equals(AoDIndustries.SUBSIDISED_FARMING)
                     ||industry.getId().equals(Industries.FARMING)){
-                industry.getSupply(Commodities.FOOD).getQuantity().modifyMult("switchReciFoodBlock",0);
+                 production = (float) industry.getSupply(Commodities.FOOD).getQuantity().getModifiedInt();
+                industry.getSupply(Commodities.FOOD).getQuantity().modifyFlat("switchReciFoodBlock",(int)-production*0.5f,"Production Focus");
 
 
             }
@@ -31,7 +33,7 @@ public class AodReci extends BaseMarketConditionPlugin {
             if(industry.getId().equals(AoDIndustries.ARTISANAL_FARMING)
                     ||industry.getId().equals(AoDIndustries.SUBSIDISED_FARMING)
                     ||industry.getId().equals(Industries.FARMING)){
-                industry.getSupply(Commodities.FOOD).getQuantity().unmodifyMult("switchReciFoodBlock");
+                industry.getSupply(Commodities.FOOD).getQuantity().unmodifyFlat("switchReciFoodBlock");
 
 
             }
@@ -47,7 +49,7 @@ public class AodReci extends BaseMarketConditionPlugin {
         for (Industry ind : market.getIndustries()) {
             if (ind.getId().equals(Industries.FARMING)||ind.getId().equals(AoDIndustries.ARTISANAL_FARMING)||ind.getId().equals(AoDIndustries.SUBSIDISED_FARMING)) {
 
-                applyCommoditySupplyToIndustry((BaseIndustry) ind,quantity);
+                applyCommoditySupplyToIndustry((BaseIndustry) ind,(int)production);
 
             }
 
@@ -57,21 +59,30 @@ public class AodReci extends BaseMarketConditionPlugin {
     }
     public void unapplyRecitificatesDemand(BaseIndustry ind) {
         ind.supply(AodCommodities.RECITIFICATES, 0, "");
-
+        ind.supply(AodCommodities.BIOTICS, 0, "");
     }
     public void applyCommoditySupplyToIndustry(BaseIndustry ind, int demand){
 
         if(ind.getId().equals(Industries.FARMING)){
+            ind.supply(AodCommodities.BIOTICS, (int)(demand*0.5f));
+            ind.getSupply(AodCommodities.BIOTICS).getQuantity().unmodify(getModId());
             ind.supply(AodCommodities.RECITIFICATES, demand);
             ind.getSupply(AodCommodities.RECITIFICATES).getQuantity().unmodify(getModId());
+
         }
         if(ind.getId().equals(AoDIndustries.ARTISANAL_FARMING)){
+            ind.supply(AodCommodities.BIOTICS, (int)((demand-2)*0.5f));
+            ind.getSupply(AodCommodities.BIOTICS).getQuantity().unmodify(getModId());
             ind.supply(AodCommodities.RECITIFICATES, demand-2);
             ind.getSupply(AodCommodities.RECITIFICATES).getQuantity().unmodify(getModId());
+
         }
         if(ind.getId().equals(AoDIndustries.SUBSIDISED_FARMING)){
+            ind.supply(AodCommodities.BIOTICS, (int)((demand+2)*0.5f));
+            ind.getSupply(AodCommodities.BIOTICS).getQuantity().unmodify(getModId());
             ind.supply(AodCommodities.RECITIFICATES, demand+2);
             ind.getSupply(AodCommodities.RECITIFICATES).getQuantity().unmodify(getModId());
+
         }
 
 

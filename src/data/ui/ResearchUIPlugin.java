@@ -16,6 +16,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.ui.P;
+import data.Ids.AoDIndustries;
 import data.Ids.AodCommodities;
 import data.Ids.AodResearcherSkills;
 import data.plugins.AoDUtilis;
@@ -1749,6 +1750,9 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 float icons = 0;
                 if (upgrdInd.getId().equals(Industries.FARMING)) {
                     industryPanelDescrpTT.addIcons(copy.getCommodityData(Commodities.FOOD), copy.getSize(), IconRenderMode.NORMAL);
+                    industryPanelDescrpTT.addIcons(copy.getCommodityData(AodCommodities.RECITIFICATES), (int)(copy.getSize()*0.5), IconRenderMode.NORMAL);
+                    industryPanelDescrpTT.addIcons(copy.getCommodityData(AodCommodities.BIOTICS),(int)(copy.getSize()*0.5), IconRenderMode.NORMAL);
+
                     icons = copy.getSize();
                 } else if (upgrdInd.getId().equals(Industries.AQUACULTURE)) {
                     industryPanelDescrpTT.addIcons(copy.getCommodityData(Commodities.FOOD), copy.getSize(), IconRenderMode.NORMAL);
@@ -1775,6 +1779,12 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                             minus = -1;
                         }
                         industryPanelDescrpTT.addIcons(copy.getCommodityData(curr.getCommodityId()), curr.getQuantity().getModifiedInt() + minus, IconRenderMode.NORMAL);
+                        if(upgrdInd.getId().equals(AoDIndustries.SUBSIDISED_FARMING)||upgrdInd.getId().equals(AoDIndustries.ARTISANAL_FARMING)){
+                            if(curr.getCommodityId().equals(Commodities.FOOD)){
+                                industryPanelDescrpTT.addIcons(copy.getCommodityData(AodCommodities.BIOTICS), (int)(curr.getQuantity().getModifiedInt()*0.5f) , IconRenderMode.NORMAL);
+                                industryPanelDescrpTT.addIcons(copy.getCommodityData(AodCommodities.RECITIFICATES),  (int)(curr.getQuantity().getModifiedInt()*0.5f) + minus, IconRenderMode.NORMAL);
+                            }
+                        }
                         icons += curr.getQuantity().getModifiedInt();
 
                     }
