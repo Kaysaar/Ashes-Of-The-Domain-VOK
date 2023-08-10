@@ -111,18 +111,24 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
 
     }
 
+// TODO : IMPLEMENT AI CORE EFFECTS
+
+//    @Override
+//    protected void addGammaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+//        tooltip.addPara("Reduces cost of forging equipment by 1 unit ",10f);
+//    }
+//    @Override
+//    protected void addBetaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+//        tooltip.addPara("Reduces cost of forging equipment by 1 unit.\nLowers cost of upkeep by 5%",10f);
+//    }
+//    @Override
+//    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+//        tooltip.addPara("Reduces cost of forging equipment by 1 unit.Lowers cost of upkeep by 5%. Reduces time to forge equipment by 50%",10f);
+//    }
 
     @Override
-    protected void addGammaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-        tooltip.addPara("Reduces cost of forging equipment by 1 unit ",10f);
-    }
-    @Override
-    protected void addBetaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-        tooltip.addPara("Reduces cost of forging equipment by 1 unit.\nLowers cost of upkeep by 5%",10f);
-    }
-    @Override
-    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-        tooltip.addPara("Reduces cost of forging equipment by 1 unit.Lowers cost of upkeep by 5%. Reduces time to forge equipment by 50%",10f);
+    public boolean canInstallAICores() {
+        return false;
     }
 
     @Override

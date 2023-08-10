@@ -5,6 +5,7 @@ public class AoDConditions {
 
     public static final String SWITCH_RECITIFICATES ="AodReci";
     public static final String SWITCH_BIOTICS ="AodSub";
+    public static final String SWITCH_FOOD ="AodFood";
 
 
 }

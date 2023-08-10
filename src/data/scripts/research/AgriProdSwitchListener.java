@@ -58,7 +58,9 @@ public class AgriProdSwitchListener extends BaseIndustryOptionProvider {
         Color dark = faction.getDarkUIColor();
         Color grid = faction.getGridUIColor();
         Color bright = faction.getBrightUIColor();
-
+        boolean arti = opt.ind.getId().equals(AoDIndustries.ARTISANAL_FARMING);
+        boolean sub = opt.ind.getId().equals(AoDIndustries.SUBSIDISED_FARMING);
+        boolean farm = opt.ind.getId().equals(Industries.FARMING);
         Color gray = Misc.getGrayColor();
         Color highlight = Misc.getHighlightColor();
         Color bad = Misc.getNegativeHighlightColor();
@@ -122,80 +124,122 @@ public class AgriProdSwitchListener extends BaseIndustryOptionProvider {
             hasSupply = true;
             break;
         }
-        if (hasSupply) {
-            tooltip.addSectionHeading("Production", color, dark, Alignment.MID, opad);
-            tooltip.beginIconGroup();
-            tooltip.setIconSpacingMedium();
-            float icons = 0;
-            for (MutableCommodityQuantity curr : switchInd.getAllSupply()) {
-                int qty = curr.getQuantity().getModifiedInt();
-                //if (qty <= 0) continue;
+        boolean hadBioticsFocus = marketAPI.hasCondition(AoDConditions.SWITCH_BIOTICS);
+        boolean hadReciFocus = marketAPI.hasCondition(AoDConditions.SWITCH_RECITIFICATES);
+        boolean hadFoodFocus = marketAPI.hasCondition(AoDConditions.SWITCH_FOOD);
 
-                int normal = qty;
-                if (normal > 0) {
-                    if(curr.getCommodityId().equals(Commodities.LUXURY_GOODS)){
-                        tooltip.addIcons(marketAPI.getCommodityData(Commodities.LUXURY_GOODS), normal, IconRenderMode.NORMAL);
-                    }
-                    else{
-                        if (opt.id.equals(AoDSwitches.SWITCH_RECTIFICATES)) {
-                            tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), normal, IconRenderMode.NORMAL);
-                        }
-                        if (opt.id.equals(AoDSwitches.SWITCH_BIOTICS)) {
-                            tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), normal, IconRenderMode.NORMAL);
-                        }
-                        if (opt.id.equals(AoDSwitches.SWITCH_FOOD)) {
-                            tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), normal, IconRenderMode.NORMAL);
-                        }
-                    }
+        marketAPI.reapplyConditions();
+        switchInd.reapply();
 
+        tooltip.addSectionHeading("Production", color, dark, Alignment.MID, opad);
+        tooltip.beginIconGroup();
+        tooltip.setIconSpacingMedium();
+        float icons = 0;
+        int biggest = 5;
+        for (MutableCommodityQuantity curr : switchInd.getAllSupply()) {
+            int qty = curr.getQuantity().getModifiedInt();
+            //if (qty <= 0) continue;
 
-                }
-
-                int plus = 0;
-                int minus = 0;
-                for (MutableStat.StatMod mod : curr.getQuantity().getFlatMods().values()) {
-                    if (mod.value > 0) {
-                        plus += (int) mod.value;
-                    }
-                }
-                minus = Math.min(minus, plus);
-                icons += normal + Math.max(0, minus);
+            if (qty >= biggest) {
+                biggest = qty;
             }
-            int rows = (int) Math.ceil(icons / maxIconsPerRow);
-            rows = 3;
-            tooltip.addIconGroup(32, rows, opad);
+
         }
 
-        if (hasDemand) {
-            tooltip.addSectionHeading("Demand & effects", color, dark, Alignment.MID, opad);
-            tooltip.beginIconGroup();
-            tooltip.setIconSpacingMedium();
-            float icons = 0;
-            for (MutableCommodityQuantity curr : switchInd.getAllDemand()) {
-                int qty = curr.getQuantity().getModifiedInt();
-                if (qty <= 0) continue;
-
-                CommodityOnMarketAPI com = marketAPI.getCommodityData(curr.getCommodityId());
-                int available = com.getAvailable();
-
-                int normal = Math.min(available, qty);
-                int red = Math.max(0, qty - available);
-
-                if (normal > 0) {
-                    tooltip.addIcons(com, normal, IconRenderMode.NORMAL);
-                }
-                if (red > 0) {
-                    tooltip.addIcons(com, red, IconRenderMode.DIM_RED);
-                }
-                icons += normal + Math.max(0, red);
+        if (farm) {
+            if (opt.id.equals(AoDSwitches.SWITCH_BIOTICS)) {
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), biggest, IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
             }
-            int rows = (int) Math.ceil(icons / maxIconsPerRow);
-            rows = 1;
-            tooltip.addIconGroup(32, rows, opad);
-            tooltip.addPara("*Shown production and demand values are already adjusted based on current market size and local conditions.", gray, opad);
+            if (opt.id.equals(AoDSwitches.SWITCH_FOOD)) {
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), biggest, IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+            }
+            if (opt.id.equals(AoDSwitches.SWITCH_RECTIFICATES)) {
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), biggest, IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+
+            }
+        }
+        if (sub) {
+            if (opt.id.equals(AoDSwitches.SWITCH_BIOTICS)) {
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), biggest, IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+            }
+            if (opt.id.equals(AoDSwitches.SWITCH_FOOD)) {
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), biggest, IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+            }
+            if (opt.id.equals(AoDSwitches.SWITCH_RECTIFICATES)) {
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), biggest, IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+
+            }
+        }
+        if (arti) {
+            if (opt.id.equals(AoDSwitches.SWITCH_BIOTICS)) {
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), biggest, IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.LUXURY_GOODS), biggest, IconRenderMode.NORMAL);
+            }
+            if (opt.id.equals(AoDSwitches.SWITCH_FOOD)) {
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), biggest, IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.LUXURY_GOODS), biggest, IconRenderMode.NORMAL);
+            }
+            if (opt.id.equals(AoDSwitches.SWITCH_RECTIFICATES)) {
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.RECITIFICATES), biggest, IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.FOOD), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(AodCommodities.BIOTICS), (int) (biggest * 0.5f), IconRenderMode.NORMAL);
+                tooltip.addIcons(marketAPI.getCommodityData(Commodities.LUXURY_GOODS), biggest, IconRenderMode.NORMAL);
+            }
         }
 
+
+    int rows = (int) Math.ceil(icons / maxIconsPerRow);
+    rows =3;
+            tooltip.addIconGroup(32,rows,opad);
+
+
+        if(hasDemand)
+
+    {
+        tooltip.addSectionHeading("Demand & effects", color, dark, Alignment.MID, opad);
+        tooltip.beginIconGroup();
+        tooltip.setIconSpacingMedium();
+        icons = 0;
+        for (MutableCommodityQuantity curr : switchInd.getAllDemand()) {
+            int qty = curr.getQuantity().getModifiedInt();
+            if (qty <= 0) continue;
+
+            CommodityOnMarketAPI com = marketAPI.getCommodityData(curr.getCommodityId());
+            int available = com.getAvailable();
+
+            int normal = Math.min(available, qty);
+            int red = Math.max(0, qty - available);
+
+            if (normal > 0) {
+                tooltip.addIcons(com, normal, IconRenderMode.NORMAL);
+            }
+            if (red > 0) {
+                tooltip.addIcons(com, red, IconRenderMode.DIM_RED);
+            }
+            icons += normal + Math.max(0, red);
+        }
+        rows = 1;
+        tooltip.addIconGroup(32, rows, opad);
+        tooltip.addPara("*Shown production and demand values are already adjusted based on current market size and local conditions.", gray, opad);
     }
+
+}
 
     @Override
     public List<IndustryOptionData> getIndustryOptions(Industry ind) {
@@ -321,6 +365,9 @@ public class AgriProdSwitchListener extends BaseIndustryOptionProvider {
                     }
                     if (market.hasCondition(AoDConditions.SWITCH_BIOTICS)) {
                         market.removeCondition(AoDConditions.SWITCH_BIOTICS);
+                    }
+                    if (!market.hasCondition(AoDConditions.SWITCH_FOOD)) {
+                        market.addCondition(AoDConditions.SWITCH_FOOD);
                     }
                 }
                 if (opt.id.equals(AoDSwitches.SWITCH_BIOTICS)) {
