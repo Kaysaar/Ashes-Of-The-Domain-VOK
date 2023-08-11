@@ -532,9 +532,13 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         if (!Global.getSector().getMemory().contains("$aotd_give_core")) {
             Global.getSector().getMemory().set("$aotd_give_core", false);
         }
-        if (!Global.getSector().getMemory().contains("$update_1.2.0_aotdhot1")) {
-            Global.getSector().getMemory().set("$update_1.2.0_aotdhot1", true);
-            Global.getSector().removeScriptsOfClass(RemnantSeededFleetManager.class);
+        if (!Global.getSector().getMemory().contains("$update_1.5.0_aotdhot1")) {
+            Global.getSector().getMemory().set("$update_1.5.0_aotdhot1", true);
+            for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
+                if(marketAPI.hasCondition(AoDConditions.SWITCH_FOOD)){
+                    marketAPI.removeCondition(AoDConditions.SWITCH_FOOD);
+                }
+            }
         }
         if (!Global.getSector().hasScript(ResearchProgressScript.class)) {
             Global.getSector().addScript(new ResearchProgressScript());
