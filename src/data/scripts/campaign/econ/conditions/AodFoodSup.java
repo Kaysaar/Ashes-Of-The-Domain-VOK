@@ -79,7 +79,7 @@ public class AodFoodSup extends BaseMarketConditionPlugin {
     }
 
     public static void applyCondition(MarketAPI marketAPI){
-        if(!marketAPI.hasCondition(AoDConditions.SWITCH_BIOTICS)&&!marketAPI.hasCondition(AoDConditions.SWITCH_RECITIFICATES)){
+        if(!marketAPI.hasCondition(AoDConditions.SWITCH_BIOTICS)&&!marketAPI.hasCondition(AoDConditions.SWITCH_RECITIFICATES)&&!marketAPI.hasCondition(AoDConditions.SWITCH_FOOD)){
             marketAPI.addCondition(AoDConditions.SWITCH_FOOD);
         }
     }
