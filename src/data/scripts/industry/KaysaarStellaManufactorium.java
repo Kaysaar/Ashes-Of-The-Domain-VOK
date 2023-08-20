@@ -9,6 +9,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.PlanetaryShieldBarEvent;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.PlanetaryShieldBarEventCreator;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.PlanetaryShieldIntel;
+import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.AICores;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.RedPlanet;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
@@ -29,7 +30,14 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
         if(!demandForProduction.isEmpty()){
             for (Map.Entry<SMSpecialItem, Float> entry : demandForProduction.entrySet()) {
                 for (Map.Entry<String, Integer> costEntry : entry.getKey().cost.entrySet()) {
-                    this.getDemand(costEntry.getKey()).getQuantity().modifyFlat("stella"+entry.getKey().id+costEntry.getKey(),costEntry.getValue(),"Stella Manufactorium");
+                    int value = costEntry.getValue();
+                    if(this.aiCoreId!=null){
+                        value-=1;
+                    }
+                    if(value!=0){
+                        this.getDemand(costEntry.getKey()).getQuantity().modifyFlat("stella"+entry.getKey().id+costEntry.getKey(),value,"Stella Manufactorium");
+                    }
+
                     Pair<String, Integer> deficit = getMaxDeficit(costEntry.getKey());
                     if(deficit.two!=0){
                         metCriteria = false;
@@ -58,6 +66,9 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
     public void advance(float amount) {
         super.advance(amount);
         float days = Global.getSector().getClock().convertToDays(amount);
+        if(this.aiCoreId.equals(Commodities.ALPHA_CORE)){
+            days+= Global.getSector().getClock().convertToDays(amount);
+        }
         if(canProduce){
             for (Map.Entry<SMSpecialItem, Float> smSpecialItemIntegerEntry : demandForProduction.entrySet()) {
                 smSpecialItemIntegerEntry.setValue(smSpecialItemIntegerEntry.getValue()-days);
@@ -94,6 +105,9 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
                     }
 
                     String insert = Math.round(smSpecialItemFloatEntry.getValue()) + days+"to create";
+                    if(this.aiCoreId.equals(Commodities.ALPHA_CORE)){
+                         insert = Math.round(smSpecialItemFloatEntry.getValue()/2) + days+"to create";
+                    }
                     tooltip.addPara(Global.getSettings().getSpecialItemSpec(smSpecialItemFloatEntry.getKey().id).getName()+" "+insert,Misc.getStoryBrightColor(),10f);
                 }
             }
@@ -113,26 +127,39 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
 
 // TODO : IMPLEMENT AI CORE EFFECTS
 
-//    @Override
-//    protected void addGammaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-//        tooltip.addPara("Reduces cost of forging equipment by 1 unit ",10f);
-//    }
-//    @Override
-//    protected void addBetaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-//        tooltip.addPara("Reduces cost of forging equipment by 1 unit.\nLowers cost of upkeep by 5%",10f);
-//    }
-//    @Override
-//    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-//        tooltip.addPara("Reduces cost of forging equipment by 1 unit.Lowers cost of upkeep by 5%. Reduces time to forge equipment by 50%",10f);
-//    }
+
+
+
+    @Override
+    protected void applyNoAICoreModifiers() {
+       this.getUpkeep().unmodifyFlat("beta_core");
+       this.getUpkeep().unmodifyFlat("gamma_core");
+       this.getUpkeep().unmodifyFlat("alpha_core");
+
+    }
+
+    @Override
+    protected void addGammaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        tooltip.addPara("Reduces cost of forging equipment by 1",10f);
+    }
+    @Override
+    protected void addBetaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        tooltip.addPara("Reduces cost of forging equipment by 1 unit. Reduces upkeep by 25%",10f);
+    }
+    @Override
+    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        tooltip.addPara("Reduces cost of forging equipment by 1 unit.Lowers cost of upkeep by 25%. Reduces time to forge equipment by 50%",10f);
+    }
 
     @Override
     public boolean canInstallAICores() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAvailableToBuild() {
       return AoDUtilis.isResearched(this.getId());
     }
+
+
 }

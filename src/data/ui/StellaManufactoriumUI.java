@@ -51,7 +51,7 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
     public void createCustomDialog(CustomPanelAPI panel, CustomDialogCallback callback) {
         TooltipMakerAPI panelTooltip = panel.createUIElement(WIDTH, HEIGHT, true);
         panelTooltip.addSectionHeading("Select Special items to be produced", Alignment.MID, 0f);
-
+        String aiId = industry.getAICoreId();
         float opad = 10f;
         float spad = 2f;
 
@@ -130,14 +130,26 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
                 if(itemCost.getKey()==null||itemCost.getKey().isEmpty()){
                     continue;
                 }
-                CommodityOnMarketAPI com = marketAPI.getCommodityData(itemCost.getKey());
 
-                anchor.addIcons(com, itemCost.getValue(), IconRenderMode.NORMAL);
+                CommodityOnMarketAPI com = marketAPI.getCommodityData(itemCost.getKey());
+                if(aiId!=null){
+                    anchor.addIcons(com, itemCost.getValue()-1, IconRenderMode.NORMAL);
+                }
+                else{
+                    anchor.addIcons(com, itemCost.getValue(), IconRenderMode.NORMAL);
+                }
+
 
             }
             int rows = 1;
             anchor.addIconGroup(32, rows, opad);
-            anchor.addPara("It takes "+(int)specItemToProduce.costInDays+ " days to produce",Color.ORANGE,10f);
+            if(aiId!=null&&aiId.equals(Commodities.ALPHA_CORE)){
+                anchor.addPara("It takes "+(int)specItemToProduce.costInDays/2+ " days to produce",Color.ORANGE,10f);
+            }
+            else{
+                anchor.addPara("It takes "+(int)specItemToProduce.costInDays+ " days to produce",Color.ORANGE,10f);
+            }
+
             subIndustryButtonPanel.addUIElement(anchor).inTL(5 + adjustedWidth + 15, 5);
 
             panelTooltip.addCustom(subIndustryButtonPanel, 0f);
