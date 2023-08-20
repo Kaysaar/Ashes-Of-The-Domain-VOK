@@ -875,7 +875,14 @@ public class ResearchAPI {
         }
         return counter;
     }
-
+    public int getDissabledResearch() {
+        int counter = 0;
+        for (ResearchOption researchOption : researchOptions) {
+            if(!researchOption.isDisabled)continue;
+            counter++;
+        }
+        return counter;
+    }
 
 //    public void setIsUpgradeToIndustry(String id, boolean hasDowngrade) {
 //        ResearchOption research = getResearchOption(id);

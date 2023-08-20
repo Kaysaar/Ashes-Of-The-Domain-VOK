@@ -15,7 +15,6 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.ui.P;
 import data.Ids.AoDIndustries;
 import data.Ids.AodCommodities;
 import data.Ids.AodResearcherSkills;
@@ -40,11 +39,11 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class ResearchUIPlugin implements CustomUIPanelPlugin {
     public ResearchAPI researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
-    boolean procesingMakret = false;
+    boolean processingMarket = false;
     PositionAPI pos;
     float scrollerHelp = 0;
     float progressionScroller = 0;
-    List<CustomPanelAPI> techPannels = new ArrayList<>();
+    List<CustomPanelAPI> techPanels = new ArrayList<>();
     List<String> itemsAoTD = new ArrayList<>();
 
     HashMap<CustomPanelAPI, String> tracker = new HashMap<>();
@@ -53,7 +52,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     protected CustomVisualDialogDelegate.DialogCallbacks callbacks;
     protected CustomPanelAPI panel;
     float scroller = 0;
-    int availabileWidith, availableHeight, pW, pH, pWX, pHY;
+    int availableWidth, availableHeight, pW, pH, pWX, pHY;
     protected TooltipMakerAPI mainTooltip;
     ResearchOption wantsToHaveInfoAbout = null;
     Color bgColor = new Color(6, 35, 40, 42);
@@ -182,7 +181,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             itemsAoTD.add("water");
         }
         //these might be helpful if you are doing custom rendering
-        availabileWidith = 1224;
+        availableWidth = 1224;
         availableHeight = 844;
         pW = (int) this.panel.getPosition().getWidth();
         pH = (int) this.panel.getPosition().getHeight();
@@ -203,7 +202,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             buttons.clear();
             buttonMap.clear();
         }
-        techPannels.clear();
+        techPanels.clear();
         tracker.clear();
         //create a new TooltipMakerAPI covering the entire UI panel
         //I don't think scrolling panels work here, but I might be doing them wrong
@@ -433,16 +432,16 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     }
 
     public void showResearchTree() {
-        float size_section = (float) ((availabileWidith - 50) * 0.25);
+        float size_section = (float) ((availableWidth - 50) * 0.25);
 
-        techPanel = panel.createCustomPanel(availabileWidith - 175, availableHeight - 40, null);
+        techPanel = panel.createCustomPanel(availableWidth - 175, availableHeight - 40, null);
         techPanel.getPosition().setLocation(0, 0).inTL(0, 0);
 
-        techPanelTT = techPanel.createUIElement(availabileWidith - 175, availableHeight - 40, true);
+        techPanelTT = techPanel.createUIElement(availableWidth - 175, availableHeight - 40, true);
         techPanelTT.getPosition().setLocation(0, 0).inTL(0, 0);
-        techTierNames = panel.createCustomPanel(availabileWidith - 175, 30, null);
+        techTierNames = panel.createCustomPanel(availableWidth - 175, 30, null);
         techTierNames.getPosition().setLocation(0, 0).inTL(0, 0);
-        techTierNamesTT = techTierNames.createUIElement(availabileWidith - 175, 30, false);
+        techTierNamesTT = techTierNames.createUIElement(availableWidth - 175, 30, false);
         techTierNamesTT.getPosition().setLocation(0, 0).inTL(0, 0);
         techTierNamesTT.setParaInsigniaLarge();
         if (currentCategory.equals(ProgressionTreeUiMode.EXPERIMENTAL)) {
@@ -795,27 +794,26 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     }
 
     public void showHelp() {
-        helpPanel = panel.createCustomPanel(availabileWidith - 175, availableHeight - 10, null);
+        helpPanel = panel.createCustomPanel(availableWidth - 175, availableHeight - 10, null);
         helpPanel.getPosition().setLocation(0, 0).inTL(0, 0);
 
-        helpPanelTT = helpPanel.createUIElement(availabileWidith - 175, availableHeight - 10, true);
+        helpPanelTT = helpPanel.createUIElement(availableWidth - 175, availableHeight - 10, true);
         helpPanelTT.getPosition().setLocation(0, 0).inTL(0, 0);
         LabelAPI start = helpPanelTT.addSectionHeading("What is Vaults Of Knowledge", Alignment.MID, 10f);
         start.getPosition().setLocation(0, 0).inTL(3, 0);
-        LabelAPI text1 = helpPanelTT.addPara("Vaults of Knowledge is one of Ashes of The Domain modules , which mainly focuses on Research Tree , and Research mechanics , in this module you will find" +
-                "a lot of things changed in overhaul colony managment, this guide is here to help you with learning new mechanics", 10f);
+        LabelAPI text1 = helpPanelTT.addPara("Vaults of Knowledge is one of Ashes of The Domain modules, which mainly focuses on Research Tree, and Research mechanics, in this module you will find, that many things has been chaned in colonies, this guide is here to help you learn new mechanics", 10f);
         LabelAPI researchExplain = helpPanelTT.addSectionHeading("What is Research mechanic and how to access it ", Alignment.MID, 10f);
         researchExplain.getPosition().setLocation(0, 0).inTL(3, 70);
-        text1 = helpPanelTT.addPara("\nAs you might have seen for the first time some familiar industries to you have vanished from List of Buildings and Structures like for example Farming , and instead you see" +
-                "things like Monoculture Plots or Smelting. Welcome you have witnessed the new Tech system in colonies. Basically now you can't simply build good buildings, you need to research them fist" +
-                "\n\nTo begin entire research you need to have at least one Research Facility on one of your planets, that belongs to your faction. After successful completion of that structure you will be" +
+        text1 = helpPanelTT.addPara("\nAs you might have seen for the first time some familiar industries to you have vanished from list of buildings and structures, instead you see" +
+                "things like Monoculture Plots or Smelting. Welcome you have witnessed the new progression system in colonies. Basically now you are unable to build most things at the start, you need to research them first." +
+                "\n\nTo start research you need to have at least one Research Facility on one of your planets, that belongs to your faction. After successful completion of that structure you will be" +
                 "able to access research interface by pressing CTRL+T or by pressing Show Interface when clicking on Research Facility\n\n\n" +
                 "The interface is divided into:", 10f);
-        helpPanelTT.addPara("Progression Tree: Where you see visually your progress and also shows possible upgrade paths for industries\n" +
+        helpPanelTT.addPara("Progression Tree: Where you see visually your progress and shows possible upgrade paths for industries\n" +
                 "Help section: As name suggest section where you can find basic info about mod \nResearch Center : Here you can see ongoing research, current head of Research Institute, and information about currently researched technology" +
                 "", Color.ORANGE, 10f);
-        helpPanelTT.addPara("To begin research you go to Progression Tree and choose technology you want to research , if research options is grey it means that this technology can't be researched. To know why you can't research " +
-                "certain technology you need to press More info , which will redirect you to Archive section with opened information about technology you want to research. Here you will see all requirements you need to met before " +
+        helpPanelTT.addPara("To begin research you go to Progression Tree and choose technology you want to research. If research options is grey it means that this technology can't be researched. To know why " +
+                "certain technology you need to press More info, which will redirect you to Archive section with opened information about technology you want to research. Here you will see all requirements you need to met before " +
                 "you can start researching this technology, If entire box is highlighted it means that this technology has been researched and player is able to build it", 10f);
         start = helpPanelTT.addSectionHeading("How to Pay for Research Cost", Alignment.MID, 10f);
         start.getPosition().setLocation(0, 0).inTL(3, 350);
@@ -1017,7 +1015,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 vPanel.addUIElement(vTT).inTL(0, 0);
                 section.addComponent(vPanel).inTL(10 + xmover * research.researchTier, (10 + index * spacerY));
 
-                techPannels.add(vPanel);
+                techPanels.add(vPanel);
                 tracker.put(vPanel, research.industryId);
 
                 index++;
@@ -1098,7 +1096,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     button.setEnabled(researchAPI.canResearch(research.industryId, true));
                     buttons.add(button);
                     buttonMap.put(button, "queue_research:" + research.industryId);
-                    if(researchAPI.isInQueue(research.industryId)|| researchAPI.canResearch(research.industryId,true)){
+                    if(researchAPI.isInQueue(research.industryId)){
                         button.setEnabled(false);
                     }
                 }
@@ -1121,7 +1119,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 vPanel.addUIElement(vTT).inTL(0, 0);
                 section.addComponent(vPanel).inTL(10 + xmover * research.researchTier, (10 + index * spacerY));
                 section.addSpacer(10);
-                techPannels.add(vPanel);
+                techPanels.add(vPanel);
                 tracker.put(vPanel, research.industryId);
                 index++;
                 if (index > higestIndex) {
@@ -1137,7 +1135,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     }
 
     void showTechIncased(String industryID) {
-        float sizeSection = availabileWidith - 175;
+        float sizeSection = availableWidth - 175;
         float height = (int) this.pH / 1.45f;
         currentlyResearchingInfo = panel.createCustomPanel(sizeSection / 2, (float) availableHeight / 6.5f, null);
         currentlyResearchingInfo.getPosition().setLocation(0, 0).inTL(0, 0);
@@ -1176,7 +1174,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     }
 
     void showReqForResearch(String id) {
-        float sizeSection = availabileWidith - 175;
+        float sizeSection = availableWidth - 175;
         wantsToKnowResearchReq = panel.createCustomPanel(sizeSection / 2, 330, null);
         wantsToKnowResearchReq.getPosition().setLocation(0, 0).inTL(0, 0);
         wantsToKnowResearchReqTT = wantsToKnowResearchReq.createUIElement(sizeSection / 2, 330, false);
@@ -1353,7 +1351,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     }
 
     void showScientistImage() {
-        float sizeSection = availabileWidith - 175;
+        float sizeSection = availableWidth - 175;
         scientistPanel = panel.createCustomPanel(167, 167, null);
         scientistPanel.getPosition().setLocation(0, 0).inTL(0, 0);
         scientistPanelTT = scientistPanel.createUIElement(167, 167, false);
@@ -1371,7 +1369,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     }
 
     void showNameAndSurrnameofScientist() {
-        float sizeSection = availabileWidith - 175;
+        float sizeSection = availableWidth - 175;
         scientistDescrpPanel = panel.createCustomPanel(330, 60, null);
         scientistDescrpPanel.getPosition().setLocation(0, 0).inTL(0, 0);
         scientistDescrpPanelTT = scientistDescrpPanel.createUIElement(330, 60, false);
@@ -1388,7 +1386,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     }
 
     void showSpecAbilityDescrp() {
-        float sizeSection = availabileWidith - 175;
+        float sizeSection = availableWidth - 175;
         scientistSpecAbilityPanel = panel.createCustomPanel(330, 107, null);
         scientistSpecAbilityPanel.getPosition().setLocation(0, 0).inTL(0, 0);
         scientistSpecAbilityPanelTT = scientistSpecAbilityPanel.createUIElement(330, 107, true);
@@ -1415,7 +1413,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     }
 
     void showBonuses() {
-        float sizeSection = availabileWidith - 175;
+        float sizeSection = availableWidth - 175;
         bonusPanel = panel.createCustomPanel((sizeSection / 2) - 18, 230, null);
         bonusPanel.getPosition().setLocation(0, 0).inTL(0, 0);
         bonusPanelTT = bonusPanel.createUIElement((sizeSection / 2) - 18, 230, true);
@@ -1445,7 +1443,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     }
 
     void showStats() {
-        float sizeSection = availabileWidith - 175;
+        float sizeSection = availableWidth - 175;
         statisticsPanel = panel.createCustomPanel((sizeSection / 2) - 18, (337/2)+1, null);
         statisticsPanel.getPosition().setLocation(0, 0).inTL(0, 0);
         statisticsPanelTT = statisticsPanel.createUIElement((sizeSection / 2) - 18, (337/2)+1, true);
@@ -1455,7 +1453,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         int tier2 = researchAPI.alreadyResearchedAmountCertainTier(2);
         int tier3 = researchAPI.alreadyResearchedAmountCertainTier(3);
         int all = researchAPI.alreadyResearchedAmount();
-        int left = researchAPI.getResearchOptions().size() - all;
+        int left = all - researchAPI.getResearchOptions().size() + researchAPI.getDissabledResearch();
         statisticsPanelTT.addPara("Currently researched " + tier1 + " of Basic technologies", Color.ORANGE, 10f);
         statisticsPanelTT.addPara("Currently researched " + tier2 + " of Sophisticated technologies", Color.ORANGE, 10f);
         statisticsPanelTT.addPara("Currently researched " + tier3 + " of Pre Collapse technologies", Color.ORANGE, 10f);
@@ -1472,14 +1470,14 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         if (all >= 16 && left != 0) {
             statisticsPanelTT.addPara("Your technological advancements are slightly higher than of the Persean Sector", Color.CYAN, 10f);
         }
-        if (left == 0) {
+        if (left <= 0) {
             statisticsPanelTT.addPara("We have researched all technologies and advanced ourselves to the point that we can be called without any doubt \"Domain's true successor\". A new hope of the Persean Sector", Color.CYAN, 10f);
         }
         statisticsPanel.addUIElement(statisticsPanelTT).inTL(0, 0);
         mainTooltip.addComponent(statisticsPanel).inTL(185 + sizeSection / 2, 502+(337/2));
     }
     void showQueue() {
-        float sizeSection = availabileWidith - 175;
+        float sizeSection = availableWidth - 175;
         queuePanel = panel.createCustomPanel((sizeSection / 2) - 18, (337/2)+100, null);
         queuePanel.getPosition().setLocation(0, 0).inTL(0, 0);
         queuePanelTT = queuePanel.createUIElement((sizeSection / 2) - 18, (337/2)+100, true);
@@ -1548,7 +1546,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         mainTooltip.addComponent(queuePanel).inTL(185 + sizeSection / 2, 402);
     }
     void showMoreInfoContainer(String industryID) {
-        float sizeSection = availabileWidith - 175;
+        float sizeSection = availableWidth - 175;
         float height = (int) this.pH / 1.45f;
         wantsToKnowResearch = panel.createCustomPanel(sizeSection / 2, 93, null);
         wantsToKnowResearch.getPosition().setLocation(0, 0).inTL(0, 0);
@@ -1650,7 +1648,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
     void showIndustryDescrp(String industryID) {
         boolean hadIndustryBefore = false;
-        int sizeSection = availabileWidith - 175;
+        int sizeSection = availableWidth - 175;
         float opad = 10f;
         float height = (float) availableHeight / 3;
 
@@ -1678,7 +1676,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 industryPanelDescrpTT.addPara("\n[" + Global.getSettings().getModManager().getModSpec(modId).getName() + "]" + getIndustryDesc(industryID), 1);
             }
             copy.setSize(defaultSizeOfExampleMarket);
-            procesingMakret = true;
+            processingMarket = true;
             List<MarketConditionAPI> copyConditions = copy.getConditions();
             ArrayList<String> conditionIds = new ArrayList<>();
             for (MarketConditionAPI condition : copyConditions) {
@@ -1841,7 +1839,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 upgrdInd.getDemand(mutableCommodityQuantity.getCommodityId()).getQuantity().unmodifyMult("ui");
             }
 
-            procesingMakret = false;
+            processingMarket = false;
         }
 
 
@@ -2102,7 +2100,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         for (InputEventAPI event : events) {
             if (event.isConsumed()) continue;
             //is ESC is pressed, close the custom UI panel and the blank IDP we used to create it
-            if (event.isKeyDownEvent() && event.getEventValue() == Keyboard.KEY_ESCAPE && !procesingMakret) {
+            if (event.isKeyDownEvent() && event.getEventValue() == Keyboard.KEY_ESCAPE && !processingMarket) {
                 event.consume();
                 callbacks.dismissDialog();
                 dialog.dismiss();
