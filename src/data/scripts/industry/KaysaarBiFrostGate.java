@@ -11,6 +11,8 @@ import com.fs.starfarer.api.util.Pair;
 import data.Ids.AodCommodities;
 import data.plugins.AoDUtilis;
 
+import java.awt.*;
+
 public class KaysaarBiFrostGate extends BaseIndustry {
     public SectorEntityToken gate ;
     public float  BASE_ACCESSIBILITY = 0.5f;
@@ -51,6 +53,9 @@ public class KaysaarBiFrostGate extends BaseIndustry {
                }
            }
        }
+       else{
+           spawnGate();
+       }
     }
 
     @Override
@@ -62,6 +67,11 @@ public class KaysaarBiFrostGate extends BaseIndustry {
     @Override
     public void finishBuildingOrUpgrading() {
         super.finishBuildingOrUpgrading();
+        spawnGate();
+
+    }
+
+    private void spawnGate() {
         SectorEntityToken primary = getMarket().getPrimaryEntity();
         float orbitRadius = primary.getRadius() + 150.0F;
         SectorEntityToken test = market.getContainingLocation().addCustomEntity((String) null, market.getName()+" Bifrost Gate" , "bifrost_gate", market.getFactionId());
@@ -69,11 +79,11 @@ public class KaysaarBiFrostGate extends BaseIndustry {
         getMarket().getConnectedEntities().add(test);
         test.setMarket(getMarket());
         test.setDiscoverable(false);
+        this.market.addCondition("bifrost_removal");
         test.getMemory().set("$used",false);
         test.getMemory().set("$cooldown",0f);
         test.getMemory().set("$supplied",true);
         gate = test;
-
     }
 
     @Override
@@ -106,7 +116,8 @@ public class KaysaarBiFrostGate extends BaseIndustry {
                     tooltip.addPara("Curently gateway in "+market.getName()+" is inactive for "+(int)value + days,Misc.getNegativeHighlightColor(),10f);
                 }
             }
-            tooltip.addPara("Accessibility bonus : 50%" ,10f);
+            tooltip.addPara("Accessibility bonus : 50%" , Color.ORANGE,10f);
         }
     }
+
 }
