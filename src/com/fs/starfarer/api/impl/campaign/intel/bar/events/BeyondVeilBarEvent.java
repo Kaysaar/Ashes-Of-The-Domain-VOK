@@ -15,6 +15,7 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.plugins.AoDUtilis;
 
+import java.awt.*;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -43,12 +44,14 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
     public boolean shouldShowAtMarket(MarketAPI market) {
         if (!super.shouldShowAtMarket(market)) return false;
 
-
+        if( Global.getSector().getMemory().is("$aotd_veil_done",true)){
+            return false;
+        }
         if (market.getFactionId().equals(Factions.LUDDIC_CHURCH) ||
                 market.getFactionId().equals(Factions.LUDDIC_PATH)) {
             return false;
         }
-        if (AoDUtilis.getResearchAPI().alreadyResearchedAmountCertainTier(3) < 1 && Global.getSector().getPlayerStats().getLevel() >= 7) {
+        if (AoDUtilis.getResearchAPI().alreadyResearchedAmountCertainTier(3) == 0 ) {
             return false;
         }
         if (getTargetPlanet() == null) return false;
@@ -59,8 +62,6 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
         if (Global.getSector().getMemory().is("$aotd_veil_accepted", true)) {
             return false;
         }
-        if (Global.getSector().getPlayerStats().getLevel() < 7 && !DebugFlags.BAR_DEBUG) return false;
-
         return true;
 
     }
@@ -94,7 +95,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
 //		c = Misc.getHighlightedOptionColor();
 
         dialog.getOptionPanel().addOption("Ask this stranger why is staring at you ", this,
-                null);
+                 Color.ORANGE,null);
     }
 
 
@@ -130,7 +131,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
             case INIT:
                 text.addPara("\"Oh, nothing. Let's just say you caught my attention\"");
                 options.addOption("Your attention? What do you mean? ", OptionId.INTRUIGED);
-                options.addOption("Suggest " + getHeOrShe() + "mistook you for someone else.", OptionId.LEAVE);
+                options.addOption("Suggest " + getHeOrShe() + " mistook you for someone else.", OptionId.LEAVE);
                 break;
             case INTRUIGED:
                 text.addPara("\"Look, space isn't that big a place you can't hear about " + Global.getSector().getPlayerPerson().getName().getFullName() +
