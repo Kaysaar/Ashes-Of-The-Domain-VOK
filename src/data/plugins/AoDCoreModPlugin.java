@@ -734,9 +734,9 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         setIndustryOnPlanet("Zagan", "Mazalot", AoDIndustries.ARTISANAL_FARMING, Industries.FARMING, AoDConditions.SWITCH_RECITIFICATES, false, null);
         setIndustryOnPlanet("Samarra", "Tartessus", AoDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null);
         setIndustryOnPlanet("Corvus", "Jangala", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
-        setIndustryOnPlanet("Naraka", "Yama", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoDConditions.SWITCH_RECITIFICATES, false, null);
+        setIndustryOnPlanet("Naraka", "Yama", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
         setIndustryOnPlanet("Westernesse", "Ailmar", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoDConditions.SWITCH_BIOTICS, false, null);
-        setIndustryOnPlanet("Kumari Kandam", "Chalcedon", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoDConditions.SWITCH_RECITIFICATES, false, null);
+        setIndustryOnPlanet("Kumari Kandam", "Chalcedon", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING,null, false, null);
         setIndustryOnPlanet("Yma", "Qaras", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoDConditions.SWITCH_BIOTICS, false, null);
         setIndustryOnPlanet("Galatia", "Ancyra", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
         setIndustryOnPlanet("Mayasura", "Mairaath", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoDConditions.SWITCH_BIOTICS, false, null);
