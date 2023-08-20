@@ -168,7 +168,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
         }
         if (hasTwoIndustriesForSynergy(AoDIndustries.BENEFICATION, AoDIndustries.POLICRYSTALIZATOR)) {
             tooltip.addPara(
-                    "Policrystalizator and Sublimation: %s",
+                    "Policrystalizator and Benefication: %s",
                     10f,
                     Misc.getStoryBrightColor(),
                     "Decrease upkeep of Policrystalizator by 25% and +1 Production to Policrystalizator"
@@ -177,7 +177,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
         }
         if (hasTwoIndustriesForSynergy(AoDIndustries.SUBLIMATION, AoDIndustries.CASCADE_REPROCESSOR)) {
             tooltip.addPara(
-                    "Policrystalizator and Benefication: %s ",
+                    "Cascade Reprocessor and Sublimation : %s ",
                     10f,
                     Misc.getStoryBrightColor(),
                     "Decrease upkeep of Cascade Reprocessor by 25% and +1 Production to Cascade Reprocessor"
@@ -186,7 +186,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
         }
         if (hasTwoIndustriesForSynergy(AoDIndustries.CASCADE_REPROCESSOR, AoDIndustries.TRI_TACHYON_HEAVY)) {
             tooltip.addPara(
-                    "Policrystalizator and Orbital Skunkwork Facility: %s ",
+                    "Cascade Reprocessor and Orbital Skunkwork Facility: %s ",
                     10f,
                     Misc.getStoryBrightColor(),
                     "+1 To Orbital Skunkwork Facility Production"
@@ -198,7 +198,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                     "Policrystalizator and Orbital Fleetwork Facility: %s ",
                     10f,
                     Misc.getStoryBrightColor(),
-                    "+1 To Orbital Fleetwork Facility"
+                    "+1 To Orbital Fleetwork Facility Production"
             );
 
         }
