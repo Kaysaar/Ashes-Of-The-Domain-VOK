@@ -1,5 +1,7 @@
 package data.console;
 
+import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import data.plugins.AoDUtilis;
 import data.scripts.research.ResearchAPI;
 import data.scripts.research.ResearchOption;
@@ -21,7 +23,14 @@ public class ResearchAllTechnologies implements BaseCommand {
             return CommandResult.ERROR;
         }
         for (ResearchOption researchOption : researchAPI.getResearchOptions()) {
+            if(researchOption.isDisabled)continue;
             researchOption.isResearched=true;
+            IndustrySpecAPI specApi = Global.getSettings().getIndustrySpec(researchOption.downgradeId);
+            for (String tag : specApi.getTags()) {
+                if (tag.contains("starter")) {
+                    specApi.setUpgrade(researchOption.industryId);
+                }
+            }
         }
         Console.showMessage("All technologies have been researched");
         researchAPI.saveResearch(true);
