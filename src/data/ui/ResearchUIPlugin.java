@@ -1434,6 +1434,10 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             bonusPanelTT.addPara("Unlocked Industry Synergies (Researched 10 or more technologies)\n", Color.ORANGE, 10f);
             bonus = true;
         }
+        if(researchAPI.getResearchFacilitiesQuantity()>1){
+         bonus=true;
+            bonusPanelTT.addPara((researchAPI.getResearchFacilitiesQuantity()-1)*10+"% bonus speed to research (Increase by building more research facilities)", Color.ORANGE, 10f);
+        }
         if (!bonus) {
             bonusPanelTT.addPara("None At this moment !", Color.RED, 10f);
         }
@@ -1453,7 +1457,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         int tier2 = researchAPI.alreadyResearchedAmountCertainTier(2);
         int tier3 = researchAPI.alreadyResearchedAmountCertainTier(3);
         int all = researchAPI.alreadyResearchedAmount();
-        int left = all - researchAPI.getResearchOptions().size() + researchAPI.getDissabledResearch();
+        int left = researchAPI.getResearchOptions().size() -all  - researchAPI.getDissabledResearch();
         statisticsPanelTT.addPara("Currently researched " + tier1 + " of Basic technologies", Color.ORANGE, 10f);
         statisticsPanelTT.addPara("Currently researched " + tier2 + " of Sophisticated technologies", Color.ORANGE, 10f);
         statisticsPanelTT.addPara("Currently researched " + tier3 + " of Pre Collapse technologies", Color.ORANGE, 10f);
