@@ -26,6 +26,9 @@ public class KaysaarExtractiveOperation extends BaseIndustry {
         if(AoDUtilis.getNormalOreAmount(market)>=-1){
             supply(Commodities.ORE,(AoDUtilis.getNormalOreAmount(market)+(market.getSize()-2)));
         }
+        if(AoDUtilis.getRareOreAmount(market)>=-1){
+            supply(Commodities.RARE_ORE,(AoDUtilis.getRareOreAmount(market)+(market.getSize()-2)));
+        }
 
 
         if(market.getPlanetEntity()!=null){

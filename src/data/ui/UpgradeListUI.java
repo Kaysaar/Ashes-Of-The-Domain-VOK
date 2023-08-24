@@ -76,14 +76,12 @@ public class UpgradeListUI implements CustomDialogDelegate {
     }
 
 
-
-
     public boolean isCryovolcanicOrFrozen(MarketAPI market) {
-        if(market==null) return false;
+        if (market == null) return false;
         boolean isCryovolcanicOrFrozen = false;
 
         if (market.getPlanetEntity() != null) {
-            if (market.getPlanetEntity().getTypeId().equals("frozen") || market.getPlanetEntity().getTypeId().equals("cryovolcanic")||market.getPlanetEntity().getTypeId().equals("frozen1")) {
+            if (market.getPlanetEntity().getTypeId().equals("frozen") || market.getPlanetEntity().getTypeId().equals("cryovolcanic") || market.getPlanetEntity().getTypeId().equals("frozen1")) {
                 isCryovolcanicOrFrozen = true;
             }
         }
@@ -139,10 +137,10 @@ public class UpgradeListUI implements CustomDialogDelegate {
             List<MutableCommodityQuantity> sup = upgrdInd.getAllSupply();
 
             marketAPI.reapplyIndustries();
-            boolean isAvailableToBuild =upgrdInd.isAvailableToBuild();
-            if(upgrdInd.getId().equals(Industries.FARMING)){
-                if((AoDUtilis.getFoodQuantityBonus(upgrdInd.getMarket()))>=-1){
-                    isAvailableToBuild=true;
+            boolean isAvailableToBuild = upgrdInd.isAvailableToBuild();
+            if (upgrdInd.getId().equals(Industries.FARMING)) {
+                if ((AoDUtilis.getFoodQuantityBonus(upgrdInd.getMarket())) >= -1) {
+                    isAvailableToBuild = true;
                 }
 
             }
@@ -151,8 +149,8 @@ public class UpgradeListUI implements CustomDialogDelegate {
 
             for (MutableCommodityQuantity curr : sup) {
                 int qty = (int) curr.getQuantity().getModifiedInt();
-                if(marketAPI.getAdmin().getStats().hasSkill(Skills.INDUSTRIAL_PLANNING)){
-                    qty-=1;
+                if (marketAPI.getAdmin().getStats().hasSkill(Skills.INDUSTRIAL_PLANNING)) {
+                    qty -= 1;
                 }
 
                 if (qty <= 0) continue;
@@ -177,12 +175,11 @@ public class UpgradeListUI implements CustomDialogDelegate {
             }
 
 
-
             Color baseColor = Misc.getButtonTextColor();
             Color bgColour = Misc.getDarkPlayerColor();
             Color brightColor = Misc.getBrightPlayerColor();
 
-            if (!canAfford||!isAvailableToBuild) {
+            if (!canAfford || !isAvailableToBuild) {
 
                 baseColor = Color.darkGray;
                 bgColour = Color.lightGray;
@@ -212,7 +209,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
 // That section is for calculation custom height for section - it is bad looking af, basically here i create replica of what i want to implement to calculate height of what i want to show, its just duplication of code
             String fullTitle = upgrdSpec.getName() + helperIndustryStructureOrIndustry(upgrdSpec.getId());
             helper = helper1.createUIElement(ENTRY_WIDTH - adjustedWidth - (3 * opad), CONTENT_HEIGHT, false);
-            if (canAfford&&isAvailableToBuild) helper.addSectionHeading(" " + fullTitle, Alignment.LMID, 0f);
+            if (canAfford && isAvailableToBuild) helper.addSectionHeading(" " + fullTitle, Alignment.LMID, 0f);
             else {
 
                 helper.addSectionHeading(" " + fullTitle, Color.WHITE, brightColor, Alignment.LMID, 0f);
@@ -282,7 +279,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
                 helper.setIconSpacingMedium();
                 float icons = 0;
                 for (MutableCommodityQuantity curr : upgrdInd.getAllSupply()) {
-                    int qty = (int)curr.getQuantity().getModifiedInt();
+                    int qty = (int) curr.getQuantity().getModifiedInt();
                     //if (qty <= 0) continue
 
                     int normal = qty;
@@ -330,7 +327,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
                 helper.setIconSpacingMedium();
                 float icons = 0;
                 for (MutableCommodityQuantity curr : dem) {
-                    int qty = (int)upgrdInd.getDemand(curr.getCommodityId()).getQuantity().getModifiedInt();
+                    int qty = (int) upgrdInd.getDemand(curr.getCommodityId()).getQuantity().getModifiedInt();
                     if (qty <= 0) continue;
 
                     CommodityOnMarketAPI com = marketAPI.getCommodityData(curr.getCommodityId());
@@ -339,7 +336,6 @@ public class UpgradeListUI implements CustomDialogDelegate {
                     int normal = Math.min(available, qty);
                     int red = Math.max(0, qty - available);
                     helper.addIcons(com, normal, IconRenderMode.NORMAL);
-
 
 
                 }
@@ -353,15 +349,15 @@ public class UpgradeListUI implements CustomDialogDelegate {
             }
             helper.addPara("*Shown production and demand values are already adjusted based on current market size and local conditions showing total production and demand of that industry on this market", gray, opad);
 // That section is for calculation custom height for section
-            if(!isAvailableToBuild){
-                helper.addPara(upgrdInd.getUnavailableReason(),Color.RED,opad);
+            if (!isAvailableToBuild) {
+                helper.addPara(upgrdInd.getUnavailableReason(), Color.RED, opad);
             }
-            helper.addPara(upgrdInd.getUnavailableReason(),Misc.getNegativeHighlightColor(),opad);
-            if(upgrdInd.getSpec().getTags().contains("consumes")){
-                helper.addPara("Disclaimer: Starting Upgrade of this industry will result in consuming special item irreversibly",Misc.getHighlightColor(),opad);
+            helper.addPara(upgrdInd.getUnavailableReason(), Misc.getNegativeHighlightColor(), opad);
+            if (upgrdInd.getSpec().getTags().contains("consumes")) {
+                helper.addPara("Disclaimer: Starting Upgrade of this industry will result in consuming special item irreversibly", Misc.getHighlightColor(), opad);
             }
-            if(!hasSupply){
-                helper.addPara("This colony's population is too small to support any production, population of at least size 5 is required or higher amount of resources on that planet",Misc.getHighlightColor(),opad);
+            if (!hasSupply) {
+                helper.addPara("This colony's population is too small to support any production, population of at least size 5 is required or higher amount of resources on that planet", Misc.getHighlightColor(), opad);
             }
 
             CustomPanelAPI subIndustryButtonPanel = panel.createCustomPanel(ENTRY_WIDTH, helper.getHeightSoFar() + 30f, new ButtonReportingCustomPanel(this));
@@ -385,7 +381,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
             TooltipMakerAPI lastPos = anchor;
 
             anchor = subIndustryButtonPanel.createUIElement(ENTRY_WIDTH - adjustedWidth - (3 * opad), CONTENT_HEIGHT, false);
-            if (canAfford&&isAvailableToBuild) anchor.addSectionHeading(" " + fullTitle, Alignment.LMID, 0f);
+            if (canAfford && isAvailableToBuild) anchor.addSectionHeading(" " + fullTitle, Alignment.LMID, 0f);
             else anchor.addSectionHeading(" " + fullTitle, Color.WHITE, brightColor, Alignment.LMID, 0f);
             LabelAPI labelDesc1 = anchor.addPara(upgrdSpec.getDesc(), opad);
             labelDesc1.autoSizeToWidth(ENTRY_WIDTH - adjustedWidth - (3 * opad));
@@ -458,8 +454,8 @@ public class UpgradeListUI implements CustomDialogDelegate {
 
                     int qty = (int) upgrdInd.getSupply(curr.getCommodityId()).getQuantity().getModifiedInt();
                     //if (qty <= 0) continue
-                    if(marketAPI.getAdmin().getStats().hasSkill(Skills.INDUSTRIAL_PLANNING)){
-                        qty-=1;
+                    if (marketAPI.getAdmin().getStats().hasSkill(Skills.INDUSTRIAL_PLANNING)) {
+                        qty -= 1;
                     }
                     int normal = qty;
 
@@ -521,21 +517,20 @@ public class UpgradeListUI implements CustomDialogDelegate {
 
             }
             anchor.addPara("*Shown production and demand values are already adjusted based on current market size and local conditions.", gray, opad);
-            if(!isAvailableToBuild){
-                anchor.addPara(upgrdInd.getUnavailableReason(),Misc.getNegativeHighlightColor(),opad);
+            if (!isAvailableToBuild) {
+                anchor.addPara(upgrdInd.getUnavailableReason(), Misc.getNegativeHighlightColor(), opad);
 
             }
-            if(upgrdInd.getSpec().getTags().contains("consumes")){
-                anchor.addPara("Disclaimer: Starting Upgrade of this industry will result in consuming special item irreversibly",Misc.getHighlightColor(),opad);
+            if (upgrdInd.getSpec().getTags().contains("consumes")) {
+                anchor.addPara("Disclaimer: Starting Upgrade of this industry will result in consuming special item irreversibly", Misc.getHighlightColor(), opad);
             }
 
-            if(!hasSupply){
-                if(upgrdInd.getSpec().hasTag("mining")){
-                    anchor.addPara("This colony's population is too small to support any production, population of at least size 5 is required or higher amount of resources on that planet",Misc.getHighlightColor(),opad);
+            if (!hasSupply) {
+                if (upgrdInd.getSpec().hasTag("mining")) {
+                    anchor.addPara("This colony's population is too small to support any production, population of at least size 5 is required or higher amount of resources on that planet", Misc.getHighlightColor(), opad);
 
-                }
-                else{
-                    anchor.addPara("This colony's population is too small to support any production, population of at least size 5 is required",Misc.getHighlightColor(),opad);
+                } else {
+                    anchor.addPara("This colony's population is too small to support any production, population of at least size 5 is required", Misc.getHighlightColor(), opad);
 
                 }
             }
@@ -578,18 +573,14 @@ public class UpgradeListUI implements CustomDialogDelegate {
         SpecialItemData specItem = industry.getSpecialItem();
         if (specItem != null && getIndustrySpec(selected.industryId).getTags().contains("consumes")) {
             industry.setSpecialItem(null);
-        }
-
-        else if(specItem!=null && !canInstallItem(selected.industryId,specItem.getId())){
+        } else if (specItem != null && !canInstallItem(selected.industryId, specItem.getId())) {
             Misc.getStorageCargo(industry.getMarket()).addSpecial(specItem, 1);
             industry.setSpecialItem(null);
         }
         industry.startUpgrading();
         float cost = getIndustrySpec(selected.industryId).getCost();
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(cost);
-        Global.getSoundPlayer().playUISound("ui_upgrade_industry",1,1);
-
-
+        Global.getSoundPlayer().playUISound("ui_upgrade_industry", 1, 1);
 
 
     }
@@ -597,8 +588,8 @@ public class UpgradeListUI implements CustomDialogDelegate {
     public void customDialogCancel() {
     }
 
-    public boolean canInstallItem(String  id, String itemID) {
-        if(id==null||itemID==null){
+    public boolean canInstallItem(String id, String itemID) {
+        if (id == null || itemID == null) {
             return false;
         }
         SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(itemID);

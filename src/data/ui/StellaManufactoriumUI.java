@@ -36,16 +36,11 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
     public Industry industry;
     public ResearchOption selected = null;
     public List<ButtonAPI> buttons = new ArrayList<>();
-    public List <SMSpecialItem> itemsThatCanBeProduced = AoDUtilis.getSpecItemsForManufactoriumData();
+    public List<SMSpecialItem> itemsThatCanBeProduced = AoDUtilis.getSpecItemsForManufactoriumData();
+
     public StellaManufactoriumUI(Industry industry) {
         this.industry = industry;
     }
-
-
-
-
-
-
 
 
     public void createCustomDialog(CustomPanelAPI panel, CustomDialogCallback callback) {
@@ -59,7 +54,7 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
         Color baseColor = Misc.getButtonTextColor();
         Color bgColour = Misc.getDarkPlayerColor();
         Color brightColor = Misc.getBrightPlayerColor();
-        for (SMSpecialItem specItemToProduce : itemsThatCanBeProduced ) {
+        for (SMSpecialItem specItemToProduce : itemsThatCanBeProduced) {
             CustomPanelAPI helper1 = panel.createCustomPanel(ENTRY_WIDTH, ENTRY_HEIGHT + 2f, new ButtonReportingCustomPanel(this));
             TooltipMakerAPI helper;
             SpecialItemSpecAPI upgrdSpec = Global.getSettings().getSpecialItemSpec(specItemToProduce.id);
@@ -88,7 +83,7 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
             helper.beginIconGroup();
             helper.setIconSpacingMedium();
             for (Map.Entry<String, Integer> itemCost : specItemToProduce.cost.entrySet()) {
-                if(itemCost.getKey()==null||itemCost.getKey().isEmpty()){
+                if (itemCost.getKey() == null || itemCost.getKey().isEmpty()) {
                     continue;
                 }
                 CommodityOnMarketAPI com = marketAPI.getCommodityData(itemCost.getKey());
@@ -97,7 +92,7 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
 
             }
             helper.addIconGroup(32, 1, opad);
-            helper.addPara("It takes :"+specItemToProduce.costInDays+ "to produce",Color.ORANGE,10f);
+            helper.addPara("It takes :" + specItemToProduce.costInDays + "to produce", Color.ORANGE, 10f);
 
             LabelAPI label1;
 
@@ -127,15 +122,14 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
             anchor.beginIconGroup();
             anchor.setIconSpacingMedium();
             for (Map.Entry<String, Integer> itemCost : specItemToProduce.cost.entrySet()) {
-                if(itemCost.getKey()==null||itemCost.getKey().isEmpty()){
+                if (itemCost.getKey() == null || itemCost.getKey().isEmpty()) {
                     continue;
                 }
 
                 CommodityOnMarketAPI com = marketAPI.getCommodityData(itemCost.getKey());
-                if(aiId!=null){
-                    anchor.addIcons(com, itemCost.getValue()-1, IconRenderMode.NORMAL);
-                }
-                else{
+                if (aiId != null) {
+                    anchor.addIcons(com, itemCost.getValue() - 1, IconRenderMode.NORMAL);
+                } else {
                     anchor.addIcons(com, itemCost.getValue(), IconRenderMode.NORMAL);
                 }
 
@@ -143,11 +137,10 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
             }
             int rows = 1;
             anchor.addIconGroup(32, rows, opad);
-            if(aiId!=null&&aiId.equals(Commodities.ALPHA_CORE)){
-                anchor.addPara("It takes "+(int)specItemToProduce.costInDays/2+ " days to produce",Color.ORANGE,10f);
-            }
-            else{
-                anchor.addPara("It takes "+(int)specItemToProduce.costInDays+ " days to produce",Color.ORANGE,10f);
+            if (aiId != null && aiId.equals(Commodities.ALPHA_CORE)) {
+                anchor.addPara("It takes " + (int) specItemToProduce.costInDays / 2 + " days to produce", Color.ORANGE, 10f);
+            } else {
+                anchor.addPara("It takes " + (int) specItemToProduce.costInDays + " days to produce", Color.ORANGE, 10f);
             }
 
             subIndustryButtonPanel.addUIElement(anchor).inTL(5 + adjustedWidth + 15, 5);
@@ -183,24 +176,23 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
     }
 
     public void customDialogConfirm() {
-        KaysaarStellaManufactorium manufactorium = (KaysaarStellaManufactorium)industry;
+        KaysaarStellaManufactorium manufactorium = (KaysaarStellaManufactorium) industry;
         manufactorium.unapplyDemand();
         for (ButtonAPI button : buttons) {
-            if(button.isChecked()){
+            if (button.isChecked()) {
                 SMSpecialItem founded = findItem((String) button.getCustomData());
-                manufactorium.demandForProduction.put(founded,founded.costInDays);
+                manufactorium.demandForProduction.put(founded, founded.costInDays);
             }
         }
-        Global.getSoundPlayer().playUISound("ui_upgrade_industry",1,1);
-
-
+        Global.getSoundPlayer().playUISound("ui_upgrade_industry", 1, 1);
 
 
     }
-    public SMSpecialItem findItem(String id ){
+
+    public SMSpecialItem findItem(String id) {
         for (SMSpecialItem smSpecialItem : itemsThatCanBeProduced) {
-            if(smSpecialItem.id.equals(id)){
-                return  smSpecialItem;
+            if (smSpecialItem.id.equals(id)) {
+                return smSpecialItem;
             }
         }
         return null;
@@ -208,7 +200,6 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
 
     public void customDialogCancel() {
     }
-
 
 
     public CustomUIPanelPlugin getCustomPanelPlugin() {

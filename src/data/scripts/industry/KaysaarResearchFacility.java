@@ -47,7 +47,7 @@ public class KaysaarResearchFacility extends BaseIndustry implements EconomyTick
 
         }
         else{
-            this.getUpkeep().unmodifyMult("research");
+            this.getUpkeep().unmodifyFlat("research");
         }
 
 
