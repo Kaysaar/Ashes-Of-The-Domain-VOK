@@ -66,7 +66,8 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
     public void advance(float amount) {
         super.advance(amount);
         float days = Global.getSector().getClock().convertToDays(amount);
-        if(this.aiCoreId.equals(Commodities.ALPHA_CORE)){
+
+        if(this.aiCoreId!=null&&this.aiCoreId.equals(Commodities.ALPHA_CORE)){
             days+= Global.getSector().getClock().convertToDays(amount);
         }
         if(canProduce){

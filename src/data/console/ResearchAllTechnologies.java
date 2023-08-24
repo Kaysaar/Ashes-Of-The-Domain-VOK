@@ -25,12 +25,15 @@ public class ResearchAllTechnologies implements BaseCommand {
         for (ResearchOption researchOption : researchAPI.getResearchOptions()) {
             if(researchOption.isDisabled)continue;
             researchOption.isResearched=true;
-            IndustrySpecAPI specApi = Global.getSettings().getIndustrySpec(researchOption.downgradeId);
-            for (String tag : specApi.getTags()) {
-                if (tag.contains("starter")) {
-                    specApi.setUpgrade(researchOption.industryId);
+            if(researchOption.hasDowngrade){
+                IndustrySpecAPI specApi = Global.getSettings().getIndustrySpec(researchOption.downgradeId);
+                for (String tag : specApi.getTags()) {
+                    if (tag.contains("starter")) {
+                        specApi.setUpgrade(researchOption.industryId);
+                    }
                 }
             }
+
         }
         Console.showMessage("All technologies have been researched");
         researchAPI.saveResearch(true);

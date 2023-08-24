@@ -205,8 +205,6 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         ip.addPerson(sophiaPerson);
 
 
-
-
     }
 
     public void RandomSetIndustryOnPlanet(String industryId, int amount, String PlanetType) {
@@ -369,42 +367,45 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         RescourceCondition.applyResourceConditionToAllMarkets();
         IndUpgradeListener.applyIndustyUpgradeCondition();
         Global.getSector().getPlayerFaction().getMemory().set(AodMemFlags.AOD_INITALIZED, true);
-        if(!Global.getSector().getPersistentData().containsKey("$aotd_v_planet")){
+        if (!Global.getSector().getPersistentData().containsKey("$aotd_v_planet")) {
             for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
                 if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
                     for (PlanetAPI planet : starSystem.getPlanets()) {
-
-                            if(planet.hasTag(Tags.MISSION_ITEM))continue;
-                            if(planet.isStar())continue;
-                            if(planet.isGasGiant())continue;
-                            if(planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
-                            long seed = StarSystemGenerator.random.nextLong();
-                            planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SEED, seed);
-                            planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_beyond_veil");
-                            planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
-                            Global.getSector().getPersistentData().put("$aotd_v_planet",planet);
-                            planet.getMemoryWithoutUpdate().set("$aotd_quest_veil", true);
-                            planet.setName("Veil of Knowledge");
-                            break;
+                        if (planet.isStar()) continue;
+                        if (planet.isMoon()) continue;
+                        if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
+                        if (planet.hasTag(Tags.NOT_RANDOM_MISSION_TARGET)) continue;
+                        if (planet.hasTag(Tags.MISSION_ITEM)) continue;
+                        if (planet.isStar()) continue;
+                        if (planet.isGasGiant()) continue;
+                        if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
+                        long seed = StarSystemGenerator.random.nextLong();
+                        planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SEED, seed);
+                        planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_beyond_veil");
+                        planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
+                        Global.getSector().getPersistentData().put("$aotd_v_planet", planet);
+                        planet.getMemoryWithoutUpdate().set("$aotd_quest_veil", true);
+                        planet.setName("Veil of Knowledge");
+                        break;
                     }
                 }
-                if(Global.getSector().getPersistentData().containsKey("$aotd_v_planet")){
+                if (Global.getSector().getPersistentData().containsKey("$aotd_v_planet")) {
                     break;
                 }
             }
         }
-        if(!Global.getSector().getMemory().contains("$aotd_cleanup")){
-            Global.getSector().getMemory().set("$aotd_cleanup",true);
-            PlanetAPI questPlanet =   (PlanetAPI)  Global.getSector().getPersistentData().get("$aotd_v_planet");
+        if (!Global.getSector().getMemory().contains("$aotd_cleanup")) {
+            Global.getSector().getMemory().set("$aotd_cleanup", true);
+            PlanetAPI questPlanet = (PlanetAPI) Global.getSector().getPersistentData().get("$aotd_v_planet");
             for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
-                    for (PlanetAPI planet : starSystem.getPlanets()) {
-                        if(questPlanet!=null&&questPlanet.getId().equals(planet.getId())){
-                            continue;
-                        }
-                        if(planet.getMemory().contains("$aotd_quest_veil")){
-                            planet.getMemory().unset("$aotd_quest_veil");
-                        }
+                for (PlanetAPI planet : starSystem.getPlanets()) {
+                    if (questPlanet != null && questPlanet.getId().equals(planet.getId())) {
+                        continue;
                     }
+                    if (planet.getMemory().contains("$aotd_quest_veil")) {
+                        planet.getMemory().unset("$aotd_quest_veil");
+                    }
+                }
             }
         }
 
@@ -521,7 +522,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             }
         };
         BarEventManager bar = BarEventManager.getInstance();
-        if(!bar.hasEventCreator(BeyondVeilBarEventCreator.class)){
+        if (!bar.hasEventCreator(BeyondVeilBarEventCreator.class)) {
             bar.addEventCreator(new BeyondVeilBarEventCreator());
         }
 
@@ -535,7 +536,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         if (!Global.getSector().getMemory().contains("$update_1.5.0_aotdhot1")) {
             Global.getSector().getMemory().set("$update_1.5.0_aotdhot1", true);
             for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
-                if(marketAPI.hasCondition(AoDConditions.SWITCH_FOOD)){
+                if (marketAPI.hasCondition(AoDConditions.SWITCH_FOOD)) {
                     marketAPI.removeCondition(AoDConditions.SWITCH_FOOD);
                 }
             }
@@ -582,7 +583,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             }
         });
         ItemEffectsRepo.ITEM_EFFECTS.put("omega_processor", new BoostIndustryInstallableItemEffect(
-                "omega_processor", ItemEffectsRepo.MANTLE_BORE_MINING_BONUS, 0) {
+                "omega_processor", 0, 0) {
             protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
                                                   InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
                 List<String> commodities = new ArrayList<String>();
@@ -736,7 +737,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         setIndustryOnPlanet("Corvus", "Jangala", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
         setIndustryOnPlanet("Naraka", "Yama", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
         setIndustryOnPlanet("Westernesse", "Ailmar", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoDConditions.SWITCH_BIOTICS, false, null);
-        setIndustryOnPlanet("Kumari Kandam", "Chalcedon", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING,null, false, null);
+        setIndustryOnPlanet("Kumari Kandam", "Chalcedon", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
         setIndustryOnPlanet("Yma", "Qaras", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoDConditions.SWITCH_BIOTICS, false, null);
         setIndustryOnPlanet("Galatia", "Ancyra", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
         setIndustryOnPlanet("Mayasura", "Mairaath", AoDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoDConditions.SWITCH_BIOTICS, false, null);

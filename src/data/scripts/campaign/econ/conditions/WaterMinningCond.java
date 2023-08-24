@@ -49,7 +49,7 @@ public class WaterMinningCond extends BaseMarketConditionPlugin {
 
     public void unapplyElectronicsDemand(BaseIndustry ind) {
         ind.supply(AodCommodities.WATER, 0, "");
-
+        ind.getSupply(AodCommodities.WATER).getQuantity().unmodifyFlat("mantle_bore_water");
     }
     public void applyCommoditySupplyToIndustry(BaseIndustry ind, int demand,boolean canApply) {
         if (!canApply) return;
@@ -58,7 +58,7 @@ public class WaterMinningCond extends BaseMarketConditionPlugin {
             ind.getSupply(AodCommodities.WATER).getQuantity().unmodify(getModId());
             if (ind.getSpecialItem() != null) {
                 if (ind.getSpecialItem().getId().equals(Items.MANTLE_BORE)) {
-                    ind.getSupply(AodCommodities.WATER).getQuantity().modifyFlat(getModId(), +3, "Mantle Bore");
+                    ind.getSupply(AodCommodities.WATER).getQuantity().modifyFlat("mantle_bore_water", +3, "Mantle Bore");
                 }
 
 
