@@ -53,41 +53,33 @@ public class AoDDatabank extends BaseSpecialItemPlugin{
     @Override
     public void render(float x, float y, float w, float h, float alphaMult,
                        float glowMult, SpecialItemRendererAPI renderer) {
-        float cx = x + w/2f;
-        float cy = y + h/2f;
 
-        float blX = cx -25f;
-        float blY = cy -14f;
-        float tlX = cx -30f;
-        float tlY = cy +16f;
-        float trX = cx +24f;
-        float trY = cy +22f;
-        float brX = cx +30f;
-        float brY = cy -6f;
+            String petId = stack.getSpecialDataIfSpecial().getData();
 
-        SpriteAPI sprite = Global.getSettings().getSprite(industry.getImageName());
+            if (petId == null) return;
 
-        String industryId = this.industryId;
-        boolean known = Global.getSector().getPlayerFaction().knowsIndustry(industryId);
+            String imageName = Global.getSettings().getIndustrySpec(industryId).getImageName();
+            SpriteAPI sprite = Global.getSettings().getSprite(imageName);
+            float dim = 30f;
 
-        float mult = 1f;
+            Color bgColor = Global.getSector().getPlayerFaction().getDarkUIColor();
+            bgColor = Misc.setAlpha(bgColor, 255);
+            float pad = 10f;
 
-        sprite.setAlphaMult(alphaMult * mult);
-        sprite.setNormalBlend();
-        sprite.renderWithCorners(blX, blY, tlX, tlY, trX, trY, brX, brY);
+            y = y + dim + pad;
+            x = x + w - dim - pad;
 
-        if (glowMult > 0) {
-            sprite.setAlphaMult(alphaMult * glowMult * 0.5f * mult);
-            sprite.setAdditiveBlend();
+            float blX = x;
+            float blY = y - dim;
+            float tlX = x;
+            float tlY = y;
+            float trX = x + dim;
+            float trY = y;
+            float brX = x + dim;
+            float brY = y - dim;
+
+            renderer.renderBGWithCorners(bgColor, blX - 1, blY - 1, tlX - 1, tlY + 1, trX + 1, trY + 1, brX + 1, brY - 1, 1f, 0f, false);
             sprite.renderWithCorners(blX, blY, tlX, tlY, trX, trY, brX, brY);
-        }
-
-        if (known) {
-            renderer.renderBGWithCorners(Color.black, blX, blY, tlX, tlY, trX, trY, brX, brY,
-                    alphaMult * 0.5f, 0f, false);
-        }
-
-        renderer.renderScanlinesWithCorners(blX, blY, tlX, tlY, trX, trY, brX, brY, alphaMult, false);
     }
 
     @Override
@@ -102,7 +94,7 @@ public class AoDDatabank extends BaseSpecialItemPlugin{
     @Override
     public String getName() {
         if (industry != null) {
-            return industry.getName() + " Industry Databank";
+            return industry.getName() + "VOK Databank";
         }
         return super.getName();
     }
@@ -135,8 +127,7 @@ public class AoDDatabank extends BaseSpecialItemPlugin{
 
     @Override
     public boolean shouldRemoveOnRightClickAction() {
-        String industryId = stack.getSpecialDataIfSpecial().getData();
-        return !Global.getSector().getPlayerFaction().knowsIndustry(industryId);
+       return false;
     }
 
 }
