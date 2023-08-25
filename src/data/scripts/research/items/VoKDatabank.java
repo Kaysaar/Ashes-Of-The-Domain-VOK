@@ -1,4 +1,4 @@
-package data.plugins;
+package data.scripts.research.items;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
@@ -8,58 +8,28 @@ import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.campaign.impl.items.BaseSpecialItemPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class AoDDatabank extends BaseSpecialItemPlugin{
+public class VoKDatabank extends BaseSpecialItemPlugin{
     protected IndustrySpecAPI industry;
     public String industryId;
+    public VoKDatabankType type;
 
     @Override
     public void init(CargoStackAPI stack) {
         super.init(stack);
-        String [] params = spec.getParams().split(",");
-        for(String param: params){
-            param = param.trim();
-            industryId = param;
-            break;
-        }
-        industry = Global.getSettings().getIndustrySpec(industryId);
-        stack.getSpecialDataIfSpecial().setData(industryId);
+        type = getType(itemId);
+        industry = Global.getSettings().getIndustrySpec(stack.getSpecialDataIfSpecial().getData());
     }
-
-    public List<String> getProvidedFighters() {
-        return null;
-    }
-
-    public List<String> getProvidedShips() {
-        return null;
-    }
-
-    public List<String> getProvidedWeapons() {
-        return null;
-    }
-    public List<String> getProvidedIndustries() {
-        List<String> result = new ArrayList<String>();
-        result.add(industry.getId());
-        return result;
-    }
-
-
     @Override
     public void render(float x, float y, float w, float h, float alphaMult,
                        float glowMult, SpecialItemRendererAPI renderer) {
 
-            String petId = stack.getSpecialDataIfSpecial().getData();
-
-            if (petId == null) return;
-
-            String imageName = Global.getSettings().getIndustrySpec(industryId).getImageName();
-            SpriteAPI sprite = Global.getSettings().getSprite(imageName);
+             SpriteAPI sprite = Global.getSettings().getSprite(industry.getImageName());
             float dim = 30f;
 
             Color bgColor = Global.getSector().getPlayerFaction().getDarkUIColor();
@@ -69,9 +39,9 @@ public class AoDDatabank extends BaseSpecialItemPlugin{
             y = y + dim + pad;
             x = x + w - dim - pad;
 
-            float blX = x;
+            float blX = x-20;
             float blY = y - dim;
-            float tlX = x;
+            float tlX = x-20;
             float tlY = y;
             float trX = x + dim;
             float trY = y;
@@ -86,7 +56,7 @@ public class AoDDatabank extends BaseSpecialItemPlugin{
     public int getPrice(MarketAPI market, SubmarketAPI submarket) {
         if (industry != null) {
             float base = super.getPrice(market, submarket);
-            return (int)(base + industry.getCost() * getItemPriceMult());
+            return (int)(base + industry.getCost() * getItemPriceMult()/(float)(type.ordinal()+1));
         }
         return super.getPrice(market, submarket);
     }
@@ -94,7 +64,7 @@ public class AoDDatabank extends BaseSpecialItemPlugin{
     @Override
     public String getName() {
         if (industry != null) {
-            return industry.getName() + "VOK Databank";
+            return industry.getName() + " VOK Databank";
         }
         return super.getName();
     }
@@ -112,9 +82,12 @@ public class AoDDatabank extends BaseSpecialItemPlugin{
         b = Misc.getPositiveHighlightColor();
 
         String industryId = stack.getSpecialDataIfSpecial().getData();
-        boolean known = Global.getSector().getPlayerFaction().knowsIndustry(industryId);
-
+        tooltip.addSectionHeading("Industry Info", Alignment.MID,10f);
         tooltip.addPara(industry.getDesc(), opad);
+        tooltip.addSectionHeading("Databank Status", Alignment.MID,10f);
+        tooltip.addPara("This databank conditions is : %s\nBecause of this, " +
+                "it gives %s research speed towards %s",10f,Color.ORANGE,""+getTypeAsString(type),""+getPercentFromType(type),""+industry.getName());
+
 
         addCostLabel(tooltip, opad, transferHandler, stackSource);
 
@@ -129,5 +102,34 @@ public class AoDDatabank extends BaseSpecialItemPlugin{
     public boolean shouldRemoveOnRightClickAction() {
        return false;
     }
-
+    public VoKDatabankType getType(String type){
+        if(type.equals("aotd_vok_databank_pristine")){
+            return VoKDatabankType.PRISTINE;
+        }
+        if(type.equals("aotd_vok_databank_decayed")){
+            return VoKDatabankType.DECAYED;
+        }
+        if(type.equals("aotd_vok_databank_damaged")){
+            return VoKDatabankType.DESTROYED;
+        }
+        return VoKDatabankType.DESTROYED;
+    }
+    public String getTypeAsString(VoKDatabankType type){
+        if(type.equals(VoKDatabankType.DECAYED)){
+            return "Decayed";
+        }
+        if(type.equals(VoKDatabankType.PRISTINE)){
+            return "Pristine";
+        }
+        return "Destroyed";
+    }
+    public String getPercentFromType(VoKDatabankType type){
+        if(type.equals(VoKDatabankType.DECAYED)){
+            return "0%";
+        }
+        if(type.equals(VoKDatabankType.PRISTINE)){
+            return "50%";
+        }
+        return "-50%";
+    }
 }
