@@ -21,6 +21,7 @@ import data.Ids.AodResearcherSkills;
 import data.plugins.AoDUtilis;
 import data.scripts.research.ResearchAPI;
 import data.scripts.research.ResearchOption;
+import data.scripts.research.items.VoKDatabank;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -1234,7 +1235,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     Color color1;
                     Color color2;
                     Color color3;
-                    if (researchAPI.hasMetReq(items)) {
+                    if (researchAPI.hasMetReq(items,wantsToHaveInfoAbout.industryId)) {
                         color1 = Misc.getStoryOptionColor();
                         color2 = Misc.getDarkPlayerColor();
                         color3 = Misc.getStoryOptionColor();
@@ -1249,7 +1250,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         if (person.hasTag("aotd_resourceful")) {
                             newCalculus = items.getValue() - 1;
 
-                            boolean notCutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank");
+                            boolean notCutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank")||items.getKey().equals("aotd_vok_databank");
                             if (notCutting) {
                                 newCalculus += 1;
                             }
@@ -1263,7 +1264,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         }
                         if (person.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)) {
                             newCalculus = items.getValue() - 1;
-                            boolean cutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank");
+                            boolean cutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank")|| items.getKey().equals("aotd_vok_databank");
                             if (!cutting) {
                                 newCalculus += 1;
                             }
@@ -1274,8 +1275,23 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
                         }
                     }
+                    if(items.getKey().contains("aotd_vok_databank")){
+                        CustomPanelAPI vPanel = wantsToKnowResearchReqItem.createCustomPanel(sizeSection / 2.2f, 50, null);
+                        vPanel.getPosition().setLocation(0, 0).inTL(0, index * spacerY);
+                        TooltipMakerAPI vTT = vPanel.createUIElement(sizeSection / 2.2f, 50, false);
+                        vTT.getPosition().inTL(0, 0);
+                        vTT.setForceProcessInput(true);
+                        ButtonAPI boxBorder = wantsToKnowResearchReqItemTT.addAreaCheckbox("", null, color1,
+                                color2, color3, sizeSection / 2.2f, 50, 0);
+                        boxBorder.getPosition().inTL(0, index * spacerY);
+                        boxBorder.setEnabled(false);
+                        wantsToKnowResearchReqItemTT.addSpacer(spacerY - 50);
+                        vTT.addPara("Item: " + wantsToHaveInfoAbout.industryName+ " VOK Databank\nQuantity: " + 1, Color.ORANGE, 0).getPosition().setLocation(0, 0).inTL(5, 15);
+                        vPanel.addUIElement(vTT).inTL(0, 0);
+                        wantsToKnowResearchReqItemTT.addComponent(vPanel).inTL(0, index * spacerY);
+                    }
 
-                    if (Global.getSettings().getSpecialItemSpec(items.getKey()) != null) {
+                    else if  (Global.getSettings().getSpecialItemSpec(items.getKey()) != null) {
                         SpecialItemSpecAPI itemReq = Global.getSettings().getSpecialItemSpec(items.getKey());
                         CustomPanelAPI vPanel = wantsToKnowResearchReqItem.createCustomPanel(sizeSection / 2.2f, 50, null);
                         vPanel.getPosition().setLocation(0, 0).inTL(0, index * spacerY);
