@@ -252,7 +252,7 @@ public class ResearchAPI {
         return toReturn;
     }
 
-    public boolean hasMetReq(Map.Entry<String, Integer> req) {
+    public boolean hasMetReq(Map.Entry<String, Integer> req, String id) {
         if (req == null) return true;
 
         int reqAmount = req.getValue();
@@ -273,7 +273,17 @@ public class ResearchAPI {
             }
             if (allMarketsWithResearch.getSubmarket(subMarketResearch) == null) continue;
             if (allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo() == null) continue;
-
+            if(req.getKey().equals("aotd_vok_databank")){
+                SpecialItemData pristine = new SpecialItemData("aotd_vok_databank_pristine", id);
+                SpecialItemData decayed = new SpecialItemData("aotd_vok_databank_decayed", id);
+                SpecialItemData damaged = new SpecialItemData("aotd_vok_databank_damaged", id);
+                float amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, pristine);
+                reqAmount -= amountFromOneMarket;
+                 amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, decayed);
+                reqAmount -= amountFromOneMarket;
+                 amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, damaged);
+                reqAmount -= amountFromOneMarket;
+            }
             if (Global.getSettings().getSpecialItemSpec(req.getKey()) != null) {
                 SpecialItemData sec = new SpecialItemData(Global.getSettings().getSpecialItemSpec(req.getKey()).getId(), null);
                 float amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, sec);
@@ -286,9 +296,9 @@ public class ResearchAPI {
         return reqAmount <= 0;
     }
 
-    public void removeItemReqFromMarkets(Map.Entry<String, Integer> req) {
+    public void removeItemReqFromMarkets(Map.Entry<String, Integer> req,String id) {
         int reqAmount = req.getValue();
-        boolean isNotSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank");
+        boolean isNotSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank") || req.getKey().equals("aotd_vok_databank");
         if (isNotSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
             reqAmount -= 1;
             if (req.getKey().equals("domain_artifacts") || req.getKey().equals("water")) {
@@ -296,7 +306,33 @@ public class ResearchAPI {
             }
         }
         for (MarketAPI allMarketsWithResearch : getAllMarketsWithResearch()) {
-            if (Global.getSettings().getSpecialItemSpec(req.getKey()) != null) {
+            if(req.getKey().equals("aotd_vok_databank")){
+                SpecialItemData pristine = new SpecialItemData("aotd_vok_databank_pristine", id);
+                SpecialItemData decayed = new SpecialItemData("aotd_vok_databank_decayed", id);
+                SpecialItemData damaged = new SpecialItemData("aotd_vok_databank_damaged", id);
+                float pristineAmountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, pristine);
+                float decayedAmountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, decayed);
+                float damagedAmountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, damaged);
+                boolean paid = false;
+                if(pristineAmountFromOneMarket>=0){
+                    paid=true;
+                   allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeItems(CargoAPI.CargoItemType.SPECIAL, pristine, 1);
+                }
+                if(!paid&&decayedAmountFromOneMarket>=0){
+                    paid=true;
+                    allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeItems(CargoAPI.CargoItemType.SPECIAL, decayed, 1);
+                }
+                if(!paid&&damagedAmountFromOneMarket>=0){
+                    paid=true;
+                    allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeItems(CargoAPI.CargoItemType.SPECIAL, damaged, 1);
+                }
+                if(paid){
+                    reqAmount=0;
+                }
+
+            }
+
+            else if (Global.getSettings().getSpecialItemSpec(req.getKey()) != null) {
                 SpecialItemData sec = new SpecialItemData(Global.getSettings().getSpecialItemSpec(req.getKey()).getId(), null);
                 float amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().getQuantity(CargoAPI.CargoItemType.SPECIAL, sec);
                 if (reqAmount <= 0) {
@@ -366,7 +402,7 @@ public class ResearchAPI {
         }
         if (getResearchOption(industryId).requieredItems != null && !getResearchOption(industryId).requieredItems.isEmpty()&&!getResearchOption(industryId).hasTakenResearchCost) {
             for (Map.Entry<String, Integer> requieredItem : getResearchOption(industryId).requieredItems.entrySet()) {
-                if (!hasMetReq(requieredItem)) {
+                if (!hasMetReq(requieredItem,industryId)) {
                     return false;
                 }
 
@@ -655,18 +691,22 @@ public class ResearchAPI {
 
 
     public HashMap<String, Integer> getItemsRequiredFromCSV(String reqItems, int tier) throws JSONException {
-        String[] splitedAll = reqItems.split(",");
         HashMap<String, Integer> itemsReq = new HashMap<>();
-        if (tier > 1) {
+        itemsReq.put("aotd_vok_databank",1);
+        String[] splitedAll = reqItems.split(",");
+
+        if (tier >= 1) {
             String req = "research_databank";
             itemsReq.put(req, tier);
         }
+
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
 
+        if(!reqItems.isEmpty())
         for (String s : splitedAll) {
             String[] splitedInstance = s.split(":");
             if (splitedInstance.length != 2) {
-                return null;
+               return itemsReq;
             }
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", true)) {
                 if (splitedInstance[0].contains("triheavy_databank") || splitedInstance[0].contains("hegeheavy_databank") || splitedInstance[0].contains("ii_ind_databank")) {
@@ -905,7 +945,7 @@ public void addResearchToQueue(String id){
         ResearchOption researchOptionToInsert = getResearchOption(id);
         if (researchOptionToInsert.requieredItems != null) {
         for (Map.Entry<String, Integer> stringIntegerEntry : researchOptionToInsert.requieredItems.entrySet()) {
-            removeItemReqFromMarkets(stringIntegerEntry);
+            removeItemReqFromMarkets(stringIntegerEntry,id);
         }
             researchOptionToInsert.requieredItems.clear();
             researchOptionToInsert.hasTakenResearchCost = true;
@@ -946,7 +986,7 @@ public void clearEntireResearchQueue(){
         }
         if (currentResearching.requieredItems != null) {
             for (Map.Entry<String, Integer> stringIntegerEntry : currentResearching.requieredItems.entrySet()) {
-                removeItemReqFromMarkets(stringIntegerEntry);
+                removeItemReqFromMarkets(stringIntegerEntry,currentResearching.industryId);
             }
             currentResearching.requieredItems.clear();
             currentResearching.hasTakenResearchCost = true;
