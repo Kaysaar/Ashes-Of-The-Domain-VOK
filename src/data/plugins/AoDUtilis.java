@@ -12,6 +12,7 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.api.util.Pair;
 import data.Ids.AoDConditions;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
@@ -27,7 +28,10 @@ import org.magiclib.util.MagicSettings;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static data.plugins.AoDCoreModPlugin.aotdDatabankRepo;
 
 
 public class AoDUtilis {
@@ -311,6 +315,9 @@ public class AoDUtilis {
             }
         }
         return false;
+    }
+    public static List<Pair<String,String>> getDatabankRepo(){
+        return (List<Pair<String, String>>) Global.getSector().getPersistentData().get(aotdDatabankRepo);
     }
 
 }

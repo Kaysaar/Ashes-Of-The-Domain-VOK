@@ -15,6 +15,7 @@ import com.fs.starfarer.api.impl.campaign.intel.bar.events.BeyondVeilBarEventCre
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.util.Pair;
 import data.Ids.AoDConditions;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
@@ -29,6 +30,7 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.util.Misc;
 
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
@@ -38,12 +40,15 @@ import java.util.*;
 public class AoDCoreModPlugin extends BaseModPlugin {
 
     public int maxTriTachyonElectronics = 2;
+    private static Logger log = Global.getLogger(AoDCoreModPlugin.class);
     public static String aodTech = "$Aodtecha";
     public static boolean isInColony = false;
     public static String sophia = "sophia";
     public static String opScientist = "opScientist";
     public static String explorer = "explorer";
     public int configSize = 6;
+    public static String aotdDatabankRepo = "$aodDatabanks";
+    public static int maxDatabanks = 5;
 
 
     public void setIndustryOnPlanet(String SystemName, String Planetname, String industryId, String removeIndustry, String potentialSwitch, boolean toImprove, String aiCore) {
@@ -167,39 +172,6 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         }
     }
 
-    @Override
-    public void onNewGameAfterEconomyLoad() {
-        super.onNewGameAfterEconomyLoad();
-        ResearchAPI researchAPI = new ResearchAPI();
-        try {
-            researchAPI.loadMergedCSV();
-            researchAPI.initializeResearchList();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-
-        Global.getSector().getPersistentData().remove(aodTech);
-        Global.getSector().getPersistentData().remove(AodMemFlags.RESEARCH_SAVED);
-        Global.getSector().getPersistentData().put(aodTech, researchAPI);
-        ImportantPeopleAPI ip = Global.getSector().getImportantPeople();
-
-        PersonAPI sophiaPerson = Global.getFactory().createPerson();
-        sophiaPerson.setId(sophia);
-        sophiaPerson.setFaction(Factions.INDEPENDENT);
-        sophiaPerson.setGender(FullName.Gender.FEMALE);
-        sophiaPerson.setRankId(Ranks.POST_SCIENTIST);
-        sophiaPerson.setPostId(Ranks.POST_SCIENTIST);
-        sophiaPerson.setImportance(PersonImportance.HIGH);
-        sophiaPerson.setVoice(Voices.SCIENTIST);
-        sophiaPerson.getName().setFirst("Sophia");
-        sophiaPerson.getName().setLast("Ashley");
-        sophiaPerson.getTags().add("aotd_researcher");
-        sophiaPerson.setPortraitSprite(Global.getSettings().getSpriteName("characters", "sophia"));
-        sophiaPerson.getStats().setSkillLevel(AodResearcherSkills.RESOURCEFUL, 0);
-        ip.addPerson(sophiaPerson);
-
-
-    }
 
     public void RandomSetIndustryOnPlanet(String industryId, int amount, String PlanetType) {
         int count = 0;
@@ -253,22 +225,51 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         }
     }
 
+    public void generatePreCollapseFacilities() {
+        List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
+        Collections.shuffle(starSystems);
+        List<Pair<String, String>> databankRepo = AoDUtilis.getDatabankRepo();
+        int databanksInPerseanSector = 0;
+        log.info("Initalized generation of pre collapse facilities");
+        for (StarSystemAPI starSystem : starSystems) {
+            if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN) || starSystem.getTags().contains(Tags.THEME_REMNANT) || starSystem.getTags().contains(Tags.THEME_DERELICT)) {
+                for (PlanetAPI planet : starSystem.getPlanets()) {
+                    if (planet.isStar()) continue;
+                    if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
+                    if (planet.hasTag(Tags.NOT_RANDOM_MISSION_TARGET)) continue;
+                    if (planet.hasTag(Tags.MISSION_ITEM)) continue;
+                    if (planet.isGasGiant()) continue;
+                    String token = planet.getMarket().addCondition("pre_collapse_facility");
+                    MarketConditionAPI marketConditionAPI = planet.getMarket().getSpecificCondition(token);
+                    marketConditionAPI.setSurveyed(false);
+                    databanksInPerseanSector += maxDatabanks;
+                    log.info("Found a planet that satisfies conditions for PCF: " + planet.getName() + "  in " + starSystem.getName());
+                    break;
+
+                }
+                if (databanksInPerseanSector >= databankRepo.size()) {
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
     public void afterGameSave() {
         super.afterGameSave();
         ResearchAPI researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
-        Global.getSector().getPersistentData().remove(aodTech);
-        Global.getSector().getPersistentData().put(aodTech, researchAPI);
-        researchAPI.saveResearch(true);
+        if(researchAPI!=null){
+            Global.getSector().getPersistentData().remove(aodTech);
+            Global.getSector().getPersistentData().put(aodTech, researchAPI);
+            researchAPI.saveResearch(true);
+        }
+
     }
 
     @Override
-    public void onGameLoad(boolean newGame) {
-        if (Global.getSector().hasScript(NexerlinColonyStartNerf.class)) {
-            Global.getSector().removeScriptsOfClass(NexerlinColonyStartNerf.class);
+    public void onNewGameAfterProcGen() {
+        super.onNewGameAfterProcGen();
 
-        }
-        Global.getSettings().resetCached();
         ResearchAPI researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
         if (researchAPI == null) {
             researchAPI = new ResearchAPI();
@@ -283,8 +284,51 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             Global.getSector().getPersistentData().remove(AodMemFlags.RESEARCH_SAVED);
             Global.getSector().getPersistentData().put(aodTech, researchAPI);
         }
+        Global.getSector().getPersistentData().put(AodMemFlags.RESEARCH_SAVED, new HashMap<String, Boolean>());
+        researchAPI.saveResearch(true);
+        boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
+        if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
+
+            RandomSetIndustryOnPlanet(AoDIndustries.CLEANROOM_MANUFACTORY, 2, null);
+            RandomSetIndustryOnPlanet(AoDIndustries.PURIFICATION_CENTER, 1, Planets.PLANET_WATER);
+            Global.getSector().getMemoryWithoutUpdate().set("$nexRandAod", true);
+            try {
+                researchAPI.loadMergedCSV();
+                researchAPI.updateResearchListFromCSV();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+            setIndustriesOnModdedPlanets();
+        } else {
+            setIndustriesOnVanilaPlanets();
+            setIndustriesOnModdedPlanets();
+        }
+        List<Pair<String, String>> databankIds = new ArrayList<>();
+        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAllResearchOptions()) {
+            if (researchOption.researchTier == 0 || Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("experimental"))
+                continue;
+            databankIds.add(new Pair<>(researchOption.modId, researchOption.industryId));
+        }
+        Global.getSector().getPersistentData().put(aotdDatabankRepo, databankIds);
+
+        if (Global.getSector().getPersistentData().containsKey(aotdDatabankRepo)) {
+            generatePreCollapseFacilities();
+        }
+    }
+
+    @Override
+    public void onGameLoad(boolean newGame) {
+        if (Global.getSector().hasScript(NexerlinColonyStartNerf.class)) {
+            Global.getSector().removeScriptsOfClass(NexerlinColonyStartNerf.class);
+
+        }
+        Global.getSettings().resetCached();
+
+
         insertSophia();
         insertExplorer();
+
         if (!Global.getSector().getMemory().contains("$aotd_sophia")) {
             Global.getSector().getMemory().set("$aotd_sophia", false);
         }
@@ -311,30 +355,9 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         Global.getSettings().getIndustrySpec(Industries.FUELPROD).addTag("starter");
         Global.getSettings().getIndustrySpec(Industries.WAYSTATION).addTag("starter");
         Global.getSettings().getIndustrySpec(Industries.ORBITALWORKS).addTag("casual_upgrade");
-        if (!Global.getSector().getPlayerFaction().getMemory().is(AodMemFlags.AOD_INITALIZED, true)) {
-            Global.getSector().getPersistentData().put(AodMemFlags.RESEARCH_SAVED, new HashMap<String, Boolean>());
-            researchAPI.saveResearch(true);
-            boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
-            if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
+        if (Global.getSector().getPlayerFaction().getMemory().is(AodMemFlags.AOD_INITALIZED, true)) {
 
-                RandomSetIndustryOnPlanet(AoDIndustries.CLEANROOM_MANUFACTORY, 2, null);
-                RandomSetIndustryOnPlanet(AoDIndustries.PURIFICATION_CENTER, 1, Planets.PLANET_WATER);
-                Global.getSector().getMemoryWithoutUpdate().set("$nexRandAod", true);
-                try {
-                    researchAPI.loadMergedCSV();
-                    researchAPI.updateResearchListFromCSV();
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-
-                setIndustriesOnModdedPlanets();
-            } else {
-                setIndustriesOnVanilaPlanets();
-                setIndustriesOnModdedPlanets();
-            }
-
-        } else {
-            researchAPI = updateAPI();
+            ResearchAPI researchAPI = updateAPI();
             researchAPI.loadMergedCSV();
             try {
                 researchAPI.updateResearchListFromCSV();
@@ -355,53 +378,17 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
+
         }
+
         setListenersIfNeeded();
         configSize = Misc.MAX_COLONY_SIZE;
         RescourceCondition.applyResourceConditionToAllMarkets();
         IndUpgradeListener.applyIndustyUpgradeCondition();
         Global.getSector().getPlayerFaction().getMemory().set(AodMemFlags.AOD_INITALIZED, true);
-        if (!Global.getSector().getPersistentData().containsKey("$aotd_v_planet")) {
-            for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
-                if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
-                    for (PlanetAPI planet : starSystem.getPlanets()) {
-                        if (planet.isStar()) continue;
-                        if (planet.isMoon()) continue;
-                        if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
-                        if (planet.hasTag(Tags.NOT_RANDOM_MISSION_TARGET)) continue;
-                        if (planet.hasTag(Tags.MISSION_ITEM)) continue;
-                        if (planet.isStar()) continue;
-                        if (planet.isGasGiant()) continue;
-                        if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
-                        long seed = StarSystemGenerator.random.nextLong();
-                        planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SEED, seed);
-                        planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_beyond_veil");
-                        planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
-                        Global.getSector().getPersistentData().put("$aotd_v_planet", planet);
-                        planet.getMemoryWithoutUpdate().set("$aotd_quest_veil", true);
-                        planet.setName("Veil of Knowledge");
-                        break;
-                    }
-                }
-                if (Global.getSector().getPersistentData().containsKey("$aotd_v_planet")) {
-                    break;
-                }
-            }
-        }
-        if (!Global.getSector().getMemory().contains("$aotd_cleanup")) {
-            Global.getSector().getMemory().set("$aotd_cleanup", true);
-            PlanetAPI questPlanet = (PlanetAPI) Global.getSector().getPersistentData().get("$aotd_v_planet");
-            for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
-                for (PlanetAPI planet : starSystem.getPlanets()) {
-                    if (questPlanet != null && questPlanet.getId().equals(planet.getId())) {
-                        continue;
-                    }
-                    if (planet.getMemory().contains("$aotd_quest_veil")) {
-                        planet.getMemory().unset("$aotd_quest_veil");
-                    }
-                }
-            }
-        }
+
+        spawnVeilPlanet();
+        cleanUpAdditionalVeilPLanets();
 
 
         CampaignEventListener customlistener = new CampaignEventListener() {
@@ -609,6 +596,53 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                 return new String[]{"not extreme weather", "not extreme tectonic activity"};
             }
         });
+    }
+
+    private static void cleanUpAdditionalVeilPLanets() {
+        if (!Global.getSector().getMemory().contains("$aotd_cleanup")) {
+            Global.getSector().getMemory().set("$aotd_cleanup", true);
+            PlanetAPI questPlanet = (PlanetAPI) Global.getSector().getPersistentData().get("$aotd_v_planet");
+            for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
+                for (PlanetAPI planet : starSystem.getPlanets()) {
+                    if (questPlanet != null && questPlanet.getId().equals(planet.getId())) {
+                        continue;
+                    }
+                    if (planet.getMemory().contains("$aotd_quest_veil")) {
+                        planet.getMemory().unset("$aotd_quest_veil");
+                    }
+                }
+            }
+        }
+    }
+
+    private static void spawnVeilPlanet() {
+        if (!Global.getSector().getPersistentData().containsKey("$aotd_v_planet")) {
+            for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
+                if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
+                    for (PlanetAPI planet : starSystem.getPlanets()) {
+                        if (planet.isStar()) continue;
+                        if (planet.isMoon()) continue;
+                        if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
+                        if (planet.hasTag(Tags.NOT_RANDOM_MISSION_TARGET)) continue;
+                        if (planet.hasTag(Tags.MISSION_ITEM)) continue;
+                        if (planet.isStar()) continue;
+                        if (planet.isGasGiant()) continue;
+                        if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
+                        long seed = StarSystemGenerator.random.nextLong();
+                        planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SEED, seed);
+                        planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_beyond_veil");
+                        planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
+                        Global.getSector().getPersistentData().put("$aotd_v_planet", planet);
+                        planet.getMemoryWithoutUpdate().set("$aotd_quest_veil", true);
+                        planet.setName("Veil of Knowledge");
+                        break;
+                    }
+                }
+                if (Global.getSector().getPersistentData().containsKey("$aotd_v_planet")) {
+                    break;
+                }
+            }
+        }
     }
 
     @NotNull
