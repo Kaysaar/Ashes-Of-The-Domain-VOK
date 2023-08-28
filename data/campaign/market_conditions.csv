@@ -11,9 +11,9 @@ ReciSup,AodReci,,TRUE,data.scripts.campaign.econ.conditions.AodReci,,graphics/ic
 BioSup,AodSub,,TRUE,data.scripts.campaign.econ.conditions.AodSub,,graphics/icons/markets/capital.png,601
 WaterMiningSupply,watterSupplyMining,,TRUE,data.scripts.campaign.econ.conditions.WaterMinningCond,,graphics/icons/markets/capital.png,602
 Industrial Center,aotd_industrial_might,,TRUE,data.scripts.campaign.econ.conditions.IndustrialMightCondition,,graphics/icons/markets/light_industrial.png,603
-,,,,,,,
-,,,,,,,
-,,,,,,,
+AodFoodSup,AodFood,,TRUE,data.scripts.campaign.econ.conditions.AodFoodSup,,graphics/icons/markets/light_industrial.png,603
+BiFrostGateRemoving,bifrost_removal,,TRUE,data.scripts.campaign.econ.conditions.BiFrostGateRemovingCondtion,,graphics/icons/markets/light_industrial.png,604
+Pre Collapse Facility,pre_collapse_facility,,,data.scripts.campaign.econ.conditions.PreCollapseFacility,"On this planet there are many ancient facilities, bearing mark of Domain. Our team suggest, that we can find here valuable data.",graphics/icons/markets/spaceport.png,605
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,

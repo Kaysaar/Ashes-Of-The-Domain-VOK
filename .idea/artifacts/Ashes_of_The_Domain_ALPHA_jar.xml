@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="Ashes-of-The-Domain-ALPHA:jar">
-    <output-path>$PROJECT_DIR$/../Ashes of  The Domain- Vaults of Knowledge 1.5.2/jars</output-path>
+    <output-path>$PROJECT_DIR$/../Ashes of  The Domain- Vaults of Knowledge 1.5.3/jars</output-path>
     <root id="archive" name="AodResearch.jar">
       <element id="module-output" name="Ashes-of-The-Domain-Research" />
     </root>
