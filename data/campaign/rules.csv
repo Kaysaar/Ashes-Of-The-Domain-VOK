@@ -76,14 +76,14 @@ bifrostCanBeUsed,bifrostCanBeUsed,"$used==false
 $cooldown <=0
 $supplied == true",SetEnabled bifrostUse true,,,
 #BEYOND VEIL,,,,,,
-veil_open_dialog,OpenInteractionDialog,$aotd_quest_veil ,"SalvageGenFromSeed
+veil_open_dialog,OpenInteractionDialog,$aotd_quest_veil score:1000,"SalvageGenFromSeed
 ShowDefaultVisual
 FireBest SalvageCheckHostile","Your $shipOrFleet approaches $entityName.
 
 The sensors are having a hard time evaluating the tenuous megastructure enveloping its entire surface. Your sensors officer takes the initiative and applies some exotic parameters to the interferometer feed; inputs go green and a few seconds later the sub-AI tentatively identifies a stable planetary-scale energy field with highly unusual properties.",,
-veil_defenderDesc,TriggerAutomatedDefenses,$aotd_quest_veil,SalvageDefenderInteraction,"As your fleet moves in closer, sensors detect multiple contacts rising up from the depths of the planet",,
-veil_continueAfterDefeating,BeatDefendersContinue,$aotd_quest_veil ,,Your fleet finishes its approach to $entityName without further incident.,0:salBeatDefendersContinue:Continue,
-veil_beatDefenders,BeginSalvage,$aotd_quest_veil ,SetShortcut defaultLeave ESCAPE,The transmission is set on repeat and garbled in ways that are indicative of aging equipment. You make out enough to gather that part of a research team was stranded here - at a secret Tri-Tachyon research facility - after the fully automated defenses over-weighed certain executive security contingency orders in the wake of one of the AI Wars and decided it was now imperative to shoot down any craft attempting to leave the planet.,"0:veil_explore:Send a salvage team down to the facility
+veil_defenderDesc,TriggerAutomatedDefenses,$aotd_quest_veil score:1000,SalvageDefenderInteraction,"As your fleet moves in closer, sensors detect multiple contacts rising up from the depths of the planet",,
+veil_continueAfterDefeating,BeatDefendersContinue,$aotd_quest_veil score:1000,,Your fleet finishes its approach to $entityName without further incident.,0:salBeatDefendersContinue:Continue,
+veil_beatDefenders,BeginSalvage,$aotd_quest_veil score:1000,SetShortcut defaultLeave ESCAPE,The transmission is set on repeat and garbled in ways that are indicative of aging equipment. You make out enough to gather that part of a research team was stranded here - at a secret Tri-Tachyon research facility - after the fully automated defenses over-weighed certain executive security contingency orders in the wake of one of the AI Wars and decided it was now imperative to shoot down any craft attempting to leave the planet.,"0:veil_explore:Send a salvage team down to the facility
 100:defaultLeave:Leave",
 veil_exploreFacility,DialogOptionSelected,$option == veil_explore,,"A tiny shuttle with a jury-rigged shield generator darts through a spot failure in the shield. A landing at the primary control center is achieved without incident and the crew is able to deactivate the shield entirely upon breaching the facility. Follow-up shuttles with heavier equipment launch quickly thereafter, and soon the salvage operation is in full swing.",0:veil_salvage:Pick through the salvage,
 veil_salvage,DialogOptionSelected,$option == veil_salvage,BeyondQuest genLoot,,,
