@@ -879,7 +879,7 @@ public class ResearchAPI {
     public void saveResearch(boolean newGame) {
 
         Map<String, Boolean> researchSaved = (HashMap<String, Boolean>) Global.getSector().getPersistentData().get(AodMemFlags.RESEARCH_SAVED);
-        if (!researchSaved.isEmpty() && newGame) {
+        if (researchSaved!=null&&!researchSaved.isEmpty() && newGame) {
             researchSaved.clear();
         }
         for (ResearchOption researchOption : researchOptions) {
