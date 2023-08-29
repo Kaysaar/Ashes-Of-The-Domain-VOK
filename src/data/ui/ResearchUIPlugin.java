@@ -1046,7 +1046,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
         int index = highestIndexSoFar;
         List<ResearchOption> filteredResearch = new ArrayList<>();
-        for (ResearchOption research : researchAPI.getResearchOptions()) {
+        for (ResearchOption research : researchAPI.getAllResearchedOptions()) {
             IndustrySpecAPI indspec = Global.getSettings().getIndustrySpec(research.industryId);
             if (indspec.hasTag("farming") || indspec.hasTag("aquaculture") || indspec.hasTag("lightindustry") || indspec.hasTag("heavyindustry") || indspec.hasTag("mining") || indspec.hasTag("refining") || indspec.hasTag("experimental")) {
                 continue;
@@ -1473,7 +1473,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         int tier2 = researchAPI.alreadyResearchedAmountCertainTier(2);
         int tier3 = researchAPI.alreadyResearchedAmountCertainTier(3);
         int all = researchAPI.alreadyResearchedAmount();
-        int left = researchAPI.getResearchOptions().size() - all - researchAPI.getDissabledResearch();
+        int left = researchAPI.getAllResearchedOptions().size() - all - researchAPI.getDissabledResearch();
         statisticsPanelTT.addPara("Currently researched " + tier1 + " of Basic technologies", Color.ORANGE, 10f);
         statisticsPanelTT.addPara("Currently researched " + tier2 + " of Sophisticated technologies", Color.ORANGE, 10f);
         statisticsPanelTT.addPara("Currently researched " + tier3 + " of Pre Collapse technologies", Color.ORANGE, 10f);

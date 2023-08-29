@@ -3,5 +3,16 @@ package data.scripts.research.items;
 public enum VoKDatabankType {
     PRISTINE,
     DECAYED,
-    DESTROYED
+    DESTROYED;
+    public static VoKDatabankType fromInteger(int x) {
+        switch(x) {
+            case 0:
+                return PRISTINE;
+            case 1:
+                return DECAYED;
+            case 2:
+                return DESTROYED;
+        }
+        return null;
+    }
 }

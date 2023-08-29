@@ -32,7 +32,7 @@ public class ResearchProgressScript implements EveryFrameScript {
     int counter =0;
 
     public boolean canResearchAnything(){
-        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getResearchOptions()) {
+        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAllResearchedOptions()) {
             if(researchOption.isDisabled)continue;
             if(researchOption.isResearched)continue;
             if(AoDUtilis.getResearchAPI().canResearch(researchOption.industryId,false)){
@@ -43,7 +43,7 @@ public class ResearchProgressScript implements EveryFrameScript {
     }
     public void advance(float amount) {
         researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
-        if(researchAPI.alreadyResearchedAmount()>=7){
+        if(researchAPI.alreadyResearchedAmount()>=12){
             if (Global.getSettings().getModManager().isModEnabled("lunalib"))
             {
                 boolean enabled = Boolean.TRUE.equals(LunaSettings.getBoolean("aod_core", "aoTDVOK_SOPHIA_ENABLED"));
@@ -53,7 +53,16 @@ public class ResearchProgressScript implements EveryFrameScript {
             }
             Global.getSector().getMemory().set("$aotd_can_scientist",true);
         }
-        if(researchAPI.alreadyResearchedAmount()>=12&&researchAPI.alreadyResearchedAmountCertainTier(3)>=1){
+       if(researchAPI.getResearchFacilitiesQuantity()!=0){
+           if(Global.getSector().getMemory().is("$has_built_first_facility",false)){
+               MessageIntel intel = new MessageIntel("Galatia Council wants to see you personally (Go to Galatia)", Misc.getHighlightColor());
+               intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
+               intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+               Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+           }
+           Global.getSector().getMemory().set("$has_built_first_facility",true);
+       }
+        if(researchAPI.alreadyResearchedAmount()>=142&&researchAPI.alreadyResearchedAmountCertainTier(3)>=1){
             if (Global.getSettings().getModManager().isModEnabled("lunalib"))
             {
                  boolean enabled = Boolean.TRUE.equals(LunaSettings.getBoolean("aod_core", "aoTDVOK_OP_SCIENTIST_ENABLED"));
