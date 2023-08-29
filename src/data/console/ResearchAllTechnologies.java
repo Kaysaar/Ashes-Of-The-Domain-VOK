@@ -22,7 +22,7 @@ public class ResearchAllTechnologies implements BaseCommand {
             Console.showMessage("ResearchAPI has not been initalized");
             return CommandResult.ERROR;
         }
-        for (ResearchOption researchOption : researchAPI.getResearchOptions()) {
+        for (ResearchOption researchOption : researchAPI.getAllResearchOptions()) {
             if(researchOption.isDisabled)continue;
             researchOption.isResearched=true;
             if(researchOption.hasDowngrade){

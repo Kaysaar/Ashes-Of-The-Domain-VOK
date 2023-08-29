@@ -58,7 +58,7 @@ public class IndUpgradeCondition extends BaseMarketConditionPlugin {
             if(cont){
                 continue;
             }
-                for (ResearchOption researchOption : researchAPI.getResearchOptions()) {
+                for (ResearchOption researchOption : researchAPI.getAllResearchedOptions()) {
                     if (!researchOption.hasDowngrade) continue;
                     if (!researchOption.industryId.equals(ind.getId())) continue;
                     if (!ind.isUpgrading()) {

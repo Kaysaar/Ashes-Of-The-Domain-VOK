@@ -160,7 +160,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     }
 
     private void setAoDTier0UpgradesIfResearched(ResearchAPI researchAPI) {
-        for (ResearchOption researchOption : researchAPI.getResearchOptions()) {
+        for (ResearchOption researchOption : researchAPI.getAllResearchedOptions()) {
             if (!researchOption.isResearched) continue;
             if (!researchOption.hasDowngrade) continue;
             IndustrySpecAPI specAPI = Global.getSettings().getIndustrySpec(researchOption.downgradeId);
@@ -241,6 +241,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                     if (planet.isGasGiant()) continue;
                     String token = planet.getMarket().addCondition("pre_collapse_facility");
                     MarketConditionAPI marketConditionAPI = planet.getMarket().getSpecificCondition(token);
+                    planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_pre_collapse_fac");
                     marketConditionAPI.setSurveyed(false);
                     databanksInPerseanSector += maxDatabanks;
                     log.info("Found a planet that satisfies conditions for PCF: " + planet.getName() + "  in " + starSystem.getName());
@@ -258,7 +259,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     public void afterGameSave() {
         super.afterGameSave();
         ResearchAPI researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
-        if(researchAPI!=null){
+        if (researchAPI != null) {
             Global.getSector().getPersistentData().remove(aodTech);
             Global.getSector().getPersistentData().put(aodTech, researchAPI);
             researchAPI.saveResearch(true);
@@ -308,6 +309,16 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAllResearchOptions()) {
             if (researchOption.researchTier == 0 || Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("experimental"))
                 continue;
+            if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", false)) {
+                if (researchOption.industryId.equals("triheavy") || (researchOption.industryId.equals("hegeheavy") || (researchOption.industryId.equals("ii_stella_castellum")))) {
+                    continue;
+                }
+            }
+            if (!haveNexerelin) {
+                if (researchOption.industryId.equals("triheavy") || (researchOption.industryId.equals("hegeheavy") || (researchOption.industryId.equals("ii_stella_castellum")))) {
+                    continue;
+                }
+            }
             databankIds.add(new Pair<>(researchOption.modId, researchOption.industryId));
         }
         Global.getSector().getPersistentData().put(aotdDatabankRepo, databankIds);
@@ -315,6 +326,8 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         if (Global.getSector().getPersistentData().containsKey(aotdDatabankRepo)) {
             generatePreCollapseFacilities();
         }
+        spawnVeilPlanet();
+        spawnGalatiaPlanet();
     }
 
     @Override
@@ -328,6 +341,13 @@ public class AoDCoreModPlugin extends BaseModPlugin {
 
         insertSophia();
         insertExplorer();
+        if (!Global.getSector().getMemory().contains("$has_built_first_facility")) {
+            Global.getSector().getMemory().set("$has_built_first_facility", false);
+        }
+        if (!Global.getSector().getMemory().contains("$aotd_offer")) {
+            Global.getSector().getMemory().set("$aotd_offer", false);
+        }
+
 
         if (!Global.getSector().getMemory().contains("$aotd_sophia")) {
             Global.getSector().getMemory().set("$aotd_sophia", false);
@@ -387,7 +407,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         IndUpgradeListener.applyIndustyUpgradeCondition();
         Global.getSector().getPlayerFaction().getMemory().set(AodMemFlags.AOD_INITALIZED, true);
 
-        spawnVeilPlanet();
+
         cleanUpAdditionalVeilPLanets();
 
 
@@ -644,13 +664,42 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             }
         }
     }
+    private static void spawnGalatiaPlanet() {
+        if (!Global.getSector().getPersistentData().containsKey("$aotd_galatia_planet")) {
+            for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
+                if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
+                    for (PlanetAPI planet : starSystem.getPlanets()) {
+                        if (planet.isStar()) continue;
+                        if (planet.isMoon()) continue;
+                        if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
+                        if (planet.hasTag(Tags.NOT_RANDOM_MISSION_TARGET)) continue;
+                        if (planet.hasTag(Tags.MISSION_ITEM)) continue;
+                        if (planet.isStar()) continue;
+                        if (planet.isGasGiant()) continue;
+                        if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
+                        planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
+                        long seed = StarSystemGenerator.random.nextLong();
+                        planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SEED, seed);
+                        planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_galatia_planet");
+                        planet.getMemoryWithoutUpdate().set("$aotd_galatia_planet",true);
 
+
+                        Global.getSector().getPersistentData().put("$aotd_galatia_planet", planet);
+                        break;
+                    }
+                }
+                if (Global.getSector().getPersistentData().containsKey("$aotd_galatia_planet")) {
+                    break;
+                }
+            }
+        }
+    }
     @NotNull
     private static ResearchAPI updateAPI() {
         ResearchAPI updatedApi = new ResearchAPI();
         updatedApi.setCurrentResearching(AoDUtilis.getResearchAPI().getCurrentResearching());
-        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getResearchOptions()) {
-            updatedApi.getResearchOptions().add(researchOption);
+        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAllResearchedOptions()) {
+            updatedApi.getAllResearchedOptions().add(researchOption);
         }
         for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getResearchQueue()) {
             updatedApi.getResearchQueue().add(researchOption);

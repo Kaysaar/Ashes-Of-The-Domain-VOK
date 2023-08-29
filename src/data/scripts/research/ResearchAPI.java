@@ -47,9 +47,6 @@ public class ResearchAPI {
 
     public PersonAPI currentResearcher = null;
 
-    public ArrayList<ResearchOption> getResearchOptions() {
-        return researchOptions;
-    }
 
     public ResearchOption getCurrentResearching() {
         return currentResearching;
@@ -571,7 +568,7 @@ public class ResearchAPI {
             int cost = jsonObject.getInt(researchCostLabel);
             boolean isResearched = jsonObject.getBoolean("is_researched");
             ArrayList<String> mustResearched = getResearchRequiredFromCSV(jsonObject.getString(mustResearchedLabel));
-            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequiredFromCSV(jsonObject.getString(reqItemsLabel), tier);
+            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequiredFromCSV(jsonObject.getString(reqItemsLabel), tier,id);
             boolean hasDowngrade = jsonObject.getBoolean(hasDowngradeLabel);
             String downgradeId;
             if (hasDowngrade) {
@@ -611,7 +608,7 @@ public class ResearchAPI {
             boolean isResearched = jsonObject.getBoolean("is_researched");
 
             ArrayList<String> mustResearched = getResearchRequiredFromCSV(jsonObject.getString(mustResearchedLabel));
-            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequiredFromCSV(jsonObject.getString(reqItemsLabel), tier);
+            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequiredFromCSV(jsonObject.getString(reqItemsLabel), tier,id);
             boolean hasDowngrade = jsonObject.getBoolean(hasDowngradeLabel);
             String downgradeId;
             if (hasDowngrade) {
@@ -690,19 +687,17 @@ public class ResearchAPI {
     }
 
 
-    public HashMap<String, Integer> getItemsRequiredFromCSV(String reqItems, int tier) throws JSONException {
+    public HashMap<String, Integer> getItemsRequiredFromCSV(String reqItems, int tier,String id) throws JSONException {
         HashMap<String, Integer> itemsReq = new HashMap<>();
-        itemsReq.put("aotd_vok_databank",1);
+
         String[] splitedAll = reqItems.split(",");
+        itemsReq.put("aotd_vok_databank",1);
 
-        if (tier >= 1) {
-            String req = "research_databank";
-            itemsReq.put(req, tier);
+        if(Global.getSettings().getIndustrySpec(id).hasTag("experimental")){
+            itemsReq.remove("aotd_vok_databank");
         }
-
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
 
-        if(!reqItems.isEmpty())
         for (String s : splitedAll) {
             String[] splitedInstance = s.split(":");
             if (splitedInstance.length != 2) {
@@ -710,13 +705,20 @@ public class ResearchAPI {
             }
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", true)) {
                 if (splitedInstance[0].contains("triheavy_databank") || splitedInstance[0].contains("hegeheavy_databank") || splitedInstance[0].contains("ii_ind_databank")) {
-                    itemsReq.put("pristine_nanoforge", 1);
+                    itemsReq.put("aotd_vok_databank", 1);
                     continue;
+                }
+            }
+            else{
+                if (splitedInstance[0].contains("triheavy_databank") || splitedInstance[0].contains("hegeheavy_databank") || splitedInstance[0].contains("ii_ind_databank")) {
+                    itemsReq.remove("aotd_vok_databank");
+                    ;
                 }
             }
             if (splitedInstance[0].equals("research_databank")) {
                 itemsReq.remove(splitedInstance[0]);
             }
+
 
             if (Integer.parseInt(splitedInstance[1]) > 0) {
                 itemsReq.put(splitedInstance[0], Integer.parseInt(splitedInstance[1]));
