@@ -106,7 +106,7 @@ public class KaysaarStellaManufactorium extends BaseIndustry  {
                     }
 
                     String insert = Math.round(smSpecialItemFloatEntry.getValue()) + days+"to create";
-                    if(this.aiCoreId.equals(Commodities.ALPHA_CORE)){
+                    if(this.aiCoreId!=null&&this.aiCoreId.equals(Commodities.ALPHA_CORE)){
                          insert = Math.round(smSpecialItemFloatEntry.getValue()/2) + days+"to create";
                     }
                     tooltip.addPara(Global.getSettings().getSpecialItemSpec(smSpecialItemFloatEntry.getKey().id).getName()+" "+insert,Misc.getStoryBrightColor(),10f);
