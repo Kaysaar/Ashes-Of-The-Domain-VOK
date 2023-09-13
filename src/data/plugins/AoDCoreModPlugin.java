@@ -20,7 +20,6 @@ import data.Ids.AoDConditions;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
 import data.Ids.AodResearcherSkills;
-import data.scripts.NexerlinColonyStartNerf;
 import data.scripts.research.ScientistPersonAPIInterceptor;
 import data.scripts.campaign.econ.listeners.*;
 import data.scripts.research.*;
@@ -45,10 +44,12 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     public static boolean isInColony = false;
     public static String sophia = "sophia";
     public static String opScientist = "opScientist";
+    public static String galatiaScientist  = "galatiaScientist";
     public static String explorer = "explorer";
     public int configSize = 6;
     public static String aotdDatabankRepo = "$aodDatabanks";
     public static int maxDatabanks = 5;
+    public static String preCollapseFacList = "$preCollapseFacList";
 
 
     public void setIndustryOnPlanet(String SystemName, String Planetname, String industryId, String removeIndustry, String potentialSwitch, boolean toImprove, String aiCore) {
@@ -160,7 +161,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     }
 
     private void setAoDTier0UpgradesIfResearched(ResearchAPI researchAPI) {
-        for (ResearchOption researchOption : researchAPI.getAllResearchedOptions()) {
+        for (ResearchOption researchOption : researchAPI.getAlreadyResearchedTechs()) {
             if (!researchOption.isResearched) continue;
             if (!researchOption.hasDowngrade) continue;
             IndustrySpecAPI specAPI = Global.getSettings().getIndustrySpec(researchOption.downgradeId);
@@ -227,6 +228,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
 
     public void generatePreCollapseFacilities() {
         List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
+        List<PlanetAPI> planetsWithFac = new ArrayList<>();
         Collections.shuffle(starSystems);
         List<Pair<String, String>> databankRepo = AoDUtilis.getDatabankRepo();
         int databanksInPerseanSector = 0;
@@ -245,6 +247,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                     marketConditionAPI.setSurveyed(false);
                     databanksInPerseanSector += maxDatabanks;
                     log.info("Found a planet that satisfies conditions for PCF: " + planet.getName() + "  in " + starSystem.getName());
+                    planetsWithFac.add(planet);
                     break;
 
                 }
@@ -253,6 +256,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                 }
             }
         }
+        Global.getSector().getPersistentData().put(preCollapseFacList,planetsWithFac);
     }
 
     @Override
@@ -332,15 +336,12 @@ public class AoDCoreModPlugin extends BaseModPlugin {
 
     @Override
     public void onGameLoad(boolean newGame) {
-        if (Global.getSector().hasScript(NexerlinColonyStartNerf.class)) {
-            Global.getSector().removeScriptsOfClass(NexerlinColonyStartNerf.class);
-
-        }
         Global.getSettings().resetCached();
 
 
         insertSophia();
         insertExplorer();
+        AoDUtilis.insertGalatiaScientist();
         if (!Global.getSector().getMemory().contains("$has_built_first_facility")) {
             Global.getSector().getMemory().set("$has_built_first_facility", false);
         }
@@ -534,14 +535,6 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         if (!Global.getSector().getMemory().contains("$aotd_give_core")) {
             Global.getSector().getMemory().set("$aotd_give_core", false);
         }
-        if (!Global.getSector().getMemory().contains("$update_1.5.0_aotdhot1")) {
-            Global.getSector().getMemory().set("$update_1.5.0_aotdhot1", true);
-            for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
-                if (marketAPI.hasCondition(AoDConditions.SWITCH_FOOD)) {
-                    marketAPI.removeCondition(AoDConditions.SWITCH_FOOD);
-                }
-            }
-        }
         if (!Global.getSector().hasScript(ResearchProgressScript.class)) {
             Global.getSector().addScript(new ResearchProgressScript());
 
@@ -698,8 +691,8 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     private static ResearchAPI updateAPI() {
         ResearchAPI updatedApi = new ResearchAPI();
         updatedApi.setCurrentResearching(AoDUtilis.getResearchAPI().getCurrentResearching());
-        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAllResearchedOptions()) {
-            updatedApi.getAllResearchedOptions().add(researchOption);
+        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAllResearchOptions()) {
+            updatedApi.getAllResearchOptions().add(researchOption);
         }
         for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getResearchQueue()) {
             updatedApi.getResearchQueue().add(researchOption);
