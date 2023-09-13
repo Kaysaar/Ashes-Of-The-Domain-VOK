@@ -26,14 +26,14 @@ public class KaysaarExtractiveOperation extends BaseIndustry {
         if(AoDUtilis.getNormalOreAmount(market)>=-1){
             supply(Commodities.ORE,(AoDUtilis.getNormalOreAmount(market)+(market.getSize()-2)));
         }
-        if(AoDUtilis.getRareOreAmount(market)>=-1){
-            supply(Commodities.RARE_ORE,(AoDUtilis.getRareOreAmount(market)+(market.getSize()-2)));
+        if(AoDUtilis.getRareOreAmount(market)>=0){
+            supply(Commodities.RARE_ORE,(AoDUtilis.getRareOreAmount(market)));
         }
 
 
         if(market.getPlanetEntity()!=null){
             if(market.getPlanetEntity().getTypeId().equals("frozen") ||market.getPlanetEntity().getTypeId().equals("cryovolcanic")){
-             supply(AodCommodities.WATER,market.getSize()-4);
+             supply(AodCommodities.WATER,market.getSize()-4,"Frozen Water");
             }
         }
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.DRUGS, Commodities.HEAVY_MACHINERY);
