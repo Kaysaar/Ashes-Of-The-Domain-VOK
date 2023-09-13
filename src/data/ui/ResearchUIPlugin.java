@@ -1015,7 +1015,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
                 vPanel.addUIElement(vTT).inTL(0, 0);
                 section.addComponent(vPanel).inTL(10 + xmover * research.researchTier, (10 + index * spacerY));
-
+                section.addSpacer(30);
                 techPanels.add(vPanel);
                 tracker.put(vPanel, research.industryId);
 
@@ -1046,7 +1046,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
         int index = highestIndexSoFar;
         List<ResearchOption> filteredResearch = new ArrayList<>();
-        for (ResearchOption research : researchAPI.getAllResearchedOptions()) {
+        for (ResearchOption research : researchAPI.getAllResearchOptions()) {
             IndustrySpecAPI indspec = Global.getSettings().getIndustrySpec(research.industryId);
             if (indspec.hasTag("farming") || indspec.hasTag("aquaculture") || indspec.hasTag("lightindustry") || indspec.hasTag("heavyindustry") || indspec.hasTag("mining") || indspec.hasTag("refining") || indspec.hasTag("experimental")) {
                 continue;
@@ -1446,7 +1446,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                 bonus = true;
             }
         }
-        if (researchAPI.alreadyResearchedAmount() >= 10) {
+        if (researchAPI.alreadyResearchedAmount() >= 16) {
             bonusPanelTT.addPara("Unlocked Industry Synergies (Researched 10 or more technologies)\n", Color.ORANGE, 10f);
             bonus = true;
         }
@@ -1473,21 +1473,21 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         int tier2 = researchAPI.alreadyResearchedAmountCertainTier(2);
         int tier3 = researchAPI.alreadyResearchedAmountCertainTier(3);
         int all = researchAPI.alreadyResearchedAmount();
-        int left = researchAPI.getAllResearchedOptions().size() - all - researchAPI.getDissabledResearch();
+        int left = researchAPI.getAllResearchOptions().size() - all;
         statisticsPanelTT.addPara("Currently researched " + tier1 + " of Basic technologies", Color.ORANGE, 10f);
         statisticsPanelTT.addPara("Currently researched " + tier2 + " of Sophisticated technologies", Color.ORANGE, 10f);
         statisticsPanelTT.addPara("Currently researched " + tier3 + " of Pre Collapse technologies", Color.ORANGE, 10f);
         statisticsPanelTT.addPara("Technologies left to research " + left, Color.ORANGE, 10f);
-        if (all >= 7) {
+        if (all >= 12) {
             statisticsPanelTT.addPara("Some individuals started to notice your faction's recent advancements in many technological fields", Color.CYAN, 10f);
         }
-        if (all < 7) {
+        if (all < 12) {
             statisticsPanelTT.addPara("Your technological advancements are below normal level of the Persean Sector", Color.CYAN, 10f);
         }
-        if (all >= 7 && all < 16) {
+        if (all >= 14 && all < 24) {
             statisticsPanelTT.addPara("Your technological advancements are on equal level of the Peresean Sector", Color.CYAN, 10f);
         }
-        if (all >= 16 && left != 0) {
+        if (all >=24 && left != 0) {
             statisticsPanelTT.addPara("Your technological advancements are slightly higher than of the Persean Sector", Color.CYAN, 10f);
         }
         if (left <= 0) {
