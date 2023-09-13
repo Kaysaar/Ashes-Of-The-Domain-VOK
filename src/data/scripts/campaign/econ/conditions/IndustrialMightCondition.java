@@ -22,7 +22,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
         super.apply(id);
         ResearchAPI researchAPI = AoDUtilis.getResearchAPI();
         if(researchAPI!=null){
-            if(researchAPI.alreadyResearchedAmount()>=10){
+            if(researchAPI.alreadyResearchedAmount()>=16){
                 handleBonuses();
             }
 
