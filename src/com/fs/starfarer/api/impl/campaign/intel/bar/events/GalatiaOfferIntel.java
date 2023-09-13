@@ -20,6 +20,7 @@ public class GalatiaOfferIntel extends BaseIntelPlugin {
     public static int PAY_PILOT_XP = 5000;
 
     protected PlanetAPI planet;
+    public boolean founded = false;
 
 
 
@@ -64,7 +65,7 @@ public class GalatiaOfferIntel extends BaseIntelPlugin {
         if (isEnded() || isEnding()) {
             return "Galatia Quest - Finished";
         }
-        return "Beyond the Veil";
+        return "Galatia Quest";
     }
     public String getIcon() {
         return Global.getSettings().getSpriteName("intel", "red_planet");
@@ -85,7 +86,11 @@ public class GalatiaOfferIntel extends BaseIntelPlugin {
 
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
+        if(founded){
+            return Global.getSector().getStarSystem("Galatia").getEntityById("station_galatia_academy");
+        }
         return planet;
+
     }
     @Override
     public String getCommMessageSound() {
@@ -102,7 +107,6 @@ public class GalatiaOfferIntel extends BaseIntelPlugin {
     protected void notifyEnded() {
         super.notifyEnded();
         Global.getSector().removeScript(this);
-        Misc.makeUnimportant(planet, "galatia");
 
 
     }
