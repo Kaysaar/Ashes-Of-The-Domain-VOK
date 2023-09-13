@@ -2,6 +2,7 @@ package data.scripts.research;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
+import data.scripts.research.items.VoKDatabankType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class ResearchOption {
     public int researchTier;
     public boolean isResearched;
     public int researchCost;
+    public int primeResearchCost;
     public ArrayList<String> requieredIndustriesToResearchIds;
 
     public HashMap<String, Integer> requieredItems;
@@ -26,6 +28,7 @@ public class ResearchOption {
     public boolean isDisabled;
     public List<String> hiddenFactor;
     public boolean hasTakenResearchCost = false;
+    public VoKDatabankType typeOfDatabankUsed = VoKDatabankType.DECAYED;
 
     public String getIndustryName() {
         for (IndustrySpecAPI indSpec : Global.getSettings().getAllIndustrySpecs()) {
@@ -59,6 +62,7 @@ public class ResearchOption {
         this.isDisabled = isDisabled;
         this.modId = modId;
         this.hiddenFactor = hiddenFactor;
+        this.primeResearchCost = researchCost;
     }
 
 
