@@ -11,10 +11,10 @@ import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.util.A;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
 import data.Ids.AodResearcherSkills;
+import data.scripts.research.items.VoKDatabankType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +39,7 @@ public class ResearchAPI {
     public String modIdLabel = "mod_id";
     public String dissabledFactor = "disabled_factor";
     public ArrayList<ResearchOption> researchOptions = new ArrayList<>();
-    public  ArrayList<ResearchOption> researchQueue = new ArrayList<>();
+    public ArrayList<ResearchOption> researchQueue = new ArrayList<>();
     public ResearchOption currentResearching = null;
     JSONArray allResearches;
     public boolean researching = false;
@@ -169,6 +169,7 @@ public class ResearchAPI {
             float curr = getResearchOption(researchOption.industryId).currentResearchDays;
             boolean isResearched = getResearchOption(researchOption.industryId).isResearched;
             boolean hasMetCriteriaInCost = getResearchOption(researchOption.industryId).hasTakenResearchCost;
+            researchOption.typeOfDatabankUsed = getResearchOption(researchOption.industryId).typeOfDatabankUsed;
             researchOptions.remove(getResearchOption(researchOption.industryId));
             researchOption.currentResearchDays = curr;
             researchOption.isResearched = isResearched;
@@ -176,6 +177,7 @@ public class ResearchAPI {
 
 
         } else {
+
             researchOptions.add(researchOption);
         }
 
@@ -189,7 +191,7 @@ public class ResearchAPI {
         ArrayList<ResearchOption> toReturn;
         toReturn = getAvailableToResearch();
         toReturn.addAll(getNotAvailableToResearch());
-        toReturn.addAll(getAllResearchedOptions());
+        toReturn.addAll(getAlreadyResearchedTechs());
 
         return toReturn;
     }
@@ -204,7 +206,7 @@ public class ResearchAPI {
         return toReturn;
     }
 
-    public ArrayList<ResearchOption> getAllResearchedOptions() {
+    public ArrayList<ResearchOption> getAlreadyResearchedTechs() {
         ArrayList<ResearchOption> toReturn = new ArrayList<>();
         for (ResearchOption researchOption : researchOptions) {
             if (researchOption.isResearched) {
@@ -260,7 +262,7 @@ public class ResearchAPI {
                 reqAmount -= 100;
             }
         }
-        if(isSpecial&&currentResearcher!=null&&currentResearcher.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)){
+        if (isSpecial && currentResearcher != null && currentResearcher.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)) {
             reqAmount -= 1;
         }
 
@@ -270,15 +272,15 @@ public class ResearchAPI {
             }
             if (allMarketsWithResearch.getSubmarket(subMarketResearch) == null) continue;
             if (allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo() == null) continue;
-            if(req.getKey().equals("aotd_vok_databank")){
+            if (req.getKey().equals("aotd_vok_databank")) {
                 SpecialItemData pristine = new SpecialItemData("aotd_vok_databank_pristine", id);
                 SpecialItemData decayed = new SpecialItemData("aotd_vok_databank_decayed", id);
                 SpecialItemData damaged = new SpecialItemData("aotd_vok_databank_damaged", id);
                 float amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, pristine);
                 reqAmount -= amountFromOneMarket;
-                 amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, decayed);
+                amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, decayed);
                 reqAmount -= amountFromOneMarket;
-                 amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, damaged);
+                amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, damaged);
                 reqAmount -= amountFromOneMarket;
             }
             if (Global.getSettings().getSpecialItemSpec(req.getKey()) != null) {
@@ -293,7 +295,7 @@ public class ResearchAPI {
         return reqAmount <= 0;
     }
 
-    public void removeItemReqFromMarkets(Map.Entry<String, Integer> req,String id) {
+    public String removeItemReqFromMarkets(Map.Entry<String, Integer> req, String id) {
         int reqAmount = req.getValue();
         boolean isNotSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank") || req.getKey().equals("aotd_vok_databank");
         if (isNotSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
@@ -303,33 +305,28 @@ public class ResearchAPI {
             }
         }
         for (MarketAPI allMarketsWithResearch : getAllMarketsWithResearch()) {
-            if(req.getKey().equals("aotd_vok_databank")){
+            if (req.getKey().equals("aotd_vok_databank")) {
                 SpecialItemData pristine = new SpecialItemData("aotd_vok_databank_pristine", id);
                 SpecialItemData decayed = new SpecialItemData("aotd_vok_databank_decayed", id);
                 SpecialItemData damaged = new SpecialItemData("aotd_vok_databank_damaged", id);
                 float pristineAmountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, pristine);
                 float decayedAmountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, decayed);
                 float damagedAmountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, damaged);
-                boolean paid = false;
-                if(pristineAmountFromOneMarket>=0){
-                    paid=true;
-                   allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeItems(CargoAPI.CargoItemType.SPECIAL, pristine, 1);
+                if (pristineAmountFromOneMarket > 0) {
+                    allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeItems(CargoAPI.CargoItemType.SPECIAL, pristine, 1);
+                    return "pristine";
                 }
-                if(!paid&&decayedAmountFromOneMarket>=0){
-                    paid=true;
+                if (decayedAmountFromOneMarket > 0) {
                     allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeItems(CargoAPI.CargoItemType.SPECIAL, decayed, 1);
+                    return "decayed";
                 }
-                if(!paid&&damagedAmountFromOneMarket>=0){
-                    paid=true;
+                if (damagedAmountFromOneMarket > 0) {
                     allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeItems(CargoAPI.CargoItemType.SPECIAL, damaged, 1);
-                }
-                if(paid){
-                    reqAmount=0;
+                    return "damaged";
                 }
 
-            }
 
-            else if (Global.getSettings().getSpecialItemSpec(req.getKey()) != null) {
+            } else if (Global.getSettings().getSpecialItemSpec(req.getKey()) != null) {
                 SpecialItemData sec = new SpecialItemData(Global.getSettings().getSpecialItemSpec(req.getKey()).getId(), null);
                 float amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().getQuantity(CargoAPI.CargoItemType.SPECIAL, sec);
                 if (reqAmount <= 0) {
@@ -357,10 +354,12 @@ public class ResearchAPI {
 
 
         }
+        return null;
     }
 
     public void removeReq(ResearchOption researchOption) {
         researchOption.requieredItems.clear();
+        researchOption.requieredItems = null;
     }
 
 
@@ -397,9 +396,9 @@ public class ResearchAPI {
         if (getResearchFacilitiesQuantity() == 0) {
             return false;
         }
-        if (getResearchOption(industryId).requieredItems != null && !getResearchOption(industryId).requieredItems.isEmpty()&&!getResearchOption(industryId).hasTakenResearchCost) {
+        if (getResearchOption(industryId).requieredItems != null && !getResearchOption(industryId).requieredItems.isEmpty() && !getResearchOption(industryId).hasTakenResearchCost) {
             for (Map.Entry<String, Integer> requieredItem : getResearchOption(industryId).requieredItems.entrySet()) {
-                if (!hasMetReq(requieredItem,industryId)) {
+                if (!hasMetReq(requieredItem, industryId)) {
                     return false;
                 }
 
@@ -451,93 +450,97 @@ public class ResearchAPI {
     }
 
 
-
-
     public String getIndustryName(String industryId) {
         if (Global.getSettings().getIndustrySpec(industryId) != null) {
             return Global.getSettings().getIndustrySpec(industryId).getName();
         }
         return null;
     }
-    public boolean isInQueue(String id){
+
+    public boolean isInQueue(String id) {
         for (ResearchOption researchOption : researchQueue) {
-            if(researchOption.industryId.equals(id)){
+            if (researchOption.industryId.equals(id)) {
                 return true;
             }
         }
         return false;
     }
-    public boolean canMoveUpOrDown(boolean up,String id){
+
+    public boolean canMoveUpOrDown(boolean up, String id) {
         int index = 0;
         for (ResearchOption researchOption : researchQueue) {
-            if(researchOption.industryId.equals(id)){
+            if (researchOption.industryId.equals(id)) {
                 break;
             }
             index++;
         }
-        if(!up){
+        if (!up) {
             index++;
-            if(index>=researchQueue.size()){
+            if (index >= researchQueue.size()) {
                 return false;
             }
-        }
-        else{
+        } else {
             index--;
-            if(index<0){
+            if (index < 0) {
                 return false;
             }
         }
         return true;
     }
-    public void moveUpOrDownInQueue(String id,boolean up){
-        if(!canMoveUpOrDown(up,id)){
+
+    public void moveUpOrDownInQueue(String id, boolean up) {
+        if (!canMoveUpOrDown(up, id)) {
             return;
         }
-        if(!up){
+        if (!up) {
             int index = 0;
             for (ResearchOption researchOption : researchQueue) {
-                if(researchOption.industryId.equals(id)){
+                if (researchOption.industryId.equals(id)) {
                     break;
                 }
                 index++;
             }
-            int highindex = index+1;
+            int highindex = index + 1;
             ResearchOption lower = getResearchOption(researchQueue.get(highindex).industryId);
-            ResearchOption higher = getResearchOption(researchQueue.get(index).industryId);;
-            researchQueue.set(highindex,higher);
-            researchQueue.set(index,lower);
-        }
-        else{
+            ResearchOption higher = getResearchOption(researchQueue.get(index).industryId);
+            ;
+            researchQueue.set(highindex, higher);
+            researchQueue.set(index, lower);
+        } else {
             int index = 0;
             for (ResearchOption researchOption : researchQueue) {
-                if(researchOption.industryId.equals(id)){
+                if (researchOption.industryId.equals(id)) {
                     break;
                 }
                 index++;
             }
-            int lowindex = index-1;
+            int lowindex = index - 1;
             ResearchOption lower = getResearchOption(researchQueue.get(lowindex).industryId);
-            ResearchOption higher = getResearchOption(researchQueue.get(index).industryId);;
-            researchQueue.set(lowindex,higher);
-            researchQueue.set(index,lower);
+            ResearchOption higher = getResearchOption(researchQueue.get(index).industryId);
+            ;
+            researchQueue.set(lowindex, higher);
+            researchQueue.set(index, lower);
         }
 
     }
-    public void moveToTopOfQueue(String id ){
+
+    public void moveToTopOfQueue(String id) {
         int index = researchQueue.indexOf(getResearchOption(id));
         ResearchOption prevTop = researchQueue.get(0);
         ResearchOption newTop = researchQueue.get(index);
-        researchQueue.set(index,prevTop);
-        researchQueue.set(0,newTop);
+        researchQueue.set(index, prevTop);
+        researchQueue.set(0, newTop);
     }
-    public void moveToBottomOfQueue(String id ){
+
+    public void moveToBottomOfQueue(String id) {
         int index = researchQueue.indexOf(getResearchOption(id));
-        ResearchOption prevBot = researchQueue.get(researchQueue.size()-1);
+        ResearchOption prevBot = researchQueue.get(researchQueue.size() - 1);
         ResearchOption newBot = researchQueue.get(index);
-        researchQueue.set(index,prevBot);
-        researchQueue.set(researchQueue.size()-1,newBot);
+        researchQueue.set(index, prevBot);
+        researchQueue.set(researchQueue.size() - 1, newBot);
     }
-    public void removeFromQueue(String id ){
+
+    public void removeFromQueue(String id) {
         researchQueue.remove(getResearchOption(id));
     }
 
@@ -568,7 +571,7 @@ public class ResearchAPI {
             int cost = jsonObject.getInt(researchCostLabel);
             boolean isResearched = jsonObject.getBoolean("is_researched");
             ArrayList<String> mustResearched = getResearchRequiredFromCSV(jsonObject.getString(mustResearchedLabel));
-            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequiredFromCSV(jsonObject.getString(reqItemsLabel), tier,id);
+            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequiredFromCSV(jsonObject.getString(reqItemsLabel), tier, id);
             boolean hasDowngrade = jsonObject.getBoolean(hasDowngradeLabel);
             String downgradeId;
             if (hasDowngrade) {
@@ -608,7 +611,7 @@ public class ResearchAPI {
             boolean isResearched = jsonObject.getBoolean("is_researched");
 
             ArrayList<String> mustResearched = getResearchRequiredFromCSV(jsonObject.getString(mustResearchedLabel));
-            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequiredFromCSV(jsonObject.getString(reqItemsLabel), tier,id);
+            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequiredFromCSV(jsonObject.getString(reqItemsLabel), tier, id);
             boolean hasDowngrade = jsonObject.getBoolean(hasDowngradeLabel);
             String downgradeId;
             if (hasDowngrade) {
@@ -618,8 +621,10 @@ public class ResearchAPI {
             }
             if (getResearchOption(id) != null) {
                 isResearched = getResearchOption(id).isResearched;
-                if(getResearchOption(id).requieredItems==null||getResearchOption(id).requieredItems.isEmpty()){
+                if (getResearchOption(id).requieredItems == null || getResearchOption(id).requieredItems.isEmpty() || getResearchOption(id).hasTakenResearchCost) {
+                    itemsReqToStartResearch.clear();
                     itemsReqToStartResearch = null;
+
                 }
             }
             boolean isHidden = jsonObject.getBoolean(isDissabled);
@@ -687,13 +692,13 @@ public class ResearchAPI {
     }
 
 
-    public HashMap<String, Integer> getItemsRequiredFromCSV(String reqItems, int tier,String id) throws JSONException {
+    public HashMap<String, Integer> getItemsRequiredFromCSV(String reqItems, int tier, String id) throws JSONException {
         HashMap<String, Integer> itemsReq = new HashMap<>();
 
         String[] splitedAll = reqItems.split(",");
-        itemsReq.put("aotd_vok_databank",1);
+        itemsReq.put("aotd_vok_databank", 1);
 
-        if(Global.getSettings().getIndustrySpec(id).hasTag("experimental")){
+        if (Global.getSettings().getIndustrySpec(id).hasTag("experimental")) {
             itemsReq.remove("aotd_vok_databank");
         }
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
@@ -701,18 +706,17 @@ public class ResearchAPI {
         for (String s : splitedAll) {
             String[] splitedInstance = s.split(":");
             if (splitedInstance.length != 2) {
-               return itemsReq;
+                return itemsReq;
             }
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", true)) {
                 if (splitedInstance[0].contains("triheavy_databank") || splitedInstance[0].contains("hegeheavy_databank") || splitedInstance[0].contains("ii_ind_databank")) {
                     itemsReq.put("aotd_vok_databank", 1);
                     continue;
                 }
-            }
-            else{
+            } else {
                 if (splitedInstance[0].contains("triheavy_databank") || splitedInstance[0].contains("hegeheavy_databank") || splitedInstance[0].contains("ii_ind_databank")) {
                     itemsReq.remove("aotd_vok_databank");
-                    ;
+
                 }
             }
             if (splitedInstance[0].equals("research_databank")) {
@@ -881,7 +885,7 @@ public class ResearchAPI {
     public void saveResearch(boolean newGame) {
 
         Map<String, Boolean> researchSaved = (HashMap<String, Boolean>) Global.getSector().getPersistentData().get(AodMemFlags.RESEARCH_SAVED);
-        if (researchSaved!=null&&!researchSaved.isEmpty() && newGame) {
+        if (researchSaved != null && !researchSaved.isEmpty() && newGame) {
             researchSaved.clear();
         }
         for (ResearchOption researchOption : researchOptions) {
@@ -893,19 +897,20 @@ public class ResearchAPI {
         int counter = 0;
         for (ResearchOption researchOption : researchOptions) {
             if (!researchOption.isResearched) continue;
-            if(researchOption.isDisabled)continue;
+            if (researchOption.isDisabled) continue;
             counter++;
         }
         return counter;
     }
-    public ArrayList<ResearchOption> getResearchQueue(){
+
+    public ArrayList<ResearchOption> getResearchQueue() {
         return this.researchQueue;
     }
 
     public int alreadyResearchedAmountCertainTier(int tier) {
         int counter = 0;
         for (ResearchOption researchOption : researchOptions) {
-            if(researchOption.isDisabled)continue;
+            if (researchOption.isDisabled) continue;
             if (researchOption.researchTier != tier && tier != 3) continue;
             if (tier == 3) {
                 if (researchOption.researchTier <= 2) {
@@ -917,16 +922,17 @@ public class ResearchAPI {
         }
         return counter;
     }
+
     public int getDissabledResearch() {
         int counter = 0;
         for (ResearchOption researchOption : researchOptions) {
-            if(!researchOption.isDisabled)continue;
+            if (!researchOption.isDisabled) continue;
             counter++;
         }
         return counter;
     }
 
-//    public void setIsUpgradeToIndustry(String id, boolean hasDowngrade) {
+    //    public void setIsUpgradeToIndustry(String id, boolean hasDowngrade) {
 //        ResearchOption research = getResearchOption(id);
 //        if (research != null) {
 //            research.hasDowngrade = hasDowngrade;
@@ -943,26 +949,28 @@ public class ResearchAPI {
 //
 //        }
 //    }
-public void addResearchToQueue(String id){
+    public void addResearchToQueue(String id) {
         ResearchOption researchOptionToInsert = getResearchOption(id);
         if (researchOptionToInsert.requieredItems != null) {
-        for (Map.Entry<String, Integer> stringIntegerEntry : researchOptionToInsert.requieredItems.entrySet()) {
-            removeItemReqFromMarkets(stringIntegerEntry,id);
-        }
+            for (Map.Entry<String, Integer> stringIntegerEntry : researchOptionToInsert.requieredItems.entrySet()) {
+                removeItemReqFromMarkets(stringIntegerEntry, id);
+            }
             researchOptionToInsert.requieredItems.clear();
             researchOptionToInsert.hasTakenResearchCost = true;
 
-        removeReq(researchOptionToInsert);
+            removeReq(researchOptionToInsert);
 
-    }
+        }
         researchQueue.add(researchOptionToInsert);
-}
-public void removeResearchFromQueue(String id ){
+    }
+
+    public void removeResearchFromQueue(String id) {
         researchQueue.remove(getResearchOption(id));
-}
-public void clearEntireResearchQueue(){
+    }
+
+    public void clearEntireResearchQueue() {
         researchQueue.clear();
-}
+    }
 
     public void startResearch(String industryId) {
         if (!canResearch(industryId, false)) {
@@ -972,30 +980,43 @@ public void clearEntireResearchQueue(){
             stopResearch();
         }
         currentResearching = getResearchOption(industryId);
+        if (currentResearching.requieredItems != null) {
+            for (Map.Entry<String, Integer> stringIntegerEntry : currentResearching.requieredItems.entrySet()) {
+                String databank = removeItemReqFromMarkets(stringIntegerEntry, currentResearching.industryId);
+                if (databank != null) {
+                    if (databank.equals("pristine")) {
+                        currentResearching.typeOfDatabankUsed = VoKDatabankType.PRISTINE;
+                    } else if (databank.equals("decayed")) {
+                        currentResearching.typeOfDatabankUsed = VoKDatabankType.DECAYED;
+                    } else {
+                        currentResearching.typeOfDatabankUsed = VoKDatabankType.DESTROYED;
+                    }
+                }
+            }
+
+            currentResearching.hasTakenResearchCost = true;
+            removeReq(getResearchOption(currentResearching.industryId));
+        }
         if (!currentResearching.initalized) {
             currentResearching.initalized = true;
-            if(currentResearcher!=null&&currentResearcher.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)){
-                if(currentResearching.industryId.equals("triheavy")||currentResearching.industryId.equals("hegeheavy")||currentResearching.industryId.equals("ii_stellacastellum")){
-                    currentResearching.currentResearchDays = currentResearching.researchCost*3;
+            if (currentResearcher != null && currentResearcher.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)) {
+                if (currentResearching.industryId.equals("triheavy") || currentResearching.industryId.equals("hegeheavy") || currentResearching.industryId.equals("ii_stellacastellum")) {
+                    currentResearching.currentResearchDays = currentResearching.researchCost * 3;
                 }
             }
             else{
-                currentResearching.currentResearchDays = currentResearching.researchCost;
+                currentResearching.researchCost = currentResearching.primeResearchCost;
+                if (currentResearching.typeOfDatabankUsed.equals(VoKDatabankType.PRISTINE)) {
+                    currentResearching.researchCost /=2;
+                }
+                if (currentResearching.typeOfDatabankUsed.equals(VoKDatabankType.DESTROYED)) {
+                    currentResearching.researchCost *=2;
+                }
+                currentResearching.currentResearchDays =  currentResearching.researchCost;
             }
 
-
-
         }
-        if (currentResearching.requieredItems != null) {
-            for (Map.Entry<String, Integer> stringIntegerEntry : currentResearching.requieredItems.entrySet()) {
-                removeItemReqFromMarkets(stringIntegerEntry,currentResearching.industryId);
-            }
-            currentResearching.requieredItems.clear();
-            currentResearching.hasTakenResearchCost = true;
 
-            removeReq(currentResearching);
-
-        }
         researching = true;
     }
 
