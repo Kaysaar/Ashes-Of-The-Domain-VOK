@@ -166,6 +166,13 @@ public class AoDUtilis {
         }
         return quantity;
     }
+    public static Pair<String,Integer> getProductionBonusFromCondition(MarketAPI market,String conditionId, int bonusProduction){
+        if(market.hasCondition(conditionId)){
+            Pair<String,Integer> bonus = new Pair<>(Global.getSettings().getMarketConditionSpec(conditionId).getName(),bonusProduction);
+            return bonus;
+        }
+      return null;
+    }
     public static boolean isFactionPossesingTriTachyonShipyards(FactionAPI factionAPI){
         for (MarketAPI factionMarket : Misc.getFactionMarkets(factionAPI)) {
             if(factionMarket.hasIndustry(AoDIndustries.TRI_TACHYON_HEAVY)&&factionMarket.getIndustry(AoDIndustries.TRI_TACHYON_HEAVY).isFunctional()){
@@ -221,34 +228,34 @@ public class AoDUtilis {
     public static ResearchAPI getResearchAPI(){
         return (ResearchAPI) Global.getSector().getPersistentData().get(AoDCoreModPlugin.aodTech);
     }
-     public static void reapplyIndustry(@NotNull MarketAPI marketAPI, String industryId) {
-        if (marketAPI.hasIndustry(industryId)) {
-            float curr_upgrade = 0;
-
-            IndustrySpecAPI industrySpecAPI = Global.getSettings().getIndustrySpec(marketAPI.getIndustry(industryId).getSpec().getUpgrade());
-            boolean isUpgrading = marketAPI.getIndustry(industryId).isUpgrading();
-            if (isUpgrading) {
-                String[] testBuildtime = marketAPI.getIndustry(industryId).getBuildOrUpgradeDaysText().split(" ");
-                curr_upgrade = Integer.parseInt(testBuildtime[0]);
-            }
-            Industry ind = marketAPI.getIndustry(industryId);
-            SpecialItemData specialItemData = ind.getSpecialItem();
-            String aiCore = ind.getAICoreId();
-            boolean improved = ind.isImproved();
-            marketAPI.removeIndustry(industryId, null, false);
-            marketAPI.addIndustry(industryId);
-            marketAPI.getIndustry(industryId).setSpecialItem(specialItemData);
-            marketAPI.getIndustry(industryId).setImproved(improved);
-            marketAPI.getIndustry(industryId).setAICoreId(aiCore);
-            if (isUpgrading) {
-                float default_time = industrySpecAPI.getBuildTime();
-                industrySpecAPI.setBuildTime(curr_upgrade);
-                marketAPI.getIndustry(industryId).startUpgrading();
-                industrySpecAPI.setBuildTime(default_time);
-            }
-        }
-
-    }
+//     public static void reapplyIndustry(@NotNull MarketAPI marketAPI, String industryId) {
+//        if (marketAPI.hasIndustry(industryId)) {
+//            float curr_upgrade = 0;
+//
+//            IndustrySpecAPI industrySpecAPI = Global.getSettings().getIndustrySpec(marketAPI.getIndustry(industryId).getSpec().getUpgrade());
+//            boolean isUpgrading = marketAPI.getIndustry(industryId).isUpgrading();
+//            if (isUpgrading) {
+//                String[] testBuildtime = marketAPI.getIndustry(industryId).getBuildOrUpgradeDaysText().split(" ");
+//                curr_upgrade = Integer.parseInt(testBuildtime[0]);
+//            }
+//            Industry ind = marketAPI.getIndustry(industryId);
+//            SpecialItemData specialItemData = ind.getSpecialItem();
+//            String aiCore = ind.getAICoreId();
+//            boolean improved = ind.isImproved();
+//            marketAPI.removeIndustry(industryId, null, false);
+//            marketAPI.addIndustry(industryId);
+//            marketAPI.getIndustry(industryId).setSpecialItem(specialItemData);
+//            marketAPI.getIndustry(industryId).setImproved(improved);
+//            marketAPI.getIndustry(industryId).setAICoreId(aiCore);
+//            if (isUpgrading) {
+//                float default_time = industrySpecAPI.getBuildTime();
+//                industrySpecAPI.setBuildTime(curr_upgrade);
+//                marketAPI.getIndustry(industryId).startUpgrading();
+//                industrySpecAPI.setBuildTime(default_time);
+//            }
+//        }
+//
+//    }
     public static void insertOPScientist(PersonAPI person) {
         ImportantPeopleAPI ip = Global.getSector().getImportantPeople();
         person.setId(AoDCoreModPlugin.opScientist);
@@ -257,6 +264,14 @@ public class AoDUtilis {
         Global.getSector().getMemory().set("$aotd_researcher_done",true);
         Global.getSector().getMemory().set("$aotd_researcher_name",person.getName().getFirst());
         person.getTags().add(AodResearcherSkills.SEEKER_OF_KNOWLEDGE);
+        if (!ip.containsPerson(person)) {
+            ip.addPerson(person);
+        }
+    }
+    public static void insertGalatiaScientist() {
+        PersonAPI person = Global.getSector().getFaction(Factions.INDEPENDENT).createRandomPerson();
+        ImportantPeopleAPI ip = Global.getSector().getImportantPeople();
+        person.setId(AoDCoreModPlugin.galatiaScientist);
         if (!ip.containsPerson(person)) {
             ip.addPerson(person);
         }
