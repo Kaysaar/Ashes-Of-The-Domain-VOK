@@ -32,7 +32,7 @@ public class ResearchProgressScript implements EveryFrameScript {
     int counter =0;
 
     public boolean canResearchAnything(){
-        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAllResearchedOptions()) {
+        for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAlreadyResearchedTechs()) {
             if(researchOption.isDisabled)continue;
             if(researchOption.isResearched)continue;
             if(AoDUtilis.getResearchAPI().canResearch(researchOption.industryId,false)){
@@ -62,7 +62,7 @@ public class ResearchProgressScript implements EveryFrameScript {
            }
            Global.getSector().getMemory().set("$has_built_first_facility",true);
        }
-        if(researchAPI.alreadyResearchedAmount()>=142&&researchAPI.alreadyResearchedAmountCertainTier(3)>=1){
+        if(researchAPI.alreadyResearchedAmount()>=17&&researchAPI.alreadyResearchedAmountCertainTier(3)>=1){
             if (Global.getSettings().getModManager().isModEnabled("lunalib"))
             {
                  boolean enabled = Boolean.TRUE.equals(LunaSettings.getBoolean("aod_core", "aoTDVOK_OP_SCIENTIST_ENABLED"));

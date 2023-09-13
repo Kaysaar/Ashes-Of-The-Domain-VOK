@@ -4,20 +4,10 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
-import com.fs.starfarer.api.impl.campaign.econ.impl.Mining;
-import com.fs.starfarer.api.impl.campaign.econ.impl.Refining;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.loading.IndustrySpecAPI;
-import com.fs.starfarer.ui.P;
 import data.Ids.AoDIndustries;
-import data.plugins.AoDUtilis;
 import data.scripts.research.ResearchAPI;
 import data.scripts.research.ResearchOption;
-import org.magiclib.util.MagicSettings;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import static data.plugins.AoDCoreModPlugin.aodTech;
 
@@ -58,7 +48,7 @@ public class IndUpgradeCondition extends BaseMarketConditionPlugin {
             if(cont){
                 continue;
             }
-                for (ResearchOption researchOption : researchAPI.getAllResearchedOptions()) {
+                for (ResearchOption researchOption : researchAPI.getAlreadyResearchedTechs()) {
                     if (!researchOption.hasDowngrade) continue;
                     if (!researchOption.industryId.equals(ind.getId())) continue;
                     if (!ind.isUpgrading()) {

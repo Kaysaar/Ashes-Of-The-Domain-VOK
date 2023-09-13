@@ -73,7 +73,7 @@ public class UpgradeOptionsListener extends BaseIndustryOptionProvider{
                 return null;
             }
         }
-        for (ResearchOption researchOption : researchAPI.getAllResearchedOptions()) {
+        for (ResearchOption researchOption : researchAPI.getAlreadyResearchedTechs()) {
             if(!researchOption.isResearched) continue;
             if(!researchOption.hasDowngrade) continue;
             if(!researchOption.downgradeId.equals(ind.getId())) continue;
