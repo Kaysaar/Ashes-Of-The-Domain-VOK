@@ -698,28 +698,15 @@ public class ResearchAPI {
         String[] splitedAll = reqItems.split(",");
         itemsReq.put("aotd_vok_databank", 1);
 
-        if (Global.getSettings().getIndustrySpec(id).hasTag("experimental")) {
+        if (Global.getSettings().getIndustrySpec(id).hasTag("experimental")||Global.getSettings().getIndustrySpec(id).hasTag("no_databank")) {
             itemsReq.remove("aotd_vok_databank");
         }
-        boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
-
         for (String s : splitedAll) {
             String[] splitedInstance = s.split(":");
             if (splitedInstance.length != 2) {
                 return itemsReq;
             }
-            if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", true)) {
-                if (splitedInstance[0].contains("triheavy_databank") || splitedInstance[0].contains("hegeheavy_databank") || splitedInstance[0].contains("ii_ind_databank")) {
-                    itemsReq.put("aotd_vok_databank", 1);
-                    continue;
-                }
-            } else {
-                if (splitedInstance[0].contains("triheavy_databank") || splitedInstance[0].contains("hegeheavy_databank") || splitedInstance[0].contains("ii_ind_databank")) {
-                    itemsReq.remove("aotd_vok_databank");
-
-                }
-            }
-            if (splitedInstance[0].equals("research_databank")) {
+            if (splitedInstance[0].equals("ii_ind_databank")) {
                 itemsReq.remove(splitedInstance[0]);
             }
 

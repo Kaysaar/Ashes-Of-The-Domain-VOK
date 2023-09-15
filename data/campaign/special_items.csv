@@ -28,14 +28,14 @@ A massive, planet-wide network of tendrils - ending in heatsinks - extrudes itse
 Its use was banned by the Domain many cycles prior to the Collapse, so it's surprising to find a working example in the Persean Sector.",175
 ,,,,,,,,,,,,,,,
 #Special Items For Shit OP Industries,,,,,,,,,,,,,,,
-Chicomoztoc Industrial Databank,hegeheavy_databank,no_drop,Ouroboros Archives,,4000000,1000,1,EXTREME,graphics/icons/items/vok_databank_green.png,ui_chip_pickup,ui_industry_bp_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,,Contains the technological specifications needed to further research.,185
-Culann Industrial Databank,triheavy_databank,no_drop,Ouroboros Archives,,4000000,1000,1,EXTREME,graphics/icons/items/vok_databank_blue.png,ui_chip_pickup,ui_industry_bp_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,,Contains the technological specifications needed to further research.,190
-Byzantium Starfortress Databank,ii_ind_databank,no_drop,Interstellar Imperium,,6000000,1000,1,EXTREME,graphics/icons/items/vok_databank_gold.png,ui_chip_pickup,ui_industry_bp_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,,Contains the technological specifications needed to further research.,195
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
 Hyperdimensional Processor,omega_processor,"no_drop,pather8",[Data Corrupted] Unknown,,10000000,1000,1,EXTREME,graphics/icons/items/hyperdimensional_processor.png,ui_chip_pickup,ui_industry_bp_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,researchfacility,"
 A computational device capable of performing calculations that violate both the p = np and Raylah-Byong hyperspace computational interference principles. While it is believed that other such examples of the object are present, the inconsistent readings from sensors and reports of required interfaces has lead to much speculation that it is not of Domain make",200
 ,,,,,,,,,,,,,,,
 #Databank Rework,,,,,,,,,,,,,,,
-VOK Type Databank Pristine,aotd_vok_databank_pristine,,Ouroboros Archives,,10000,1,10,EXTREME,graphics/icons/items/vok_databank_gold.png,ui_chip_pickup,ui_industry_bp_drop,data.scripts.research.items.VoKDatabank,,This databank contains knowledge lost to sands of time.,210
-VOK Type Databank Decayed,aotd_vok_databank_decayed,,Ouroboros Archives,,10000,1,10,EXTREME,graphics/icons/items/vok_databank_gold_decayed.png,ui_chip_pickup,ui_industry_bp_drop,data.scripts.research.items.VoKDatabank,,This databank contains knowledge lost to sands of time.,210
-VOK Type Databank Damaged,aotd_vok_databank_damaged,,Ouroboros Archives,,10000,1,10,EXTREME,graphics/icons/items/vok_databank_gold_destroyed.png,ui_chip_pickup,ui_industry_bp_drop,data.scripts.research.items.VoKDatabank,,This databank contains knowledge lost to sands of time.,210
+VOK Type Databank Pristine,aotd_vok_databank_pristine,,Ouroboros Archives,,20000,1,10,EXTREME,graphics/icons/items/vok_databank_gold.png,ui_chip_pickup,ui_industry_bp_drop,data.scripts.research.items.VoKDatabank,,This databank contains knowledge lost to sands of time.,210
+VOK Type Databank Decayed,aotd_vok_databank_decayed,,Ouroboros Archives,,20000,1,10,EXTREME,graphics/icons/items/vok_databank_gold_decayed.png,ui_chip_pickup,ui_industry_bp_drop,data.scripts.research.items.VoKDatabank,,This databank contains knowledge lost to sands of time.,210
+VOK Type Databank Damaged,aotd_vok_databank_damaged,,Ouroboros Archives,,20000,1,10,EXTREME,graphics/icons/items/vok_databank_gold_destroyed.png,ui_chip_pickup,ui_industry_bp_drop,data.scripts.research.items.VoKDatabank,,This databank contains knowledge lost to sands of time.,210
 ,,,,,,,,,,,,,,,

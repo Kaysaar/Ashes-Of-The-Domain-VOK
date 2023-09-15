@@ -89,4 +89,67 @@ veil_exploreFacility,DialogOptionSelected,$option == veil_explore,,"A tiny shutt
 veil_salvage,DialogOptionSelected,$option == veil_salvage,BeyondQuest genLoot,,,
 ,,,,,,
 ,,,,,,
+#Pre collapse facility,,,,,,
+preCollapse_fac,PopulateOptions,"$market.isSurveyed
+$market.isPlanetConditionMarketOnly
+$market.mc:pre_collapse_facility
+!$market.aotd_fac_explored
+!$tag:gas_giant","FireBest DissablePreCollapseFacilityWhenNeeded 
+SalvageGenFromSeed
+ShowDefaultVisual
+FireBest SalvageCheckHostile","This planet possess a massive facility, that seems to be a reserarch facility. Scan indicate, that this facility was once one of main centers of research, before Collapse. Our crew suggest, that here we might find some intresting things.",6:preExplore:Venture into Facility,
+preCollapse_hostileNearby,DisableRuinsExploreIfNeeded,HostileFleetNearbyAndAware,SetEnabled preExplore false,"A nearby hostile fleet is tracking your movements, making exploration of the planet impossible.",,
+preCollapse_noHostileNearby,DisableRuinsExploreIfNeeded,!HostileFleetNearbyAndAware,SetEnabled preExplore true,"While long-term exploitation of the resources in these ruins requires a colony, a salvage team can conduct a search for anything of immediate value.",,
+preCollapse_explore,TriggerAutomatedDefenses,"$market.isSurveyed
+$market.isPlanetConditionMarketOnly
+$market.mc:pre_collapse_facility
+!$market.aotd_fac_explored
+!$tag:gas_giant",SalvageDefenderInteraction,"As your fleet moves in closer, sensors detect multiple contacts rising up from the depths of the planet",,
+preCollapse_continiueAfterDefeating,BeatDefendersContinue,,SetShortcut defaultLeave ESCAPE,"Now, that defenders has been defeated  our path to facility is cleared",0:salBeatDefendersContinue:Continue,
+preCollapse_beatDefenders,BeginSalvage,"$market.isSurveyed
+$market.isPlanetConditionMarketOnly
+$market.mc:pre_collapse_facility
+!$market.aotd_fac_explored
+!$tag:gas_giant",SetShortcut defaultLeave ESCAPE,,"0:explore_PreFac:Send a salvage team down to the facility
+100:defaultLeave:Leave",
+explore_PreFacility,DialogOptionSelected,$option == explore_PreFac,,,0:pre_salvage:Pick through the salvage,
+preSalvage,DialogOptionSelected,$option == pre_salvage,"PreCollapseFacLoot genLoot 
+$market.aotd_fac_explored = true",,,
 ,,,,,,
+#Galatia comming with offer,,,,,,
+aotd_galatia_offer,GAPostOpen,"$id == station_galatia_academy 
+!$global.aotd_offer 
+$global.has_built_first_facility score :10000",,"While enetring Galatia, you are being guided to giant room, that seems to be main haul of this station. There is one person waiting for you in corner.",aotdGalatiaOffer:Follow,
+aotd_galatia_offer_more_info,DialogOptionSelected,$option == aotdGalatiaOffer,"SaveCurrentVisual
+BeginConversation galatiaScientist ","Grettings starfarer. Our Council have noticed, that your faction recently started to grasp technology, necessary to run efficient colonies. We as council have offer for you. We will provide you with all basic databanks, necessary to start up colonies, but in return we would like to use your services.",aotdGalatiaOfferQuestion: How much this service will cost?,
+aotd_galatia_offer_details,DialogOptionSelected,$option == aotdGalatiaOfferQuestion,GalatiaOfferQuest showPlanet,"""Basically we ask you to retrieve very important data core, that has been lost on one of planets during our expedition. On tripad you will see it's location. Do you wish to help us ?","aotdGalatiaOfferAgreed:Yes
+aotdGalatiaOfferRefused:No",
+aotd_galatia_accept,DialogOptionSelected,$option == aotdGalatiaOfferAgreed,"EndConversation 
+RestoreSavedVisual
+$global.aotd_offer=true
+GalatiaOfferQuest acceptedQuest","That's the spirit, return with this core, and you shall be rewarded.",,
+aotd_galatia_refuse,DialogOptionSelected,$option == aotdGalatiaOfferRefused,"EndConversation 
+RestoreSavedVisual
+$global.aotd_offer=true
+GalatiaOfferQuest rejectedQuest",,,
+galatia_planet_databank_init,OpenInteractionDialog,$aotd_galatia_planet score:1000,"SalvageGenFromSeed
+ShowDefaultVisual
+FireBest SalvageCheckHostile","When you apporach planet, your sensors are detecting abbandoned facility , where data core should be located.",,
+galatia_planet_defenderDesc,TriggerAutomatedDefenses,$aotd_galatia_planet score:1000,SalvageDefenderInteraction,"As your fleet moves in closer, sensors detect multiple contacts rising up from the depths of the planet",,
+galatia_planet_continueAfterDefeating,BeatDefendersContinue,$aotd_galatia_planet score:1000,,Your fleet finishes its approach to abbandoned facility.,0:salBeatDefendersContinue:Continue,
+galatia_planet_explore,BeginSalvage,$aotd_galatia_planet score:1000,"SetShortcut defaultLeave ESCAPE
+",,"0:gal_explore:Send a salvage team down to the facility and retrieve data
+100:defaultLeave:Leave",
+galatia_salvage,DialogOptionSelected,$option == gal_explore,"$global.aotd_got_core = true
+GalatiaOfferQuest scavenge",,100:defaultLeave:Leave Facility with Data Core,
+galatia_completed,GAPostOpen,"$id == station_galatia_academy 
+!$global.aotd_got_databank
+$global.aotd_got_core 
+$global.aotd_offer score :10000","SaveCurrentVisual
+BeginConversation galatiaScientist ","Greeting, starfarer. I assume you got a data core right?",0:galatia_give_core:Give data core to scientist,
+galatia_give_data_core,DialogOptionSelected,$option == galatia_give_core,,"Congratulations, we are thankful for your services, here is your reward, access to these databanks.",0:galatia_reward: Claim your reward,
+galatia_take_reward,DialogOptionSelected,$option == galatia_reward,"EndConversation 
+RestoreSavedVisual
+GalatiaGenLoot genLoot
+AddTextSmall ""Recieved Galatia Databanks"" highlight
+$global.aotd_got_databank = true",,100:defaultLeave:Leave,
