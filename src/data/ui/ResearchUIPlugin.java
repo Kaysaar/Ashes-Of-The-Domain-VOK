@@ -1015,7 +1015,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
 
                 vPanel.addUIElement(vTT).inTL(0, 0);
                 section.addComponent(vPanel).inTL(10 + xmover * research.researchTier, (10 + index * spacerY));
-                section.addSpacer(30);
+                section.addSpacer(10);
                 techPanels.add(vPanel);
                 tracker.put(vPanel, research.industryId);
 

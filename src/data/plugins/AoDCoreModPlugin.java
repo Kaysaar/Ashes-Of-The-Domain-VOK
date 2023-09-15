@@ -31,6 +31,7 @@ import com.fs.starfarer.api.util.Misc;
 
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.json.Cookie;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -313,12 +314,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAllResearchOptions()) {
             if (researchOption.researchTier == 0 || Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("experimental"))
                 continue;
-            if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", false)) {
-                if (researchOption.industryId.equals("triheavy") || (researchOption.industryId.equals("hegeheavy") || (researchOption.industryId.equals("ii_stella_castellum")))) {
-                    continue;
-                }
-            }
-            if (!haveNexerelin) {
+            if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", true)) {
                 if (researchOption.industryId.equals("triheavy") || (researchOption.industryId.equals("hegeheavy") || (researchOption.industryId.equals("ii_stella_castellum")))) {
                     continue;
                 }
@@ -630,7 +626,9 @@ public class AoDCoreModPlugin extends BaseModPlugin {
 
     private static void spawnVeilPlanet() {
         if (!Global.getSector().getPersistentData().containsKey("$aotd_v_planet")) {
-            for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
+            List <StarSystemAPI> starSystems = Global.getSector().getStarSystems();
+            Collections.shuffle(starSystems);
+            for (StarSystemAPI starSystem :starSystems) {
                 if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
                     for (PlanetAPI planet : starSystem.getPlanets()) {
                         if (planet.isStar()) continue;
@@ -659,7 +657,9 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     }
     private static void spawnGalatiaPlanet() {
         if (!Global.getSector().getPersistentData().containsKey("$aotd_galatia_planet")) {
-            for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
+            List <StarSystemAPI> starSystems = Global.getSector().getStarSystems();
+            Collections.shuffle(starSystems);
+            for (StarSystemAPI starSystem :starSystems) {
                 if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
                     for (PlanetAPI planet : starSystem.getPlanets()) {
                         if (planet.isStar()) continue;
