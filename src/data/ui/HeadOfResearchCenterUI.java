@@ -44,7 +44,7 @@ public class HeadOfResearchCenterUI  implements CustomDialogDelegate {
     }
     public String getDescrpForResearcher(PersonAPI personAPI){
         if(personAPI.hasTag(AodResearcherSkills.RESOURCEFUL)){
-            return "That scientist is very cautious and wants to use as little resources to accomplish task as possible\nDecrease cost of item for inital research by 1 unit.\nThis does not include special databanks";
+            return "That scientist is very cautious and wants to use as little resources to accomplish task as possible\nDecrease upkeep of research facilities by 50%.";
         }
         if(personAPI.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)){
             return "This scientist possesses knowledge that for many has been already deemed to be lost in sands of time\nNegate need for special type of databanks for research, but increase amount of days to research technologies that requieres special databank three times more";

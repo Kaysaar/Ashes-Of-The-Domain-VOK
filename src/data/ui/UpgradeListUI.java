@@ -15,6 +15,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.Ids.AodCommodities;
 import data.plugins.AoDUtilis;
+import data.scripts.campaign.econ.conditions.IndUpgradeCondition;
 import data.scripts.research.ResearchAPI;
 import data.scripts.research.ResearchOption;
 
@@ -578,6 +579,10 @@ public class UpgradeListUI implements CustomDialogDelegate {
             industry.setSpecialItem(null);
         }
         industry.startUpgrading();
+        IndUpgradeCondition cond = (IndUpgradeCondition)industry.getMarket().getFirstCondition("AodIndUpgrade").getPlugin();
+        cond.currUpgradesOnPlanet.put(industry.getId(),selected.industryId);
+        industry.getSpec().setUpgrade(null);
+
         float cost = getIndustrySpec(selected.industryId).getCost();
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(cost);
         Global.getSoundPlayer().playUISound("ui_upgrade_industry", 1, 1);

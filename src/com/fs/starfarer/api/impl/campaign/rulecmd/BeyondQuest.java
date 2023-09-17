@@ -98,14 +98,10 @@ public class BeyondQuest  extends BaseCommandPlugin {
         planet.addDropRandom(d);
 
         d = new SalvageEntityGenDataSpec.DropData();
-        d.chances = 1;
+        d.chances = 4;
         d.group = "rare_tech";
         planet.addDropRandom(d);
 
-        d = new SalvageEntityGenDataSpec.DropData();
-        d.chances = 9;
-        d.group = "ashes_research";
-        planet.addDropRandom(d);
 
         CargoAPI salvage = SalvageEntity.generateSalvage(random, 1f, 1f, 1f, 1f, planet.getDropValue(), planet.getDropRandom());
         CargoAPI extra = BaseSalvageSpecial.getCombinedExtraSalvage(memoryMap);
