@@ -114,6 +114,8 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             l.addListener(new ResearchPanelListener(), true);
         if (!l.hasListenerOfClass(UpgradeOptionsListener.class))
             l.addListener(new UpgradeOptionsListener(), true);
+        if (!l.hasListenerOfClass(CancelUpgradeUIOverride.class))
+            l.addListener(new CancelUpgradeUIOverride(), true);
         if (!l.hasListenerOfClass(AgriProdSwitchListener.class))
             l.addListener(new AgriProdSwitchListener(), true);
         if (!l.hasListenerOfClass(AoDFoodDemmandListener.class))
@@ -328,15 +330,26 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         }
         spawnVeilPlanet();
         spawnGalatiaPlanet();
+        setAoDTier0UpgradesIfResearched(researchAPI);
     }
+
 
     @Override
     public void onGameLoad(boolean newGame) {
         Global.getSettings().resetCached();
-
-
         insertSophia();
+        boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
+        if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
+
+            RandomSetIndustryOnPlanet(AoDIndustries.CLEANROOM_MANUFACTORY, 2, null);
+            RandomSetIndustryOnPlanet(AoDIndustries.PURIFICATION_CENTER, 1, Planets.PLANET_WATER);
+            setIndustriesOnModdedPlanets();
+        } else {
+            setIndustriesOnVanilaPlanets();
+            setIndustriesOnModdedPlanets();
+        }
         insertExplorer();
+        setVanilaIndustriesDowngrades();
         AoDUtilis.insertGalatiaScientist();
         if (!Global.getSector().getMemory().contains("$has_built_first_facility")) {
             Global.getSector().getMemory().set("$has_built_first_facility", false);
@@ -355,7 +368,8 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         if (!Global.getSector().getMemory().contains("$aotd_explorer")) {
             Global.getSector().getMemory().set("$aotd_explorer", false);
         }
-        setVanilaIndustriesDowngrades();
+
+
         setVanilaSpecialItemNewIndustries(Items.SOIL_NANITES, "subfarming");
         setVanilaSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator");
         setVanilaSpecialItemNewIndustries(Items.BIOFACTORY_EMBRYO, "lightproduction,consumerindustry");
@@ -397,17 +411,13 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             throw new RuntimeException(e);
 
         }
-
+        clearVanilaUpgrades(AoDUtilis.getResearchAPI());
         setListenersIfNeeded();
         configSize = Misc.MAX_COLONY_SIZE;
         RescourceCondition.applyResourceConditionToAllMarkets();
         IndUpgradeListener.applyIndustyUpgradeCondition();
         Global.getSector().getPlayerFaction().getMemory().set(AodMemFlags.AOD_INITALIZED, true);
-
-
         cleanUpAdditionalVeilPLanets();
-
-
         CampaignEventListener customlistener = new CampaignEventListener() {
             @Override
             public void reportPlayerOpenedMarket(MarketAPI market) {
@@ -833,6 +843,11 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         String prevParams = spec.getParams();
         if (prevParams.contains(listOfAdditionalIndustries)) return;
         spec.setParams(prevParams + "," + listOfAdditionalIndustries);
+    }
+    private static void clearVanilaUpgrades(ResearchAPI researchAPI){
+        for (ResearchOption allResearchOption : researchAPI.getAllResearchOptions()) {
+            Global.getSettings().getIndustrySpec(allResearchOption.industryId).setUpgrade(null);
+        }
     }
 
 }
