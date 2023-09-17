@@ -9,11 +9,14 @@ import data.Ids.AoDIndustries;
 import data.scripts.research.ResearchAPI;
 import data.scripts.research.ResearchOption;
 
+import java.util.HashMap;
+
 import static data.plugins.AoDCoreModPlugin.aodTech;
 
 public class IndUpgradeCondition extends BaseMarketConditionPlugin {
 
     public ResearchAPI researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
+    public HashMap<String,String> currUpgradesOnPlanet = new HashMap<>();
     public static String UpgradeCond = "AodIndUpgrade";
     @Override
     public void apply(String id) {
@@ -48,13 +51,12 @@ public class IndUpgradeCondition extends BaseMarketConditionPlugin {
             if(cont){
                 continue;
             }
-                for (ResearchOption researchOption : researchAPI.getAlreadyResearchedTechs()) {
-                    if (!researchOption.hasDowngrade) continue;
-                    if (!researchOption.industryId.equals(ind.getId())) continue;
-                    if (!ind.isUpgrading()) {
-                        ind.getSpec().setUpgrade(null);
-                    }
+            if(researchAPI.getResearchOption(ind.getId())!=null&&!ind.isUpgrading()){
+                ind.getSpec().setUpgrade(null);
+                if(currUpgradesOnPlanet.get(ind.getId())!=null){
+                    currUpgradesOnPlanet.remove(ind.getId());
                 }
+            }
 
 
 
