@@ -1,18 +1,19 @@
 package com.fs.starfarer.api.impl.campaign.intel.bar.events;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.InteractionDialogAPI;
-import com.fs.starfarer.api.campaign.TextPanelAPI;
+import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
+import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.historian.HistorianBackstory;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.historian.HistorianData;
 import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.combat.entities.terrain.Planet;
+import data.plugins.AoDCoreModPlugin;
 
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class PreCollapseFacBarEvent extends BaseBarEvent {
 
@@ -23,11 +24,15 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
         MORE_INFO,
         PRICE,
         END_CONVERSATION,
+        END_CONVERSATION_START,
+        LEAVE
     }
 
     protected long seed;
+    protected PlanetAPI targetPlanet;
+
     protected transient Random random;
-    protected transient HistorianBackstory.HistorianBackstoryInfo backstory = null;
+
     protected MarketAPI market = null;
     protected PersonAPI person = null;
 
@@ -66,13 +71,18 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
     }
 
     protected String getOptionText() {
-        return "Go over to "+person.getManOrWoman()+" with old Tripad and ask what "+person.getHeOrShe()+" wants";
+        return "Go over to " + person.getManOrWoman() + " with old Tripad and ask what " + person.getHeOrShe() + " wants";
     }
 
     @Override
     public void init(InteractionDialogAPI dialog, Map<String, MemoryAPI> memoryMap) {
         super.init(dialog, memoryMap);
 
+        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
+        Collections.shuffle(preCollapsePlanets);
+        if (!preCollapsePlanets.isEmpty()) {
+            targetPlanet = preCollapsePlanets.get(0);
+        }
 
         dialog.getVisualPanel().showPersonInfo(person, true, true);
         optionSelected(null, OptionId.GREETING);
@@ -80,40 +90,105 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
 
     }
 
+    @Override
+    public boolean shouldShowAtMarket(MarketAPI market) {
+        if(!super.shouldShowAtMarket(market))return false;
+        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
+        if (Global.getSector().getIntelManager().hasIntelOfClass(PreCollapseFacIntel.class)) {
+            return false;
+        }
+        return !preCollapsePlanets.isEmpty();
+    }
+
     public void optionSelected(String optionText, Object optionData) {
-//        if (optionData == OptionId.GREETING) {
-//            text.addPara("\"Ain't nothing, I'm just reading my mail,\" " + getHeOrShe() +
-//                    " growls back. Then laughs, and taps " + getHisOrHer() + " temple. " +
-//                    "\"Swear I'll never get proper used to these things.\"");
-//            options.addOption("Your attention? What do you mean? ", BeyondVeilBarEvent.OptionId.INTRUIGED);
-//            options.addOption("Suggest " + getHeOrShe() + " mistook you for someone else.", BeyondVeilBarEvent.OptionId.LEAVE);
-//        }
-//        if (optionData == OptionId.GREETNG_CONTINUE_1) {
-//            text.addPara("\"Oh, nothing. Let's just say you caught my attention\"");
-//            options.addOption("Your attention? What do you mean? ", BeyondVeilBarEvent.OptionId.INTRUIGED);
-//            options.addOption("Suggest " + getHeOrShe() + " mistook you for someone else.", BeyondVeilBarEvent.OptionId.LEAVE);
-//        }
-//        if (optionData == OptionId.WHAT_DO_YOU_HAVE) {
-//            text.addPara("\"Oh, nothing. Let's just say you caught my attention\"");
-//            options.addOption("Your attention? What do you mean? ", BeyondVeilBarEvent.OptionId.INTRUIGED);
-//            options.addOption("Suggest " + getHeOrShe() + " mistook you for someone else.", BeyondVeilBarEvent.OptionId.LEAVE);
-//        }
-//        if (optionData == OptionId.MORE_INFO) {
-//            text.addPara("\"Oh, nothing. Let's just say you caught my attention\"");
-//            options.addOption("Your attention? What do you mean? ", BeyondVeilBarEvent.OptionId.INTRUIGED);
-//            options.addOption("Suggest " + getHeOrShe() + " mistook you for someone else.", BeyondVeilBarEvent.OptionId.LEAVE);
-//        }
-//        if (optionData == OptionId.PRICE) {
-//            text.addPara("\"Oh, nothing. Let's just say you caught my attention\"");
-//            options.addOption("Your attention? What do you mean? ", BeyondVeilBarEvent.OptionId.INTRUIGED);
-//            options.addOption("Suggest " + getHeOrShe() + " mistook you for someone else.", BeyondVeilBarEvent.OptionId.LEAVE);
-//        }
-//        if (optionData == OptionId.END_CONVERSATION) {
-//            text.addPara("\"Oh, nothing. Let's just say you caught my attention\"");
-//            options.addOption("Your attention? What do you mean? ", BeyondVeilBarEvent.OptionId.INTRUIGED);
-//            options.addOption("Suggest " + getHeOrShe() + " mistook you for someone else.", BeyondVeilBarEvent.OptionId.LEAVE);
-//        }
+        if (!(optionData instanceof PreCollapseFacBarEvent.OptionId)) {
+            return;
+        }
+        OptionId option = (PreCollapseFacBarEvent.OptionId) optionData;
+
+        OptionPanelAPI options = dialog.getOptionPanel();
+        TextPanelAPI text = dialog.getTextPanel();
+        options.clearOptions();
+
+        if (option == OptionId.GREETING) {
+            text.addPara("Small Introduction");
+            options.addOption("Option 1 : Listen", OptionId.GREETNG_CONTINUE_1);
+            options.addOption("Option 2 : Ignore", OptionId.END_CONVERSATION_START);
+            return;
+        }
+        if (option == OptionId.GREETNG_CONTINUE_1) {
+            text.addPara("Story about failed expedition");
+            options.addOption("Your attention? What do you mean? ", OptionId.WHAT_DO_YOU_HAVE);
+            return;
+        }
+        if (option == OptionId.WHAT_DO_YOU_HAVE) {
+            text.addPara("Moment where Pre Collapse Fac is mentioned");
+            options.addOption("Pre Collapse fac ? ", OptionId.MORE_INFO);
+            return;
+        }
+        if (option == OptionId.MORE_INFO) {
+            //Show planet
+            text.addPara("More Info about what could be there");
+            options.addOption("Where i can find it ? ", OptionId.PRICE);
+            return;
+        }
+        if (option == OptionId.PRICE) {
+
+            text.addPara("Price : Money 500k ");
+            options.addOption("Yes", OptionId.END_CONVERSATION);
+            options.addOption("No ", OptionId.END_CONVERSATION_START);
+            if (Global.getSector().getPlayerFleet().getCargo().getCredits().get() < 500000) {
+                options.setEnabled(OptionId.END_CONVERSATION, false);
+            }
+            else{
+                options.setEnabled(OptionId.END_CONVERSATION, true);
+            }
+            return;
+        }
+        if (option == OptionId.END_CONVERSATION) {
+            text.addPara("Telling location and showing location");
+            String icon = Global.getSettings().getSpriteName("intel", "red_planet");
+            Set<String> tags = new LinkedHashSet<String>();
+            tags.add(Tags.INTEL_MISSIONS);
+
+            dialog.getVisualPanel().showMapMarker(targetPlanet.getStarSystem().getCenter(),
+                    "Destination: " + targetPlanet.getStarSystem().getName(), Misc.getBasePlayerColor(),
+                    true, icon, null, tags);
+
+            options.addOption("Goooood", OptionId.LEAVE);
+            ArrayList<PlanetAPI> planets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
+            planets.remove(targetPlanet);
+            addIntel();
+            Global.getSector().getPersistentData().put(AoDCoreModPlugin.preCollapseFacList, planets);
+            return;
+
+        }
+        if (option == OptionId.END_CONVERSATION_START) {
+            text.addPara("Text about maybe next time starfarer, a bit of dissapointment");
+            options.addOption("Essa", OptionId.LEAVE);
+            return;
+        }
+        if (option == OptionId.LEAVE) {
+            noContinue = true;
+            done = true;
+
+        }
+
+    }
+
+    protected void addIntel() {
+
+        TextPanelAPI text = dialog.getTextPanel();
+
+        PlanetAPI planet = targetPlanet;
+        if (planet != null) {
+            PreCollapseFacIntel intel = new PreCollapseFacIntel(planet, this);
+            intel.setImportant(true);
+            Global.getSector().getIntelManager().addIntel(intel, false, text);
+        }
+
 
     }
 
 }
+
