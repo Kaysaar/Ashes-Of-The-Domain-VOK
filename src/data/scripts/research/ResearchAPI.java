@@ -297,7 +297,7 @@ public class ResearchAPI {
 
     public String removeItemReqFromMarkets(Map.Entry<String, Integer> req, String id) {
         int reqAmount = req.getValue();
-        boolean isNotSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank") || req.getKey().equals("aotd_vok_databank");
+        boolean isNotSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank") || req.getKey().contains("aotd_vok_databank");
         if (isNotSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
             reqAmount -= 1;
             if (req.getKey().equals("domain_artifacts") || req.getKey().equals("water")) {

@@ -1250,7 +1250,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         if (person.hasTag("aotd_resourceful")) {
                             newCalculus = items.getValue() - 1;
 
-                            boolean notCutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank")||items.getKey().equals("aotd_vok_databank");
+                            boolean notCutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank")||items.getKey().contains("aotd_vok_databank");
                             if (notCutting) {
                                 newCalculus += 1;
                             }
@@ -1264,7 +1264,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         }
                         if (person.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)) {
                             newCalculus = items.getValue() - 1;
-                            boolean cutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank")|| items.getKey().equals("aotd_vok_databank");
+                            boolean cutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank")|| items.getKey().contains("aotd_vok_databank");
                             if (!cutting) {
                                 newCalculus += 1;
                             }
@@ -1415,7 +1415,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             if (personAPI.hasTag("aotd_resourceful")) {
                 scientistSpecAbilityPanelTT.addPara("Special Ability", Color.CYAN, 10f);
                 scientistSpecAbilityPanelTT.addPara("Resourceful", Color.ORANGE, 10f);
-                scientistSpecAbilityPanelTT.addPara("Description: That scientist is very cautious and wants to use as little resources to accomplish task as possible\n\nDecrease cost of item for inital research by 1 unit.\n\nThis does not include special databanks", Color.WHITE, 10f);
+                scientistSpecAbilityPanelTT.addPara("Description: That scientist is very cautious and wants to use as little resources to accomplish task as possible\n\nDecrease upkeep of research facilities by 50%.", Color.WHITE, 10f);
             }
             if (personAPI.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)) {
                 scientistSpecAbilityPanelTT.addPara("Special Ability", Color.CYAN, 10f);
