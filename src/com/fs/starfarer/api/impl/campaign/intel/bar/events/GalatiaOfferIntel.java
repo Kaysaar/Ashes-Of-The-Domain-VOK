@@ -58,14 +58,14 @@ public class GalatiaOfferIntel extends BaseIntelPlugin {
         addBulletPoints(info, ListInfoMode.IN_DESC);
     }
     public String getSortString() {
-        return "Galatia Quest";
+        return "Ouroboros";
     }
 
     public String getName() {
         if (isEnded() || isEnding()) {
-            return "Galatia Quest - Finished";
+            return "Ouroboros - Finished";
         }
-        return "Galatia Quest";
+        return "Ouroboros";
     }
     public String getIcon() {
         return Global.getSettings().getSpriteName("intel", "red_planet");
