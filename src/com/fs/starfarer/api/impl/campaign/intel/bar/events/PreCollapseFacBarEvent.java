@@ -134,10 +134,10 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
         }
         if (option == OptionId.PRICE) {
 
-            text.addPara("Price : Money 500k ");
+            text.addPara("Price : Money 100k ");
             options.addOption("Yes", OptionId.END_CONVERSATION);
             options.addOption("No ", OptionId.END_CONVERSATION_START);
-            if (Global.getSector().getPlayerFleet().getCargo().getCredits().get() < 500000) {
+            if (Global.getSector().getPlayerFleet().getCargo().getCredits().get() < 100000) {
                 options.setEnabled(OptionId.END_CONVERSATION, false);
             }
             else{
@@ -147,6 +147,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
         }
         if (option == OptionId.END_CONVERSATION) {
             text.addPara("Telling location and showing location");
+            Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(100000);
             String icon = Global.getSettings().getSpriteName("intel", "red_planet");
             Set<String> tags = new LinkedHashSet<String>();
             tags.add(Tags.INTEL_MISSIONS);

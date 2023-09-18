@@ -2,9 +2,6 @@
 <module version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../Ashes of  The Domain- Vaults of Knowledge">
-      <excludeFolder url="file://$MODULE_DIR$/../../Ashes of  The Domain- Vaults of Knowledge" />
-    </content>
     <content url="file://$MODULE_DIR$/..">
       <sourceFolder url="file://$MODULE_DIR$/../src" isTestSource="false" />
     </content>
