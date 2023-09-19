@@ -37,9 +37,9 @@ public class KaysaarResearchFacility extends BaseIndustry implements EconomyTick
                 market.removeSubmarket(subMarketId);
             }
         }
-        if(AoDUtilis.getResearchAPI().getCurrentResearching()!=null){
+        if(AoDUtilis.getResearchAPI().getCurrentResearcher()!=null){
             int div =1 ;
-            if( AoDUtilis.getResearchAPI().getCurrentResearcher()!=null&&AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.RESOURCEFUL)){
+            if(AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.RESOURCEFUL)){
                 div++;
             }
             if(Global.getSettings().getIndustrySpec(AoDUtilis.getResearchAPI().getCurrentResearching().industryId).hasTag("experimental")){
