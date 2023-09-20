@@ -398,9 +398,8 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             }
             researchAPI.handleOtherModsAvailbility();
             researchAPI.clearResearchFromErrors();
-            setAoDTier0UpgradesIfResearched(researchAPI);
-
             researchAPI.saveResearch(true);
+
 
         }
         try {
@@ -413,11 +412,13 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         }
         clearVanilaUpgrades(AoDUtilis.getResearchAPI());
         setListenersIfNeeded();
+
         configSize = Misc.MAX_COLONY_SIZE;
         RescourceCondition.applyResourceConditionToAllMarkets();
         IndUpgradeListener.applyIndustyUpgradeCondition();
         Global.getSector().getPlayerFaction().getMemory().set(AodMemFlags.AOD_INITALIZED, true);
         cleanUpAdditionalVeilPLanets();
+        setAoDTier0UpgradesIfResearched(AoDUtilis.getResearchAPI());
         CampaignEventListener customlistener = new CampaignEventListener() {
             @Override
             public void reportPlayerOpenedMarket(MarketAPI market) {
