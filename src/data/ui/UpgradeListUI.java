@@ -104,7 +104,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
     public void createCustomDialog(CustomPanelAPI panel, CustomDialogCallback callback) {
         TooltipMakerAPI panelTooltip = panel.createUIElement(WIDTH, HEIGHT, true);
         panelTooltip.addSectionHeading("Select a Upgrade", Alignment.MID, 0f);
-
+        boolean hasPolution = industry.getMarket().hasCondition(Conditions.POLLUTION);
         float opad = 10f;
         float spad = 2f;
 
@@ -546,6 +546,9 @@ public class UpgradeListUI implements CustomDialogDelegate {
         }
 
         panel.addUIElement(panelTooltip).inTL(0.0F, 0.0F);
+        if(!hasPolution){
+            industry.getMarket().removeCondition(Conditions.POLLUTION);
+        }
     }
 
     private String getDayOrDays(int buildTime) {
