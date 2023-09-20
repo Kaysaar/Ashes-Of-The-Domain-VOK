@@ -30,7 +30,8 @@ public class CancelUpgradeUIOverride extends BaseIndustryOptionProvider {
         ArrayList<IndustryOptionData> result = new ArrayList<>();
 
         for (ResearchOption option : AoDUtilis.getResearchAPI().getAllResearchOptions()) {
-            if (option != null && option.hasDowngrade && option.modId != "starter" && ind.isUpgrading() && option.downgradeId.equals(ind.getId())) {
+            IndustrySpecAPI specAPI = Global.getSettings().getIndustrySpec(option.industryId);
+            if (option != null && option.hasDowngrade && !specAPI.hasTag("starter") && ind.isUpgrading() && option.downgradeId.equals(ind.getId())) {
                 IndustryOptionData opt = new IndustryOptionData("Cancel upgrade", AOTD_DOWNGRADE, ind, this);
                 result.add(opt);
                 return result;

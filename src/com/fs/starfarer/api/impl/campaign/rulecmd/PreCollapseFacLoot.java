@@ -124,6 +124,7 @@ public class PreCollapseFacLoot extends BaseCommandPlugin{
             }
         });
         options.clearOptions();
+
         dialog.setPromptText("");
 
 

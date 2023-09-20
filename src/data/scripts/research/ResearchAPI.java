@@ -255,7 +255,7 @@ public class ResearchAPI {
         if (req == null) return true;
 
         int reqAmount = req.getValue();
-        boolean isSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank");
+        boolean isSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank")||req.getKey().equals("aotd_vok_databank");
         if (!isSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
             reqAmount -= 1;
             if (req.getKey().equals("domain_artifacts") || req.getKey().equals("water")) {
@@ -525,7 +525,13 @@ public class ResearchAPI {
     }
 
     public void moveToTopOfQueue(String id) {
-        int index = researchQueue.indexOf(getResearchOption(id));
+        int index =0;
+        for (ResearchOption option : researchQueue) {
+            if(option.industryId.equals(id)){
+                break;
+            }
+            index++;
+        }
         ResearchOption prevTop = researchQueue.get(0);
         ResearchOption newTop = researchQueue.get(index);
         researchQueue.set(index, prevTop);
@@ -533,7 +539,14 @@ public class ResearchAPI {
     }
 
     public void moveToBottomOfQueue(String id) {
-        int index = researchQueue.indexOf(getResearchOption(id));
+        int index =0;
+        for (ResearchOption option : researchQueue) {
+            if(option.industryId.equals(id)){
+                break;
+            }
+            index++;
+        }
+
         ResearchOption prevBot = researchQueue.get(researchQueue.size() - 1);
         ResearchOption newBot = researchQueue.get(index);
         researchQueue.set(index, prevBot);
@@ -701,21 +714,21 @@ public class ResearchAPI {
         if (Global.getSettings().getIndustrySpec(id).hasTag("experimental")||Global.getSettings().getIndustrySpec(id).hasTag("no_databank")) {
             itemsReq.remove("aotd_vok_databank");
         }
-        for (String s : splitedAll) {
-            String[] splitedInstance = s.split(":");
-            if (splitedInstance.length != 2) {
-                return itemsReq;
-            }
-            if (splitedInstance[0].equals("ii_ind_databank")) {
-                itemsReq.remove(splitedInstance[0]);
-            }
-
-
-            if (Integer.parseInt(splitedInstance[1]) > 0) {
-                itemsReq.put(splitedInstance[0], Integer.parseInt(splitedInstance[1]));
-            }
-
-        }
+//        for (String s : splitedAll) {
+//            String[] splitedInstance = s.split(":");
+//            if (splitedInstance.length != 2) {
+//                return itemsReq;
+//            }
+//            if (splitedInstance[0].equals("ii_ind_databank")) {
+//                itemsReq.remove(splitedInstance[0]);
+//            }
+//
+//
+//            if (Integer.parseInt(splitedInstance[1]) > 0) {
+//                itemsReq.put(splitedInstance[0], Integer.parseInt(splitedInstance[1]));
+//            }
+//
+//        }
 
         return itemsReq;
     }
