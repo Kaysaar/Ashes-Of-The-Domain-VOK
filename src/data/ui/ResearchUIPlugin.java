@@ -1264,7 +1264,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         }
                         if (person.hasTag(AodResearcherSkills.SEEKER_OF_KNOWLEDGE)) {
                             newCalculus = items.getValue() - 1;
-                            boolean cutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank")|| items.getKey().contains("aotd_vok_databank");
+                            boolean cutting = items.getKey().equals("hegeheavy_databank") || items.getKey().equals("triheavy_databank") || items.getKey().equals("ii_ind_databank");
                             if (!cutting) {
                                 newCalculus += 1;
                             }

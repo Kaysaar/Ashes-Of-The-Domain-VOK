@@ -45,10 +45,11 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     public static boolean isInColony = false;
     public static String sophia = "sophia";
     public static String opScientist = "opScientist";
-    public static String galatiaScientist  = "galatiaScientist";
+    public static String galatiaScientist = "galatiaScientist";
     public static String explorer = "explorer";
     public int configSize = 6;
     public static String aotdDatabankRepo = "$aodDatabanks";
+    public static String aotdDatabankRepoStatic = "$aodDatabanksStatic";
     public static int maxDatabanks = 5;
     public static String preCollapseFacList = "$preCollapseFacList";
 
@@ -259,7 +260,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                 }
             }
         }
-        Global.getSector().getPersistentData().put(preCollapseFacList,planetsWithFac);
+        Global.getSector().getPersistentData().put(preCollapseFacList, planetsWithFac);
     }
 
     @Override
@@ -324,7 +325,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             databankIds.add(new Pair<>(researchOption.modId, researchOption.industryId));
         }
         Global.getSector().getPersistentData().put(aotdDatabankRepo, databankIds);
-
+        Global.getSector().getPersistentData().put(aotdDatabankRepoStatic, databankIds);
         if (Global.getSector().getPersistentData().containsKey(aotdDatabankRepo)) {
             generatePreCollapseFacilities();
         }
@@ -409,6 +410,12 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
+
+        }
+        if (Global.getSector().getMemory().contains("$Aotd_SaveRev")) {
+            Global.getSector().getMemory().set("$Aotd_SaveRev", true);
+            InsertAdditionalFacilities();
+
 
         }
         clearVanilaUpgrades(AoDUtilis.getResearchAPI());
@@ -617,6 +624,50 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         });
     }
 
+    private static void InsertAdditionalFacilities() {
+        ArrayList<ResearchOption> databanksLoaded = AoDUtilis.getResearchAPI().getAllResearchOptions();
+        ArrayList<String> allDatabanks = (ArrayList<String>) Global.getSector().getPersistentData().get(aotdDatabankRepoStatic);
+        ArrayList<String> newDatabanks = new ArrayList<>();
+        List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
+        Collections.shuffle(starSystems);
+        ArrayList<String> remainingDatabanks = (ArrayList<String>) Global.getSector().getPersistentData().get(aotdDatabankRepo);
+        ArrayList<PlanetAPI> preCollpsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(preCollapseFacList);
+        for (ResearchOption option : databanksLoaded) {
+            if (!allDatabanks.contains(option.industryId)) {
+                newDatabanks.add(option.industryId);
+            }
+        }
+        int remainingPlanetsCount = preCollpsePlanets.size();
+        int remainingDatabanksCount = remainingDatabanks.size();
+        int remainingPlaces = remainingDatabanksCount - (remainingPlanetsCount * 3);
+        int databanksNeededToBeSpawn = newDatabanks.size() - remainingPlaces;
+
+        for (StarSystemAPI starSystem : starSystems) {
+            if (databanksNeededToBeSpawn <= 0) break;
+            for (PlanetAPI planet : starSystem.getPlanets()) {
+                if (planet.isStar()) continue;
+                if (planet.getMemory().is("$isSurveyed", true)) continue;
+                if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
+                if (planet.hasTag(Tags.NOT_RANDOM_MISSION_TARGET)) continue;
+                if (planet.hasTag(Tags.MISSION_ITEM)) continue;
+                if (planet.isGasGiant()) continue;
+                if (planet.getMarket().hasCondition("pre_collapse_facility")) continue;
+                String token = planet.getMarket().addCondition("pre_collapse_facility");
+                MarketConditionAPI marketConditionAPI = planet.getMarket().getSpecificCondition(token);
+                planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_pre_collapse_fac");
+                marketConditionAPI.setSurveyed(false);
+                databanksNeededToBeSpawn -= 3;
+                log.info("Found a planet that satisfies conditions for additional PCF: " + planet.getName() + "  in " + starSystem.getName());
+                preCollpsePlanets.add(planet);
+                break;
+            }
+        }
+        allDatabanks.addAll(newDatabanks);
+        remainingDatabanks.addAll(newDatabanks);
+        Global.getSector().getPersistentData().put(aotdDatabankRepo, remainingDatabanks);
+        Global.getSector().getPersistentData().put(aotdDatabankRepoStatic, allDatabanks);
+    }
+
     private static void cleanUpAdditionalVeilPLanets() {
         if (!Global.getSector().getMemory().contains("$aotd_cleanup")) {
             Global.getSector().getMemory().set("$aotd_cleanup", true);
@@ -636,9 +687,9 @@ public class AoDCoreModPlugin extends BaseModPlugin {
 
     private static void spawnVeilPlanet() {
         if (!Global.getSector().getPersistentData().containsKey("$aotd_v_planet")) {
-            List <StarSystemAPI> starSystems = Global.getSector().getStarSystems();
+            List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
             Collections.shuffle(starSystems);
-            for (StarSystemAPI starSystem :starSystems) {
+            for (StarSystemAPI starSystem : starSystems) {
                 if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
                     for (PlanetAPI planet : starSystem.getPlanets()) {
                         if (planet.isStar()) continue;
@@ -665,11 +716,12 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             }
         }
     }
+
     private static void spawnGalatiaPlanet() {
         if (!Global.getSector().getPersistentData().containsKey("$aotd_galatia_planet")) {
-            List <StarSystemAPI> starSystems = Global.getSector().getStarSystems();
+            List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
             Collections.shuffle(starSystems);
-            for (StarSystemAPI starSystem :starSystems) {
+            for (StarSystemAPI starSystem : starSystems) {
                 if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
                     for (PlanetAPI planet : starSystem.getPlanets()) {
                         if (planet.isStar()) continue;
@@ -684,7 +736,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                         long seed = StarSystemGenerator.random.nextLong();
                         planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SEED, seed);
                         planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_galatia_planet");
-                        planet.getMemoryWithoutUpdate().set("$aotd_galatia_planet",true);
+                        planet.getMemoryWithoutUpdate().set("$aotd_galatia_planet", true);
 
 
                         Global.getSector().getPersistentData().put("$aotd_galatia_planet", planet);
@@ -697,6 +749,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             }
         }
     }
+
     @NotNull
     private static ResearchAPI updateAPI() {
         ResearchAPI updatedApi = new ResearchAPI();
@@ -844,7 +897,8 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         if (prevParams.contains(listOfAdditionalIndustries)) return;
         spec.setParams(prevParams + "," + listOfAdditionalIndustries);
     }
-    private static void clearVanilaUpgrades(ResearchAPI researchAPI){
+
+    private static void clearVanilaUpgrades(ResearchAPI researchAPI) {
         for (ResearchOption allResearchOption : researchAPI.getAllResearchOptions()) {
             Global.getSettings().getIndustrySpec(allResearchOption.industryId).setUpgrade(null);
         }
