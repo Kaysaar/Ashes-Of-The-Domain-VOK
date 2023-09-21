@@ -62,7 +62,7 @@ public class KaysaarExtractiveOperation extends BaseIndustry {
     @Override
     public boolean isAvailableToBuild() {
 
-            return (AoDUtilis.getNormalOreAmount(market)>=-1 || AoDUtilis.getOrganicsAmount(market) >=-1 ||AoDUtilis.getVolatilesAmount(market)>=-1)&&!AoDUtilis.checkForFamilyIndustryInstance(market, Industries.MINING,Industries.MINING,this.id);
+            return (AoDUtilis.getNormalOreAmount(market)>=-1 || AoDUtilis.getOrganicsAmount(market) >=-1 ||AoDUtilis.getVolatilesAmount(market)>=-1 ||AoDUtilis.getRareOreAmount(market)>=-1)&&!AoDUtilis.checkForFamilyIndustryInstance(market, Industries.MINING,Industries.MINING,this.id);
 
     }
 

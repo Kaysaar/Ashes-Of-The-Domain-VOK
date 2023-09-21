@@ -165,7 +165,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     }
 
     private void setAoDTier0UpgradesIfResearched(ResearchAPI researchAPI) {
-        for (ResearchOption researchOption : researchAPI.getAlreadyResearchedTechs()) {
+        for (ResearchOption researchOption : researchAPI.getAllResearchOptions()) {
             if (!researchOption.isResearched) continue;
             if (!researchOption.hasDowngrade) continue;
             IndustrySpecAPI specAPI = Global.getSettings().getIndustrySpec(researchOption.downgradeId);
@@ -399,7 +399,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             }
             researchAPI.handleOtherModsAvailbility();
             researchAPI.clearResearchFromErrors();
-            setAoDTier0UpgradesIfResearched(researchAPI);
+
 
             researchAPI.saveResearch(true);
 
@@ -419,6 +419,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
 
         }
         clearVanilaUpgrades(AoDUtilis.getResearchAPI());
+        setAoDTier0UpgradesIfResearched(AoDUtilis.getResearchAPI());
         setListenersIfNeeded();
         configSize = Misc.MAX_COLONY_SIZE;
         RescourceCondition.applyResourceConditionToAllMarkets();
