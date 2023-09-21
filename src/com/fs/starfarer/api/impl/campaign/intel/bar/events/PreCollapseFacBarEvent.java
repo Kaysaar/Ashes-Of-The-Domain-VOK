@@ -95,7 +95,10 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
 
     @Override
     public boolean shouldShowAtMarket(MarketAPI market) {
-        if(!super.shouldShowAtMarket(market))return false;
+        if(!super.shouldShowAtMarket(market)) return false;
+        if (Global.getSector().getIntelManager().hasIntelOfClass(PreCollapseFacIntel.class)) {
+            return false;
+        }
         ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
         return !preCollapsePlanets.isEmpty();
     }
@@ -183,6 +186,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
         if (option == OptionId.LEAVE) {
             noContinue = true;
             done = true;
+
 
         }
 

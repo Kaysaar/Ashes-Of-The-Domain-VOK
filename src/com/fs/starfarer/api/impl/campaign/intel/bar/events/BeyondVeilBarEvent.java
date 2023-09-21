@@ -56,7 +56,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
         }
         if (getTargetPlanet() == null) return false;
 
-        if (Global.getSector().getIntelManager().hasIntelOfClass(PlanetaryShieldIntel.class)) {
+        if (Global.getSector().getIntelManager().hasIntelOfClass(BeyondVeilIntel.class)) {
             return false;
         }
         if (Global.getSector().getMemory().is("$aotd_veil_accepted", true)) {
