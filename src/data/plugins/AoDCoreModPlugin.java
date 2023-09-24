@@ -20,6 +20,7 @@ import data.Ids.AoDConditions;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
 import data.Ids.AodResearcherSkills;
+import data.listeners.VokDatabankGroundRaidCreator;
 import data.scripts.research.ScientistPersonAPIInterceptor;
 import data.scripts.campaign.econ.listeners.*;
 import data.scripts.research.*;
@@ -31,7 +32,6 @@ import com.fs.starfarer.api.util.Misc;
 
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.json.Cookie;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -68,13 +68,13 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                     planet.getMarket().addIndustry(industryId);
                     if (industryId.equals("vault_aotd")) {
                         if (Planetname.equals("Chicomoztoc")) {
-                            placeSpecialDatabank("hegeheavy_databank", planet);
+                            placeVOKDatabankOnPlanet("hegeheavy", planet);
                         }
                         if (Planetname.equals("Culann")) {
-                            placeSpecialDatabank("triheavy_databank", planet);
+                            placeVOKDatabankOnPlanet("triheavy", planet);
                         }
                         if (Planetname.equals("Byzantium")) {
-                            placeSpecialDatabank("ii_ind_databank", planet);
+                            placeVOKDatabankOnPlanet("ii_stellacastellum", planet);
                         }
 
 
@@ -96,11 +96,9 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         }
     }
 
-    private static void placeSpecialDatabank(String specialDatabank, PlanetAPI planet) {
-        SpecialItemData special;
-        special = new SpecialItemData(specialDatabank, null);
-
-        planet.getMarket().getIndustry("vault_aotd").setSpecialItem(special);
+    private static void placeVOKDatabankOnPlanet(String specialDatabank, PlanetAPI planet) {
+        planet.getMarket().getMemory().set("$aotd_vok_databank",specialDatabank);
+        planet.getMarket().getIndustry("vault_aotd").setSpecialItem(null);
     }
 
 
@@ -125,6 +123,8 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             l.addListener(new AodAdvancedHeavyIndustryApplier(), true);
         if (!l.hasListenerOfClass(AoDIndustrialMightListener.class))
             l.addListener(new AoDIndustrialMightListener(), true);
+        if (!l.hasListenerOfClass(VokDatabankGroundRaidCreator.class))
+            l.addListener(new VokDatabankGroundRaidCreator(), true);
 
     }
 
@@ -340,15 +340,26 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         Global.getSettings().resetCached();
         insertSophia();
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
-        if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
+        if (newGame) {
+            if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
 
-            RandomSetIndustryOnPlanet(AoDIndustries.CLEANROOM_MANUFACTORY, 2, null);
-            RandomSetIndustryOnPlanet(AoDIndustries.PURIFICATION_CENTER, 1, Planets.PLANET_WATER);
-            setIndustriesOnModdedPlanets();
-        } else {
-            setIndustriesOnVanilaPlanets();
-            setIndustriesOnModdedPlanets();
+                RandomSetIndustryOnPlanet(AoDIndustries.CLEANROOM_MANUFACTORY, 2, null);
+                RandomSetIndustryOnPlanet(AoDIndustries.PURIFICATION_CENTER, 1, Planets.PLANET_WATER);
+                setIndustriesOnModdedPlanets();
+            } else {
+                setIndustriesOnVanilaPlanets();
+                setIndustriesOnModdedPlanets();
+            }
         }
+        if (!newGame&&!Global.getSector().getMemory().contains("$aotd_fix_vok")) {
+            Global.getSector().getMemory().set("$aotd_fix_vok", true);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", "vault_aotd", null, null, false, null);
+            setIndustryOnPlanet("Hybrasil", "Culann", "vault_aotd", null, null, false, null);
+            if (Global.getSettings().getModManager().isModEnabled("Imperium")) {
+                setIndustryOnPlanet("Thracia", "Byzantium", "vault_aotd", null, null, false, null);
+            }
+        }
+        Global.getSector().getMemory().set("$aotd_fix_vok", true);
         insertExplorer();
         setVanilaIndustriesDowngrades();
         AoDUtilis.insertGalatiaScientist();
