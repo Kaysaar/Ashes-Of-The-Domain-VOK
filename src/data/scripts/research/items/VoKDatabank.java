@@ -23,33 +23,38 @@ public class VoKDatabank extends BaseSpecialItemPlugin{
     public void init(CargoStackAPI stack) {
         super.init(stack);
         type = getType(itemId);
-        industry = Global.getSettings().getIndustrySpec(stack.getSpecialDataIfSpecial().getData());
+        industryId = stack.getSpecialDataIfSpecial().getData();
+        industry = Global.getSettings().getIndustrySpec(industryId);
+
     }
     @Override
     public void render(float x, float y, float w, float h, float alphaMult,
                        float glowMult, SpecialItemRendererAPI renderer) {
+            if(industryId!=null){
+                SpriteAPI sprite = Global.getSettings().getSprite(industry.getImageName());
+                float dim = 30f;
 
-             SpriteAPI sprite = Global.getSettings().getSprite(industry.getImageName());
-            float dim = 30f;
+                Color bgColor = Global.getSector().getPlayerFaction().getDarkUIColor();
+                bgColor = Misc.setAlpha(bgColor, 255);
+                float pad = 10f;
 
-            Color bgColor = Global.getSector().getPlayerFaction().getDarkUIColor();
-            bgColor = Misc.setAlpha(bgColor, 255);
-            float pad = 10f;
+                y = y + dim + pad;
+                x = x + w - dim - pad;
 
-            y = y + dim + pad;
-            x = x + w - dim - pad;
+                float blX = x-20;
+                float blY = y - dim;
+                float tlX = x-20;
+                float tlY = y;
+                float trX = x + dim;
+                float trY = y;
+                float brX = x + dim;
+                float brY = y - dim;
 
-            float blX = x-20;
-            float blY = y - dim;
-            float tlX = x-20;
-            float tlY = y;
-            float trX = x + dim;
-            float trY = y;
-            float brX = x + dim;
-            float brY = y - dim;
+                renderer.renderBGWithCorners(bgColor, blX - 1, blY - 1, tlX - 1, tlY + 1, trX + 1, trY + 1, brX + 1, brY - 1, 1f, 0f, false);
+                sprite.renderWithCorners(blX, blY, tlX, tlY, trX, trY, brX, brY);
+            }
 
-            renderer.renderBGWithCorners(bgColor, blX - 1, blY - 1, tlX - 1, tlY + 1, trX + 1, trY + 1, brX + 1, brY - 1, 1f, 0f, false);
-            sprite.renderWithCorners(blX, blY, tlX, tlY, trX, trY, brX, brY);
+
     }
 
     @Override
@@ -97,7 +102,6 @@ public class VoKDatabank extends BaseSpecialItemPlugin{
     public boolean hasRightClickAction() {
         return false;
     }
-
     @Override
     public boolean shouldRemoveOnRightClickAction() {
        return false;
@@ -132,4 +136,5 @@ public class VoKDatabank extends BaseSpecialItemPlugin{
         }
         return "-50%";
     }
+
 }
