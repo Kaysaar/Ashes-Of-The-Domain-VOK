@@ -100,7 +100,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
             return false;
         }
         ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
-        return !preCollapsePlanets.isEmpty();
+        return preCollapsePlanets!=null&&!preCollapsePlanets.isEmpty();
     }
 
     public void optionSelected(String optionText, Object optionData) {

@@ -86,7 +86,7 @@ public class GalatiaOfferIntel extends BaseIntelPlugin {
 
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
-        if(founded){
+        if(founded&&Global.getSector().getStarSystem("Galatia")!=null){
             return Global.getSector().getStarSystem("Galatia").getEntityById("station_galatia_academy");
         }
         return planet;

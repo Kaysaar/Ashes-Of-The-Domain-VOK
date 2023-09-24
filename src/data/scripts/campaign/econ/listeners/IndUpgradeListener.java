@@ -11,7 +11,6 @@ public class IndUpgradeListener implements PlayerColonizationListener, EconomyTi
     public static void applyIndustyUpgradeCondition() {
 
         for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
-            if(!m.getFaction().isPlayerFaction()) continue;
             IndUpgradeCondition.applyIndustryUpgradeCondition(m);
         }
 
