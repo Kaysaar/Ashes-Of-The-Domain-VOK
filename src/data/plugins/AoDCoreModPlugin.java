@@ -20,6 +20,7 @@ import data.Ids.AoDConditions;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
 import data.Ids.AodResearcherSkills;
+import data.listeners.PCFPlanetListener;
 import data.listeners.VokDatabankGroundRaidCreator;
 import data.scripts.research.ScientistPersonAPIInterceptor;
 import data.scripts.campaign.econ.listeners.*;
@@ -125,7 +126,8 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             l.addListener(new AoDIndustrialMightListener(), true);
         if (!l.hasListenerOfClass(VokDatabankGroundRaidCreator.class))
             l.addListener(new VokDatabankGroundRaidCreator(), true);
-
+        if (!l.hasListenerOfClass(PCFPlanetListener.class))
+            l.addListener(new PCFPlanetListener(), true);
     }
 
     private void setVanilaIndustriesDowngrades() {
@@ -238,7 +240,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         int databanksInPerseanSector = 0;
         log.info("Initalized generation of pre collapse facilities");
         for (StarSystemAPI starSystem : starSystems) {
-            if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN) || starSystem.getTags().contains(Tags.THEME_REMNANT) || starSystem.getTags().contains(Tags.THEME_DERELICT)) {
+            if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN) || starSystem.getTags().contains(Tags.THEME_REMNANT) || starSystem.getTags().contains(Tags.THEME_DERELICT)||starSystem.getTags().contains("")) {
                 for (PlanetAPI planet : starSystem.getPlanets()) {
                     if (planet.isStar()) continue;
                     if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
@@ -313,19 +315,24 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             setIndustriesOnVanilaPlanets();
             setIndustriesOnModdedPlanets();
         }
-        List<Pair<String, String>> databankIds = new ArrayList<>();
+        ArrayList<String> databankIds = new ArrayList<>();
         for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAllResearchOptions()) {
             if (researchOption.researchTier == 0 || Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("experimental"))
                 continue;
-            if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", true)) {
-                if (researchOption.industryId.equals("triheavy") || (researchOption.industryId.equals("hegeheavy") || (researchOption.industryId.equals("ii_stella_castellum")))) {
+            if (researchOption.industryId.equals("triheavy") || (researchOption.industryId.equals("hegeheavy") || (researchOption.industryId.equals("ii_stella_castellum")))) {
+                if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", false)) {
+                    continue;
+                }
+                else if(!haveNexerelin){
                     continue;
                 }
             }
-            databankIds.add(new Pair<>(researchOption.modId, researchOption.industryId));
+            if(researchOption.isDisabled||researchOption.isResearched)continue;
+            databankIds.add(researchOption.industryId);
         }
         Global.getSector().getPersistentData().put(aotdDatabankRepo, databankIds);
         Global.getSector().getPersistentData().put(aotdDatabankRepoStatic, databankIds);
+        log.info("Current size of repo "+databankIds.size());
         if (Global.getSector().getPersistentData().containsKey(aotdDatabankRepo)) {
             generatePreCollapseFacilities();
         }
@@ -425,10 +432,11 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         }
         if (Global.getSector().getMemory().contains("$Aotd_SaveRev")) {
             Global.getSector().getMemory().set("$Aotd_SaveRev", true);
-            InsertAdditionalFacilities();
+
 
 
         }
+        InsertAdditionalFacilities();
         clearVanilaUpgrades(AoDUtilis.getResearchAPI());
         setAoDTier0UpgradesIfResearched(AoDUtilis.getResearchAPI());
         setListenersIfNeeded();
@@ -644,16 +652,21 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         Collections.shuffle(starSystems);
         ArrayList<String> remainingDatabanks = (ArrayList<String>) Global.getSector().getPersistentData().get(aotdDatabankRepo);
         ArrayList<PlanetAPI> preCollpsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(preCollapseFacList);
-        for (ResearchOption option : databanksLoaded) {
-            if (!allDatabanks.contains(option.industryId)) {
-                newDatabanks.add(option.industryId);
+        for (ResearchOption researchOption : databanksLoaded) {
+            if (allDatabanks.contains(researchOption.industryId)) {
+               continue;
             }
+            if (researchOption.researchTier == 0 || Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("experimental"))
+                continue;
+            if(researchOption.isDisabled||researchOption.isResearched)continue;
+            newDatabanks.add(researchOption.industryId);
         }
+        if(newDatabanks.isEmpty())return;
         int remainingPlanetsCount = preCollpsePlanets.size();
         int remainingDatabanksCount = remainingDatabanks.size();
-        int remainingPlaces = remainingDatabanksCount - (remainingPlanetsCount * 3);
+        int remainingPlaces = (remainingPlanetsCount * maxDatabanks)-remainingDatabanksCount ;
         int databanksNeededToBeSpawn = newDatabanks.size() - remainingPlaces;
-
+        log.info("Remaining databanks to spawn "+newDatabanks.size());
         for (StarSystemAPI starSystem : starSystems) {
             if (databanksNeededToBeSpawn <= 0) break;
             for (PlanetAPI planet : starSystem.getPlanets()) {
@@ -668,7 +681,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                 MarketConditionAPI marketConditionAPI = planet.getMarket().getSpecificCondition(token);
                 planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_pre_collapse_fac");
                 marketConditionAPI.setSurveyed(false);
-                databanksNeededToBeSpawn -= 3;
+                databanksNeededToBeSpawn -= maxDatabanks;
                 log.info("Found a planet that satisfies conditions for additional PCF: " + planet.getName() + "  in " + starSystem.getName());
                 preCollpsePlanets.add(planet);
                 break;
