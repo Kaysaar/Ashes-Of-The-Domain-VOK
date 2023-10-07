@@ -17,7 +17,9 @@ public class ResearchProgressScript implements EveryFrameScript {
     public ResearchAPI researchAPI = (ResearchAPI) Global.getSector().getPersistentData().get(aodTech);
     public boolean firstTick = true;
     public int lastDayChecked = 0;
-
+    public static int interval = 180;
+    public static int staticInteral = 180;
+    public static boolean shouldStartInterval = false;
     @Override
     public boolean isDone() {
         return false;
@@ -55,12 +57,16 @@ public class ResearchProgressScript implements EveryFrameScript {
         }
        if(researchAPI.getResearchFacilitiesQuantity()!=0){
            if(Global.getSector().getMemory().is("$has_built_first_facility",false)){
-               MessageIntel intel = new MessageIntel("Galatia Council wants to see you personally (Go to Galatia)", Misc.getHighlightColor());
-               intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
-               intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
-               Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+               if(Global.getSector().getMemory().is("$aotd_got_core ",false)||!Global.getSector().getMemory().contains("$aotd_got_core")){
+                   MessageIntel intel = new MessageIntel("Galatia Council wants to see you personally (Go to Galatia)", Misc.getHighlightColor());
+                   intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
+                   intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+                   Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+                   Global.getSector().getMemory().set("$has_built_first_facility",true);
+               }
+
            }
-           Global.getSector().getMemory().set("$has_built_first_facility",true);
+
        }
         if(researchAPI.alreadyResearchedAmount()>=17&&researchAPI.alreadyResearchedAmountCertainTier(3)>=1){
             if (Global.getSettings().getModManager().isModEnabled("lunalib"))
@@ -75,6 +81,13 @@ public class ResearchProgressScript implements EveryFrameScript {
 
         sentmessage=false;
         if (newDay()) {
+            if(shouldStartInterval){
+                interval-=1;
+                if(interval<=0){
+                    shouldStartInterval = false;
+                    interval=staticInteral;
+                }
+            }
             if (researchAPI.isResearching()) {
                 hasResearchedin30Days=true;
                 counter=0;

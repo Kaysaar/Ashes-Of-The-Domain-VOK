@@ -12,6 +12,7 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BaseSalvageSpecial;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.plugins.AoDCoreModPlugin;
 import data.plugins.AoDUtilis;
 import data.scripts.research.items.VoKDatabank;
 import data.scripts.research.items.VoKDatabankType;
@@ -107,7 +108,7 @@ public class PreCollapseFacLoot extends BaseCommandPlugin{
         if (!extra.isEmpty()) {
             ListenerUtil.reportExtraSalvageShown(planet);
         }
-        for(int i=0;i<3;i++){
+        for(int i = 0; i< AoDCoreModPlugin.maxDatabanks; i++){
             Pair<String,String> retrieved = retrieveFromRepo(databankRepo);
             if(retrieved!=null){
                 salvage.addSpecial(new SpecialItemData(chooseType(), retrieved.two), 1);
