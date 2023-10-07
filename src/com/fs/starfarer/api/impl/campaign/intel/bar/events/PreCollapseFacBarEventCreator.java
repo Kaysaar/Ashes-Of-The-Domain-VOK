@@ -17,7 +17,7 @@ public class PreCollapseFacBarEventCreator  extends  BaseBarEventCreator {
 
     @Override
     public float getBarEventFrequencyWeight() {
-        return super.getBarEventFrequencyWeight()*30;
+        return super.getBarEventFrequencyWeight()*40;
     }
 
     public float getBarEventActiveDuration() {
@@ -25,7 +25,7 @@ public class PreCollapseFacBarEventCreator  extends  BaseBarEventCreator {
     }
 
     public float getBarEventTimeoutDuration() {
-        return Math.max(0, 30f - (float) Math.random() * 40f);
+        return Math.max(0, 30f - (float) Math.random() * 50f);
     }
 
     @Override
