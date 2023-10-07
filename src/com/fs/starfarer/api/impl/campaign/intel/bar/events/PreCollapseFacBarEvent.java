@@ -7,11 +7,13 @@ import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.impl.campaign.intel.PCFPlanetIntel;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.historian.HistorianBackstory;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.historian.HistorianData;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.combat.entities.terrain.Planet;
 import data.plugins.AoDCoreModPlugin;
+import data.scripts.research.ResearchProgressScript;
 
 import java.awt.*;
 import java.util.*;
@@ -96,11 +98,18 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
     @Override
     public boolean shouldShowAtMarket(MarketAPI market) {
         if(!super.shouldShowAtMarket(market)) return false;
-        if (Global.getSector().getIntelManager().hasIntelOfClass(PreCollapseFacIntel.class)) {
-            return false;
-        }
+
         ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
-        return preCollapsePlanets!=null&&!preCollapsePlanets.isEmpty();
+        ArrayList<PlanetAPI>validPlanets = new ArrayList<>();
+        if(preCollapsePlanets!=null){
+            for (PlanetAPI preCollapsePlanet : preCollapsePlanets) {
+                if(!preCollapsePlanet.getMarket().getSurveyLevel().equals(MarketAPI.SurveyLevel.FULL)){
+                    validPlanets.add(preCollapsePlanet);
+                }
+            }
+        }
+
+        return !validPlanets.isEmpty()&&!ResearchProgressScript.shouldStartInterval;
     }
 
     public void optionSelected(String optionText, Object optionData) {
@@ -173,6 +182,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
             ArrayList<PlanetAPI> planets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
             planets.remove(targetPlanet);
             addIntel();
+            ResearchProgressScript.shouldStartInterval = true;
             Global.getSector().getPersistentData().put(AoDCoreModPlugin.preCollapseFacList, planets);
             return;
 
@@ -198,10 +208,10 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
 
         PlanetAPI planet = targetPlanet;
         if (planet != null) {
-            PreCollapseFacIntel intel = new PreCollapseFacIntel(planet, this);
-            intel.setImportant(true);
+            PCFPlanetIntel intel = new PCFPlanetIntel(planet);
             Global.getSector().getIntelManager().addIntel(intel, false, text);
         }
+
 
 
     }
