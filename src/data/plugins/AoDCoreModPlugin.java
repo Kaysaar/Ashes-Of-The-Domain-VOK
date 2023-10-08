@@ -236,7 +236,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
         List<PlanetAPI> planetsWithFac = new ArrayList<>();
         Collections.shuffle(starSystems);
-        List<Pair<String, String>> databankRepo = AoDUtilis.getDatabankRepo();
+        ArrayList<String> databankRepo = AoDUtilis.getDatabankRepo();
         int databanksInPerseanSector = 0;
         log.info("Initalized generation of pre collapse facilities");
         for (StarSystemAPI starSystem : starSystems) {

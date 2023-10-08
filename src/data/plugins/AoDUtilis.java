@@ -331,8 +331,8 @@ public class AoDUtilis {
         }
         return false;
     }
-    public static List<Pair<String,String>> getDatabankRepo(){
-        return (List<Pair<String, String>>) Global.getSector().getPersistentData().get(aotdDatabankRepo);
+    public static ArrayList<String> getDatabankRepo(){
+        return (ArrayList<String>) Global.getSector().getPersistentData().get(aotdDatabankRepo);
     }
 
 }
