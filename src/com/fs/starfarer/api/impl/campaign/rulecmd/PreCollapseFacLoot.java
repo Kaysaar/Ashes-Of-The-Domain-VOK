@@ -99,7 +99,7 @@ public class PreCollapseFacLoot extends BaseCommandPlugin{
         d.chances = 1;
         d.group = "rare_tech";
         planet.addDropRandom(d);
-        List<Pair<String, String>> databankRepo = AoDUtilis.getDatabankRepo();
+        ArrayList<String> databankRepo = AoDUtilis.getDatabankRepo();
         Collections.shuffle(databankRepo);
         CargoAPI salvage = SalvageEntity.generateSalvage(random, 1f, 1f, 1f, 1f, planet.getDropValue(), planet.getDropRandom());
         CargoAPI extra = BaseSalvageSpecial.getCombinedExtraSalvage(memoryMap);
@@ -109,9 +109,9 @@ public class PreCollapseFacLoot extends BaseCommandPlugin{
             ListenerUtil.reportExtraSalvageShown(planet);
         }
         for(int i = 0; i< AoDCoreModPlugin.maxDatabanks; i++){
-            Pair<String,String> retrieved = retrieveFromRepo(databankRepo);
+            String retrieved = retrieveFromRepo(databankRepo);
             if(retrieved!=null){
-                salvage.addSpecial(new SpecialItemData(chooseType(), retrieved.two), 1);
+                salvage.addSpecial(new SpecialItemData(chooseType(), retrieved), 1);
             }
         }
         salvage.sort();
@@ -153,7 +153,7 @@ public class PreCollapseFacLoot extends BaseCommandPlugin{
         }
         return "aotd_vok_databank_damaged";
     }
-    public Pair<String, String >retrieveFromRepo( List<Pair<String, String>> repo){
+    public String retrieveFromRepo(ArrayList<String> repo){
         if(repo.isEmpty()){
             return null;
         }
