@@ -19,6 +19,7 @@ import data.Ids.AoDIndustries;
 import data.Ids.AodCommodities;
 import data.Ids.AodResearcherSkills;
 import data.plugins.AoDUtilis;
+import data.scripts.research.ReqMetType;
 import data.scripts.research.ResearchAPI;
 import data.scripts.research.ResearchOption;
 import data.scripts.research.items.VoKDatabank;
@@ -1235,7 +1236,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                     Color color1;
                     Color color2;
                     Color color3;
-                    if (researchAPI.hasMetReq(items,wantsToHaveInfoAbout.industryId)) {
+                    if (researchAPI.hasMetReq(items,wantsToHaveInfoAbout.industryId)!= ReqMetType.NOT_MET) {
                         color1 = Misc.getStoryOptionColor();
                         color2 = Misc.getDarkPlayerColor();
                         color3 = Misc.getStoryOptionColor();
@@ -1276,13 +1277,13 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         }
                     }
                     if(items.getKey().contains("aotd_vok_databank")){
-                        CustomPanelAPI vPanel = wantsToKnowResearchReqItem.createCustomPanel(sizeSection / 2.2f, 50, null);
+                        CustomPanelAPI vPanel = wantsToKnowResearchReqItem.createCustomPanel(sizeSection / 2.0f, 50, null);
                         vPanel.getPosition().setLocation(0, 0).inTL(0, index * spacerY);
-                        TooltipMakerAPI vTT = vPanel.createUIElement(sizeSection / 2.2f, 50, false);
+                        TooltipMakerAPI vTT = vPanel.createUIElement(sizeSection / 2.0f, 50, false);
                         vTT.getPosition().inTL(0, 0);
                         vTT.setForceProcessInput(true);
                         ButtonAPI boxBorder = wantsToKnowResearchReqItemTT.addAreaCheckbox("", null, color1,
-                                color2, color3, sizeSection / 2.2f, 50, 0);
+                                color2, color3, sizeSection / 2.0f, 50, 0);
                         boxBorder.getPosition().inTL(0, index * spacerY);
                         boxBorder.setEnabled(false);
                         wantsToKnowResearchReqItemTT.addSpacer(spacerY - 50);
@@ -1290,37 +1291,24 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         vPanel.addUIElement(vTT).inTL(0, 0);
                         wantsToKnowResearchReqItemTT.addComponent(vPanel).inTL(0, index * spacerY);
                     }
-
-                    else if  (Global.getSettings().getSpecialItemSpec(items.getKey()) != null) {
-                        SpecialItemSpecAPI itemReq = Global.getSettings().getSpecialItemSpec(items.getKey());
-                        CustomPanelAPI vPanel = wantsToKnowResearchReqItem.createCustomPanel(sizeSection / 2.2f, 50, null);
-                        vPanel.getPosition().setLocation(0, 0).inTL(0, index * spacerY);
-                        TooltipMakerAPI vTT = vPanel.createUIElement(sizeSection / 2.2f, 50, false);
-                        vTT.getPosition().inTL(0, 0);
-                        vTT.setForceProcessInput(true);
-                        ButtonAPI boxBorder = wantsToKnowResearchReqItemTT.addAreaCheckbox("", null, color1,
-                                color2, color3, sizeSection / 2.2f, 50, 0);
-                        boxBorder.getPosition().inTL(0, index * spacerY);
-                        boxBorder.setEnabled(false);
+                    else {
+                        wantsToKnowResearchReqItemTT.addSectionHeading("Or",Alignment.MID,15f);
                         wantsToKnowResearchReqItemTT.addSpacer(spacerY - 50);
-                        vTT.addPara("Item:" + itemReq.getName() + "\nQuantity: " + newCalculus, Color.ORANGE, 0).getPosition().setLocation(0, 0).inTL(5, 15);
-                        vPanel.addUIElement(vTT).inTL(0, 0);
-                        wantsToKnowResearchReqItemTT.addComponent(vPanel).inTL(0, index * spacerY);
-                    } else {
+                        index++;
                         CommoditySpecAPI itemReq = Global.getSettings().getCommoditySpec(items.getKey());
-                        CustomPanelAPI vPanel = wantsToKnowResearchReqItem.createCustomPanel(sizeSection / 2.2f, 50, null);
+                        CustomPanelAPI vPanel = wantsToKnowResearchReqItem.createCustomPanel(sizeSection / 2.0f, 50, null);
                         vPanel.getPosition().setLocation(0, 0).inTL(0, index * spacerY);
-                        TooltipMakerAPI vTT = vPanel.createUIElement(sizeSection / 2.2f, 50, false);
+                        TooltipMakerAPI vTT = vPanel.createUIElement(sizeSection / 2.0f, 50, false);
                         vTT.getPosition().inTL(0, 0);
                         vTT.setForceProcessInput(true);
                         ButtonAPI boxBorder = wantsToKnowResearchReqItemTT.addAreaCheckbox("", null, color1,
-                                color2, color3, sizeSection / 2.2f, 50, 0);
+                                color2, color3, sizeSection / 2.0f, 50, 0);
                         boxBorder.getPosition().inTL(0, index * spacerY);
                         boxBorder.setEnabled(false);
-                        wantsToKnowResearchReqItemTT.addSpacer(spacerY - 50);
+                        wantsToKnowResearchReqItemTT.addSpacer(spacerY - 40);
                         vTT.addPara("Item:" + itemReq.getName() + "\nQuantity: " + newCalculus, Color.ORANGE, 0).getPosition().setLocation(0, 0).inTL(5, 15);
                         vPanel.addUIElement(vTT).inTL(0, 0);
-                        wantsToKnowResearchReqItemTT.addComponent(vPanel).inTL(0, index * spacerY);
+                        wantsToKnowResearchReqItemTT.addComponent(vPanel).inTL(0, index * spacerY-5);
                     }
                     index++;
                 }
@@ -1896,7 +1884,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(bgColor.getRed() / 255f, bgColor.getGreen() / 255f, bgColor.getBlue() / 255f,
-                bgColor.getAlpha() / 255f * alphaMult);
+                bgColor.getAlpha() / 255f * alphaMult*0.01f);
         GL11.glRectf(x, y, x + w, y + h);
         GL11.glColor4f(1, 1, 1, 1);
         GL11.glPopMatrix();
