@@ -14,9 +14,12 @@ import data.Ids.AodCommodities;
 import data.Ids.AodResearcherSkills;
 import data.plugins.AoDUtilis;
 
+import java.awt.*;
+
 public class KaysaarResearchFacility extends BaseIndustry implements EconomyTickListener {
     public static final float IMMIGRATION_BONUS = 10f;
     public static String subMarketId = "researchfacil";
+
     protected transient SubmarketAPI saved = null;
 
     @Override
@@ -54,6 +57,7 @@ public class KaysaarResearchFacility extends BaseIndustry implements EconomyTick
         else{
             this.getUpkeep().unmodifyFlat("research");
         }
+        Global.getSector().getListenerManager().addListener(this);
 
 
     }
@@ -69,6 +73,7 @@ public class KaysaarResearchFacility extends BaseIndustry implements EconomyTick
             market.removeSubmarket(subMarketId);
 
         }
+        Global.getSector().getListenerManager().removeListener(this);
     }
 
 
@@ -114,6 +119,9 @@ public class KaysaarResearchFacility extends BaseIndustry implements EconomyTick
         if(AoDUtilis.getResearchAPI().getCurrentResearching()!=null){
             tooltip.addPara("Researching: "+AoDUtilis.getResearchAPI().getCurrentResearching().industryName, Misc.getHighlightColor(), 10f);
         }
+        if(this.market.hasCondition("pre_collapse_facility")){
+            tooltip.addPara("With building this facility here, our scientist will be able to analize those ruins", Misc.getPositiveHighlightColor(),10f);
+        }
     }
 
     @Override
@@ -123,7 +131,8 @@ public class KaysaarResearchFacility extends BaseIndustry implements EconomyTick
 
     @Override
     public void reportEconomyMonthEnd() {
-        if(AoDUtilis.getResearchAPI().getCurrentResearcher().hasTag(AodResearcherSkills.EXPLORER)){
+
+        if(this.market.hasCondition("pre_collapse_facility")){
             SubmarketAPI open = market.getSubmarket(subMarketId);
             open.getCargo().addCommodity("research_databank",1);
         }
