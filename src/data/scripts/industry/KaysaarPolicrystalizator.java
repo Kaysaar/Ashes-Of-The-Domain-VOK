@@ -23,9 +23,13 @@ public class KaysaarPolicrystalizator extends BaseIndustry {
         supply(AodCommodities.REFINED_METAL, market.getSize()-4); //1+1+1 3 at size 6
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORE, AodCommodities.PURIFIED_ORE, Commodities.RARE_ORE,AodCommodities.POLYMERS);
-        int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
-        if (deficit.two > maxDeficit) deficit.two = maxDeficit;
-        applyDeficitToProduction(1, deficit, AodCommodities.REFINED_METAL);
+        if(deficit.two>market.getSize()-4){
+            deficit.two = market.getSize()-4;
+            if(deficit.two<0){
+                deficit.two=0;
+            }
+        }
+        applyDeficitToProduction(2, deficit, AodCommodities.REFINED_METAL);
 
         if (!isFunctional()) {
             supply.clear();
