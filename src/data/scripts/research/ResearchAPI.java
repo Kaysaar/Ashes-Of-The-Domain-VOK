@@ -251,13 +251,13 @@ public class ResearchAPI {
         return toReturn;
     }
 
-    public boolean hasMetReq(Map.Entry<String, Integer> req, String id) {
-        if (req == null) return true;
+    public ReqMetType hasMetReq(Map.Entry<String, Integer> req, String id) {
+        if (req == null) return ReqMetType.NOT_MET;
 
         int reqAmount = req.getValue();
+        int reqAmoutUniversal = req.getValue();
         boolean isSpecial = req.getKey().equals("hegeheavy_databank") || req.getKey().equals("triheavy_databank") || req.getKey().equals("ii_ind_databank")||req.getKey().equals("aotd_vok_databank");
         if (!isSpecial && currentResearcher != null && currentResearcher.hasTag("aotd_resourceful")) {
-            reqAmount -= 1;
             if (req.getKey().equals("domain_artifacts") || req.getKey().equals("water")) {
                 reqAmount -= 100;
             }
@@ -283,16 +283,18 @@ public class ResearchAPI {
                 amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, damaged);
                 reqAmount -= amountFromOneMarket;
             }
-            if (Global.getSettings().getSpecialItemSpec(req.getKey()) != null) {
-                SpecialItemData sec = new SpecialItemData(Global.getSettings().getSpecialItemSpec(req.getKey()).getId(), null);
-                float amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, sec);
-                reqAmount -= amountFromOneMarket;
-            } else {
+            else {
                 float amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo().getCommodityQuantity(req.getKey());
-                reqAmount -= amountFromOneMarket;
+                reqAmoutUniversal -= amountFromOneMarket;
             }
         }
-        return reqAmount <= 0;
+        if(reqAmount<=0){
+            return ReqMetType.VOK;
+        }
+        if(reqAmoutUniversal<=0){
+            return ReqMetType.UNIVERSAL;
+        }
+        return ReqMetType.NOT_MET;
     }
 
     public String removeItemReqFromMarkets(Map.Entry<String, Integer> req, String id) {
@@ -325,23 +327,12 @@ public class ResearchAPI {
                     return "damaged";
                 }
 
+            }
 
-            } else if (Global.getSettings().getSpecialItemSpec(req.getKey()) != null) {
-                SpecialItemData sec = new SpecialItemData(Global.getSettings().getSpecialItemSpec(req.getKey()).getId(), null);
-                float amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().getQuantity(CargoAPI.CargoItemType.SPECIAL, sec);
-                if (reqAmount <= 0) {
-                    break;
-                }
-                if (amountFromOneMarket <= reqAmount) {
-                    allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeItems(CargoAPI.CargoItemType.SPECIAL, sec, amountFromOneMarket);
 
-                } else {
-                    allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeItems(CargoAPI.CargoItemType.SPECIAL, sec, reqAmount);
-
-                }
-                reqAmount -= amountFromOneMarket;
-
-            } else {
+        }
+        for (MarketAPI allMarketsWithResearch : getAllMarketsWithResearch()) {
+            if (!req.getKey().equals("aotd_vok_databank")) {
                 float amountFromOneMarket = allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().getCommodityQuantity(req.getKey());
                 if (amountFromOneMarket <= reqAmount) {
                     allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeCommodity(req.getKey(), amountFromOneMarket);
@@ -350,10 +341,11 @@ public class ResearchAPI {
                     allMarketsWithResearch.getSubmarket(subMarketResearch).getCargoNullOk().removeCommodity(req.getKey(), reqAmount);
                 }
                 reqAmount -= amountFromOneMarket;
+
             }
-
-
         }
+        if(reqAmount<=0)return "universal";
+
         return null;
     }
 
@@ -398,7 +390,7 @@ public class ResearchAPI {
         }
         if (getResearchOption(industryId).requieredItems != null && !getResearchOption(industryId).requieredItems.isEmpty() && !getResearchOption(industryId).hasTakenResearchCost) {
             for (Map.Entry<String, Integer> requieredItem : getResearchOption(industryId).requieredItems.entrySet()) {
-                if (!hasMetReq(requieredItem, industryId)) {
+                if (hasMetReq(requieredItem, industryId)==ReqMetType.NOT_MET) {
                     return false;
                 }
 
@@ -584,7 +576,7 @@ public class ResearchAPI {
             int cost = jsonObject.getInt(researchCostLabel);
             boolean isResearched = jsonObject.getBoolean("is_researched");
             ArrayList<String> mustResearched = getResearchRequiredFromCSV(jsonObject.getString(mustResearchedLabel));
-            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequiredFromCSV(jsonObject.getString(reqItemsLabel), tier, id);
+            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequired(jsonObject.getString(reqItemsLabel), tier, id);
             boolean hasDowngrade = jsonObject.getBoolean(hasDowngradeLabel);
             String downgradeId;
             if (hasDowngrade) {
@@ -624,7 +616,7 @@ public class ResearchAPI {
             boolean isResearched = jsonObject.getBoolean("is_researched");
 
             ArrayList<String> mustResearched = getResearchRequiredFromCSV(jsonObject.getString(mustResearchedLabel));
-            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequiredFromCSV(jsonObject.getString(reqItemsLabel), tier, id);
+            HashMap<String, Integer> itemsReqToStartResearch = getItemsRequired(jsonObject.getString(reqItemsLabel), tier, id);
             boolean hasDowngrade = jsonObject.getBoolean(hasDowngradeLabel);
             String downgradeId;
             if (hasDowngrade) {
@@ -705,30 +697,14 @@ public class ResearchAPI {
     }
 
 
-    public HashMap<String, Integer> getItemsRequiredFromCSV(String reqItems, int tier, String id) throws JSONException {
+    public HashMap<String, Integer> getItemsRequired(String reqItems, int tier, String id) throws JSONException {
         HashMap<String, Integer> itemsReq = new HashMap<>();
-
-        String[] splitedAll = reqItems.split(",");
         itemsReq.put("aotd_vok_databank", 1);
-
+        itemsReq.put("research_databank",tier);
         if (Global.getSettings().getIndustrySpec(id).hasTag("experimental")||Global.getSettings().getIndustrySpec(id).hasTag("no_databank")) {
-            itemsReq.remove("aotd_vok_databank");
+            itemsReq.clear();
         }
-//        for (String s : splitedAll) {
-//            String[] splitedInstance = s.split(":");
-//            if (splitedInstance.length != 2) {
-//                return itemsReq;
-//            }
-//            if (splitedInstance[0].equals("ii_ind_databank")) {
-//                itemsReq.remove(splitedInstance[0]);
-//            }
 //
-//
-//            if (Integer.parseInt(splitedInstance[1]) > 0) {
-//                itemsReq.put(splitedInstance[0], Integer.parseInt(splitedInstance[1]));
-//            }
-//
-//        }
 
         return itemsReq;
     }
@@ -953,7 +929,9 @@ public class ResearchAPI {
         ResearchOption researchOptionToInsert = getResearchOption(id);
         if (researchOptionToInsert.requieredItems != null) {
             for (Map.Entry<String, Integer> stringIntegerEntry : researchOptionToInsert.requieredItems.entrySet()) {
-                removeItemReqFromMarkets(stringIntegerEntry, id);
+                if(removeItemReqFromMarkets(stringIntegerEntry, id)!=null){
+                    break;
+                }
             }
             researchOptionToInsert.requieredItems.clear();
             researchOptionToInsert.hasTakenResearchCost = true;
@@ -980,17 +958,20 @@ public class ResearchAPI {
             stopResearch();
         }
         currentResearching = getResearchOption(industryId);
+
         if (currentResearching.requieredItems != null) {
             for (Map.Entry<String, Integer> stringIntegerEntry : currentResearching.requieredItems.entrySet()) {
                 String databank = removeItemReqFromMarkets(stringIntegerEntry, currentResearching.industryId);
                 if (databank != null) {
                     if (databank.equals("pristine")) {
                         currentResearching.typeOfDatabankUsed = VoKDatabankType.PRISTINE;
-                    } else if (databank.equals("decayed")) {
+                    } else if (databank.equals("decayed")||databank.equals("universal")) {
                         currentResearching.typeOfDatabankUsed = VoKDatabankType.DECAYED;
-                    } else {
+                    }
+                    else{
                         currentResearching.typeOfDatabankUsed = VoKDatabankType.DESTROYED;
                     }
+                    break;
                 }
             }
 

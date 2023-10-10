@@ -21,7 +21,7 @@ public class ResearchUIDP implements InteractionDialogPlugin {
         dialog.hideVisualPanel();
         dialog.hideTextPanel();
         dialog.setPromptText("");
-        dialog.setOpacity(0.95f);
+        dialog.setOpacity(0.85f);
 
         optionSelected(null, ResearchUIDP.OptionID.INIT);
     }
