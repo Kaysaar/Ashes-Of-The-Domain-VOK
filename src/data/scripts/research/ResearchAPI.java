@@ -11,6 +11,7 @@ import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.ui.P;
 import data.Ids.AoDIndustries;
 import data.Ids.AodMemFlags;
 import data.Ids.AodResearcherSkills;
@@ -20,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.*;
 
 import lunalib.lunaSettings.LunaSettings;
@@ -388,13 +390,14 @@ public class ResearchAPI {
         if (getResearchFacilitiesQuantity() == 0) {
             return false;
         }
+        ReqMetType type = ReqMetType.UNIVERSAL;
         if (getResearchOption(industryId).requieredItems != null && !getResearchOption(industryId).requieredItems.isEmpty() && !getResearchOption(industryId).hasTakenResearchCost) {
             for (Map.Entry<String, Integer> requieredItem : getResearchOption(industryId).requieredItems.entrySet()) {
-                if (hasMetReq(requieredItem, industryId)==ReqMetType.NOT_MET) {
-                    return false;
-                }
-
+                type = hasMetReq(requieredItem, industryId);
             }
+        }
+        if(type.equals(ReqMetType.NOT_MET)) {
+            return false;
         }
 
         if (!wantsToResearch.requieredIndustriesToResearchIds.isEmpty()) {
@@ -704,6 +707,10 @@ public class ResearchAPI {
         if (Global.getSettings().getIndustrySpec(id).hasTag("experimental")||Global.getSettings().getIndustrySpec(id).hasTag("no_databank")) {
             itemsReq.clear();
         }
+       if(id.equals("triheavy")||id.equals("hegeheavy")||id.equals("ii_stellacastellum")){
+           itemsReq.remove("research_databank");
+       }
+
 //
 
         return itemsReq;
