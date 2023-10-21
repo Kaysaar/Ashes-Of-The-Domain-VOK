@@ -56,6 +56,15 @@ public class AoDUtilis {
                 }
             }
         }
+        for (MarketAPI playerMarket : Misc.getPlayerMarkets(false)) {
+            for (Industry industry : playerMarket.getIndustries()) {
+                if(industry.isFunctional()&&industry.getId().equals("archimedes")&&Global.getSector().getMemory().contains("$aotd_archimedes_event")){
+                    if(toReturn!=0){
+                        toReturn+=0.5f;
+                    }
+                }
+            }
+        }
         return  toReturn;
     }
     public static int getNormalOreAmount(MarketAPI market){
