@@ -274,7 +274,7 @@ public class ResearchAPI {
             }
             if (allMarketsWithResearch.getSubmarket(subMarketResearch) == null) continue;
             if (allMarketsWithResearch.getSubmarket(subMarketResearch).getCargo() == null) continue;
-            if (req.getKey().equals("aotd_vok_databank")) {
+            if (req.getKey().contains("aotd_vok_databank")) {
                 SpecialItemData pristine = new SpecialItemData("aotd_vok_databank_pristine", id);
                 SpecialItemData decayed = new SpecialItemData("aotd_vok_databank_decayed", id);
                 SpecialItemData damaged = new SpecialItemData("aotd_vok_databank_damaged", id);
@@ -394,7 +394,11 @@ public class ResearchAPI {
         if (getResearchOption(industryId).requieredItems != null && !getResearchOption(industryId).requieredItems.isEmpty() && !getResearchOption(industryId).hasTakenResearchCost) {
             for (Map.Entry<String, Integer> requieredItem : getResearchOption(industryId).requieredItems.entrySet()) {
                 type = hasMetReq(requieredItem, industryId);
+                if(!type.equals(ReqMetType.NOT_MET)){
+                    break;
+                }
             }
+
         }
         if(type.equals(ReqMetType.NOT_MET)) {
             return false;
@@ -707,7 +711,7 @@ public class ResearchAPI {
         if (Global.getSettings().getIndustrySpec(id).hasTag("experimental")||Global.getSettings().getIndustrySpec(id).hasTag("no_databank")) {
             itemsReq.clear();
         }
-       if(id.equals("triheavy")||id.equals("hegeheavy")||id.equals("ii_stellacastellum")){
+       if(id.equals("triheavy")||id.equals("hegeheavy")||id.equals("ii_stellacastellum")||id.equals("cheron")){
            itemsReq.remove("research_databank");
        }
 
