@@ -117,6 +117,10 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
     }
 
     public String getIndustryDesc(String industryId) {
+        //Temporary Solution for dynamic description for one industry remember to rewrite this disappointment
+        if(industryId.equals("cheron")&&!Global.getSector().getMemory().contains("$aotd_cheron")){
+            return "[REDACTED - NO DATA FOUND]";
+        }
         for (IndustrySpecAPI indSpec : Global.getSettings().getAllIndustrySpecs()) {
             if (indSpec.getId().equals(industryId)) {
                 return indSpec.getDesc();
@@ -1291,7 +1295,7 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         vPanel.addUIElement(vTT).inTL(0, 0);
                         wantsToKnowResearchReqItemTT.addComponent(vPanel).inTL(0, index * spacerY);
                     }
-                    else {
+                    else if(!Global.getSettings().getIndustrySpec(wantsToHaveInfoAbout.industryId).hasTag("no_databank")) {
                         wantsToKnowResearchReqItemTT.addSectionHeading("Or",Alignment.MID,15f);
                         wantsToKnowResearchReqItemTT.addSpacer(spacerY - 50);
                         index++;
@@ -1438,9 +1442,21 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
             bonusPanelTT.addPara("Unlocked Industry Synergies (Researched 10 or more technologies)\n", Color.ORANGE, 10f);
             bonus = true;
         }
+        boolean haveArchimedes = false;
+        for (MarketAPI playerMarket : Misc.getPlayerMarkets(false)) {
+            if(playerMarket.hasIndustry("archimedes")){
+                haveArchimedes = true;
+                break;
+            }
+        }
+        haveArchimedes= Global.getSector().getMemory().contains("$aotd_archimedes_event");
         if (researchAPI.getResearchFacilitiesQuantity() > 1) {
             bonus = true;
             bonusPanelTT.addPara((researchAPI.getResearchFacilitiesQuantity() - 1) * 10 + "% bonus speed to research (Increase by building more research facilities)", Color.ORANGE, 10f);
+        }
+        if(haveArchimedes){
+            bonusPanelTT.addPara("Archimedes Quantum Supercomputer - 50% bonus towards research speed)\n", Color.ORANGE, 10f);
+            bonus = true;
         }
         if (!bonus) {
             bonusPanelTT.addPara("None At this moment !", Color.RED, 10f);

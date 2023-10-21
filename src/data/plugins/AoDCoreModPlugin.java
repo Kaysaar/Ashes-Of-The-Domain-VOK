@@ -656,7 +656,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             if (allDatabanks.contains(researchOption.industryId)) {
                continue;
             }
-            if (researchOption.researchTier == 0 || Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("experimental"))
+            if (researchOption.researchTier == 0 || Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("experimental")|| Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("no_databank"))
                 continue;
             if(researchOption.isDisabled||researchOption.isResearched)continue;
             newDatabanks.add(researchOption.industryId);

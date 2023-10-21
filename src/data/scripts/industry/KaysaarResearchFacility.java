@@ -1,6 +1,7 @@
 package data.scripts.industry;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
@@ -13,6 +14,7 @@ import com.fs.starfarer.api.util.Misc;
 import data.Ids.AodCommodities;
 import data.Ids.AodResearcherSkills;
 import data.plugins.AoDUtilis;
+import lunalib.lunaSettings.LunaSettings;
 
 import java.awt.*;
 
@@ -62,7 +64,12 @@ public class KaysaarResearchFacility extends BaseIndustry implements EconomyTick
 
     }
 
-
+    @Override
+    public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
+        super.notifyBeingRemoved(mode, forUpgrade);
+        CargoAPI cargoAPI = saved.getCargo();
+        market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addAll(cargoAPI);
+    }
 
     @Override
     public void unapply() {
@@ -131,10 +138,15 @@ public class KaysaarResearchFacility extends BaseIndustry implements EconomyTick
 
     @Override
     public void reportEconomyMonthEnd() {
-
-        if(this.market.hasCondition("pre_collapse_facility")){
-            SubmarketAPI open = market.getSubmarket(subMarketId);
-            open.getCargo().addCommodity("research_databank",1);
+        if (Global.getSettings().getModManager().isModEnabled("lunalib"))
+        {
+            boolean enabled = Boolean.TRUE.equals(LunaSettings.getBoolean("aod_core", "aoTDVOK_CHEAT_DATABANKS"));
+            if(enabled){
+                if(this.market.hasCondition("pre_collapse_facility")){
+                    SubmarketAPI open = market.getSubmarket(subMarketId);
+                    open.getCargo().addCommodity("research_databank",1);
+                }
+            }
         }
     }
 }
