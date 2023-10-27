@@ -5,16 +5,13 @@ import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.GalatiaOfferIntel;
-import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.util.Misc;
-import data.plugins.AoDUtilis;
-import data.scripts.research.ResearchOption;
+import data.kaysaar_aotd_vok.plugins.AoDUtilis;
+import data.kaysaar_aotd_vok.scripts.research.ResearchOption;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class GalatiaGenLoot extends BaseCommandPlugin {
     protected CampaignFleetAPI playerFleet;

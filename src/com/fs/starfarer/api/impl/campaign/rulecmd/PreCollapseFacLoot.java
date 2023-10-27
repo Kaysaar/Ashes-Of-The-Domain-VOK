@@ -6,16 +6,13 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
-import com.fs.starfarer.api.impl.campaign.intel.bar.events.BeyondVeilIntel;
 import com.fs.starfarer.api.impl.campaign.procgen.SalvageEntityGenDataSpec;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BaseSalvageSpecial;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.api.util.Pair;
-import data.plugins.AoDCoreModPlugin;
-import data.plugins.AoDUtilis;
-import data.scripts.research.items.VoKDatabank;
-import data.scripts.research.items.VoKDatabankType;
+import data.kaysaar_aotd_vok.plugins.AoDCoreModPlugin;
+import data.kaysaar_aotd_vok.plugins.AoDUtilis;
+import data.kaysaar_aotd_vok.scripts.research.items.VoKDatabankType;
 
 import java.util.*;
 

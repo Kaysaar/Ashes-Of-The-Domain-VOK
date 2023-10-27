@@ -2,9 +2,9 @@ package data.console;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
-import data.plugins.AoDUtilis;
-import data.scripts.research.ResearchAPI;
-import data.scripts.research.ResearchOption;
+import data.kaysaar_aotd_vok.plugins.AoDUtilis;
+import data.kaysaar_aotd_vok.scripts.research.ResearchAPI;
+import data.kaysaar_aotd_vok.scripts.research.ResearchOption;
 import org.jetbrains.annotations.NotNull;
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.CommonStrings;
