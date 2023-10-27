@@ -4,16 +4,16 @@ name,id,planetary,decivRemove,script,desc,icon,order
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,
-IcDemand,IcDemmand,,TRUE,data.scripts.campaign.econ.conditions.IcDemmand,,graphics/icons/markets/cryosanctum.png,1000
-AodIndUpgrade,AodIndUpgrade,,TRUE,data.scripts.campaign.econ.conditions.IndUpgradeCondition,,graphics/icons/markets/cryosanctum.png,1000
-AoDFoodDemand,AoDFoodDemand,,TRUE,data.scripts.campaign.econ.conditions.AoDFoodDemand,,graphics/icons/markets/am_fuel_facility.png,500
-ReciSup,AodReci,,TRUE,data.scripts.campaign.econ.conditions.AodReci,,graphics/icons/markets/cryosanctum.png,600
-BioSup,AodSub,,TRUE,data.scripts.campaign.econ.conditions.AodSub,,graphics/icons/markets/capital.png,601
-WaterMiningSupply,watterSupplyMining,,TRUE,data.scripts.campaign.econ.conditions.WaterMinningCond,,graphics/icons/markets/capital.png,602
-Industrial Center,aotd_industrial_might,,TRUE,data.scripts.campaign.econ.conditions.IndustrialMightCondition,,graphics/icons/markets/light_industrial.png,603
-AodFoodSup,AodFood,,TRUE,data.scripts.campaign.econ.conditions.AodFoodSup,,graphics/icons/markets/light_industrial.png,603
-BiFrostGateRemoving,bifrost_removal,,TRUE,data.scripts.campaign.econ.conditions.BiFrostGateRemovingCondtion,,graphics/icons/markets/light_industrial.png,604
-Pre Collapse Facility,pre_collapse_facility,,,data.scripts.campaign.econ.conditions.PreCollapseFacility,"On this planet there are many ancient facilities, bearing mark of Domain. Our team suggest, that we can find here valuable data.",graphics/icons/markets/spaceport.png,605
+IcDemand,IcDemmand,,TRUE,data.kaysaar_aotd_vok.scripts.campaign.econ.conditions.IcDemmand,,graphics/icons/markets/cryosanctum.png,1000
+AodIndUpgrade,AodIndUpgrade,,TRUE,data.kaysaar_aotd_vok.scripts.campaign.econ.conditions.IndUpgradeCondition,,graphics/icons/markets/cryosanctum.png,1000
+AoDFoodDemand,AoDFoodDemand,,TRUE,data.kaysaar_aotd_vok.scripts.campaign.econ.conditions.AoDFoodDemand,,graphics/icons/markets/am_fuel_facility.png,500
+ReciSup,AodReci,,TRUE,data.kaysaar_aotd_vok.scripts.campaign.econ.conditions.AodReci,,graphics/icons/markets/cryosanctum.png,600
+BioSup,AodSub,,TRUE,data.kaysaar_aotd_vok.scripts.campaign.econ.conditions.AodSub,,graphics/icons/markets/capital.png,601
+WaterMiningSupply,watterSupplyMining,,TRUE,data.kaysaar_aotd_vok.scripts.campaign.econ.conditions.WaterMinningCond,,graphics/icons/markets/capital.png,602
+Industrial Center,aotd_industrial_might,,TRUE,data.kaysaar_aotd_vok.scripts.campaign.econ.conditions.IndustrialMightCondition,,graphics/icons/markets/light_industrial.png,603
+AodFoodSup,AodFood,,TRUE,data.kaysaar_aotd_vok.scripts.campaign.econ.conditions.AodFoodSup,,graphics/icons/markets/light_industrial.png,603
+BiFrostGateRemoving,bifrost_removal,,TRUE,data.kaysaar_aotd_vok.scripts.campaign.econ.conditions.BiFrostGateRemovingCondtion,,graphics/icons/markets/light_industrial.png,604
+Pre Collapse Facility,pre_collapse_facility,,,data.kaysaar_aotd_vok.scripts.campaign.econ.conditions.PreCollapseFacility,"On this planet there are many ancient facilities, bearing mark of Domain. Our team suggest, that we can find here valuable data.",graphics/icons/markets/spaceport.png,605
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,

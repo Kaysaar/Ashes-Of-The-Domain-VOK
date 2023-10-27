@@ -6,8 +6,8 @@ import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.Ids.AodResearcherSkills;
-import data.plugins.AoDUtilis;
-import data.scripts.research.ResearchAPI;
+import data.kaysaar_aotd_vok.plugins.AoDUtilis;
+import data.kaysaar_aotd_vok.scripts.research.ResearchAPI;
 
 import java.util.List;
 import java.util.Map;

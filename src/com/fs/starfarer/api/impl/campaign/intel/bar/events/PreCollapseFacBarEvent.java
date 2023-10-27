@@ -8,12 +8,9 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.intel.PCFPlanetIntel;
-import com.fs.starfarer.api.impl.campaign.intel.bar.events.historian.HistorianBackstory;
-import com.fs.starfarer.api.impl.campaign.intel.bar.events.historian.HistorianData;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.combat.entities.terrain.Planet;
-import data.plugins.AoDCoreModPlugin;
-import data.scripts.research.ResearchProgressScript;
+import data.kaysaar_aotd_vok.plugins.AoDCoreModPlugin;
+import data.kaysaar_aotd_vok.scripts.research.ResearchProgressScript;
 
 import java.awt.*;
 import java.util.*;
