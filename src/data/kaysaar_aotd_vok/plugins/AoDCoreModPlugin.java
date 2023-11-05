@@ -97,7 +97,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
     }
 
     private static void placeVOKDatabankOnPlanet(String specialDatabank, PlanetAPI planet) {
-        planet.getMarket().getMemory().set("$aotd_vok_databank",specialDatabank);
+        planet.getMarket().getMemory().set("$aotd_vok_databank", specialDatabank);
         planet.getMarket().getIndustry("vault_aotd").setSpecialItem(null);
     }
 
@@ -239,7 +239,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         int databanksInPerseanSector = 0;
         log.info("Initalized generation of pre collapse facilities");
         for (StarSystemAPI starSystem : starSystems) {
-            if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN) || starSystem.getTags().contains(Tags.THEME_REMNANT) || starSystem.getTags().contains(Tags.THEME_DERELICT)||starSystem.getTags().contains("")) {
+            if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN) || starSystem.getTags().contains(Tags.THEME_REMNANT) || starSystem.getTags().contains(Tags.THEME_DERELICT) || starSystem.getTags().contains("")) {
                 for (PlanetAPI planet : starSystem.getPlanets()) {
                     if (planet.isStar()) continue;
                     if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
@@ -314,24 +314,22 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             setIndustriesOnVanilaPlanets();
             setIndustriesOnModdedPlanets();
         }
+        researchAPI.handleOtherModsAvailbility();
         ArrayList<String> databankIds = new ArrayList<>();
         for (ResearchOption researchOption : AoDUtilis.getResearchAPI().getAllResearchOptions()) {
             if (researchOption.researchTier == 0 || Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("experimental"))
                 continue;
-            if (researchOption.industryId.equals("triheavy") || (researchOption.industryId.equals("hegeheavy") || (researchOption.industryId.equals("ii_stella_castellum")))) {
-                if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", false)) {
-                    continue;
-                }
-                else if(!haveNexerelin){
+            if (researchOption.industryId.equals("triheavy") || (researchOption.industryId.equals("hegeheavy") || (researchOption.industryId.equals("ii_stella_castellum")) || (researchOption.industryId.equals("cheron")))) {
+                if (!(haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", true))) {
                     continue;
                 }
             }
-            if(researchOption.isDisabled||researchOption.isResearched)continue;
+            if (researchOption.isDisabled || researchOption.isResearched) continue;
             databankIds.add(researchOption.industryId);
         }
         Global.getSector().getPersistentData().put(aotdDatabankRepo, databankIds);
         Global.getSector().getPersistentData().put(aotdDatabankRepoStatic, databankIds);
-        log.info("Current size of repo "+databankIds.size());
+        log.info("Current size of repo " + databankIds.size());
         if (Global.getSector().getPersistentData().containsKey(aotdDatabankRepo)) {
             generatePreCollapseFacilities();
         }
@@ -357,7 +355,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                 setIndustriesOnModdedPlanets();
             }
         }
-        if (!newGame&&!Global.getSector().getMemory().contains("$aotd_fix_vok")) {
+        if (!newGame && !Global.getSector().getMemory().contains("$aotd_fix_vok")) {
             Global.getSector().getMemory().set("$aotd_fix_vok", true);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", "vault_aotd", null, null, false, null);
             setIndustryOnPlanet("Hybrasil", "Culann", "vault_aotd", null, null, false, null);
@@ -433,9 +431,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             Global.getSector().getMemory().set("$Aotd_SaveRev", true);
 
 
-
         }
-        InsertAdditionalFacilities();
         clearVanilaUpgrades(AoDUtilis.getResearchAPI());
         setAoDTier0UpgradesIfResearched(AoDUtilis.getResearchAPI());
         setListenersIfNeeded();
@@ -444,6 +440,7 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         IndUpgradeListener.applyIndustyUpgradeCondition();
         Global.getSector().getPlayerFaction().getMemory().set(AodMemFlags.AOD_INITALIZED, true);
         cleanUpAdditionalVeilPLanets();
+        InsertAdditionalFacilities();
         CampaignEventListener customlistener = new CampaignEventListener() {
             @Override
             public void reportPlayerOpenedMarket(MarketAPI market) {
@@ -651,21 +648,24 @@ public class AoDCoreModPlugin extends BaseModPlugin {
         Collections.shuffle(starSystems);
         ArrayList<String> remainingDatabanks = (ArrayList<String>) Global.getSector().getPersistentData().get(aotdDatabankRepo);
         ArrayList<PlanetAPI> preCollpsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(preCollapseFacList);
+        boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
         for (ResearchOption researchOption : databanksLoaded) {
-            if (allDatabanks.contains(researchOption.industryId)) {
-               continue;
-            }
-            if (researchOption.researchTier == 0 || Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("experimental")|| Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("no_databank"))
+            if (researchOption.researchTier == 0 || Global.getSettings().getIndustrySpec(researchOption.industryId).hasTag("experimental"))
                 continue;
-            if(researchOption.isDisabled||researchOption.isResearched)continue;
+            if (researchOption.industryId.equals("triheavy") || (researchOption.industryId.equals("hegeheavy") || (researchOption.industryId.equals("ii_stella_castellum")) || (researchOption.industryId.equals("cheron")))) {
+                if (!(haveNexerelin && Global.getSector().getMemoryWithoutUpdate().is("$nexRandAod", true))) {
+                    continue;
+                }
+            }
+            if (researchOption.isDisabled || researchOption.isResearched) continue;
             newDatabanks.add(researchOption.industryId);
         }
-        if(newDatabanks.isEmpty())return;
+        if (newDatabanks.isEmpty()) return;
         int remainingPlanetsCount = preCollpsePlanets.size();
         int remainingDatabanksCount = remainingDatabanks.size();
-        int remainingPlaces = (remainingPlanetsCount * maxDatabanks)-remainingDatabanksCount ;
+        int remainingPlaces = (remainingPlanetsCount * maxDatabanks) - remainingDatabanksCount;
         int databanksNeededToBeSpawn = newDatabanks.size() - remainingPlaces;
-        log.info("Remaining databanks to spawn "+newDatabanks.size());
+        log.info("Remaining databanks to spawn " + newDatabanks.size());
         for (StarSystemAPI starSystem : starSystems) {
             if (databanksNeededToBeSpawn <= 0) break;
             for (PlanetAPI planet : starSystem.getPlanets()) {

@@ -74,7 +74,7 @@ public class GalatiaGenLoot extends BaseCommandPlugin {
             }
         }
         IntelInfoPlugin intel = Global.getSector().getIntelManager().getFirstIntel(GalatiaOfferIntel.class);
-       if( intel!=null){
+       if(intel!=null){
            Global.getSector().getIntelManager().removeIntel(intel);
        }
     }

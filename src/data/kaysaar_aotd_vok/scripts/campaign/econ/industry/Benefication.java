@@ -5,6 +5,8 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
+import com.fs.starfarer.api.ui.Alignment;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.Ids.AodCommodities;
@@ -92,6 +94,13 @@ public class Benefication extends BaseIndustry {
 
         return reasoning;
     }
+
+    @Override
+    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+        tooltip.addSectionHeading("Lost Technology", Alignment.MID,10f);
+        tooltip.addPara("This industry is capable of producing sophisticated resources, that can't be used by normal industries",10f);
+    }
+
     @Override
     public boolean showWhenUnavailable() {
         Map<String,Boolean> researchSaved = (HashMap<String, Boolean>) Global.getSector().getPersistentData().get("researchsaved");

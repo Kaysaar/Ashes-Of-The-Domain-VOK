@@ -9,6 +9,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.intel.PCFPlanetIntel;
 import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.ui.P;
 import data.kaysaar_aotd_vok.plugins.AoDCoreModPlugin;
 import data.kaysaar_aotd_vok.scripts.research.ResearchProgressScript;
 
@@ -82,8 +83,12 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
 
         ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
         Collections.shuffle(preCollapsePlanets);
-        if (!preCollapsePlanets.isEmpty()) {
-            targetPlanet = preCollapsePlanets.get(0);
+        for (PlanetAPI preCollapsePlanet : preCollapsePlanets) {
+            if(!preCollapsePlanet.getMarket().getSurveyLevel().equals(MarketAPI.SurveyLevel.FULL)){
+                targetPlanet = preCollapsePlanet;
+                break;
+            }
+
         }
 
         dialog.getVisualPanel().showPersonInfo(person, true, true);
@@ -177,7 +182,15 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
 
             options.addOption("Finish your drink and leave with the information on the ancient laboratory that already got one scavenger fleet killed.", OptionId.LEAVE);
             ArrayList<PlanetAPI> planets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
-            planets.remove(targetPlanet);
+            int index =0;
+            for (PlanetAPI planet : planets) {
+                if(planet.getId().equals(targetPlanet.getId())){
+                    planets.remove(index);
+                    break;
+
+                }
+                index++;
+            }
             addIntel();
             ResearchProgressScript.shouldStartInterval = true;
             Global.getSector().getPersistentData().put(AoDCoreModPlugin.preCollapseFacList, planets);

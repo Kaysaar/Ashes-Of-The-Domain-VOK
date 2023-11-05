@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
@@ -113,6 +114,9 @@ public class BiFrostGate extends BaseIndustry {
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         super.addPostDemandSection(tooltip, hasDemand, mode);
+        tooltip.addSectionHeading("Experimental Technology", Alignment.MID,10f);
+        tooltip.addPara("This marvel of technology is result of continuous research to push known boundaries even further",10f);
+        tooltip.addPara("Special Perk: Allows moving between other Bifrost Gates like normal Gate without using fuel, but with 30 days cooldown.",Misc.getTooltipTitleAndLightHighlightColor(),10f);
         if (mode.equals(IndustryTooltipMode.NORMAL)) {
             if (gate != null) {
                 if (gate.getMemory().is("$used", true)) {

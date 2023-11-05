@@ -3,6 +3,7 @@ package data.kaysaar_aotd_vok.scripts.campaign.econ.industry;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.*;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
@@ -98,11 +99,12 @@ public class TriTachyonHeavy extends HeavyIndustry {
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
-        if (mode != IndustryTooltipMode.ADD_INDUSTRY || isFunctional()) {
+        tooltip.addSectionHeading("Lost Technology", Alignment.MID,10f);
+        tooltip.addPara("This industry stands out as one of most priced Domain's technological jewels, by using advanced resources, it produces ships of quality that no one have ever saw.",10f);
             float total = 0;
             String totalStr;
             Color h = Misc.getHighlightColor();
-            h = Misc.getNegativeHighlightColor();
+            h = Misc.getPositiveHighlightColor();
             totalStr = "From 1 to 3 ";
 
             float opad = 10f;
@@ -111,7 +113,7 @@ public class TriTachyonHeavy extends HeavyIndustry {
             tooltip.addPara("*This bonus applies for every planet of " + market.getFaction().getDisplayName(),
                     Misc.getGrayColor(), opad);
 
-        }
+
 
 
     }

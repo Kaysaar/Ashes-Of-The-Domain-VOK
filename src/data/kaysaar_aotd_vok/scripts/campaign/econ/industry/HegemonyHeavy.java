@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.*;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
@@ -94,8 +95,11 @@ public class HegemonyHeavy extends BaseIndustry {
 
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
-        //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
-        if (mode != IndustryTooltipMode.ADD_INDUSTRY || isFunctional()) {
+
+        tooltip.addSectionHeading("Lost Technology", Alignment.MID,10f);
+        tooltip.addPara("This industry stands out as one of most priced Domain's technological jewels, by using advanced resources, it can produce ships in vast quantities, without " +
+                "sacrificing production quality!",10f);
+        if (mode != IndustryTooltipMode.ADD_INDUSTRY ) {
                 float total = 0;
             for (MarketAPI factionMarket : Misc.getFactionMarkets(market.getFaction())) {
                 if(factionMarket.hasIndustry("hegeheavy")){
@@ -110,6 +114,7 @@ public class HegemonyHeavy extends BaseIndustry {
                 }
                 float opad = 10f;
                 if (total >= 0) {
+
                     tooltip.addPara("Wide Faction Bonus Fleets : %s", opad, h, totalStr);
                     tooltip.addPara("*This bonus applies for every planet of " + market.getFaction().getDisplayName(),
                             Misc.getGrayColor(), opad);
