@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
@@ -90,7 +91,11 @@ public class StellaManufactorium extends BaseIndustry  {
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         super.addPostDemandSection(tooltip, hasDemand, mode);
+        tooltip.addSectionHeading("Experimental Technology", Alignment.MID,10f);
+        tooltip.addPara("This marvel of technology is result of continuous research to push known boundaries even further",10f);
+        tooltip.addPara("Special Perk: Allows production of colony items by using advanced resources",Misc.getTooltipTitleAndLightHighlightColor(),10f);
         if(mode.equals(IndustryTooltipMode.NORMAL)){
+            tooltip.addSectionHeading("Stellar Forge", Alignment.MID,10f);
             if(canProduce){
                 tooltip.addPara("Currently forged equipments in Manufactorium: ",Color.ORANGE,10f);
                 for (Map.Entry<SMSpecialItem, Float> smSpecialItemFloatEntry : demandForProduction.entrySet()) {

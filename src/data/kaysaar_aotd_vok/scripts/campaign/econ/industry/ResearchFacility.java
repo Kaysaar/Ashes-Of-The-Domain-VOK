@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.Ids.AodResearcherSkills;
@@ -106,9 +107,11 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
         return "The " + market.getFaction().getDisplayName() + " does not support research,as most funds are allocated to military due to Sector instability in recent years";
     }
 
+
+
     @Override
-    protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
-        super.addRightAfterDescriptionSection(tooltip, mode);
+    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+        super.addPostDemandSection(tooltip, hasDemand, mode);
         if (IndustryTooltipMode.NORMAL.equals(mode)) {
             if ( !this.getMarket().getFaction().isPlayerFaction()) {
                 tooltip.addPara("The " + market.getFaction().getDisplayName() + " does not support research,as most funds are allocated to military due to Sector instability in recent years", Misc.getHighlightColor(), 10f);
@@ -119,10 +122,13 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
             tooltip.addPara("Building that structure will enable your faction to research new technologies", Misc.getHighlightColor(), 10f);
         }
         if(AoDUtilis.getResearchAPI().getCurrentResearching()!=null){
+            tooltip.addSectionHeading("Currently Researching", Alignment.MID,10f);
             tooltip.addPara("Researching: "+AoDUtilis.getResearchAPI().getCurrentResearching().industryName, Misc.getHighlightColor(), 10f);
         }
-        if(this.market.hasCondition("pre_collapse_facility")){
-            tooltip.addPara("With building this facility here, our scientist will be able to analize those ruins", Misc.getPositiveHighlightColor(),10f);
+        boolean enabled = Boolean.TRUE.equals(LunaSettings.getBoolean("aod_core", "aoTDVOK_CHEAT_DATABANKS"));
+        if(this.market.hasCondition("pre_collapse_facility")&&enabled){
+            tooltip.addSectionHeading("Pre Collapse Facilities", Alignment.MID,10f);
+            tooltip.addPara("With building this facility here, our scientist will be able to analyze those ruins", Misc.getPositiveHighlightColor(),10f);
         }
     }
 

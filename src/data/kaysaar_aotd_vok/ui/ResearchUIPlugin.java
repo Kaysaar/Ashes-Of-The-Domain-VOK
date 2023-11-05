@@ -1295,9 +1295,11 @@ public class ResearchUIPlugin implements CustomUIPanelPlugin {
                         wantsToKnowResearchReqItemTT.addComponent(vPanel).inTL(0, index * spacerY);
                     }
                     else if(!Global.getSettings().getIndustrySpec(wantsToHaveInfoAbout.industryId).hasTag("no_databank")) {
-                        wantsToKnowResearchReqItemTT.addSectionHeading("Or",Alignment.MID,15f);
-                        wantsToKnowResearchReqItemTT.addSpacer(spacerY - 50);
-                        index++;
+                        if(wantsToHaveInfoAbout.requieredItems.entrySet().size()>=2){
+                            wantsToKnowResearchReqItemTT.addSectionHeading("Or",Alignment.MID,15f);
+                            wantsToKnowResearchReqItemTT.addSpacer(spacerY - 50);
+                            index++;
+                        }
                         CommoditySpecAPI itemReq = Global.getSettings().getCommoditySpec(items.getKey());
                         CustomPanelAPI vPanel = wantsToKnowResearchReqItem.createCustomPanel(sizeSection / 2.0f, 50, null);
                         vPanel.getPosition().setLocation(0, 0).inTL(0, index * spacerY);

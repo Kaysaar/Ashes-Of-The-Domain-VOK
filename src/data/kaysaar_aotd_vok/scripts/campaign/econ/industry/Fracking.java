@@ -3,6 +3,8 @@ package data.kaysaar_aotd_vok.scripts.campaign.econ.industry;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.ui.Alignment;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.Ids.AodCommodities;
@@ -68,7 +70,12 @@ public class Fracking extends BaseIndustry {
         super.unapply();
 
     }
-
+    @Override
+    protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
+        tooltip.addSectionHeading("Lost Technology", Alignment.MID,10f);
+        tooltip.addPara("This industry is capable of producing vast quantities of goods",10f);
+        tooltip.addPara("Unfortunate due to incompatibilities and ensuring safety of our works Mantle Bore can't be used here!",Misc.getNegativeHighlightColor(),10f);
+    }
     @Override
     protected boolean canImproveToIncreaseProduction() {
         return true;

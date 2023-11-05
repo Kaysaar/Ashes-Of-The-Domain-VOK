@@ -647,6 +647,7 @@ public class ResearchAPI {
             } else {
                 String[] splited = hiddenFactorExtraced.split(",");
                 List<String> hiddenFactor = new ArrayList<>(Arrays.asList(splited));
+
                 updateResearchOption(createResearchOption(id, cost, tier, isResearched, mustResearched, itemsReqToStartResearch, hasDowngrade, downgradeId, isHidden, modId, hiddenFactor));
             }
 
