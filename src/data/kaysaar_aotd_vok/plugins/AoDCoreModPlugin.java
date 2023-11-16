@@ -639,7 +639,12 @@ public class AoDCoreModPlugin extends BaseModPlugin {
             }
         });
     }
-
+    public static boolean IsInList(String id , ArrayList<String> list){
+        for (String s : list) {
+            if(s.contains(id)) return true;
+        }
+        return false;
+    }
     private static void InsertAdditionalFacilities() {
         ArrayList<ResearchOption> databanksLoaded = AoDUtilis.getResearchAPI().getAllResearchOptions();
         ArrayList<String> allDatabanks = (ArrayList<String>) Global.getSector().getPersistentData().get(aotdDatabankRepoStatic);
@@ -657,8 +662,9 @@ public class AoDCoreModPlugin extends BaseModPlugin {
                     continue;
                 }
             }
-            if (researchOption.isDisabled || researchOption.isResearched) continue;
+            if (researchOption.isDisabled || researchOption.isResearched||IsInList(researchOption.industryId,allDatabanks)) continue;
             newDatabanks.add(researchOption.industryId);
+
         }
         if (newDatabanks.isEmpty()) return;
         int remainingPlanetsCount = preCollpsePlanets.size();
