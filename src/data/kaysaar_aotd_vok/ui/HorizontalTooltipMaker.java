@@ -2,13 +2,14 @@ package data.kaysaar_aotd_vok.ui;
 
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import org.jetbrains.annotations.NotNull;
 
 public class HorizontalTooltipMaker {
     public TooltipMakerAPI mainTooltip;
     public CustomPanelAPI mainPanel;
     public HorizontalScrollbar horizontalScrollbar;
 
-    public void init(CustomPanelAPI mainPanel,float width, float height, boolean hasVeritcalScrollbar,float trueWidth ){
+    public void init(@NotNull CustomPanelAPI mainPanel, float width, float height, boolean hasVeritcalScrollbar, float trueWidth ){
         this.mainPanel = mainPanel;
         mainTooltip = mainPanel.createUIElement(width,height,hasVeritcalScrollbar);
         horizontalScrollbar = new HorizontalScrollbar(mainPanel.getPosition().getY(),mainPanel.getPosition().getX(),mainTooltip,trueWidth);
