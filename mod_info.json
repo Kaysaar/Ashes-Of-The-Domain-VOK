@@ -4,7 +4,7 @@
 	"author":"Kaysaar",
 	"utility":"false",
 	"version":"2.0.0",
-	"description":"Ashes of the Domain - Vaults of Knowldege: Adds research mechanics to game, independent from other AoTD modules ",	"gameVersion": "0.96a",
+	"description":"Ashes of the Domain - Vaults of Knowledge: Adds research mechanics to game, independent from other AoTD modules ",	"gameVersion": "0.96a",
 	"jars":["jars/Vok.jar"],
 	"dependencies": [ {"id": "MagicLib","name": "MagicLib"} ],
 	"modPlugin":"data.kaysaar.aotd.vok.plugins.AoTDVokModPlugin"
