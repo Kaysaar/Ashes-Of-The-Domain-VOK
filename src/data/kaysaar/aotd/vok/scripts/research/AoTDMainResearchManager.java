@@ -318,7 +318,10 @@ public class AoTDMainResearchManager {
     }
 
     public void setExpeditionFleet(String factionId) {
-        this.getSpecificFactionManager(Global.getSector().getFaction(factionId)).sentFleet();
+        if(this.getSpecificFactionManager(Global.getSector().getFaction(factionId))!=null){
+            this.getSpecificFactionManager(Global.getSector().getFaction(factionId)).sentFleet();
+        }
+
     }
 
     public void saveData() {
@@ -360,6 +363,7 @@ public class AoTDMainResearchManager {
         }
         if (expeditionCounter >= expeditionThreshold*2) {
             expeditionCounter = 0;
+
             setExpeditionFleet(expeditionSender);
             expeditionSender = null;
         }
@@ -408,10 +412,6 @@ public class AoTDMainResearchManager {
     }
 
     public AoTDFactionResearchManager getManagerForPlayer() {
-        FactionAPI factionCommingPlayer = Misc.getCommissionFaction();
-        if (factionCommingPlayer != null) {
-            return getSpecificFactionManager(factionCommingPlayer);
-        }
         return getManagerForPlayerFaction();
     }
 
