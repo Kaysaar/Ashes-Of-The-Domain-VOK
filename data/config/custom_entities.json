@@ -1,37 +1,34 @@
 {
-	
-	"bifrost_gate":{
-		"defaultName":"Bifrost Gate", # used if name=null in addCustomEntity()
-		"nameInText":"bifrost gate",
-		"aOrAn":"an",
-		"defaultRadius":60, # used if radius<0 in addCustomEntity()
-		"interactionImage":"graphics/illustrations/dead_gate.jpg",
-		"icon":"graphics/icons/gate0.png",
-		"iconWidth":20,
-		"iconHeight":20,
-		"sprite":"graphics/stations/bifrost.png",
-		"spriteWidth":96,
-		"spriteHeight":96,
-		#"sprite":"graphics/ships/com_relay.png",
-		#"spriteWidth":178,
-		#"spriteHeight":96,
+	"hypershunt_aotd":{
+		"defaultName":"Coronal Hypershunt", # used if name=null in addCustomEntity()
+		"nameInText":"coronal hypershunt",
+		"shortName":"coronal hypershunt",
+		"aOrAn":"a",
+		"isOrAre":"is",
+		"defaultRadius":150, # used if radius<0 in addCustomEntity()
+		"customDescriptionId":"coronal_tap",
+		"interactionImage":"graphics/illustrations/coronal_tap.jpg",
+		"icon":"graphics/icons/coronal_shunt.png",
+		"iconWidth":32,
+		"iconHeight":32,
+		"sprite":"graphics/stations/coronal_shunt2.png",
+		"spriteWidth":240,
+		"spriteHeight":240,
 		"renderShadow":true,
 		"useLightColor":true,
 		"showInCampaign":true,
 		"showIconOnMap":true,
-		"showNameOnMap":true,
+		"showNameOnMap":false,
 		"scaleNameWithZoom":false,
 		"scaleIconWithZoom":true,
-		"nameColor":[70,200,255,255],
-		"nameShadowColor":[0,0,0,255],
-		#"renderCircleIndicator":false,
+		"tags":["has_interaction_dialog", "coronal_tap", "neutrino_high", "protects_from_corona_in_battle", "not_random_mission_target","station"],
+		"layers":[STATIONS], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
 		"renderCircleIndicator":true,
 		"renderCircleIndicatorSelectionFlash":true,
-		"customDescriptionId":"bifrost_gate",
-		"tags":["bifrost", "neutrino"],
-		"layers":[STATIONS, BELOW_STATIONS], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
-		"pluginClass":"com.fs.starfarer.api.impl.campaign.GateEntityPlugin",
-	}
+		#"pluginClass":"com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin",
+	},	
+	
+
 }
 
 

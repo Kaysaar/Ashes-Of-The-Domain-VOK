@@ -7,16 +7,15 @@ import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.impl.campaign.procgen.SalvageEntityGenDataSpec;
+import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BaseSalvageSpecial;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar_aotd_vok.plugins.AoDCoreModPlugin;
-import data.kaysaar_aotd_vok.plugins.AoDUtilis;
-import data.kaysaar_aotd_vok.scripts.research.items.VoKDatabankType;
+
 
 import java.util.*;
 
-public class PreCollapseFacLoot extends BaseCommandPlugin{
+public class PreCollapseFacLoot extends BaseCommandPlugin {
 
     protected CampaignFleetAPI playerFleet;
     protected SectorEntityToken entity;
@@ -88,7 +87,7 @@ public class PreCollapseFacLoot extends BaseCommandPlugin{
         Random random = Misc.getRandom(seed, 100);
 
         SalvageEntityGenDataSpec.DropData d = new SalvageEntityGenDataSpec.DropData();
-        d.chances = 5;
+        d.chances = 2;
         d.group = "blueprints";
         planet.addDropRandom(d);
 
@@ -96,20 +95,18 @@ public class PreCollapseFacLoot extends BaseCommandPlugin{
         d.chances = 1;
         d.group = "rare_tech";
         planet.addDropRandom(d);
-        ArrayList<String> databankRepo = AoDUtilis.getDatabankRepo();
-        Collections.shuffle(databankRepo);
+
+        d = new SalvageEntityGenDataSpec.DropData();
+        d.chances = 25;
+        d.group = "ashes_research";
+        planet.addDropRandom(d);
+
         CargoAPI salvage = SalvageEntity.generateSalvage(random, 1f, 1f, 1f, 1f, planet.getDropValue(), planet.getDropRandom());
         CargoAPI extra = BaseSalvageSpecial.getCombinedExtraSalvage(memoryMap);
         salvage.addAll(extra);
         BaseSalvageSpecial.clearExtraSalvage(memoryMap);
         if (!extra.isEmpty()) {
             ListenerUtil.reportExtraSalvageShown(planet);
-        }
-        for(int i = 0; i< AoDCoreModPlugin.maxDatabanks; i++){
-            String retrieved = retrieveFromRepo(databankRepo);
-            if(retrieved!=null){
-                salvage.addSpecial(new SpecialItemData(chooseType(), retrieved), 1);
-            }
         }
         salvage.sort();
 
@@ -139,17 +136,7 @@ public class PreCollapseFacLoot extends BaseCommandPlugin{
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
-    public String chooseType(){
-        int rand = getRandomNumber(0,2);
-        VoKDatabankType type = VoKDatabankType.fromInteger(rand);
-        if(type.equals(VoKDatabankType.PRISTINE)){
-            return "aotd_vok_databank_pristine";
-        }
-        if(type.equals(VoKDatabankType.DECAYED)){
-            return "aotd_vok_databank_decayed";
-        }
-        return "aotd_vok_databank_damaged";
-    }
+
     public String retrieveFromRepo(ArrayList<String> repo){
         if(repo.isEmpty()){
             return null;

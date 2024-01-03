@@ -1,13 +1,14 @@
 package com.fs.starfarer.api.impl.campaign.rulecmd;
 
+import com.fs.starfarer.api.impl.campaign.BiFrostGateEntity;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.impl.campaign.BiFrostGateEntity;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar_aotd_vok.plugins.AoDUtilis;
+
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -49,10 +50,24 @@ public class BiFrostCMD extends BaseCommandPlugin {
         return true;
     }
 
+    ArrayList<SectorEntityToken>getAllBifrostGates(){
+        ArrayList<SectorEntityToken> toReturn = new ArrayList<>();
+        for (MarketAPI factionMarket : Misc.getFactionMarkets(Global.getSector().getPlayerFaction())) {
+            for (SectorEntityToken connectedEntity : factionMarket.getConnectedEntities()) {
+                if(connectedEntity.hasTag("bifrost")){
+                    toReturn.add(connectedEntity);
+                }
+            }
+        }
+        if(toReturn.isEmpty()){
+            return null;
+        }
+        return toReturn;
+    }
 
     protected void selectDestination() {
         final ArrayList<SectorEntityToken> gates =
-                new ArrayList<SectorEntityToken>(AoDUtilis.getAllBifrostGates());
+                new ArrayList<>(getAllBifrostGates());
         gates.remove(entity);
         dialog.showCampaignEntityPicker("Select destination", "Destination:", "Initiate transit",
                 Global.getSector().getPlayerFaction(), gates,

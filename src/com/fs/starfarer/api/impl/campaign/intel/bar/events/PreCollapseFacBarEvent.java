@@ -1,17 +1,20 @@
 package com.fs.starfarer.api.impl.campaign.intel.bar.events;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.InteractionDialogAPI;
+import com.fs.starfarer.api.campaign.OptionPanelAPI;
+import com.fs.starfarer.api.campaign.PlanetAPI;
+import com.fs.starfarer.api.campaign.TextPanelAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.intel.PCFPlanetIntel;
+import com.fs.starfarer.api.impl.campaign.intel.bar.events.BaseBarEvent;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.ui.P;
-import data.kaysaar_aotd_vok.plugins.AoDCoreModPlugin;
-import data.kaysaar_aotd_vok.scripts.research.ResearchProgressScript;
+import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
+
 
 import java.awt.*;
 import java.util.*;
@@ -81,7 +84,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
     public void init(InteractionDialogAPI dialog, Map<String, MemoryAPI> memoryMap) {
         super.init(dialog, memoryMap);
 
-        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
+        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList);
         Collections.shuffle(preCollapsePlanets);
         for (PlanetAPI preCollapsePlanet : preCollapsePlanets) {
             if(!preCollapsePlanet.getMarket().getSurveyLevel().equals(MarketAPI.SurveyLevel.FULL)){
@@ -100,8 +103,8 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
     @Override
     public boolean shouldShowAtMarket(MarketAPI market) {
         if(!super.shouldShowAtMarket(market)) return false;
-
-        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
+        if(market.getMemory().is("$aotd_pre_collapse",true))return false;
+        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList);
         ArrayList<PlanetAPI>validPlanets = new ArrayList<>();
         if(preCollapsePlanets!=null){
             for (PlanetAPI preCollapsePlanet : preCollapsePlanets) {
@@ -111,14 +114,14 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
             }
         }
 
-        return !validPlanets.isEmpty()&&!ResearchProgressScript.shouldStartInterval;
+        return !validPlanets.isEmpty();
     }
 
     public void optionSelected(String optionText, Object optionData) {
-        if (!(optionData instanceof PreCollapseFacBarEvent.OptionId)) {
+        if (!(optionData instanceof OptionId)) {
             return;
         }
-        OptionId option = (PreCollapseFacBarEvent.OptionId) optionData;
+        OptionId option = (OptionId) optionData;
 
         OptionPanelAPI options = dialog.getOptionPanel();
         TextPanelAPI text = dialog.getTextPanel();
@@ -181,7 +184,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
                     true, icon, null, tags);
 
             options.addOption("Finish your drink and leave with the information on the ancient laboratory that already got one scavenger fleet killed.", OptionId.LEAVE);
-            ArrayList<PlanetAPI> planets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoDCoreModPlugin.preCollapseFacList);
+            ArrayList<PlanetAPI> planets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList);
             int index =0;
             for (PlanetAPI planet : planets) {
                 if(planet.getId().equals(targetPlanet.getId())){
@@ -192,14 +195,14 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
                 index++;
             }
             addIntel();
-            ResearchProgressScript.shouldStartInterval = true;
-            Global.getSector().getPersistentData().put(AoDCoreModPlugin.preCollapseFacList, planets);
+            market.getMemory().set("$aotd_pre_collapse",true,200);
+            Global.getSector().getPersistentData().put(AoTDMemFlags.preCollapseFacList, planets);
             return;
 
         }
         if (option == OptionId.END_CONVERSATION_START) {
             text.addPara("\"The choice is yours. Should you change your mind, I will be here, but not for long. "+
-                    "A lot of people would like to buy this kind of information, with creds or blood. They just don't know this, yet.\"");
+                    "A lot of people would like to buy this kind of information, with creeds or blood. They just don't know this, yet.\"");
             options.addOption("Take your leave.", OptionId.LEAVE);
             return;
         }

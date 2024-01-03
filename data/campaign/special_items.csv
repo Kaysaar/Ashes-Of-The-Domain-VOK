@@ -1,41 +1,29 @@
 name,id,tags,tech/manufacturer,rarity,base price,stack size,cargo space,baseRaidDanger,icon,sound id,sound id drop,plugin,plugin params,desc,order
-,,,,,,,,,,,,,,,
-# industry-slotted items,,,,,,,,,,,,,,,
-#Corrupted Nanoforge,corrupted_nanoforge,"nanoforge, pather4",Domain Restricted,,50000,1000,1,HIGH,graphics/icons/cargo/nanoforge_corrupted.png,ui_cargo_special_industrial_pickup,ui_cargo_special_industrial_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,"heavyindustry, orbitalworks","A powerful and versatile manufacturing ""black box"", capable of building itself out to an industrial scale, given the necessary raw materials and human assistance.
-
-This one has seen better days, and is incapable of reliably producing defect-free components. Nonetheless, having access to a nanoforge at all is a step up as far as starship construction goes.",139
-#Pristine Nanoforge,pristine_nanoforge,"nanoforge, hist3t, pather4",Domain Restricted,,250000,1000,1,EXTREME,graphics/icons/cargo/nanoforge_pristine.png,ui_cargo_special_industrial_pickup,ui_cargo_special_industrial_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,"heavyindustry, orbitalworks","A powerful and versatile manufacturing ""black box"", capable of building itself out to an industrial scale, given the necessary raw materials and human assistance.
-
-This one is good as new, at least according to its on-board diagnostics. In practice, getting defect-free starship components is still a challenge given the overall state of manufacturing in the Sector, but this nanoforge is as good as it gets.",139.1
-#Synchrotron Core,synchrotron,"hist3t, pather4",Domain Restricted,,250000,1000,1,EXTREME,graphics/icons/cargo/synchrotron_core.png,ui_cargo_special_ultratech_pickup,ui_cargo_special_ultratech_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,fuelprod,"A specialized nanoforge, loaded with firmware and seed nano-tech to build itself out into a Synchrotron that allows industrial-scale antimatter production.",139.2
-#Orbital Fusion Lamp,orbital_fusion_lamp,"hist3t, pather4",Fabrique Orbitale,,150000,1000,1,EXTREME,graphics/icons/cargo/fusion_lamp.png,ui_cargo_special_ultratech_pickup,ui_cargo_special_ultratech_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,population,"A minituarized, variable-output fusion reactor capable of providing ample light and heat to a planet.
-
-Safe operation requires prodigious quantities of volatiles. If the demand is not met, the reactor suffers from potentially hazardous instability, which may lead to an uncontrolled surge in output. Litigation over whether this device is of inherently unsafe design or simply used unsafely were ongoing in Domain courts at the time of the Collapse.",135
-#Hypershunt Tap,coronal_portal,"hist3t, pather8",Domain Restricted,,300000,1000,1,EXTREME,graphics/icons/cargo/hypershunt_tap.png,ui_cargo_special_ultratech_pickup,ui_cargo_special_ultratech_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,population,"A minituarized wormhole interface which can be activated to tap into a nearby coronal hypershunt, providing a colony with virtually unlimited power.
-
-Operation requires industrial quantities of transplutonics, which are at first used to open the wormhole, and then - once the power drawn becomes self-sustaining - is consumed in a complicated ablative process which maintains wormhole stability. Any interruption in supply requires a full shutdown of the tap.",137
-#Autonomous Mantle Bore,mantle_bore,"hist3t, pather4",Eridani-Utopia Terraforming,,80000,1000,1,EXTREME,graphics/icons/cargo/terraforming_bore.png,ui_cargo_special_industrial_pickup,ui_cargo_special_industrial_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,mining,"While it is believed there are no functional control override units remaining in the Sector, the bore itself is capable of independent - if sometimes unpredictable - operation. Automatic-mode failsafes preclude its use on habitable worlds.",140
-#Catalytic Core,catalytic_core,"hist3t, pather4",Ko Combine,,100000,1000,1,EXTREME,graphics/icons/cargo/catalytic_core.png,ui_cargo_special_industrial_pickup,ui_cargo_special_industrial_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,refining,Vastly improves the effectiveness of refining operations by way of a surprising quirk of osmosis physics. Operation requires access to vacuum on a scale difficult to achieve on planets with significant atmospheric pressure.,145
-#Soil Nanites,soil_nanites,"hist3t, pather4",Eridani-Utopia Terraforming,,60000,1000,1,EXTREME,graphics/icons/cargo/soil_nanites.png,ui_cargo_special_biotech_pickup,ui_cargo_special_tech_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,farming,"Enables soil enrichment and recovery at a rate far beyond that at which unaided natural processes perform. Domain Nanite Safety Regulation 4324, subsection 81 prohibits use on worlds with transplutonic ore or volatiles deposits, and unfortunately the built-in failsafe appears to be functional.",150
-#Biofactory Embryo,biofactory_embryo,"hist3t, pather4",Exodyne Biotech,,120000,1000,1,EXTREME,graphics/icons/cargo/biofactory_embryo.png,ui_cargo_special_biotech_pickup,ui_cargo_special_bio_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,lightindustry,"A dizzying array of consumer goods can be grown rather than manufactured. The fully-extruded biofactory only thrives in the delicate balance of sunlight, soil nutrients, and atmospheric conditions a habitable world can provide. Attempts to mimic these conditions in artificial environments always fail, causing the factory to sicken, presumably due to a genetically encoded failsafe.",155
-#Fullerene Spool,fullerene_spool,"hist3t, pather4",Fabrique Orbitale,,150000,1000,1,EXTREME,graphics/icons/cargo/fullerene_spool.png,ui_cargo_special_biotech_pickup,ui_cargo_special_tech_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,"spaceport, megaport",An ultra-strong carbon nanomesh cable that is key to the construction of a space elevator. Greatly improves the efficiency of logistics between the surface of a planet and low orbit.,160
-#Plasma Dynamo,plasma_dynamo,"hist3t, pather4",Fabrique Orbitale,,100000,1000,1,EXTREME,graphics/icons/cargo/plasma_dynamo.png,ui_cargo_special_biotech_pickup,ui_cargo_special_tech_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,mining,"The superconductor-flanged centerpiece of an industrial system which creates a planetary-scale plasma net that enables efficient, spectacular extraction of volatiles from the atmosphere of a suitable gas giant.",165
-#Cryoarithmetic Engine,cryoarithmetic_engine,"hist3t, pather4",Domain Restricted,,200000,1000,1,EXTREME,graphics/icons/cargo/cryoarithmetic_engine.png,ui_cargo_special_ultratech_pickup,ui_cargo_special_ultratech_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,"patrolhq, militarybase, highcommand","A quantum computer that violates the second law of thermodynamics by getting colder instead of hotter while performing computations.
-
-A massive, planet-wide network of tendrils - ending in heatsinks - extrudes itself, using heat to fuel growth and continued computation. The hotter the planet surface, the more effective the computation engine. The unrivaled processing capacity is a boon to logistical and strategic planning.",170
-#Combat Drone Replicator,drone_replicator,"hist3t, pather4",Ko Combine,,60000,1000,1,EXTREME,graphics/icons/cargo/combat_drone_replicator.png,ui_cargo_special_military_pickup,ui_cargo_special_military_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,"grounddefenses, heavybatteries","Mass-produces a number of drone variants, all suited to various tasks related to planetary defense against raids and invasions, as well as local security actions.
-
-Its use was banned by the Domain many cycles prior to the Collapse, so it's surprising to find a working example in the Persean Sector.",175
-,,,,,,,,,,,,,,,
-#Special Items For Shit OP Industries,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
 Hyperdimensional Processor,omega_processor,"no_drop,pather8",[Data Corrupted] Unknown,,10000000,1000,1,EXTREME,graphics/icons/items/hyperdimensional_processor.png,ui_chip_pickup,ui_industry_bp_drop,com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin,researchfacility,"
 A computational device capable of performing calculations that violate both the p = np and Raylah-Byong hyperspace computational interference principles. While it is believed that other such examples of the object are present, the inconsistent readings from sensors and reports of required interfaces has lead to much speculation that it is not of Domain make",200
 ,,,,,,,,,,,,,,,
 #Databank Rework,,,,,,,,,,,,,,,
-VOK Type Databank Pristine,aotd_vok_databank_pristine,,Ouroboros Archives,,20000,1,10,EXTREME,graphics/icons/items/vok_databank_gold.png,ui_chip_pickup,ui_industry_bp_drop,data.scripts.research.items.VoKDatabank,,This databank contains knowledge lost to sands of time.,210
-VOK Type Databank Decayed,aotd_vok_databank_decayed,,Ouroboros Archives,,20000,1,10,EXTREME,graphics/icons/items/vok_databank_gold_decayed.png,ui_chip_pickup,ui_industry_bp_drop,data.scripts.research.items.VoKDatabank,,This databank contains knowledge lost to sands of time.,210
-VOK Type Databank Damaged,aotd_vok_databank_damaged,,Ouroboros Archives,,20000,1,10,EXTREME,graphics/icons/items/vok_databank_gold_destroyed.png,ui_chip_pickup,ui_industry_bp_drop,data.scripts.research.items.VoKDatabank,,This databank contains knowledge lost to sands of time.,210
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
