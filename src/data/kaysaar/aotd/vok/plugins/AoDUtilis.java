@@ -101,7 +101,7 @@ public class AoDUtilis {
         return howMuchToProduce;
     }
     public static boolean checkForItemBeingInstalled(MarketAPI market,String industryId, String itemId) {
-        if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(market.getFaction()).haveResearched(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION)){
+        if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(market.getFaction()).haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
             return true;
         }
         if(market.getIndustry(industryId)==null){

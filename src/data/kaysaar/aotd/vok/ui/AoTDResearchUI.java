@@ -680,7 +680,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                     buttons.clear();
                     mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, null);
                     createUIForTechInfo();
-                    dialog.setOpacity(0.95f);
+                    dialog.setOpacity(1.0f);
                 } else if (mainPanel != null && resetForInfo) {
                     prevOffset = 0;
                     Xoffset = 0;
@@ -717,7 +717,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                 mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, null);
                 mode = UIMODE.SPECIAL_PROJECTS;
                 createUIForSpecialProjects();
-                dialog.setOpacity(0.95f);
+                dialog.setOpacity(1.0f);
 
             }
         }
@@ -737,7 +737,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                 mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, null);
                 mode = UIMODE.SPECIAL_PROJECTS;
                 createUIForSpecialProjects();
-                dialog.setOpacity(0.95f);
+                dialog.setOpacity(1.0f);
             } else {
                 mode = UIMODE.TECH_TREE;
                 panel.removeComponent(mainPanel);
@@ -750,7 +750,8 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         if (mainPanel == null) {
             mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, null);
             createUIForTechInfo();
-            dialog.setOpacity(0.95f);
+            dialog.setOpacity(1.0f);
+
         }
 
 
