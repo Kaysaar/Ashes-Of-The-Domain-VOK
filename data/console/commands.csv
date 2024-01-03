@@ -1,5 +1,0 @@
-command,class,tags,syntax,help
-TestRing,data.console.TestRing,"campaign, testring",testring [one] [two] [three] [four] [five] [six],PLACEHOLDER
-finish_research,data.console.FinishResearch,"campaign, aotd",finish_research (no arguments),PLACEHOLDER
-research_all_technologies,data.console.ResearchAllTechnologies,"campaign, aotd",research_all_technologies,PLACEHOLDER
-,,,,

@@ -9,7 +9,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Ranks;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar_aotd_vok.plugins.AoDUtilis;
 
 import java.awt.*;
 import java.util.LinkedHashSet;
@@ -47,9 +46,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
                 market.getFactionId().equals(Factions.LUDDIC_PATH)) {
             return false;
         }
-        if (AoDUtilis.getResearchAPI().alreadyResearchedAmountCertainTier(3) == 0 ) {
-            return false;
-        }
+
         if (getTargetPlanet() == null) return false;
 
         if (Global.getSector().getIntelManager().hasIntelOfClass(BeyondVeilIntel.class)) {

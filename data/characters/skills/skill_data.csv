@@ -1,6 +1,0 @@
-id,name,order,tier,reqPoints,reqPointsPerExtraSkill,description,author,combat officer,admiral,admin,tags,icon,
-# INDUSTRY,,,,,,,,,,,,,
-# ordnance_expert,Ordnance Expertise,1530,3,1,,"There's more to antimatter fuel than simply just fueling starships. Why, with just a bit of ingenuity, you'll find there's plenty of things which can benefit from a bit of antimatter reactions.",Chapter 15 of The Sindrian Fuel Company: From Dream to Reality,TRUE,,,,graphics/icons/skills/ordnance_expert2.png,
-# Special Skills,,,,,,,,,,,,,
-aotd_resourceful,Resourcefull,25990,0,,,,,FALSE,FALSE,FALSE,"npc_only, deprecated",graphics/icons/skills/surveying.png,
-,,,,,,,,,,,,,

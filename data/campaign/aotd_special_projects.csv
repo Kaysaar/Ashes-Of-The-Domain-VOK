@@ -1,0 +1,17 @@
+id,name,isRepeatable,isDiscoverable,stageMap,stageDuration,projectDescription,plugin,modId,,
+aotd_remanant_project,Remnant Structure Analysis,false,true,"0:option_1:Reverse polarization of field generator:20
+0:option_2:Evacuate entire facility, NOW!:20
+1:option_1_2: Do stuff but for stage 2:20
+1:option_2:Do stuff nr 2 but for stage 2:20
+2:option_2:Do stuff nr 2 but for stage 3:20
+2:option_1_2: Do stuff but for stage 3:20
+3:option_1_2: Do stuff but for stage tr:20","stage_0:40
+stage_1:20
+stage_2:30
+stage_3:40","After several clashes with Remnant fleets we have recovered a few pieces from their ships, in hope of reverse engineering at least a portion of Remnant technology.",data.kaysaar.aotd.vok.scripts.research.researchprojects.RemnantAlgorithmAnalysis,aotd_vok,,
+aotd_nanoforge_restoration,Nanoforge Restoration ,true,true,"0:reset_systems:Reset Nanoforge Systems:20
+0:override_systems:Override System:-200
+1:recon_standard:Reconfigurate Nanoforge by using Standard Template Schematics:40
+1:recon_alpha:Reconfigurate Nanoforge with Alpha Core:20
+1:recon_dont:Don't interfere with Nanoforge internal systems:500","stage_0:20
+stage_1:40",Our scientist are now confidient that we can restore corrupted nanoforges to their pristine version.,data.kaysaar.aotd.vok.scripts.research.researchprojects.NanoforgeRestoration,aotd_vok,,

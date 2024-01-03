@@ -4,12 +4,12 @@ sophiaEncounters,DialogOptionSelected,"$faction.id != pirates
 $faction.id != luddic_path
 $option == marketVisitBar
 $global.aotd_sophia == false
-$global.aotd_can_scientist == true","FireBest BarShuttleDownPrintDesc
+$global.aotd_can_sophia == true","FireBest BarShuttleDownPrintDesc
 BarCMD playAmbience
 AddText ""You make your way inside a bar when suddenly you are approached by a woman with white hair. First thing that catches your attention is a golden mark on her face and a uniform typical for a researcher. As you consider what to say, your thoughts are interrupted by her gentle voice asking you for a drink and 5 minutes of your time""",,"aotdSophiaTalk:Follow
 aotdSophiaDontTalk:Don't follow",
 aotdSophiaTalk,DialogOptionSelected,$option == aotdSophiaTalk,"SaveCurrentVisual
-BeginConversation sophia 
+BeginConversation aotd_sophia 
 $global.aotd_sophia",Both of you sit in the bar ordering a small glass of fine booze. After a moment you hear that her name is Sophia and she is one of researchers from Galatia as you guessed it earlier. “I have heard stories about technological advancements of your faction and  I have come with a proposition for you”,aotdSophiaListen: Listen to proposition,
 aotdSophiaListen,DialogOptionSelected,$option == aotdSophiaListen,,"So getting to the point, I am a seeker of knowledge, Galatia limits me with regulations, but you? You pursue knowledge without any bounds and I want to be part of it . So my question is will you allow my humble person to help you in that matter?
 ","aotdSophiaAgree:Accept Propostion 
@@ -18,7 +18,7 @@ aotdReturn:Decline ,and leave the bar",
 aotdSophiaAgree,DialogOptionSelected,$option == aotdSophiaAgree,"SophiaAgreed  
 AddTextSmall ""$personName joined your faction"" highlight",,aotdReturn: Leave the bar,
 aotdSophiaInfo,DialogOptionSelected,$option == aotdSophiaInfo,"AddTextSmall ""Skill - Resourceful."" highlight
-AddTextSmall  ""Decrease cost of item for initial research by 1 unit. This does not include special databanks"" highlight
+AddTextSmall  ""Decrease cost of item for initial research by 100 units or 1 if given item is research databank. This does not include colony items"" highlight
 ",,,
 aotdReturn,DialogOptionSelected,$option == aotdReturn,"EndConversation DO_NOT_FIRE
 RestoreSavedVisual
@@ -28,41 +28,21 @@ BarCMD showOptions",You return to the bar.,,
 ,,,,,,
 ,,,,,,
 aotdSophiaDontTalk,DialogOptionSelected,$option == aotdSophiaDontTalk,"BarCMD showOptions 
-$global.aotd_sophia = true",,,
+$global.aotd_can_sophia = false",,,
 aotdSophiaIgnore,DialogOptionSelected,$option == aotdSophiaIgnore,"EndConversation DO_NOT_FIRE
 RestoreSavedVisual
 BarCMD showOptions
-$global.aotd_sophia = true",,,
-#RT ,,,,,,
-haveGivenCore,DialogOptionSelected,$option == saic_continueGiveCore score:10000,"$global.aotd_give_core = true 
-CallEvent $saic_eventRef genLootNoCore",,,
-haveTakenCore,DialogOptionSelected,$option == saic_continueTakeCore score:10000,"$global.aotd_give_core = false 
-CallEvent $saic_eventRef genLootWithCore",,,
+$global.aotd_can_sophia=false",,,
 ,,,,,,
-opScientistEncounter,DialogOptionSelected,"$faction.id == tritachyon
-$option == marketVisitBar
-$global.aotd_op_scientist==false
-$global.aotd_can_op_scientist == true
-$global.aotd_give_core == true","FireBest BarShuttleDownPrintDesc
-BarCMD playAmbience
-AddText ""Before you enter the bar a person that looks like an scientist interrupts you""",,opScientistFollow:Continue,
-opScientistFollow,DialogOptionSelected,$option == opScientistFollow,"SaveCurrentVisual
-BeginConversation opScientist 
-$global.$aotd_op_scientist = true","""Ahh, it has been a while since we met. I hope you still recognize me do you ?""","scientistRecognied: Yea, I remember you 
-scientistNotRecognied: I don't know who you are",
-scientistRecognied: ,DialogOptionSelected,$option == scientistRecognied,,"
-""So you still remember , that is refreshing. I can’t simply say how thankful I am to you for sending me that specific Alpha Core. With it I have decoded lost knowledge of Domain’s past. And now as my token of gratitude I would like to help you in your endeavors of rediscovering Domain’s lost secrets. What do you think about my offer ?"" 
-","opScientistAgree:Accept Propostion 
-opScientistInfo:See skills of that scientist
-aotdReturn:Decline ,and leave the bar",
-scientistNotRecognied: ,DialogOptionSelected,$option == scientistNotRecognied,,"""Well can’t blame you , a lot of time passed since i hired you to retrieve that Technology Cache. I hope that the rest of the cache's content was useful for you. I was that one scientist back then who hired you to retrieve a special Alpha Core, which helped me to decipher lost knowledge of Domain’s Past. And now as my token of gratitude I would like to help you in your endeavors of rediscovering Domain’s lost secrets. What do you think about my offer?""","opScientistAgree:Accept Propostion 
-opScientistInfo:See skills of that scientist 
-aotdReturn:Decline ,and leave the bar",
-opScientistAgree,DialogOptionSelected,$option == opScientistAgree,"OpScientistAgreed  
-AddTextSmall ""$personName joined your faction"" highlight",,aotdReturn: Leave the bar,
-opScientistInfo,DialogOptionSelected,$option == opScientistInfo,"AddTextSmall ""Skill - Seeker of Knowledge."" highlight
-AddTextSmall  ""Negate need for special type of databanks for research, but increase amount of days to research technologies that requieres special databank three times more"" highlight
-",,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
 #BIFROST SECTION,,,,,,
 ,,,,,,
 bifrostAccess,OpenInteractionDialog,$customType == bifrost_gate score:1000,"SetShortcut defaultLeave ESCAPE  
@@ -89,67 +69,78 @@ veil_exploreFacility,DialogOptionSelected,$option == veil_explore,,"A tiny shutt
 veil_salvage,DialogOptionSelected,$option == veil_salvage,BeyondQuest genLoot,,,
 ,,,,,,
 ,,,,,,
-#Pre collapse facility,,,,,,
-preCollapse_fac,PopulateOptions,"$market.isSurveyed
+#Pre collapse facility- battle variant,,,,,,
+pre_collapse_orbiting ,OpenInteractionDialog,$aotd_r_expedition_present score:1000,"ShowDefaultVisual
+AoTDPCFEncounter init",,,
+pre_Collapse_bribery,OpenCommLink,$entity.fleetType == aotd_expedition score:10000,AoTDBeginConversation,,,
+pre_collapse_bribery_offer,DialogOptionSelected,$option == aotd_bribery_without_sp,AoTDBribery proposeBribery,,,
+pre_collapse_bribery_offer_succeed,DialogOptionSelected,$option == aotd_bribery_suceed,AoTDPCFEncounter bribery,,,
+preCollapse_continiueAfterDefeatingExpedition,BeatDefendersContinue,,SetShortcut defaultLeave ESCAPE,,0:salBeatDefendersContinue:Continue,
+preCollapse_beatExpedition,BeginSalvage,"$market.isSurveyed
 $market.isPlanetConditionMarketOnly
 $market.mc:pre_collapse_facility
 !$market.aotd_fac_explored
-!$tag:gas_giant","FireBest DissablePreCollapseFacilityWhenNeeded 
-SalvageGenFromSeed
-ShowDefaultVisual
-FireBest SalvageCheckHostile","This planet possess a massive facility, that seems to be a reserarch facility. Scan indicate, that this facility was once one of main centers of research, before Collapse. Our crew suggest, that here we might find some intresting things.",6:preExplore:Venture into Facility,
-preCollapse_hostileNearby,DisableRuinsExploreIfNeeded,HostileFleetNearbyAndAware,SetEnabled preExplore false,"A nearby hostile fleet is tracking your movements, making exploration of the planet impossible.",,
-preCollapse_noHostileNearby,DisableRuinsExploreIfNeeded,!HostileFleetNearbyAndAware,SetEnabled preExplore true,"While long-term exploitation of the resources in these ruins requires a colony, a salvage team can conduct a search for anything of immediate value.",,
-preCollapse_explore,TriggerAutomatedDefenses,"$market.isSurveyed
-$market.isPlanetConditionMarketOnly
-$market.mc:pre_collapse_facility
-!$market.aotd_fac_explored
-!$tag:gas_giant",SalvageDefenderInteraction,"As your fleet moves in closer, sensors detect multiple contacts rising up from the depths of the planet",,
-preCollapse_continiueAfterDefeating,BeatDefendersContinue,,SetShortcut defaultLeave ESCAPE,"Now, that defenders has been defeated  our path to facility is cleared",0:salBeatDefendersContinue:Continue,
-preCollapse_beatDefenders,BeginSalvage,"$market.isSurveyed
-$market.isPlanetConditionMarketOnly
-$market.mc:pre_collapse_facility
-!$market.aotd_fac_explored
-!$tag:gas_giant",SetShortcut defaultLeave ESCAPE,,"0:explore_PreFac:Send a salvage team down to the facility
+!$tag:gas_giant
+!$market.aotd_failed_pre_collapse",SetShortcut defaultLeave ESCAPE,,"0:explore_PreFac:Send a salvage team  to the facility
 100:defaultLeave:Leave",
 explore_PreFacility,DialogOptionSelected,$option == explore_PreFac,,,0:pre_salvage:Pick through the salvage,
 preSalvage,DialogOptionSelected,$option == pre_salvage,"PreCollapseFacLoot genLoot 
 $market.aotd_fac_explored = true",,,
 ,,,,,,
-#Galatia comming with offer,,,,,,
-aotd_galatia_offer,GAPostOpen,"$id == station_galatia_academy 
-!$global.aotd_offer 
-$global.has_built_first_facility score :10000",,"While enetring Galatia, you are being guided to giant room, that seems to be main haul of this station. There is one person waiting for you in corner.",aotdGalatiaOffer:Follow,
-aotd_galatia_offer_more_info,DialogOptionSelected,$option == aotdGalatiaOffer,"SaveCurrentVisual
-BeginConversation galatiaScientist ","Grettings starfarer. Our Council have noticed, that your faction recently started to grasp technology, necessary to run efficient colonies. We as council have offer for you. We will provide you with all basic databanks, necessary to start up colonies, but in return we would like to use your services.",aotdGalatiaOfferQuestion: How much this service will cost?,
-aotd_galatia_offer_details,DialogOptionSelected,$option == aotdGalatiaOfferQuestion,GalatiaOfferQuest showPlanet,"""Basically we ask you to retrieve very important data core, that has been lost on one of planets during our expedition. On tripad you will see it's location. Do you wish to help us ?","aotdGalatiaOfferAgreed:Yes
-aotdGalatiaOfferRefused:No",
-aotd_galatia_accept,DialogOptionSelected,$option == aotdGalatiaOfferAgreed,"EndConversation 
-RestoreSavedVisual
-$global.aotd_offer=true
-GalatiaOfferQuest acceptedQuest","That's the spirit, return with this core, and you shall be rewarded.",,
-aotd_galatia_refuse,DialogOptionSelected,$option == aotdGalatiaOfferRefused,"EndConversation 
-RestoreSavedVisual
-$global.aotd_offer=true
-GalatiaOfferQuest rejectedQuest",,,
-galatia_planet_databank_init,OpenInteractionDialog,$aotd_galatia_planet score:1000,"SalvageGenFromSeed
-ShowDefaultVisual
-FireBest SalvageCheckHostile","When you apporach planet, your sensors are detecting abbandoned facility , where data core should be located.",,
-galatia_planet_defenderDesc,TriggerAutomatedDefenses,$aotd_galatia_planet score:1000,SalvageDefenderInteraction,"As your fleet moves in closer, sensors detect multiple contacts rising up from the depths of the planet",,
-galatia_planet_continueAfterDefeating,BeatDefendersContinue,$aotd_galatia_planet score:1000,,Your fleet finishes its approach to abbandoned facility.,0:salBeatDefendersContinue:Continue,
-galatia_planet_explore,BeginSalvage,$aotd_galatia_planet score:1000,"SetShortcut defaultLeave ESCAPE
-",,"0:gal_explore:Send a salvage team down to the facility and retrieve data
+,,,,,,
+preCollapse_fac,PopulateOptions,"$market.isSurveyed
+$market.isPlanetConditionMarketOnly
+$market.mc:pre_collapse_facility score:10000
+!$market.aotd_fac_explored
+!$tag:gas_giant
+!$market.aotd_failed_pre_collapse","ShowDefaultVisual
+AoTDPCFEncounter init",,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+preCollapse_fac_failed,PopulateOptions,"$market.isSurveyed
+$market.isPlanetConditionMarketOnly
+$market.mc:pre_collapse_facility
+!$market.aotd_fac_explored
+!$tag:gas_giant
+$market.aotd_failed_pre_collapse","FireBest DissablePreCollapseFacilityWhenNeeded
+FireAll PCFFailed",,,
+preCollapse_fac_failed1,PCFFailed,"$market.isSurveyed
+$market.isPlanetConditionMarketOnly
+$market.mc:pre_collapse_facility
+!$market.aotd_fac_explored
+!$tag:gas_giant
+$market.aotd_failed_pre_collapse","AoTDPCFFailed removeCondition 
+SetShortcut defaultLeave ESCAPE",Unfortuanelty previous fleet have cleared entire planet from all of valuable data. There is nothing left valuable for us ,0:aotd_leave:Leave,
+preCollapse_fac_failed2,DialogOptionSelected,$option == aotd_leave,AoTDPCFFailed dismiss,,,
+,,,,,,
+#Coronal Rework ,,,,,,
+,,,,,,
+cTap_defenderDesc_Override,TriggerAutomatedDefenses,$customType == coronal_tap score:10000,SalvageDefenderInteraction,"As your $shipOrFleet moves into a close holding orbit, an executive summary of the hypershunt's specifications is helpfully presented by your TriPad's pseudo-AI assistant.
+
+The bridge sounds an alert as several previously undifferentiated shapes detach themselves from the superstructure and smoothly accelerate towards your fleet just as you finish reading, ""-and for reasons of safety, automated defense drones are no longer a standard feature.""
+
+Your tactical officer waves for your attention, ""We're close enough to the magfield generated by the megastructure that the anticipated combat volume should be unaffected by the star's corona. Mostly. However,"" they examine their console, ""The hostiles, they're... unknown profile. Incoming fast."" They are starting to look concerned, and in a brittle voice say, ""This might be something new, captain.""""",,
+cTap_infoText_Override,BeginSalvage,"$customType == coronal_tap score:10000
+!$usable 
+!$colonized",SetShortcut defaultLeave ESCAPE,"Salvage crews board the structure at key points and soon reports come in of extensive wear and damage. It is difficult to assess the entire structure in detail, but it is clear that it is not operable in its current state.
+
+However, as with most mega-scale Domain technology from the late pre-Collapse era, the $nameInText features fantastic self-repair capabilities which requires only sufficient resources to be made available.
+
+Regrettably, the self-repair systems have sustained damage, though they are recoverable. Our imperative is to establish a compact presence on-site. We've identified secure space within the Hypershunt, earmarked for conversion into living quarters. Due to spatial constraints, our presence can accommodate no more than 100 crew members, tasked with overseeing the restoration project for the Hypershunt.","0:aotd_colonize_hypershunt:Colonize Hypershunt
 100:defaultLeave:Leave",
-galatia_salvage,DialogOptionSelected,$option == gal_explore,"$global.aotd_got_core = true
-GalatiaOfferQuest scavenge",,100:defaultLeave:Leave Facility with Data Core,
-galatia_completed,GAPostOpen,"$id == station_galatia_academy 
-!$global.aotd_got_databank
-$global.aotd_got_core 
-$global.aotd_offer score :10000","SaveCurrentVisual
-BeginConversation galatiaScientist ","Greeting, starfarer. I assume you got a data core right?",0:galatia_give_core:Give data core to scientist,
-galatia_give_data_core,DialogOptionSelected,$option == galatia_give_core,,"Congratulations, we are thankful for your services, here is your reward, access to these databanks.",0:galatia_reward: Claim your reward,
-galatia_take_reward,DialogOptionSelected,$option == galatia_reward,"EndConversation 
-RestoreSavedVisual
-GalatiaGenLoot genLoot
-AddTextSmall ""Recieved Galatia Databanks"" highlight
-$global.aotd_got_databank = true",,100:defaultLeave:Leave,
+cTap_infoText_Restoration,DialogOptionSelected,$option == aotd_colonize_hypershunt,"$crewReq = 100 0
+$machineReq = 1500 0
+ShowResCost crew $crewReq heavy_machinery $machineReq true 
+FireBest CTapColonyCheckIfCan
+FireBest CTapColonyDisableIfNeeded
+SetShortcut defaultLeave ESCAPE",,"0:aotd_colonize_hypershunt_confrim:Establish a Colony
+100:defaultLeave:Leave",
+cTapColonyCheckIfCan,CTapColonyCheckIfCan,"$player.heavy_machinery >= $machineReq 
+$player.crew >= $crewReq",$canAfford = true 0,,,
+cTapColonyDisableIfNeeded,CTapColonyDisableIfNeeded,!$canAfford,SetEnabled aotd_colonize_hypershunt_confrim false,,,
+ctapColonyEstablishing,DialogOptionSelected,$option == aotd_colonize_hypershunt_confrim,"AoTDHypershuntColonization
+DismissDialog",,,

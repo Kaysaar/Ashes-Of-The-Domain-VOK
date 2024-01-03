@@ -2,10 +2,8 @@ package com.fs.starfarer.api.impl.campaign.intel.bar.events;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.intel.bar.PortsideBarEvent;
-import com.fs.starfarer.api.impl.campaign.intel.bar.events.historian.HistorianBarEvent;
-import com.fs.starfarer.api.impl.campaign.intel.bar.events.historian.HistorianBarEventCreator;
 
-public class PreCollapseFacBarEventCreator  extends  BaseBarEventCreator {
+public class PreCollapseFacBarEventCreator  extends BaseBarEventCreator {
     public PortsideBarEvent createBarEvent() {
         return new PreCollapseFacBarEvent();
     }
