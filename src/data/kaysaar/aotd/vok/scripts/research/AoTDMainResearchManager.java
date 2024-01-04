@@ -339,10 +339,11 @@ public class AoTDMainResearchManager {
             weight.put(factionResearchManager.getFaction().getId(), factionResearchManager.pointTowardsExpedition);
         }
 
+        if(Global.getSector().getClock().getCycle()>=210){
             expeditionCounter += Global.getSector().getClock().convertToDays(amount);
 
-
-        if (expeditionCounter >= expeditionThreshold && expeditionSender == null&&Global.getSector().getClock().getCycle()>=210) {
+        }
+        if (expeditionCounter >= expeditionThreshold && expeditionSender == null) {
             expeditionSender = pickFactionForExpedition();
             IntelManagerAPI intelManager = Global.getSector().getIntelManager();
 
@@ -361,7 +362,7 @@ public class AoTDMainResearchManager {
             intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
             Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO);
         }
-        if (expeditionCounter >= expeditionThreshold*2) {
+        if (expeditionCounter >= expeditionThreshold*2&&expeditionSender!=null) {
             expeditionCounter = 0;
 
             setExpeditionFleet(expeditionSender);
@@ -380,6 +381,7 @@ public class AoTDMainResearchManager {
     }
 
     public AoTDFactionResearchManager getSpecificFactionManager(FactionAPI factionAPI) {
+        if(factionAPI==null)return null;
         for (AoTDFactionResearchManager factionResearchManager : factionResearchManagers) {
             if (factionResearchManager.getFaction().getId().equals(factionAPI.getId())) return factionResearchManager;
         }
