@@ -278,7 +278,7 @@ public class TechTreeResearchOptionPanel extends UiPanel {
             d = " day";
         }
         d += " to finish research";
-        if (AoTDMainResearchManager.getInstance().getSpecificFactionManager(Global.getSector().getPlayerFaction()).getCurrentFocus() != null && AoTDMainResearchManager.getInstance().getSpecificFactionManager(Global.getSector().getPlayerFaction()).getCurrentFocus().
+        if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus() != null && AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().
                 Id.equals(TechToResearch.Id)) {
             LabelAPI labelAPI = vTT.addPara((int) (days) + d, Misc.getBasePlayerColor(), 10f);
             labelAPI.getPosition().inTL((AoTDUiComp.WIDTH_OF_TECH_PANEL - 1) / 2 - (labelAPI.computeTextWidth(labelAPI.getText())) / 2, 103);
