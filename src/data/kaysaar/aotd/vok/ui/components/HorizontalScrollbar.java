@@ -86,6 +86,16 @@ public class HorizontalScrollbar {
 
 
         }
+        else{
+            float begining = startingX;
+            float currentOffset = scrollbarX-begining;
+            float percent = 0;
+            percent = currentOffset/panelWidth;
+            currOffset = -(trueWidth*percent);
+            if(boundTooltip.getExternalScroller().getXOffset()!=currOffset){
+                boundTooltip.getExternalScroller().setXOffset(currOffset);
+            }
+        }
     }
 
     public void processInputForScrollbar(List<InputEventAPI> events,float panelWidth) {

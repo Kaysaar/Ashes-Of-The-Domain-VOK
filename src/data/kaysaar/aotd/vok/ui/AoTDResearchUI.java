@@ -89,7 +89,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
     ResearchOption researchingBeforeUI = AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus();
     ResearchOption researching = AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus();
     ResearchOption prevResearching = null;
-    AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayer();
+    AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction();
     ResearchCenterPanel researchCenterPanelUI;
     HelpPanel helpButtonPanelYU;
     SpecialProjectButtonPanel buttonPanelUI;
@@ -394,7 +394,6 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
 
             if (horizontalTooltipMaker != null && horizontalTooltipMaker.getHorizontalScrollbar() != null&&horizontalTooltipMaker.mainPanel!=null) {
                 horizontalTooltipMaker.getHorizontalScrollbar().displayScrollbar(Misc.getDarkPlayerColor(), alphaMult);
-                horizontalTooltipMaker.getHorizontalScrollbar().handleMouseDragging(horizontalTooltipMaker.mainPanel.getPosition().getWidth());
             }
 //            if (techTreeCoreUI != null && techTreePanel != null && !techTreeCoreUI.Eras.isEmpty()) {
 //                glEnable(GL_STENCIL_TEST);
@@ -507,8 +506,10 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
     public void advance(float amount) {
         glClearStencil(0);
         glStencilMask(0xff);
-
-        GL11.glPushMatrix();
+        if (horizontalTooltipMaker != null && horizontalTooltipMaker.getHorizontalScrollbar() != null&&horizontalTooltipMaker.mainPanel!=null) {
+            horizontalTooltipMaker.getHorizontalScrollbar().handleMouseDragging(horizontalTooltipMaker.mainPanel.getPosition().getWidth());
+        }
+            GL11.glPushMatrix();
         int width = (int) (Display.getWidth() * Display.getPixelScaleFactor()),
                 height = (int) (Display.getHeight() * Display.getPixelScaleFactor());
         GL11.glViewport(0, 0, width, height);
@@ -529,11 +530,17 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                                 wantsToKnow = allResearchOption;
                                 if (!manager.haveResearched(wantsToKnow.Id) && manager.canResearch(wantsToKnow.Id, false)) {
                                     if (researching != null && wantsToKnow.Id.equals(researching.Id)) {
+                                        prevResearching=researching;
                                         manager.setCurrentFocus(null);
+                                        researching=null;
+                                        mustReset = true;
+                                        break;
                                     } else {
                                         manager.pickResearchFocus(wantsToKnow.Id);
                                         prevResearching = researching;
                                         researching = wantsToKnow;
+                                        mustReset = true;
+
                                     }
                                     break;
                                 }
@@ -541,9 +548,14 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                             }
 
                         }
-                        mustReset = true;
+
+                    }
+                    if(mustReset){
                         break;
                     }
+                }
+                if(mustReset){
+                    break;
                 }
             }
         }

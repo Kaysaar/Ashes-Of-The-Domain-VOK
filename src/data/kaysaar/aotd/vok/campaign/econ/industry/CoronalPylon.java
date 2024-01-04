@@ -108,7 +108,8 @@ public class CoronalPylon extends BaseIndustry {
     public boolean checkIfIsConnected(){
         for (MarketAPI factionMarket : Misc.getFactionMarkets(this.getMarket().getFaction())) {
             if(factionMarket.hasIndustry("coronal_network")){
-                CoronalCenter center = (CoronalCenter) market.getIndustry("coronal_network");
+                CoronalCenter center = (CoronalCenter) factionMarket.getIndustry("coronal_network");
+                if(center==null)continue;
                 if(center.tenLY){
                    float distance= Misc.getDistanceLY(factionMarket.getPrimaryEntity(),this.market.getPrimaryEntity());
                    if(distance<10){
