@@ -218,7 +218,8 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         techTreeCoreUI.init(mainPanel, techTreePanel, techTreeTooltip);
 
         techTreeCoreUI.createUI(researchCenterPanel.getPosition().getX() + researchCenterPanel.getPosition().getWidth() + 10, -2);
-        horizontalTooltipMaker.getHorizontalScrollbar().setPosition(techTreePanel.getPosition().getX() + spaceBetweenWidth, techTreePanel.getPosition().getY() + spaceBetweenHeight - 15);
+
+        horizontalTooltipMaker.getHorizontalScrollbar().setPosition(techTreePanel.getPosition().getX()  + spaceBetweenWidth, techTreePanel.getPosition().getY() + spaceBetweenHeight - 15);
         horizontalTooltipMaker.getHorizontalScrollbar().setScrollbarDimensions(30, 10);
 
         if (Xoffset == 0 && prevOffset == 0) {
