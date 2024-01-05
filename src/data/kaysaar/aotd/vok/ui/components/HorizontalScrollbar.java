@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui.components;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -54,7 +55,8 @@ public class HorizontalScrollbar {
     }
     public void handleMouseDragging(float panelWidth) {
         if (isDragging) {
-            int x = Mouse.getX(); // Replace with the actual method to get mouse X position in LWJGL
+            int x = Global.getSettings().getMouseX();// Replace with the actual method to get mouse X position in LWJGL
+
 
             scrollbarX = x-scrollbarWidth/2;
 
@@ -102,8 +104,8 @@ public class HorizontalScrollbar {
         for (InputEventAPI event : events) {
             if (event.isConsumed()) continue;
             if (event.isMouseDownEvent()&&!isDragging) {
-                int x = Mouse.getX(); // Replace with the actual method to get mouse X position in LWJGL
-                int y = Mouse.getY();
+                int x = Global.getSettings().getMouseX(); // Replace with the actual method to get mouse X position in LWJGL
+                int y = Global.getSettings().getMouseY();
                 float begining = startingX;
                 float end = begining+panelWidth;
                 float trueX= x-scrollbarWidth/2;

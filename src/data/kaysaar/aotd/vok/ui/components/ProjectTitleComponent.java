@@ -35,7 +35,7 @@ public class ProjectTitleComponent extends UiPanel{
 
             @Override
             public float getTooltipWidth(Object tooltipParam) {
-                return 0;
+                return 200;
             }
 
             @Override
