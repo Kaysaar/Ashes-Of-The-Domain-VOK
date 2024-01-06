@@ -120,7 +120,7 @@ public abstract class ResearchProject {
             Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
 
         }
-        if(currentProgress>=calculateTotalDays()){
+        if(currentProgress>=calculateTotalDays()&&!haveDoneIt){
             applyProjectOutcomeWhenCompleted();
         }
 
