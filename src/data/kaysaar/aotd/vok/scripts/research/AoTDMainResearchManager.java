@@ -12,6 +12,7 @@ import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.impl.campaign.intel.ResearchExpeditionIntel;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.models.*;
+import lunalib.lunaSettings.LunaSettings;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -333,15 +334,26 @@ public class AoTDMainResearchManager {
     }
 
     public void advance(float amount) {
+        int cycle = 210;
+        if(Global.getSettings().getModManager().isModEnabled("lunalib")){
+            if(LunaSettings.getFloat("aotd_vok","aotd_expedition_threshold")!=null){
+                expeditionThreshold =LunaSettings.getFloat("aotd_vok","aotd_expedition_threshold");
+            }
+            if(LunaSettings.getInt("aotd_vok","aotd_expedition_begin")!=null){
+                cycle = LunaSettings.getInt("aotd_vok","aotd_expedition_begin");
+
+            }
+
+        }
         weight.clear();
         for (AoTDFactionResearchManager factionResearchManager : factionResearchManagers) {
             factionResearchManager.advance(amount);
             weight.put(factionResearchManager.getFaction().getId(), factionResearchManager.pointTowardsExpedition);
         }
 
-        if(Global.getSector().getClock().getCycle()>=210){
-            expeditionCounter += Global.getSector().getClock().convertToDays(amount);
 
+        if(Global.getSector().getClock().getCycle()>=cycle){
+            expeditionCounter += Global.getSector().getClock().convertToDays(amount);
         }
         if (expeditionCounter >= expeditionThreshold && expeditionSender == null) {
             expeditionSender = pickFactionForExpedition();

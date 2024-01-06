@@ -1,0 +1,24 @@
+fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
+aotd_vok_header,Settings,Header,Project Settings,,,,,Vaults of Knowledge
+aotd_expedition_threshold,Frequency of research expeditions,Int,240,,"Increase/Decrease frequency of research expeditions, conducted by faction.",30,1000,Vaults of Knowledge
+aotd_expedition_begin,Enable Seeker of Knowledge Scientist,Int,210,,"Increase/Decrease year, where research expeditions are beginning.",207,220,Vaults of Knowledge
+aotd_pcf_amount,Enable Generation of Research Databanks,Int,50,,Increase/Decrease amount of Pre Collapse Facilities spawning per sector.,10,180,Vaults of Knowledge
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,

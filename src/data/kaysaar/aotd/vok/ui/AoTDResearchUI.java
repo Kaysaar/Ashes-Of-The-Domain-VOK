@@ -235,8 +235,8 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             for (TechTreeEraSection era : techTreeCoreUI.Eras) {
                 for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
                     if (researchOptionPanel.TechToResearch.Id.equals(researching.Id)) {
-                        prevOffset = researchOptionPanel.x + era.panel.getPosition().getX();
-                        Xoffset = researchOptionPanel.getCoordinates().getX();
+                        prevOffset = researchOptionPanel.x-550 + era.panel.getPosition().getX()-5;
+                        Xoffset = researchOptionPanel.getCoordinates().getX()-40;
                     }
                 }
             }
@@ -244,7 +244,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             for (TechTreeEraSection era : techTreeCoreUI.Eras) {
                 for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
                     if (researchOptionPanel.TechToResearch.isResearched) {
-                        prevOffset = researchOptionPanel.x + era.panel.getPosition().getX();
+                        prevOffset = researchOptionPanel.x-550 + era.panel.getPosition().getX()-5;
                         Xoffset = researchOptionPanel.getCoordinates().getX();
                     }
                 }
@@ -318,7 +318,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         }
         else{
             if(specialProjectProgressionBarPanel!=null)  {
-                openGlUtilis.drawProgressionBar(projectBarUI.getBar().getPosition(),alphaMult,Misc.getTooltipTitleAndLightHighlightColor(),AoTDMainResearchManager.getInstance().getResearchProjectFromRepo("aotd_remanant_project").calculateProgress());
+                openGlUtilis.drawProgressionBar(projectBarUI.getBar().getPosition(),alphaMult,Misc.getTooltipTitleAndLightHighlightColor(),projectBarUI.projectOfIntrest.calculateProgress());
             }
 
         }

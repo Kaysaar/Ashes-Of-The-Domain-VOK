@@ -21,6 +21,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import lunalib.lunaSettings.LunaSettings;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +39,10 @@ public class AoTDDataInserter {
     private int maxTriTachyonElectronics = 2;
     public static String AOTD = "aotd_";
     public void generatePreCollapseFacilities(){
-        int preCollapseFacAmount = 75;
+        int preCollapseFacAmount = 50;
+        if(Global.getSettings().getModManager().isModEnabled("lunalib")){
+            preCollapseFacAmount = LunaSettings.getInt("aotd_vok","aotd_pcf_amount");
+        }
         List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
         List<PlanetAPI> planetsWithFac = new ArrayList<>();
         Collections.shuffle(starSystems);
