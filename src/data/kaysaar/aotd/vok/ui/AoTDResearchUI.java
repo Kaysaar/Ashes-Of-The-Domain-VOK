@@ -188,7 +188,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         helpPanel = mainPanel.createCustomPanel(300, 51, null);
         helpTooltip = helpPanel.createUIElement(300, 51, false);
 
-        techTreePanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT - 20, null);
+        techTreePanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT - 20, new handlerOfScrollbar(horizontalTooltipMaker));
         horizontalTooltipMaker.init(techTreePanel, WIDTH - 300, HEIGHT - 20, true, techTreeCoreUI.calculateWidthAndHeight().one, techTreeCoreUI.calculateWidthAndHeight().two);
         techTreeTooltip = horizontalTooltipMaker.getMainTooltip();
 
@@ -541,6 +541,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                                         prevResearching = researching;
                                         researching = wantsToKnow;
                                         mustReset = true;
+                                        Global.getSoundPlayer().playUISound("aotd_research_started",1f,1f);
 
                                     }
                                     break;
@@ -645,9 +646,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
 
             }
         }
-        if (horizontalTooltipMaker.getHorizontalScrollbar() != null) {
-            horizontalTooltipMaker.getHorizontalScrollbar().processInputForScrollbar(events, horizontalTooltipMaker.mainPanel.getPosition().getWidth());
-        }
+
 
 
     }
@@ -768,5 +767,45 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         }
 
 
+    }
+    public static class  handlerOfScrollbar implements CustomUIPanelPlugin {
+        HorizontalTooltipMaker tooltipMaker;
+        public handlerOfScrollbar(HorizontalTooltipMaker scrollbar){
+            this.tooltipMaker = scrollbar;
+        }
+        @Override
+        public void positionChanged(PositionAPI position) {
+
+        }
+
+        @Override
+        public void renderBelow(float alphaMult) {
+
+        }
+
+        @Override
+        public void render(float alphaMult) {
+
+        }
+
+        @Override
+        public void advance(float amount) {
+            if (tooltipMaker.getHorizontalScrollbar() != null) {
+                tooltipMaker.horizontalScrollbar.detectIfRightMouse();
+                tooltipMaker.getMainTooltip().getExternalScroller().setXOffset(tooltipMaker.horizontalScrollbar.getCurrOffset());
+            }
+        }
+
+        @Override
+        public void processInput(List<InputEventAPI> events) {
+            if (tooltipMaker.getHorizontalScrollbar() != null) {
+                tooltipMaker.getHorizontalScrollbar().processInputForScrollbar(events, tooltipMaker.mainPanel.getPosition().getWidth());
+            }
+        }
+
+        @Override
+        public void buttonPressed(Object buttonId) {
+
+        }
     }
 }

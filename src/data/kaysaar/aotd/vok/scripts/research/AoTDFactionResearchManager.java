@@ -107,7 +107,7 @@ public class AoTDFactionResearchManager {
                     break;
                 }
             }
-            AoTDMainResearchManager.getInstance().expeditionCounter =  AoTDMainResearchManager.getInstance().expeditionThreshold/2;
+            AoTDMainResearchManager.getInstance().expeditionCounter =  AoTDMainResearchManager.getInstance().expeditionThreshold/3;
             return;
         }
         CampaignFleetAPI fleet = FleetFactory.createGenericFleet(faction.getId(), "Expedition Fleet", faction.getDoctrine().getShipQuality(), 150);
@@ -234,6 +234,8 @@ public class AoTDFactionResearchManager {
                     currentFocusId = null;
                     if (getFaction().isPlayerFaction()) {
                         notifyResearchCompletion(researchOption);
+                        Global.getSoundPlayer().playUISound("aotd_research_complete",1f,1f);
+
                     } else {
                         if (Global.getSettings().isDevMode()) {
                             notifyFactionFinishedResearchOnDevMode(researchOption);

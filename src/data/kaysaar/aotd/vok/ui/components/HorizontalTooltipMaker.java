@@ -14,7 +14,7 @@ public class HorizontalTooltipMaker {
         mainTooltip = mainPanel.createUIElement(trueWidth,height,true);
         mainTooltip.addPara("",10f);
         mainTooltip.addSpacer(trueHeight);
-        horizontalScrollbar = new HorizontalScrollbar(mainPanel.getPosition().getY(),mainPanel.getPosition().getX(),mainTooltip,trueWidth);
+        horizontalScrollbar = new HorizontalScrollbar(mainPanel.getPosition().getY(),mainPanel.getPosition().getX(),mainTooltip,trueWidth,mainPanel);
     }
     public TooltipMakerAPI getMainTooltip(){
         return this.mainTooltip;

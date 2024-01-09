@@ -48,7 +48,7 @@ public class Crystalizator extends BaseIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        return checkForItemBeingInstalled(this.market,Industries.REFINING,Items.CATALYTIC_CORE)&& AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PRODUCTION_MATRIX,market);
+        return  AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PRODUCTION_MATRIX,market);
     }
     @Override
     public String getUnavailableReason() {

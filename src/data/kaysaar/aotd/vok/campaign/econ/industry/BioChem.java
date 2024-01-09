@@ -45,7 +45,7 @@ public class BioChem extends LightIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        return AoDUtilis.checkForItemBeingInstalled(market, Industries.LIGHTINDUSTRY, Items.BIOFACTORY_EMBRYO)&&AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.CONSUMER_GOODS_PRODUCTION,market)&&market.isFreePort();
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.CONSUMER_GOODS_PRODUCTION,market)&&market.isFreePort();
     }
 
     @Override
