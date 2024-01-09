@@ -20,7 +20,7 @@ public class OrbitalManufactorium extends HeavyIndustry {
         int size = market.getSize();
         AoDUtilis.ensureIndustryHasNoItem(this);
         int shipBonus = 0;
-        float qualityBonus = 0.5f;
+        float qualityBonus = 0.7f;
 
 
         demand(Commodities.METALS, size-1);
@@ -65,7 +65,7 @@ public class OrbitalManufactorium extends HeavyIndustry {
     }
     @Override
     public boolean isAvailableToBuild() {
-        return AoDUtilis.checkForItemBeingInstalled(market,Industries.ORBITALWORKS,Items.PRISTINE_NANOFORGE)&&AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market);
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market);
 
     }
     @Override

@@ -393,6 +393,12 @@ public class UpgradeListUI implements CustomDialogDelegate {
 
             areaCheckbox.setChecked(selected == upgrdSpec.getId());
             areaCheckbox.setEnabled(canAfford && isAvailableToBuild);
+            for (String tag : upgrdInd.getSpec().getTags()) {
+                if(tag.contains("consumes")){
+                    String[] splited = tag.split(":");
+                    areaCheckbox.setEnabled(AoDUtilis.checkForItemBeingInstalled(marketAPI,splited[1],splited[2]));
+                }
+            }
             subIndustryButtonPanel.addUIElement(anchor).inTL(-opad, 0f); //if we don't -opad it kinda does it by its own, no clue why
 
 

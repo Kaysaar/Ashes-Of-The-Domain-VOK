@@ -54,8 +54,8 @@ public class Benefication extends BaseIndustry {
     @Override
     public boolean isAvailableToBuild() {
         return ((AoDUtilis.getRareOreAmount(market) >= 0 || AoDUtilis.getNormalOreAmount(market) >= 0)) &&
-                AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS, market) &&
-                checkForItemBeingInstalled(this.market, Industries.MINING, Items.MANTLE_BORE);
+                AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS, market);
+
     }
 
 
