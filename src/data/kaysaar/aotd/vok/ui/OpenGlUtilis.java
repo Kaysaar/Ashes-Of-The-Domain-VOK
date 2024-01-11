@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
 import org.lwjgl.opengl.GL11;
@@ -121,7 +122,11 @@ public class OpenGlUtilis {
         GL11.glVertex2f(x, y + h);
         GL11.glEnd();
     }
-    void drawPanelBorder(PositionAPI p) {
+    void drawPanelBorder(PositionAPI p,boolean isResearched,float alphaMult,Color uiColor) {
+        if(isResearched){
+            GL11.glColor4f( uiColor.getRed()/ 255f, uiColor.getGreen() / 255f, uiColor.getBlue() / 255f,
+                    uiColor.getAlpha() / 255f * alphaMult * 23f);
+        }
         GL11.glBegin(GL11.GL_LINE_LOOP);
         float x = p.getX() + 5;
         float y = p.getY();
