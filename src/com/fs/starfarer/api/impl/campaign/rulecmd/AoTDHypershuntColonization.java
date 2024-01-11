@@ -102,12 +102,18 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
             @Override
             public void advance(float amount) {
                 if(Misc.getDistance(Global.getSector().getPlayerFleet().getLocation(),entity.getLocation())<=entity.getRadius()*5.5F){
-                    Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().arc=1;
-                    Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().extraLengthFlat=0;
-                    Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().extraLengthMult=0;
-                    Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().direction =1;
-                    Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().direction =1;
-                    Misc.getCoronaFor(entity.getStarSystem().getStar()).setTerrainName("");
+                    if(Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager()!=null){
+                        if(Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare()!=null){
+                            Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().arc=1;
+                            Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().extraLengthFlat=0;
+                            Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().extraLengthMult=0;
+                            Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().direction =1;
+                            Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().direction =1;
+                            Misc.getCoronaFor(entity.getStarSystem().getStar()).setTerrainName("");
+                        }
+
+                    }
+
                 }
                 else{
                     Misc.getCoronaFor(entity.getStarSystem().getStar()).setTerrainName("Corona");
