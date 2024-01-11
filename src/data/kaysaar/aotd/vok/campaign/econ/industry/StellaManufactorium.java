@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
@@ -91,7 +92,7 @@ public class StellaManufactorium extends BaseIndustry  {
     @Override
     public void apply() {
         super.apply(true);
-//        canProduce = applyDemand();
+       canProduce = applyDemand();
     }
 
     @Override
@@ -99,7 +100,7 @@ public class StellaManufactorium extends BaseIndustry  {
         super.addPostDemandSection(tooltip, hasDemand, mode);
         if(mode.equals(IndustryTooltipMode.NORMAL)){
             if(canProduce){
-                tooltip.addPara("Currently forged equipments in Manufactorium: ",Color.ORANGE,10f);
+                tooltip.addSectionHeading("Manufactorium Forges", Alignment.MID,10f);
                 for (Map.Entry<SMSpecialItem, Float> smSpecialItemFloatEntry : demandForProduction.entrySet()) {
                     String days= " days ";
                     if(smSpecialItemFloatEntry.getValue()<=1){
@@ -110,7 +111,10 @@ public class StellaManufactorium extends BaseIndustry  {
                     if(this.aiCoreId!=null&&this.aiCoreId.equals(Commodities.ALPHA_CORE)){
                          insert = Math.round(smSpecialItemFloatEntry.getValue()/2) + days+"to create";
                     }
+                    float dim = 40;
+                    tooltip.addImage(Global.getSettings().getSpecialItemSpec(smSpecialItemFloatEntry.getKey().id).getIconName(),dim,dim,10f);
                     tooltip.addPara(Global.getSettings().getSpecialItemSpec(smSpecialItemFloatEntry.getKey().id).getName()+" "+insert,Misc.getStoryBrightColor(),10f);
+
                 }
             }
             else if (demandForProduction.isEmpty()){

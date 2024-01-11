@@ -182,17 +182,20 @@ public class AoTDFactionResearchManager {
                 }
             }
         }
+        boolean hadMetreq = false;
         for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
             if (marketAPI.getFaction().getId().equals(managerTiedToFaction.getId())) {
                 if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
-                    boolean hadMetreq = marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER).getSpecialItem() != null;
-                    if (hadMetreq) {
-                        Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
-                    } else {
-                        Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
+                    if(marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER).getSpecialItem() != null){
+                        hadMetreq = true;
                     }
                 }
             }
+        }
+        if (hadMetreq) {
+            Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
+        } else {
+            Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
         }
         if(this.getFaction().isPlayerFaction()){
             if (this.haveResearched(AoTDTechIds.AGRICULTURE_INDUSTRIALIZATION)) {
