@@ -181,7 +181,6 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
         }
         Global.getSoundPlayer().playUISound("ui_upgrade_industry", 1, 1);
 
-
     }
 
     public SMSpecialItem findItem(String id) {
