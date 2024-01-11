@@ -59,9 +59,16 @@ public class TechTreeResearchOptionPanel extends UiPanel {
         }
 
         LabelAPI title = vTT.addPara(TechToResearch.Name, Color.ORANGE, 10f);
-        title.getPosition().inTL(AoTDUiComp.WIDTH_OF_TECH_PANEL - 5 - title.computeTextWidth(title.getText()), 3);
+        title.getPosition().inTL(AoTDUiComp.WIDTH_OF_TECH_PANEL - 5 - title.computeTextWidth(title.getText()), 7);
+        if(TechToResearch.isResearched){
+            vTT.addImage(Global.getSettings().getSpriteName("ui_icons_tech_tree", "researched"), 20, 20, 10f);
+            vTT.getPrev().getPosition().inTL(AoTDUiComp.WIDTH_OF_TECH_PANEL - 30 - title.computeTextWidth(title.getText()), 5);
+        }
+
+
             vTT.addImage(Global.getSettings().getSpriteName("ui_icons_tech_tree", TechToResearch.getSpec().getIconId()), 100, 100, 10f);
             vTT.getPrev().getPosition().inTL(5, 5);
+
 
 
         vTT.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {

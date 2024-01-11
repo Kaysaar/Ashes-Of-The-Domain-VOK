@@ -333,7 +333,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         Color color = Misc.getDarkPlayerColor();
-        Color colorResearched = Misc.getTooltipTitleAndLightHighlightColor();
+        Color colorResearched = color.brighter().brighter();
         GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alphaMult);
         openGlUtilis.drawMainPanelBorder(panel, WIDTH, HEIGHT);
         openGlUtilis.drawMainPanelBorderSecondLayer(panel, WIDTH, HEIGHT);
@@ -350,15 +350,28 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                 glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP); // Make sure you will no longer (over)write stencil values, even if any test succeeds
                 glColorMask(true, true, true, true); // Make sure we draw on the backbuffer again.
                 glStencilFunc(GL_EQUAL, 1, 0xFF); // Now we will only draw pixels where the corresponding stencil buffer value equals 1
+                for (TechTreeEraSection era : techTreeCoreUI.Eras) {
+
+                    for (TechTreeResearchOptionPanel panels : era.getResearchOptionPanels()) {
+
+                        openGlUtilis.drawTopPanelBorder(panels.getProgressionBar(), Misc.getDarkPlayerColor(), alphaMult);
+                    }
+
+                }
                 for (ResearchOption allResearchOption : techTreeCoreUI.allResearchOptions) {
                     GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alphaMult);
                     if (techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id) == null) continue;
-                    openGlUtilis.drawPanelBorder(techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id));
+                    GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alphaMult);
+
+                    openGlUtilis.drawPanelBorder(techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id),allResearchOption.isResearched,alphaMult,colorResearched);
+
                     int alligment = 0;
                     int amount = 0;
+                    GL11.glColor4f(colorResearched.getRed() / 255f, colorResearched.getGreen() / 255f, colorResearched.getBlue() / 255f, alphaMult);
+
                     for (ResearchOption researchOption : techTreeCoreUI.allResearchOptions) {
                         for (String s : researchOption.ReqTechsToResearchFirst) {
-                            if (s.equals(allResearchOption.Id)) {
+                            if (s.equals(allResearchOption.Id)&&allResearchOption.isResearched()) {
 
                                 if (techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id) == null || techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(researchOption.Id) == null)
                                     continue;
@@ -366,13 +379,20 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                             }
                         }
                     }
-                    for (TechTreeEraSection era : techTreeCoreUI.Eras) {
+                    GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alphaMult);
 
-                        for (TechTreeResearchOptionPanel panels : era.getResearchOptionPanels()) {
-                            openGlUtilis.drawTopPanelBorder(panels.getProgressionBar(), Misc.getDarkPlayerColor(), alphaMult);
+                    for (ResearchOption researchOption : techTreeCoreUI.allResearchOptions) {
+                        for (String s : researchOption.ReqTechsToResearchFirst) {
+                            if (s.equals(allResearchOption.Id)&&!allResearchOption.isResearched) {
+
+                                if (techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id) == null || techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(researchOption.Id) == null)
+                                    continue;
+                                openGlUtilis.drawTechLine(techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id), techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(researchOption.Id), -alligment);
+                            }
                         }
-
                     }
+
+
                 }
 
 
