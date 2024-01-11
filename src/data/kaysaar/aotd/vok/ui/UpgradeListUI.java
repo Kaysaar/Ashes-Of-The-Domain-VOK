@@ -396,7 +396,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
             for (String tag : upgrdInd.getSpec().getTags()) {
                 if(tag.contains("consumes")){
                     String[] splited = tag.split(":");
-                    areaCheckbox.setEnabled(AoDUtilis.checkForItemBeingInstalled(marketAPI,splited[1],splited[2]));
+                    areaCheckbox.setEnabled(!AoDUtilis.checkForItemBeingInstalled(marketAPI,splited[1],splited[2]));
                 }
             }
             subIndustryButtonPanel.addUIElement(anchor).inTL(-opad, 0f); //if we don't -opad it kinda does it by its own, no clue why
@@ -547,7 +547,15 @@ public class UpgradeListUI implements CustomDialogDelegate {
             anchor.addPara("*Shown production and demand values are already adjusted based on current market size and local conditions.", gray, opad);
             if (!isAvailableToBuild) {
                 anchor.addPara(upgrdInd.getUnavailableReason(), Misc.getNegativeHighlightColor(), opad);
-
+            }
+            for (String tag : upgrdInd.getSpec().getTags()) {
+                if(tag.contains("consumes")){
+                    String[] splited = tag.split(":");
+                    if(!AoDUtilis.checkForItemBeingInstalled(marketAPI,splited[1],splited[2])){
+                        anchor.addPara(upgrdInd.getUnavailableReason(), Misc.getNegativeHighlightColor(), opad);
+                    }
+                    break;
+                }
             }
             if (upgrdInd.getSpec().getTags().contains("consumes")) {
                 if(AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){

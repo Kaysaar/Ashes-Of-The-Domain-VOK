@@ -14,7 +14,7 @@ public class PreCollapseFacility extends BaseMarketConditionPlugin {
 
     @Override
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
-                tooltip.addPara("Allows built there research facilities to produce +1 research databank per month", Misc.getPositiveHighlightColor(),10f);
+                tooltip.addPara("Enables the construction of research facilities that generate an additional research databank each month.", Misc.getPositiveHighlightColor(),10f);
     }
     @Override
     public boolean showIcon() {
