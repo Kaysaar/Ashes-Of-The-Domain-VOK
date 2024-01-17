@@ -23,6 +23,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.ResearchFleetDefeatListener;
 import data.kaysaar.aotd.vok.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
+import lunalib.lunaSettings.LunaSettings;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -182,21 +183,25 @@ public class AoTDFactionResearchManager {
                 }
             }
         }
-        boolean hadMetreq = false;
-        for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
-            if (marketAPI.getFaction().getId().equals(managerTiedToFaction.getId())) {
-                if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
-                    if(marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER).getSpecialItem() != null){
-                        hadMetreq = true;
+
+        if(getFaction().isPlayerFaction()){
+            boolean hadMetreq = false;
+            for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
+                if (marketAPI.getFaction().getId().equals(managerTiedToFaction.getId())) {
+                    if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
+                        if(marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER).getSpecialItem() != null){
+                            hadMetreq = true;
+                        }
                     }
                 }
             }
+            if (hadMetreq) {
+                Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
+            } else {
+                Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
+            }
         }
-        if (hadMetreq) {
-            Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
-        } else {
-            Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
-        }
+
         if(this.getFaction().isPlayerFaction()){
             if (this.haveResearched(AoTDTechIds.AGRICULTURE_INDUSTRIALIZATION)) {
                 Global.getSettings().getIndustrySpec(AoTDIndustries.MONOCULTURE).setUpgrade(Industries.FARMING);
@@ -230,7 +235,14 @@ public class AoTDFactionResearchManager {
                     researchOption.daysSpentOnResearching += 100 * Global.getSector().getClock().convertToDays(amount);
                 }
                 researchOption.daysSpentOnResearching += Global.getSector().getClock().convertToDays(amount);
-                if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch()) {
+                double multiplier =1;
+                if(Global.getSettings().getModManager().isModEnabled("lunalib")){
+                    if(LunaSettings.getFloat("aotd_vok","aotd_expedition_threshold")!=null){
+                        multiplier =LunaSettings.getDouble("aotd_vok","aotd_reserarch_speed_multiplier");
+                    }
+
+                }
+                if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch()*multiplier) {
                     researchOption.daysSpentOnResearching = 0;
                     researchOption.setResearched(true);
 
