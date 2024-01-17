@@ -20,6 +20,7 @@ import data.kaysaar.aotd.vok.models.ResearchRewardType;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import lunalib.lunaSettings.LunaSettings;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -69,7 +70,13 @@ public class TechTreeResearchOptionPanel extends UiPanel {
             vTT.addImage(Global.getSettings().getSpriteName("ui_icons_tech_tree", TechToResearch.getSpec().getIconId()), 100, 100, 10f);
             vTT.getPrev().getPosition().inTL(5, 5);
 
+        double multiplier =1;
+        if(Global.getSettings().getModManager().isModEnabled("lunalib")){
+            if(LunaSettings.getFloat("aotd_vok","aotd_expedition_threshold")!=null){
+                multiplier =LunaSettings.getDouble("aotd_vok","aotd_reserarch_speed_multiplier");
+            }
 
+        }
 
         vTT.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
             @Override
@@ -84,10 +91,17 @@ public class TechTreeResearchOptionPanel extends UiPanel {
 
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                double multiplier =1;
+                if(Global.getSettings().getModManager().isModEnabled("lunalib")){
+                    if(LunaSettings.getFloat("aotd_vok","aotd_expedition_threshold")!=null){
+                        multiplier =LunaSettings.getDouble("aotd_vok","aotd_reserarch_speed_multiplier");
+                    }
+
+                }
                 tooltip.addSectionHeading("Technology Name", Alignment.MID, 10f);
                 tooltip.addPara(TechToResearch.Name, 10f);
                 tooltip.addSectionHeading("Time need to research", Alignment.MID, 10f);
-                float days = TechToResearch.TimeToResearch - TechToResearch.daysSpentOnResearching;
+                float days = TechToResearch.TimeToResearch*(float) multiplier - TechToResearch.daysSpentOnResearching;
                 String d = " days";
                 if (days <= 1) {
                     d = " day";
@@ -279,7 +293,7 @@ public class TechTreeResearchOptionPanel extends UiPanel {
         }
 
 
-        float days = TechToResearch.TimeToResearch - TechToResearch.daysSpentOnResearching;
+        float days = (TechToResearch.TimeToResearch*(float) multiplier) - TechToResearch.daysSpentOnResearching;
         String d = " days";
         if (days <= 1) {
             d = " day";
