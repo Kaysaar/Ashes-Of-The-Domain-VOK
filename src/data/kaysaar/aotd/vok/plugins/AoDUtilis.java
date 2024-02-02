@@ -11,7 +11,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import org.magiclib.util.MagicSettings;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,6 @@ import java.util.Map;
 
 
 public class AoDUtilis {
-    public static int MIN_SIZE = MagicSettings.getInteger("aod_core", "CAPITAL_MIN_FACTION_SIZE");
     public static final String reason = "This industry can't be downgraded, due to starsector API limitations.";
 
     public static boolean checkIfResearched(String id) {

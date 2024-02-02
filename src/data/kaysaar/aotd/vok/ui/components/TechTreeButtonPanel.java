@@ -22,6 +22,5 @@ public class TechTreeButtonPanel extends UiPanel{
         tooltip.setParaFontDefault();
         techTreeButton =tooltip.addButton("Tech Tree","UI_TECH_TREE",290,30,10f);
         techTreeButton.getPosition().inTL(5,52);
-
     }
 }
