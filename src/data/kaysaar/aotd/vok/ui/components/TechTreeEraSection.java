@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui.components;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.coreui.Y;
