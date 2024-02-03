@@ -10,14 +10,34 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.ui.P;
+import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.models.ResearchProject;
 import data.kaysaar.aotd.vok.models.SpecialProjectStage;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import org.lazywizard.lazylib.MathUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NanoforgeRestoration extends ResearchProject {
-
+    public static final ArrayList<String> items = new ArrayList<String>(Arrays.asList(
+            "corrupted_nanoforge",
+            "pristine_nanoforge",
+            "synchrotron",
+            "orbital_fusion_lamp",
+            "mantle_bore",
+            "catalytic_core",
+            "soil_nanites",
+            "biofactory_embryo",
+            "fullerene_spool",
+            "plasma_dynamo",
+            "cryoarithmetic_engine",
+            "drone_replicator",
+            "dealmaker_holosuite",
+            "coronal_portal"
+    ));
     @Override
     public boolean haveMetReqForProjectToAppear() {
         return  AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched("aotd_tech_streamlined_production");
@@ -105,10 +125,28 @@ public class NanoforgeRestoration extends ResearchProject {
 
     @Override
     public void applyProjectOutcomeWhenCompleted() {
-        if(currentValueOfOptions>0){
+        if(currentValueOfOptions>0&&currentValueOfOptions<100){
             for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
                 if(playerMarket.hasSubmarket(AoTDSubmarkets.RESEARCH_FACILITY_MARKET)){
                     playerMarket.getSubmarket(AoTDSubmarkets.RESEARCH_FACILITY_MARKET).getCargo().addSpecial(new SpecialItemData(Items.PRISTINE_NANOFORGE,null),1);
+                    break;
+                }
+            }
+        }
+        else if (currentValueOfOptions<=0){
+            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+                if(playerMarket.hasIndustry(AoTDIndustries.RESEARCH_CENTER)){
+                    playerMarket.getIndustry(AoTDIndustries.RESEARCH_CENTER).setDisrupted(150);
+                    break;
+                }
+            }
+        }
+        else{
+            int random = MathUtils.getRandomNumberInRange(0,items.size()-1);
+            String id = items.get(random);
+            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+                if(playerMarket.hasSubmarket(AoTDSubmarkets.RESEARCH_FACILITY_MARKET)){
+                    playerMarket.getSubmarket(AoTDSubmarkets.RESEARCH_FACILITY_MARKET).getCargo().addSpecial(new SpecialItemData(id,null),1);
                     break;
                 }
             }
@@ -136,6 +174,10 @@ public class NanoforgeRestoration extends ResearchProject {
             tooltip.addPara("We need one Alpha AI Core to be in Research Facility Storage", Misc.getTooltipTitleAndLightHighlightColor(), 10f);
 
         }
+        if(optionId.equals("recon_dont")){
+            tooltip.addPara("We will allow Nanofroge to reconfigure it's systems on its own.", Misc.getTooltipTitleAndLightHighlightColor(), 10f);
+
+        }
     }
 
     @Override
@@ -154,6 +196,9 @@ public class NanoforgeRestoration extends ResearchProject {
                 if (stage.chosenOption.equals("recon_alpha")) {
                     tooltipMakerAPI.addPara("With usage of Alpha AI Core we hope that systems can be fully reconfigured ", 10f);
                 }
+                if (stage.chosenOption.equals("recon_dont")) {
+                    tooltipMakerAPI.addPara("Internal systems of nanoforge have not been interupted, from what our scientist belives, nanoforge is going throught total reconfiguration process.", 10f);
+                }
             }
         }
      if(haveDoneIt){
@@ -164,13 +209,18 @@ public class NanoforgeRestoration extends ResearchProject {
          }
 
         else{
-            if(currentValueOfOptions==600){
+            if(currentValueOfOptions==40){
                 tooltipMakerAPI.addPara("By using Alpha level AI core we were able to restore damaged system to it's full capacity",Misc.getPositiveHighlightColor(),10f);
                 tooltipMakerAPI.addPara("Gain Pristine Nanoforge",Misc.getNegativeHighlightColor(),10f);
             }
-            else{
+            else if (currentValueOfOptions==60){
                 tooltipMakerAPI.addPara("By using our Standard Templates we were able to restore damaged system to it's full capacity",Misc.getPositiveHighlightColor(),10f);
                 tooltipMakerAPI.addPara("Gain Pristine Nanoforge",Misc.getNegativeHighlightColor(),10f);
+            }
+            else{
+                tooltipMakerAPI.addPara("We have allowed Nanoforge to reconfigure itself, which resulted in Nanoforge transforming randomly to one of colony items",Misc.getPositiveHighlightColor(),10f);
+                tooltipMakerAPI.addPara("Gain a random colony item",Misc.getNegativeHighlightColor(),10f);
+
             }
 
         }

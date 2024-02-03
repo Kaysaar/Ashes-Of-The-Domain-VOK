@@ -62,7 +62,7 @@ public class StageEventComponent extends UiPanel{
             optionsPanel = panel.createCustomPanel(width*0.6f,height-20,null);
             TooltipMakerAPI tooltipOptions =  optionsPanel.createUIElement(width*0.6f,height-20,true);
             tooltipOptions.addSpacer(15);
-            for (Map.Entry<String, String> optionEntry : currentProject.getCertainStage(currentProject.indexOfCurrentStage).optionsNameMap.entrySet()) {
+            for (final Map.Entry<String, String> optionEntry : currentProject.getCertainStage(currentProject.indexOfCurrentStage).optionsNameMap.entrySet()) {
                 CustomPanelAPI optionButtonPanel = panel.createCustomPanel(ENTRY_WIDTH, ENTRY_HEIGHT,null);
                 TooltipMakerAPI anchor = optionButtonPanel.createUIElement(ENTRY_WIDTH, ENTRY_HEIGHT, false);
                 ButtonAPI areaCheckbox = anchor.addAreaCheckbox("", optionEntry.getKey(), baseColor, bgColour, brightColor, //new Color(255,255,255,0)
@@ -71,7 +71,23 @@ public class StageEventComponent extends UiPanel{
                         0f,
                         true);
                 optionButtonPanel.addUIElement(anchor).inTL(-opad, 0f);
+                areaCheckbox.setEnabled(currentProject.haveMetReqForOption(optionEntry.getKey()));
+                tooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
+                    @Override
+                    public boolean isTooltipExpandable(Object tooltipParam) {
+                        return false;
+                    }
 
+                    @Override
+                    public float getTooltipWidth(Object tooltipParam) {
+                        return 300;
+                    }
+
+                    @Override
+                    public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                        currentProject.generateTooltipForOption(optionEntry.getKey(),tooltip);
+                    }
+                }, TooltipMakerAPI.TooltipLocation.RIGHT);
                 anchor = optionButtonPanel.createUIElement(ENTRY_WIDTH, ENTRY_HEIGHT, true);
                 anchor.setParaFont(Fonts.ORBITRON_12);
                 anchor.addPara(optionEntry.getValue(), Color.ORANGE, 10f);

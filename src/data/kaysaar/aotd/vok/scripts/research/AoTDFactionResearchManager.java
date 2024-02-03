@@ -23,6 +23,8 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.ResearchFleetDefeatListener;
 import data.kaysaar.aotd.vok.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
+import data.kaysaar.aotd.vok.ui.AoTDResearchUI;
+import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
 import lunalib.lunaSettings.LunaSettings;
 import org.apache.log4j.Logger;
 
@@ -283,7 +285,7 @@ public class AoTDFactionResearchManager {
         MessageIntel intel = new MessageIntel("Faction "+getFaction().getDisplayName()+" Researched Technology - " + researchOption.Name, Misc.getBasePlayerColor());
         intel.setIcon(getFaction().getCrest());
         intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
-        Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO);
+        Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.INTERACTION_DIALOG,new AoTDResearchUIDP());
     }
 
     public void pickResearchFocus(String id) {
@@ -377,6 +379,7 @@ public class AoTDFactionResearchManager {
         if (numberRemaining >= 1) {
             return false;
         }
+
         return true;
     }
 

@@ -34,7 +34,7 @@ public class AoTDSpecialItemRepo {
 
             @Override
             public String[] getSimpleReqs(Industry industry) {
-                return new String[]{"not extreme weather", "not habitable", "not a gas giant"};
+                return new String[]{"not extreme weather","not a gas giant"};
             }
 
             @Override

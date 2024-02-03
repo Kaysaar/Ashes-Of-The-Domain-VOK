@@ -29,6 +29,10 @@ public abstract class ResearchProject {
     public boolean haveReachedCriticalMoment = false;
     public int indexOfCurrentStage = 0;
 
+    public void setCurrentlyOngoing(boolean currentlyOngoing) {
+        this.currentlyOngoing = currentlyOngoing;
+    }
+
     public float calculateTotalDays() {
         float toReturn = 0f;
         for (SpecialProjectStage stage : stages) {
@@ -85,6 +89,7 @@ public abstract class ResearchProject {
 
     public void applyProjectOutcomeWhenCompleted(){
         haveDoneIt = true;
+        currentlyOngoing=false;
         AoTDMainResearchManager.getInstance().setCurrentProject(null);
     }
     public void payForProjectIfNecessary(){
