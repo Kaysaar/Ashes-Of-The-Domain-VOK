@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.intel.deciv.DecivTracker;
 import com.fs.starfarer.api.ui.Alignment;
@@ -12,19 +13,16 @@ import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import java.awt.*;
 
 public class CoronalShield extends CoronalSegment{
-    float firstDays = 360;
+    float firstDays = 365;
     float started = 0;
     float gatheredResourcesFor = 0;
     float maxGatheredResourcesFor = 360;
 
     @Override
     public void apply() {
+
         super.apply();
-        if(started>=firstDays){
-            market.getPrimaryEntity().getTags().add(Tags.SALVAGEABLE);
-            market.getPrimaryEntity().getTags().remove(Tags.STATION);
-            DecivTracker.decivilize(this.getMarket(),true,true);
-        }
+
     }
 
     @Override
@@ -59,6 +57,13 @@ public class CoronalShield extends CoronalSegment{
 
     @Override
     public void advance(float amount) {
+        if(started>=firstDays){
+            market.getPrimaryEntity().getTags().add(Tags.SALVAGEABLE);
+            market.getPrimaryEntity().getTags().remove(Tags.STATION);
+            DecivTracker.decivilize(this.getMarket(),true,true);
+            Misc.fadeAndExpire(market.getPrimaryEntity(),1);
+            return;
+        }
         super.advance(amount);
         if(!haveCompletedRestoration||!isWorking()){
             started+= Global.getSector().getClock().convertToDays(amount);

@@ -109,7 +109,12 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
     public void reportEconomyMonthEnd() {
         if(this.market.hasCondition("pre_collapse_facility")){
             SubmarketAPI open = market.getSubmarket(subMarketId);
-            open.getCargo().addCommodity("research_databank",1);
+            if(open!=null){
+                open.getCargo().addCommodity("research_databank",1);
+            }
+            else{
+                market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addCommodity("research_databank",1);
+            }
         }
     }
 }
