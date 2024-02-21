@@ -45,12 +45,12 @@ public class BioChem extends LightIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.CONSUMER_GOODS_PRODUCTION,market)&&market.isFreePort();
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DRUGS_AMPLIFICATION,market)&&market.isFreePort();
     }
 
     @Override
     public boolean showWhenUnavailable() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.CONSUMER_GOODS_PRODUCTION,market);
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DRUGS_AMPLIFICATION,market);
     }
 
     @Override

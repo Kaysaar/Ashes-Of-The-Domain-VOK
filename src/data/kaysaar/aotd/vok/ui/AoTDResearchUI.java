@@ -404,7 +404,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             if (helpPanel != null) openGlUtilis.drawPanelBorder(helpPanel);
             if (techTreePanel != null) openGlUtilis.drawPanelBorder(techTreePanel);
             if (helpPanel != null) openGlUtilis.drawPanelBorder(buttonPanel);
-            if (researchCenterPanel != null) {
+            if (researchCenterPanel != null&&researchCenterPanelUI!=null) {
 
                 openGlUtilis.drawPanelBorder(researchCenterPanel);
                 openGlUtilis.drawPanelBorder(researchCenterPanelUI.getCoverPanel());
@@ -583,16 +583,20 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         }
 
 
-        if (researchCenterPanel != null) {
-            for (ButtonAPI button : researchCenterPanelUI.buttons) {
-                if (button.isChecked()) {
-                    button.setChecked(false);
-                    currentModToShow = (String) button.getCustomData();
-                    mustHardReset = true;
-                    mustReset = true;
-                    break;
+        if (researchCenterPanel != null&&researchCenterPanelUI!=null) {
+
+            if(!researchCenterPanelUI.buttons.isEmpty()){
+                for (ButtonAPI button : researchCenterPanelUI.buttons) {
+                    if (button.isChecked()) {
+                        button.setChecked(false);
+                        currentModToShow = (String) button.getCustomData();
+                        mustHardReset = true;
+                        mustReset = true;
+                        break;
+                    }
                 }
             }
+
         }
         if (buttonPanelUI != null && buttonPanelUI.getSpecialProjectButton().isChecked()) {
             buttonPanelUI.getSpecialProjectButton().setChecked(false);
@@ -602,14 +606,17 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             return;
         }
         if(specialProjectListPanel!=null){
-            for (ButtonAPI button : projectListUI.buttons) {
-                if (button.isChecked()) {
-                    button.setChecked(false);
-                    currentlyFocused = AoTDMainResearchManager.getInstance().getResearchProjectFromRepo((String) button.getCustomData());
-                    reset(false, false,null);
-                    return;
+            if(!projectListUI.buttons.isEmpty()){
+                for (ButtonAPI button : projectListUI.buttons) {
+                    if (button.isChecked()) {
+                        button.setChecked(false);
+                        currentlyFocused = AoTDMainResearchManager.getInstance().getResearchProjectFromRepo((String) button.getCustomData());
+                        reset(false, false,null);
+                        return;
+                    }
                 }
             }
+
         }
         if (techTreeButtonPanelUI != null && techTreeButtonPanelUI.getTechTreeButton().isChecked()) {
             techTreeButtonPanelUI.getTechTreeButton().setChecked(false);
@@ -645,8 +652,30 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         for (InputEventAPI event : events) {
             if (event.isKeyDownEvent() && event.getEventValue() == Keyboard.KEY_ESCAPE) {
                 event.consume();
+                panel.removeComponent(mainPanel);
                 callbacks.dismissDialog();
                 dialog.dismiss();
+                if(researchCenterPanelUI!=null){
+                    researchCenterPanelUI.buttons.clear();
+                    researchCenterPanelUI=null;
+                }
+                if(techTreeCoreUI!=null){
+                    if(techTreeCoreUI.Eras!=null||techTreeCoreUI.Eras.isEmpty()){
+                        for (TechTreeEraSection era : techTreeCoreUI.Eras) {
+                            for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
+                                researchOptionPanel.setTechToResearch(null);
+                            }
+                            era.researchOptionPanels.clear();
+                            era.sortedResearchOptions.clear();
+                        }
+                    }
+                }
+                if(projectListUI!=null){
+                    projectListUI.buttons.clear();
+                }
+                if(projectStageOptions!=null){
+                    projectStageOptions.buttons.clear();
+                }
                 if (researchingBeforeUI != null && researching != null && !researchingBeforeUI.Id.equals(researching.Id)) {
                     MessageIntel intel = new MessageIntel("Started Research - " + researching.Name, Misc.getBasePlayerColor());
                     intel.setIcon(manager.getFaction().getCrest());

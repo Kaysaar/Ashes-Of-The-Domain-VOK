@@ -72,7 +72,7 @@ public class StageEventComponent extends UiPanel{
                         true);
                 optionButtonPanel.addUIElement(anchor).inTL(-opad, 0f);
                 areaCheckbox.setEnabled(currentProject.haveMetReqForOption(optionEntry.getKey()));
-                tooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
+                anchor.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
                     @Override
                     public boolean isTooltipExpandable(Object tooltipParam) {
                         return false;
@@ -80,7 +80,7 @@ public class StageEventComponent extends UiPanel{
 
                     @Override
                     public float getTooltipWidth(Object tooltipParam) {
-                        return 300;
+                        return 500;
                     }
 
                     @Override
