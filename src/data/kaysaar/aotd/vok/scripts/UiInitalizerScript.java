@@ -27,6 +27,7 @@ public class UiInitalizerScript implements CampaignInputListener {
             if (event.isConsumed()) continue;
             if (event.isCtrlDown() && event.getEventValue() == Keyboard.KEY_T) {
                 event.consume();
+                AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getQueuedReesarchOptions();
                 Global.getSector().getCampaignUI().showInteractionDialog(new AoTDResearchUIDP(), null);
             }
         }

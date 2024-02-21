@@ -10,7 +10,10 @@ import com.fs.starfarer.api.combat.BattleCreationContext;
 import com.fs.starfarer.api.impl.campaign.FleetEncounterContext;
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactory;
+import com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV3;
+import com.fs.starfarer.api.impl.campaign.fleets.FleetParamsV3;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
+import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
 import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.impl.campaign.intel.ResearchExpeditionIntel;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.FleetAdvanceScript;
@@ -63,7 +66,21 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
             factionAPI = Global.getSector().getFaction(Factions.REMNANTS);
             if (dialogAPI.getInteractionTarget() instanceof PlanetAPI) {
                 if (!dialogAPI.getInteractionTarget().getMemory().contains("$aotd_precollapse_fleet")) {
-                    CampaignFleetAPI fleet = FleetFactory.createGenericFleet(factionAPI.getId(), "Automatic Defence Fleet", 2, 240);
+                    FleetParamsV3 params = new FleetParamsV3(
+                            dialogAPI.getInteractionTarget().getLocation(),
+                            Factions.REMNANTS,
+                            1f,
+                            FleetTypes.PATROL_LARGE,
+                            220, // combatPts
+                            0f, // freighterPts
+                            0f, // tankerPts
+                            0f, // transportPts
+                            0f, // linerPts
+                            0f, // utilityPts
+                            0f // qualityMod
+                    );
+                    CampaignFleetAPI fleet = FleetFactoryV3.createFleet(params);
+                    fleet.setName("Automatic Defence Fleet");
                     fleet.setNoFactionInName(true);
                     fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_FLEET_TYPE, "aotd_expedition");
                     if (factionAPI.getId().equals(Factions.LUDDIC_PATH)) {
@@ -163,7 +180,6 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
         config.noSalvageLeaveOptionText = Misc.ucFirst("Continiue");
         config.dismissOnLeave = false;
         config.printXPToDialog = true;
-
         config.salvageRandom = new Random();
         final FleetInteractionDialogPluginImpl plugin = new FleetInteractionDialogPluginImpl(config);
 
@@ -206,6 +222,11 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
                 } else {
                     dialog.dismiss();
                 }
+            }
+
+            @Override
+            public void battleContextCreated(InteractionDialogAPI dialog, BattleCreationContext bcc) {
+                bcc.aiRetreatAllowed = false;
             }
         };
 

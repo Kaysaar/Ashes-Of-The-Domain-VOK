@@ -44,8 +44,10 @@ public class PurificationCenter extends BaseIndustry {
     public void unapply() {
         super.unapply();
         Industry ind =  market.getIndustry(Industries.POPULATION);
-        ind.getSupply(AoTDCommodities.WATER).getQuantity().unmodifyFlat("water_prod");
+        if(ind!=null){
+            ind.getSupply(AoTDCommodities.WATER).getQuantity().unmodifyFlat("water_prod");
 
+        }
     }
 
     @Override

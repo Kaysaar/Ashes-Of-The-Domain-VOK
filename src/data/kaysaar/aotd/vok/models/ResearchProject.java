@@ -2,12 +2,14 @@ package data.kaysaar.aotd.vok.models;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
+import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
 import org.lazywizard.lazylib.MathUtils;
 
 import java.util.ArrayList;
@@ -110,7 +112,7 @@ public abstract class ResearchProject {
                 MessageIntel intel = new MessageIntel("New Special Project Available!", Misc.getTooltipTitleAndLightHighlightColor());
                 intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
                 intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
-                Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+                Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.INTERACTION_DIALOG,new AoTDResearchUIDP());
             }
 
         }
@@ -122,7 +124,7 @@ public abstract class ResearchProject {
             MessageIntel intel = new MessageIntel("Your attention is  immediately required towards  "+spec.nameOfProject+" project!", Misc.getNegativeHighlightColor());
             intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
             intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
-            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.INTERACTION_DIALOG,new AoTDResearchUIDP());
 
         }
         if(currentProgress>=calculateTotalDays()&&!haveDoneIt){

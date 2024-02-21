@@ -41,13 +41,19 @@ public class AoTDFactionResearchManager {
         return researchRepoOfFaction;
     }
 
+    public ArrayList<ResearchOption> queuedReesarchOptions = new ArrayList<>();
+
+    public ArrayList<ResearchOption> getQueuedReesarchOptions() {
+        if (queuedReesarchOptions == null) queuedReesarchOptions = new ArrayList<>();
+        return queuedReesarchOptions;
+    }
+
     public ArrayList<ScientistAPI> researchCouncil = new ArrayList<>();
     public ScientistAPI currentHeadOfCouncil;
     public ArrayList<ResearchOption> researchRepoOfFaction;
     public float bonusToResearch = 0.0f;
     public float pointsTowardsUpgrade = 0.0f;
     public static float UPGRADE_THRESHOLD = 250f;
-
 
 
     public boolean canUpgrade = false;
@@ -69,15 +75,17 @@ public class AoTDFactionResearchManager {
         this.managerTiedToFaction = factionAPI;
         this.researchRepoOfFaction = researchOptions;
     }
+
     public void setCanUpgrade(boolean canUpgrade) {
         this.canUpgrade = canUpgrade;
     }
+
     public void manageForAI(float amount) {
         pointTowardsExpedition += Global.getSector().getClock().convertToDays(amount);
-        if(haveMetCriteriaForUpgrade()){
-            pointsTowardsUpgrade +=Global.getSector().getClock().convertToDays(amount);
+        if (haveMetCriteriaForUpgrade()) {
+            pointsTowardsUpgrade += Global.getSector().getClock().convertToDays(amount);
         }
-        if(pointsTowardsUpgrade>=UPGRADE_THRESHOLD){
+        if (pointsTowardsUpgrade >= UPGRADE_THRESHOLD) {
             pointsTowardsUpgrade = 0;
             canUpgrade = true;
         }
@@ -95,27 +103,30 @@ public class AoTDFactionResearchManager {
             }
         }
     }
-    public boolean haveMetCriteriaForUpgrade(){
 
-       return haveResearched(AoTDTechIds.DEEP_MINING_METHODS)&&haveResearched(AoTDTechIds.STREAMLINED_PRODUCTION);
+    public boolean haveMetCriteriaForUpgrade() {
+
+        return haveResearched(AoTDTechIds.DEEP_MINING_METHODS) && haveResearched(AoTDTechIds.STREAMLINED_PRODUCTION);
     }
-    public void sentFleet(){
+
+    public void sentFleet() {
         pointTowardsExpedition -= 380;
-        FactionAPI faction =getFaction();
-        if(Misc.getFactionMarkets(getFaction()).isEmpty()){
+        FactionAPI faction = getFaction();
+        if (Misc.getFactionMarkets(getFaction()).isEmpty()) {
             for (IntelInfoPlugin intelInfoPlugin : Global.getSector().getIntelManager().getIntel(ResearchExpeditionIntel.class)) {
                 ResearchExpeditionIntel intel = (ResearchExpeditionIntel) intelInfoPlugin;
-                if(intel.idOfIntel.split("_")[1].equals(getFaction().getId())){
+                if (intel.idOfIntel.split("_")[1].equals(getFaction().getId())) {
                     Global.getSector().getIntelManager().removeIntel(intelInfoPlugin);
                     break;
                 }
             }
-            AoTDMainResearchManager.getInstance().expeditionCounter =  AoTDMainResearchManager.getInstance().expeditionThreshold/3;
+            AoTDMainResearchManager.getInstance().expeditionCounter = AoTDMainResearchManager.getInstance().expeditionThreshold / 3;
             return;
         }
         CampaignFleetAPI fleet = FleetFactory.createGenericFleet(faction.getId(), "Expedition Fleet", faction.getDoctrine().getShipQuality(), 150);
         PlanetAPI targetPlanet = null;
         ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList);
+        if (preCollapsePlanets == null) return;
         Collections.shuffle(preCollapsePlanets);
         for (PlanetAPI preCollapsePlanet : preCollapsePlanets) {
             if (!preCollapsePlanet.hasCondition("pre_collapse_facility")) continue;
@@ -125,7 +136,9 @@ public class AoTDFactionResearchManager {
             targetPlanet = preCollapsePlanet;
             break;
         }
-
+        if (targetPlanet == null) {
+            return;
+        }
         Long seed = new Random().nextLong();
         fleet.addTag("aotd_expedition");
         fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_FLEET_TYPE, "aotd_expedition");
@@ -135,7 +148,7 @@ public class AoTDFactionResearchManager {
         fleet.setFacing((float) Math.random() * 360f);
         for (IntelInfoPlugin intelInfoPlugin : Global.getSector().getIntelManager().getIntel(ResearchExpeditionIntel.class)) {
             ResearchExpeditionIntel intel = (ResearchExpeditionIntel) intelInfoPlugin;
-            if(intel.idOfIntel.split("_")[1].equals(getFaction().getId())){
+            if (intel.idOfIntel.split("_")[1].equals(getFaction().getId())) {
                 intel.setLaunchMarket(from);
                 break;
             }
@@ -149,7 +162,7 @@ public class AoTDFactionResearchManager {
         fleet.removeAbility(Abilities.GO_DARK);
         fleet.setTransponderOn(true);
         assert targetPlanet != null;
-
+        if (targetPlanet.getMarket() == null) return;
         targetPlanet.getMarket().getMemory().set("$aotd_chosen_by_faction", true, 300);
         fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_ALLOW_LONG_PURSUIT, false);
         fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_HOLD_VS_STRONGER, true);
@@ -162,6 +175,7 @@ public class AoTDFactionResearchManager {
         fleet.addEventListener(new ResearchFleetDefeatListener());
         fleet.addScript(new ResearchFleetRouteManager(fleet, data, targetPlanet));
     }
+
     public void setAICounter(float counter) {
         AIChrages += counter;
     }
@@ -186,12 +200,12 @@ public class AoTDFactionResearchManager {
             }
         }
 
-        if(getFaction().isPlayerFaction()){
+        if (getFaction().isPlayerFaction()) {
             boolean hadMetreq = false;
             for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
                 if (marketAPI.getFaction().getId().equals(managerTiedToFaction.getId())) {
                     if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
-                        if(marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER).getSpecialItem() != null){
+                        if (marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER).getSpecialItem() != null) {
                             hadMetreq = true;
                         }
                     }
@@ -204,7 +218,7 @@ public class AoTDFactionResearchManager {
             }
         }
 
-        if(this.getFaction().isPlayerFaction()){
+        if (this.getFaction().isPlayerFaction()) {
             if (this.haveResearched(AoTDTechIds.AGRICULTURE_INDUSTRIALIZATION)) {
                 Global.getSettings().getIndustrySpec(AoTDIndustries.MONOCULTURE).setUpgrade(Industries.FARMING);
             }
@@ -237,21 +251,21 @@ public class AoTDFactionResearchManager {
                     researchOption.daysSpentOnResearching += 100 * Global.getSector().getClock().convertToDays(amount);
                 }
                 researchOption.daysSpentOnResearching += Global.getSector().getClock().convertToDays(amount);
-                double multiplier =1;
-                if(Global.getSettings().getModManager().isModEnabled("lunalib")){
-                    if(LunaSettings.getFloat("aotd_vok","aotd_expedition_threshold")!=null){
-                        multiplier =LunaSettings.getDouble("aotd_vok","aotd_reserarch_speed_multiplier");
+                double multiplier = 1;
+                if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
+                    if (LunaSettings.getFloat("aotd_vok", "aotd_expedition_threshold") != null) {
+                        multiplier = LunaSettings.getDouble("aotd_vok", "aotd_reserarch_speed_multiplier");
                     }
 
                 }
-                if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch()*multiplier) {
+                if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch() * multiplier) {
                     researchOption.daysSpentOnResearching = 0;
                     researchOption.setResearched(true);
 
                     currentFocusId = null;
                     if (getFaction().isPlayerFaction()) {
                         notifyResearchCompletion(researchOption);
-                        Global.getSoundPlayer().playUISound("aotd_research_complete",1f,1f);
+                        Global.getSoundPlayer().playUISound("aotd_research_complete", 1f, 1f);
 
                     } else {
                         if (Global.getSettings().isDevMode()) {
@@ -275,17 +289,17 @@ public class AoTDFactionResearchManager {
     }
 
     private void notifyFactionStartedResearchOnDevMode(ResearchOption researchOption) {
-        MessageIntel intel = new MessageIntel("Faction "+getFaction().getDisplayName()+" Started Research - " + researchOption.Name, Misc.getBasePlayerColor());
+        MessageIntel intel = new MessageIntel("Faction " + getFaction().getDisplayName() + " Started Research - " + researchOption.Name, Misc.getBasePlayerColor());
         intel.setIcon(getFaction().getCrest());
         intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
         Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO);
     }
 
     private void notifyFactionFinishedResearchOnDevMode(ResearchOption researchOption) {
-        MessageIntel intel = new MessageIntel("Faction "+getFaction().getDisplayName()+" Researched Technology - " + researchOption.Name, Misc.getBasePlayerColor());
+        MessageIntel intel = new MessageIntel("Faction " + getFaction().getDisplayName() + " Researched Technology - " + researchOption.Name, Misc.getBasePlayerColor());
         intel.setIcon(getFaction().getCrest());
         intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
-        Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.INTERACTION_DIALOG,new AoTDResearchUIDP());
+        Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.INTERACTION_DIALOG, new AoTDResearchUIDP());
     }
 
     public void pickResearchFocus(String id) {
@@ -379,7 +393,6 @@ public class AoTDFactionResearchManager {
         if (numberRemaining >= 1) {
             return false;
         }
-
         return true;
     }
 

@@ -50,7 +50,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             l.addListener(new TechModifiersApplier(), true);
         if(!l.hasListenerOfClass(AIColonyManagerListener.class))
             l.addListener(new AIColonyManagerListener());
-
     }
 
     @Override
