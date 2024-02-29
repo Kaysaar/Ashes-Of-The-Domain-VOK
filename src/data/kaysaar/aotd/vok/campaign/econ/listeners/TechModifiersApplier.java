@@ -28,10 +28,11 @@ public class TechModifiersApplier implements PlayerColonizationListener, Economy
     public void reportPlayerColonizedPlanet(PlanetAPI planetAPI) {
         MarketAPI m = planetAPI.getMarket();
         if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION,m)){
-            HazmatCondition.applyRessourceCond(m);
             ResearchedUpkeepModifier.applyRessourceCond(m);
         }
-
+        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.HAZMAT_WORKING_EQUIPMENT,m)){
+            HazmatCondition.applyRessourceCond(m);
+        }
     }
 
     @Override
