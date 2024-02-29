@@ -613,15 +613,18 @@ public class UpgradeListUI implements CustomDialogDelegate {
         if (selected == null) return;
         industry.getSpec().setUpgrade(selected);
         SpecialItemData specItem = industry.getSpecialItem();
-        if (specItem != null && getIndustrySpec(selected).getTags().contains("consumes")) {
-            if(AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
-                Misc.getStorageCargo(industry.getMarket()).addSpecial(specItem, 1);
+        if(getIndustrySpec(selected).getTags().contains("consumes")){
+            if (specItem != null) {
+                if(AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
+                    Misc.getStorageCargo(industry.getMarket()).addSpecial(specItem, 1);
+                }
+                 if (!canInstallItem(selected, specItem.getId())) {
+                    Misc.getStorageCargo(industry.getMarket()).addSpecial(specItem, 1);
+                }
+                 industry.setSpecialItem(null);
             }
-            industry.setSpecialItem(null);
-        } else if (specItem != null && !canInstallItem(selected, specItem.getId())) {
-            Misc.getStorageCargo(industry.getMarket()).addSpecial(specItem, 1);
-            industry.setSpecialItem(null);
         }
+
         industry.startUpgrading();
         industry.getSpec().setUpgrade(null);
 
