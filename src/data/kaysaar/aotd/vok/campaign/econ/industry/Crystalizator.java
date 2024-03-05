@@ -7,6 +7,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorPlugin;
+import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorRepo;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
@@ -50,13 +52,7 @@ public class Crystalizator extends BaseIndustry {
     public boolean isAvailableToBuild() {
         return  AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PRODUCTION_MATRIX,market);
     }
-    @Override
-    public String getUnavailableReason() {
-        if(!checkForItemBeingInstalled(this.market,Industries.REFINING,Items.CATALYTIC_CORE)){
-            return "Catalytic Core required to be installed in Refining";
-        }
-        return null;
-    }
+
 
     @Override
     public boolean showWhenUnavailable() {

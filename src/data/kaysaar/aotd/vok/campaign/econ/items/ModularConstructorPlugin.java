@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.CargoTransferHandlerAPI;
 import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
 import com.fs.starfarer.api.campaign.impl.items.BaseSpecialItemPlugin;
 import com.fs.starfarer.api.campaign.impl.items.BlueprintProviderItem;
+import com.fs.starfarer.api.campaign.impl.items.GenericSpecialItemPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.Alignment;
@@ -15,25 +16,24 @@ import com.fs.starfarer.ui.P;
 import org.json.JSONException;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ModularConstructorPlugin extends BaseSpecialItemPlugin implements BlueprintProviderItem {
+public class ModularConstructorPlugin extends GenericSpecialItemPlugin {
 
-    protected SpecialItemSpecAPI itemSpecAPI;
     protected IndustrySpecAPI industrySpecAPI;
 
     @Override
     public void init(CargoStackAPI stack) {
         super.init(stack);
-        itemSpecAPI = Global.getSettings().getSpecialItemSpec(stack.getSpecialDataIfSpecial().getData());
-        industrySpecAPI = Global.getSettings().getIndustrySpec(retrieveTypeOfConstructor());
+        industrySpecAPI = Global.getSettings().getIndustrySpec(this.getSpec().getId().split("_")[2]);
     }
 
     @Override
     public void render(float x, float y, float w, float h, float alphaMult,
                        float glowMult, SpecialItemRendererAPI renderer) {
-        if(itemSpecAPI!=null){
+        if(industrySpecAPI!=null){
             float cx = x + w / 2f;
             float cy = y + h / 2f;
 
@@ -71,22 +71,23 @@ public class ModularConstructorPlugin extends BaseSpecialItemPlugin implements B
 
     @Override
     public String getName() {
-        if (itemSpecAPI != null) {
-            return super.getName() + " : " + Global.getSettings().getIndustrySpec(retrieveTypeOfConstructor()).getName() + " Type";
-        }
         return super.getName();
     }
-    public static void  setConstructorKnowledge(ModularConstructorPlugin constructor,String itemId){
-        constructor.itemSpecAPI = Global.getSettings().getSpecialItemSpec(itemId);
-        constructor.industrySpecAPI = Global.getSettings().getIndustrySpec(constructor.retrieveTypeOfConstructor());
+    public static String retrieveNameForReq(String industryId){
+        for (SpecialItemSpecAPI allSpecialItemSpec : Global.getSettings().getAllSpecialItemSpecs()) {
+            if(allSpecialItemSpec.getId().equals("modular_constructor_"+industryId)){
+                return allSpecialItemSpec.getName();
+            }
+        }
+        return "";
     }
 
     @Override
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, CargoTransferHandlerAPI transferHandler, Object stackSource) {
         super.createTooltip(tooltip, expanded, transferHandler, stackSource);
         tooltip.addSectionHeading("Constructor capabilities:", Alignment.MID, 10f);
-        if(itemSpecAPI!=null){
-            tooltip.addPara("This constructor is capable of upgrading %s into %s", 10f, Color.ORANGE, retriveUpgradeFrom(),retrieveIndustries() );
+        if(industrySpecAPI!=null){
+            tooltip.addPara("This constructor is capable of upgrading %s into %s", 10f, Color.ORANGE, retriveUpgradeFrom(),retrieveIndustries(this.industrySpecAPI) );
             tooltip.addPara("Note! After start of industry's upgrade, item is irreversibly consumed!", Misc.getNegativeHighlightColor(),10f);
         }
         else{
@@ -96,36 +97,15 @@ public class ModularConstructorPlugin extends BaseSpecialItemPlugin implements B
 
     }
 
-    @Override
-    public List<String> getProvidedShips() {
-        return null;
-    }
-
-    @Override
-    public List<String> getProvidedWeapons() {
-        return null;
-    }
-
-    @Override
-    public List<String> getProvidedFighters() {
-        return null;
-    }
-
-    @Override
-    public List<String> getProvidedIndustries() {
-        return null;
-    }
 
     public String retrieveTypeOfConstructor() {
-        if (itemSpecAPI != null) {
+        if (industrySpecAPI != null) {
             for (IndustrySpecAPI allIndustrySpec : Global.getSettings().getAllIndustrySpecs()) {
                 String branch = "";
                 boolean consumes = false;
                 for (String tag : allIndustrySpec.getTags()) {
                     if (tag.contains("consumes")) {
-                        if (tag.contains(itemSpecAPI.getId())) {
                             consumes = true;
-                        }
                     }
                     if (tag.contains("aotd")) {
                         branch = tag.split("_")[1].trim();
@@ -146,36 +126,38 @@ public class ModularConstructorPlugin extends BaseSpecialItemPlugin implements B
     }
 
     public String retriveUpgradeFrom() {
-        if (itemSpecAPI != null) {
-            for (IndustrySpecAPI allIndustrySpec : Global.getSettings().getAllIndustrySpecs()) {
-                String branch = "";
-                boolean consumes = false;
-                for (String tag : allIndustrySpec.getTags()) {
-                    if (tag.contains("consumes")) {
-                        if (tag.contains(itemSpecAPI.getId())) {
-                           return Global.getSettings().getIndustrySpec(tag.split(":")[1]).getName();
-                        }
-                    }
-                }
-            }
-
+        if (industrySpecAPI != null) {
+            return industrySpecAPI.getName();
         }
         return "";
     }
-    public String retrieveIndustries() {
-        if (itemSpecAPI != null) {
+    public static  String retrieveIndustries(IndustrySpecAPI industrySpecAPI) {
+        if (industrySpecAPI != null) {
             String all = "";
+            ArrayList<String>industries = new ArrayList<>();
             for (IndustrySpecAPI allIndustrySpec : Global.getSettings().getAllIndustrySpecs()) {
                 String branch = "";
                 boolean consumes = false;
+                int i = 0;
                 for (String tag : allIndustrySpec.getTags()) {
                     if (tag.contains("consumes")) {
-                        if (tag.contains(itemSpecAPI.getId())) {
-                            all += allIndustrySpec.getName() + " ";
+                        if (tag.contains(industrySpecAPI.getId())) {
+                            industries.add( allIndustrySpec.getName());
                         }
                     }
                 }
 
+            }
+            int i =0;
+            for (String industry : industries) {
+                if(i+1>=industries.size()){
+                    all += industry;
+                }
+                else{
+                    all += industry + ", ";
+                }
+
+                i++;
             }
             return all;
         }

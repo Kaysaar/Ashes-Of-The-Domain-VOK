@@ -122,6 +122,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         techTreeButtonPanelUI.placeTooltip(0, 0);
         techTreeButtonPanelUI.placeSubPanel(0, -2);
 
+
         projectListUI = new ResearchProjectListComponent();
         projectListUI.init(mainPanel, specialProjectListPanel, specialProjectListTooltip);
         projectListUI.setHeight(HEIGHT - 150);
@@ -528,6 +529,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         glClearStencil(0);
         glStencilMask(0xff);
         if (horizontalTooltipMaker != null && horizontalTooltipMaker.getHorizontalScrollbar() != null&&horizontalTooltipMaker.mainPanel!=null) {
+            horizontalTooltipMaker.getHorizontalScrollbar().moveTooltip(horizontalTooltipMaker.mainPanel.getPosition().getWidth(),horizontalTooltipMaker.horizontalScrollbar.startingX);
             horizontalTooltipMaker.getHorizontalScrollbar().handleMouseDragging(horizontalTooltipMaker.mainPanel.getPosition().getWidth());
         }
             GL11.glPushMatrix();
@@ -812,7 +814,6 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, null);
             createUIForTechInfo();
             dialog.setOpacity(1.0f);
-
         }
 
 

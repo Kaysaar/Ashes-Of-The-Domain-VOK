@@ -18,7 +18,7 @@ import java.util.List;
 public class HorizontalScrollbar {
     public static final Logger log = Global.getLogger(HorizontalScrollbar.class);
     private float scrollbarX = 800f; // Initial position
-    private float startingX = 0;
+    public float startingX = 0;
     private float startingY = 0;
     private float scrollbarWidth = 120f;
     public boolean isDraggingWithRightMouse = false;
@@ -162,6 +162,22 @@ public class HorizontalScrollbar {
         }
         if(!isDraggingWithRightMouse){
             startingXOfRight = -1;
+        }
+
+    }
+
+    public void moveTooltip(float panelWidth, float begining) {
+        if(!isDraggingWithRightMouse&&!isDragging){
+            float currentOffset = scrollbarX - begining;
+            float percent = 0;
+            percent = currentOffset / panelWidth;
+
+            if (boundTooltip != null) {
+                currOffset = -(trueWidth * percent);
+                boundTooltip.getExternalScroller().setXOffset(currOffset);
+
+
+            }
         }
 
     }

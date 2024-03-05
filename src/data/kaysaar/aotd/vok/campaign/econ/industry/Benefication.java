@@ -9,6 +9,8 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorPlugin;
+import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorRepo;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
@@ -62,7 +64,6 @@ public class Benefication extends BaseIndustry {
     @Override
     public String getUnavailableReason() {
         String reasoning = null;
-
         if (AoDUtilis.getNormalOreAmount(market) < -1) {
             reasoning = "There is no ore on that planet large enough to support that industry ";
         }
@@ -73,13 +74,6 @@ public class Benefication extends BaseIndustry {
 
         }
 
-        if (!checkForItemBeingInstalled(market, Industries.MINING, Items.MANTLE_BORE)) {
-            if (reasoning != null) {
-                reasoning += "\nMantle Bore required to be installed in Mining";
-            } else {
-                reasoning = "Mantle Bore required to be installed in Mining";
-            }
-        }
 
 
         return reasoning;
