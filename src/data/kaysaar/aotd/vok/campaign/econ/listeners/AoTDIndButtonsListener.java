@@ -109,7 +109,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
             tooltip.addPara("Access interface of research center",0f);
         }
         if (opt.id == PROGRAMMING) {
-            tooltip.addPara("With usage of technology, provided by Galatia Research Council, we are able to re-program dormant Constructors, to suit our needs for rapid industrialization.",0f);
+            tooltip.addPara("With usage of advanced technology, we are able to re-program dormant Constructors, to suit our needs for rapid industrialization.",0f);
         }
         if (opt.id == AOTD_VOK_CANCEL_UPGRADE) {
             String upgradeId = (String) reflectionUtilis.getPrivateVariableFromSuperClass("upgradeId", opt.ind);

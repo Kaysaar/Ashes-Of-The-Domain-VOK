@@ -11,7 +11,9 @@ import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
 import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorPlugin;
+import data.kaysaar.aotd.vok.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import lunalib.lunaSettings.LunaSettings;
 
 
 import java.util.ArrayList;
@@ -30,7 +32,17 @@ public class AoDUtilis {
         return ModularConstructorPlugin.retrieveNameForReq(industryId) +" required to be installed in "+Global.getSettings().getIndustrySpec(industryId).getName();
 
     }
+    public static float calculatePercentOfProgression(ResearchOption option){
+        if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
+            if (LunaSettings.getFloat("aotd_vok", "aotd_expedition_threshold") != null) {
+                Double multiplier = LunaSettings.getDouble("aotd_vok", "aotd_reserarch_speed_multiplier");
+                return (float) (option.daysSpentOnResearching/(option.getSpec().getTimeToResearch()*multiplier));
+            }
 
+        }
+
+        return (float) (option.daysSpentOnResearching/(option.getSpec().getTimeToResearch()));
+    }
     public static boolean checkForFamilyIndustryInstance(MarketAPI marketAPI, String industryIdToIgnoire, String category, String Base, Industry.IndustryTooltipMode mode) {
 
         for (Industry industry : marketAPI.getIndustries()) {
