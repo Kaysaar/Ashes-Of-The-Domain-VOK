@@ -19,6 +19,7 @@ import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.CoronalSegment;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
+import data.kaysaar.aotd.vok.ui.ModularFabricatorUI;
 import data.kaysaar.aotd.vok.ui.StellaManufactoriumUI;
 import data.kaysaar.aotd.vok.ui.UpgradeListUI;
 
@@ -34,6 +35,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
     public static Object STELLA = new Object();
     public static Object CORONAL = new Object();
     public static Object RESEARCH_CENTER = new Object();
+    public static Object PROGRAMMING = new Object();
     ReflectionUtilis reflectionUtilis = new ReflectionUtilis();
     static ArrayList<Pair<String,String>> industries = new ArrayList<>();
     static {
@@ -64,7 +66,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
        }
        if(ind instanceof CoronalSegment && !ind.isBuilding()){
            if(!((CoronalSegment) ind).haveCompletedRestoration){
-               List<IndustryOptionData> result = new ArrayList<IndustryOptionData>();
+               List<IndustryOptionData> result = new ArrayList<>();
                IndustryOptionData opt;
                opt = new IndustryOptionData("Repair section", CORONAL, ind, this);
                opt.color = new Color(246, 94, 0, 255);
@@ -72,14 +74,21 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
            }
        }
         if(ind.getId().equals("stella_manufactorium")){
-            List<IndustryOptionData> result = new ArrayList<IndustryOptionData>();
+            List<IndustryOptionData> result = new ArrayList<>();
             IndustryOptionData opt;
             opt = new IndustryOptionData("Access Stellar Forge", STELLA, ind, this);
             opt.color = new Color(246, 94, 0, 255);
             data.add(opt);
         }
+        if(ind.getId().equals("modula_program")){
+            List<IndustryOptionData> result = new ArrayList<>();
+            IndustryOptionData opt;
+            opt = new IndustryOptionData("Reprogram Modular Constructor", PROGRAMMING, ind, this);
+            opt.color = new Color(13, 86, 222, 255);
+            data.add(opt);
+        }
         if(ind.getId().equals(AoTDIndustries.RESEARCH_CENTER)&&ind.getMarket().getFaction().isPlayerFaction()){
-            List<IndustryOptionData> result = new ArrayList<IndustryOptionData>();
+            List<IndustryOptionData> result = new ArrayList<>();
             IndustryOptionData opt;
             opt = new IndustryOptionData("Research Center", RESEARCH_CENTER, ind, this);
             opt.color = new Color(0, 217, 246, 255);
@@ -99,8 +108,11 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
         if (opt.id == RESEARCH_CENTER) {
             tooltip.addPara("Access interface of research center",0f);
         }
+        if (opt.id == PROGRAMMING) {
+            tooltip.addPara("With usage of technology, provided by Galatia Research Council, we are able to re-program dormant Constructors, to suit our needs for rapid industrialization.",0f);
+        }
         if (opt.id == AOTD_VOK_CANCEL_UPGRADE) {
-            String upgradeId = (String) reflectionUtilis.getPrivateVariableFromSuperClass("upgradeId",(BaseIndustry)opt.ind);
+            String upgradeId = (String) reflectionUtilis.getPrivateVariableFromSuperClass("upgradeId", opt.ind);
             IndustrySpecAPI upgrdInd = Global.getSettings().getIndustrySpec(upgradeId);
             String costStr = Misc.getDGSCredits(upgrdInd.getCost());
             if (opt.ind.getBuildOrUpgradeProgress() != 0.0f) {
@@ -127,6 +139,11 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
         }
         if (opt.id == RESEARCH_CENTER) {
             ui.showDialog(null, (new AoTDResearchUIDP()));
+        }
+
+        if(opt.id == PROGRAMMING ){
+            CustomDialogDelegate delegate = new ModularFabricatorUI(opt.ind);
+            ui.showDialog(ModularFabricatorUI.WIDTH, ModularFabricatorUI.HEIGHT, delegate);
         }
         if(opt.id == STELLA ){
             CustomDialogDelegate delegate = new StellaManufactoriumUI(opt.ind);

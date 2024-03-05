@@ -102,14 +102,28 @@ public class PreCollapseFacLoot extends BaseCommandPlugin {
         planet.addDropRandom(d);
 
         CargoAPI salvage = SalvageEntity.generateSalvage(random, 1f, 1f, 1f, 1f, planet.getDropValue(), planet.getDropRandom());
-        CargoAPI extra = BaseSalvageSpecial.getCombinedExtraSalvage(memoryMap);
-        salvage.addAll(extra);
-        BaseSalvageSpecial.clearExtraSalvage(memoryMap);
-        if (!extra.isEmpty()) {
-            ListenerUtil.reportExtraSalvageShown(planet);
-        }
-        salvage.sort();
 
+            salvage.addSpecial(new SpecialItemData("modular_constructor_empty",null),getRandomNumber(0,4));
+        if(getRandomNumber(0,6)>=5){
+            int secondRoll = getRandomNumber(0,3);
+            if(secondRoll==0){
+                salvage.addSpecial(new SpecialItemData("modular_constructor_empty",null),getRandomNumber(0,4));
+
+            }
+            if(secondRoll==1){
+                salvage.addSpecial(new SpecialItemData("modular_constructor_refining",null),getRandomNumber(0,4));
+
+            }
+            if(secondRoll==2){
+                salvage.addSpecial(new SpecialItemData("modular_constructor_mining",null),getRandomNumber(0,4));
+
+            }
+            if(secondRoll==3){
+                salvage.addSpecial(new SpecialItemData("modular_constructor_orbitalworks",null),getRandomNumber(0,4));
+            }
+        }
+        BaseSalvageSpecial.clearExtraSalvage(memoryMap);
+        salvage.sort();
         dialog.getVisualPanel().showLoot("Salvaged", salvage, false, true, true, new CoreInteractionListener() {
             public void coreUIDismissed() {
                 dialog.dismiss();

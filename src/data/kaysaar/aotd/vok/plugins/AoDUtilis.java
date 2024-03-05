@@ -10,6 +10,7 @@ import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
+import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorPlugin;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 
@@ -25,6 +26,10 @@ public class AoDUtilis {
         Map<String, Boolean> researchSaved = (HashMap<String, Boolean>) Global.getSector().getPersistentData().get("researchsaved");
         return researchSaved != null ? researchSaved.get(id) : false;
     }
+    public static String consumeReq(String industryId){
+        return ModularConstructorPlugin.retrieveNameForReq(industryId) +" required to be installed in "+Global.getSettings().getIndustrySpec(industryId).getName();
+
+    }
 
     public static boolean checkForFamilyIndustryInstance(MarketAPI marketAPI, String industryIdToIgnoire, String category, String Base, Industry.IndustryTooltipMode mode) {
 
@@ -34,7 +39,6 @@ public class AoDUtilis {
             }
             for (String tag : industry.getSpec().getTags()) {
                 if (tag.equals(AoTDDataInserter.AOTD + category) && !industry.getId().equals(Base)) {
-
                     return true;
                 }
             }

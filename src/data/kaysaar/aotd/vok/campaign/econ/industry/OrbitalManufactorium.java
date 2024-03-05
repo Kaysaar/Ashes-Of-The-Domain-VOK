@@ -9,8 +9,12 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorPlugin;
+import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorRepo;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+
+import static data.kaysaar.aotd.vok.plugins.AoDUtilis.checkForItemBeingInstalled;
 
 public class OrbitalManufactorium extends HeavyIndustry {
     @Override
@@ -72,11 +76,6 @@ public class OrbitalManufactorium extends HeavyIndustry {
     public boolean showWhenUnavailable() {
         return  AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market);
     }
-    @Override
-    public String getUnavailableReason() {
-        if(!AoDUtilis.checkForItemBeingInstalled(market,Industries.ORBITALWORKS,Items.PRISTINE_NANOFORGE)){
-            return "Pristine Nanoforge must be installed on Orbital Works to update";
-        }
-        return null;
-    }
+
+
 }

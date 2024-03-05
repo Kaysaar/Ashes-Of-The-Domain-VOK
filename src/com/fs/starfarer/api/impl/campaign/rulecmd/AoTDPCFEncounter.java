@@ -71,7 +71,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
                             Factions.REMNANTS,
                             1f,
                             FleetTypes.PATROL_LARGE,
-                            220, // combatPts
+                            MathUtils.getRandomNumberInRange(140,180), // combatPts
                             0f, // freighterPts
                             0f, // tankerPts
                             0f, // transportPts
@@ -80,6 +80,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
                             0f // qualityMod
                     );
                     CampaignFleetAPI fleet = FleetFactoryV3.createFleet(params);
+
                     fleet.setName("Automatic Defence Fleet");
                     fleet.setNoFactionInName(true);
                     fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_FLEET_TYPE, "aotd_expedition");
@@ -156,6 +157,10 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
         }
         final CampaignFleetAPI defenders = dummy;
         if (defenders == null) return false;
+        if(defenders.getFaction().getId().equals(Factions.REMNANTS)){
+            defenders.getMemoryWithoutUpdate().set("$knowsWhoPlayerIs",false);
+
+        }
 
         dialog.setInteractionTarget(defenders);
         defenders.getMemoryWithoutUpdate().set("$LP_titheAskedFor", true);
@@ -175,12 +180,19 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
         config.showFleetAttitude = false;
         //config.alwaysAttackVsAttack = true;
         config.pullInStations = false;
+        config.impactsAllyReputation = false;
+        config.showWarningDialogWhenNotHostile = false;
+        config.impactsEnemyReputation = false;
         config.pullInEnemies = false;
         //config.pullInAllies = false;
         config.noSalvageLeaveOptionText = Misc.ucFirst("Continiue");
         config.dismissOnLeave = false;
         config.printXPToDialog = true;
         config.salvageRandom = new Random();
+        if(defenders.getFaction().getId().equals(Factions.REMNANTS)){
+            defenders.getMemoryWithoutUpdate().set("$knowsWhoPlayerIs",false);
+
+        }
         final FleetInteractionDialogPluginImpl plugin = new FleetInteractionDialogPluginImpl(config);
 
         final InteractionDialogPlugin originalPlugin = dialog.getPlugin();
@@ -207,7 +219,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
                         if (plugin != null) {
                             plugin.reportDefeated(p, entity, defenders);
                         }
-                        FireBest.fire(null, dialog, memoryMap, "BeatDefendersContinue");
+                        FireBest.fire("pre_fix_salvage", dialog, memoryMap, "BeatDefendersContinue");
                         entity.removeScriptsOfClass(FleetAdvanceScript.class);
                         dialog.getOptionPanel().clearOptions();
                         dialog.getVisualPanel().finishFadeFast();

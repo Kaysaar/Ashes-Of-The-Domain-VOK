@@ -396,7 +396,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
             for (String tag : upgrdInd.getSpec().getTags()) {
                 if(tag.contains("consumes")){
                     String[] splited = tag.split(":");
-                    areaCheckbox.setEnabled(AoDUtilis.checkForItemBeingInstalled(marketAPI,splited[1],splited[2]));
+                    areaCheckbox.setEnabled(canAfford && isAvailableToBuild&&AoDUtilis.checkForItemBeingInstalled(marketAPI,splited[1],splited[2]));
                     break;
                 }
             }
@@ -553,7 +553,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
                 if(tag.contains("consumes")){
                     String[] splited = tag.split(":");
                     if(!AoDUtilis.checkForItemBeingInstalled(marketAPI,splited[1],splited[2])){
-                        anchor.addPara(upgrdInd.getUnavailableReason(), Misc.getNegativeHighlightColor(), opad);
+                        anchor.addPara(AoDUtilis.consumeReq(splited[1]), Misc.getNegativeHighlightColor(), opad);
                     }
                     break;
                 }
@@ -613,17 +613,14 @@ public class UpgradeListUI implements CustomDialogDelegate {
         if (selected == null) return;
         industry.getSpec().setUpgrade(selected);
         SpecialItemData specItem = industry.getSpecialItem();
-        if(getIndustrySpec(selected).getTags().contains("consumes")){
-            if (specItem != null) {
-                if(AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
-                    Misc.getStorageCargo(industry.getMarket()).addSpecial(specItem, 1);
+        for (String tag : getIndustrySpec(selected).getTags()) {
+            if(tag.contains("consumes")){
+                if (specItem != null) {
+                    industry.setSpecialItem(null);
                 }
-                 if (!canInstallItem(selected, specItem.getId())) {
-                    Misc.getStorageCargo(industry.getMarket()).addSpecial(specItem, 1);
-                }
-                 industry.setSpecialItem(null);
             }
         }
+
 
         industry.startUpgrading();
         industry.getSpec().setUpgrade(null);

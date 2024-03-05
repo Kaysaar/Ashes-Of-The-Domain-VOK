@@ -8,10 +8,13 @@ import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.InstallableIndustryItemPlugin;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BoostIndustryInstallableItemEffect;
 import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorPlugin;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +59,32 @@ public class AoTDSpecialItemRepo {
                         pad);
             }
         });
+        ItemEffectsRepo.ITEM_EFFECTS.put("modular_constructor_refining", new BoostIndustryInstallableItemEffect(
+                "modular_constructor_refining", 0, 0) {
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+                text.addPara(pre + "Allows upgrading %s into : %s " ,10f, Color.ORANGE,
+                        "Refining",ModularConstructorPlugin.retrieveIndustries(Global.getSettings().getIndustrySpec(Industries.REFINING)));
+            }
+        });
+        ItemEffectsRepo.ITEM_EFFECTS.put("modular_constructor_mining", new BoostIndustryInstallableItemEffect(
+                "modular_constructor_mining", 0, 0) {
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+                text.addPara(pre + "Allows upgrading %s into : %s " ,10f, Color.ORANGE,
+                        "Mining",ModularConstructorPlugin.retrieveIndustries(Global.getSettings().getIndustrySpec(Industries.MINING)));
+            }
+        });
+        ItemEffectsRepo.ITEM_EFFECTS.put("modular_constructor_orbitalworks", new BoostIndustryInstallableItemEffect(
+                "modular_constructor_orbitalworks", 0, 0) {
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+                text.addPara(pre + "Allows upgrading %s into : %s " ,10f, Color.ORANGE,
+                        "Orbital Works",ModularConstructorPlugin.retrieveIndustries(Global.getSettings().getIndustrySpec(Industries.ORBITALWORKS)));
+
+            }
+        });
+
         ItemEffectsRepo.ITEM_EFFECTS.put(Items.CATALYTIC_CORE, new BoostIndustryInstallableItemEffect(
                 Items.CATALYTIC_CORE, ItemEffectsRepo.CATALYTIC_CORE_BONUS, 0) {
 
