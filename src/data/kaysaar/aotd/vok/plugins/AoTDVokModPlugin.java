@@ -8,12 +8,14 @@ import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
+import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchProgressionScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
+import org.lazywizard.lazylib.ui.FontException;
 
 import java.io.IOException;
 
@@ -50,6 +52,14 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             l.addListener(new TechModifiersApplier(), true);
         if(!l.hasListenerOfClass(AIColonyManagerListener.class))
             l.addListener(new AIColonyManagerListener());
+        l.removeListenerOfClass(CurrentResearchProgressUI.class);
+        if(!l.hasListenerOfClass(CurrentResearchProgressUI.class)) {
+            try {
+                l.addListener(new CurrentResearchProgressUI());
+            } catch (FontException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override

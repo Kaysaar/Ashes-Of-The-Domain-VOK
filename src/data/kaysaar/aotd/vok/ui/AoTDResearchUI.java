@@ -14,6 +14,7 @@ import com.fs.starfarer.ui.P;
 import data.kaysaar.aotd.vok.models.ResearchOption;
 import data.kaysaar.aotd.vok.models.ResearchProject;
 import data.kaysaar.aotd.vok.models.SpecialProjectStage;
+import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.ui.components.*;
@@ -308,7 +309,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                         openGlUtilis.drawProgressionBar(panels.getProgressionBar().getPosition(), 231, color, 1);
 
                     } else {
-                        openGlUtilis.drawProgressionBar(panels.getProgressionBar().getPosition(), 231, color, panels.TechToResearch.daysSpentOnResearching / panels.TechToResearch.TimeToResearch);
+                        openGlUtilis.drawProgressionBar(panels.getProgressionBar().getPosition(), 231, color, AoDUtilis.calculatePercentOfProgression(panels.TechToResearch));
 
                     }
                 }
