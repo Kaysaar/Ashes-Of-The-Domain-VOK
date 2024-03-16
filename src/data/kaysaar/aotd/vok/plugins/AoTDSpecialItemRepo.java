@@ -118,7 +118,7 @@ public class AoTDSpecialItemRepo {
         Global.getSettings().getSpecialItemSpec(Items.CORONAL_PORTAL).setParams("coronal_pylon");
     }
 
-    public void setVanilaSpecialItemNewIndustries(String specialItemID, String listOfAdditionalIndustries) {
+    public void setSpecialItemNewIndustries(String specialItemID, String listOfAdditionalIndustries) {
         SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(specialItemID);
         String prevParams = spec.getParams();
         if (prevParams.contains(listOfAdditionalIndustries)) return;

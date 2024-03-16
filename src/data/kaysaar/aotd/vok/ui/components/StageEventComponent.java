@@ -2,7 +2,6 @@ package data.kaysaar.aotd.vok.ui.components;
 
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.util.A;
 import data.kaysaar.aotd.vok.models.ResearchProject;
 
 import java.awt.*;

@@ -86,7 +86,7 @@ public class TechTreeResearchOptionPanel extends UiPanel {
 
             @Override
             public float getTooltipWidth(Object tooltipParam) {
-                return 300;
+                return 400;
             }
 
             @Override
@@ -101,7 +101,10 @@ public class TechTreeResearchOptionPanel extends UiPanel {
                 tooltip.addSectionHeading("Technology Name", Alignment.MID, 10f);
                 tooltip.addPara(TechToResearch.Name, 10f);
                 tooltip.addSectionHeading("Time need to research", Alignment.MID, 10f);
-                float days = TechToResearch.TimeToResearch*(float) multiplier - TechToResearch.daysSpentOnResearching;
+
+                float defaultDays = (TechToResearch.TimeToResearch*(float) multiplier);
+
+                float days = defaultDays - TechToResearch.daysSpentOnResearching-(defaultDays*(AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*(AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getAmountOfResearchFacilities()-1)));
                 String d = " days";
                 if (days <= 1) {
                     d = " day";
@@ -150,29 +153,38 @@ public class TechTreeResearchOptionPanel extends UiPanel {
                     tooltip.setParaInsigniaLarge();
                     LabelAPI title = tooltip.addPara("Items", Color.ORANGE, 10f);
                     tooltip.setParaFontDefault();
+
                     for (Map.Entry<String, Integer> entry : TechToResearch.ReqItemsToResearchFirst.entrySet()) {
-                        CustomPanelAPI panel = mainPanel.createCustomPanel(300, 60, null);
+                        if(entry.getValue()==0)continue;
+                        CustomPanelAPI panel = mainPanel.createCustomPanel(400, 60, null);
                         TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(60, 60, false);
-                        TooltipMakerAPI labelTooltip = panel.createUIElement(220, 60, false);
+                        TooltipMakerAPI labelTooltip = panel.createUIElement(320, 60, false);
                         LabelAPI labelAPI1 = null;
+
                         if (Global.getSettings().getCommoditySpec(entry.getKey()) != null) {
                             tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), 60, 60, 10f);
-                            labelAPI1 = labelTooltip.addPara(Global.getSettings().getCommoditySpec(entry.getKey()).getName() + " : " + entry.getValue(), 10f);
+                            labelAPI1 = labelTooltip.addPara(Global.getSettings().getCommoditySpec(entry.getKey()).getName() + " : " + entry.getValue(),10f);
+                            labelTooltip.addPara("You have %s located in Research Storages", 10f,Color.ORANGE,""+(int)manager.retrieveAmountOfItems(entry.getKey()));
+
                         }
                         if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
                             tooltipMakerAPI.addImage(Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName(), 60, 60, 10f);
-                            labelAPI1 = labelTooltip.addPara(Global.getSettings().getSpecialItemSpec(entry.getKey()).getName() + " : " + entry.getValue(), 10f);
+                            labelAPI1 = labelTooltip.addPara(Global.getSettings().getSpecialItemSpec(entry.getKey()).getName() + " : " + entry.getValue(),10f);
+                            labelTooltip.addPara("You have %s located in Research Storages", 10f,Color.ORANGE,""+(int)manager.retrieveAmountOfItems(entry.getKey()));
+
                         }
                         if (manager.haveMetReqForItem(entry.getKey(), entry.getValue()) || manager.getResearchOptionFromRepo(TechToResearch.Id).havePaidForResearch) {
                             labelAPI1.setColor(Misc.getPositiveHighlightColor());
+
                         } else {
                             labelAPI1.setColor(Misc.getNegativeHighlightColor());
                         }
                         if (TechToResearch.isResearched) {
                             labelAPI1.setColor(Misc.getPositiveHighlightColor());
                         }
+                        labelAPI1.autoSizeToWidth(320);
                         panel.addUIElement(tooltipMakerAPI).inTL(-10, -20);
-                        panel.addUIElement(labelTooltip).inTL(60, 5);
+                        panel.addUIElement(labelTooltip).inTL(60, -14);
                         tooltip.addCustom(panel, 10f);
                     }
 
@@ -292,8 +304,9 @@ public class TechTreeResearchOptionPanel extends UiPanel {
             beginx+=58;
         }
 
+        float defaultDays = (TechToResearch.TimeToResearch*(float) multiplier);
 
-        float days = (TechToResearch.TimeToResearch*(float) multiplier) - TechToResearch.daysSpentOnResearching;
+        float days = defaultDays - TechToResearch.daysSpentOnResearching-(defaultDays*(AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*(AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getAmountOfResearchFacilities()-1)));
         String d = " days";
         if (days <= 1) {
             d = " day";

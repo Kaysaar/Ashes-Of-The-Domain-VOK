@@ -10,6 +10,7 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -32,9 +33,9 @@ public class ResearchCenterPanel extends UiPanel {
         tooltip.addSectionHeading("Research Center", Alignment.MID, 10f);
         coverPanel = panel.createCustomPanel(300,128,null);
         imagePanel = coverPanel.createCustomPanel(115,128,null);
-        bonusPanel = panel.createCustomPanel(300,50,null);
-        modPanel = panel.createCustomPanel(300,height-217,null);
-        TooltipMakerAPI modPanelTooltip = modPanel.createUIElement(300,height-217,true);
+        bonusPanel = panel.createCustomPanel(300,200,null);
+        modPanel = panel.createCustomPanel(300,height-217-150,null);
+        TooltipMakerAPI modPanelTooltip = modPanel.createUIElement(300,height-217-150,true);
         currentScientist = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().currentHeadOfCouncil;
         TooltipMakerAPI imageAnchor = imagePanel.createUIElement(128,128,false);
         if(currentScientist!=null){
@@ -52,8 +53,23 @@ public class ResearchCenterPanel extends UiPanel {
         descriptionPanel.addUIElement(tooltipMakerAPI).inTL(-5,-5);
         coverPanel.addComponent(imagePanel).inTL(0,0);
         coverPanel.addComponent(descriptionPanel).inTL(125,5);
-        TooltipMakerAPI tooltipMakerAPI1= bonusPanel.createUIElement(300,50,false);
-        tooltipMakerAPI1.addPara("Currently controls "+ AoTDMainResearchManager.getInstance().getManagerForPlayer().howManyFacilitiesFactionControlls()+" research facilities.",Misc.getTooltipTitleAndLightHighlightColor(),10f);
+        TooltipMakerAPI tooltipOfBonuses= bonusPanel.createUIElement(306,50,false);
+        tooltipOfBonuses.addSectionHeading("Current Bonuses",Alignment.MID,10f);
+        float amountOfFacilities = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getAmountOfResearchFacilities();
+        float bonus = AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*100f;
+        if(AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getAmountOfResearchFacilities()>=1){
+           tooltipOfBonuses.addPara("Research Speed",Misc.getTooltipTitleAndLightHighlightColor(),10f);
+            String faciltiies = "facilities";
+            if(amountOfFacilities ==1){
+                faciltiies = "facility";
+            }
+            tooltipOfBonuses.addPara("Currently controls %s Research "+faciltiies+" : %s bonus research speed",10f, Color.ORANGE,""+(int)amountOfFacilities,""+((amountOfFacilities-1)*bonus)+"%");
+        }
+
+
+
+
+        bonusPanel.addUIElement(tooltipOfBonuses).inTL(-1,0);
         tooltip.addCustom(coverPanel,1f);
         tooltip.addCustom(bonusPanel,0f);
         tooltip.addSectionHeading("Mod List",Alignment.MID,0f);
@@ -83,5 +99,6 @@ public class ResearchCenterPanel extends UiPanel {
     public CustomPanelAPI getModPanel() {
         return modPanel;
     }
+
 
 }

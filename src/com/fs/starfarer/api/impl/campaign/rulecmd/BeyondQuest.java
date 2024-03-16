@@ -12,6 +12,7 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BaseSalvageSpecial;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.util.List;
 import java.util.Map;

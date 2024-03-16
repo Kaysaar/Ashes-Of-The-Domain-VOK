@@ -1,6 +1,5 @@
 package data.kaysaar.aotd.vok.scripts;
 
-import com.fs.starfarer.C;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
@@ -74,7 +73,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
         final CampaignUIAPI campaignUI = Global.getSector().getCampaignUI();
         if (campaignUI.isShowingDialog() || campaignUI.isShowingMenu() || campaignUI.getCurrentCoreTab() != null)
             return;
-        if (AoTDMainResearchManager.getInstance().getManagerForPlayer().howManyFacilitiesFactionControlls() <= 0)
+        if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities() <= 0)
             return;
 
         int x1 = 0;
@@ -111,7 +110,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 techString.setBaseColor(Misc.getTextColor());
                 techString.draw(95, Global.getSettings().getScreenHeight() - 125);
                 progressionBarChanged.setWidth(progressionBarFull.getWidth() * AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()));
-                progressionBarChanged.render(9, y - sprite.getHeight() + 2);
+                progressionBarChanged.render(7, y - sprite.getHeight() + 2);
             } else {
                 techString.setText("Currently nothing is being\nresearched!");
                 techString.setFontSize(12);
@@ -140,10 +139,16 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()!=null){
                 progressionString.setText((int) (AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()) * 100) + "%");
                 progressionString.setFontSize(10);
-                progressionString.setBaseColor(new Color(31, 32, 33));
+                if((AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()) * 100)>=50){
+                    progressionString.setBaseColor(new Color(31, 32, 33));
+                }
+                else{
+                    progressionString.setBaseColor(Misc.getTooltipTitleAndLightHighlightColor());
+
+                }
                 progressionString.draw(125, Global.getSettings().getScreenHeight() - 189);
             }
-
+            
 
         } else {
             float x = x1;
@@ -181,7 +186,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             if (isHidden) {
                 x = 1;
             }
-            if (event.isLMBDownEvent()) {
+            if (event.isLMBDownEvent()&&!event.isConsumed()) {
                 if (detector.determineIfHoversOverButton(x, y, x + buttonHide.getWidth(), y - 11, x, y - sprite.getHeight(), x + buttonHide.getWidth(), y - sprite.getHeight() + 11, Global.getSettings().getMouseX(), (float) (Global.getSettings().getMouseY()))) {
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
                     isHidden = !isHidden;
@@ -190,7 +195,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 }
                 float buttonXBeginning = 95;
                 float buttonYBeginning = Global.getSettings().getScreenHeight() - 166;
-                if (detector.determineIfHoversOverButton(buttonXBeginning, buttonYBeginning, buttonXBeginning + 170, buttonYBeginning, buttonXBeginning, buttonYBeginning - 20, buttonXBeginning + 170, buttonYBeginning - 20, Global.getSettings().getMouseX(), Global.getSettings().getMouseY())) {
+                if (!isHidden&&detector.determineIfHoversOverButton(buttonXBeginning, buttonYBeginning, buttonXBeginning + 170, buttonYBeginning, buttonXBeginning, buttonYBeginning - 20, buttonXBeginning + 170, buttonYBeginning - 20, Global.getSettings().getMouseX(), Global.getSettings().getMouseY())) {
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
                     Global.getSector().getCampaignUI().showInteractionDialog(new AoTDResearchUIDP(), null);
                     event.consume();
