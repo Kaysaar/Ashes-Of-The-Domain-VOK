@@ -23,7 +23,6 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.ResearchFleetDefeatListener;
 import data.kaysaar.aotd.vok.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
-import data.kaysaar.aotd.vok.ui.AoTDResearchUI;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
 import lunalib.lunaSettings.LunaSettings;
 import org.apache.log4j.Logger;
@@ -243,7 +242,7 @@ public class AoTDFactionResearchManager {
             }
         }
 
-        if (currentFocusId != null && howManyFacilitiesFactionControlls() != 0) {
+        if (currentFocusId != null && getAmountOfResearchFacilities() != 0) {
 
             ResearchOption researchOption = getResearchOptionFromRepo(currentFocusId);
             if (researchOption.getSpec().getId().equals(currentFocusId) && canResearch(currentFocusId, false)) {
@@ -258,7 +257,7 @@ public class AoTDFactionResearchManager {
                     }
 
                 }
-                if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch() * multiplier) {
+                if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch() * multiplier-researchOption.getSpec().getTimeToResearch() * multiplier*(AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*(getAmountOfResearchFacilities()-1))) {
                     researchOption.daysSpentOnResearching = 0;
                     researchOption.setResearched(true);
 
@@ -373,29 +372,27 @@ public class AoTDFactionResearchManager {
     }
 
     public boolean haveMetReqForItem(String id, float value) {
-        float numberRemaining = value;
+        return value<=retrieveAmountOfItems(id);
+    }
+    public float retrieveAmountOfItems(String id) {
+        float numberRemaining = 0;
         for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
             SubmarketAPI subMarket = marketAPI.getSubmarket(AoTDSubmarkets.RESEARCH_FACILITY_MARKET);
             if (Global.getSettings().getCommoditySpec(id) != null) {
                 if (subMarket != null) {
-                    numberRemaining -= subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);
+                    numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);
                 }
             }
             if (Global.getSettings().getSpecialItemSpec(id) != null) {
                 if (subMarket != null) {
-                    numberRemaining -= subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id, null));
+                    numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id, null));
                 }
             }
-            if (numberRemaining <= 0) {
-                break;
-            }
-        }
-        if (numberRemaining >= 1) {
-            return false;
-        }
-        return true;
-    }
 
+        }
+
+        return numberRemaining;
+    }
     public void payForResearch(String id) {
         if (getResearchOptionFromRepo(id).havePaidForResearch) return;
         for (Map.Entry<String, Integer> entry : getResearchOptionFromRepo(id).ReqItemsToResearchFirst.entrySet()) {
@@ -454,12 +451,15 @@ public class AoTDFactionResearchManager {
         return marketsToReturn;
     }
 
-    public int howManyFacilitiesFactionControlls() {
+    public int getAmountOfResearchFacilities() {
         int toReturn = 0;
         for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
             if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
                 toReturn++;
             }
+        }
+        if(toReturn>8){
+            toReturn = 8;
         }
         return toReturn;
     }

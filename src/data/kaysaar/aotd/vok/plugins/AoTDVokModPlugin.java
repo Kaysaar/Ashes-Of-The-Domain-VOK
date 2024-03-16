@@ -100,12 +100,18 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         }
         aoTDSpecialItemRepo.putInfoForSpecialItems();
         aoTDDataInserter.setStarterIndustriesUpgrades();
-        aoTDSpecialItemRepo.setVanilaSpecialItemNewIndustries(Items.SOIL_NANITES, "subfarming");
-        aoTDSpecialItemRepo.setVanilaSpecialItemNewIndustries(Items.BIOFACTORY_EMBRYO, "lightproduction,consumerindustry");
-        aoTDSpecialItemRepo.setVanilaSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
-        aoTDSpecialItemRepo.setVanilaSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
-        aoTDSpecialItemRepo.setVanilaSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy");
-        aoTDSpecialItemRepo.setVanilaSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SOIL_NANITES, "subfarming");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.BIOFACTORY_EMBRYO, "lightproduction,consumerindustry");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
+        if(Global.getSettings().getModManager().isModEnabled("uaf")){
+            aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker" ,"subfarming,artifarming");
+            aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_garrison_transmitter" ,AoTDIndustries.TERMINUS);
+
+        }
+
     }
     }
 

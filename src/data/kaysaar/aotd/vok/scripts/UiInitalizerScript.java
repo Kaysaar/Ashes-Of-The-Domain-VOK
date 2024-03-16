@@ -1,6 +1,5 @@
 package data.kaysaar.aotd.vok.scripts;
 
-import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.listeners.CampaignInputListener;
 import com.fs.starfarer.api.input.InputEventAPI;
@@ -20,7 +19,7 @@ public class UiInitalizerScript implements CampaignInputListener {
 
     @Override
     public void processCampaignInputPreCore(List<InputEventAPI> events) {
-        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().howManyFacilitiesFactionControlls()==0){
+        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities()==0){
             return;
         }
         for (InputEventAPI event : events) {

@@ -36,7 +36,8 @@ public class AoDUtilis {
         if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
             if (LunaSettings.getFloat("aotd_vok", "aotd_expedition_threshold") != null) {
                 Double multiplier = LunaSettings.getDouble("aotd_vok", "aotd_reserarch_speed_multiplier");
-                return (float) (option.daysSpentOnResearching/(option.getSpec().getTimeToResearch()*multiplier));
+                float bonusResearch = (float) (option.getSpec().getTimeToResearch()*multiplier*(AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities()-1)));
+                return (float) (option.daysSpentOnResearching/((option.getSpec().getTimeToResearch()*multiplier)-bonusResearch));
             }
 
         }

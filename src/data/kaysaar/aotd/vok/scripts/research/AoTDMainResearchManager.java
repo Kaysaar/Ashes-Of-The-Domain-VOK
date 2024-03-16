@@ -28,7 +28,7 @@ public class AoTDMainResearchManager {
     public static final String specsFilename = "data/campaign/aotd_tech_options.csv";
     public static ArrayList<ResearchOption> researchOptions = new ArrayList<>();
     public static final String managerMemo = "$aotd_vok_manager";
-
+    public static float BONUS_PER_RESEARACH_FAC = 0.1f;
     public ArrayList<AoTDFactionResearchManager> getFactionResearchManagers() {
         return factionResearchManagers;
     }
@@ -384,7 +384,7 @@ public class AoTDMainResearchManager {
             ResearchExpeditionIntel intel = (ResearchExpeditionIntel) intelInfoPlugin;
             intel.advance(amount);
         }
-        if(getManagerForPlayer().howManyFacilitiesFactionControlls()!=0){
+        if(getManagerForPlayer().getAmountOfResearchFacilities()!=0){
             for (ResearchProject project : researchProjects) {
                 project.advance(amount);
             }
