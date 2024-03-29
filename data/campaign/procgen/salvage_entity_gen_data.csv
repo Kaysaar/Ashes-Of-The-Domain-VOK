@@ -8,8 +8,8 @@ rare_tech_low:2,
 ashes_research:4",derelict,0.5,0.5,21,30,,3,,
 derelict_mothership,1,3500,DISCOVERABLE,2200,5000,20000,,basic:75000,"ai_cores3:5,
 extended:5x15000,
-rare_tech:1, 
-ashes_research:6",derelict,1,1,45,60,,3,1,derelictMothership
+rare_tech_mothership:1,
+ashes_research:10",derelict,1,1,45,60,,3,1,derelictMothership
 derelict_cryosleeper,0,3500,DISCOVERABLE,200,5000,20000,,,,derelict,1,1,20,20,,4,,
 coronal_tap,0,3500,DISCOVERABLE,200,5000,20000,,,,omega,1,1,80,80,3,4,,
 ,,,,,,,,,,,,,,,,,,

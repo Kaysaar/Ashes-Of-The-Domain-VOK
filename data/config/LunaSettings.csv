@@ -1,9 +1,9 @@
 fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
-aotd_vok_header,Settings,Header,Project Settings,,,,,Vaults of Knowledge
-aotd_expedition_threshold,Frequency of research expeditions,Int,240,,"Increase/Decrease frequency of research expeditions, conducted by faction.",30,1000,Vaults of Knowledge
-aotd_expedition_begin,Enable Seeker of Knowledge Scientist,Int,210,,"Increase/Decrease year, where research expeditions are beginning.",207,220,Vaults of Knowledge
-aotd_pcf_amount,Enable Generation of Research Databanks,Int,50,,Increase/Decrease amount of Pre Collapse Facilities spawning per sector.,10,180,Vaults of Knowledge
-,,,,,,,,
+aotd_vok_header,Settings,Header,General Settings,,,,,Vaults of Knowledge
+aotd_expedition_threshold,Frequency of research expeditions,Int,240,,"Increase/Decrease frequency of research expeditions, conducted by faction. (Days)",30,400,Vaults of Knowledge
+aotd_expedition_begin,Expedition Year Threshold,Int,210,,"Increase/Decrease year, where research expeditions are beginning.",207,220,Vaults of Knowledge
+aotd_pcf_amount,Amount of Pre Collapse Facilities,Int,50,,Increase/Decrease amount of Pre Collapse Facilities spawning per sector.,10,180,Vaults of Knowledge
+aotd_reserarch_speed_multiplier,Research Speed Multiplier,Double,1.0,,Increase/Decrease multiplier of research speed. If research by default takes 30 days with multiplier 2 will take 60 days etc etc.,0.5,10.0,Vaults of Knowledge
 ,,,,,,,,
 ,,,,,,,,
 ,,,,,,,,

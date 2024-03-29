@@ -1,0 +1,11 @@
+{
+
+	"aotd_research_complete":[
+			{"file":"sounds/sfx_interface/Research_Complete.ogg","volume":0.6}
+		],
+		"aotd_research_started":[
+			{"file":"sounds/sfx_interface/Research_Started.ogg","volume":0.6}
+		],
+
+	
+}

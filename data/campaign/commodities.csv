@@ -1,6 +1,6 @@
 name,id,demand class,base price,export value,price variability,utility,origin,tags,stack size,cargo space,icon,sound id,sound id drop,order,economyTier,econUnit,baseRaidDanger,eU * base value,iconWidthMult,plugin,desc
 Integrated Components,electronics,electronics,1000,4000,3,1,,expensive,1000,1,graphics/icons/items/electronics.png,ui_cargo_luxury,ui_cargo_luxury_drop,10,3.1,200,,30000,1,1,
-Water,water,water,15,1400,5,1,,expensive,1000,1,graphics/icons/items/water.png,ui_cargo_food,ui_cargo_food_drop,13,3,5000,,45000,1,1,
+Water,water,water,10,800,2,1,,expensive,1000,1,graphics/icons/items/water.png,ui_cargo_food,ui_cargo_food_drop,13,3,5000,,25000,1,1,
 Biotics,biotics,biotics,100,1000,2,1,,expensive,1000,1,graphics/icons/items/biotics.png,ui_cargo_supplies,ui_cargo_supplies_drop,14,3,100,,21000,1,1,
 Rectificates,recitificates,recitificates,150,950,2,1,,expensive,1000,1,graphics/icons/items/reci.png,ui_cargo_volatiles,ui_cargo_volatiles_drop,15,3,500,,21000,1,1,
 Purified Ore,purified_ore,purified_ore,25,3000,3,1,,"luxury, expensive",1000,1,graphics/icons/items/purified_ore.png,ui_cargo_ore,ui_cargo_ore_drop,15,3,500,,30000,1,1	,

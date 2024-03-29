@@ -70,7 +70,19 @@
 			"orbitalheavy_sub":"graphics/icons/tech/subicon_orbital_manu.png",
 			"bifrost_sub":"graphics/icons/tech/subicon_bifrost.png",
 			"stella_manufactorium_sub":"graphics/icons/tech/subicon_stella.png",
+			"modula_program_sub":"graphics/icons/tech/subicon_modula_program.png",
 			"none":"graphics/icons/tech/generic.png",
+			"researched":"graphics/icons/tech/researched.png",
+			"test":"graphics/icons/tech/test.png",
+
+		},
+		"ui_campaign_components":{
+			"tech_panel":"graphics/ui/tech_progression_campaign.png",
+			"tech_button_hide":"graphics/ui/tech_hide_button.png",
+			"tech_hide_button_highlighted":"graphics/ui/tech_hide_button_highlighted.png",
+			"tech_progression":"graphics/ui/tech_progression.png",
+			"tech_button":"graphics/ui/tech_button.png",
+			"tech_button_highlighted":"graphics/ui/tech_button_highlighted.png"
 		}
 	}
 }

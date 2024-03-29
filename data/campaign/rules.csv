@@ -137,10 +137,19 @@ $machineReq = 1500 0
 ShowResCost crew $crewReq heavy_machinery $machineReq true 
 FireBest CTapColonyCheckIfCan
 FireBest CTapColonyDisableIfNeeded
-SetShortcut defaultLeave ESCAPE",,"0:aotd_colonize_hypershunt_confrim:Establish a Colony
+SetShortcut defaultLeave ESCAPE",,"0:aotd_colonize_hypershunt_confrim:Establish a control station
 100:defaultLeave:Leave",
 cTapColonyCheckIfCan,CTapColonyCheckIfCan,"$player.heavy_machinery >= $machineReq 
 $player.crew >= $crewReq",$canAfford = true 0,,,
 cTapColonyDisableIfNeeded,CTapColonyDisableIfNeeded,!$canAfford,SetEnabled aotd_colonize_hypershunt_confrim false,,,
-ctapColonyEstablishing,DialogOptionSelected,$option == aotd_colonize_hypershunt_confrim,"AoTDHypershuntColonization
+ctapColonyEstablishing,DialogOptionSelected,$option == aotd_colonize_hypershunt_confrim,"AoTDHypershuntColonization AoTDDefault
+DismissDialog",,,
+,,,,,,
+cTap_infoText_Override_TASC,BeginSalvage,"$customType == coronal_tap score:10000
+$usable 
+!$colonized",SetShortcut defaultLeave ESCAPE,test we have everything,"0:aotd_colonize_hypershunt_tasc:Activate all systems!
+100:defaultLeave:Leave",
+cTap_infoText_Restoration_TASC,DialogOptionSelected,$option == aotd_colonize_hypershunt_tasc,,are you sure fucker,"0:aotd_colonize_hypershunt_confrim_tasc:Establish a control station
+100:defaultLeave:Leave",
+ctapColonyEstablishing_TASC,DialogOptionSelected,$option == aotd_colonize_hypershunt_confrim_tasc,"AoTDHypershuntColonization TascColonizataion
 DismissDialog",,,

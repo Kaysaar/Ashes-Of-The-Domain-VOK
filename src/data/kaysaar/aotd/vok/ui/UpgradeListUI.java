@@ -378,9 +378,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
                     helper.addPara("Disclaimer: Starting Upgrade of this industry will result in consuming special item irreversibly", Misc.getHighlightColor(), opad);
                 }
             }
-            if (!hasSupply) {
-                helper.addPara("This colony's population is too small to support any production, population of at least size 5 is required or higher amount of resources on that planet", Misc.getHighlightColor(), opad);
-            }
+
 
             CustomPanelAPI subIndustryButtonPanel = panel.createCustomPanel(ENTRY_WIDTH, helper.getHeightSoFar() + 30f, new ButtonReportingCustomPanel(this));
             TooltipMakerAPI anchor = subIndustryButtonPanel.createUIElement(ENTRY_WIDTH, helper.getHeightSoFar() + 20, false);
@@ -566,17 +564,6 @@ public class UpgradeListUI implements CustomDialogDelegate {
                     anchor.addPara("Disclaimer: Starting Upgrade of this industry will result in consuming special item irreversibly", Misc.getHighlightColor(), opad);
                 }
             }
-
-            if (!hasSupply) {
-                if (upgrdInd.getSpec().hasTag("mining")) {
-                    anchor.addPara("This colony's population is too small to support any production, population of at least size 5 is required or higher amount of resources on that planet", Misc.getHighlightColor(), opad);
-
-                } else {
-                    anchor.addPara("This colony's population is too small to support any production, population of at least size 5 is required", Misc.getHighlightColor(), opad);
-
-                }
-            }
-
             subIndustryButtonPanel.addUIElement(anchor).inTL(5 + adjustedWidth + 15, 5);
 
             panelTooltip.addCustom(subIndustryButtonPanel, 0f);
