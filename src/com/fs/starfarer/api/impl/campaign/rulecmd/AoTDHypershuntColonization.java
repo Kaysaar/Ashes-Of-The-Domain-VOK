@@ -11,6 +11,7 @@ import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.*;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,8 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
     @Override
     public boolean execute(String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
         if(dialog==null)return false;
-        MarketAPI m = createCoronalColony(Global.getSector(),Factions.PLAYER,dialog.getInteractionTarget());
+        String arg = params.get(0).getString(memoryMap);
+        MarketAPI m = createCoronalColony(Global.getSector(),Factions.PLAYER,dialog.getInteractionTarget(),arg);
         m.removeSubmarket(Submarkets.SUBMARKET_OPEN);
         m.removeSubmarket(Submarkets.SUBMARKET_BLACK);
         m.setFactionId(Factions.PLAYER);
@@ -55,7 +57,7 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
         dialog.dismiss();
        return true;
     }
-    public  MarketAPI createCoronalColony(SectorAPI sector, String factionId, final SectorEntityToken entity) {
+    public  MarketAPI createCoronalColony(SectorAPI sector, String factionId, final SectorEntityToken entity,String command) {
         MarketAPI market;
         if(factionId == null)factionId = Factions.INDEPENDENT;
         market = Global.getFactory().createMarket(Misc.genUID(), "Coronal Network Center", 3);
@@ -87,6 +89,18 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
         market.getTariff().modifyFlat("default_tariff", market.getFaction().getTariffFraction());
         market.setPrimaryEntity(entity);
         entity.setMarket(market);
+        if(command.equals("TascColonizataion")){
+            for (Industry industry : market.getIndustries()) {
+                if(industry instanceof CoronalSegment){
+                    ((CoronalSegment) industry).haveCompletedRestoration=true;
+                }
+
+            }
+            if(!market.hasIndustry("starfortress_high")){
+                market.addIndustry("starfortress_high");
+                market.getIndustry("starfortress_high").setHidden(true);
+            }
+        }
 
         entity.addScript(new EveryFrameScript() {
             @Override

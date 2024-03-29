@@ -27,7 +27,38 @@
 		"renderCircleIndicatorSelectionFlash":true,
 		#"pluginClass":"com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin",
 	},	
-	
+	"bifrost_gate":{
+		"defaultName":"Bifrost Gate", # used if name=null in addCustomEntity()
+		"nameInText":"bifrost gate",
+		"aOrAn":"an",
+		"defaultRadius":60, # used if radius<0 in addCustomEntity()
+		"interactionImage":"graphics/illustrations/dead_gate.jpg",
+		"icon":"graphics/icons/gate0.png",
+		"iconWidth":20,
+		"iconHeight":20,
+		"sprite":"graphics/stations/bifrost.png",
+		"spriteWidth":96,
+		"spriteHeight":96,
+		#"sprite":"graphics/ships/com_relay.png",
+		#"spriteWidth":178,
+		#"spriteHeight":96,
+		"renderShadow":true,
+		"useLightColor":true,
+		"showInCampaign":true,
+		"showIconOnMap":true,
+		"showNameOnMap":true,
+		"scaleNameWithZoom":false,
+		"scaleIconWithZoom":true,
+		"nameColor":[70,200,255,255],
+		"nameShadowColor":[0,0,0,255],
+		#"renderCircleIndicator":false,
+		"renderCircleIndicator":true,
+		"renderCircleIndicatorSelectionFlash":true,
+		"customDescriptionId":"bifrost_gate",
+		"tags":["bifrost", "neutrino"],
+		"layers":[STATIONS, BELOW_STATIONS], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
+		"pluginClass":"com.fs.starfarer.api.impl.campaign.GateEntityPlugin",
+	}
 
 }
 
