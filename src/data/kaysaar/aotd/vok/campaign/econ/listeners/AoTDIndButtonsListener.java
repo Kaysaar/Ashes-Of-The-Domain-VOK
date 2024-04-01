@@ -15,6 +15,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.campaign.econ.industry.ModulaProgramotoria;
 import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.CoronalSegment;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -85,6 +86,11 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
             IndustryOptionData opt;
             opt = new IndustryOptionData("Reprogram Modular Constructor", PROGRAMMING, ind, this);
             opt.color = new Color(13, 86, 222, 255);
+            if(ind instanceof ModulaProgramotoria){
+                if(((ModulaProgramotoria) ind).mapOfProduction!=null){
+                    opt.enabled=false;
+                }
+            }
             data.add(opt);
         }
         if(ind.getId().equals(AoTDIndustries.RESEARCH_CENTER)&&ind.getMarket().getFaction().isPlayerFaction()){

@@ -9,6 +9,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
 
@@ -31,7 +32,7 @@ public class ModulaProgramotoria extends BaseIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        return super.isAvailableToBuild();
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket("aotd_tech_modular_programming",this.getMarket());
     }
 
     @Override
@@ -82,5 +83,10 @@ public class ModulaProgramotoria extends BaseIndustry {
         }
 
 
+    }
+
+    @Override
+    public boolean showWhenUnavailable() {
+        return super.showWhenUnavailable();
     }
 }
