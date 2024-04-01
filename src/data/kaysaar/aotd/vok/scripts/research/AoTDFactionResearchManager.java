@@ -40,13 +40,12 @@ public class AoTDFactionResearchManager {
         return researchRepoOfFaction;
     }
 
-    public ArrayList<ResearchOption> queuedReesarchOptions = new ArrayList<>();
+    public ResearchQueueManager queueManager = new ResearchQueueManager(this.getFaction().getId());
 
-    public ArrayList<ResearchOption> getQueuedReesarchOptions() {
-        if (queuedReesarchOptions == null) queuedReesarchOptions = new ArrayList<>();
-        return queuedReesarchOptions;
+    public ResearchQueueManager getQueueManager() {
+        if (queueManager == null) queueManager =new ResearchQueueManager(this.getFaction().getId());
+        return queueManager;
     }
-
     public ArrayList<ScientistAPI> researchCouncil = new ArrayList<>();
     public ScientistAPI currentHeadOfCouncil;
     public ArrayList<ResearchOption> researchRepoOfFaction;
@@ -183,6 +182,9 @@ public class AoTDFactionResearchManager {
         if (currentHeadOfCouncil != null) {
             currentHeadOfCouncil.advance(amount);
         }
+        if(getCurrentFocus()==null){
+            notifyFactionBeginResearch(getQueueManager().removeFromTop());
+        }
         if (!getFaction().isPlayerFaction()) {
             manageForAI(amount);
         }
@@ -300,7 +302,25 @@ public class AoTDFactionResearchManager {
         intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
         Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.INTERACTION_DIALOG, new AoTDResearchUIDP());
     }
+    private void notifyFactionBeginResearch(ResearchOption researchOption){
+        if(researchOption==null)return;
+        if(!this.canResearch(researchOption.Id,false)){
+            MessageIntel intel = new MessageIntel("Could not research - " + researchOption.Name+": Requirements not met ", Misc.getNegativeHighlightColor());
+            intel.setIcon(getFaction().getCrest());
+            intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+        }
+        else{
+            MessageIntel intel = new MessageIntel("Started Research - " + researchOption.Name, Misc.getBasePlayerColor());
+            intel.setIcon(getFaction().getCrest());
+            intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+            this.payForResearch(researchOption.Id);
+            this.setCurrentFocus(researchOption.Id);
+        }
 
+
+    }
     public void pickResearchFocus(String id) {
         setCurrentFocus(id);
     }
@@ -327,11 +347,7 @@ public class AoTDFactionResearchManager {
     }
 
     public boolean canResearch(String id, boolean forAI) {
-        for (String s : getResearchOptionFromRepo(id).ReqTechsToResearchFirst) {
-            if (!haveResearched(s)) {
-                return false;
-            }
-        }
+        if (!haveResearchedAllReq(id)) return false;
         if (!getFaction().isPlayerFaction()) {
             forAI = true;
         }
@@ -345,6 +361,15 @@ public class AoTDFactionResearchManager {
         }
         if (getResearchOptionFromRepo(id).otherReq != null) {
             return getResearchOptionFromRepo(id).metOtherReq;
+        }
+        return true;
+    }
+
+    public boolean haveResearchedAllReq(String id) {
+        for (String s : getResearchOptionFromRepo(id).ReqTechsToResearchFirst) {
+            if (!haveResearched(s)) {
+                return false;
+            }
         }
         return true;
     }

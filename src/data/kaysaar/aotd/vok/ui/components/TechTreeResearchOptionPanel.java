@@ -35,9 +35,6 @@ public class TechTreeResearchOptionPanel extends UiPanel {
     CustomPanelAPI buttonPanel;
     CustomPanelAPI trueProgressionBar;
 
-    public HashMap<String,CustomPanelAPI> getHexagons() {
-        return hexagons;
-    }
 
     public HashMap<String,CustomPanelAPI> hexagons = new HashMap<>();
     public float x = 0;
@@ -45,20 +42,22 @@ public class TechTreeResearchOptionPanel extends UiPanel {
 
     @Override
     public void createUI(float x, float y) {
+        ButtonAPI buttonForCheckbox ;
         buttonPanel = panel.createCustomPanel(AoTDUiComp.WIDTH_OF_TECH_PANEL - 1, AoTDUiComp.HEIGHT_OF_TECH_PANEL - 1, null);
         TooltipMakerAPI vTT = buttonPanel.createUIElement(AoTDUiComp.WIDTH_OF_TECH_PANEL, AoTDUiComp.HEIGHT_OF_TECH_PANEL, false);
         trueProgressionBar = buttonPanel.createCustomPanel(AoTDUiComp.WIDTH_OF_TECH_PANEL - 10, (AoTDUiComp.HEIGHT_OF_TECH_PANEL * 0.05f) + 10, null);
         if (AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(TechToResearch.Id)) {
-            currentButton = vTT.addAreaCheckbox("", TechToResearch.Id, Misc.getBrightPlayerColor(), Misc.getTooltipTitleAndLightHighlightColor(), Misc.getBrightPlayerColor(), AoTDUiComp.WIDTH_OF_TECH_PANEL, AoTDUiComp.HEIGHT_OF_TECH_PANEL, 0);
+            buttonForCheckbox = vTT.addAreaCheckbox("", TechToResearch.Id, Misc.getBrightPlayerColor(), Misc.getTooltipTitleAndLightHighlightColor(), Misc.getBrightPlayerColor(), AoTDUiComp.WIDTH_OF_TECH_PANEL, AoTDUiComp.HEIGHT_OF_TECH_PANEL, 0);
 
         } else if (AoTDMainResearchManager.getInstance().getManagerForPlayer().canResearch(TechToResearch.Id, false)) {
-            currentButton = vTT.addAreaCheckbox("", TechToResearch.Id, Misc.getPositiveHighlightColor(), Misc.getDarkHighlightColor(), Misc.getTooltipTitleAndLightHighlightColor(), AoTDUiComp.WIDTH_OF_TECH_PANEL, AoTDUiComp.HEIGHT_OF_TECH_PANEL, 0);
+            buttonForCheckbox = vTT.addAreaCheckbox("", TechToResearch.Id, Misc.getPositiveHighlightColor(), Misc.getDarkHighlightColor(), Misc.getTooltipTitleAndLightHighlightColor(), AoTDUiComp.WIDTH_OF_TECH_PANEL, AoTDUiComp.HEIGHT_OF_TECH_PANEL, 0);
 
         } else {
-            currentButton = vTT.addAreaCheckbox("", TechToResearch.Id, Misc.getNegativeHighlightColor(), Misc.getDarkHighlightColor(), Misc.getTooltipTitleAndLightHighlightColor(), AoTDUiComp.WIDTH_OF_TECH_PANEL, AoTDUiComp.HEIGHT_OF_TECH_PANEL, 0);
-            currentButton.setEnabled(false);
+            buttonForCheckbox = vTT.addAreaCheckbox("", TechToResearch.Id, Misc.getNegativeHighlightColor(), Misc.getDarkHighlightColor(), Misc.getTooltipTitleAndLightHighlightColor(), AoTDUiComp.WIDTH_OF_TECH_PANEL, AoTDUiComp.HEIGHT_OF_TECH_PANEL, 0);
         }
-
+        buttonForCheckbox.setEnabled(false);
+        buttonForCheckbox.setClickable(false);
+        buttonForCheckbox.highlight();
         LabelAPI title = vTT.addPara(TechToResearch.Name, Color.ORANGE, 10f);
         title.getPosition().inTL(AoTDUiComp.WIDTH_OF_TECH_PANEL - 5 - title.computeTextWidth(title.getText()), 7);
         if(TechToResearch.isResearched){
@@ -315,15 +314,30 @@ public class TechTreeResearchOptionPanel extends UiPanel {
         if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus() != null && AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().
                 Id.equals(TechToResearch.Id)) {
             LabelAPI labelAPI = vTT.addPara((int) (days) + d, Misc.getBasePlayerColor(), 10f);
-            labelAPI.getPosition().inTL((AoTDUiComp.WIDTH_OF_TECH_PANEL - 1) / 2 - (labelAPI.computeTextWidth(labelAPI.getText())) / 2, 103);
+            labelAPI.getPosition().inTL((AoTDUiComp.WIDTH_OF_TECH_PANEL - 1) / 2 - (labelAPI.computeTextWidth(labelAPI.getText())) / 2, 112);
 
 
         }
         if (TechToResearch.isResearched) {
             LabelAPI labelAPI = vTT.addPara("Researched!", Misc.getBasePlayerColor(), 10f);
-            labelAPI.getPosition().inTL((AoTDUiComp.WIDTH_OF_TECH_PANEL - 1) / 2 - (labelAPI.computeTextWidth(labelAPI.getText())) / 2, 103);
+            labelAPI.getPosition().inTL((AoTDUiComp.WIDTH_OF_TECH_PANEL - 1) / 2 - (labelAPI.computeTextWidth(labelAPI.getText())) / 2, 112);
 
         }
+        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()==null){
+            currentButton = vTT.addButton("Research","research:"+TechToResearch.Id,110,25,10f);
+        }
+        else{
+            if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getId().equals(TechToResearch.Id)){
+                currentButton = vTT.addButton("Stop","stop:"+TechToResearch.Id,110,25,10f);
+            }
+            else{
+                currentButton = vTT.addButton("Queue","queue:"+TechToResearch.Id,110,25,10f);
+
+            }
+        }
+        currentButton.setEnabled(AoTDMainResearchManager.getInstance().getManagerForPlayer().canResearch(TechToResearch.Id,false)&&!AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().isInQueue(TechToResearch.Id));
+
+        currentButton.getPosition().inTL(AoTDUiComp.WIDTH_OF_TECH_PANEL-115,AoTDUiComp.HEIGHT_OF_TECH_PANEL-50);
 
         buttonPanel.addUIElement(vTT).inTL(0, -1);
         buttonPanel.addComponent(trueProgressionBar).inTL(10, (AoTDUiComp.HEIGHT_OF_TECH_PANEL * 0.95f) - 13);

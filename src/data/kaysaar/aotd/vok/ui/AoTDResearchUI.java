@@ -32,7 +32,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class AoTDResearchUI implements CustomUIPanelPlugin {
     public static final float WIDTH = Global.getSettings().getScreenWidth() - 5;
-    public static final float HEIGHT = Global.getSettings().getScreenHeight() - 100;
+    public static final float HEIGHT = Global.getSettings().getScreenHeight() - 50;
     PositionAPI pos;
     float oppacity = 0.0f;
     Color bgColor = new Color(6, 35, 40, 42);
@@ -89,7 +89,6 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
     String currentModToShow = "aotd_vok";
     ResearchOption researchingBeforeUI = AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus();
     ResearchOption researching = AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus();
-    ResearchOption prevResearching = null;
     AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction();
     ResearchCenterPanel researchCenterPanelUI;
     HelpPanel helpButtonPanelYU;
@@ -543,35 +542,46 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         oppacity += amount;
         boolean mustReset = false;
         boolean mustHardReset = false;
+        boolean mustResetPanel = false;
         if (techTreeCoreUI != null) {
             for (TechTreeEraSection era : techTreeCoreUI.Eras) {
                 for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
                     ButtonAPI button = researchOptionPanel.getCurrentButton();
                     if (button.isChecked()) {
                         button.setChecked(false);
+                        String data = (String) button.getCustomData();
+                        String[]splitted = data.split(":");
                         for (ResearchOption allResearchOption : techTreeCoreUI.allResearchOptions) {
-                            if (allResearchOption.Id.equals((String) button.getCustomData())) {
+                            if (allResearchOption.Id.equals(splitted[1])) {
                                 wantsToKnow = allResearchOption;
-                                if (!manager.haveResearched(wantsToKnow.Id) && manager.canResearch(wantsToKnow.Id, false)) {
-                                    if (researching != null && wantsToKnow.Id.equals(researching.Id)) {
-                                        prevResearching=researching;
-                                        manager.setCurrentFocus(null);
-                                        researching=null;
-                                        mustReset = true;
-                                        break;
-                                    } else {
-                                        manager.pickResearchFocus(wantsToKnow.Id);
-                                        prevResearching = researching;
-                                        researching = wantsToKnow;
-                                        mustReset = true;
-                                        Global.getSoundPlayer().playUISound("aotd_research_started",1f,1f);
-
-                                    }
-                                    break;
+                                if(splitted[0].equals("research")){
+                                    manager.pickResearchFocus(wantsToKnow.Id);
+                                    researching = wantsToKnow;
+                                    mustReset = true;
+                                    Global.getSoundPlayer().playUISound("aotd_research_started",1f,1f);
+                                    researchOptionPanel.reset();
                                 }
+                                if(splitted[0].equals("queue")){
+                                    mustReset = true;
+                                    manager.getQueueManager().addToQueue(wantsToKnow.Id);
+                                    Global.getSoundPlayer().playUISound("aotd_research_started",1f,1f);
+                                    researchOptionPanel.reset();
 
+                                }
+                                if(splitted[0].equals("stop")){
+                                    manager.setCurrentFocus(null);
+                                    researching=null;
+                                    if(!manager.getQueueManager().getQueuedResearchOptions().isEmpty()){
+                                      researching =manager.getQueueManager().removeFromTop();
+                                      manager.setCurrentFocus(researching.Id);
+                                    }
+                                    researchOptionPanel.reset();
+                                    mustReset = true;
+                                }
                             }
-
+                            if(mustReset){
+                                break;
+                            }
                         }
 
                     }
@@ -592,14 +602,51 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                 for (ButtonAPI button : researchCenterPanelUI.buttons) {
                     if (button.isChecked()) {
                         button.setChecked(false);
-                        currentModToShow = (String) button.getCustomData();
-                        mustHardReset = true;
-                        mustReset = true;
-                        break;
+                        String data = (String) button.getCustomData();
+                        if(data.contains(":")){
+                            String[] splitted = data.split(":");
+                            if(splitted[0].equals("up")){
+                                manager.getQueueManager().moveUp(splitted[1]);
+                            }
+                            if(splitted[0].equals("down")){
+                                manager.getQueueManager().moveDown(splitted[1]);
+                            }
+                            if(splitted[0].equals("top")){
+                                manager.getQueueManager().moveToTop(splitted[1]);
+                            }
+                            if(splitted[0].equals("bottom")){
+                                manager.getQueueManager().moveToBottom(splitted[1]);
+                            }
+                            if(splitted[0].equals("remove")){
+                                manager.getQueueManager().removeFromQueue(splitted[1]);
+                                boolean found = false;
+                                for (TechTreeEraSection era : techTreeCoreUI.Eras) {
+                                    for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
+                                        if(researchOptionPanel.TechToResearch.Id.equals(splitted[1])){
+                                            found = true;
+                                            researchOptionPanel.reset();
+                                        }
+                                        if(found)break;
+                                    }
+                                }
+                            }
+                            mustResetPanel = true;
+                            break;
+                        }
+                        else{
+                            currentModToShow = (String) button.getCustomData();
+                            mustHardReset = true;
+                            mustReset = true;
+                            break;
+                        }
+
                     }
                 }
             }
 
+        }
+        if(mustResetPanel){
+            resetCentralPanel();
         }
         if (buttonPanelUI != null && buttonPanelUI.getSpecialProjectButton().isChecked()) {
             buttonPanelUI.getSpecialProjectButton().setChecked(false);
@@ -751,22 +798,37 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                     Yoffset = horizontalTooltipMaker.getMainTooltip().getExternalScroller().getYOffset();
                     for (TechTreeEraSection era : techTreeCoreUI.Eras) {
                         if (wantsToKnow != null && !manager.canResearch(wantsToKnow.Id, false)) break;
-                        if (prevResearching != null) {
-                            for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
-                                if (researchOptionPanel.getCurrentButton().getCustomData().equals(prevResearching.Id)) {
-                                    researchOptionPanel.reset();
-                                }
-                            }
-                        }
                         if (researching != null) {
                             for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
-                                if (researchOptionPanel.getCurrentButton().getCustomData().equals(researching.Id)) {
-                                    researchOptionPanel.reset();
+                                String id = (String) researchOptionPanel.getCurrentButton().getCustomData();
+                                id = id.split(":")[1];
+                                if(researchOptionPanel.TechToResearch.isResearched())continue;
+                                if (!id.equals(researching.Id)&&manager.getCurrentFocus()!=null) {
+                                    researchOptionPanel.getCurrentButton().setText("Queue");
+                                    researchOptionPanel.getCurrentButton().setCustomData("queue:"+researchOptionPanel.TechToResearch.Id);
+                                    researchOptionPanel.getCurrentButton().setEnabled(!manager.getQueueManager().isInQueue(researchOptionPanel.TechToResearch.Id)&&manager.canResearch(researchOptionPanel.TechToResearch.Id,false));
                                 }
+                                if (!id.equals(researching.Id)&&manager.getCurrentFocus()==null&&manager.getQueueManager().getQueuedResearchOptions().isEmpty()) {
+                                    researchOptionPanel.getCurrentButton().setText("Research");
+                                    researchOptionPanel.getCurrentButton().setCustomData("research:"+researchOptionPanel.TechToResearch.Id);
+                                    researchOptionPanel.getCurrentButton().setEnabled(!manager.getQueueManager().isInQueue(researchOptionPanel.TechToResearch.Id)&&manager.canResearch(researchOptionPanel.TechToResearch.Id,false));
+                                }
+                                if(id.equals(researching.Id)){
+                                    researchOptionPanel.reset();
+                                    researchOptionPanel.getCurrentButton().setText("Stop");
+                                    researchOptionPanel.getCurrentButton().setCustomData("stop:"+researchOptionPanel.TechToResearch.Id);
+                                    researchOptionPanel.getCurrentButton().setEnabled(true);
+                                }
+
+
+
+
                             }
+
                         }
 
                     }
+                    resetCentralPanel();
                 }
             }
             else{
@@ -819,6 +881,25 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
 
 
     }
+
+    private void resetCentralPanel() {
+        mainPanel.removeComponent(researchCenterPanelUI.getBonusPanel());
+        mainPanel.removeComponent(researchCenterPanelUI.getDescriptionPanel());
+        mainPanel.removeComponent(researchCenterPanelUI.getModPanel());
+        mainPanel.removeComponent(researchCenterPanelUI.getCoverPanel());
+        mainPanel.removeComponent(researchCenterPanelUI.getQueuePanel());
+        mainPanel.removeComponent(researchCenterPanelUI.getImagePanel());
+        mainPanel.removeComponent(researchCenterPanel);
+        researchCenterPanelUI.buttons.clear();
+        researchCenterPanel = mainPanel.createCustomPanel(300, HEIGHT - 150, null);
+        researchCenterTooltip = researchCenterPanel.createUIElement(310, HEIGHT - 150, false);
+        researchCenterPanelUI.init(mainPanel, researchCenterPanel, researchCenterTooltip);
+        researchCenterPanelUI.setHeight(HEIGHT - 150);
+        researchCenterPanelUI.createUI();
+        researchCenterPanelUI.placeTooltip(-5, 0);
+        researchCenterPanelUI.placeSubPanel(0, 100);
+    }
+
     public static class  handlerOfScrollbar implements CustomUIPanelPlugin {
         HorizontalTooltipMaker tooltipMaker;
         public handlerOfScrollbar(HorizontalTooltipMaker scrollbar){
