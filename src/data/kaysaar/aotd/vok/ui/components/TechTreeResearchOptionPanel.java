@@ -270,7 +270,11 @@ public class TechTreeResearchOptionPanel extends UiPanel {
                             ind.getDemand(AoTDCommodities.ELECTRONICS).getQuantity().modifyFlat("test",marketAPI.getSize()-3);
                         }
                         ind.createTooltip(Industry.IndustryTooltipMode.NORMAL,tooltip,true);
+                        if(ind.getSpec().getDowngrade()!=null){
+                            tooltip.addSectionHeading("Upgrades from ",Alignment.MID,10f);
+                            tooltip.addPara("This industry upgrades from : %s ",10f,Color.ORANGE,""+Global.getSettings().getIndustrySpec(ind.getSpec().getDowngrade()).getName());
 
+                        }
                         Global.getSector().getEconomy().removeMarket(marketAPI);
                     }
                 }, TooltipMakerAPI.TooltipLocation.RIGHT);

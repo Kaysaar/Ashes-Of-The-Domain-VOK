@@ -80,7 +80,6 @@ public class PreCollapseFacLoot extends BaseCommandPlugin {
     protected void genLoot() {
 
         OptionPanelAPI options = dialog.getOptionPanel();
-        TextPanelAPI text = dialog.getTextPanel();
 
         MemoryAPI memory = planet.getMemoryWithoutUpdate();
         long seed = memory.getLong(MemFlags.SALVAGE_SEED);
@@ -105,21 +104,24 @@ public class PreCollapseFacLoot extends BaseCommandPlugin {
 
             salvage.addSpecial(new SpecialItemData("modular_constructor_empty",null),getRandomNumber(0,4));
         if(getRandomNumber(0,6)>=5){
-            int secondRoll = getRandomNumber(0,3);
+            int secondRoll = getRandomNumber(0,4);
             if(secondRoll==0){
-                salvage.addSpecial(new SpecialItemData("modular_constructor_empty",null),getRandomNumber(0,4));
+                salvage.addSpecial(new SpecialItemData("modular_constructor_empty",null),getRandomNumber(0,3));
 
             }
             if(secondRoll==1){
-                salvage.addSpecial(new SpecialItemData("modular_constructor_refining",null),getRandomNumber(0,4));
+                salvage.addSpecial(new SpecialItemData("modular_constructor_refining",null),getRandomNumber(0,3));
 
             }
             if(secondRoll==2){
-                salvage.addSpecial(new SpecialItemData("modular_constructor_mining",null),getRandomNumber(0,4));
+                salvage.addSpecial(new SpecialItemData("modular_constructor_mining",null),getRandomNumber(0,3));
 
             }
             if(secondRoll==3){
-                salvage.addSpecial(new SpecialItemData("modular_constructor_orbitalworks",null),getRandomNumber(0,4));
+                salvage.addSpecial(new SpecialItemData("modular_constructor_orbitalworks",null),getRandomNumber(0,2));
+            }
+            if(secondRoll==4){
+                salvage.addSpecial(new SpecialItemData("modular_constructor_fuelprod",null),getRandomNumber(0,2));
             }
         }
         BaseSalvageSpecial.clearExtraSalvage(memoryMap);
@@ -135,17 +137,6 @@ public class PreCollapseFacLoot extends BaseCommandPlugin {
         options.clearOptions();
 
         dialog.setPromptText("");
-
-
-//		if (keptPromise) {
-//			if (random.nextFloat() > 0.5f) {
-//				SectorEntityToken loc = planet.getContainingLocation().createToken(planet.getLocation());
-//				spawnPiratesToInvestigate(loc, 50f + random.nextFloat() * 50f);
-//				if (random.nextFloat() > 0.5f) {
-//					spawnPiratesToInvestigate(loc, 50f + random.nextFloat() * 50f);
-//				}
-//			}
-//		}
     }
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);

@@ -9,6 +9,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Ranks;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
 import java.util.LinkedHashSet;
@@ -47,6 +49,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
             return false;
         }
 
+
         if (getTargetPlanet() == null) return false;
 
         if (Global.getSector().getIntelManager().hasIntelOfClass(BeyondVeilIntel.class)) {
@@ -55,7 +58,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
         if (Global.getSector().getMemory().is("$aotd_veil_accepted", true)) {
             return false;
         }
-        return true;
+        return AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().haveResearched(AoTDTechIds.ORBITAL_FLEETWORK_FACILITIES)||AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().haveResearched(AoTDTechIds.ORBITAL_SKUNKWORK_FACILITIES);
 
     }
 
