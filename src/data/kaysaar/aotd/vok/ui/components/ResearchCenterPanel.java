@@ -42,9 +42,9 @@ public class ResearchCenterPanel extends UiPanel {
         coverPanel = panel.createCustomPanel(300,128,null);
         imagePanel = coverPanel.createCustomPanel(115,128,null);
         bonusPanel = panel.createCustomPanel(300,100,null);
-        modPanel = panel.createCustomPanel(300,100,null);
-        queuePanel = panel.createCustomPanel(300,height-217-170,null);
-        TooltipMakerAPI tooltipQueue = queuePanel.createUIElement(300,height-217-170,true);
+        modPanel = panel.createCustomPanel(300,130,null);
+        queuePanel = panel.createCustomPanel(300,height-217-140,null);
+        TooltipMakerAPI tooltipQueue = queuePanel.createUIElement(300,height-217-140,true);
         TooltipMakerAPI modPanelTooltip = modPanel.createUIElement(300,100,true);
         currentScientist = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().currentHeadOfCouncil;
         TooltipMakerAPI imageAnchor = imagePanel.createUIElement(128,128,false);

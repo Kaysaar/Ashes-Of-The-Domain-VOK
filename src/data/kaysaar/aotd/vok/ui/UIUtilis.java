@@ -1,15 +1,17 @@
 package data.kaysaar.aotd.vok.ui;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
+import data.kaysaar.aotd.vok.models.ResearchOption;
+import data.kaysaar.aotd.vok.ui.components.AoTDUiComp;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class OpenGlUtilis {
+public class UIUtilis {
     public void drawProgressionBar(PositionAPI pos, float alphaMult, Color uiColor, float progress) {
         if (uiColor == null) return;
 
@@ -179,5 +181,6 @@ public class OpenGlUtilis {
         }
 
     }
+
 
 }

@@ -607,8 +607,6 @@ public class UpgradeListUI implements CustomDialogDelegate {
                 }
             }
         }
-
-
         industry.startUpgrading();
         industry.getSpec().setUpgrade(null);
 

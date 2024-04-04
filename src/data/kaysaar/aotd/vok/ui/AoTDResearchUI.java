@@ -3,14 +3,11 @@ package data.kaysaar.aotd.vok.ui;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
-import com.fs.starfarer.api.graphics.SpriteAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.ui.P;
 import data.kaysaar.aotd.vok.models.ResearchOption;
 import data.kaysaar.aotd.vok.models.ResearchProject;
 import data.kaysaar.aotd.vok.models.SpecialProjectStage;
@@ -26,7 +23,6 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -79,7 +75,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
     protected TooltipMakerAPI specialProjectProgressionBarTooltip;
     protected CustomPanelAPI specialProjectSectionOptionsPanel;
     protected TooltipMakerAPI specialProjectSectionOptionsTooltip;
-    OpenGlUtilis openGlUtilis = new OpenGlUtilis();
+    UIUtilis openGlUtilis = new UIUtilis();
     float Xoffset = 0f;
     float prevOffset = 0f;
     float Yoffset = 0f;
@@ -252,7 +248,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             }
         }
 
-        if (prevOffset <= AoTDUiComp.WIDTH_OF_TECH_PANEL * 1.5f) {
+        if (prevOffset <=  techTreeCoreUI.calculateWidthAndHeight().one ) {
             prevOffset = 0;
             Xoffset = 0;
 

@@ -40,7 +40,7 @@ public class AoTDFactionResearchManager {
         return researchRepoOfFaction;
     }
 
-    public ResearchQueueManager queueManager = new ResearchQueueManager(this.getFaction().getId());
+    public ResearchQueueManager queueManager;
 
     public ResearchQueueManager getQueueManager() {
         if (queueManager == null) queueManager =new ResearchQueueManager(this.getFaction().getId());
@@ -72,6 +72,7 @@ public class AoTDFactionResearchManager {
     public AoTDFactionResearchManager(FactionAPI factionAPI, ArrayList<ResearchOption> researchOptions) {
         this.managerTiedToFaction = factionAPI;
         this.researchRepoOfFaction = researchOptions;
+        this.queueManager = new ResearchQueueManager(this.getFaction().getId());
     }
 
     public void setCanUpgrade(boolean canUpgrade) {

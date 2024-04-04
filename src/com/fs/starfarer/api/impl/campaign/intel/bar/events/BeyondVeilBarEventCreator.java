@@ -15,8 +15,7 @@ public class BeyondVeilBarEventCreator extends BaseBarEventCreator {
 
     @Override
     public float getBarEventFrequencyWeight() {
-
-        return super.getBarEventFrequencyWeight()*50;
+        return super.getBarEventFrequencyWeight()*500;
     }
 
 
