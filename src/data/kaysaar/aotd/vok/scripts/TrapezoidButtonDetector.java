@@ -1,6 +1,6 @@
 package data.kaysaar.aotd.vok.scripts;
 
-public class TrapezoidButtonDetector {
+    public class TrapezoidButtonDetector {
     public boolean determineIfHoversOverButton(
             float topLeftX, float topLeftY,
             float topRightX, float topRightY,
