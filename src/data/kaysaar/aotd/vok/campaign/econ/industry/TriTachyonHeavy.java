@@ -56,7 +56,10 @@ public class TriTachyonHeavy extends HeavyIndustry {
             unapply();
         } else {
             if (!market.hasCondition(Conditions.POLLUTION)&&market.hasCondition(Conditions.HABITABLE)) {
-                market.addCondition(Conditions.POLLUTION);
+                if(market.hasIndustry("BOGGLED_GENELAB")){
+                    market.addCondition(Conditions.POLLUTION);
+                }
+
             }
         }
     }

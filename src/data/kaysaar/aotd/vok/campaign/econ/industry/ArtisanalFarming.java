@@ -1,11 +1,9 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
+import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Conditions;
-import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import com.fs.starfarer.api.impl.campaign.ids.Industries;
+import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -33,8 +31,10 @@ public class ArtisanalFarming extends BaseIndustry {
     public void apply() {
         super.apply(true);
         if (this.special != null) {
-            Misc.getStorageCargo(this.getMarket()).addSpecial(this.special, 1);
-            this.special = null;
+            if(!AoDUtilis.canInstallItem(this,this.special.getId())){
+                Misc.getStorageCargo(this.getMarket()).addSpecial(this.special, 1);
+                this.special = null;
+            }
         }
         int quantity = market.getSize() - 2;
         supply(Commodities.LUXURY_GOODS, quantity);

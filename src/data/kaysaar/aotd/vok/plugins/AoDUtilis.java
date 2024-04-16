@@ -2,8 +2,10 @@ package data.kaysaar.aotd.vok.plugins;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
+import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
@@ -17,6 +19,7 @@ import lunalib.lunaSettings.LunaSettings;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +35,20 @@ public class AoDUtilis {
         return ModularConstructorPlugin.retrieveNameForReq(industryId) +" required to be installed in "+Global.getSettings().getIndustrySpec(industryId).getName();
 
     }
+    public static boolean canInstallItem(Industry industry, String itemID) {
+        if (industry == null || itemID == null) {
+            return false;
+        }
+        SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(itemID);
+        //Also from SirHatley this has been taken
+
+        //check if it's applicable to the industry
+        boolean isApplicableToIndustry = Arrays.asList(spec.getParams().replaceAll("\\s", "").split(",")).contains(industry.getSpec().getId());
+        //check if it has unmet requirements on the market
+        return isApplicableToIndustry && ItemEffectsRepo.ITEM_EFFECTS.get(itemID).getUnmetRequirements(industry).isEmpty();
+
+    }
+
     public static float calculatePercentOfProgression(ResearchOption option){
         if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
             if (LunaSettings.getFloat("aotd_vok", "aotd_expedition_threshold") != null) {

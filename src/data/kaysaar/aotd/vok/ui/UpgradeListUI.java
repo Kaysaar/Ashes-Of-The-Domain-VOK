@@ -620,19 +620,6 @@ public class UpgradeListUI implements CustomDialogDelegate {
     public void customDialogCancel() {
     }
 
-    public boolean canInstallItem(String id, String itemID) {
-        if (id == null || itemID == null) {
-            return false;
-        }
-        SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(itemID);
-        //Also from SirHatley this has been taken
-
-        //check if it's applicable to the industry
-        boolean isApplicableToIndustry = Arrays.asList(spec.getParams().replaceAll("\\s", "").split(",")).contains(id);
-        //check if it has unmet requirements on the market
-        return isApplicableToIndustry && ItemEffectsRepo.ITEM_EFFECTS.get(itemID).getUnmetRequirements(industry).isEmpty();
-
-    }
 
     public CustomUIPanelPlugin getCustomPanelPlugin() {
         return null;

@@ -100,6 +100,15 @@ public class AoTDSpecialItemRepo {
                 return new String[]{"not extreme weather", "not extreme tectonic activity"};
             }
         });
+        ItemEffectsRepo.ITEM_EFFECTS.put("modular_constructor_fuelprod", new BoostIndustryInstallableItemEffect(
+                "modular_constructor_fuelprod", 0, 0) {
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+                text.addPara(pre + "Allows upgrading %s into : %s " ,10f, Color.ORANGE,
+                        "Fuel Production",ModularConstructorPlugin.retrieveIndustries(Global.getSettings().getIndustrySpec(Industries.ORBITALWORKS)));
+
+            }
+        });
         ItemEffectsRepo.CORONAL_TAP_RANGE = "Coronal Network Center in 10 light years, 50 if Wormhole Stabilizer has been repaired";
         ItemEffectsRepo.CORONAL_TAP_INDUSTRIES = 0;
         ItemEffectsRepo.CORONAL_TAP_TRANSPLUTONICS = 0;

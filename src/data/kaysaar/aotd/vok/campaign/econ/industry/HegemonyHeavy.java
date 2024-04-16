@@ -80,7 +80,10 @@ public class HegemonyHeavy extends HeavyIndustry {
             unapply();
         } else {
             if (!market.hasCondition(Conditions.POLLUTION)&&market.hasCondition(Conditions.HABITABLE)) {
-                market.addCondition(Conditions.POLLUTION);
+                if(market.hasIndustry("BOGGLED_GENELAB")){
+                    market.addCondition(Conditions.POLLUTION);
+                }
+
             }
             for (MarketAPI factionMarket : Misc.getFactionMarkets(market.getFaction())) {
                 factionMarket.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyFlat(getModId(), (float) bonus/100, "Wide Bonus from Orbital Fleetwork Facility");
