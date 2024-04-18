@@ -1,6 +1,6 @@
 bar event id,tags,freq,prob,min dur,max dur,min timeout,max timeout,min accepted timeout,max accepted timeout,plugin
 aotd_search_for_databanks,,2,1,30,40,15,20,60,90,com.fs.starfarer.api.impl.campaign.intel.bar.events.PreCollapseFacBarEvent
-,,,,,,,,,,
+aotd_beyond_veil,,1,1,30,40,15,20,60,90,com.fs.starfarer.api.impl.campaign.intel.bar.events.BeyondVeilBarEvent
 ,,,,,,,,,,
 ,,,,,,,,,,
 ,,,,,,,,,,
