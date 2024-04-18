@@ -17,7 +17,7 @@ dummy_industry,Research Facility,100,30,,,,,"researchfacility,structure",,graphi
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
 #FUEL PRODCUTION SECTION,,,,,,,,,,,,,,,
-blast_processing,Blast Processing Unit ,150,120,,15,fuelprod,,"fuelprod, industry, industrial,aotd_fuelprod",,graphics/icons/industry/blast_processing.png,data.kaysaar.aotd.vok.campaign.econ.industry.BlastProcessingUnit,"A groundbreaking facility that defies the limits of energy production, specializing in the creation of Antimatter Fuel at a rate reminiscent of the illustrious era of The Domain.This cutting-edge unit harnesses advanced technologies to achieve unprecedented efficiency, ensuring a reliable and abundant supply of Antimatter Fuel. A beacon of energy innovation,stands as a testament to the resurgence of Domain-era industrial capabilities.",1905,,
+blast_processing,Blast Processing Unit ,150,120,,15,fuelprod,,"fuelprod, industry, industrial,aotd_fuelprod, consumes:fuelprod:modular_constructor_fuelprod",,graphics/icons/industry/blast_processing.png,data.kaysaar.aotd.vok.campaign.econ.industry.BlastProcessingUnit,"A groundbreaking facility that defies the limits of energy production, specializing in the creation of Antimatter Fuel at a rate reminiscent of the illustrious era of The Domain.This cutting-edge unit harnesses advanced technologies to achieve unprecedented efficiency, ensuring a reliable and abundant supply of Antimatter Fuel. A beacon of energy innovation,stands as a testament to the resurgence of Domain-era industrial capabilities.",1905,,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,

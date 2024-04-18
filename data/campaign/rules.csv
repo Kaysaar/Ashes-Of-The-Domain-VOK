@@ -147,9 +147,9 @@ DismissDialog",,,
 ,,,,,,
 cTap_infoText_Override_TASC,BeginSalvage,"$customType == coronal_tap score:10000
 $usable 
-!$colonized",SetShortcut defaultLeave ESCAPE,test we have everything,"0:aotd_colonize_hypershunt_tasc:Activate all systems!
+!$colonized",SetShortcut defaultLeave ESCAPE,"As your $shipOrFleet enters orbit, the colossal megastructure looms before you. Constructed from scratch, it's a bustling hub of interstellar activity. Maintenance crews scurry across its surface, ensuring its smooth operation. Despite its enormity, the megastructure hums with efficiency, connecting distant corners of the galaxy.","0:aotd_colonize_hypershunt_tasc:Activate all systems!
 100:defaultLeave:Leave",
-cTap_infoText_Restoration_TASC,DialogOptionSelected,$option == aotd_colonize_hypershunt_tasc,,are you sure fucker,"0:aotd_colonize_hypershunt_confrim_tasc:Establish a control station
+cTap_infoText_Restoration_TASC,DialogOptionSelected,$option == aotd_colonize_hypershunt_tasc,,"Your tactical officer, scanning the megastructure's expanse, remarks, ""Captain, we're observing areas with sparse activity. It appears some sections lack established maintenance teams. Those might be vulnerable points if hostiles breach our defenses.""","0:aotd_colonize_hypershunt_confrim_tasc:Establish a control station
 100:defaultLeave:Leave",
 ctapColonyEstablishing_TASC,DialogOptionSelected,$option == aotd_colonize_hypershunt_confrim_tasc,"AoTDHypershuntColonization TascColonizataion
 DismissDialog",,,
