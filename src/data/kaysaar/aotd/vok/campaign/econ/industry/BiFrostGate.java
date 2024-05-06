@@ -124,11 +124,11 @@ public class BiFrostGate extends BaseIndustry {
                     if (value <= 1) {
                         days = " day";
                     }
-                    tooltip.addPara("Curently gateway in " + market.getName() + " is inactive for " + (int) value + days, Misc.getNegativeHighlightColor(), 10f);
+                    tooltip.addPara("Curently the gateway in " + market.getName() + " is inactive for " + (int) value + days, Misc.getNegativeHighlightColor(), 10f);
                 }
             }
             tooltip.addPara("Accessibility bonus : 50%", Color.ORANGE, 10f);
-            tooltip.addPara("This planet is now connected with Bifrost Network", Color.ORANGE, 10f);
+            tooltip.addPara("This planet is now connected via the Bifrost Network.", Color.ORANGE, 10f);
         }
     }
 

@@ -28,12 +28,12 @@ public class AoTDBeginConversation extends BaseCommandPlugin {
         if(person==null)return false;
         dialog.getOptionPanel().clearOptions();
         if (person.getFaction().getId().equals(Factions.LUDDIC_PATH) || person.getFaction().getId().equals(Factions.LUDDIC_CHURCH)) {
-            dialog.getTextPanel().addPara("Stop right there intruder. This place has been deemed to be infested with Moloch activity. We shall cleanse this planet from all of it's influence. Do not interrupt our glorious duty!", Misc.getNegativeHighlightColor());
+            dialog.getTextPanel().addPara("Stop right there intruder. This place has been deemed to be infested with Moloch's abominations. We shall cleanse this planet from all of it's influence. Do not interrupt our glorious duty!", Misc.getNegativeHighlightColor());
             dialog.getOptionPanel().addOption("Cut comm link", "cutCommLink");
         }
        else if (person.getFaction().getId().equals(Factions.INDEPENDENT)) {
-            dialog.getTextPanel().addPara("We are currently conducting excavating operations on behalf of our contractor. Any disturbance in our operations will result in combat.");
-            dialog.getOptionPanel().addOption("How about we will pay you more, than your contractor", "aotd_bribery_without_sp");
+            dialog.getTextPanel().addPara("We are currently conducting excavating operations on behalf of our contractor. Any disturbance to our operations will result in combat.");
+            dialog.getOptionPanel().addOption("How about we will pay you more than your contractor?", "aotd_bribery_without_sp");
             dialog.getOptionPanel().addOption("Cut comm link", "cutCommLink");
         } else if (person.getFaction().getId().equals(Factions.REMNANTS)) {
             dialog.getTextPanel().addPara("We ... must [CORRUPTED] ... defend");

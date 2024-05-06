@@ -99,7 +99,7 @@ public class TechTreeResearchOptionPanel extends UiPanel {
                 }
                 tooltip.addSectionHeading("Technology Name", Alignment.MID, 10f);
                 tooltip.addPara(TechToResearch.Name, 10f);
-                tooltip.addSectionHeading("Time need to research", Alignment.MID, 10f);
+                tooltip.addSectionHeading("Time required to finish researching", Alignment.MID, 10f);
 
                 float defaultDays = (TechToResearch.TimeToResearch*(float) multiplier);
 
@@ -111,9 +111,9 @@ public class TechTreeResearchOptionPanel extends UiPanel {
                 //TODO - commision faction pickup or player faction
                 AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayer();
                 if (!TechToResearch.isResearched()) {
-                    tooltip.addPara((int) days + d + " to finish research", Misc.getTooltipTitleAndLightHighlightColor(), 10f);
+                    tooltip.addPara((int) days + d + " to finish researching.", Misc.getTooltipTitleAndLightHighlightColor(), 10f);
                 } else {
-                    tooltip.addPara("Researched!", Misc.getPositiveHighlightColor(), 10f);
+                    tooltip.addPara("Research complete!", Misc.getPositiveHighlightColor(), 10f);
                 }
 
                 tooltip.addSectionHeading("Unlocks", Alignment.MID, 10f);
@@ -314,7 +314,7 @@ public class TechTreeResearchOptionPanel extends UiPanel {
         if (days <= 1) {
             d = " day";
         }
-        d += " to finish research";
+        d += " to finish researching";
         if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus() != null && AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().
                 Id.equals(TechToResearch.Id)) {
             LabelAPI labelAPI = vTT.addPara((int) (days) + d, Misc.getBasePlayerColor(), 10f);
@@ -323,7 +323,7 @@ public class TechTreeResearchOptionPanel extends UiPanel {
 
         }
         if (TechToResearch.isResearched) {
-            LabelAPI labelAPI = vTT.addPara("Researched!", Misc.getBasePlayerColor(), 10f);
+            LabelAPI labelAPI = vTT.addPara("Research complete!", Misc.getBasePlayerColor(), 10f);
             labelAPI.getPosition().inTL((AoTDUiComp.WIDTH_OF_TECH_PANEL - 1) / 2 - (labelAPI.computeTextWidth(labelAPI.getText())) / 2, 112);
 
         }

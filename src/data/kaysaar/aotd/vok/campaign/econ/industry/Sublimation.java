@@ -67,14 +67,14 @@ public class Sublimation extends BaseIndustry {
     public String getUnavailableReason() {
         String reasoning= null;
         if( AoDUtilis.getOrganicsAmount(market)<=-1){
-            reasoning = "There are no organics on that planet large enough to support that industry ";
+            reasoning = "There are no organics deposits on this planet that are large enough to support this industry.";
         }
         if(AoDUtilis.getVolatilesAmount(market)<=-1){
             if(reasoning!=null){
-                reasoning = "\nThere are neither organics nor volatiles on the planet large enough to support that industry ";
+                reasoning = "\nThere are neither organics nor volatiles deposits on this planet that are large enough to support this industry.";
             }
             else{
-                reasoning = "There are no volatiles on the planet large enough to support that industry ";
+                reasoning = "There are no volatiles deposits on this planet that are large enough to support this industry.";
             }
 
         }

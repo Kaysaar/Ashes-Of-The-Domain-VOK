@@ -184,7 +184,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                     "Policrystalizator and Benefication: %s",
                     10f,
                     Misc.getStoryBrightColor(),
-                    "Decrease upkeep of Policrystalizator by 25% and +1 Production to Policrystalizator"
+                    "Decreases upkeep of Policrystalizator by 25% and increases Policrystalizator's production by 1 unit."
             );
 
         }
@@ -193,7 +193,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                     "Cascade Reprocessor and Sublimation : %s ",
                     10f,
                     Misc.getStoryBrightColor(),
-                    "Decrease upkeep of Cascade Reprocessor by 25% and +1 Production to Cascade Reprocessor"
+                    "Decreases upkeep of Cascade Reprocessor by 25% and increases Cascade Reprocessor's production by 1 unit."
             );
 
         }
@@ -202,7 +202,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                     "Cascade Reprocessor and Orbital Skunkwork Facility: %s ",
                     10f,
                     Misc.getStoryBrightColor(),
-                    "+1 To Orbital Skunkwork Facility Production"
+                    "Increases Orbital Skunkwork Facility production by 1 unit."
             );
 
         }
@@ -211,7 +211,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                     "Policrystalizator and Orbital Fleetwork Facility: %s ",
                     10f,
                     Misc.getStoryBrightColor(),
-                    "+1 To Orbital Fleetwork Facility Production"
+                    "Increases Orbital Fleetwork Facility production by 1 unit."
             );
 
         }
@@ -220,7 +220,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                     "Consumer Industry and Resort Center: %s ",
                     10f,
                     Misc.getStoryBrightColor(),
-                    "Increase Resort income by 10%"
+                    "Increases Resort income by 10%"
             );
 
         }
@@ -229,7 +229,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                     "Artisanal Farming and Resort Center: %s ",
                     10f,
                     Misc.getStoryBrightColor(),
-                    "Increase Artisanal Farming's income by 10%"
+                    "Increases Artisanal Farming's income by 10%"
             );
 
         }
@@ -238,7 +238,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                     "Underworld and Resort Center: %s ",
                     10f,
                     Misc.getStoryBrightColor(),
-                    "Increase planet income by 5% "
+                    "Increases planet income by 5% "
             );
 
         }
@@ -247,7 +247,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                     "Terminus and Resort Center: %s ",
                     10f,
                     Misc.getStoryBrightColor(),
-                    "Increase planet accessibility by 10% "
+                    "Increases planet accessibility by 10% "
             );
 
         }

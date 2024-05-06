@@ -86,7 +86,7 @@ public class HegemonyHeavy extends HeavyIndustry {
 
             }
             for (MarketAPI factionMarket : Misc.getFactionMarkets(market.getFaction())) {
-                factionMarket.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyFlat(getModId(), (float) bonus/100, "Wide Bonus from Orbital Fleetwork Facility");
+                factionMarket.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyFlat(getModId(), (float) bonus/100, "Faction Wide Bonus from Orbital Fleetwork Facility");
             }
         }
     }
@@ -120,7 +120,7 @@ public class HegemonyHeavy extends HeavyIndustry {
                 }
                 float opad = 10f;
                 if (total >= 0) {
-                    tooltip.addPara("Wide Faction Bonus Fleets : %s", opad, h, totalStr);
+                    tooltip.addPara("Faction Wide Bonus Fleets : %s", opad, h, totalStr);
                     tooltip.addPara("*This bonus applies for every planet of " + market.getFaction().getDisplayName(),
                             Misc.getGrayColor(), opad);
                 }

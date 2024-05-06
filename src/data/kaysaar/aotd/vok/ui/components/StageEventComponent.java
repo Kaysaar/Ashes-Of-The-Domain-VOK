@@ -47,11 +47,11 @@ public class StageEventComponent extends UiPanel{
         tooltip.addSectionHeading("Project Events", Alignment.MID,10f);
         if(!currentProject.haveReachedCriticalMoment&&!currentProject.haveDoneIt){
             tooltip.setParaFont(Fonts.ORBITRON_20AABOLD);
-            tooltip.addPara("Currently there are issues, that needs our attention!", Misc.getPositiveHighlightColor(),10f);
+            tooltip.addPara("There are some ongoing issues that require your attention!", Misc.getPositiveHighlightColor(),10f);
         }
         if(currentProject.haveDoneIt){
             tooltip.setParaFont(Fonts.ORBITRON_20AABOLD);
-            tooltip.addPara("Project Completed! There won't be any more events regarding this project!", Misc.getPositiveHighlightColor(),10f);
+            tooltip.addPara("Project successfuly completed! There won't be any more events related to this project.", Misc.getPositiveHighlightColor(),10f);
         }
         float opad = 10f;
         if(currentProject.haveReachedCriticalMoment){

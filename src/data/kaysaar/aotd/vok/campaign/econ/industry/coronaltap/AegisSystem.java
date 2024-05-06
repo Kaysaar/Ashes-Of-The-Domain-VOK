@@ -37,12 +37,12 @@ public class AegisSystem extends CoronalSegment{
         tooltip.addSectionHeading("Repair Cost ", Alignment.MID,0f);
         tooltip.addPara("Repair will require constant supply of 8 units of Metal and 6 units of Supplies for "+this.getBuildTime()+" days", Misc.getTooltipTitleAndLightHighlightColor(),10f);
         tooltip.addSectionHeading("Aegis System : Effect after repair",Alignment.MID,10f);
-        tooltip.addPara("Re-awakens defence systems of Hypershunt",Misc.getPositiveHighlightColor(),10f);
+        tooltip.addPara("Re-awakens defence systems of Hypershunt.",Misc.getPositiveHighlightColor(),10f);
     }
     @Override
     public void addSegmentEffect(TooltipMakerAPI tooltipMakerAPI) {
         if(haveCompletedRestoration){
-            tooltipMakerAPI.addPara(this.getCurrentName()+" : %s",10f,Misc.getPositiveHighlightColor(),""+"provides for Hypershunt protection with massive battlestation.");
+            tooltipMakerAPI.addPara(this.getCurrentName()+" : %s",10f,Misc.getPositiveHighlightColor(),""+"protects the Hypershunt with a massive battlestation.");
         }
     }
 

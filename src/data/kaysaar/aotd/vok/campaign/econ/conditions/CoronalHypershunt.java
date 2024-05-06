@@ -39,7 +39,7 @@ public class CoronalHypershunt extends LCAttractorLow implements MarketImmigrati
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
         super.createTooltipAfterDescription(tooltip, expanded);
         tooltip.addPara("Maximum size of this colony : %s", 10f,Misc.getNegativeHighlightColor(),""+"2");
-        tooltip.addPara("Building any industry / structure on this market will result in increase of upkeep by 1000%    ", Misc.getNegativeHighlightColor(),10f);
+        tooltip.addPara("Building any industry / structure on this market will result in increase of upkeep costs by 1000%    ", Misc.getNegativeHighlightColor(),10f);
     }
 
     @Override

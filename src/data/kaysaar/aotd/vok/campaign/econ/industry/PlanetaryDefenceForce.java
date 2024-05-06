@@ -148,16 +148,16 @@ public class PlanetaryDefenceForce extends BaseIndustry implements EconomyTickLi
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. " +
-                            "Increases ground defenses by %s.", 0f, highlight,
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s units. " +
+                            "Increases ground defenses strength by %s.", 0f, highlight,
                     "" + (int)((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION,
                     str);
             tooltip.addImageWithText(opad);
             return;
         }
 
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. " +
-                        "Increases ground defenses by %s.", opad, highlight,
+        tooltip.addPara(pre + "Reduces upkeep costs by %s. Reduces demand by %s units. " +
+                        "Increases ground defenses strength by %s.", opad, highlight,
                 "" + (int)((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION,
                 str);
 
@@ -196,9 +196,9 @@ public class PlanetaryDefenceForce extends BaseIndustry implements EconomyTickLi
         String str = Strings.X + (1f + a) + "";
 
         if (mode == ImprovementDescriptionMode.INDUSTRY_TOOLTIP) {
-            info.addPara("Ground defenses increased by %s.", 0f, highlight, str);
+            info.addPara("Ground defenses strength increased by %s.", 0f, highlight, str);
         } else {
-            info.addPara("Increases ground defenses by %s.", 0f, highlight, str);
+            info.addPara("Increases ground defenses strength by %s.", 0f, highlight, str);
         }
 
         info.addSpacer(opad);

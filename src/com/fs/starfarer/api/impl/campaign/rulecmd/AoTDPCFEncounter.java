@@ -57,7 +57,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
     public void init(InteractionDialogAPI dialogAPI, Map<String, MemoryAPI> memoryMap) {
         dialogAPI.getOptionPanel().clearOptions();
         if(getNearby(dialogAPI.getInteractionTarget())!=null){
-            dialogAPI.getTextPanel().addPara("We have been intercepted by fleet, that is orbiting this planet");
+            dialogAPI.getTextPanel().addPara("We have been intercepted by fleet that is orbiting this planet.");
             if (dialogAPI.getInteractionTarget().getMemory().is("$aotd_r_expedition_present", true))
                 initBattle(dialogAPI, memoryMap);
         }
@@ -117,11 +117,11 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
             CampaignFleetAPI campaignFleetAPI = getNearby(dialog.getInteractionTarget());
             assert campaignFleetAPI != null;
             campaignFleetAPI.clearAssignments();
-            campaignFleetAPI.addAssignment(FleetAssignment.GO_TO_LOCATION_AND_DESPAWN, Misc.getFactionMarkets(campaignFleetAPI.getFaction()).get(0).getPrimaryEntity(), 10000, "Returning to home-world");
+            campaignFleetAPI.addAssignment(FleetAssignment.GO_TO_LOCATION_AND_DESPAWN, Misc.getFactionMarkets(campaignFleetAPI.getFaction()).get(0).getPrimaryEntity(), 10000, "Returning to homeworld");
             dialog.getOptionPanel().clearOptions();
             dialog.getVisualPanel().finishFadeFast();
             dialog.getVisualPanel().showPlanetInfo(dialog.getInteractionTarget());
-            dialog.getOptionPanel().addOption("Send a salvage team down to the facility", "explore_PreFac");
+            dialog.getOptionPanel().addOption("Send a salvage team down to the facility.", "explore_PreFac");
             dialog.getOptionPanel().addOption("Leave", "defaultLeave");
         } else {
             FleetInteractionDialogPluginImpl conf = (FleetInteractionDialogPluginImpl) dialog.getPlugin();
@@ -137,7 +137,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
                 }
             }
             campaignFleetAPI.clearAssignments();
-            campaignFleetAPI.addAssignment(FleetAssignment.GO_TO_LOCATION_AND_DESPAWN, Misc.getFactionMarkets(campaignFleetAPI.getFaction()).get(0).getPrimaryEntity(), 10000, "Returning to home-world");
+            campaignFleetAPI.addAssignment(FleetAssignment.GO_TO_LOCATION_AND_DESPAWN, Misc.getFactionMarkets(campaignFleetAPI.getFaction()).get(0).getPrimaryEntity(), 10000, "Returning to homeworld");
             dialog.dismiss();
 
         }

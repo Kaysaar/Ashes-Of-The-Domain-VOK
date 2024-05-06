@@ -115,7 +115,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
 
     public void createCustomDialog(CustomPanelAPI panel, CustomDialogCallback callback) {
         TooltipMakerAPI panelTooltip = panel.createUIElement(WIDTH, HEIGHT, true);
-        panelTooltip.addSectionHeading("Select a Upgrade", Alignment.MID, 0f);
+        panelTooltip.addSectionHeading("Select an Upgrade", Alignment.MID, 0f);
 
         float opad = 10f;
         float spad = 2f;
@@ -363,7 +363,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
 
 
             }
-            helper.addPara("*Shown production and demand values are already adjusted based on current market size and local conditions showing total production and demand of that industry on this market", gray, opad);
+            helper.addPara("*Shown production and demand values are already adjusted based on current market size and local conditions, showing total production and demands of this industry on the market.", gray, opad);
 // That section is for calculation custom height for section
             if (!isAvailableToBuild) {
                 helper.addPara(upgrdInd.getUnavailableReason(), Color.RED, opad);
@@ -372,10 +372,10 @@ public class UpgradeListUI implements CustomDialogDelegate {
             if (upgrdInd.getSpec().getTags().contains("consumes")) {
 
                 if(AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
-                    helper.addPara("Mega Assembly Systems researched! Item won't be consumed", Misc.getPositiveHighlightColor(), opad);
+                    helper.addPara("Mega Assembly Systems have been researched! Item won't be consumed.", Misc.getPositiveHighlightColor(), opad);
                 }
                 else{
-                    helper.addPara("Disclaimer: Starting Upgrade of this industry will result in consuming special item irreversibly", Misc.getHighlightColor(), opad);
+                    helper.addPara("Urgent! After industry's upgrade is started, this item is irreversibly consumed!", Misc.getHighlightColor(), opad);
                 }
             }
 
@@ -558,10 +558,10 @@ public class UpgradeListUI implements CustomDialogDelegate {
             }
             if (upgrdInd.getSpec().getTags().contains("consumes")) {
                 if(AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
-                    anchor.addPara("Mega Assembly Systems researched! Item won't be consumed.", Misc.getPositiveHighlightColor(), opad);
+                    anchor.addPara("Mega Assembly Systems have been researched! Item won't be consumed.", Misc.getPositiveHighlightColor(), opad);
                 }
                 else{
-                    anchor.addPara("Disclaimer: Starting Upgrade of this industry will result in consuming special item irreversibly", Misc.getHighlightColor(), opad);
+                    anchor.addPara("Urgent! After industry's upgrade is started, this item is irreversibly consumed!", Misc.getHighlightColor(), opad);
                 }
             }
             subIndustryButtonPanel.addUIElement(anchor).inTL(5 + adjustedWidth + 15, 5);

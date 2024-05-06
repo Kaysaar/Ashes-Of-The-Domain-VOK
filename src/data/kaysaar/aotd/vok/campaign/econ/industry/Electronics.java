@@ -69,13 +69,13 @@ public class Electronics extends BaseIndustry {
     @Override
     public String getUnavailableReason() {
         if (market.hasCondition(Conditions.EXTREME_WEATHER)){
-            return "Cannot be builded on planet with extreme weather ";
+            return "Cannot be built on planet with extreme weather.";
         }
         if (market.hasCondition(Conditions.TECTONIC_ACTIVITY)){
-            return "Cannot be builded on planet with tectonic activity ";
+            return "Cannot be built on planet with tectonic activity.";
         }
         if (market.hasCondition(Conditions.TOXIC_ATMOSPHERE)){
-            return "Cannot be builded on planet with toxic atmosphere ";
+            return "Cannot be built on planet with toxic atmosphere.";
         }
 
         return"There is bug, please report it to mod author";

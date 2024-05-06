@@ -112,10 +112,10 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
             tooltip.addPara("Select Upgrade for "+ opt.ind.getCurrentName(),0f);
         }
         if (opt.id == RESEARCH_CENTER) {
-            tooltip.addPara("Access interface of research center",0f);
+            tooltip.addPara("Access the interface of research center",0f);
         }
         if (opt.id == PROGRAMMING) {
-            tooltip.addPara("With usage of advanced technology, we are able to re-program dormant Constructors, to suit our needs for rapid industrialization.",0f);
+            tooltip.addPara("With usage of advanced technology, we are able to re-program the dormant Constructors, to suit our needs for rapid industrialization.",0f);
         }
         if (opt.id == AOTD_VOK_CANCEL_UPGRADE) {
             String upgradeId = (String) reflectionUtilis.getPrivateVariableFromSuperClass("upgradeId", opt.ind);
@@ -124,10 +124,10 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
             if (opt.ind.getBuildOrUpgradeProgress() != 0.0f) {
                 costStr = Misc.getDGSCredits(upgrdInd.getCost() * 0.4f);
             }
-            tooltip.addPara("Currently upgrading to : " + upgrdInd.getName() + ". Cancel upgrade for a %s refund\n", 10f, Color.ORANGE, "" + costStr);
+            tooltip.addPara("Currently upgrading to : " + upgrdInd.getName() + ". If you cancel the upgrade you will receive %s as refund\n", 10f, Color.ORANGE, "" + costStr);
         }
         if(opt.id == STELLA ){
-            tooltip.addPara("Access Stellar Forge where special equipment for industries is being forged",0f);
+            tooltip.addPara("Access the Stellar Forge, where special equipment for industries is being made.",0f);
 
         }
         if(opt.id == CORONAL ){

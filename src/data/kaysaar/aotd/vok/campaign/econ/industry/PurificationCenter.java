@@ -53,7 +53,7 @@ public class PurificationCenter extends BaseIndustry {
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         tooltip.addSectionHeading("Purification Center", Alignment.MID,10f);
-        tooltip.addPara("+2 To Water Production if market produces at least one supply of water",10f);
+        tooltip.addPara("Increases Water production by 2 units if market produces at least one supply of water.",10f);
     }
 
     @Override

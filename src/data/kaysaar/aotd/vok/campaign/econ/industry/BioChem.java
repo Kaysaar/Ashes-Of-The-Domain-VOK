@@ -56,9 +56,9 @@ public class BioChem extends LightIndustry {
     @Override
     public String getUnavailableReason() {
         if( !AoDUtilis.checkForItemBeingInstalled(market, Industries.LIGHTINDUSTRY, Items.BIOFACTORY_EMBRYO)){
-            return "Biofactory Embryo must be installed in Light Industry";
+            return "Biofactory Embryo must be installed in the Light Industry.";
         }
-        return "Market must have free port enabled.";
+        return "Market must have free port status.";
     }
 
     @Override

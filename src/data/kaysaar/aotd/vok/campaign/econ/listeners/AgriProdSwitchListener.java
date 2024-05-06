@@ -81,7 +81,7 @@ public class AgriProdSwitchListener extends BaseIndustryOptionProvider {
         if (days == 1) daysStr = "day";
 
         LabelAPI label = null;
-        label = tooltip.addPara("%s and %s " + daysStr + " to upgrade. You have %s.", opad,
+        label = tooltip.addPara("%s and %s " + daysStr + " to upgrade. You currently have %s.", opad,
                 highlight, costStr, "" + days, creditsStr);
 
         label.setHighlight(costStr, "" + days, creditsStr);
@@ -238,7 +238,7 @@ public class AgriProdSwitchListener extends BaseIndustryOptionProvider {
         }
         rows = 1;
         tooltip.addIconGroup(32, rows, opad);
-        tooltip.addPara("*Shown production and demand values are already adjusted based on current market size and local conditions.", gray, opad);
+        tooltip.addPara("*Shown production and demand values are already adjusted to current market size and local conditions.", gray, opad);
     }
 
 }
@@ -322,13 +322,13 @@ public class AgriProdSwitchListener extends BaseIndustryOptionProvider {
 
                 LabelAPI label = null;
                 if (opt.id.equals(AoTDSwitches.SWITCH_BIOTICS)) {
-                    label = info.addPara("Switching production to Biotics will cost %s and take %s " + daysStr + " to upgrade.\n\nYou have %s.", opad,
+                    label = info.addPara("Switching production to Biotics will cost %s and take %s " + daysStr + " to switch.\n\nYou currently have %s.", opad,
                             highlight, costStr, "" + days, creditsStr);
                 } else if (opt.id.equals(AoTDSwitches.SWITCH_RECTIFICATES)) {
-                    label = info.addPara("Switching production to Rectificates will cost %s and take %s " + daysStr + " to upgrade.\n\nYou have %s.", opad,
+                    label = info.addPara("Switching production to Rectificates will cost %s and take %s " + daysStr + " to switch.\n\nYou currently have %s.", opad,
                             highlight, costStr, "" + days, creditsStr);
                 } else {
-                    label = info.addPara("Switching production to Food will cost %s and take %s " + daysStr + " to upgrade.\n\nYou have %s.", opad,
+                    label = info.addPara("Switching production to Food will cost %s and take %s " + daysStr + " to switch.\n\nYou currently have %s.", opad,
                             highlight, costStr, "" + days, creditsStr);
                 }
 
