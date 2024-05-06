@@ -723,14 +723,14 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                     projectStageOptions.buttons.clear();
                 }
                 if (researchingBeforeUI != null && researching != null && !researchingBeforeUI.Id.equals(researching.Id)) {
-                    MessageIntel intel = new MessageIntel("Started Research - " + researching.Name, Misc.getBasePlayerColor());
+                    MessageIntel intel = new MessageIntel("Started Researching - " + researching.Name, Misc.getBasePlayerColor());
                     intel.setIcon(manager.getFaction().getCrest());
                     intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
                     Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
                     manager.payForResearch(researching.Id);
                 }
                 if (researchingBeforeUI == null && researching != null) {
-                    MessageIntel intel = new MessageIntel("Started Research - " + researching.Name, Misc.getBasePlayerColor());
+                    MessageIntel intel = new MessageIntel("Started Researching - " + researching.Name, Misc.getBasePlayerColor());
                     intel.setIcon(manager.getFaction().getCrest());
                     intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
                     Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);

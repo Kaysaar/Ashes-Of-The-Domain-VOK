@@ -57,8 +57,8 @@ public class PlasmaCollector extends CoronalSegment{
         tooltip.addSectionHeading("Repair Cost ", Alignment.MID,0f);
         tooltip.addPara("Repair will require constant supply of 9 units of Refined Metal, 6 units of Metal and 7 units of Polymers for "+this.getBuildTime()+" days", Misc.getTooltipTitleAndLightHighlightColor(),10f);
         tooltip.addSectionHeading("Plasma Collector: Effect after repair",Alignment.MID,10f);
-        tooltip.addPara("Once repaired it provides +1 industry and +1 production bonus to colonies with functional Coronal Pylon within 10 Light Years",Misc.getPositiveHighlightColor(),10f);
-        tooltip.addPara("Once Wormhole Stabilizer is repaired range will increase to 50 Light years",Misc.getPositiveHighlightColor(),10f);
+        tooltip.addPara("Once repaired it adds 1 industry slot and increases production of all colonies with functional Coronal Pylon within 10 Light Years by 2 units.",Misc.getPositiveHighlightColor(),10f);
+        tooltip.addPara("Once Wormhole Stabilizer is repaired range will increase to 50 Light years.",Misc.getPositiveHighlightColor(),10f);
     }
     @Override
     public void applyDemandForRepair() {
@@ -84,11 +84,11 @@ public class PlasmaCollector extends CoronalSegment{
             status.two = Misc.getPositiveHighlightColor();
         }
         if(haveCompletedRestoration&&!this.isWorking()){
-            status.one="Collector demand not met . Harvest of energy stopped";
+            status.one="Collector's demands not met. Harvest of energy stopped.";
             status.two = Misc.getPositiveHighlightColor();
         }
         if(!haveCompletedRestoration&&isBuilding()&&canProgress){
-            status.one="Restoration in progress";
+            status.one="Restoration in progress.";
             status.two = Misc.getBrightPlayerColor();
         }
         if(!haveCompletedRestoration&&isBuilding()&&!canProgress){
@@ -104,12 +104,12 @@ public class PlasmaCollector extends CoronalSegment{
     @Override
     public void addSegmentEffect(TooltipMakerAPI tooltipMakerAPI){
         if(haveCompletedRestoration&&isWorking()){
-            tooltipMakerAPI.addPara("Plasma Collector : %s",10f,Misc.getPositiveHighlightColor(),""+"provides +1 industry slot and +2 production bonus to colonies within 10 LY, with Coronal Pylon structure.");
+            tooltipMakerAPI.addPara("Plasma Collector : %s",10f,Misc.getPositiveHighlightColor(),""+"Adds 1 industry slot and and increases production of all colonies within 10 LY with functional Coronal Pylon structure by 2 units.");
 
         }
         if(haveCompletedRestoration&&!isWorking()){
-            tooltipMakerAPI.addPara("Plasma Collector : %s",10f,Misc.getPositiveHighlightColor(),""+"provides +1 industry slot and +2 production bonus to colonies within 10 LY, with Coronal Pylon structure.");
-            tooltipMakerAPI.addPara("Not working due to lack of resources",Misc.getNegativeHighlightColor(),2f);
+            tooltipMakerAPI.addPara("Plasma Collector : %s",10f,Misc.getPositiveHighlightColor(),""+"Adds 1 industry slot and and increases production of all colonies within 10 LY with functional Coronal Pylon structure by 2 units.");
+            tooltipMakerAPI.addPara("Not working due to lack of resources.",Misc.getNegativeHighlightColor(),2f);
 
         }
     }

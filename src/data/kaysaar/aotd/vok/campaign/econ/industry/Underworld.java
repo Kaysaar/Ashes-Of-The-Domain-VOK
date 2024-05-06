@@ -82,7 +82,7 @@ public class Underworld extends BaseIndustry implements MarketImmigrationModifie
 
         float a = BASE_BONUS;
         String aStr = "+" + (int)Math.round(a * 1f) + "%";
-        tooltip.addPara("Colony income: %s", opad, h, aStr);
+        tooltip.addPara("Colony income bonus: %s", opad, h, aStr);
 
         h = Misc.getNegativeHighlightColor();
         tooltip.addPara("Stability penalty: %s", opad, h, "" + -(int)STABILITY_PELANTY);
@@ -91,7 +91,7 @@ public class Underworld extends BaseIndustry implements MarketImmigrationModifie
     @Override
     protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
         if (market.isPlayerOwned() || currTooltipMode == IndustryTooltipMode.ADD_INDUSTRY) {
-            tooltip.addPara("Adds an  \'Black Market\' that the colony's owner is able to trade with.", 10f);
+            tooltip.addPara("Adds a  \'Black Market\' that the colony's owner is able to trade with.", 10f);
         }
     }
 
@@ -127,17 +127,17 @@ public class Underworld extends BaseIndustry implements MarketImmigrationModifie
 
     public String getUnavailableReason() {
         if(market.hasIndustry("kaysaarcapital_forbidden_city")){
-            return  "Requires a functional spaceport and enabled Free Port policy"+"Cannot be build due, to Forbidden City established on that planet";
+            return  "Requires a functional spaceport and enabled Free Port policy"+"Cannot be build due to Forbidden City being already established on this planet.";
         }
         if(market.hasIndustry("commerce")){
-            return  "Requires a functional spaceport and enabled Free Port policy"+"Cannot be build due, to Independent trade being to well established here by Commerce";
+            return  "Requires a functional spaceport and enabled Free Port policy"+"Cannot be build due to Independent trade being well established on this planet by the Commerce industry.";
         }
         if(Global.getSettings().getModManager().isModEnabled("yunruindustries")){
             if(market.hasIndustry("yunru_bazaar")){
-                return  "Requires a functional spaceport and eneabled Free Port policy"+"Cannot be build due, to Independent trade being to well established here by Baazar";
+                return  "Requires a functional spaceport and enabled Free Port policy"+"Cannot be build due, to Independent trade being well established on this planet by the Baazar.";
             }
         }
-        return "Requires a functional spaceport and eneabled Free Port policy";
+        return "Requires a functional spaceport and enabled Free Port policy.";
     }
 
 
@@ -171,7 +171,7 @@ public class Underworld extends BaseIndustry implements MarketImmigrationModifie
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s" +
+            text.addPara(pre + "Reduces upkeep costs by %s" +
                             "Increases colony income by %s.", 0f, highlight,
                     "" + (int)((1f - UPKEEP_MULT) * 100f) + "%", "" +
                     str);
@@ -179,7 +179,7 @@ public class Underworld extends BaseIndustry implements MarketImmigrationModifie
             return;
         }
 
-        tooltip.addPara(pre + "Reduces upkeep cost by %s" +
+        tooltip.addPara(pre + "Reduces upkeep costs by %s" +
                         "Increases colony income by %s.", opad, highlight,
                 "" + (int)((1f - UPKEEP_MULT) * 100f) + "%", "" +
                 str);

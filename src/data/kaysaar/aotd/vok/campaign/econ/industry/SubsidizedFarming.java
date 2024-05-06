@@ -95,7 +95,7 @@ public class SubsidizedFarming extends BaseIndustry {
     @Override
     public String getUnavailableReason() {
         if (!super.isAvailableToBuild()) return super.getUnavailableReason();
-        return "Requires farmland";
+        return "Requires farmland.";
     }
 
 

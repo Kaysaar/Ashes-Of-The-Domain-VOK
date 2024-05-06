@@ -121,7 +121,7 @@ public abstract class ResearchProject {
         }
         if(currentProgress>=calculateInterval()&&!haveReachedCriticalMoment&&indexOfCurrentStage<stages.size()){
             haveReachedCriticalMoment = true;
-            MessageIntel intel = new MessageIntel("Your attention is  immediately required towards  "+spec.nameOfProject+" project!", Misc.getNegativeHighlightColor());
+            MessageIntel intel = new MessageIntel("Your attention is immediately required at the "+spec.nameOfProject+" project!", Misc.getNegativeHighlightColor());
             intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
             intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
             Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.INTERACTION_DIALOG,new AoTDResearchUIDP());

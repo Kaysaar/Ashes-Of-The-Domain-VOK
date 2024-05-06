@@ -98,11 +98,11 @@ public class AIColonyManagerListener implements EconomyTickListener {
         HashMap<String, Integer> industriesPoll = generateValuesForIndustries(faction,AoTDIndustries.BENEFICATION,AoTDIndustries.SUBLIMATION,AoTDIndustries.ISOTOPE_SEPARATOR,AoTDIndustries.CRYSTALIZATOR);
         if (industriesPoll.get(AoTDIndustries.BENEFICATION) == 0) {
             beneficationRoll(faction);
-            log.info("Faction "+faction.getId()+" has rolled for construction of benefication for first time");
+            log.info("Faction "+faction.getId()+" has rolled for construction of benefication for the first time");
         }
         else if  (industriesPoll.get(AoTDIndustries.SUBLIMATION) == 0) {
             sublimationRoll(faction);
-            log.info("Faction "+faction.getId()+" has rolled for construction of sublimation for first time");
+            log.info("Faction "+faction.getId()+" has rolled for construction of sublimation for the first time");
 
         }  else {
             int lowestValue = -1;
@@ -291,7 +291,7 @@ public class AIColonyManagerListener implements EconomyTickListener {
             log.info("Picked up market "+marketToReturn.getId());
         }
         else{
-            log.info("Picked up no market");
+            log.info("Picked up no markets");
         }
         return marketToReturn;
 

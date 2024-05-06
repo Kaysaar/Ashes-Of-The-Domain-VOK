@@ -80,7 +80,7 @@ public class EcoTourism extends BaseIndustry {
         float opad = 10f;
         float a = total_income;
         String aStr = "+" + (float)Math.round(a * 1f) + "";
-        tooltip.addPara("Flat Bonus Colony income from Tourism: %s", opad, h, aStr);
+        tooltip.addPara("Flat Bonus to Colony's income from Tourism: %s", opad, h, aStr);
 
         h = Misc.getHighlightColor();
         tooltip.addPara("Stability Bonus: %s", opad, h, "" + STAB_BONUS);
@@ -95,7 +95,7 @@ public class EcoTourism extends BaseIndustry {
         return false;
     }
     public String getUnavailableReason() {
-        return "Requires a functional spaceport, And Habitable planet that's have mild climate without any pollution ";
+        return "Requires a functional spaceport and a habitable planet that has mild climate without any pollution.";
     }
     @Override
     protected void applyAlphaCoreModifiers() {

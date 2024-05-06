@@ -90,7 +90,7 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
 
     @Override
     public String getUnavailableReason() {
-        return "The " + market.getFaction().getDisplayName() + " does not support research,as most funds are allocated to military due to Sector instability in recent years";
+        return "The " + market.getFaction().getDisplayName() + " does not support research, as most of the funds are allocated to military spendings due to system's instability in recent years.";
     }
 
     @Override
@@ -98,19 +98,19 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
         super.addRightAfterDescriptionSection(tooltip, mode);
         if (IndustryTooltipMode.NORMAL.equals(mode)) {
             if (market.getAdmin().isPlayer() && !market.getFaction().isPlayerFaction()) {
-                tooltip.addPara("This research facility will be under control of " + market.getFaction().getDisplayName() + " therefore it will only contribute to them!", Misc.getNegativeHighlightColor(), 10f);
+                tooltip.addPara("This research facility will be under control of " + market.getFaction().getDisplayName() + " therefore it will only contribute its research to them!", Misc.getNegativeHighlightColor(), 10f);
             }
 
         }
 
         if (IndustryTooltipMode.ADD_INDUSTRY.equals(mode)) {
-            tooltip.addPara("Building that structure will enable faction to research new technologies", Misc.getHighlightColor(), 10f);
+            tooltip.addPara("Building that structure will enable your faction to research new technologies.", Misc.getHighlightColor(), 10f);
         }
         tooltip.addSectionHeading("Research costs", Alignment.MID, 10f);
-        tooltip.addPara("Depending on currently conducted research upkeep of facility is dependent on what you currently research!", 10f);
+        tooltip.addPara("Upkeep costs of the research facility are dependent on what is being currently researched.", 10f);
 
         if (this.market.hasCondition("pre_collapse_facility")) {
-            tooltip.addPara("With building this facility here, our scientist will be able to analyze those ruins", Misc.getPositiveHighlightColor(), 10f);
+            tooltip.addPara("By building this facility here, our scientists will be able to analyze local pre-collapse ruins.", Misc.getPositiveHighlightColor(), 10f);
         }
         if (IndustryTooltipMode.NORMAL.equals(mode)) {
             tooltip.addSectionHeading("Currently ongoing research",Alignment.MID,10f);
@@ -119,7 +119,7 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
                 tooltip.addPara("Researching : %s",10, Color.ORANGE,AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getCurrentFocus().getSpec().getName());
             }
             else{
-                tooltip.addPara("%s",10, Color.ORANGE,"Nothing is being researched");
+                tooltip.addPara("%s",10, Color.ORANGE,"Nothing is being researched.");
             }
         }
     }

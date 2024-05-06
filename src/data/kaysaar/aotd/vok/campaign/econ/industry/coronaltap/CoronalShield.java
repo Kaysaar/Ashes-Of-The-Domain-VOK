@@ -35,9 +35,9 @@ public class CoronalShield extends CoronalSegment{
     @Override
     public void createTooltipInfoForOption(TooltipMakerAPI tooltip) {
         tooltip.addSectionHeading("Repair Cost ", Alignment.MID,0f);
-        tooltip.addPara("Repair will require constant supply of 5 units of Refined Metal and 6 of Purified Transplutonics for "+this.getBuildTime()+" days", Misc.getTooltipTitleAndLightHighlightColor(),10f);
+        tooltip.addPara("Repair will require constant supply of 5 units of Refined Metal and 6 units of Purified Transplutonics for "+this.getBuildTime()+" days", Misc.getTooltipTitleAndLightHighlightColor(),10f);
         tooltip.addSectionHeading("Coronal Shielding : Effect after repair",Alignment.MID,10f);
-        tooltip.addPara("Prevents shield failure as long as demand is met, protects crew and entire structure from star's heat",Misc.getPositiveHighlightColor(),10f);
+        tooltip.addPara("Prevents shield failure as long as the demands are met, protecting the crew and entire structure from the star's heat.",Misc.getPositiveHighlightColor(),10f);
     }
     @Override
     public void applyUpkeepWithRebuilding() {
@@ -89,10 +89,10 @@ public class CoronalShield extends CoronalSegment{
     @Override
     public void addSegmentEffect(TooltipMakerAPI tooltipMakerAPI) {
         if(haveCompletedRestoration&&isWorking()){
-            tooltipMakerAPI.addPara("Coronal Shielding : %s",10f,Misc.getPositiveHighlightColor(),""+"protects Hypershunt from star's heat.");
+            tooltipMakerAPI.addPara("Coronal Shielding : %s",10f,Misc.getPositiveHighlightColor(),""+"protects the Hypershunt from star's heat.");
         }
         if(haveCompletedRestoration&&!isWorking()){
-            tooltipMakerAPI.addPara("Coronal Shielding : %s",10f,Misc.getPositiveHighlightColor(),""+"protects Hypershunt from star's heat.");
+            tooltipMakerAPI.addPara("Coronal Shielding : %s",10f,Misc.getPositiveHighlightColor(),""+"protects the Hypershunt from star's heat.");
         }
         if(!isWorking()){
             tooltipMakerAPI.addPara("Currently running on emergency power!",Misc.getNegativeHighlightColor(),10f);
@@ -103,7 +103,7 @@ public class CoronalShield extends CoronalSegment{
     @Override
     public Pair<String, Color> getCurrentStatusString() {
         Pair<String,Color> status = super.getCurrentStatusString();
-        String danger = ((int)(firstDays-started))+" days before shield stops working";
+        String danger = ((int)(firstDays-started))+" days before the shield stops working.";
         if(haveCompletedRestoration&&this.isWorking()){
             status.one="Shield functional ";
             status.two = Misc.getPositiveHighlightColor();
@@ -122,10 +122,10 @@ public class CoronalShield extends CoronalSegment{
         }
         if(!haveCompletedRestoration&&!isBuilding()){
             if(started<firstDays-10) {
-                status.one = "Reactor not functional!!!, running on emergency power "+danger;
+                status.one = "Reactor is not functional!!! Running on emergency power! "+danger;
             }
             else{
-                status.one = "Shield is about to fail!. Evacuate outpost NOW!";
+                status.one = "The shield is about to fail! Evacuate the outpost NOW!";
             }
             status.two = Misc.getNegativeHighlightColor();
         }

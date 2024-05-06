@@ -64,16 +64,16 @@ public class ResearchCenterPanel extends UiPanel {
         coverPanel.addComponent(imagePanel).inTL(0,0);
         coverPanel.addComponent(descriptionPanel).inTL(125,5);
         TooltipMakerAPI tooltipOfBonuses= bonusPanel.createUIElement(306,50,false);
-        tooltipOfBonuses.addSectionHeading("Current Bonuses",Alignment.MID,10f);
+        tooltipOfBonuses.addSectionHeading("Current Bonuses:",Alignment.MID,10f);
         float amountOfFacilities = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getAmountOfResearchFacilities();
         float bonus = AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*100f;
         if(AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getAmountOfResearchFacilities()>=1){
-           tooltipOfBonuses.addPara("Research Speed",Misc.getTooltipTitleAndLightHighlightColor(),10f);
+           tooltipOfBonuses.addPara("Research Speed:",Misc.getTooltipTitleAndLightHighlightColor(),10f);
             String faciltiies = "facilities";
             if(amountOfFacilities ==1){
                 faciltiies = "facility";
             }
-            tooltipOfBonuses.addPara("Currently controls %s Research "+faciltiies+" : %s bonus research speed",10f, Color.ORANGE,""+(int)amountOfFacilities,""+((amountOfFacilities-1)*bonus)+"%");
+            tooltipOfBonuses.addPara("Currently controls %s of Research "+faciltiies+" : %s bonus research speed",10f, Color.ORANGE,""+(int)amountOfFacilities,""+((amountOfFacilities-1)*bonus)+"%");
         }
 
 

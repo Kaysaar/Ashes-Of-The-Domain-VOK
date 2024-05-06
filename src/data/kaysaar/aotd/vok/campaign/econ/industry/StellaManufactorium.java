@@ -118,14 +118,14 @@ public class StellaManufactorium extends BaseIndustry  {
                 }
             }
             else if (demandForProduction.isEmpty()){
-                tooltip.addPara("Currently Forges are dormant ,waiting for new orders to create new equipment", Misc.getNegativeHighlightColor(),10f);
+                tooltip.addPara("Currently the Forges are dormant, waiting for new orders to create new equipment.", Misc.getNegativeHighlightColor(),10f);
             }
             else{
-                tooltip.addPara("Forges has not been supplied with enough resources to continue production", Misc.getNegativeHighlightColor(),10f);
+                tooltip.addPara("Forges have not been supplied with enough resources to continue production.", Misc.getNegativeHighlightColor(),10f);
             }
         }
         else{
-            tooltip.addPara("This Industry specializes in production of colony items by using advanced resources",Color.ORANGE,10f);
+            tooltip.addPara("This Industry specializes in manufacturing of colony items by using advanced resources.",Color.ORANGE,10f);
         }
 
 
@@ -146,15 +146,15 @@ public class StellaManufactorium extends BaseIndustry  {
 
     @Override
     protected void addGammaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-        tooltip.addPara("Reduces cost of forging equipment by 1",10f);
+        tooltip.addPara("Reduces cost of forging equipment by 1 unit.",10f);
     }
     @Override
     protected void addBetaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-        tooltip.addPara("Reduces cost of forging equipment by 1 unit. Reduces upkeep by 25%",10f);
+        tooltip.addPara("Reduces cost of forging equipment by 1 unit and lowers upkeep costs by 25%.",10f);
     }
     @Override
     protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
-        tooltip.addPara("Reduces cost of forging equipment by 1 unit.Lowers cost of upkeep by 25%. Reduces time to forge equipment by 50%",10f);
+        tooltip.addPara("Reduces cost of forging equipment by 1 unit, lowers upkeep costs by 25% and reduces time to forge equipment by 50%.",10f);
     }
 
     @Override

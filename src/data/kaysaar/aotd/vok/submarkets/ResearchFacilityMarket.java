@@ -57,7 +57,7 @@ public class ResearchFacilityMarket extends BaseSubmarketPlugin {
 
     public String getIllegalTransferText(CargoStackAPI stack, TransferAction action) {
 
-        return "Can not be stored here.";
+        return "Cannot be stored here.";
     }
 
     public boolean isEnabled(CoreUIAPI ui) {

@@ -65,11 +65,11 @@ public class Benefication extends BaseIndustry {
     public String getUnavailableReason() {
         String reasoning = null;
         if (AoDUtilis.getNormalOreAmount(market) < -1) {
-            reasoning = "There is no ore on that planet large enough to support that industry ";
+            reasoning = "There are no ore deposits on this planet that are large enough to support this industry. ";
         }
         if (AoDUtilis.getRareOreAmount(market) < -1) {
             if (reasoning != null) {
-                reasoning += "\nThere is no transplutonic ore on that planet large enough to support that industry ";
+                reasoning += "\nThere are no transplutonic ore deposits on this planet that are large enough to support this industry. ";
             }
 
         }

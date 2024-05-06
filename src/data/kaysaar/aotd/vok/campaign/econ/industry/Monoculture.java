@@ -69,7 +69,7 @@ public class Monoculture extends BaseIndustry {
     @Override
     public String getUnavailableReason() {
         if  (AoDUtilis.getFoodQuantityBonus(market)<=-5) {
-            return "Requires farmland";
+            return "Requires farmland.";
         }
         if(AoDUtilis.checkForFamilyIndustryInstance(market, Industries.FARMING, Industries.FARMING,this.id,this.currTooltipMode)){
             return AoDUtilis.reason;

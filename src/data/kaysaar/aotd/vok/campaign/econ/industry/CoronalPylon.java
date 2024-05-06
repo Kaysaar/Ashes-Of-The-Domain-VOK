@@ -155,16 +155,16 @@ public class CoronalPylon extends BaseIndustry {
     @Override
     public String getUnavailableReason() {
         Pair<CoronalCenter, Float> nearest= getNearestCoronalCenter(this.market.getLocationInHyperspace(),this.market.getFactionId());
-        if(nearest==null)return "There is no Hypershunt in your control";
-        if(!nearest.one.tenLY) return "Hypershunt is currently not harvesting any energy!";
+        if(nearest==null)return "There are no Hypershunts under your control.";
+        if(!nearest.one.tenLY) return "The Hypershunt is currently not harvesting any energy!";
         if(nearest.two>10){
             if(!nearest.one.extendedRange){
-                return "Wormhole Stabilizer is not working \n";
+                return "The Wormhole Stabilizer is not working. \n";
 
             }
         }
         if(isThereControlInSystemOrHub()){
-            return "There is already Coronal Energetic Hub in that system";
+            return "There is already Coronal Energetic Hub built in this system.";
         }
         return "";
     }

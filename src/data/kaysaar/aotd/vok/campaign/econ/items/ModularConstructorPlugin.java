@@ -87,11 +87,11 @@ public class ModularConstructorPlugin extends GenericSpecialItemPlugin {
         super.createTooltip(tooltip, expanded, transferHandler, stackSource);
         tooltip.addSectionHeading("Constructor capabilities:", Alignment.MID, 10f);
         if(industrySpecAPI!=null){
-            tooltip.addPara("This constructor is capable of upgrading %s into %s", 10f, Color.ORANGE, retriveUpgradeFrom(),retrieveIndustries(this.industrySpecAPI) );
-            tooltip.addPara("Note! After start of industry's upgrade, item is irreversibly consumed!", Misc.getNegativeHighlightColor(),10f);
+            tooltip.addPara("This constructor is capable of upgrading %s into %s.", 10f, Color.ORANGE, retriveUpgradeFrom(),retrieveIndustries(this.industrySpecAPI) );
+            tooltip.addPara("Urgent! After industry's upgrade is started, this item is irreversibly consumed!", Misc.getNegativeHighlightColor(),10f);
         }
         else{
-            tooltip.addPara("This constructor's data rack is empty. We can fill it with our current data, to suit our needs", Misc.getTooltipTitleAndLightHighlightColor(),10f);
+            tooltip.addPara("This constructor's data rack is empty. We can insert our current data into it, to suit our needs.", Misc.getTooltipTitleAndLightHighlightColor(),10f);
         }
         addCostLabel(tooltip, 10f, transferHandler, stackSource);
 

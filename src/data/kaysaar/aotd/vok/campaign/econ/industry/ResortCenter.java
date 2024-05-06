@@ -119,7 +119,7 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
         return false;
     }
     public String getUnavailableReason() {
-        return "Requires a functional spaceport, And Habitable planet that's have mild climate without any pollution ";
+        return "Requires a functional spaceport and a habitable planet that has mild climate without any pollution.";
     }
     @Override
     protected void applyAlphaCoreModifiers() {

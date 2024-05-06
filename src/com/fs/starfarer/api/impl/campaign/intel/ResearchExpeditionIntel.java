@@ -132,25 +132,25 @@ public class ResearchExpeditionIntel extends BaseIntelPlugin {
         // Create the small description here, you can place images, multiple paragraphs, anything
         info.addImage(factionAPI.getLogo(), width, 96, 5);
         if (counter >= 0) {
-            info.addPara("Strange activity has been recently seen in " + factionAPI.getDisplayName() + ". Their exploratory fleets are beginning to be mobilized.From what intel we can gather, it all indicates that massive exploration fleet is being prepared and it is ", 10);
-            info.addPara((int) counter + " days till expedition will embark", 10f);
+            info.addPara("Strange activity has been recently reported in " + factionAPI.getDisplayName() + ". Their exploration fleets are being mobilized and from what intel we can gather, it seems that a massive exploration fleet is being prepared and it is set to embark in ", 10);
+            info.addPara((int) counter + " days.", 10f);
         } else {
             if (launchMarket != null) {
                 info.addPara("Given current intel, expedition has been launched from " + launchMarket.getName(), 10);
             }
             if(!finished){
                 if(!success&&failed){
-                    info.addPara("Expedition has failed",10f);
+                    info.addPara("The expedition has failed",10f);
                 }
             }
             else{
                 if(!success&&!failed){
                     assert launchMarket != null;
-                    info.addPara("Expedition has been successful - currently it's returning to "+launchMarket.getName(),10f);
+                    info.addPara("The expedition has been successful - currently it's returning to "+launchMarket.getName(),10f);
                 }
             }
             if(success){
-                info.addPara("Expedition has been successful and it boosted faction's technological capabilities",10f);
+                info.addPara("The expedition has been successful and it has boosted faction's technological capabilities.",10f);
             }
 
         }

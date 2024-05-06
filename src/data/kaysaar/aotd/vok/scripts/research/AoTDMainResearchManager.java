@@ -256,7 +256,7 @@ public class AoTDMainResearchManager {
         if (!isPresent) {
             if ((factionAPI.isShowInIntelTab() || factionAPI.isPlayerFaction()) && !factionAPI.getId().equals(Factions.PIRATES)) {
                 factionResearchManagers.add(new AoTDFactionResearchManager(factionAPI, generateResearchOptions(getSpecsFromFiles())));
-                logger.info("Faction of name " + factionAPI.getDisplayName() + " has been added to research manager");
+                logger.info("Faction " + factionAPI.getDisplayName() + " has been added to research manager.");
             }
 
         }

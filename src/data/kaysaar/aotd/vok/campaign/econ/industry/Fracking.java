@@ -86,7 +86,7 @@ public class Fracking extends BaseIndustry {
 
     @Override
     public String getUnavailableReason() {
-        return "There is no ore present on this planet";
+        return "There are no ore deposits present on this planet.";
 
     }
 

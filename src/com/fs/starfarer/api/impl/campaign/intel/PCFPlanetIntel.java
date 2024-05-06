@@ -63,7 +63,7 @@ public class PCFPlanetIntel extends BaseIntelPlugin {
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
         // Create the small description here, you can place images, multiple paragraphs, anything
-        info.addPara("This location points out planet, that might possess long lost ruins of Domain's technological might", Misc.getGrayColor(), 0);
+        info.addPara("This is a location of planet that might possess long lost ruins of Domain's technological might.", Misc.getGrayColor(), 0);
     }
 
     @Override

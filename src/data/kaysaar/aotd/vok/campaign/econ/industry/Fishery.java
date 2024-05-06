@@ -57,7 +57,7 @@ public class Fishery extends BaseIndustry {
         if(AoDUtilis.checkForFamilyIndustryInstance(market, Industries.AQUACULTURE,Industries.AQUACULTURE,this.id,this.currTooltipMode)){
             return AoDUtilis.reason;
         }
-        return "Requires water covered surface world";
+        return "Requires a world with water-covered surface.";
     }
 
 

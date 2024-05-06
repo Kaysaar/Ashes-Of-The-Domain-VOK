@@ -42,7 +42,7 @@ public class Aquaculture extends Farming {
 
     @Override
     public String getUnavailableReason() {
-        return "Requires water surfaced world";
+        return "Requires a world with water-covered surface.";
     }
 
 

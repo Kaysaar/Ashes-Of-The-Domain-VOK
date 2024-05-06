@@ -37,16 +37,16 @@ public class SpecialProjectBarComponent extends UiPanel {
     @Override
     public void createUI() {
         bar = panel.createCustomPanel(widthOfBar, 25, null);
-        tooltip.addSectionHeading("Progression towards  completing project : " + String.format("%.2f", 100 * projectOfIntrest.calculateProgress()) + "%", Alignment.MID, 10f).getPosition().inTL(0, 1);
+        tooltip.addSectionHeading("Progression towards completing project : " + String.format("%.2f", 100 * projectOfIntrest.calculateProgress()) + "%", Alignment.MID, 10f).getPosition().inTL(0, 1);
         panel.addComponent(bar).inTL(0, 20);
-        tooltip.addPara("Special projects are enormous undertaking in terms of scientific capabilities in the Persean Sector", 10f).getPosition().inTL(5, 65);
+        tooltip.addPara("Special projects are enormous undertakings that push the limits of the science that can be done in the Persean Sector.", 10f).getPosition().inTL(5, 65);
         tooltip.setParaFont(Fonts.ORBITRON_20AABOLD);
         tooltip.addPara("Project Specification", Color.ORANGE, 20f);
         tooltip.setParaFont(Fonts.DEFAULT_SMALL);
         if (!projectOfIntrest.spec.isRepeatable) {
-            tooltip.addPara("Warning! Due to nature and scope of project, we can only give it one shot!", Misc.getNegativeHighlightColor(), 10f);
+            tooltip.addPara("Warning! Due to experimental nature and massive scope of this project, we can only give it one shot!", Misc.getNegativeHighlightColor(), 10f);
         } else {
-            tooltip.addPara("Due to abundance of resources needed for this project we can do it multiple times", Misc.getPositiveHighlightColor(), 10f);
+            tooltip.addPara("We can attempt this project multiple times, granted we have enough resources for it.", Misc.getPositiveHighlightColor(), 10f);
         }
         tooltip.setParaFont(Fonts.ORBITRON_20AABOLD);
         tooltip.addPara("Project Description", Color.ORANGE, 20);

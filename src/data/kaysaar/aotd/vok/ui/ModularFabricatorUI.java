@@ -45,7 +45,7 @@ public class ModularFabricatorUI implements CustomDialogDelegate {
 
     public void createCustomDialog(CustomPanelAPI panel, CustomDialogCallback callback) {
         TooltipMakerAPI panelTooltip = panel.createUIElement(WIDTH, HEIGHT, true);
-        panelTooltip.addSectionHeading("Select programming for Constructor", Alignment.MID, 0f);
+        panelTooltip.addSectionHeading("Select programming for the Constructor.", Alignment.MID, 0f);
         String aiId = industry.getAICoreId();
         float opad = 10f;
         float spad = 2f;
@@ -84,7 +84,7 @@ public class ModularFabricatorUI implements CustomDialogDelegate {
             if (!AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)) {
                 helper.addImage(Global.getSettings().getSpecialItemSpec("modular_constructor_empty").getIconName(), 60, 60, 10f);
             }
-            helper.addPara("It takes :" + PROGRAMMING_TIME + " days to produce", Color.ORANGE, 5f);
+            helper.addPara("It will take :" + PROGRAMMING_TIME + " days to finish.", Color.ORANGE, 5f);
 
             LabelAPI label1;
 
@@ -151,7 +151,7 @@ public class ModularFabricatorUI implements CustomDialogDelegate {
             panelhelper.addUIElement(labelTooltip).inTL(60, 5);
             anchor.addCustom(panelhelper, 10f);
             areaCheckbox.setEnabled(enabled);
-            anchor.addPara("It will require around %s to program constructor", 10f, Color.ORANGE, "" + PROGRAMMING_TIME);
+            anchor.addPara("It will take around %s days to program the constructor.", 10f, Color.ORANGE, "" + PROGRAMMING_TIME);
             subIndustryButtonPanel.addUIElement(anchor).inTL(5 + adjustedWidth + 15, 5);
             panelTooltip.addCustom(subIndustryButtonPanel, 0f);
             buttons.add(areaCheckbox);

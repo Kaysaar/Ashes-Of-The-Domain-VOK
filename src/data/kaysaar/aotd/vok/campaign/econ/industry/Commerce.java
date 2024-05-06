@@ -22,10 +22,10 @@ public class Commerce extends TradeCenter {
     @Override
     public String getUnavailableReason() {
         if (market.hasIndustry(AoTDIndustries.UNDERWORLD)) {
-            return "There is already a Underworld in your colony";
+            return "There is already a Underworld present in your colony.";
         }
         if (market.hasIndustry(AoTDIndustries.FORBIDDEN_CITY)) {
-            return "There is already a Forbidden City in your colony";
+            return "There is already a Forbidden City present in your colony.";
         }
         return super.getUnavailableReason();
     }

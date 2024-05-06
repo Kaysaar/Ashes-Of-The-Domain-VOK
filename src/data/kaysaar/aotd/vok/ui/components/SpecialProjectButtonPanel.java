@@ -36,7 +36,7 @@ public class SpecialProjectButtonPanel extends UiPanel{
 
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                tooltip.addPara("Special projects are special type of research options,that appear after meeting certain criteria.\nThose projects unlike research options in tech tree are not guaranteed to be done successfully." +
+                tooltip.addPara("Special projects are special type of research options, that appear once certain criteria are met.\nThese projects unlike research options in the tech tree are not guaranteed to be successful." +
                         "\nCurrently special projects are inaccessible due to being WIP",10f);
             }
         }, TooltipMakerAPI.TooltipLocation.RIGHT);

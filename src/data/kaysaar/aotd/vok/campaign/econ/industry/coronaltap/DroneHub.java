@@ -54,17 +54,17 @@ public class DroneHub extends CoronalSegment {
     @Override
     public void createTooltipInfoForOption(TooltipMakerAPI tooltip) {
         tooltip.addSectionHeading("Repair Cost ", Alignment.MID,0f);
-        tooltip.addPara("Repair will require constant supply of 10 units of Refined Metal and 5 of Purified Transplutonics for "+this.getBuildTime()+" days", Misc.getTooltipTitleAndLightHighlightColor(),10f);
+        tooltip.addPara("Repair will require constant supply of 10 units of Refined Metal and 5 units of Purified Transplutonics for "+this.getBuildTime()+" days", Misc.getTooltipTitleAndLightHighlightColor(),10f);
         tooltip.addSectionHeading("Drone Mega-Assembly : Effect after repair",Alignment.MID,10f);
-        tooltip.addPara("Allows repairing other modules 50% faster",Misc.getPositiveHighlightColor(),10f);
-        tooltip.addPara("2.5 times multiplier towards ship production",Misc.getPositiveHighlightColor(),10f);
+        tooltip.addPara("Allows for repairing other modules 50% faster.",Misc.getPositiveHighlightColor(),10f);
+        tooltip.addPara("Provides 2 times multiplier for ship production.",Misc.getPositiveHighlightColor(),10f);
     }
 
     @Override
     public void addSegmentEffect(TooltipMakerAPI tooltipMakerAPI) {
         if(haveCompletedRestoration&&isWorking()){
-            tooltipMakerAPI.addPara(this.getCurrentName()+" : %s",10f,Misc.getPositiveHighlightColor(),""+"50% speed towards restoration of other Hypershunt segments");
-            tooltipMakerAPI.addPara("%s",10f,Misc.getPositiveHighlightColor(),""+"2 times multiplier towards ship production");
+            tooltipMakerAPI.addPara(this.getCurrentName()+" : %s",10f,Misc.getPositiveHighlightColor(),""+"50% speed towards restoration of other Hypershunt segments.");
+            tooltipMakerAPI.addPara("%s",10f,Misc.getPositiveHighlightColor(),""+"2 times multiplier towards ship production.");
         }
     }
 
@@ -72,11 +72,11 @@ public class DroneHub extends CoronalSegment {
     public Pair<String, Color> getCurrentStatusString() {
         Pair<String,Color> status = super.getCurrentStatusString();
         if(haveCompletedRestoration&&this.isWorking()){
-            status.one="All systems functional";
+            status.one="All systems functional.";
             status.two = Misc.getPositiveHighlightColor();
         }
         if(!haveCompletedRestoration&&isBuilding()&&canProgress){
-            status.one="Restoration in progress";
+            status.one="Restoration in progress.";
             status.two = Misc.getBrightPlayerColor();
         }
         if(!haveCompletedRestoration&&isBuilding()&&!canProgress){

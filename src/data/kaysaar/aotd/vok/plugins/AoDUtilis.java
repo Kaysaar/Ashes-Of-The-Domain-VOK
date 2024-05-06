@@ -25,14 +25,14 @@ import java.util.Map;
 
 
 public class AoDUtilis {
-    public static final String reason = "This industry can't be downgraded, due to starsector API limitations.";
+    public static final String reason = "This industry cannot be downgraded due to starsector API limitations.";
 
     public static boolean checkIfResearched(String id) {
         Map<String, Boolean> researchSaved = (HashMap<String, Boolean>) Global.getSector().getPersistentData().get("researchsaved");
         return researchSaved != null ? researchSaved.get(id) : false;
     }
     public static String consumeReq(String industryId){
-        return ModularConstructorPlugin.retrieveNameForReq(industryId) +" required to be installed in "+Global.getSettings().getIndustrySpec(industryId).getName();
+        return ModularConstructorPlugin.retrieveNameForReq(industryId) +" is required to be installed in "+Global.getSettings().getIndustrySpec(industryId).getName();
 
     }
     public static boolean canInstallItem(Industry industry, String itemID) {

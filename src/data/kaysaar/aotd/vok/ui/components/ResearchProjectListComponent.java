@@ -56,7 +56,7 @@ public class ResearchProjectListComponent extends UiPanel{
         tooltipMakerAPI1.addPara("Currently controls "+ AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities()+" research facilities.",Misc.getTooltipTitleAndLightHighlightColor(),10f);
         tooltip.addCustom(coverPanel,1f);
         tooltip.addCustom(bonusPanel,0f);
-        tooltip.addSectionHeading("Special Project Lists",Alignment.MID,0f);
+        tooltip.addSectionHeading("Special Project List",Alignment.MID,0f);
         for (ResearchProject s : AoTDMainResearchManager.getInstance().getResearchProjects()) {
             if(!s.haveMetReqOnce)continue;
             CustomPanelAPI buttonPanel = panel.createCustomPanel(290, 100, null);

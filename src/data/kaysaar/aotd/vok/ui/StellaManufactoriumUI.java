@@ -41,7 +41,7 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
 
     public void createCustomDialog(CustomPanelAPI panel, CustomDialogCallback callback) {
         TooltipMakerAPI panelTooltip = panel.createUIElement(WIDTH, HEIGHT, true);
-        panelTooltip.addSectionHeading("Select Special items to be produced", Alignment.MID, 0f);
+        panelTooltip.addSectionHeading("Select Special items to be manufactured.", Alignment.MID, 0f);
         String aiId = industry.getAICoreId();
         float opad = 10f;
         float spad = 2f;
@@ -75,7 +75,7 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
             helper.addSectionHeading(" " + fullTitle, baseColor, brightColor, Alignment.LMID, 0f);
             LabelAPI labelDesc = helper.addPara(upgrdSpec.getDesc(), opad);
             labelDesc.autoSizeToWidth(ENTRY_WIDTH - adjustedWidth - (3 * opad));
-            helper.addSectionHeading("Demand to produce item", color, dark, Alignment.MID, opad);
+            helper.addSectionHeading("Demands that have to be met in order to manufacture this item", color, dark, Alignment.MID, opad);
             helper.beginIconGroup();
             helper.setIconSpacingMedium();
             for (Map.Entry<String, Integer> itemCost : specItemToProduce.cost.entrySet()) {
@@ -88,7 +88,7 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
 
             }
             helper.addIconGroup(32, 1, opad);
-            helper.addPara("It takes :" + specItemToProduce.costInDays + "to produce", Color.ORANGE, 10f);
+            helper.addPara("It will take :" + specItemToProduce.costInDays + "days to manufacture.", Color.ORANGE, 10f);
 
             LabelAPI label1;
 
@@ -113,7 +113,7 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
             LabelAPI labelDesc1 = anchor.addPara(upgrdSpec.getDesc(), opad);
             labelDesc1.autoSizeToWidth(ENTRY_WIDTH - adjustedWidth - (3 * opad));
             LabelAPI label;
-            anchor.addSectionHeading("Demand to produce item", color, dark, Alignment.MID, opad);
+            anchor.addSectionHeading("Demands that have to be met in order to manufacture this item", color, dark, Alignment.MID, opad);
             anchor.beginIconGroup();
             anchor.setIconSpacingMedium();
             for (Map.Entry<String, Integer> itemCost : specItemToProduce.cost.entrySet()) {
@@ -133,9 +133,9 @@ public class StellaManufactoriumUI implements CustomDialogDelegate {
             int rows = 1;
             anchor.addIconGroup(32, rows, opad);
             if (aiId != null && aiId.equals(Commodities.ALPHA_CORE)) {
-                anchor.addPara("It takes " + (int) specItemToProduce.costInDays / 2 + " days to produce", Color.ORANGE, 10f);
+                anchor.addPara("It will take " + (int) specItemToProduce.costInDays / 2 + " days to produce", Color.ORANGE, 10f);
             } else {
-                anchor.addPara("It takes " + (int) specItemToProduce.costInDays + " days to produce", Color.ORANGE, 10f);
+                anchor.addPara("It will take " + (int) specItemToProduce.costInDays + " days to produce", Color.ORANGE, 10f);
             }
 
             subIndustryButtonPanel.addUIElement(anchor).inTL(5 + adjustedWidth + 15, 5);

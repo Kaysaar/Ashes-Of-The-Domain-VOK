@@ -57,7 +57,7 @@ public class SwitchAgricultureSection extends BaseIndustry {
 
     @Override
     protected String getDescriptionOverride() {
-        return "Currently this industry is switching production Focus";
+        return "This industry is currently switching its production focus.";
     }
     @Override
     public boolean showShutDown() {

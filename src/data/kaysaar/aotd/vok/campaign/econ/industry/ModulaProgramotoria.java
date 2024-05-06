@@ -65,17 +65,17 @@ public class ModulaProgramotoria extends BaseIndustry {
         super.addPostDemandSection(tooltip, hasDemand, mode);
         if (mapOfProduction != null) {
             if(canGoFuther){
-                tooltip.addPara("Due to complexity of constructor's programming, we can only program one at time!", Misc.getNegativeHighlightColor(), 10f);
+                tooltip.addPara("Due to complexity of constructor's programming, we can only program one thing at a time!", Misc.getNegativeHighlightColor(), 10f);
                 String days = " days ";
 
                 if (mapOfProduction.two.intValue() <= 1) {
                     days = " day ";
                 }
                 //FUNNI CODE
-                tooltip.addPara("%s " + days + "left until constructor will be programmed", 10f, Color.ORANGE, "" + mapOfProduction.two.intValue());
+                tooltip.addPara("%s " + days + "left until constructor will be fully programmed.", 10f, Color.ORANGE, "" + mapOfProduction.two.intValue());
             }
             else{
-                tooltip.addPara("We need stable supply of resources to go further!", Misc.getNegativeHighlightColor(), 10f);
+                tooltip.addPara("We need stable supply of resources to continue!", Misc.getNegativeHighlightColor(), 10f);
 
             }
 
