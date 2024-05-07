@@ -57,7 +57,6 @@ public class ModularConstructorPlugin extends GenericSpecialItemPlugin {
             sprite.setAlphaMult(alphaMult * mult);
             sprite.setNormalBlend();
             sprite.renderWithCorners(blX, blY, tlX, tlY, trX, trY, brX, brY);
-
             if (glowMult > 0) {
                 sprite.setAlphaMult(alphaMult * glowMult * 0.5f * mult);
                 sprite.setAdditiveBlend();

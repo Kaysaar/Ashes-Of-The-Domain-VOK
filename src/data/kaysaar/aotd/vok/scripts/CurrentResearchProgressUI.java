@@ -5,37 +5,45 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
 import com.fs.starfarer.api.campaign.listeners.CampaignInputListener;
 import com.fs.starfarer.api.campaign.listeners.CampaignUIRenderingListener;
+import com.fs.starfarer.api.combat.CombatEngineLayers;
 import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
+import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
+import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.ui.FontException;
 import org.lazywizard.lazylib.ui.LazyFont;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector2f;
+import org.magiclib.util.MagicRender;
+import org.magiclib.util.MagicSettings;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Random;
 
 
 public class CurrentResearchProgressUI implements CampaignUIRenderingListener, EveryFrameScript, CampaignInputListener {
-    private SpriteAPI sprite = Global.getSettings().getSprite("ui_campaign_components", "tech_panel");
-    private SpriteAPI spriteOfCurrentlyResearched;
+    transient SpriteAPI sprite = Global.getSettings().getSprite("ui_campaign_components", "tech_panel");
+    transient SpriteAPI spriteOfCurrentlyResearched;
 
-    public LazyFont loader = LazyFont.loadFont(Fonts.ORBITRON_24AABOLD);
-    public LazyFont.DrawableString techString;
-    public LazyFont.DrawableString buttonString;
-    public LazyFont.DrawableString progressionString;
-    private SpriteAPI buttonHide = Global.getSettings().getSprite("ui_campaign_components", "tech_button_hide");
-    private SpriteAPI buttonHideHighlighted = Global.getSettings().getSprite("ui_campaign_components", "tech_hide_button_highlighted");
-    private SpriteAPI buttonTech = Global.getSettings().getSprite("ui_campaign_components", "tech_button");
-    private SpriteAPI buttonTechHighlighted = Global.getSettings().getSprite("ui_campaign_components", "tech_button_highlighted");
-    private TrapezoidButtonDetector detector = new TrapezoidButtonDetector();
-    private SpriteAPI progressionBarFull = Global.getSettings().getSprite("ui_campaign_components", "tech_progression");
+    transient LazyFont loader = LazyFont.loadFont(Fonts.ORBITRON_24AABOLD);
+    transient LazyFont.DrawableString techString;
+    transient LazyFont.DrawableString buttonString;
+    transient LazyFont.DrawableString progressionString;
+    transient SpriteAPI buttonHide = Global.getSettings().getSprite("ui_campaign_components", "tech_button_hide");
+    transient SpriteAPI buttonHideHighlighted = Global.getSettings().getSprite("ui_campaign_components", "tech_hide_button_highlighted");
+    transient SpriteAPI buttonTech = Global.getSettings().getSprite("ui_campaign_components", "tech_button");
+    transient SpriteAPI buttonTechHighlighted = Global.getSettings().getSprite("ui_campaign_components", "tech_button_highlighted");
+    transient TrapezoidButtonDetector detector = new TrapezoidButtonDetector();
+    transient SpriteAPI progressionBarFull = Global.getSettings().getSprite("ui_campaign_components", "tech_progression");
     ;
-    private SpriteAPI progressionBarChanged = Global.getSettings().getSprite("ui_campaign_components", "tech_progression");
+    transient SpriteAPI progressionBarChanged = Global.getSettings().getSprite("ui_campaign_components", "tech_progression");
     ;
     boolean isHidden = true;
 
@@ -68,8 +76,12 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
 
     }
 
+
+
+
     @Override
     public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
+
         final CampaignUIAPI campaignUI = Global.getSector().getCampaignUI();
         if (campaignUI.isShowingDialog() || campaignUI.isShowingMenu() || campaignUI.getCurrentCoreTab() != null)
             return;
@@ -162,9 +174,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             }
         }
 
-
     }
-
     @Override
     public int getListenerInputPriority() {
         return 1200;

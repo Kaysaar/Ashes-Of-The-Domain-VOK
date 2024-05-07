@@ -55,7 +55,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.removeListenerOfClass(CurrentResearchProgressUI.class);
         if(!l.hasListenerOfClass(CurrentResearchProgressUI.class)) {
             try {
-                l.addListener(new CurrentResearchProgressUI());
+                l.addListener(new CurrentResearchProgressUI(),true);
             } catch (FontException e) {
                 throw new RuntimeException(e);
             }
