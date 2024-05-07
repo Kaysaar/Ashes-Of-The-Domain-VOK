@@ -91,6 +91,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
 
                 }
             }
+
             initBattle(dialogAPI,memoryMap);
 
         }
@@ -161,7 +162,12 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
             defenders.getMemoryWithoutUpdate().set("$knowsWhoPlayerIs",false);
 
         }
-
+        if(defenders.isEmpty()){
+            defenders.deflate();
+            dialog.getOptionPanel().addOption("Send a salvage team down to the facility", "explore_PreFac");
+            dialog.getOptionPanel().addOption("Leave", "defaultLeave");
+            return true;
+        }
         dialog.setInteractionTarget(defenders);
         defenders.getMemoryWithoutUpdate().set("$LP_titheAskedFor", true);
         if (defenders.isEmpty()) {
@@ -224,7 +230,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
                         dialog.getOptionPanel().clearOptions();
                         dialog.getVisualPanel().finishFadeFast();
                         dialog.getVisualPanel().showPlanetInfo(dialog.getInteractionTarget());
-
+                        defenders.deflate();
                         dialog.getOptionPanel().addOption("Send a salvage team down to the facility", "explore_PreFac");
                         dialog.getOptionPanel().addOption("Leave", "defaultLeave");
 
