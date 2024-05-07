@@ -10,15 +10,15 @@ AddText ""You make your way inside a bar when suddenly you are approached by a w
 aotdSophiaDontTalk:Don't follow",
 aotdSophiaTalk,DialogOptionSelected,$option == aotdSophiaTalk,"SaveCurrentVisual
 BeginConversation aotd_sophia 
-$global.aotd_sophia",Both of you sit in the bar ordering a small glass of fine booze. After a moment you hear that her name is Sophia and she is one of researchers from Galatia as you guessed it earlier. “I have heard stories about technological advancements of your faction and  I have come with a proposition for you”,aotdSophiaListen: Listen to proposition,
-aotdSophiaListen,DialogOptionSelected,$option == aotdSophiaListen,,"So getting to the point, I am a seeker of knowledge, Galatia limits me with regulations, but you? You pursue knowledge without any bounds and I want to be part of it . So my question is will you allow my humble person to help you in that matter?
+$global.aotd_sophia","Both of you sit in the bar, ordering a small glass of fine booze. After exchanging some pleasantries she introduces herself as Sophia, one of researchers from Galatia Academy. “I have heard many stories about technological advancements of your faction and I have come up with a proposition for you.”",aotdSophiaListen: Listen to proposition,
+aotdSophiaListen,DialogOptionSelected,$option == aotdSophiaListen,,"Getting to the point, I am a Seeker of Knowledge. Galatia Academy limits me with it's regulations, but you? You pursue knowledge without any bounds nor limits and I want to be a part of it. So my question is: will you allow my humble self to help you in further pursue of knowledge?
 ","aotdSophiaAgree:Accept Propostion 
 aotdSophiaInfo:See her skills
 aotdReturn:Decline ,and leave the bar",
 aotdSophiaAgree,DialogOptionSelected,$option == aotdSophiaAgree,"SophiaAgreed  
 AddTextSmall ""$personName joined your faction"" highlight",,aotdReturn: Leave the bar,
 aotdSophiaInfo,DialogOptionSelected,$option == aotdSophiaInfo,"AddTextSmall ""Skill - Resourceful."" highlight
-AddTextSmall  ""Decrease cost of item for initial research by 100 units or 1 if given item is research databank. This does not include colony items"" highlight
+AddTextSmall  ""Decrease cost of items for initial research by 100 units or by 1 if required item is a research databank. This does not include colony items"" highlight
 ",,,
 aotdReturn,DialogOptionSelected,$option == aotdReturn,"EndConversation DO_NOT_FIRE
 RestoreSavedVisual
@@ -107,14 +107,16 @@ $market.mc:pre_collapse_facility
 !$market.aotd_fac_explored
 !$tag:gas_giant
 $market.aotd_failed_pre_collapse","FireBest DissablePreCollapseFacilityWhenNeeded
-FireAll PCFFailed",,,
+
+FireAll PCFFailed",,,
 preCollapse_fac_failed1,PCFFailed,"$market.isSurveyed
 $market.isPlanetConditionMarketOnly
 $market.mc:pre_collapse_facility
 !$market.aotd_fac_explored
 !$tag:gas_giant
 $market.aotd_failed_pre_collapse","AoTDPCFFailed removeCondition 
-SetShortcut defaultLeave ESCAPE",Unfortuanelty previous fleet have cleared entire planet from all of valuable data. There is nothing left valuable for us ,0:aotd_leave:Leave,
+
+SetShortcut defaultLeave ESCAPE",Unfortuanelty previous fleet have cleared entire planet from all of valuable data. There is nothing left valuable for us ,0:aotd_leave:Leave,
 preCollapse_fac_failed2,DialogOptionSelected,$option == aotd_leave,AoTDPCFFailed dismiss,,,
 ,,,,,,
 #Coronal Rework ,,,,,,
