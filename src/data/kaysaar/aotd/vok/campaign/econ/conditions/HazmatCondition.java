@@ -13,7 +13,6 @@ public class HazmatCondition extends BaseHazardCondition {
         if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(market.getFaction()).haveResearched(AoTDTechIds.HAZMAT_WORKING_EQUIPMENT)){
             market.getHazard().modifyFlat("tech_hazmmat",-0.1f,"Hazmat Working Equipment");
         }
-
     }
 
     @Override
