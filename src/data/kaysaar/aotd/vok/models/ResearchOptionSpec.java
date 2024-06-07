@@ -170,7 +170,7 @@ public class ResearchOptionSpec {
         return new ResearchOptionSpec(id, name, tier, iconId, timeToResearch, reqMerged, column, row, generateResearchRewards(rewards), modId, isResearched, reqItems, globalReq);
     }
 
-    public ResearchOptionEra getValueFromNumber(int tier) {
+    public static ResearchOptionEra getValueFromNumber(int tier) {
         for (ResearchOptionEra value : ResearchOptionEra.values()) {
             if (value.ordinal() == tier) return value;
         }

@@ -31,10 +31,12 @@ public class AoDUtilis {
         Map<String, Boolean> researchSaved = (HashMap<String, Boolean>) Global.getSector().getPersistentData().get("researchsaved");
         return researchSaved != null ? researchSaved.get(id) : false;
     }
-    public static String consumeReq(String industryId){
-        return ModularConstructorPlugin.retrieveNameForReq(industryId) +" is required to be installed in "+Global.getSettings().getIndustrySpec(industryId).getName();
+
+    public static String consumeReq(String industryId) {
+        return ModularConstructorPlugin.retrieveNameForReq(industryId) + " is required to be installed in " + Global.getSettings().getIndustrySpec(industryId).getName();
 
     }
+
     public static boolean canInstallItem(Industry industry, String itemID) {
         if (industry == null || itemID == null) {
             return false;
@@ -49,18 +51,12 @@ public class AoDUtilis {
 
     }
 
-    public static float calculatePercentOfProgression(ResearchOption option){
-        if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
-            if (LunaSettings.getFloat("aotd_vok", "aotd_expedition_threshold") != null) {
-                Double multiplier = LunaSettings.getDouble("aotd_vok", "aotd_reserarch_speed_multiplier");
-                float bonusResearch = (float) (option.getSpec().getTimeToResearch()*multiplier*(AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities()-1)));
-                return (float) (option.daysSpentOnResearching/((option.getSpec().getTimeToResearch()*multiplier)-bonusResearch));
-            }
-
-        }
-
-        return (float) (option.daysSpentOnResearching/(option.getSpec().getTimeToResearch()));
+    public static float calculatePercentOfProgression(ResearchOption option) {
+        float multiplier = AoTDSettingsManager.getFloatValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
+        float bonusResearch = (float) (option.getSpec().getTimeToResearch() * multiplier * (AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC * (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities() - 1)));
+        return (float) (option.daysSpentOnResearching / ((option.getSpec().getTimeToResearch() * multiplier) - bonusResearch));
     }
+
     public static boolean checkForFamilyIndustryInstance(MarketAPI marketAPI, String industryIdToIgnoire, String category, String Base, Industry.IndustryTooltipMode mode) {
 
         for (Industry industry : marketAPI.getIndustries()) {
@@ -133,21 +129,23 @@ public class AoDUtilis {
 
         return howMuchToProduce;
     }
-    public static boolean checkForItemBeingInstalled(MarketAPI market,String industryId, String itemId) {
-        if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(market.getFaction()).haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
+
+    public static boolean checkForItemBeingInstalled(MarketAPI market, String industryId, String itemId) {
+        if (AoTDMainResearchManager.getInstance().getSpecificFactionManager(market.getFaction()).haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)) {
             return true;
         }
-        if(market.getIndustry(industryId)==null){
+        if (market.getIndustry(industryId) == null) {
             return false;
         }
-        if(market.getIndustry(industryId).getSpecialItem()==null ){
+        if (market.getIndustry(industryId).getSpecialItem() == null) {
             return false;
         }
-        if(market.getIndustry(industryId).getSpecialItem().getId().equals(itemId)){
+        if (market.getIndustry(industryId).getSpecialItem().getId().equals(itemId)) {
             return true;
         }
         return false;
     }
+
     public static void ensureIndustryHasNoItem(Industry ind) {
         if (ind.getSpecialItem() != null) {
             Misc.getStorageCargo(ind.getMarket()).addSpecial(ind.getSpecialItem(), 1);

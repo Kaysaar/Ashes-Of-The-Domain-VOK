@@ -12,6 +12,7 @@ import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.impl.campaign.intel.ResearchExpeditionIntel;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.models.*;
+import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import lunalib.lunaSettings.LunaSettings;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -29,19 +30,21 @@ public class AoTDMainResearchManager {
     public static ArrayList<ResearchOption> researchOptions = new ArrayList<>();
     public static final String managerMemo = "$aotd_vok_manager";
     public static float BONUS_PER_RESEARACH_FAC = 0.1f;
+
     public ArrayList<AoTDFactionResearchManager> getFactionResearchManagers() {
         return factionResearchManagers;
     }
+
     public static String specialProjetsPath = "data/campaign/aotd_special_projects.csv";
 
     HashMap<String, Float> weight = new HashMap<>();
     public ArrayList<String> modIDsRepo = new ArrayList<>();
     public ArrayList<AoTDFactionResearchManager> factionResearchManagers = new ArrayList<>();
-    public ArrayList<ResearchProject>researchProjects = new ArrayList<>();
+    public ArrayList<ResearchProject> researchProjects = new ArrayList<>();
 
     public float expeditionCounter = 0;
     public String expeditionSender = null;
-    public float  expeditionThreshold = 120;
+    public float expeditionThreshold = 120;
 
     @NotNull
     private Map<String, ResearchOptionSpec> researchOptionSpec = new HashMap<>();
@@ -78,7 +81,8 @@ public class AoTDMainResearchManager {
         return toReturn;
 
     }
-    public static @NotNull Map<String, ResearchProjectSpec> getResearchProjectSpecFromFiles(){
+
+    public static @NotNull Map<String, ResearchProjectSpec> getResearchProjectSpecFromFiles() {
         Map<String, ResearchProjectSpec> newEventSpecs = new HashMap<>();
         JSONArray projectCsvFromMod;
         try {
@@ -100,6 +104,7 @@ public class AoTDMainResearchManager {
         return newEventSpecs;
 
     }
+
     public void updateModIdRepo() {
         if (modIDsRepo == null) modIDsRepo = new ArrayList<>();
         for (ResearchOptionSpec spec : researchOptionSpec.values()) {
@@ -151,9 +156,10 @@ public class AoTDMainResearchManager {
         }
         return researchProjects;
     }
-    public ResearchProject getResearchProjectFromRepo(String id ){
+
+    public ResearchProject getResearchProjectFromRepo(String id) {
         for (ResearchProject project : researchProjects) {
-            if(project.id.equals(id)){
+            if (project.id.equals(id)) {
                 return project;
             }
         }
@@ -165,10 +171,10 @@ public class AoTDMainResearchManager {
         researchOptionSpec = getSpecsFromFiles();
         researchProjectSpec.clear();
         researchProjectSpec = getResearchProjectSpecFromFiles();
-        ArrayList<ResearchProject>dummyList =  generateResearchProjects(researchProjectSpec);
+        ArrayList<ResearchProject> dummyList = generateResearchProjects(researchProjectSpec);
         for (ResearchProject researchProject : dummyList) {
-            ResearchProject original  = getResearchProjectFromRepo(researchProject.id);
-            if(original==null)continue;
+            ResearchProject original = getResearchProjectFromRepo(researchProject.id);
+            if (original == null) continue;
             researchProject.currentlyOngoing = original.currentlyOngoing;
             researchProject.haveDoneIt = original.haveDoneIt;
             researchProject.optionsTakenIds = original.optionsTakenIds;
@@ -177,9 +183,9 @@ public class AoTDMainResearchManager {
             researchProject.currentProgress = original.currentProgress;
             researchProject.haveReachedCriticalMoment = original.haveReachedCriticalMoment;
             for (SpecialProjectStage stageNew : researchProject.stages) {
-                if(original.getCertainStage(stageNew.numberOfStage)!=null){
+                if (original.getCertainStage(stageNew.numberOfStage) != null) {
                     stageNew.chosenOption = original.getCertainStage(stageNew.numberOfStage).chosenOption;
-                    if(stageNew.chosenOption!=null){
+                    if (stageNew.chosenOption != null) {
                         stageNew.ensureDecisionExist();
                     }
 
@@ -222,9 +228,8 @@ public class AoTDMainResearchManager {
     }
 
 
-
     public void initalizeFactionManagers() {
-        List<FactionAPI>factions = Global.getSector().getAllFactions();
+        List<FactionAPI> factions = Global.getSector().getAllFactions();
         Collections.shuffle(factions);
         for (FactionAPI allFaction : factions) {
             if ((allFaction.isShowInIntelTab() || allFaction.isPlayerFaction()) && !allFaction.getId().equals(Factions.PIRATES)) {
@@ -236,7 +241,7 @@ public class AoTDMainResearchManager {
     }
 
     public void updateManagerRepo() {
-        List<FactionAPI>factions = Global.getSector().getAllFactions();
+        List<FactionAPI> factions = Global.getSector().getAllFactions();
         Collections.shuffle(factions);
         for (FactionAPI allFaction : factions) {
             if (allFaction.isShowInIntelTab() || allFaction.isPlayerFaction()) {
@@ -280,20 +285,22 @@ public class AoTDMainResearchManager {
         return manager;
 
     }
-    public ResearchProject getCurrentProject(){
+
+    public ResearchProject getCurrentProject() {
         return currentProject;
     }
-    public ArrayList<ResearchProject>getResearchProjects(){
+
+    public ArrayList<ResearchProject> getResearchProjects() {
         return this.researchProjects;
     }
 
     public String pickFactionForExpedition() {
-        ArrayList<String>poll = new ArrayList<>();
+        ArrayList<String> poll = new ArrayList<>();
         float biggest = 0f;
         String faction = null;
 
         for (Map.Entry<String, Float> entry : weight.entrySet()) {
-            if(Misc.getFactionMarkets(entry.getKey()).isEmpty()){
+            if (Misc.getFactionMarkets(entry.getKey()).isEmpty()) {
                 continue;
             }
             if (biggest == 0f) {
@@ -307,19 +314,19 @@ public class AoTDMainResearchManager {
 
         }
         for (Map.Entry<String, Float> entry : weight.entrySet()) {
-            if(Misc.getFactionMarkets(entry.getKey()).isEmpty()){
+            if (Misc.getFactionMarkets(entry.getKey()).isEmpty()) {
                 continue;
             }
-           if(entry.getValue()>=biggest){
-               poll.add(entry.getKey());
-           }
+            if (entry.getValue() >= biggest) {
+                poll.add(entry.getKey());
+            }
         }
 
-        return poll.get(MathUtils.getRandomNumberInRange(0,poll.size()-1));
+        return poll.get(MathUtils.getRandomNumberInRange(0, poll.size() - 1));
     }
 
     public void setExpeditionFleet(String factionId) {
-        if(this.getSpecificFactionManager(Global.getSector().getFaction(factionId))!=null){
+        if (this.getSpecificFactionManager(Global.getSector().getFaction(factionId)) != null) {
             this.getSpecificFactionManager(Global.getSector().getFaction(factionId)).sentFleet();
         }
 
@@ -335,16 +342,10 @@ public class AoTDMainResearchManager {
 
     public void advance(float amount) {
         int cycle = 210;
-        if(Global.getSettings().getModManager().isModEnabled("lunalib")){
-            if(LunaSettings.getFloat("aotd_vok","aotd_expedition_threshold")!=null){
-                expeditionThreshold =LunaSettings.getFloat("aotd_vok","aotd_expedition_threshold");
-            }
-            if(LunaSettings.getInt("aotd_vok","aotd_expedition_begin")!=null){
-                cycle = LunaSettings.getInt("aotd_vok","aotd_expedition_begin");
+        expeditionThreshold = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_EXPEDITION_THRESHOLD);
+        cycle = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_EXPEDITION_BEGIN);
 
-            }
 
-        }
         weight.clear();
         for (AoTDFactionResearchManager factionResearchManager : factionResearchManagers) {
             factionResearchManager.advance(amount);
@@ -352,7 +353,7 @@ public class AoTDMainResearchManager {
         }
 
 
-        if(Global.getSector().getClock().getCycle()>=cycle){
+        if (Global.getSector().getClock().getCycle() >= cycle) {
             expeditionCounter += Global.getSector().getClock().convertToDays(amount);
         }
         if (expeditionCounter >= expeditionThreshold && expeditionSender == null) {
@@ -362,19 +363,19 @@ public class AoTDMainResearchManager {
             // Checks if this intel exists already
 
 
-            ResearchExpeditionIntel report = new ResearchExpeditionIntel(Global.getSector().getFaction(expeditionSender),expeditionThreshold);
+            ResearchExpeditionIntel report = new ResearchExpeditionIntel(Global.getSector().getFaction(expeditionSender), expeditionThreshold);
             // Should the report appear in the "New" tab?
             report.setNew(true);
             // Adds the intel, can force no notification
             intelManager.addIntel(report, false);
 
 
-            MessageIntel intel = new MessageIntel("Faction Expedition imminent in "+expeditionThreshold+" days " + Global.getSector().getFaction(expeditionSender).getDisplayName(), Misc.getBasePlayerColor());
+            MessageIntel intel = new MessageIntel("Faction Expedition imminent in " + expeditionThreshold + " days " + Global.getSector().getFaction(expeditionSender).getDisplayName(), Misc.getBasePlayerColor());
             intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
             intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
             Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO);
         }
-        if (expeditionCounter >= expeditionThreshold*2&&expeditionSender!=null) {
+        if (expeditionCounter >= expeditionThreshold * 2 && expeditionSender != null) {
             expeditionCounter = 0;
 
             setExpeditionFleet(expeditionSender);
@@ -384,7 +385,7 @@ public class AoTDMainResearchManager {
             ResearchExpeditionIntel intel = (ResearchExpeditionIntel) intelInfoPlugin;
             intel.advance(amount);
         }
-        if(getManagerForPlayer().getAmountOfResearchFacilities()!=0){
+        if (getManagerForPlayer().getAmountOfResearchFacilities() != 0) {
             for (ResearchProject project : researchProjects) {
                 project.advance(amount);
             }
@@ -393,7 +394,7 @@ public class AoTDMainResearchManager {
     }
 
     public AoTDFactionResearchManager getSpecificFactionManager(FactionAPI factionAPI) {
-        if(factionAPI==null)return null;
+        if (factionAPI == null) return null;
         for (AoTDFactionResearchManager factionResearchManager : factionResearchManagers) {
             if (factionResearchManager.getFaction().getId().equals(factionAPI.getId())) return factionResearchManager;
         }

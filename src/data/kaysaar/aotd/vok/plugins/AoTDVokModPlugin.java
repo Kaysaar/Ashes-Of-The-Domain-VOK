@@ -8,6 +8,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
+import data.kaysaar.aotd.vok.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchProgressionScript;
@@ -111,6 +112,15 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_garrison_transmitter" ,AoTDIndustries.TERMINUS);
 
         }
+            int highestTierUnlock = AoTDSettingsManager.getHighestTierEnabled();
+            for (ResearchOption option : AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getResearchRepoOfFaction()) {
+                if(option.Tier.ordinal()<=highestTierUnlock){
+                    option.setResearched(true);
+                    option.havePaidForResearch = true;
+                }
+            }
+
+
 
     }
     }
