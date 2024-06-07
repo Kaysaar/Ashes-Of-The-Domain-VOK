@@ -39,10 +39,7 @@ public class AoTDDataInserter {
     private int maxTriTachyonElectronics = 2;
     public static String AOTD = "aotd_";
     public void generatePreCollapseFacilities(){
-        int preCollapseFacAmount = 50;
-        if(Global.getSettings().getModManager().isModEnabled("lunalib")){
-            preCollapseFacAmount = LunaSettings.getInt("aotd_vok","aotd_pcf_amount");
-        }
+        int preCollapseFacAmount = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_PCF_AMOUNT);
         List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
         List<PlanetAPI> planetsWithFac = new ArrayList<>();
         Collections.shuffle(starSystems);

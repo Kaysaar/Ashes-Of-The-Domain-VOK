@@ -22,10 +22,12 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.ui.P;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
+import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.ResearchFleetRouteManager;
+import lunalib.lunaSettings.LunaSettings;
 import org.lazywizard.lazylib.MathUtils;
 
 import java.util.Collections;
@@ -64,6 +66,8 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
         else{
             FactionAPI factionAPI;
             factionAPI = Global.getSector().getFaction(Factions.REMNANTS);
+            int min = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_DEFENCE_MIN_VAL);
+            int max = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_DEFENCE_MAX_VAL);
             if (dialogAPI.getInteractionTarget() instanceof PlanetAPI) {
                 if (!dialogAPI.getInteractionTarget().getMemory().contains("$aotd_precollapse_fleet")) {
                     FleetParamsV3 params = new FleetParamsV3(
@@ -71,7 +75,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
                             Factions.REMNANTS,
                             1f,
                             FleetTypes.PATROL_LARGE,
-                            MathUtils.getRandomNumberInRange(140,180), // combatPts
+                            MathUtils.getRandomNumberInRange(min,max), // combatPts
                             0f, // freighterPts
                             0f, // tankerPts
                             0f, // transportPts

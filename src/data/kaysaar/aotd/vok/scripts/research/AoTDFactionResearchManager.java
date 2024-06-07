@@ -22,6 +22,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.ResearchFleetDefeatListener;
 import data.kaysaar.aotd.vok.models.ResearchOption;
+import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
 import lunalib.lunaSettings.LunaSettings;
@@ -253,13 +254,7 @@ public class AoTDFactionResearchManager {
                     researchOption.daysSpentOnResearching += 100 * Global.getSector().getClock().convertToDays(amount);
                 }
                 researchOption.daysSpentOnResearching += Global.getSector().getClock().convertToDays(amount);
-                double multiplier = 1;
-                if (Global.getSettings().getModManager().isModEnabled("lunalib")) {
-                    if (LunaSettings.getFloat("aotd_vok", "aotd_expedition_threshold") != null) {
-                        multiplier = LunaSettings.getDouble("aotd_vok", "aotd_reserarch_speed_multiplier");
-                    }
-
-                }
+                double multiplier = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
                 if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch() * multiplier-researchOption.getSpec().getTimeToResearch() * multiplier*(AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*(getAmountOfResearchFacilities()-1))) {
                     researchOption.daysSpentOnResearching = 0;
                     researchOption.setResearched(true);
@@ -374,6 +369,7 @@ public class AoTDFactionResearchManager {
         }
         return true;
     }
+
 
     public ResearchOption getResearchOptionFromRepo(String id) {
         for (ResearchOption researchOption : researchRepoOfFaction) {

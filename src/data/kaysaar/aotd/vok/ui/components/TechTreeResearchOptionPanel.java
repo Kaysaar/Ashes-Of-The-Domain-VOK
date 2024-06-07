@@ -17,6 +17,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDConditions;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.models.ResearchOption;
 import data.kaysaar.aotd.vok.models.ResearchRewardType;
+import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -69,13 +70,7 @@ public class TechTreeResearchOptionPanel extends UiPanel {
             vTT.addImage(Global.getSettings().getSpriteName("ui_icons_tech_tree", TechToResearch.getSpec().getIconId()), 100, 100, 10f);
             vTT.getPrev().getPosition().inTL(5, 5);
 
-        double multiplier =1;
-        if(Global.getSettings().getModManager().isModEnabled("lunalib")){
-            if(LunaSettings.getFloat("aotd_vok","aotd_expedition_threshold")!=null){
-                multiplier =LunaSettings.getDouble("aotd_vok","aotd_reserarch_speed_multiplier");
-            }
-
-        }
+        double multiplier = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
 
         vTT.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
             @Override
@@ -90,13 +85,8 @@ public class TechTreeResearchOptionPanel extends UiPanel {
 
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                double multiplier =1;
-                if(Global.getSettings().getModManager().isModEnabled("lunalib")){
-                    if(LunaSettings.getFloat("aotd_vok","aotd_expedition_threshold")!=null){
-                        multiplier =LunaSettings.getDouble("aotd_vok","aotd_reserarch_speed_multiplier");
-                    }
+                double multiplier =AoTDSettingsManager.getFloatValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
 
-                }
                 tooltip.addSectionHeading("Technology Name", Alignment.MID, 10f);
                 tooltip.addPara(TechToResearch.Name, 10f);
                 tooltip.addSectionHeading("Time required to finish researching", Alignment.MID, 10f);

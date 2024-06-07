@@ -46,9 +46,11 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
 
     @Override
     public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
+        if(saved!=null){
+            CargoAPI cargoAPI = saved.getCargo();
+            market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addAll(cargoAPI);
+        }
         super.notifyBeingRemoved(mode, forUpgrade);
-        CargoAPI cargoAPI = saved.getCargo();
-        market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addAll(cargoAPI);
     }
 
     @Override
