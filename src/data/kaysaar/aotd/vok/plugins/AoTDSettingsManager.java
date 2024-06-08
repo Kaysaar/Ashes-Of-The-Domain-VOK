@@ -68,10 +68,10 @@ public class AoTDSettingsManager {
         return val;
     }
     public static float getFloatValue(String key){
-        float val = 0;
+        float val = 1;
         if(Global.getSettings().getModManager().isModEnabled("lunalib")){
-            if(LunaSettings.getFloat("aotd_vok",key)!=null){
-                val = LunaSettings.getFloat("aotd_vok",key);
+            if(LunaSettings.getDouble("aotd_vok",key)!=null){
+                val = LunaSettings.getDouble("aotd_vok",key).floatValue();
             }
 
         }
