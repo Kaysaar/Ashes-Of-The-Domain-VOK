@@ -7,7 +7,9 @@ import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPDataLoader;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
+import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderInfoRepo;
 import data.kaysaar.aotd.vok.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
@@ -64,6 +66,11 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     }
 
     @Override
+    public void onApplicationLoad() throws Exception {
+        ShipRenderInfoRepo.populateRenderInfoRepo();
+    }
+
+    @Override
     public void onNewGameAfterEconomyLoad() {
         super.onNewGameAfterEconomyLoad();
         aoTDDataInserter.generatePreCollapseFacilities();
@@ -71,6 +78,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     }
 
     public void onGameLoad(boolean newGame) {
+        GPDataLoader loader = new GPDataLoader();
+        loader.start();
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
         try {
