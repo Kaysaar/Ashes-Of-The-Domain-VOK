@@ -1,0 +1,222 @@
+package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.panels;
+
+import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.ui.*;
+import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.RowData;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class BasePanelManager {
+    CustomPanelAPI mainPanel;
+    CustomPanelAPI panel;
+    Color base = Global.getSector().getPlayerFaction().getBaseUIColor();
+    Color bg = Global.getSector().getPlayerFaction().getDarkUIColor();
+    Color bright = Global.getSector().getPlayerFaction().getBrightUIColor();
+    ArrayList<ButtonAPI> buttonsPage = new ArrayList<>();
+    CustomPanelAPI buttonPanel;
+    CustomPanelAPI buttonSize;
+    CustomPanelAPI buttonType;
+    CustomPanelAPI buttonDesignPanel;
+    CustomPanelAPI optionPanel;
+    CustomPanelAPI buttonSortingPnael;
+    CustomPanelAPI panelOfSearchBar;
+    TextFieldAPI searchbar;
+    public HashMap<String, SortingState> mapOfButtonStates;
+    boolean resetToText = false;
+    String prevText = "";
+    float YHeight;
+    int currOffset = 0;
+    int currPage = 0;
+
+    float bottomHeight = UIData.HEIGHT - (UIData.HEIGHT * 0.45f) - 230;
+    ArrayList<ButtonAPI> buttons = new ArrayList<>();
+    ArrayList<String> chosenManu = new ArrayList<>();
+    ArrayList<ButtonAPI> sortingButtons = new ArrayList<>();
+    boolean wantsAll = false;
+    public void createDesignButtons( LinkedHashMap<String,Integer> designs) {
+        buttonDesignPanel = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 120, null);
+        TooltipMakerAPI tooltipButDesigners = buttonDesignPanel.createUIElement(panel.getPosition().getWidth() * 0.70f, bottomHeight, true);
+        float currY = 1;
+        for (RowData calculateAmountOfRow : UIData.calculateAmountOfRows(UIData.WIDTH_OF_OPTIONS,designs, 5)) {
+            float x = 0;
+            tooltipButDesigners.setButtonFontDefault();
+            for (Map.Entry<String, Integer> entry : calculateAmountOfRow.stringsInRow.entrySet()) {
+                String manu = entry.getKey().split("\\(")[0];
+                ButtonAPI button = tooltipButDesigners.addAreaCheckbox("", manu, base, bg, bright, entry.getValue(), 30, 0f);
+                button.getPosition().inTL(x, currY);
+                buttons.add(button);
+                tooltipButDesigners.addPara(entry.getKey(), Misc.getDesignTypeColor(manu), 0f).getPosition().inTL((x + 15), currY + 8);
+                x += entry.getValue() + 5f;
+            }
+            currY += 35;
+        }
+        tooltipButDesigners.setHeightSoFar(currY);
+        buttonDesignPanel.addUIElement(tooltipButDesigners).inTL(0, 0);
+        panel.addComponent(buttonDesignPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, YHeight + 130);
+
+    }
+    public void createSizeOptions(LinkedHashMap<String, Integer> sizeInfo) {
+        buttonSize = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 30, null);
+        TooltipMakerAPI tooltip = buttonSize.createUIElement(UIData.WIDTH_OF_OPTIONS, 30, false);
+        float padding = 5f;
+        float currentX = 0;
+        float widthOfButton = 150;
+
+        for (Map.Entry<String, Integer> category : sizeInfo.entrySet()) {
+            ButtonAPI button = tooltip.addAreaCheckbox(category.getKey() + "(" + category.getValue() + ")", null, base, bg, bright, widthOfButton, 30, 0f);
+            button.getPosition().inTL(currentX, 0);
+            currentX += widthOfButton + padding;
+        }
+        buttonSize.addUIElement(tooltip).inTL(0, 0);
+        panel.addComponent(buttonSize).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, panel.getPosition().getHeight() - 50);
+
+    }
+    public void createTypeOptions(LinkedHashMap<String, Integer> typeInfo) {
+        buttonType = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 80, null);
+        TooltipMakerAPI tooltip = buttonType.createUIElement(UIData.WIDTH_OF_OPTIONS, 30, false);
+        float padding = 5f;
+        float currentX = 0;
+        float widthOfButton = 150;
+        for (Map.Entry<String, Integer> category : typeInfo.entrySet()) {
+            ButtonAPI button = tooltip.addAreaCheckbox(category.getKey() + "(" + category.getValue() + ")", null, base, bg, bright, widthOfButton, 30, 0f);
+            button.getPosition().inTL(currentX, 0);
+            currentX += widthOfButton + padding;
+        }
+        buttonType.addUIElement(tooltip).inTL(0, 0);
+        panel.addComponent(buttonType).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, panel.getPosition().getHeight() - 85);
+    }
+    public void createSerachBarPanel() {
+        panelOfSearchBar = panel.createCustomPanel(230, 20, null);
+        TooltipMakerAPI tooltip = panelOfSearchBar.createUIElement(230, 20, false);
+        searchbar = tooltip.addTextField(230, 20, Fonts.DEFAULT_SMALL, 0f);
+        panelOfSearchBar.addUIElement(tooltip).inTL(-5, 0);
+        panel.addComponent(panelOfSearchBar).inTL(buttonSortingPnael.getPosition().getX() + buttonSortingPnael.getPosition().getWidth() - 245, 29);
+    }
+    public void createSortingButtons(boolean forFighter, boolean isWeapon) {
+        buttonSortingPnael = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 20, null);
+        mapOfButtonStates.put("Name", SortingState.NON_INITIALIZED);
+        mapOfButtonStates.put("Build time", SortingState.NON_INITIALIZED);
+        if(!forFighter){
+            mapOfButtonStates.put("Size", SortingState.NON_INITIALIZED);
+        }
+
+        mapOfButtonStates.put("Type", SortingState.NON_INITIALIZED);
+        mapOfButtonStates.put("Design Type", SortingState.NON_INITIALIZED);
+        mapOfButtonStates.put("Cost", SortingState.NON_INITIALIZED);
+        mapOfButtonStates.put("Gp cost", SortingState.NON_INITIALIZED);
+        String name = "Ship blueprint name";
+        if(isWeapon){
+            name = "Weapon blueprint name";
+        }
+        TooltipMakerAPI tooltip = buttonSortingPnael.createUIElement(UIData.WIDTH_OF_OPTIONS, 20, false);
+        ArrayList<ButtonAPI> sortButtons = new ArrayList<>();
+        sortButtons.add(tooltip.addAreaCheckbox(name, "Name", base, bg, bright, UIData.WIDTH_OF_NAME, 20, 0f));
+        sortButtons.add(tooltip.addAreaCheckbox("Build time", "Build time", base, bg, bright, UIData.WIDTH_OF_BUILD_TIME, 20, 0f));
+        if(!forFighter){
+            sortButtons.add(tooltip.addAreaCheckbox("Size", "Size", base, bg, bright, UIData.WIDTH_OF_SIZE, 20, 0f));
+            sortButtons.add(tooltip.addAreaCheckbox("Type", "Type", base, bg, bright, UIData.WIDTH_OF_TYPE, 20, 0f));
+        }
+        else{
+            sortButtons.add(tooltip.addAreaCheckbox("Type", "Type", base, bg, bright, UIData.WIDTH_OF_TYPE+ UIData.WIDTH_OF_SIZE, 20, 0f));
+
+        }
+
+        sortButtons.add(tooltip.addAreaCheckbox("Design type", "Design Type", base, bg, bright, UIData.WIDTH_OF_DESIGN_TYPE, 20, 0f));
+        sortButtons.add(tooltip.addAreaCheckbox("Cost (credits)", "Cost", base, bg, bright, UIData.WIDTH_OF_CREDIT_COST, 20, 0f));
+        sortButtons.add(tooltip.addAreaCheckbox("Gp cost", "Gp cost", base, bg, bright, UIData.WIDTH_OF_GP, 20, 0f));
+        float currentX = 0;
+        for (ButtonAPI sortButton : sortButtons) {
+            sortButton.getPosition().inTL(currentX, 0);
+            currentX += sortButton.getPosition().getWidth();
+        }
+        buttonSortingPnael.addUIElement(tooltip).inTL(-5, 0);
+
+        sortingButtons.addAll(sortButtons);
+        panel.addComponent(buttonSortingPnael).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, 50);
+    }
+    public void reset(){
+
+    }
+    public void advance(float amount) {
+        boolean reset = false;
+        if (searchbar != null) {
+            if (!searchbar.getText().equals(prevText)) {
+                if (searchbar.getText().isEmpty()) {
+                    wantsAll = true;
+                    currPage = 0;
+                } else {
+                    resetToText = true;
+                }
+                prevText = searchbar.getText();
+                reset();
+            }
+        }
+        for (ButtonAPI button : buttonsPage) {
+            if (button.isChecked()) {
+
+                button.setChecked(false);
+                currPage = (int) button.getCustomData();
+                reset = true;
+
+
+                break;
+            }
+        }
+        for (ButtonAPI button : buttons) {
+            if (button.isChecked()) {
+                if (button.getCustomData() instanceof String) {
+                    button.setChecked(false);
+                    if (button.getCustomData().equals("All designs")) {
+                        wantsAll = true;
+                        currPage = 0;
+                        chosenManu.clear();
+                        reset = true;
+                        break;
+                    }
+                    chosenManu.clear();
+                    chosenManu.add((String) button.getCustomData());
+                    currPage = 0;
+                    reset = true;
+                }
+                break;
+            }
+        }
+        for (ButtonAPI button : sortingButtons) {
+            if (button.isChecked()) {
+                if (button.getCustomData() instanceof String) {
+                    button.setChecked(false);
+                    SortingState state = mapOfButtonStates.get(button.getCustomData());
+                    if(state == SortingState.NON_INITIALIZED){
+                        state = SortingState.ASCENDING;
+                    }
+                    else if(state == SortingState.ASCENDING){
+                        state = SortingState.DESCENDING;
+                    }
+                    else if(state == SortingState.DESCENDING){
+                        state = SortingState.NON_INITIALIZED;
+                    }
+                    for (String s : mapOfButtonStates.keySet()) {
+                        mapOfButtonStates.put(s,SortingState.NON_INITIALIZED);
+                    }
+                    mapOfButtonStates.put((String) button.getCustomData(),state);
+                    currPage = 0;
+                    reset = true;
+                }
+                break;
+            }
+        }
+
+        if (reset) {
+            reset();
+        }
+    }
+
+}
