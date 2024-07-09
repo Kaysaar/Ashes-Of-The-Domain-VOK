@@ -34,9 +34,22 @@ public class GPManager {
             return false;
         }
     };
+    ArrayList<GPSpec> specialProjectSpecs = new ArrayList<GPSpec>() {
+        @Override
+        public boolean contains(Object o) {
+            String cnt = (String) o;
+            for (GPSpec spec : this) {
+                if (spec.getProjectId().contains(cnt)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    };
     ArrayList<GPOption> shipProductionOption = new ArrayList<>();
     ArrayList<GPOption> weaponProductionOption = new ArrayList<>();
     ArrayList<GPOption> fighterProductionOption = new ArrayList<>();
+    ArrayList<GPOption> specialProjects = new ArrayList<>();
     ArrayList<GPOrder> productionOrders = new ArrayList<>();
     public LinkedHashMap<String, Integer> shipSizeInfo = new LinkedHashMap<>();
 
@@ -93,6 +106,10 @@ public class GPManager {
         commodities.add(Commodities.HAND_WEAPONS);
     }
     public static String memkey = "aotd_gp_plugin";
+
+    public ArrayList<GPOption> getSpecialProjects() {
+        return specialProjects;
+    }
 
     public static GPManager getInstance() {
         if (Global.getSector().getPersistentData().get(memkey) == null) {
@@ -180,10 +197,10 @@ public class GPManager {
         for (GPOrder productionOrder : productionOrders) {
             for (Map.Entry<String, Integer> entry : productionOrder.getReqResources().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
-                    reqResources.put(entry.getKey(), entry.getValue() * productionOrder.amountToProduce);
+                    reqResources.put(entry.getKey(), entry.getValue());
                 } else {
                     int prev = reqResources.get(entry.getKey());
-                    reqResources.put(entry.getKey(), prev + entry.getValue() * productionOrder.amountToProduce);
+                    reqResources.put(entry.getKey(), prev + entry.getValue() );
                 }
             }
         }
@@ -519,9 +536,18 @@ public class GPManager {
 
     }
 
-  ;
+    public boolean hasSpecialProject(String rewardId){
+        for (GPSpec projectSpec : specialProjectSpecs) {
+            if(projectSpec.getRewardId().equals(rewardId)){
+                return true;
+            }
+        }
+        return false;
+    }
     public void loadProductionSpecs() {
         specs.clear();
+        specialProjectSpecs.clear();
+        specialProjectSpecs.addAll(GPSpec.loadSpecialProjects());
         for (ShipHullSpecAPI shipHullSpecAPI : Global.getSettings().getAllShipHullSpecs()) {
             if (shipHullSpecAPI.getHints().contains(ShipHullSpecAPI.ShipTypeHints.STATION)) continue;
             if (shipHullSpecAPI.getHullSize().equals(ShipAPI.HullSize.FIGHTER)) continue;
@@ -537,18 +563,26 @@ public class GPManager {
                 if (!found) continue;
             }
             GPSpec spec = GPSpec.getSpecFromShip(shipHullSpecAPI);
-            specs.add(spec);
+            if(!hasSpecialProject(spec.getIdOfItemProduced())){
+                specs.add(spec);
+            }
+   ;
 
 
         }
         for (WeaponSpecAPI shipHullSpecAPI : Global.getSettings().getAllWeaponSpecs()) {
             GPSpec spec = GPSpec.getSpecFromWeapon(shipHullSpecAPI);
-            specs.add(spec);
+            if(!hasSpecialProject(spec.getIdOfItemProduced())){
+                specs.add(spec);
+            }
         }
         for (FighterWingSpecAPI shipHullSpecAPI : Global.getSettings().getAllFighterWingSpecs()) {
             GPSpec spec = GPSpec.getSpecFromWing(shipHullSpecAPI);
-            specs.add(spec);
+            if(!hasSpecialProject(spec.getIdOfItemProduced())){
+                specs.add(spec);
+            }
         }
+
     }
 
     public ArrayList<GPOption> getShipPackagesByManu(ArrayList<String> values) {
@@ -600,7 +634,9 @@ public class GPManager {
         shipProductionOption.clear();
         weaponProductionOption.clear();
         fighterProductionOption.clear();
+        specialProjects.clear();
         for (GPSpec spec : specs) {
+
             if (spec.type.equals(GPSpec.ProductionType.SHIP)) {
                 GPOption option = new GPOption(spec, true);
                 shipProductionOption.add(option);
@@ -615,7 +651,10 @@ public class GPManager {
             }
 
         }
-
+        for (GPSpec specialProjectSpec : specialProjectSpecs) {
+            GPOption option = new GPOption(specialProjectSpec, true);
+            specialProjects.add(option);
+        }
 
     }
 
@@ -908,6 +947,7 @@ public class GPManager {
 
     public void removeDoneOrders(ArrayList<Integer> offsets) {
         for (Integer offset : offsets) {
+            if(offset.intValue()>=productionOrders.size())continue;
             productionOrders.remove(offset.intValue());
         }
     }

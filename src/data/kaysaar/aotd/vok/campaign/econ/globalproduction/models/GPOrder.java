@@ -1,23 +1,37 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
+import com.fs.starfarer.api.impl.campaign.fleets.DefaultFleetInflaterParams;
+import com.fs.starfarer.api.impl.campaign.ids.Factions;
+import com.fs.starfarer.api.impl.campaign.ids.Stats;
+import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
+import com.fs.starfarer.api.loading.WeaponSlotAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GPOrder {
     int amountToProduce;
-    int currentQuotaMet;
+    int alreadyProduced;
     float daysSpentDoingOrder;// between 0 and 1
     boolean contributingToOrder;
     int priority = 0;
     String specId;
+    public int getAmountToProduce(){
+        return  amountToProduce - alreadyProduced;
+    }
+    public float getDaysTillOrderFinished(){
+        return getSpecFromClass().days-daysSpentDoingOrder;
+    }
     HashMap<String, Integer>assignedResources = new HashMap<>();
     HashMap<String, Integer>resourcesGet = new HashMap<>();
     public boolean canProceed() {
@@ -30,7 +44,7 @@ public class GPOrder {
                 }
             }
         }
-        if(haveHeavy)return false;
+        if(!haveHeavy)return false;
         if(!isCountingToContribution()||isAboutToBeRemoved())return false;
         // Check if the obtained resources meet or exceed the required resources
         for (Map.Entry<String, Integer> entry : assignedResources.entrySet()) {
@@ -89,7 +103,7 @@ public class GPOrder {
         this.amountToProduce = newValue;
     }
     public boolean haveMetQuota(){
-        return currentQuotaMet>=amountToProduce;
+        return alreadyProduced >=amountToProduce;
     }
 
     public void setPriority(int priority) {
@@ -106,6 +120,32 @@ public class GPOrder {
 
     public void advance(float amount){
         daysSpentDoingOrder+=Global.getSector().getClock().convertToDays(amount);
+        if(getDaysTillOrderFinished()<0){
+            amountToProduce--;
+            FactionAPI pf = Global.getSector().getPlayerFaction();
+            FactionProductionAPI prod = pf.getProduction();
+
+            MarketAPI gatheringPoint = prod.getGatheringPoint();
+            if (gatheringPoint == null) return;
+
+            //CargoAPI local = Misc.getLocalResourcesCargo(gatheringPoint);
+            CargoAPI local = Misc.getStorageCargo(gatheringPoint);
+            if(getSpecFromClass().type== GPSpec.ProductionType.WEAPON){
+                local.addWeapons(getSpecFromClass().getIdOfItemProduced(), 1);
+            }
+            if(getSpecFromClass().type== GPSpec.ProductionType.SHIP){
+                local.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(getSpecFromClass().getShipHullSpecAPI()));
+                for (FleetMemberAPI fleetMemberAPI : local.getMothballedShips().getMembersListCopy()) {
+                    fleetMemberAPI.getVariant().clear();
+                }
+            }
+            if(getSpecFromClass().type== GPSpec.ProductionType.FIGHTER){
+                local.addFighters(getSpecFromClass().getIdOfItemProduced(), 1);
+            }
+            if(!isAboutToBeRemoved()){
+                daysSpentDoingOrder = 0;
+            }
+        }
     }
     
 

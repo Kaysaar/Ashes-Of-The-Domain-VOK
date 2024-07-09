@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components;
 
+import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.misc.fighterinfo.FighterIconRenderer;
@@ -14,23 +15,29 @@ public class UiPackage {
     transient WeaponSpriteRenderer renderWep;
     transient GPOption option;
     transient FighterIconRenderer fighterIconRenderer;
-    public UiPackage(CustomPanelAPI panel, FighterIconRenderer render, GPOption option) {
+    ButtonAPI button ;
+    public UiPackage(CustomPanelAPI panel, FighterIconRenderer render, GPOption option,ButtonAPI button) {
         this.panelPackage = panel;
         this.fighterIconRenderer = render;
         this.option = option;
+        this.button = button;
 
     }
-    public UiPackage(CustomPanelAPI panel, ShipRenderer render, GPOption option) {
+    public UiPackage(CustomPanelAPI panel, ShipRenderer render, GPOption option,ButtonAPI button) {
         this.panelPackage = panel;
         this.render = render;
         this.option = option;
+        this.button = button;
+
 
     }
 
-    public UiPackage(CustomPanelAPI panel, WeaponSpriteRenderer render, GPOption option) {
+    public UiPackage(CustomPanelAPI panel, WeaponSpriteRenderer render, GPOption option,ButtonAPI button) {
         this.panelPackage = panel;
         this.renderWep = render;
         this.option = option;
+        this.button = button;
+
 
     }
 

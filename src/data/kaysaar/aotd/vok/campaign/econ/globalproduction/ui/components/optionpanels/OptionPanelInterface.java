@@ -1,10 +1,14 @@
-package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.panels;
+package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.optionpanels;
 
+import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 
-public interface BasePanelInterface {
+import java.util.ArrayList;
+
+public interface OptionPanelInterface {
     public CustomPanelAPI getOptionPanel();
     public CustomPanelAPI getDesignPanel();
+    public ArrayList<ButtonAPI>getOrderButtons();
     public  void init();
     public void clear();
     public void reInit();

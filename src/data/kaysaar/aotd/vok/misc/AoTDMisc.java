@@ -6,10 +6,14 @@ import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WingRole;
+import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 import java.io.IOException;
@@ -40,7 +44,40 @@ public class AoTDMisc {
 
         return variantId;
     }
+    public static void startStencil(CustomPanelAPI panel,float scale) {
+        GL11.glClearStencil(0);
+        GL11.glStencilMask(0xff);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
 
+        GL11.glColorMask(false, false, false, false);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xff);
+        GL11.glStencilMask(0xff);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+
+        GL11.glBegin(GL11.GL_POLYGON);
+        PositionAPI position = panel.getPosition();
+        float x = position.getX();
+        float y = position.getY();
+        float width = position.getWidth();
+        float height = position.getHeight();
+
+        // Define the rectangle
+        GL11.glVertex2f(x, y);
+        GL11.glVertex2f(x + width, y);
+        GL11.glVertex2f(x + width, y + height*scale);
+        GL11.glVertex2f(x, y + height*scale);
+        GL11.glEnd();
+
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        GL11.glColorMask(true, true, true, true);
+
+        GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+    }
+    public static void endStencil() {
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
+    }
     public static String[] splitAndClean(String input) {
         // Convert to lowercase to make the search case-insensitive
         String lowerCaseInput = input.toLowerCase();

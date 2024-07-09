@@ -22,12 +22,5 @@ public class GPOption {
         return spec;
     }
 
-    public void setDiscovered(boolean discovered) {
-        isDiscovered = discovered;
-    }
-
-    public boolean isDiscovered() {
-        return isDiscovered;
-    }
 
 }

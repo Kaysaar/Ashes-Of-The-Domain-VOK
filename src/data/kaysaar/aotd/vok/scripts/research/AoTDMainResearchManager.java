@@ -35,7 +35,7 @@ public class AoTDMainResearchManager {
         return factionResearchManagers;
     }
 
-    public static String specialProjetsPath = "data/campaign/aotd_special_projects.csv";
+    public static String specialProjetsPath = "data/campaign/aotd_research_project.csv";
 
     HashMap<String, Float> weight = new HashMap<>();
     public ArrayList<String> modIDsRepo = new ArrayList<>();

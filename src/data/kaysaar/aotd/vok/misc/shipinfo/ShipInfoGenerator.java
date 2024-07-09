@@ -570,7 +570,7 @@ public class ShipInfoGenerator {
         }
     }
 
-    public static Pair<CustomPanelAPI,ShipRenderer> getShipImage(ShipHullSpecAPI specAPI, float iconSize) {
+    public static Pair<CustomPanelAPI,ShipRenderer> getShipImage(ShipHullSpecAPI specAPI, float iconSize,Color colorOverride) {
         ShipRenderer renderer = new ShipRenderer();
         CustomPanelAPI panelHolder = Global.getSettings().createCustom(iconSize, iconSize, renderer);
         TooltipMakerAPI tooltip = panelHolder.createUIElement(iconSize, iconSize, false);
@@ -733,6 +733,9 @@ public class ShipInfoGenerator {
             tooltip.addCustom(data2.two, 0f).getPosition().inTL(remainingX / 2, remainingY / 2);
             renderer.setScale(scale);
             renderer.setPartsOfShip(data2.one, data2.two);
+            renderer.setCollorOverride(colorOverride);
+            renderer.setStencilMaskBorder(panelHolder);
+
             panelHolder.addUIElement(tooltip).inTL(0, 0);
             return new Pair<>(panelHolder,renderer);
 
@@ -750,12 +753,205 @@ public class ShipInfoGenerator {
             HashMap<CustomPanelAPI, ShipRenderInfo.Module> renderingMap = new HashMap<>();
             renderingMap.put(center, centralModule);
             renderer.setScale(scale);
+            renderer.setCollorOverride(colorOverride);
             renderer.setPartsOfShip(renderingMap, center);
         }
 
         return new Pair<>(panelHolder,renderer);
     }
+    public static Pair<CustomPanelAPI,ShipRenderer> getShipImage(ShipHullSpecAPI specAPI, float iconSize,Color colorOverride,float percentageOfShipRendered) {
+        ShipRenderer renderer = new ShipRenderer();
+        CustomPanelAPI panelHolder = Global.getSettings().createCustom(iconSize, iconSize, renderer);
+        TooltipMakerAPI tooltip = panelHolder.createUIElement(iconSize, iconSize, false);
 
+
+        // Get the sprite using the spec API
+        SpriteAPI shipSprite = Global.getSettings().getSprite(specAPI.getSpriteName());
+        shipSprite.setAlphaMult(0f);
+        float originalWidth = shipSprite.getWidth();
+        float originalHeight = shipSprite.getHeight();
+        // Get the original width and height of the sprite
+
+
+        // Calculate the aspect ratio
+        float aspectRatio = originalWidth / originalHeight;
+
+        // Variables for the new width and height
+        float newWidth, newHeight;
+
+        // Determine which dimension to resize to fit the icon size
+        if (originalWidth <= iconSize && originalHeight <= iconSize) {
+            newWidth = originalWidth;
+            newHeight = originalHeight;
+        } else {
+            if (originalWidth > originalHeight) {
+                // Width is the larger dimension
+                newWidth = iconSize;
+                newHeight = iconSize / aspectRatio;
+            } else {
+                // Height is the larger dimension or they are equal
+                newHeight = iconSize;
+                newWidth = iconSize * aspectRatio;
+            }
+        }
+        if (aspectRatio >= 1) {
+            if (originalWidth > originalHeight) {
+                // Width is the larger dimension
+                newWidth = iconSize * 0.8f;
+                newHeight = iconSize * 0.8f / aspectRatio;
+            } else {
+                // Height is the larger dimension or they are equal
+                newHeight = iconSize * 0.8f;
+                newWidth = iconSize * 0.8f * aspectRatio;
+            }
+        }
+        if (specAPI.getHullSize().equals(ShipAPI.HullSize.FRIGATE)) {
+            if (originalWidth > originalHeight) {
+                // Width is the larger dimension
+                newWidth = iconSize * 0.4f;
+                newHeight = iconSize * 0.4f / aspectRatio;
+            } else {
+                // Height is the larger dimension or they are equal
+                newHeight = iconSize * 0.4f;
+                newWidth = iconSize * 0.4f * aspectRatio;
+            }
+        }
+        if (specAPI.getHullSize().equals(ShipAPI.HullSize.FRIGATE)) {
+            if (originalWidth > originalHeight) {
+                // Width is the larger dimension
+                newWidth = iconSize * 0.4f;
+                newHeight = iconSize * 0.4f / aspectRatio;
+            } else {
+                // Height is the larger dimension or they are equal
+                newHeight = iconSize * 0.4f;
+                newWidth = iconSize * 0.4f * aspectRatio;
+            }
+        }
+        if (specAPI.getHullSize().equals(ShipAPI.HullSize.DESTROYER)) {
+            if (originalWidth > originalHeight) {
+                // Width is the larger dimension
+                newWidth = iconSize * 0.6f;
+                newHeight = iconSize * 0.6f / aspectRatio;
+            } else {
+                // Height is the larger dimension or they are equal
+                newHeight = iconSize * 0.6f;
+                newWidth = iconSize * 0.6f * aspectRatio;
+            }
+        }
+        if (specAPI.getHullSize().equals(ShipAPI.HullSize.CRUISER)) {
+            if (originalWidth > originalHeight) {
+                // Width is the larger dimension
+                newWidth = iconSize * 0.8f;
+                newHeight = iconSize * 0.8f / aspectRatio;
+            } else {
+                // Height is the larger dimension or they are equal
+                newHeight = iconSize * 0.8f;
+                newWidth = iconSize * 0.8f * aspectRatio;
+            }
+        }
+
+        boolean modular = false;
+        for (ShipHullSpecAPI.ShipTypeHints hint : specAPI.getHints()) {
+            if (hint.equals(ShipHullSpecAPI.ShipTypeHints.SHIP_WITH_MODULES) || hint.equals(ShipHullSpecAPI.ShipTypeHints.STATION)) {
+                modular = true;
+                break;
+            }
+        }
+        ShipRenderInfo info = ShipRenderInfoRepo.renderInfoRepo.get(specAPI.getHullId());
+        if(info==null)       {
+            try {
+                //We sometimes miss during loading , this is to insure that we wont have blank ( at least as long as worst case scenario has not been met)
+                ShipRenderInfoRepo.populateShip(specAPI);
+                info = ShipRenderInfoRepo.renderInfoRepo.get(specAPI.getHullId());
+            }
+            catch (Exception e ){
+                return new Pair<>(panelHolder,renderer);
+            }
+        }
+        if (modular) {
+
+            float scale = 1f;
+            Pair<HashMap<CustomPanelAPI, ShipRenderInfo.Module>, CustomPanelAPI> data = (generateImageOfModularShip(specAPI, panelHolder, info, scale));
+            HashMap<CustomPanelAPI, ShipRenderInfo.Module> imagePanels = new HashMap<>();
+            imagePanels.putAll(data.one);
+
+            float minX = 0;
+            float maxX = 0;
+            float minY = 0;
+            float maxY = 0;
+            for (Map.Entry<CustomPanelAPI, ShipRenderInfo.Module> imagePanel : imagePanels.entrySet()) {
+                if (imagePanel.getKey().getPosition().getX() <= minX) {
+                    minX = imagePanel.getKey().getPosition().getX();
+                }
+                if (imagePanel.getKey().getPosition().getX() + imagePanel.getKey().getPosition().getWidth() >= maxX) {
+                    maxX = imagePanel.getKey().getPosition().getX() + imagePanel.getKey().getPosition().getWidth();
+                }
+                if (imagePanel.getKey().getPosition().getY() + imagePanel.getKey().getPosition().getHeight() >= maxY) {
+                    maxY = imagePanel.getKey().getPosition().getY() + imagePanel.getKey().getPosition().getHeight();
+                }
+                if (imagePanel.getKey().getPosition().getY() <= minY) {
+                    minY = imagePanel.getKey().getPosition().getY();
+                }
+            }
+            float widthCombined = maxX - minX;
+            float heightCombined = maxY - minY;
+
+            aspectRatio = widthCombined / heightCombined;
+
+            if (widthCombined <= iconSize && heightCombined <= iconSize) {
+                newWidth = widthCombined;
+                newHeight = heightCombined;
+            } else {
+                if (widthCombined > heightCombined) {
+                    // Width is the larger dimension
+                    newWidth = iconSize;
+                    newHeight = iconSize / aspectRatio;
+                } else {
+                    // Height is the larger dimension or they are equal
+                    newHeight = iconSize;
+                    newWidth = iconSize * aspectRatio;
+                }
+            }
+
+            scale = newHeight / heightCombined;
+            Pair<HashMap<CustomPanelAPI, ShipRenderInfo.Module>, CustomPanelAPI> data2 = (generateImageOfModularShipSized(specAPI, panelHolder, info, scale, newWidth, newHeight));
+            panelHolder.getPosition().setSize(iconSize, iconSize);
+            ;
+            float remainingX = iconSize - data2.two.getPosition().getWidth();
+            float remainingY = iconSize - data2.two.getPosition().getHeight();
+            tooltip.addCustom(data2.two, 0f).getPosition().inTL(remainingX / 2, remainingY / 2);
+            renderer.setScale(scale);
+            renderer.setPartsOfShip(data2.one, data2.two);
+            renderer.setCollorOverride(colorOverride);
+            renderer.setStencilMaskBorder(panelHolder);
+            renderer.setUsingStencil(true);
+            renderer.setRenderingPercentage(percentageOfShipRendered);
+            panelHolder.addUIElement(tooltip).inTL(0, 0);
+            return new Pair<>(panelHolder,renderer);
+
+
+        }
+
+        if(info!=null){
+            float remainingX = iconSize - newWidth;
+            float remainingY = iconSize - newHeight;
+            float scale = newWidth / originalWidth;
+
+            ShipRenderInfo.Module centralModule = info.createModule(info.center, info.width, info.height, info.center, specAPI.getHullId(), -1);
+            CustomPanelAPI center = panelHolder.createCustomPanel((float) (info.width * scale), (float) (info.height * scale), null);
+            panelHolder.addComponent(center).inTL(remainingX / 2, remainingY / 2);
+            HashMap<CustomPanelAPI, ShipRenderInfo.Module> renderingMap = new HashMap<>();
+            renderingMap.put(center, centralModule);
+            renderer.setScale(scale);
+            renderer.setCollorOverride(colorOverride);
+            renderer.setPartsOfShip(renderingMap, center);
+            renderer.setStencilMaskBorder(panelHolder);
+            renderer.setUsingStencil(true);
+            renderer.setRenderingPercentage(percentageOfShipRendered);
+        }
+
+        return new Pair<>(panelHolder,renderer);
+    }
     private static Pair<HashMap<CustomPanelAPI, ShipRenderInfo.Module>, CustomPanelAPI> generateImageOfModularShip(ShipHullSpecAPI specAPI, CustomPanelAPI panelHolder, ShipRenderInfo info, float scale) {
         CustomPanelAPI centralPanel = panelHolder.createCustomPanel((float) info.width * scale, (float) info.height * scale, null);
         float translatedY = (float) (info.height * scale - info.center.getY() * scale);
@@ -763,7 +959,7 @@ public class ShipInfoGenerator {
 
         float posX = info.center.x * scale;
         float posY = translatedY;
-        ShipRenderInfo.Module centralModule = info.createModule(info.center, info.width, info.height, info.center, specAPI.getHullId(), 100);
+        ShipRenderInfo.Module centralModule = info.createModule(info.center, info.width, info.height, info.center, specAPI.getHullId(), -100);
         HashMap<CustomPanelAPI, ShipRenderInfo.Module> mapOfRendering = new HashMap<>();
         mapOfRendering.put(centralPanel, centralModule);
         for (ShipRenderInfo.Module module : info.moduleSlotsOnOriginalShip) {
@@ -793,7 +989,7 @@ public class ShipInfoGenerator {
         float furtherstXRight = 0f;
         float furtherstYBot = 0f;
 
-        ShipRenderInfo.Module centralModule = info.createModule(info.center, info.width, info.height, info.center, specAPI.getHullId(), 100);
+        ShipRenderInfo.Module centralModule = info.createModule(info.center, info.width, info.height, info.center, specAPI.getHullId(), -100);
         HashMap<CustomPanelAPI, ShipRenderInfo.Module> mapOfRendering = new HashMap<>();
         mapOfRendering.put(centralPanel, centralModule);
         for (ShipRenderInfo.Module module : info.moduleSlotsOnOriginalShip) {

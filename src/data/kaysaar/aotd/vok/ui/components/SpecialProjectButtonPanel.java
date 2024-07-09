@@ -17,6 +17,7 @@ public class SpecialProjectButtonPanel extends UiPanel{
     ButtonAPI specialProjectButton;
     @Override
     public void createUI() {
+
         tooltip.setTitleOrbitronLarge();
         LabelAPI labelAPI= tooltip.addPara("Technology Tree of "+ AoTDMainResearchManager.getInstance().getManagerForPlayer().getFaction().getDisplayName(), Color.ORANGE,10f);
         labelAPI.getPosition().inTL(150-labelAPI.computeTextWidth(labelAPI.getText())/2,10);
@@ -39,7 +40,7 @@ public class SpecialProjectButtonPanel extends UiPanel{
                 tooltip.addPara("Special projects are special type of research options, that appear once certain criteria are met.\nThese projects unlike research options in the tech tree are not guaranteed to be successful." +
                         "\nCurrently special projects are inaccessible due to being WIP",10f);
             }
-        }, TooltipMakerAPI.TooltipLocation.RIGHT);
+        }, TooltipMakerAPI.TooltipLocation.RIGHT,false);
 
     }
 }
