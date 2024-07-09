@@ -3,12 +3,16 @@ package data.kaysaar.aotd.vok.misc.shipinfo;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.ui.P;
 import com.fs.state.AppDriver;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -16,7 +20,7 @@ import java.util.*;
 import java.util.List;
 
 public class ShipRenderer implements CustomUIPanelPlugin {
-    HashMap<CustomPanelAPI, ShipRenderInfo.Module> partsOfShip = new HashMap<>();
+    LinkedHashMap<CustomPanelAPI, ShipRenderInfo.Module> partsOfShip = new LinkedHashMap<>();
     transient SpriteAPI spriteToRender = Global.getSettings().getSprite("rendering", "GlitchSquare");
     CustomPanelAPI absoultePanel = null;
 
@@ -43,7 +47,7 @@ public class ShipRenderer implements CustomUIPanelPlugin {
         return true;
     }
 
-    private HashMap<CustomPanelAPI, ShipRenderInfo.Module> sortPartsOfShipByRenderingOrder(HashMap<CustomPanelAPI, ShipRenderInfo.Module> parts) {
+    private LinkedHashMap<CustomPanelAPI, ShipRenderInfo.Module> sortPartsOfShipByRenderingOrder(HashMap<CustomPanelAPI, ShipRenderInfo.Module> parts) {
         // Convert the entries of the HashMap to a list
         List<Map.Entry<CustomPanelAPI, ShipRenderInfo.Module>> entries = new ArrayList<>(parts.entrySet());
 
@@ -63,6 +67,22 @@ public class ShipRenderer implements CustomUIPanelPlugin {
 
         return sortedMap;
     }
+    CustomPanelAPI stencilMaskBorder;
+
+    public void setStencilMaskBorder(CustomPanelAPI stencilMaskBorder) {
+        this.stencilMaskBorder = stencilMaskBorder;
+    }
+    public float renderingPercentage = 1f;
+    boolean isUsingStencil = false;
+
+    public void setRenderingPercentage(float renderingPercentage) {
+        this.renderingPercentage = renderingPercentage;
+    }
+
+    public void setUsingStencil(boolean usingStencil) {
+        isUsingStencil = usingStencil;
+    }
+
 
     CustomPanelAPI test;
     public float scale = 1f;
@@ -70,7 +90,10 @@ public class ShipRenderer implements CustomUIPanelPlugin {
     public void setScale(float scale) {
         this.scale = scale;
     }
-
+    public Color colorOverride;
+    public void setCollorOverride(Color color){
+        colorOverride = color;
+    }
     @Override
     public void positionChanged(PositionAPI position) {
         return;
@@ -89,15 +112,25 @@ public class ShipRenderer implements CustomUIPanelPlugin {
 //            spriteToRender.renderAtCenter(test.getPosition().getCenterX(),test.getPosition().getCenterY());
 //        }
         if (!canRender()) return;
+        if(isUsingStencil){
+            AoTDMisc.startStencil(stencilMaskBorder,renderingPercentage);
+        }
         for (Map.Entry<CustomPanelAPI, ShipRenderInfo.Module> entry : partsOfShip.entrySet()) {
             SpriteAPI sprite = Global.getSettings().getSprite(Global.getSettings().getHullSpec(entry.getValue().slotOnOriginal.id).getSpriteName());
             sprite.setAngle(entry.getValue().slotOnOriginal.angle);
+            if(colorOverride!=null){
+                sprite.setColor(colorOverride);
+            }
+
             sprite.setSize((float) entry.getValue().width * scale, (float) entry.getValue().height * scale);
             sprite.renderAtCenter(entry.getKey().getPosition().getCenterX(), entry.getKey().getPosition().getCenterY());
             for (ShipRenderInfo.Slot builtInSlot : entry.getValue().built_in_slots) {
                 WeaponSpecAPI weapon = Global.getSettings().getWeaponSpec(builtInSlot.id);
                 String base = weapon.getTurretSpriteName();
                 SpriteAPI baseSprite = Global.getSettings().getSprite(base);
+                if(colorOverride!=null){
+                    baseSprite.setColor(colorOverride);
+                }
                 setSizeOfSpriteToScale(baseSprite);
                 baseSprite.setAngle(builtInSlot.angle);
                 float x = entry.getKey().getPosition().getX() + entry.getValue().center.x * scale;
@@ -106,7 +139,9 @@ public class ShipRenderer implements CustomUIPanelPlugin {
 
             }
         }
-
+        if(isUsingStencil){
+            AoTDMisc.endStencil();
+        }
 
     }
 

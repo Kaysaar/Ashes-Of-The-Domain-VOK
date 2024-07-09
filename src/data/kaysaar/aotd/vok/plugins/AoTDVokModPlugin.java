@@ -8,6 +8,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPDataLoader;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderInfoRepo;
 import data.kaysaar.aotd.vok.models.ResearchOption;
@@ -78,8 +79,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     }
 
     public void onGameLoad(boolean newGame) {
-        GPDataLoader loader = new GPDataLoader();
-        loader.start();
+        GPManager.getInstance().reInitalize();
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
         try {
@@ -108,6 +108,18 @@ public class AoTDVokModPlugin extends BaseModPlugin {
                 aoTDDataInserter.initalizeEconomy(false);
             }
         }
+        GPManager.getInstance().addOrder("onslaught",1);
+        GPManager.getInstance().addOrder("onslaught",4);
+        GPManager.getInstance().addOrder("paragon",4);
+        GPManager.getInstance().addOrder("realitydisruptor",4);
+        GPManager.getInstance().addOrder("vpdriver",4);
+        GPManager.getInstance().addOrder("riftcascade",4);
+        GPManager.getInstance().addOrder("disintegrator",4);
+        GPManager.getInstance().addOrder("cryoblaster",4);
+        GPManager.getInstance().addOrder("riftlance",4);
+        GPManager.getInstance().addOrder("minipulser",4);
+        GPManager.getInstance().addOrder("diableavionics_zephyr_wing",4);
+
         aoTDSpecialItemRepo.putInfoForSpecialItems();
         aoTDDataInserter.setStarterIndustriesUpgrades();
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SOIL_NANITES, "subfarming");

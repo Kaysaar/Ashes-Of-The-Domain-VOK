@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.econ.impl.Farming;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
@@ -11,12 +12,8 @@ import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Monoculture extends BaseIndustry {
-    public static Set<String> AQUA_PLANETS = new HashSet<String>();
+public class Monoculture extends Farming {
 
-    static {
-        AQUA_PLANETS.add(Planets.PLANET_WATER);
-    }
     public void apply() {
         super.apply(true);
         supply(Commodities.FOOD, 2);

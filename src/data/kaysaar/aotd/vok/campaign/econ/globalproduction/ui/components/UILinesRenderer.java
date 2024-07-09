@@ -16,6 +16,7 @@ public class UILinesRenderer implements CustomUIPanelPlugin {
     ArrayList<CustomPanelAPI> panels = new ArrayList<>();
     SpriteAPI box = Global.getSettings().getSprite("rendering","GlitchSquare");
     Color boxColor = Misc.getDarkPlayerColor();
+    Color progression = Misc.getBrightPlayerColor();
     public void setPanels(ArrayList<CustomPanelAPI> panels) {
         this.panels = panels;
     }
@@ -26,7 +27,12 @@ public class UILinesRenderer implements CustomUIPanelPlugin {
     public ArrayList<CustomPanelAPI> getPanels() {
         return panels;
     }
-
+    boolean renderProgress = false;
+    float progress = 0f;
+    public void enableProgressMode(float currProgress){
+        renderProgress = true;
+        progress = currProgress;
+    }
     @Override
     public void positionChanged(PositionAPI position) {
 
@@ -47,6 +53,15 @@ public class UILinesRenderer implements CustomUIPanelPlugin {
 
     @Override
     public void render(float alphaMult) {
+        if(renderProgress){
+            for (CustomPanelAPI panel : panels) {
+                if (panel != null) {
+                    box.setSize((panel.getPosition().getWidth()+widthPadding)*progress,panel.getPosition().getHeight());
+                    box.setColor(progression);
+                    box.render(panel.getPosition().getX(),panel.getPosition().getY());
+                }
+            }
+        }
         for (CustomPanelAPI panel : panels) {
             if (panel != null) {
                 box.setSize(panel.getPosition().getWidth()+widthPadding,1);

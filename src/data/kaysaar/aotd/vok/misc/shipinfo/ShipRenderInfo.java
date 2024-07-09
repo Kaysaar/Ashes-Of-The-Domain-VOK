@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -261,17 +262,6 @@ public class ShipRenderInfo {
            }
        }
    }
-
-    public static String getWeaponTurretBarrelSpriteName(String id){
-        String spriteName = "";
-        try{
-            JSONObject jsonData = Global.getSettings().getMergedJSON("data/weapons/"+id+".wpn");
-            spriteName = jsonData.optString("turretGunSprite","");
-        }catch(IOException | JSONException ex){
-
-        }
-        return spriteName;
-    }
-
+   
 
 }

@@ -1,6 +1,7 @@
-package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.panels;
+package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.optionpanels;
 
 import com.fs.starfarer.api.ui.*;
+import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.OptionPanelDesigner;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin.maxItemsPerPage;
 
-public class FighterPanelInterface extends BasePanelManager implements BasePanelInterface {
+public class FighterOptionPanelInterface extends BaseOptionPanelManager implements OptionPanelInterface {
     @Override
     public CustomPanelAPI getOptionPanel() {
         return null;
@@ -24,7 +25,7 @@ public class FighterPanelInterface extends BasePanelManager implements BasePanel
         return null;
     }
 
-    public FighterPanelInterface(CustomPanelAPI panel){
+    public FighterOptionPanelInterface(CustomPanelAPI panel){
         GPManager.getInstance().populateFighterInfo();
         GPManager.getInstance().populateFighterTypeInfo();
         mapOfButtonStates = new HashMap<>();
@@ -47,6 +48,7 @@ public class FighterPanelInterface extends BasePanelManager implements BasePanel
     @Override
     public void clear() {
         buttonsPage.clear();
+        orderButtons.clear();
         buttons.clear();
         sortingButtons.clear();
         chosenManu.clear();
@@ -60,7 +62,7 @@ public class FighterPanelInterface extends BasePanelManager implements BasePanel
         init();
     }
     private void createFighterOptions(CustomPanelAPI panel) {
-
+        if(orderButtons==null)orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages = GPManager.getInstance().getLearnedFighters();
         if (!chosenManu.isEmpty() && !wantsAll && !resetToText) {
             packages = GPManager.getInstance().getFightersByManu(chosenManu);
@@ -79,31 +81,14 @@ public class FighterPanelInterface extends BasePanelManager implements BasePanel
         float size = packages.size();
         int maxPages = (int) (size / maxItemsPerPage);
         if ((float) maxPages != size / maxItemsPerPage) maxPages++;
+        Pair<CustomPanelAPI,ArrayList<ButtonAPI>>orders = OptionPanelDesigner.createFighterPanel(UIData.WIDTH_OF_OPTIONS, YHeight, this.panel, packages, currOffset, maxItemsPerPage);
+        optionPanel = orders.one;
+        pageInitalization(panel, maxPages, orders);
+    }
 
-        optionPanel = OptionPanelDesigner.createFighterPanel(UIData.WIDTH_OF_OPTIONS, YHeight, this.panel, packages, currOffset, maxItemsPerPage);
-        buttonPanel = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 40, null);
-        TooltipMakerAPI tooltipBut = buttonPanel.createUIElement(panel.getPosition().getWidth() * 0.70f, bottomHeight, false);
-        if (maxPages > 1) {
-            ArrayList<ButtonAPI> buttons = new ArrayList<>();
-            float buttonSeperator = 5f;
-            float buttonSize = 30f;
-            for (int i = 0; i < maxPages; i++) {
-                ButtonAPI buttonAPI = tooltipBut.addButton("" + (i + 1), i, base, bg, Alignment.MID, CutStyle.NONE, buttonSize, buttonSize, 0f);
-                buttons.add(buttonAPI);
-            }
-            float width = panel.getPosition().getWidth() * 0.70f;
-            float buttomCombinedWidth = buttons.size() * buttonSize + (buttons.size() - 1) * buttonSeperator;
-            float beginX = (width - buttomCombinedWidth) / 2;
-            for (ButtonAPI button : buttons) {
-                button.getPosition().inTL(beginX, 0);
-                beginX += buttonSize + buttonSeperator;
-            }
-            this.buttonsPage.addAll(buttons);
-
-        }
-        buttonPanel.addUIElement(tooltipBut).inTL(-5, 0);
-        panel.addComponent(optionPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, 70);
-        panel.addComponent(buttonPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, YHeight + 85);
+    @Override
+    public ArrayList<ButtonAPI> getOrderButtons() {
+        return orderButtons;
     }
 
     @Override

@@ -1,9 +1,9 @@
-package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.panels;
+package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.optionpanels;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.RowData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class BasePanelManager {
+public class BaseOptionPanelManager {
     CustomPanelAPI mainPanel;
     CustomPanelAPI panel;
     Color base = Global.getSector().getPlayerFaction().getBaseUIColor();
@@ -29,6 +29,7 @@ public class BasePanelManager {
     CustomPanelAPI buttonSortingPnael;
     CustomPanelAPI panelOfSearchBar;
     TextFieldAPI searchbar;
+    ArrayList<ButtonAPI> orderButtons;
     public HashMap<String, SortingState> mapOfButtonStates;
     boolean resetToText = false;
     String prevText = "";
@@ -141,6 +142,33 @@ public class BasePanelManager {
 
         sortingButtons.addAll(sortButtons);
         panel.addComponent(buttonSortingPnael).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, 50);
+    }
+    public void pageInitalization(CustomPanelAPI panel, int maxPages, Pair<CustomPanelAPI, ArrayList<ButtonAPI>> orders) {
+        optionPanel = orders.one;
+        orderButtons.addAll(orders.two);
+        buttonPanel = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 40, null);
+        TooltipMakerAPI tooltipBut = buttonPanel.createUIElement(panel.getPosition().getWidth() * 0.70f, bottomHeight, false);
+        if (maxPages > 1) {
+            ArrayList<ButtonAPI> buttons = new ArrayList<>();
+            float buttonSeperator = 5f;
+            float buttonSize = 30f;
+            for (int i = 0; i < maxPages; i++) {
+                ButtonAPI buttonAPI = tooltipBut.addButton("" + (i + 1), i, base, bg, Alignment.MID, CutStyle.NONE, buttonSize, buttonSize, 0f);
+                buttons.add(buttonAPI);
+            }
+            float width = panel.getPosition().getWidth() * 0.70f;
+            float buttomCombinedWidth = buttons.size() * buttonSize + (buttons.size() - 1) * buttonSeperator;
+            float beginX = (width - buttomCombinedWidth) / 2;
+            for (ButtonAPI button : buttons) {
+                button.getPosition().inTL(beginX, 0);
+                beginX += buttonSize + buttonSeperator;
+            }
+            this.buttonsPage.addAll(buttons);
+
+        }
+        buttonPanel.addUIElement(tooltipBut).inTL(-5, 0);
+        panel.addComponent(optionPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, 70);
+        panel.addComponent(buttonPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, YHeight + 85);
     }
     public void reset(){
 
