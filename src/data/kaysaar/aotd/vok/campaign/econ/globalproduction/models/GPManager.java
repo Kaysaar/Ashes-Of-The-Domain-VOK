@@ -14,7 +14,6 @@ import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UiPackage;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.NidavelirIndustryOptionProvider;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
@@ -49,7 +48,8 @@ public class GPManager {
     ArrayList<GPOption> shipProductionOption = new ArrayList<>();
     ArrayList<GPOption> weaponProductionOption = new ArrayList<>();
     ArrayList<GPOption> fighterProductionOption = new ArrayList<>();
-    ArrayList<GPOption> specialProjects = new ArrayList<>();
+    ArrayList<GPOption> specialProjectsOption = new ArrayList<>();
+    ArrayList<GpSpecialProjectData>specialProjData = new ArrayList<>();
     ArrayList<GPOrder> productionOrders = new ArrayList<>();
     public LinkedHashMap<String, Integer> shipSizeInfo = new LinkedHashMap<>();
 
@@ -86,9 +86,31 @@ public class GPManager {
     public LinkedHashMap<String, Integer> getFighterTypeInfo() {
         return fighterTypeInfo;
     }
-    public static final int scale = 100;
+    public static final int scale = 10;
     public ArrayList<GPSpec> getSpecs() {
         return specs;
+    }
+    public GpSpecialProjectData currentFocus;
+
+    public GpSpecialProjectData getCurrProjOnGoing() {
+        return currentFocus;
+    }
+
+    public void setCurrentFocus(GpSpecialProjectData currentFocus) {
+        if(currentFocus!=null){
+            currentFocus.hasStarted = true;
+            if(currentFocus.getCurrentStage()==-1){
+                currentFocus.currentStage=0;
+            }
+            if(currentFocus.isFinished()){
+                currentFocus.totalDaysSpent = 0f;
+                currentFocus.currentStage = 0;
+                currentFocus.haveRecivedAward = false;
+            }
+
+
+        }
+        this.currentFocus = currentFocus;
     }
 
     LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();
@@ -107,9 +129,13 @@ public class GPManager {
     }
     public static String memkey = "aotd_gp_plugin";
 
-    public ArrayList<GPOption> getSpecialProjects() {
-        return specialProjects;
+    public ArrayList<GPOption> getSpecialProjectsOption() {
+        return specialProjectsOption;
     }
+    public ArrayList<GpSpecialProjectData>getSpecialProjects(){
+        return specialProjData;
+    }
+
 
     public static GPManager getInstance() {
         if (Global.getSector().getPersistentData().get(memkey) == null) {
@@ -194,6 +220,16 @@ public class GPManager {
         for (String s : commodities) {
             reqResources.put(s, 0);
         }
+        if(currentFocus!=null){
+            for (Map.Entry<String, Integer> entry : currentFocus.getSpec().getStageSupplyCost().get(currentFocus.currentStage).entrySet()) {
+                if (reqResources.get(entry.getKey()) == null) {
+                    reqResources.put(entry.getKey(), entry.getValue());
+                } else {
+                    int prev = reqResources.get(entry.getKey());
+                    reqResources.put(entry.getKey(), prev + entry.getValue() );
+                }
+            }
+        }
         for (GPOrder productionOrder : productionOrders) {
             for (Map.Entry<String, Integer> entry : productionOrder.getReqResources().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
@@ -204,6 +240,7 @@ public class GPManager {
                 }
             }
         }
+
         return reqResources;
     }
 
@@ -535,6 +572,14 @@ public class GPManager {
         }
 
     }
+    public void removeOrder(String specId,int amount){
+        for (GPOrder order : productionOrders) {
+            if (order.getSpecFromClass().getProjectId().equals(specId)) {
+                order.updateAmountToProduce(order.amountToProduce - amount);
+                break;
+            }
+        }
+    }
 
     public boolean hasSpecialProject(String rewardId){
         for (GPSpec projectSpec : specialProjectSpecs) {
@@ -634,7 +679,7 @@ public class GPManager {
         shipProductionOption.clear();
         weaponProductionOption.clear();
         fighterProductionOption.clear();
-        specialProjects.clear();
+        specialProjectsOption.clear();
         for (GPSpec spec : specs) {
 
             if (spec.type.equals(GPSpec.ProductionType.SHIP)) {
@@ -652,9 +697,20 @@ public class GPManager {
 
         }
         for (GPSpec specialProjectSpec : specialProjectSpecs) {
-            GPOption option = new GPOption(specialProjectSpec, true);
-            specialProjects.add(option);
+            boolean foundOne = false;
+            for (GpSpecialProjectData datum : specialProjData) {
+                if(datum.getSpec().getProjectId().equals(specialProjectSpec.getProjectId())){
+                    foundOne = true;
+                    datum.setSpec(specialProjectSpec);
+                    break;
+                }
+            }
+            if(!foundOne){
+                GpSpecialProjectData data = new GpSpecialProjectData(specialProjectSpec);
+                specialProjData.add(data);
+            }
         }
+
 
     }
 
@@ -904,8 +960,23 @@ public class GPManager {
             removeDoneOrders(offsetOfOrdersToBeRemoved);
         }
 
-        HashMap<String, Integer> available = new HashMap<>(getTotalResources());
-        HashMap<String, Integer> availableUnchanged = new HashMap<>(getTotalResources());
+        HashMap<String, Integer> available = new HashMap<>();
+        available.putAll(getTotalResources());
+        HashMap<String, Integer> availableUnchanged = new HashMap<>();
+        availableUnchanged.putAll(getTotalResources());
+        if(currentFocus!=null){
+            if(currentFocus.canSupportStageConsumption(available)){
+                for (Map.Entry<String, Integer> entry : currentFocus.getSpec().getStageSupplyCost().get(currentFocus.currentStage).entrySet()) {
+                    int availableCommoditySize = available.get(entry.getKey());
+                    available.put(entry.getKey(), availableCommoditySize - entry.getValue());
+
+                }
+                currentFocus.advance(amount);
+            }
+
+        }
+        availableUnchanged.clear();
+        availableUnchanged.putAll(available);
         for (GPOrder productionOrder : getProductionOrders()) {
             if (!productionOrder.isCountingToContribution()) continue;
             boolean metCriteriaWithResources = true;

@@ -24,7 +24,7 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager implement
         mapOfButtonStates = new HashMap<>();
         this.mainPanel = panel;
         this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
-        YHeight = panel.getPosition().getHeight()-25-230;
+        YHeight = panel.getPosition().getHeight() * 0.45f;
     }
     @Override
     public CustomPanelAPI getOptionPanel() {

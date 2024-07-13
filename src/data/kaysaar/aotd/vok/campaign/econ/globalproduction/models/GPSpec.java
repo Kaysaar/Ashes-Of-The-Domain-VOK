@@ -9,6 +9,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,16 +37,16 @@ public class GPSpec {
         int basePrice = (int) specAPI.getBaseValue();
         float days = 1;
         if(specAPI.getHullSize().equals(ShipAPI.HullSize.FRIGATE)){
-            days = Math.min(basePrice/dayScaling,30);
+            days = Math.min(basePrice/dayScaling,10);
         }
         if(specAPI.getHullSize().equals(ShipAPI.HullSize.DESTROYER)){
-            days = Math.min(basePrice/dayScaling,40);
+            days = Math.min(basePrice/dayScaling,20);
         }
         if(specAPI.getHullSize().equals(ShipAPI.HullSize.CRUISER)){
-            days = Math.min(basePrice/dayScaling,50);
+            days = Math.min(basePrice/dayScaling,40);
         }
         if(specAPI.getHullSize().equals(ShipAPI.HullSize.CAPITAL_SHIP)){
-            days = Math.min(basePrice/dayScaling,60);
+            days = Math.min(basePrice/dayScaling,80);
         }
         if(days<=0)days=1;
         float newPrice = basePrice*0.6f;
@@ -67,7 +68,7 @@ public class GPSpec {
     }
     public static GPSpec getSpecFromWeapon(WeaponSpecAPI specAPI){
 
-        int priceScaling = 10000;
+        int priceScaling = 1000;
         int dayScaling = 1000;
         int basePrice = Global.getSector().getPlayerFaction().getProduction().createSampleItem(FactionProductionAPI.ProductionItemType.WEAPON, specAPI.getWeaponId(),1).getBaseCost();
         float days = 1;
@@ -80,6 +81,7 @@ public class GPSpec {
         if(specAPI.getSize().equals(WeaponAPI.WeaponSize.LARGE)){
             days = Math.min(basePrice/dayScaling,50);
         }
+
         if(days<=0)days=2;
         float newPrice = basePrice*0.6f;
         newPrice = Math.round(newPrice);
@@ -98,10 +100,10 @@ public class GPSpec {
         return spec;
     }
     public static GPSpec getSpecFromWing(FighterWingSpecAPI specAPI){
-        int priceScaling = 1000;
-        int dayScaling = 1000;
+        int priceScaling = 5000;
+        int dayScaling = 10000;
         int basePrice = (int) specAPI.getBaseValue();
-        float newDays = basePrice/priceScaling;
+        float newDays = basePrice/dayScaling;
         if(newDays<=0){
             newDays = 2;
         }
@@ -396,6 +398,7 @@ public class GPSpec {
                 spec.setSpecialProject(true);
                 spec.setDescriptionOfProject(descp);
                 spec.setStageNameAndDecsMap(stageMapNames);
+                spec.setDaysPerStage(stageDuration);
                 spec.setMemFlagsToMetForDiscovery(memFlags);
                 spec.setDiscoverable(isDiscoverable);
                 spec.setAmountOfStages(amountOfStages);
@@ -418,6 +421,9 @@ public class GPSpec {
         return map;
     }
     public static ArrayList<String> loadEntries(String rawMap,String seperator) {
+        if(!AoTDMisc.isStringValid(rawMap)){
+            return  new ArrayList<>();
+        }
         String[]splitted = rawMap.split(seperator);
         ArrayList<String> map = new ArrayList<>(Arrays.asList(splitted));
 
