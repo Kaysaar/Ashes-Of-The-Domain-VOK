@@ -6,8 +6,7 @@ import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WingRole;
-import com.fs.starfarer.api.ui.CustomPanelAPI;
-import com.fs.starfarer.api.ui.PositionAPI;
+import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
@@ -43,6 +42,29 @@ public class AoTDMisc {
         }
 
         return variantId;
+    }
+    public static boolean isHoveringOverButton(UIComponentAPI button){
+        float x = Global.getSettings().getMouseX();
+        float y = Global.getSettings().getMouseY();
+        float xBut = button.getPosition().getX();
+        float yBut = button.getPosition().getY();
+        float width  = button.getPosition().getWidth();
+        float height = button.getPosition().getHeight();
+
+        return !(x < xBut) && !(x > xBut + width) && !(y < yBut) && !(y > yBut + height);
+    }
+    public static boolean isHoveringOverButton(UIComponentAPI button,float tooltipCorrection){
+        float x = Global.getSettings().getMouseX();
+        float y = Global.getSettings().getMouseY();
+        float xBut = button.getPosition().getX();
+        float yBut = button.getPosition().getY()+tooltipCorrection;
+        float width  = button.getPosition().getWidth();
+        float height = button.getPosition().getHeight();
+
+        return !(x < xBut) && !(x > xBut + width) && !(y < yBut) && !(y > yBut + height);
+    }
+    public static boolean isStringValid(String str){
+        return str!=null&&!str.isEmpty();
     }
     public static void startStencil(CustomPanelAPI panel,float scale) {
         GL11.glClearStencil(0);

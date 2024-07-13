@@ -8,6 +8,7 @@ import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.util.ArrayList;
@@ -42,8 +43,8 @@ public class ProgressBarRender implements CustomUIPanelPlugin {
                 ButtonAPI secondButtonPos = buttons.get(i);
                 float distance = button.getPosition().getY()-secondButtonPos.getPosition().getY()-secondButtonPos.getPosition().getHeight();
                 spriteToRender.setSize(5,distance);
-                spriteToRender.setColor(Misc.getBrightPlayerColor().darker());
-                spriteToRender.render(button.getPosition().getCenterX()-2,button.getPosition().getY()-button.getPosition().getHeight());
+                spriteToRender.setColor(NidavelirMainPanelPlugin.bg);
+                spriteToRender.render(button.getPosition().getCenterX()-2,button.getPosition().getY()-distance);
                 i++;
             }
             AoTDMisc.endStencil();
