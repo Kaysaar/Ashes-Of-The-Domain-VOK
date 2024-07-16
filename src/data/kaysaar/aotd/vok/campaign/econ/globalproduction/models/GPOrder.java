@@ -19,12 +19,22 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GPOrder {
+public class GPOrder implements Cloneable{
     int amountToProduce;
     int alreadyProduced;
     float daysSpentDoingOrder;// between 0 and 1
     boolean contributingToOrder;
     int priority = 0;
+
+
+    public GPOrder cloneOrder(){
+        try {
+            return (GPOrder) clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     String specId;
     public int getAmountToProduce(){
         return  amountToProduce - alreadyProduced;

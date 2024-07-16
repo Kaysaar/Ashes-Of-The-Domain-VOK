@@ -607,6 +607,22 @@ public class GPManager {
         }
 
     }
+    public void addOrderToDummy(String specId, int amount,ArrayList<GPOrder>dummyOrders) {
+        boolean foundOrderForSameItem = false;
+        for (GPOrder order : dummyOrders) {
+            if (order.getSpecFromClass().getProjectId().equals(specId)) {
+                order.updateAmountToProduce(order.amountToProduce + amount);
+                foundOrderForSameItem = true;
+                break;
+            }
+        }
+        if (!foundOrderForSameItem) {
+            GPOrder order = new GPOrder(specId, amount);
+            dummyOrders.add(order);
+
+        }
+
+    }
     public void removeOrder(String specId,int amount){
         for (GPOrder order : productionOrders) {
             if (order.getSpecFromClass().getProjectId().equals(specId)) {
@@ -615,7 +631,14 @@ public class GPManager {
             }
         }
     }
-
+    public void removeOrderFromDummy(String specId,int amount,ArrayList<GPOrder>dummy){
+        for (GPOrder order : dummy) {
+            if (order.getSpecFromClass().getProjectId().equals(specId)) {
+                order.updateAmountToProduce(order.amountToProduce - amount);
+                break;
+            }
+        }
+    }
     public boolean hasSpecialProject(String rewardId){
         for (GPSpec projectSpec : specialProjectSpecs) {
             if(projectSpec.getRewardId().equals(rewardId)){
@@ -1123,12 +1146,27 @@ public class GPManager {
         }
         return map;
     }
-
+    public ArrayList<Integer> retrieveOrdersToBeRemovedFromDummy(ArrayList<GPOrder>dummyOrders) {
+        ArrayList<Integer> map = new ArrayList<>();
+        int i = 0;
+        for (GPOrder productionOrder : dummyOrders) {
+            if (productionOrder.isAboutToBeRemoved()) {
+                map.add(i);
+            }
+            i++;
+        }
+        return map;
+    }
     public void removeDoneOrders(ArrayList<Integer> offsets) {
         for (Integer offset : offsets) {
             if(offset.intValue()>=productionOrders.size())continue;
             productionOrders.remove(offset.intValue());
         }
     }
-
+    public void removeDoneOrdersDummy(ArrayList<Integer> offsets,ArrayList<GPOrder>dummyOrders) {
+        for (Integer offset : offsets) {
+            if(offset.intValue()>=dummyOrders.size())continue;
+            dummyOrders.remove(offset.intValue());
+        }
+    }
 }
