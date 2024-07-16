@@ -2,8 +2,8 @@ package data.kaysaar.aotd.vok.scripts.research.scientist.listeners;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
-import data.kaysaar.aotd.vok.models.ResearchOption;
-import data.kaysaar.aotd.vok.models.ResearchOptionEra;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOptionEra;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 

@@ -13,9 +13,8 @@ import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
 import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorPlugin;
-import data.kaysaar.aotd.vok.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import lunalib.lunaSettings.LunaSettings;
 
 
 import java.util.ArrayList;
@@ -128,6 +127,9 @@ public class AoDUtilis {
 
 
         return howMuchToProduce;
+    }
+    public static boolean isMiningAvailable(MarketAPI marketAPI){
+        return AoDUtilis.getOrganicsAmount(marketAPI)>=-1 || AoDUtilis.getNormalOreAmount(marketAPI) >=-1 || AoDUtilis.getRareOreAmount(marketAPI) >= -1 ||AoDUtilis.getVolatilesAmount(marketAPI)>=-1;
     }
 
     public static boolean checkForItemBeingInstalled(MarketAPI market, String industryId, String itemId) {

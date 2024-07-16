@@ -15,24 +15,17 @@ public class CascadeReprocessor extends BaseIndustry {
     public void apply() {
         super.apply(true);
         AoDUtilis.ensureIndustryHasNoItem(this);
-        int size = market.getSize()-8;
+        int size = market.getSize()-3;
 
-        if(market.getSize()<=8){// have to keep it low since it can be circular
-            demand(AoTDCommodities.PURIFIED_RARE_ORE, 4);
-            demand(AoTDCommodities.COMPOUNDS,6);
-        }
-        else{// have to keep it low since it can be circular
-            demand(AoTDCommodities.PURIFIED_RARE_ORE, 4+size);
-            demand(AoTDCommodities.COMPOUNDS,6+size);
-        }
+        demand(Commodities.ORE, 7 + size);
+        demand(Commodities.RARE_ORE, 10 + size); // have to keep it low since it can be circular
+
         supply(AoTDCommodities.PURIFIED_TRANSPLUTONICS, market.getSize()+1);
         supply(Commodities.RARE_METALS, market.getSize());
         supply(Commodities.METALS, market.getSize()-2);
 
 
-        Pair<String, Integer> deficit = getMaxDeficit(AoTDCommodities.PURIFIED_RARE_ORE, Commodities.METALS, AoTDCommodities.COMPOUNDS);
-        int maxDeficit = market.getSize()-3 ;// to allow *some* production so economy doesn't get into an unrecoverable state
-
+        Pair<String, Integer> deficit = getMaxDeficit( Commodities.ORE,Commodities.RARE_ORE);
         if (!isFunctional()) {
             supply.clear();
         }

@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.models;
+package data.kaysaar.aotd.vok.scripts.research.models;
 
 public enum ResearchRewardType {
     INDUSTRY,

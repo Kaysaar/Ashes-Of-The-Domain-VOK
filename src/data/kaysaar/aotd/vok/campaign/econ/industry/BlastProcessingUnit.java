@@ -19,12 +19,10 @@ public class BlastProcessingUnit extends FuelProduction {
     public void apply() {
         super.apply(true);
         int size = market.getSize();
-        demand(AoTDCommodities.COMPOUNDS,size);
         demand(Commodities.VOLATILES, size-2);
         demand(Commodities.HEAVY_MACHINERY, size);
         supply(Commodities.FUEL, size +3);
-        AoDUtilis.ensureIndustryHasNoItem(this);
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.VOLATILES,Commodities.HEAVY_MACHINERY,AoTDCommodities.COMPOUNDS);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.VOLATILES,Commodities.HEAVY_MACHINERY);
 
         applyDeficitToProduction(1, deficit, Commodities.FUEL);
 
@@ -35,13 +33,10 @@ public class BlastProcessingUnit extends FuelProduction {
 
     @Override
     public boolean isAvailableToBuild() {
-        return checkForItemBeingInstalled(this.market, Industries.FUELPROD, "modular_constructor_fuelprod")&& AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ANTIMATTER_SYNTHESIS,market);
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ANTIMATTER_SYNTHESIS,market);
     }
     @Override
     public String getUnavailableReason() {
-        if(!checkForItemBeingInstalled(this.market, Industries.FUELPROD, "modular_constructor_fuelprod")){
-            return AoDUtilis.consumeReq(Industries.FUELPROD);
-        }
         return null;
     }
 

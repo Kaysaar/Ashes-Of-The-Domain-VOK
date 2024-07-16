@@ -30,25 +30,13 @@ import java.util.List;
 public class UpgradeListUI implements CustomDialogDelegate {
 
 
-    //This ui has been "Yoinked" by permission of SirHartley as it based on  his code, to which I thank you a lot for sharing ^^
     public static final float WIDTH = 600f;
     public static final float HEIGHT = Global.getSettings().getScreenHeight() - 300f;
     public static final float ENTRY_HEIGHT = 500; //MUST be even
     public static final float ENTRY_WIDTH = WIDTH - 5f; //MUST be even
     public static final float CONTENT_HEIGHT = 80;
 
-    static ArrayList<Pair<String,String>> industries = new ArrayList<>();
-    static {
-        industries.add(new Pair<>(Industries.AQUACULTURE,"aotd_tech_aquatic_agriculture"));
-        industries.add(new Pair<>(Industries.FARMING,"aotd_tech_agriculture"));
-        industries.add(new Pair<>(Industries.MINING,"aotd_tech_exosceletons"));
-        industries.add(new Pair<>(Industries.REFINING,"aotd_tech_nanometal"));
-        industries.add(new Pair<>(Industries.HEAVYINDUSTRY,"aotd_tech_hull_manufacture"));
-        industries.add(new Pair<>(Industries.ORBITALWORKS,"aotd_tech_orbital_assembly"));
-        industries.add(new Pair<>(Industries.LIGHTINDUSTRY,"aotd_tech_aquatic_agriculture"));
 
-
-    }
     public Industry industry;
     public List<ButtonAPI> buttons = new ArrayList<>();
     public List<String> upgrades = new ArrayList<>();
@@ -554,14 +542,6 @@ public class UpgradeListUI implements CustomDialogDelegate {
                         anchor.addPara(AoDUtilis.consumeReq(splited[1]), Misc.getNegativeHighlightColor(), opad);
                     }
                     break;
-                }
-            }
-            if (upgrdInd.getSpec().getTags().contains("consumes")) {
-                if(AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
-                    anchor.addPara("Mega Assembly Systems have been researched! Item won't be consumed.", Misc.getPositiveHighlightColor(), opad);
-                }
-                else{
-                    anchor.addPara("Urgent! After industry's upgrade is started, this item is irreversibly consumed!", Misc.getHighlightColor(), opad);
                 }
             }
             subIndustryButtonPanel.addUIElement(anchor).inTL(5 + adjustedWidth + 15, 5);

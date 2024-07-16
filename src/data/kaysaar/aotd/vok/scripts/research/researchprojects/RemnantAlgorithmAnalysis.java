@@ -3,7 +3,7 @@ package data.kaysaar.aotd.vok.scripts.research.researchprojects;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.models.ResearchProject;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchProject;
 
 public class RemnantAlgorithmAnalysis extends ResearchProject {
     @Override

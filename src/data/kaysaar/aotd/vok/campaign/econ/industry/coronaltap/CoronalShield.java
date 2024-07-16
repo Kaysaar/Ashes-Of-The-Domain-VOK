@@ -52,7 +52,6 @@ public class CoronalShield extends CoronalSegment{
     public void applyDemandAfterRepair() {
         demand(AoTDCommodities.REFINED_METAL,0);
         demand(AoTDCommodities.PURIFIED_TRANSPLUTONICS,5);
-        demand(AoTDCommodities.COMPOUNDS,5);
     }
 
     @Override

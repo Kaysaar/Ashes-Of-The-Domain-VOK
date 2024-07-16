@@ -3,7 +3,7 @@ package data.kaysaar.aotd.vok.ui.components;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.models.ResearchProject;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchProject;
 
 import java.awt.*;
 

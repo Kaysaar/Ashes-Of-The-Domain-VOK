@@ -16,8 +16,6 @@ public class BioChem extends LightIndustry {
         AoDUtilis.ensureIndustryHasNoItem(this);
         int size = market.getSize();
         demand(Commodities.ORGANICS, size+2);
-        demand(AoTDCommodities.BIOTICS,size-2);
-        demand(AoTDCommodities.COMPOUNDS, size-2);
         //supply(Commodities.SUPPLIES, size - 3);
 
         //if (!market.getFaction().isIllegal(Commodities.LUXURY_GOODS)) {
@@ -28,7 +26,7 @@ public class BioChem extends LightIndustry {
         }
         //if (!market.getFaction().isIllegal(Commodities.DRUGS)) {
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS, AoTDCommodities.BIOTICS,AoTDCommodities.COMPOUNDS);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS);
         applyDeficitToProduction(2, deficit,
                 Commodities.DRUGS);
 

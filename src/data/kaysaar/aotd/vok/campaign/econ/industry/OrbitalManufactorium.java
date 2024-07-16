@@ -22,7 +22,6 @@ public class OrbitalManufactorium extends HeavyIndustry {
         super.apply(true);
 
         int size = market.getSize();
-        AoDUtilis.ensureIndustryHasNoItem(this);
         int shipBonus = 0;
         float qualityBonus = 0.7f;
 

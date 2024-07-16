@@ -32,7 +32,7 @@ public class NidavelirMainPanelDP implements InteractionDialogPlugin {
     public void optionSelected(String optionText, Object optionData) {
         if (optionData == NidavelirMainPanelDP.OptionID.INIT) {
             //this is where the size of the panel is set, automatically centered
-            dialog.showCustomVisualDialog(UIData.WIDTH, UIData.HEIGHT, new NidavelirMainPanelDelegate(new NidavelirMainPanelPlugin(),dialog));
+            dialog.showCustomVisualDialog(UIData.WIDTH, UIData.HEIGHT, new NidavelirMainPanelDelegate(new NidavelirMainPanelPlugin(false),dialog));
 
         }
     }

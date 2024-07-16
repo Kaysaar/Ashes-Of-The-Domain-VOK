@@ -1,8 +1,7 @@
-package data.kaysaar.aotd.vok.models;
+package data.kaysaar.aotd.vok.scripts.research.models;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
-import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.ui.Alignment;
@@ -14,7 +13,6 @@ import org.lazywizard.lazylib.MathUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 public abstract class ResearchProject {
     public String id;

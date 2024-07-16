@@ -1,10 +1,7 @@
 package data.kaysaar.aotd.vok.plugins;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.FactionAPI;
-import com.fs.starfarer.api.campaign.PersonImportance;
-import com.fs.starfarer.api.campaign.PlanetAPI;
-import com.fs.starfarer.api.campaign.StarSystemAPI;
+import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
@@ -145,11 +142,6 @@ public class AoTDDataInserter {
                 allIndustrySpec.addTag("starter");
                 allIndustrySpec.addTag(AOTD+Industries.WAYSTATION);
             }
-            if (allIndustrySpec.getId().equals(Industries.FUELPROD)) {
-                allIndustrySpec.addTag("starter");
-                allIndustrySpec.addTag(AOTD+Industries.FUELPROD);
-                allIndustrySpec.setPluginClass("data.kaysaar.aotd.vok.campaign.econ.industry.FuelProdOverride");
-            }
         }
     }
     public void setStarterIndustriesUpgrades() {
@@ -266,13 +258,16 @@ public class AoTDDataInserter {
             }
         }
     }
-    public void setIndustryOnPlanet(String SystemName, String Planetname, String industryId, String removeIndustry, String potentialSwitch, boolean toImprove, String aiCore) {
+    public void setIndustryOnPlanet(String SystemName, String Planetname, String industryId, String removeIndustry, String potentialSwitch, boolean toImprove, String aiCore,String itemToInsert) {
         if (Global.getSector().getStarSystem(SystemName) == null) return;
         List<PlanetAPI> planets = Global.getSector().getStarSystem(SystemName).getPlanets();
         for (PlanetAPI planet : planets) {
             if (planet.getName().equals(Planetname)) {
+
                 if (planet.getMarket() == null) continue;
+                SpecialItemData data = null;
                 if (removeIndustry != null) {
+                    data = planet.getMarket().getIndustry(removeIndustry).getSpecialItem();
                     planet.getMarket().removeIndustry(removeIndustry, null, false);
 
                 }
@@ -280,16 +275,15 @@ public class AoTDDataInserter {
                     planet.getMarket().addIndustry(industryId);
                     planet.getMarket().getIndustry(industryId).setImproved(toImprove);
                     planet.getMarket().getIndustry(industryId).setAICoreId(aiCore);
-                }
-
-                if (potentialSwitch != null) {
-                    if (planet.getMarket() != null) {
-                        if (!planet.getMarket().hasCondition(potentialSwitch)) {
-                            planet.getMarket().addCondition(potentialSwitch);
-                        }
-
+                    if(data!=null){
+                        planet.getMarket().getIndustry(industryId).setSpecialItem(data);
+                    }
+                    if(itemToInsert!=null){
+                        SpecialItemData daten = new SpecialItemData(Items.MANTLE_BORE,null);
+                        planet.getMarket().getIndustry(industryId).setSpecialItem(daten);
                     }
                 }
+
 
             }
         }
@@ -319,11 +313,11 @@ public class AoTDDataInserter {
 
                         } else {
                             if (chooseReci) {
-                                setIndustryOnPlanet(market.getStarSystem().getBaseName(), market.getPlanetEntity().getName(), null, null, AoTDConditions.SWITCH_RECITIFICATES, false, null);
+                                setIndustryOnPlanet(market.getStarSystem().getBaseName(), market.getPlanetEntity().getName(), null, null, AoTDConditions.SWITCH_RECITIFICATES, false, null,null);
                                 increased_reci++;
                                 chooseReci = false;
                             } else {
-                                setIndustryOnPlanet(market.getStarSystem().getBaseName(), market.getPlanetEntity().getName(), null, null, AoTDConditions.SWITCH_BIOTICS, false, null);
+                                setIndustryOnPlanet(market.getStarSystem().getBaseName(), market.getPlanetEntity().getName(), null, null, AoTDConditions.SWITCH_BIOTICS, false, null,null);
                                 increased_biotiocs++;
                                 chooseReci = true;
                             }
@@ -340,41 +334,34 @@ public class AoTDDataInserter {
     }
     public void initalizeEconomy(boolean random){
         if(!random){
-            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ORBITAL_SKUNKWORK, Industries.ORBITALWORKS, null, false, Commodities.ALPHA_CORE);
-            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.HEGEMONY_HEAVY, Industries.ORBITALWORKS, null, false, null);
-            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, true, Commodities.ALPHA_CORE);
-            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, false, null);
-            setIndustryOnPlanet("Corvus", "Jangala", AoTDIndustries.CLEANROOM_MANUFACTORY, null, null, false, null);
-            setIndustryOnPlanet("Hybrasil", "Eochu Bres", AoTDIndustries.CLEANROOM_MANUFACTORY, null, null, false, null);
-            setIndustryOnPlanet("Tyle", "Madeira", AoTDIndustries.CLEANROOM_MANUFACTORY, null, null, false, null);
-            setIndustryOnPlanet("Valhalla", "Skathi", AoTDIndustries.CLEANROOM_MANUFACTORY, null, null, false, null);
-            setIndustryOnPlanet("Hybrasil", "Culaan", AoTDIndustries.CLEANROOM_MANUFACTORY, null, null, false, null);
-            setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null);
-            setIndustryOnPlanet("Hybrasil", "Eouchu Bres", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null);
-            setIndustryOnPlanet("Zagan", "Mazalot", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, AoTDConditions.SWITCH_RECITIFICATES, false, null);
-            setIndustryOnPlanet("Samarra", "Tartessus", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null);
-            setIndustryOnPlanet("Corvus", "Jangala", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
-            setIndustryOnPlanet("Naraka", "Yama", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
-            setIndustryOnPlanet("Westernesse", "Ailmar", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_BIOTICS, false, null);
-            setIndustryOnPlanet("Kumari Kandam", "Chalcedon", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
-            setIndustryOnPlanet("Yma", "Qaras", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_BIOTICS, false, null);
-            setIndustryOnPlanet("Galatia", "Ancyra", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null);
-            setIndustryOnPlanet("Mayasura", "Mairaath", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_BIOTICS, false, null);
-            setIndustryOnPlanet("Corvus", "Asharu", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_RECITIFICATES, false, null);
-            setIndustryOnPlanet("Askonia", "Volturn", AoTDIndustries.PURIFICATION_CENTER, null, null, false, null);
-            setIndustryOnPlanet("Aztlan", "Chicomoztoc", "vault_aotd", null, null, false, null);
-            setIndustryOnPlanet("Hybrasil", "Culann", "vault_aotd", null, null, false, null);
-            setIndustryOnPlanet("Eos Exodus", "Baetis", AoTDIndustries.SUBLIMATION, null, null, true, null);
-            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.CRYSTALIZATOR, Industries.REFINING, null, false, null);
-            setIndustryOnPlanet("Aztlan", "Chicomoztoc",Industries.MEGAPORT, Industries.MEGAPORT, null, true, null);
-            setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.BENEFICATION, null, null, true, null);
-            setIndustryOnPlanet("Askonia", "Volturn", AoTDIndustries.SUBLIMATION, Industries.MINING, null, false, Commodities.GAMMA_CORE);
-            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ISOTOPE_SEPARATOR, Industries.REFINING, null, true, Commodities.ALPHA_CORE);
-            setIndustryOnPlanet("Hybrasil", "Culann", Industries.HEAVYBATTERIES, Industries.HEAVYBATTERIES, null, true, Commodities.ALPHA_CORE);
-            setIndustryOnPlanet("Westernesse", "Athulf", AoTDIndustries.BENEFICATION, Industries.MINING, null, true, Commodities.ALPHA_CORE);
-            if (Global.getSettings().getModManager().isModEnabled("Imperium")) {
-                setIndustryOnPlanet("Thracia", "Byzantium", "vault_aotd", null, null, false, null);
-            }
+            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ORBITAL_SKUNKWORK, Industries.ORBITALWORKS, null, false, Commodities.ALPHA_CORE,null);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.HEGEMONY_HEAVY, Industries.ORBITALWORKS, null, false, null,null);
+            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, true, Commodities.ALPHA_CORE,null);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, false, null,null);
+            setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null,null);
+            setIndustryOnPlanet("Hybrasil", "Eouchu Bres", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null,null);
+            setIndustryOnPlanet("Zagan", "Mazalot", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, AoTDConditions.SWITCH_RECITIFICATES, false, null,null);
+            setIndustryOnPlanet("Samarra", "Tartessus", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null,null);
+            setIndustryOnPlanet("Corvus", "Jangala", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null,null);
+            setIndustryOnPlanet("Naraka", "Yama", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null,null);
+            setIndustryOnPlanet("Westernesse", "Ailmar", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_BIOTICS, false, null,null);
+            setIndustryOnPlanet("Kumari Kandam", "Chalcedon", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null,null);
+            setIndustryOnPlanet("Yma", "Qaras", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_BIOTICS, false, null,null);
+            setIndustryOnPlanet("Galatia", "Ancyra", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null,null);
+            setIndustryOnPlanet("Mayasura", "Mairaath", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_BIOTICS, false, null,null);
+            setIndustryOnPlanet("Corvus", "Asharu", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_RECITIFICATES, false, null,null);
+            setIndustryOnPlanet("Askonia", "Volturn", AoTDIndustries.PURIFICATION_CENTER, null, null, false, null,null);
+            setIndustryOnPlanet("Eos Exodus", "Baetis", AoTDIndustries.SUBLIMATION, null, null, true, null,null);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.CRYSTALIZATOR, Industries.REFINING, null, false, null,null);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc",Industries.MEGAPORT, Industries.MEGAPORT, null, true, null,null);
+            setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.BENEFICATION, null, null, true, null,null);
+            setIndustryOnPlanet("Askonia", "Volturn", AoTDIndustries.SUBLIMATION, Industries.MINING, null, false, Commodities.GAMMA_CORE,null);
+            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ISOTOPE_SEPARATOR, Industries.REFINING, null, true, Commodities.ALPHA_CORE,null);
+            setIndustryOnPlanet("Hybrasil", "Culann", Industries.HEAVYBATTERIES, Industries.HEAVYBATTERIES, null, true, Commodities.ALPHA_CORE,null);
+            setIndustryOnPlanet("Thule", "Kazeron",AoTDIndustries.BENEFICATION, Industries.MINING, null, false, null,Items.MANTLE_BORE);
+            setIndustryOnPlanet("Thule", "Kazeron",AoTDIndustries.TERMINUS,null, null, true, null,null);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.TERMINUS, Industries.MINING, null, false, null,null);
+
         }
 
         setIndustriesOnModdedPlanets();

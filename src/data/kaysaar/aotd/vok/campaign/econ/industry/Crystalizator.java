@@ -23,11 +23,10 @@ public class Crystalizator extends BaseIndustry {
 
 
         demand(Commodities.HEAVY_MACHINERY, size - 2); // have to keep it low since it can be circular
-        demand(Commodities.ORE, size + 2);
-        demand(AoTDCommodities.POLYMERS, size - 2);
+        demand(Commodities.ORE, size + 4);
         supply(Commodities.METALS, size+4);
         supply(AoTDCommodities.REFINED_METAL, size-2);
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.ORE, AoTDCommodities.POLYMERS);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.ORE);
 
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;

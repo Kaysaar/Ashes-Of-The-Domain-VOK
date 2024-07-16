@@ -19,10 +19,20 @@ import java.awt.*;
 
 public class HegemonyHeavy extends HeavyIndustry {
     public static float WIDE_FACTION_PRODUCTION_BONUS = 0.25f;
-
+    public int getAdvancedComponents(){
+        if(this.market.getSize()<5){
+            return 0;
+        }
+        if(this.market.getSize()>=5&&market.getSize()<=8){
+            return market.getSize()-2;
+        }
+        if(market.getSize()>8){
+            return market.getSize()-1;
+        }
+        return 0;
+    }
     public void apply() {
         super.apply(true);
-        AoDUtilis.ensureIndustryHasNoItem(this);
         int size = market.getSize();
 
         int shipBonus = 0;
@@ -44,10 +54,11 @@ public class HegemonyHeavy extends HeavyIndustry {
 
         demand(Commodities.RARE_METALS, size - 2);
 
-        supply(Commodities.HEAVY_MACHINERY, size + 5);
-        supply(Commodities.SUPPLIES, size + 5);
+        supply(Commodities.HEAVY_MACHINERY, size + 4);
+        supply(Commodities.SUPPLIES, size + 4);
         supply(Commodities.HAND_WEAPONS, size + 4);
         supply(Commodities.SHIPS, size + 4);
+        supply("advanced_components", getAdvancedComponents());
         if(Global.getSettings().getModManager().isModEnabled("IndEvo")){
             supply("IndEvo_parts",market.getSize());
             demand("IndEvo_parts",market.getSize()-2);
@@ -148,7 +159,7 @@ public class HegemonyHeavy extends HeavyIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ORBITAL_FLEETWORK_FACILITIES,market);
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ORBITAL_FLEETWORK_FACILITIES,market)&&market.getSize()>=5;
 
     }
     @Override

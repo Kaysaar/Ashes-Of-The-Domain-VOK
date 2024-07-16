@@ -51,6 +51,9 @@ public class PCFPlanetIntel extends BaseIntelPlugin {
     @Override
     protected String getName() {
         // The text in the title of the intel
+        if(getPlanet().getMarket().getMemory().is("$aotd_fac_explored",true)){
+            return "Pre Collapse Facility - "+planet.getName()+" :Plundered";
+        }
         return "Pre Collapse Facility - "+planet.getName();
     }
 

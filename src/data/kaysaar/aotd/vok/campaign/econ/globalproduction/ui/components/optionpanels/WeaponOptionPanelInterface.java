@@ -65,10 +65,18 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager implement
     private void createWeaponOptions(CustomPanelAPI panel) {
         if(orderButtons==null)orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages = GPManager.getInstance().getLearnedWeapons();
-        if (!chosenManu.isEmpty() && !wantsAll && !resetToText) {
+        if (!chosenManu.isEmpty() && !wantsAll && !resetToText&&chosenType.isEmpty()&&chosenSize.isEmpty()) {
             packages = GPManager.getInstance().getWeaponsByManu(chosenManu);
         }
-        if (resetToText) {
+        if (chosenManu.isEmpty() && !wantsAll && !resetToText&&!chosenType.isEmpty()&&chosenSize.isEmpty()) {
+            packages = GPManager.getInstance().getWeaponBasedOnType(chosenType.get(0));
+        }
+        if (chosenManu.isEmpty() && !wantsAll && !resetToText&&chosenType.isEmpty()&&!chosenSize.isEmpty()) {
+            packages = GPManager.getInstance().getWeaponBasedOnSize(chosenSize.get(0));
+        }
+
+
+            if (resetToText) {
             packages = GPManager.getInstance().getMatchingWeaponGps(searchbar.getText());
         }
         for (Map.Entry<String, SortingState> option : mapOfButtonStates.entrySet()) {

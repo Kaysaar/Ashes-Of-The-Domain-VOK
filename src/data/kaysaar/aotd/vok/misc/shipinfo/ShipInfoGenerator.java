@@ -40,7 +40,7 @@ public class ShipInfoGenerator {
 
         CustomPanelAPI container = Global.getSettings().createCustom(690, 200, null);
         tooltipOfShipDescriptionTest.setParaFont(Fonts.INSIGNIA_LARGE);
-        LabelAPI labelAPI = tooltipOfShipDescriptionTest.addPara(Global.getSettings().getDescription(ship.getHullSpec().getDescriptionId(), Description.Type.SHIP).getText1FirstPara(), 10f);
+        LabelAPI labelAPI = tooltipOfShipDescriptionTest.addPara(Global.getSettings().getDescription(ship.getHullSpec().getDescriptionId(), Description.Type.SHIP).getText1FirstPara()+"\ns", 10f);
         TooltipMakerAPI tooltipOfShipDescription = textPanel.createUIElement(tooltip.getWidthSoFar() - 15, labelAPI.getPosition().getHeight() + 15, false);
         textPanel.getPosition().setSize(textPanel.getPosition().getWidth(), labelAPI.getPosition().getHeight() + 45);
         LabelAPI designLabel = Misc.addDesignTypePara(tooltipOfShipDescription, ship.getHullSpec().getManufacturer(), 10f);

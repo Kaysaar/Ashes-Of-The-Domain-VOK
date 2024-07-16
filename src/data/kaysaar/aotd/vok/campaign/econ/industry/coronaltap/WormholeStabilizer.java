@@ -23,7 +23,6 @@ public class WormholeStabilizer extends CoronalSegment{
     public void applyDemandForRepair() {
         super.applyDemandForRepair();
         demand(AoTDCommodities.REFINED_METAL,10);
-        demand(AoTDCommodities.COMPOUNDS,6);
         demand(Commodities.METALS,8);
         demand(Commodities.RARE_METALS,6);
     }
@@ -40,7 +39,6 @@ public class WormholeStabilizer extends CoronalSegment{
     public void applyDemandAfterRepair() {
         super.applyDemandAfterRepair();
         demand(AoTDCommodities.REFINED_METAL,0);
-        demand(AoTDCommodities.COMPOUNDS,4);
         demand(AoTDCommodities.PURIFIED_TRANSPLUTONICS,6);
         demand(Commodities.METALS,0);
         demand(Commodities.RARE_METALS,0);

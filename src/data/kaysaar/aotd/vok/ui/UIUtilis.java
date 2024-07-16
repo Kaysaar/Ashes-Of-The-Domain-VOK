@@ -2,12 +2,9 @@ package data.kaysaar.aotd.vok.ui;
 
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
-import data.kaysaar.aotd.vok.models.ResearchOption;
-import data.kaysaar.aotd.vok.ui.components.AoTDUiComp;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 

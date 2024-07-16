@@ -13,18 +13,16 @@ public class Policrystalizator extends BaseIndustry {
     public void apply() {
         super.apply(true);
 
-        int size = market.getSize()-8;
+        int size = market.getSize()-2;
         if(size<=0){
             size=0;
         }
-        demand(Commodities.ORE, 10 + size);
-        demand(Commodities.RARE_ORE, 7 + size); // have to keep it low since it can be circular
-        demand(AoTDCommodities.PURIFIED_ORE, 5+size);
-        demand(AoTDCommodities.POLYMERS,6+size);
+        demand(Commodities.ORE, 9 + size);
+        demand(Commodities.RARE_ORE, 6 + size); // have to keep it low since it can be circular
         supply(AoTDCommodities.REFINED_METAL, market.getSize()+2); //1+1+1 3 at size 6
         supply(Commodities.METALS, market.getSize()+2);
         supply(Commodities.RARE_METALS, market.getSize()-2);
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORE, AoTDCommodities.PURIFIED_ORE, Commodities.RARE_ORE, AoTDCommodities.POLYMERS);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORE, Commodities.RARE_ORE);
         if(deficit.two>market.getSize()-4){
             deficit.two = market.getSize()-4;
             if(deficit.two<0){
