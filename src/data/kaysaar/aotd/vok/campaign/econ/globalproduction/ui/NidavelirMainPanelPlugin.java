@@ -33,9 +33,12 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     CustomPanelAPI panel;
     public static int maxItemsPerPage = 45;
     boolean showProjectList;
-    public NidavelirMainPanelPlugin(boolean showProjectList){
-            this.showProjectList = showProjectList;
+    ArrayList<GPOrder> ordersQueued = new ArrayList<>();
+
+    public NidavelirMainPanelPlugin(boolean showProjectList) {
+        this.showProjectList = showProjectList;
     }
+
     public static Color base = Global.getSector().getPlayerFaction().getBaseUIColor();
     public static Color bg = Global.getSector().getPlayerFaction().getDarkUIColor();
     public static Color bright = Global.getSector().getPlayerFaction().getBrightUIColor();
@@ -58,17 +61,21 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     float leftHeight = UIData.HEIGHT - 30 - 145 - 20;
     float offset = 0f;
     ButtonAPI projectReference;
+    CustomPanelAPI costConfirmOrders;
+    ButtonAPI confirmButton;
+    ButtonAPI cancelButtono;
 
     public void init(CustomPanelAPI panel, CustomVisualDialogDelegate.DialogCallbacks callbacks, InteractionDialogAPI dialog) {
 
         this.panel = panel;
         this.callbacks = callbacks;
+        copyFromOriginal();
         shipPanelManager = new ShipOptionPanelInterface(this.panel);
         weaponPanelManager = new WeaponOptionPanelInterface(this.panel);
         fighterPanelInterface = new FighterOptionPanelInterface(this.panel);
         specialProjectManager = new SpecialProjectManager(this.panel);
         currentManager = shipPanelManager;
-        if(showProjectList){
+        if (showProjectList) {
             currentManager = specialProjectManager;
         }
         this.dialog = dialog;
@@ -77,6 +84,98 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         createMarketResourcesPanel();
         createSpecialProjectBar();
         createOrders();
+    }
+
+    private void copyFromOriginal() {
+        for (GPOrder productionOrder : GPManager.getInstance().getProductionOrders()) {
+            ordersQueued.add(productionOrder.cloneOrder());
+        }
+    }
+
+    public CustomPanelAPI createPaymentConfirm(float width, float height) {
+        CustomPanelAPI panel = Global.getSettings().createCustom(width, height, null);
+        TooltipMakerAPI tooltip = panel.createUIElement(width, height, false);
+        tooltip.setParaFont(Fonts.ORBITRON_16);
+        tooltip.addPara("Cost :%s", 0f, Color.ORANGE, Misc.getDGSCredits(calculateDifference()));
+        ButtonAPI button = tooltip.addButton("Confirm", null, base, bg, Alignment.MID, CutStyle.TL_BR, 100, 30, 0f);
+        ButtonAPI caancelBut = tooltip.addButton("Cancel", null, base, bg, Alignment.MID, CutStyle.TL_BR, 100, 30, 0f);
+        float diff = calculateDifference();
+
+        if(!isThereDifferenceBetweenQueueAndOriginal()){
+            button.setEnabled(false);
+            caancelBut.setEnabled(false);
+        }
+        if(diff>Global.getSector().getPlayerFleet().getCargo().getCredits().get()){
+            button.setEnabled(false);
+
+        }
+        button.getPosition().inTL(width - 110, -5);
+        caancelBut.getPosition().inTL(width - 220, -5);
+        confirmButton = button;
+        cancelButtono = caancelBut;
+        panel.addUIElement(tooltip).inTL(0, 0);
+        return panel;
+    }
+
+    public boolean isThereDifferenceBetweenQueueAndOriginal() {
+        int size = GPManager.getInstance().getProductionOrders().size();
+        int queueSize = ordersQueued.size();
+        if(size!=queueSize)return true;
+        for (int i = 0; i < size; i++) {
+           GPOrder order =  GPManager.getInstance().getProductionOrders().get(i);
+           GPOrder queueOrder = ordersQueued.get(i);
+           if(!order.getSpecFromClass().getProjectId().equals(queueOrder.getSpecFromClass().getProjectId())){
+               return true;
+           }
+           else {
+               if(order.getAmountToProduce()!=queueOrder.getAmountToProduce()){
+                   return true;
+               }
+           }
+        }
+        return false;
+    }
+
+    public float calculateDifference() {
+        ArrayList<GPOrder> notFoundIdsOriginalProdOrder = new ArrayList<>();
+        ArrayList<GPOrder> notFoundIdsQueue = new ArrayList<>();
+        float credits = 0f;
+        for (GPOrder productionOrder : GPManager.getInstance().getProductionOrders()) {
+            boolean found = false;
+            for (GPOrder gpOrder : ordersQueued) {
+                if (productionOrder.getSpecFromClass().getProjectId().equals(gpOrder.getSpecFromClass().getProjectId())) {
+                    int queue = gpOrder.getAmountToProduce();
+                    int inProd = productionOrder.getAmountToProduce();
+                    int diff = queue - inProd;
+                    credits += diff * gpOrder.getSpecFromClass().getCredistCost();
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                notFoundIdsQueue.add(productionOrder);
+
+            }
+        }
+        for (GPOrder productionOrder : ordersQueued) {
+            boolean found = false;
+            for (GPOrder gpOrder : GPManager.getInstance().getProductionOrders()) {
+                if (productionOrder.getSpecFromClass().getProjectId().equals(gpOrder.getSpecFromClass().getProjectId())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                notFoundIdsOriginalProdOrder.add(productionOrder);
+            }
+        }
+        for (GPOrder gpOrder : notFoundIdsQueue) {
+            credits -= gpOrder.getAmountToProduce() * gpOrder.getSpecFromClass().getCredistCost();
+        }
+        for (GPOrder gpOrder : notFoundIdsOriginalProdOrder) {
+            credits += gpOrder.getAmountToProduce() * gpOrder.getSpecFromClass().getCredistCost();
+        }
+        return credits;
     }
 
     public CustomPanelAPI createCurrentSpecialProjectShowcase(float width, float height) {
@@ -132,7 +231,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
             buttonAPI.getPosition().inTL(currX, 0);
             currX += buttonAPI.getPosition().getWidth() + paddingX;
         }
-        if(!GPManager.getInstance().hasAtLestOneProjectUnlocked()){
+        if (!GPManager.getInstance().hasAtLestOneProjectUnlocked()) {
             butt.get(3).setEnabled(false);
         }
         switchingButtons.addAll(butt);
@@ -144,7 +243,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     public void createOrders() {
         UILinesRenderer renderer = new UILinesRenderer(0f);
         float yPad = 400;
-        float height = panel.getPosition().getHeight() - 20 - yPad - 50;
+        float height = panel.getPosition().getHeight() - 20 - yPad - 85;
         sortingButtonsPanel = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 50, renderer);
         panelOfOrders = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, height, renderer);
         TooltipMakerAPI tooltip = sortingButtonsPanel.createUIElement(UIData.WIDTH_OF_ORDERS, 50, false);
@@ -162,7 +261,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
             buttonAPI.getPosition().inTL(x, y);
             x += buttonAPI.getPosition().getWidth() + 1;
         }
-        for (GPOrder productionOrder : GPManager.getInstance().getProductionOrders()) {
+        for (GPOrder productionOrder : ordersQueued) {
             Pair<CustomPanelAPI, ButtonAPI> pair = UIData.getOrderPanel(productionOrder);
             tooltip2.addCustom(pair.one, 5f);
             orders.add(pair.two);
@@ -174,10 +273,11 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         tooltipOfOrders = tooltip2;
         panelOfOrders.addUIElement(tooltip2).inTL(0, 0);
         sortingButtonsPanel.addUIElement(tooltip).inTL(0, 0);
+        costConfirmOrders = createPaymentConfirm(UIData.WIDTH_OF_ORDERS, 30);
         tooltip2.getExternalScroller().setYOffset(offset);
         panel.addComponent(sortingButtonsPanel).inTL(spacerX, yPad);
         panel.addComponent(panelOfOrders).inTL(spacerX, yPad + 50);
-
+        panel.addComponent(costConfirmOrders).inTL(spacerX, yPad + height + 60);
     }
 
     public void resetPanelOfOrders() {
@@ -185,11 +285,13 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         orders.clear();
         panel.removeComponent(panelOfOrders);
         panel.removeComponent(sortingButtonsPanel);
+        panel.removeComponent(costConfirmOrders);
         resetPanelOfMarketData();
         createOrders();
 
     }
-    public void resetPanelOfMarketData(){
+
+    public void resetPanelOfMarketData() {
         panel.removeComponent(panelOfMarketData);
         createMarketResourcesPanel();
     }
@@ -278,7 +380,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                     if (orderButton.isChecked()) {
                         orderButton.setChecked(false);
                         GPOption option = (GPOption) orderButton.getCustomData();
-                        GPManager.getInstance().addOrder(option.getSpec().getProjectId(), 1);
+                        GPManager.getInstance().addOrderToDummy(option.getSpec().getProjectId(), 1, ordersQueued);
                         resetPanelOfOrders();
                         break;
                     }
@@ -327,10 +429,10 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
             if (order.isChecked()) {
                 order.setChecked(false);
                 GPOrder ordera = (GPOrder) order.getCustomData();
-                GPManager.getInstance().addOrder(ordera.getSpecFromClass().getProjectId(), 1);
-                ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemoved();
+                GPManager.getInstance().addOrderToDummy(ordera.getSpecFromClass().getProjectId(), 1, ordersQueued);
+                ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemovedFromDummy(ordersQueued);
                 if (!offsetOfOrdersToBeRemoved.isEmpty()) {
-                    GPManager.getInstance().removeDoneOrders(offsetOfOrdersToBeRemoved);
+                    GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
                 }
                 resetPanelOfOrders();
                 break;
@@ -347,7 +449,26 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                 }
             }
         }
-
+        if(confirmButton!=null){
+            if(confirmButton.isChecked()){
+                confirmButton.setChecked(false);
+                float money = calculateDifference();
+                Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(money);
+                GPManager.getInstance().getProductionOrders().clear();
+                GPManager.getInstance().getProductionOrders().addAll(ordersQueued);
+                ordersQueued.clear();
+                copyFromOriginal();
+                resetPanelOfOrders();
+            }
+        }
+        if(cancelButtono!=null){
+            if(cancelButtono.isChecked()){
+                cancelButtono.setChecked(false);
+                ordersQueued.clear();
+                copyFromOriginal();
+                resetPanelOfOrders();
+            }
+        }
 
     }
 
@@ -363,10 +484,10 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                         buttonAPI.setChecked(false);
 
                         GPOrder order = (GPOrder) buttonAPI.getCustomData();
-                        GPManager.getInstance().removeOrder(order.getSpecFromClass().getProjectId(), 1);
-                        ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemoved();
+                        GPManager.getInstance().removeOrderFromDummy(order.getSpecFromClass().getProjectId(), 1, ordersQueued);
+                        ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemovedFromDummy(ordersQueued);
                         if (!offsetOfOrdersToBeRemoved.isEmpty()) {
-                            GPManager.getInstance().removeDoneOrders(offsetOfOrdersToBeRemoved);
+                            GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
                         }
                         resetPanelOfOrders();
                         break;
@@ -378,6 +499,15 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                 dialog.dismiss();
             }
         }
+    }
+
+    public GPOrder getOrderFromDummy(String id) {
+        for (GPOrder gpOrder : ordersQueued) {
+            if (gpOrder.getSpecFromClass().getProjectId().equals(id)) {
+                return gpOrder;
+            }
+        }
+        return null;
     }
 
     @Override

@@ -65,16 +65,11 @@ public class GpProductionButtonRenderer implements CampaignUIRenderingListener, 
     }
     @Override
     public int getListenerInputPriority() {
-        return 1200;
+        return 1400;
     }
 
     @Override
     public void processCampaignInputPreCore(java.util.List<InputEventAPI> events) {
-
-    }
-
-    @Override
-    public void processCampaignInputPreFleetControl(java.util.List<InputEventAPI> events) {
         if (buttonHide == null) return;
         if (buttonHideHighlighted == null) return;
         for (InputEventAPI event : events) {
@@ -92,6 +87,11 @@ public class GpProductionButtonRenderer implements CampaignUIRenderingListener, 
 
 
         }
+    }
+
+    @Override
+    public void processCampaignInputPreFleetControl(java.util.List<InputEventAPI> events) {
+
     }
 
     @Override
