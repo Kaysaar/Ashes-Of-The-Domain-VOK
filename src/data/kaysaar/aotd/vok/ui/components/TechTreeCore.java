@@ -5,8 +5,8 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.models.ResearchOption;
-import data.kaysaar.aotd.vok.models.ResearchOptionEra;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOptionEra;
 
 import java.util.ArrayList;
 import java.util.List;

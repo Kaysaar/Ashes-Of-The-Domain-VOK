@@ -1,6 +1,6 @@
 package data.console;
 
-import data.kaysaar.aotd.vok.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.jetbrains.annotations.NotNull;

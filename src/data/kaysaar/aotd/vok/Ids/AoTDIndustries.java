@@ -22,8 +22,8 @@ public class AoTDIndustries {
     public static final String MONOCULTURE = "monoculture";
     public static final String PURIFICATION_CENTER = "purification";
     public static final String EXTRACTIVE_OPERATION = "extractive";
-    public static final String SUBLIMATION = "sublimation";
-    public static final String BENEFICATION = "benefication";
+    public static final String SUBLIMATION = "mining_megaplex"; // because i am lazy and i am not gonna replace it over and over
+    public static final String BENEFICATION = "mining_megaplex";
     public static final String SMELTING = "smelting";
     public static final String CRYSTALIZATOR = "crystalizator";
     public static final String ISOTOPE_SEPARATOR = "isotope_separator";

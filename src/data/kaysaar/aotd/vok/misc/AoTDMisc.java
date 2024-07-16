@@ -1,13 +1,20 @@
 package data.kaysaar.aotd.vok.misc;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CargoAPI;
+import com.fs.starfarer.api.campaign.SpecialItemData;
+import com.fs.starfarer.api.campaign.econ.Industry;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WingRole;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +49,66 @@ public class AoTDMisc {
         }
 
         return variantId;
+    }
+    public static boolean isPLayerHavingHeavyIndustry(){
+        for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+            for (Industry industry : playerMarket.getIndustries()) {
+                if(industry instanceof HeavyIndustry)return true;
+            }
+        }
+        return false;
+    }
+    public static float retrieveAmountOfItems(String id,String submarketID) {
+        float numberRemaining = 0;
+        for (MarketAPI marketAPI : Misc.getPlayerMarkets(true)) {
+            SubmarketAPI subMarket = marketAPI.getSubmarket(AoTDSubmarkets.RESEARCH_FACILITY_MARKET);
+            if (Global.getSettings().getCommoditySpec(id) != null) {
+                if (subMarket != null) {
+                    numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);
+                }
+            }
+            if (Global.getSettings().getSpecialItemSpec(id) != null) {
+                if (subMarket != null) {
+                    numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id, null));
+                }
+            }
+
+        }
+
+        return numberRemaining;
+    }
+    public static void eatItems(Map.Entry<String, Integer> entry,String submarketId,List<MarketAPI>affectedMarkets) {
+        float numberRemaining = entry.getValue();
+        for (MarketAPI marketAPI : affectedMarkets) {
+
+            SubmarketAPI subMarket = marketAPI.getSubmarket(submarketId);
+            if (subMarket != null) {
+                if (Global.getSettings().getCommoditySpec(entry.getKey()) != null) {
+                    float onMarket = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, entry.getKey());
+                    if (numberRemaining >= onMarket) {
+                        subMarket.getCargo().removeItems(CargoAPI.CargoItemType.RESOURCES, entry.getKey(), onMarket);
+                    } else {
+                        subMarket.getCargo().removeItems(CargoAPI.CargoItemType.RESOURCES, entry.getKey(), numberRemaining);
+                    }
+                    numberRemaining -= onMarket;
+
+                }
+                if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
+
+                    float onMarket = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(entry.getKey(), null));
+                    if (numberRemaining >= onMarket) {
+                        subMarket.getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(entry.getKey(), null), onMarket);
+                    } else {
+                        subMarket.getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(entry.getKey(), null), numberRemaining);
+                    }
+                    numberRemaining -= onMarket;
+
+                }
+            }
+            if (numberRemaining <= 0) {
+                break;
+            }
+        }
     }
     public static boolean isHoveringOverButton(UIComponentAPI button){
         float x = Global.getSettings().getMouseX();

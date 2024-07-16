@@ -14,7 +14,6 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
 import data.kaysaar.aotd.vok.campaign.econ.industry.StellaManufactorium;
-import data.kaysaar.aotd.vok.models.ResearchOption;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 
 import java.awt.*;

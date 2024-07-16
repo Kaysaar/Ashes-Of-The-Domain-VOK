@@ -32,6 +32,7 @@ public class GPSpec {
     }
 
     public static GPSpec getSpecFromShip(ShipHullSpecAPI specAPI){
+        int advancedComponentsScaling = 30000;
         int priceScaling = 10000;
         int dayScaling = 10000;
         int basePrice = (int) specAPI.getBaseValue();
@@ -48,6 +49,7 @@ public class GPSpec {
         if(specAPI.getHullSize().equals(ShipAPI.HullSize.CAPITAL_SHIP)){
             days = Math.min(basePrice/dayScaling,80);
         }
+
         if(days<=0)days=1;
         float newPrice = basePrice*0.6f;
         newPrice = Math.round(newPrice);
@@ -62,6 +64,10 @@ public class GPSpec {
             price =1;
         }
         commodityCost.put(Commodities.SHIPS,price);
+        if(GPManager.getInstance().getManData(specAPI.getManufacturer())!=null){
+            int advanced_Components = basePrice/advancedComponentsScaling;
+            commodityCost.put("advanced_components",Math.min(advanced_Components,GPManager.getInstance().getManData(specAPI.getManufacturer()).getMaxACCostForShip()));
+        }
         spec.setCredistCost(newPrice);
         spec.setSupplyCost(commodityCost);
         return spec;
@@ -71,6 +77,23 @@ public class GPSpec {
         int priceScaling = 1000;
         int dayScaling = 1000;
         int basePrice = Global.getSector().getPlayerFaction().getProduction().createSampleItem(FactionProductionAPI.ProductionItemType.WEAPON, specAPI.getWeaponId(),1).getBaseCost();
+
+        float newPrice = basePrice*0.6f;
+        newPrice = Math.round(newPrice);
+        GPSpec spec = new GPSpec();
+        spec.setProjectId(specAPI.getWeaponId());
+        spec.setObjectToBeProduced(specAPI.getWeaponId(),ProductionType.WEAPON);
+
+        HashMap<String,Integer>commodityCost = new HashMap<>();
+        int price =(int) basePrice/priceScaling;
+        if(price==0){
+            price =1;
+        }
+        if(GPManager.getInstance().getManData(specAPI.getManufacturer())!=null){
+            int advanced_Components = GPManager.getInstance().getManData(specAPI.getManufacturer()).getMaxAcCostForWeapon(specAPI);
+            commodityCost.put("advanced_components",advanced_Components);
+        }
+        commodityCost.put(Commodities.HAND_WEAPONS,price);
         float days = 1;
         if(specAPI.getSize().equals(WeaponAPI.WeaponSize.SMALL)){
             days = Math.min(basePrice/dayScaling,30);
@@ -81,26 +104,16 @@ public class GPSpec {
         if(specAPI.getSize().equals(WeaponAPI.WeaponSize.LARGE)){
             days = Math.min(basePrice/dayScaling,50);
         }
-
         if(days<=0)days=2;
-        float newPrice = basePrice*0.6f;
-        newPrice = Math.round(newPrice);
-        GPSpec spec = new GPSpec();
-        spec.setProjectId(specAPI.getWeaponId());
-        spec.setObjectToBeProduced(specAPI.getWeaponId(),ProductionType.WEAPON);
         spec.setDays((int) days);
-        HashMap<String,Integer>commodityCost = new HashMap<>();
-        int price =(int) basePrice/priceScaling;
-        if(price==0){
-            price =1;
-        }
-        commodityCost.put(Commodities.HAND_WEAPONS,price);
+
         spec.setCredistCost(newPrice);
         spec.setSupplyCost(commodityCost);
         return spec;
     }
     public static GPSpec getSpecFromWing(FighterWingSpecAPI specAPI){
         int priceScaling = 5000;
+        int advanced_comp_scaling = 10000;
         int dayScaling = 10000;
         int basePrice = (int) specAPI.getBaseValue();
         float newDays = basePrice/dayScaling;
@@ -118,6 +131,10 @@ public class GPSpec {
         int price =(int) basePrice/priceScaling;
         if(price==0){
             price =2;
+        }
+        if(GPManager.getInstance().getManData(specAPI.getVariant().getHullSpec().getManufacturer())!=null){
+            int advanced_Components = basePrice/advanced_comp_scaling;
+            commodityCost.put("advanced_components",Math.min(advanced_Components,GPManager.getInstance().getManData(specAPI.getVariant().getHullSpec().getManufacturer()).getMaxACCostForFighter()));
         }
         commodityCost.put(Commodities.SHIPS,price/2);
         commodityCost.put(Commodities.HAND_WEAPONS,price/2);
@@ -176,6 +193,9 @@ public class GPSpec {
     ShipHullSpecAPI shipHullSpecAPI;
     boolean isRepeatable = true;
     public int  amountOfStages;
+    public String progressString;
+    public ArrayList<String> highlights;
+
     HashMap<String, Integer> commodityCost;
     HashMap<String, Integer> supplyCost;
     ArrayList<HashMap<String,Integer>>stageSupplyCost;
@@ -202,6 +222,16 @@ public class GPSpec {
 
     public void setStageSupplyCost(ArrayList<HashMap<String, Integer>> stageSupplyCost) {
         this.stageSupplyCost = stageSupplyCost;
+    }
+    public HashMap<String,Integer>itemInitCostMap;
+
+    public void setItemInitCostMap(HashMap<String, Integer> itemInitCostMap) {
+        this.itemInitCostMap = itemInitCostMap;
+    }
+
+
+    public HashMap<String, Integer> getItemInitCostMap() {
+        return itemInitCostMap;
     }
 
     public ArrayList<Integer> getDaysPerStage() {
@@ -359,6 +389,22 @@ public class GPSpec {
         isSpecialProject = specialProject;
     }
 
+    public void setHighlights(ArrayList<String> highlights) {
+        this.highlights = highlights;
+    }
+
+    public void setProgressString(String progressString) {
+        this.progressString = progressString;
+    }
+
+    public ArrayList<String> getHighlights() {
+        return highlights;
+    }
+
+    public String getProgressString() {
+        return progressString;
+    }
+
     public boolean isSpecialProject() {
         return isSpecialProject;
     }
@@ -391,6 +437,10 @@ public class GPSpec {
 
                 ArrayList<HashMap<String,Integer>>stageCosts = loadCostMapStages(entry.getString("stageCost"));
                 String rewardId = entry.getString("rewardId");
+                String progressString = entry.getString("progressString");
+                int cost = entry.getInt("initalCostMoney");
+                HashMap<String,Integer> itemCostMap = loadCostMap(entry.getString("initalCostItems"));
+                ArrayList<String> highlights = new ArrayList<>(loadEntries(entry.getString("highlights"), ","));
                 GPSpec spec = new GPSpec();
                 spec.setProjectId(id);
                 spec.setRewardId(rewardId);
@@ -404,6 +454,10 @@ public class GPSpec {
                 spec.setAmountOfStages(amountOfStages);
                 spec.setStageSupplyCost(stageCosts);
                 spec.setRepeatable(isRepeatable);
+                spec.setCredistCost(cost);
+                spec.setHighlights(highlights);
+                spec.setItemInitCostMap(itemCostMap);
+                spec.setProgressString(progressString);
                 specs.add(spec);
             }
         } catch (Exception e) {
@@ -447,5 +501,6 @@ public class GPSpec {
         }
         return costs;
     }
+
 
 }

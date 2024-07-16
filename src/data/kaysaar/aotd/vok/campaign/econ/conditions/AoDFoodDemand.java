@@ -33,10 +33,6 @@ public class AoDFoodDemand extends BaseMarketConditionPlugin {
 
         }
     public void unapplyOtherDemand(BaseIndustry ind) {
-        ind.supply(AoTDCommodities.RECITIFICATES, 0, "");
-        ind.demand(AoTDCommodities.RECITIFICATES, 0, "");
-        ind.supply(AoTDCommodities.BIOTICS, 0, "");
-        ind.demand(AoTDCommodities.BIOTICS, 0, "");
         ind.supply(AoTDCommodities.WATER, 0, "");
         ind.demand(AoTDCommodities.WATER, 0, "");
     }
@@ -149,17 +145,11 @@ public class AoDFoodDemand extends BaseMarketConditionPlugin {
         return 0;
     }
     public void applyOtherDemmands(BaseIndustry ind) {
-
-        int marketSize = ind.getMarket().getSize();
-        ind.demand(AoTDCommodities.BIOTICS,marketSize-2);
-        ind.getDemand(AoTDCommodities.BIOTICS).getQuantity().unmodify(getModId());
-        ind.demand(AoTDCommodities.RECITIFICATES,marketSize-1);
-        ind.getDemand(AoTDCommodities.RECITIFICATES).getQuantity().unmodify(getModId());
         ind.demand(AoTDCommodities.WATER,calcuateWaterDemand(ind.getMarket()));
         ind.getDemand(AoTDCommodities.WATER).getQuantity().unmodify(getModId());
         ind.supply(AoTDCommodities.WATER,calcuateWaterSupply(ind.getMarket()));
         ind.getSupply(AoTDCommodities.WATER).getQuantity().unmodify(getModId());
-        Pair<String, Integer> deficit = ind.getMaxDeficit(AoTDCommodities.RECITIFICATES,AoTDCommodities.BIOTICS,AoTDCommodities.WATER);
+        Pair<String, Integer> deficit = ind.getMaxDeficit(AoTDCommodities.WATER);
         int maxDeficit = 2; // missing ship parts do not affect the output much, they just reduce quality.
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;
 

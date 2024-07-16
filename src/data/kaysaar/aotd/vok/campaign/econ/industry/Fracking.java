@@ -50,7 +50,7 @@ public class Fracking extends BaseIndustry {
             supply(Commodities.ORE,AoDUtilis.getNormalOreAmount(market)+(market.getSize()+2));
         }
         if(AoDUtilis.getRareOreAmount(market)>=-1){
-            supply(Commodities.RARE_ORE,AoDUtilis.getRareOreAmount(market)+(market.getSize()+2));
+            supply(Commodities.RARE_ORE,AoDUtilis.getRareOreAmount(market)+(market.getSize()));
         }
         if(AoDUtilis.getVolatilesAmount(market)>=-1){
             supply(Commodities.VOLATILES,AoDUtilis.getVolatilesAmount(market)+(market.getSize()+2));
@@ -59,7 +59,7 @@ public class Fracking extends BaseIndustry {
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;
         applyDeficitToProduction(2, deficit,
-                Commodities.ORE,Commodities.ORGANICS, AoTDCommodities.WATER,Commodities.RARE_ORE);
+                Commodities.ORE,Commodities.ORGANICS, AoTDCommodities.WATER,Commodities.RARE_ORE,Commodities.VOLATILES);
         if (!isFunctional()) {
             supply.clear();
             unapply();

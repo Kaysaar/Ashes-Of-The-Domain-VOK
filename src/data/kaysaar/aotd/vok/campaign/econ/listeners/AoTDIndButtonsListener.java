@@ -16,12 +16,11 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-import data.kaysaar.aotd.vok.campaign.econ.industry.ModulaProgramotoria;
+
 import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.CoronalSegment;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
-import data.kaysaar.aotd.vok.ui.ModularFabricatorUI;
 import data.kaysaar.aotd.vok.ui.StellaManufactoriumUI;
 import data.kaysaar.aotd.vok.ui.UpgradeListUI;
 
@@ -82,18 +81,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
             opt.color = new Color(246, 94, 0, 255);
             data.add(opt);
         }
-        if(ind.getId().equals("modula_program")){
-            List<IndustryOptionData> result = new ArrayList<>();
-            IndustryOptionData opt;
-            opt = new IndustryOptionData("Reprogram Modular Constructor", PROGRAMMING, ind, this);
-            opt.color = new Color(13, 86, 222, 255);
-            if(ind instanceof ModulaProgramotoria){
-                if(((ModulaProgramotoria) ind).mapOfProduction!=null){
-                    opt.enabled=false;
-                }
-            }
-            data.add(opt);
-        }
+
         if(ind.getId().equals(AoTDIndustries.RESEARCH_CENTER)&&ind.getMarket().getFaction().isPlayerFaction()){
             List<IndustryOptionData> result = new ArrayList<>();
             IndustryOptionData opt;
@@ -114,9 +102,6 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
         }
         if (opt.id == RESEARCH_CENTER) {
             tooltip.addPara("Access the interface of research center",0f);
-        }
-        if (opt.id == PROGRAMMING) {
-            tooltip.addPara("With usage of advanced technology, we are able to re-program the dormant Constructors, to suit our needs for rapid industrialization.",0f);
         }
         if (opt.id == AOTD_VOK_CANCEL_UPGRADE) {
             String upgradeId = (String) reflectionUtilis.getPrivateVariableFromSuperClass("upgradeId", opt.ind);
@@ -148,10 +133,6 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
             ui.showDialog(null, (new AoTDResearchUIDP()));
         }
 
-        if(opt.id == PROGRAMMING ){
-            CustomDialogDelegate delegate = new ModularFabricatorUI(opt.ind);
-            ui.showDialog(ModularFabricatorUI.WIDTH, ModularFabricatorUI.HEIGHT, delegate);
-        }
         if(opt.id == STELLA ){
             CustomDialogDelegate delegate = new StellaManufactoriumUI(opt.ind);
             ui.showDialog(StellaManufactoriumUI.WIDTH, StellaManufactoriumUI.HEIGHT, delegate);

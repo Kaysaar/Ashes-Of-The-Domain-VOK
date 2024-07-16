@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.models;
+package data.kaysaar.aotd.vok.scripts.research.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;

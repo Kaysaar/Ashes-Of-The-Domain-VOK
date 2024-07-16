@@ -21,11 +21,11 @@ import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.ResearchFleetDefeatListener;
-import data.kaysaar.aotd.vok.models.ResearchOption;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
-import lunalib.lunaSettings.LunaSettings;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -418,43 +418,15 @@ public class AoTDFactionResearchManager {
     public void payForResearch(String id) {
         if (getResearchOptionFromRepo(id).havePaidForResearch) return;
         for (Map.Entry<String, Integer> entry : getResearchOptionFromRepo(id).ReqItemsToResearchFirst.entrySet()) {
-            float numberRemaining = entry.getValue();
-            for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
-
-                SubmarketAPI subMarket = marketAPI.getSubmarket(AoTDSubmarkets.RESEARCH_FACILITY_MARKET);
-                if (subMarket != null) {
-                    if (Global.getSettings().getCommoditySpec(entry.getKey()) != null) {
-                        float onMarket = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, entry.getKey());
-                        if (numberRemaining >= onMarket) {
-                            subMarket.getCargo().removeItems(CargoAPI.CargoItemType.RESOURCES, entry.getKey(), onMarket);
-                        } else {
-                            subMarket.getCargo().removeItems(CargoAPI.CargoItemType.RESOURCES, entry.getKey(), numberRemaining);
-                        }
-                        numberRemaining -= onMarket;
-
-                    }
-                    if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
-
-                        float onMarket = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(entry.getKey(), null));
-                        if (numberRemaining >= onMarket) {
-                            subMarket.getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(entry.getKey(), null), onMarket);
-                        } else {
-                            subMarket.getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(entry.getKey(), null), numberRemaining);
-                        }
-                        numberRemaining -= onMarket;
-
-                    }
-                }
-                if (numberRemaining <= 0) {
-                    break;
-                }
-            }
+            AoTDMisc.eatItems(entry,AoTDSubmarkets.RESEARCH_FACILITY_MARKET,retrieveMarketsOfThatFaction());
 
         }
         getResearchOptionFromRepo(id).havePaidForResearch = true;
 
 
     }
+
+
 
     public ArrayList<MarketAPI> retrieveMarketsOfThatFaction() {
         ArrayList<MarketAPI> marketsToReturn = new ArrayList<>();

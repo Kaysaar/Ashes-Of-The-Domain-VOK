@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.models;
+package data.kaysaar.aotd.vok.scripts.research.models;
 
 import com.fs.starfarer.api.util.Pair;
 import org.json.JSONException;

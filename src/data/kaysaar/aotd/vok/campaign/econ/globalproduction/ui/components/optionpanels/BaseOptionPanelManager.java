@@ -29,17 +29,21 @@ public class BaseOptionPanelManager {
     CustomPanelAPI buttonSortingPnael;
     CustomPanelAPI panelOfSearchBar;
     TextFieldAPI searchbar;
+
     ArrayList<ButtonAPI> orderButtons;
+    ArrayList<ButtonAPI> types = new ArrayList<>();
+    ArrayList<ButtonAPI> sizes = new ArrayList<>();
     public HashMap<String, SortingState> mapOfButtonStates;
     boolean resetToText = false;
     String prevText = "";
     float YHeight;
     int currOffset = 0;
     int currPage = 0;
-
     float bottomHeight = UIData.HEIGHT - (UIData.HEIGHT * 0.45f) - 230;
     ArrayList<ButtonAPI> buttons = new ArrayList<>();
     ArrayList<String> chosenManu = new ArrayList<>();
+    ArrayList<String> chosenType = new ArrayList<>();
+    ArrayList<String> chosenSize = new ArrayList<>();
     ArrayList<ButtonAPI> sortingButtons = new ArrayList<>();
     boolean wantsAll = false;
     public void createDesignButtons( LinkedHashMap<String,Integer> designs) {
@@ -72,9 +76,10 @@ public class BaseOptionPanelManager {
         float widthOfButton = 150;
 
         for (Map.Entry<String, Integer> category : sizeInfo.entrySet()) {
-            ButtonAPI button = tooltip.addAreaCheckbox(category.getKey() + "(" + category.getValue() + ")", null, base, bg, bright, widthOfButton, 30, 0f);
+            ButtonAPI button = tooltip.addAreaCheckbox(category.getKey() + "(" + category.getValue() + ")", category.getKey(), base, bg, bright, widthOfButton, 30, 0f);
             button.getPosition().inTL(currentX, 0);
             currentX += widthOfButton + padding;
+            sizes.add(button);
         }
         buttonSize.addUIElement(tooltip).inTL(0, 0);
         panel.addComponent(buttonSize).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, panel.getPosition().getHeight() - 50);
@@ -87,9 +92,10 @@ public class BaseOptionPanelManager {
         float currentX = 0;
         float widthOfButton = 150;
         for (Map.Entry<String, Integer> category : typeInfo.entrySet()) {
-            ButtonAPI button = tooltip.addAreaCheckbox(category.getKey() + "(" + category.getValue() + ")", null, base, bg, bright, widthOfButton, 30, 0f);
+            ButtonAPI button = tooltip.addAreaCheckbox(category.getKey() + "(" + category.getValue() + ")", category.getKey(), base, bg, bright, widthOfButton, 30, 0f);
             button.getPosition().inTL(currentX, 0);
             currentX += widthOfButton + padding;
+            types.add(button);
         }
         buttonType.addUIElement(tooltip).inTL(0, 0);
         panel.addComponent(buttonType).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, panel.getPosition().getHeight() - 85);
@@ -209,7 +215,7 @@ public class BaseOptionPanelManager {
                         reset = true;
                         break;
                     }
-                    chosenManu.clear();
+                    clearButtons();
                     chosenManu.add((String) button.getCustomData());
                     currPage = 0;
                     reset = true;
@@ -241,10 +247,54 @@ public class BaseOptionPanelManager {
                 break;
             }
         }
+        for (ButtonAPI button : sizes) {
+            if (button.isChecked()) {
+                if (button.getCustomData() instanceof String) {
+                    button.setChecked(false);
+                    if (button.getCustomData().equals("All sizes")) {
+                        wantsAll = true;
+                        currPage = 0;
+                        clearButtons();
+                        reset = true;
+                        break;
+                    }
+                    clearButtons();
+                    chosenSize.add((String) button.getCustomData());
+                    currPage = 0;
+                    reset = true;
+                }
+                break;
+            }
+        }
+        for (ButtonAPI button : types) {
+            if (button.isChecked()) {
+                if (button.getCustomData() instanceof String) {
+                    button.setChecked(false);
+                    if (button.getCustomData().equals("All types")) {
+                        wantsAll = true;
+                        currPage = 0;
+                        clearButtons();
+                        reset = true;
+                        break;
+                    }
+                    clearButtons();
+                    chosenType.add((String) button.getCustomData());
+                    currPage = 0;
+                    reset = true;
+                }
+                break;
+            }
+        }
 
         if (reset) {
             reset();
         }
+    }
+
+    private void clearButtons() {
+        chosenManu.clear();
+        chosenSize.clear();
+        chosenType.clear();
     }
 
 }

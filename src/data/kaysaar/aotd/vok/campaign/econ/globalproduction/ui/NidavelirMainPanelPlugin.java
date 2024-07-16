@@ -31,9 +31,11 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     InteractionDialogAPI dialog;
     CustomVisualDialogDelegate.DialogCallbacks callbacks;
     CustomPanelAPI panel;
-    public static int maxItemsPerPage = 50;
-
-
+    public static int maxItemsPerPage = 45;
+    boolean showProjectList;
+    public NidavelirMainPanelPlugin(boolean showProjectList){
+            this.showProjectList = showProjectList;
+    }
     public static Color base = Global.getSector().getPlayerFaction().getBaseUIColor();
     public static Color bg = Global.getSector().getPlayerFaction().getDarkUIColor();
     public static Color bright = Global.getSector().getPlayerFaction().getBrightUIColor();
@@ -66,8 +68,11 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         fighterPanelInterface = new FighterOptionPanelInterface(this.panel);
         specialProjectManager = new SpecialProjectManager(this.panel);
         currentManager = shipPanelManager;
+        if(showProjectList){
+            currentManager = specialProjectManager;
+        }
         this.dialog = dialog;
-        shipPanelManager.init();
+        currentManager.init();
         createTopBar();
         createMarketResourcesPanel();
         createSpecialProjectBar();
@@ -126,6 +131,9 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         for (ButtonAPI buttonAPI : butt) {
             buttonAPI.getPosition().inTL(currX, 0);
             currX += buttonAPI.getPosition().getWidth() + paddingX;
+        }
+        if(!GPManager.getInstance().hasAtLestOneProjectUnlocked()){
+            butt.get(3).setEnabled(false);
         }
         switchingButtons.addAll(butt);
         topPanel.addUIElement(tooltip).inTL(-5, 0);

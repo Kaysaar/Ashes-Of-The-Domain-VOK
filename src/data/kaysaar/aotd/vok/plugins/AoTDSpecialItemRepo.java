@@ -10,6 +10,7 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.BoostIndustryInstallableItem
 import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
+import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorPlugin;
@@ -17,6 +18,9 @@ import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorPlugin;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo.PRISTINE_NANOFORGE_PROD;
+import static com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo.PRISTINE_NANOFORGE_QUALITY_BONUS;
 
 public class AoTDSpecialItemRepo {
     public void putInfoForSpecialItems() {
@@ -59,55 +63,45 @@ public class AoTDSpecialItemRepo {
                         pad);
             }
         });
-        ItemEffectsRepo.ITEM_EFFECTS.put("modular_constructor_refining", new BoostIndustryInstallableItemEffect(
-                "modular_constructor_refining", 0, 0) {
-            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
-                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
-                text.addPara(pre + "Allows upgrading %s into : %s " ,10f, Color.ORANGE,
-                        "Refining",ModularConstructorPlugin.retrieveIndustries(Global.getSettings().getIndustrySpec(Industries.REFINING)));
-            }
-        });
-        ItemEffectsRepo.ITEM_EFFECTS.put("modular_constructor_mining", new BoostIndustryInstallableItemEffect(
-                "modular_constructor_mining", 0, 0) {
-            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
-                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
-                text.addPara(pre + "Allows upgrading %s into : %s " ,10f, Color.ORANGE,
-                        "Mining",ModularConstructorPlugin.retrieveIndustries(Global.getSettings().getIndustrySpec(Industries.MINING)));
-            }
-        });
-        ItemEffectsRepo.ITEM_EFFECTS.put("modular_constructor_orbitalworks", new BoostIndustryInstallableItemEffect(
-                "modular_constructor_orbitalworks", 0, 0) {
-            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
-                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
-                text.addPara(pre + "Allows upgrading %s into : %s " ,10f, Color.ORANGE,
-                        "Orbital Works",ModularConstructorPlugin.retrieveIndustries(Global.getSettings().getIndustrySpec(Industries.ORBITALWORKS)));
+        ItemEffectsRepo.ITEM_EFFECTS.put(Items.PRISTINE_NANOFORGE, new BoostIndustryInstallableItemEffect(
+                Items.PRISTINE_NANOFORGE, PRISTINE_NANOFORGE_PROD, 0) {
+                protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                        InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+                    String heavyIndustry = "heavy industry ";
+                    if (mode == InstallableIndustryItemPlugin.InstallableItemDescriptionMode.MANAGE_ITEM_DIALOG_LIST) {
+                        heavyIndustry = "";
+                    }
+                    text.addPara(pre + "Increases ship and weapon production quality by %s. " +
+                                    "Increases " + heavyIndustry + "production by %s units." +"Increases production of advanced components by %s"+
+                                    " On habitable worlds, causes pollution which becomes permanent.",
+                            pad, Misc.getHighlightColor(),
+                            "" + (int) Math.round(PRISTINE_NANOFORGE_QUALITY_BONUS * 100f) + "%",
+                            "" + (int) PRISTINE_NANOFORGE_PROD,"1");
 
+                }
+            public void apply(Industry industry) {
+                super.apply(industry);
+                industry.getMarket().getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD)
+                        .modifyFlat("nanoforge", PRISTINE_NANOFORGE_QUALITY_BONUS, Misc.ucFirst(spec.getName().toLowerCase()));
+                industry.getSupply("advanced_components").getQuantity().modifyFlat("aotd_nano",1,"Pristine Nanoforge");
             }
-        });
-
-        ItemEffectsRepo.ITEM_EFFECTS.put(Items.CATALYTIC_CORE, new BoostIndustryInstallableItemEffect(
-                Items.CATALYTIC_CORE, ItemEffectsRepo.CATALYTIC_CORE_BONUS, 0) {
-
-            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
-                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
-                text.addPara(pre + "Increases refining's production by %s units.",
-                        pad, Misc.getHighlightColor(),
-                        "" + (int) ItemEffectsRepo.CATALYTIC_CORE_BONUS);
+            public void unapply(Industry industry) {
+                super.unapply(industry);
+                industry.getMarket().getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodifyFlat("nanoforge");
+                industry.getSupply("advanced_components").getQuantity().unmodifyFlat("aotd_nano");
             }
+
 
             @Override
             public String[] getSimpleReqs(Industry industry) {
-                return new String[]{"does not have extreme weather", "does not have extreme tectonic activity"};
+                return new String[]{"does not have extreme weather","is not a gas giant"};
             }
-        });
-        ItemEffectsRepo.ITEM_EFFECTS.put("modular_constructor_fuelprod", new BoostIndustryInstallableItemEffect(
-                "modular_constructor_fuelprod", 0, 0) {
-            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
-                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
-                text.addPara(pre + "Allows upgrading %s into : %s " ,10f, Color.ORANGE,
-                        "Fuel Production",ModularConstructorPlugin.retrieveIndustries(Global.getSettings().getIndustrySpec(Industries.ORBITALWORKS)));
 
+            @Override
+            public List<String> getRequirements(Industry industry) {
+                return super.getRequirements(industry);
             }
+
         });
         ItemEffectsRepo.CORONAL_TAP_RANGE = "Coronal Network Center in 10 LY radius, 50 LY if Wormhole Stabilizer has been repaired.";
         ItemEffectsRepo.CORONAL_TAP_INDUSTRIES = 0;

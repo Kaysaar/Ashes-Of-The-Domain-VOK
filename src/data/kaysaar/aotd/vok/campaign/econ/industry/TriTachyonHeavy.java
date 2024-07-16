@@ -16,11 +16,22 @@ import java.awt.*;
 
 public class TriTachyonHeavy extends HeavyIndustry {
     public static float QUALITY_BONUS = 0.8f;
-
+    public int getAdvancedComponents(){
+        if(this.market.getSize()<5){
+            return 0;
+        }
+        if(this.market.getSize()>=5&&market.getSize()<=8){
+            return market.getSize()-2;
+        }
+        if(market.getSize()>8){
+            return market.getSize()-1;
+        }
+        return 0;
+    }
     public void apply() {
         super.apply(true);
-        AoDUtilis.ensureIndustryHasNoItem(this);
         int size = market.getSize();
+
         float qualityBonus = QUALITY_BONUS;
         demand(Commodities.METALS, size+2);
         demand(AoTDCommodities.PURIFIED_TRANSPLUTONICS, size+1);
@@ -29,6 +40,7 @@ public class TriTachyonHeavy extends HeavyIndustry {
         supply(Commodities.SUPPLIES, size+3);
         supply(Commodities.HAND_WEAPONS, size+5);
         supply(Commodities.SHIPS, size+5);
+        supply("advanced_components", getAdvancedComponents()+1);
         market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(getModId(1), qualityBonus, "Orbital Skunkworks Facility");
 
 
@@ -103,7 +115,7 @@ public class TriTachyonHeavy extends HeavyIndustry {
             float total = 0;
             String totalStr;
             Color h = Misc.getHighlightColor();
-            h = Misc.getNegativeHighlightColor();
+            h = Misc.getPositiveHighlightColor();
             totalStr = "From 1 to 3 ";
 
             float opad = 10f;

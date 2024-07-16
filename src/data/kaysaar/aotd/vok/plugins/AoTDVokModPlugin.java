@@ -7,11 +7,11 @@ import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPDataLoader;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderInfoRepo;
-import data.kaysaar.aotd.vok.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchProgressionScript;
@@ -40,10 +40,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.addListener(listener);
         if (!l.hasListenerOfClass(ResourceConditionApplier.class))
             l.addListener(new ResourceConditionApplier(), true);
-        if (!l.hasListenerOfClass(AgriProdSwitchListener.class))
-            l.addListener(new AgriProdSwitchListener(), true);
-        if (!l.hasListenerOfClass(AoDFoodDemmandListener.class))
-            l.addListener(new AoDFoodDemmandListener(), true);
         if (!l.hasListenerOfClass(AodAdvancedHeavyIndustryApplier.class))
             l.addListener(new AodAdvancedHeavyIndustryApplier(), true);
         if (!l.hasListenerOfClass(AoDIndustrialMightListener.class))
@@ -60,6 +56,14 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         if(!l.hasListenerOfClass(CurrentResearchProgressUI.class)) {
             try {
                 l.addListener(new CurrentResearchProgressUI(),true);
+            } catch (FontException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        l.removeListenerOfClass(GpProductionButtonRenderer.class);
+        if(!l.hasListenerOfClass(GpProductionButtonRenderer.class)) {
+            try {
+                l.addListener(new GpProductionButtonRenderer(),true);
             } catch (FontException e) {
                 throw new RuntimeException(e);
             }
@@ -123,11 +127,12 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.putInfoForSpecialItems();
         aoTDDataInserter.setStarterIndustriesUpgrades();
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SOIL_NANITES, "subfarming");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.MANTLE_BORE, "mining_megaplex");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.BIOFACTORY_EMBRYO, "lightproduction,consumerindustry");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy");
-        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy");
         if(Global.getSettings().getModManager().isModEnabled("uaf")){
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker" ,"subfarming,artifarming");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_garrison_transmitter" ,AoTDIndustries.TERMINUS);

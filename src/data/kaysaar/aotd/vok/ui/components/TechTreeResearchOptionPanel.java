@@ -4,30 +4,22 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.econ.MutableCommodityQuantity;
-import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
-import data.kaysaar.aotd.vok.Ids.AoTDConditions;
-import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-import data.kaysaar.aotd.vok.models.ResearchOption;
-import data.kaysaar.aotd.vok.models.ResearchRewardType;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchRewardType;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
-import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import lunalib.lunaSettings.LunaSettings;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class TechTreeResearchOptionPanel extends UiPanel {
     public ResearchOption TechToResearch;
@@ -144,36 +136,8 @@ public class TechTreeResearchOptionPanel extends UiPanel {
                     tooltip.setParaFontDefault();
 
                     for (Map.Entry<String, Integer> entry : TechToResearch.ReqItemsToResearchFirst.entrySet()) {
-                        if(entry.getValue()==0)continue;
-                        CustomPanelAPI panel = mainPanel.createCustomPanel(400, 60, null);
-                        TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(60, 60, false);
-                        TooltipMakerAPI labelTooltip = panel.createUIElement(320, 60, false);
-                        LabelAPI labelAPI1 = null;
-
-                        if (Global.getSettings().getCommoditySpec(entry.getKey()) != null) {
-                            tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), 60, 60, 10f);
-                            labelAPI1 = labelTooltip.addPara(Global.getSettings().getCommoditySpec(entry.getKey()).getName() + " : " + entry.getValue(),10f);
-                            labelTooltip.addPara("You have %s located in Research Storages", 10f,Color.ORANGE,""+(int)manager.retrieveAmountOfItems(entry.getKey()));
-
-                        }
-                        if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
-                            tooltipMakerAPI.addImage(Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName(), 60, 60, 10f);
-                            labelAPI1 = labelTooltip.addPara(Global.getSettings().getSpecialItemSpec(entry.getKey()).getName() + " : " + entry.getValue(),10f);
-                            labelTooltip.addPara("You have %s located in Research Storages", 10f,Color.ORANGE,""+(int)manager.retrieveAmountOfItems(entry.getKey()));
-
-                        }
-                        if (manager.haveMetReqForItem(entry.getKey(), entry.getValue()) || manager.getResearchOptionFromRepo(TechToResearch.Id).havePaidForResearch) {
-                            labelAPI1.setColor(Misc.getPositiveHighlightColor());
-
-                        } else {
-                            labelAPI1.setColor(Misc.getNegativeHighlightColor());
-                        }
-                        if (TechToResearch.isResearched) {
-                            labelAPI1.setColor(Misc.getPositiveHighlightColor());
-                        }
-                        labelAPI1.autoSizeToWidth(320);
-                        panel.addUIElement(tooltipMakerAPI).inTL(-10, -20);
-                        panel.addUIElement(labelTooltip).inTL(60, -14);
+                        CustomPanelAPI panel = getCustomPanelAPI(manager, entry);
+                        if (panel == null) continue;
                         tooltip.addCustom(panel, 10f);
                     }
 
@@ -236,16 +200,6 @@ public class TechTreeResearchOptionPanel extends UiPanel {
                         marketAPI.reapplyConditions();
                         if(ind.getId().equals(Industries.FARMING)){
                             ind.getSupply(Commodities.FOOD).getQuantity().modifyFlat("test",6);
-                            ind.getSupply(AoTDCommodities.BIOTICS).getQuantity().modifyFlat("test",3);
-                            ind.getSupply(AoTDCommodities.RECITIFICATES).getQuantity().modifyFlat("test",3);
-                        }
-                        if(ind.getId().equals(AoTDIndustries.SUBSIDISED_FARMING)){
-                            ind.getSupply(AoTDCommodities.BIOTICS).getQuantity().modifyFlat("test",4);
-                            ind.getSupply(AoTDCommodities.RECITIFICATES).getQuantity().modifyFlat("test",4);
-                        }
-                        if(ind.getId().equals(AoTDIndustries.ARTISANAL_FARMING)){
-                            ind.getSupply(AoTDCommodities.BIOTICS).getQuantity().modifyFlat("test",2);
-                            ind.getSupply(AoTDCommodities.RECITIFICATES).getQuantity().modifyFlat("test",2);
                         }
                         if(ind.getId().equals(Industries.AQUACULTURE)){
                             ind.getSupply(Commodities.FOOD).getQuantity().modifyFlat("test",6);
@@ -256,9 +210,7 @@ public class TechTreeResearchOptionPanel extends UiPanel {
                             ind.getSupply(Commodities.ORGANICS).getQuantity().modifyFlat("test",6);
                             ind.getSupply(Commodities.VOLATILES).getQuantity().modifyFlat("test",4);
                         }
-                        if(ind instanceof HeavyIndustry&&!ind.getId().equals(AoTDIndustries.HEAVY_PRODUCTION)){
-                            ind.getDemand(AoTDCommodities.ELECTRONICS).getQuantity().modifyFlat("test",marketAPI.getSize()-3);
-                        }
+
                         ind.createTooltip(Industry.IndustryTooltipMode.NORMAL,tooltip,true);
                         if(ind.getSpec().getDowngrade()!=null){
                             tooltip.addSectionHeading("Upgrades from ",Alignment.MID,10f);
@@ -341,6 +293,41 @@ public class TechTreeResearchOptionPanel extends UiPanel {
         this.y = y;
     }
 
+    @Nullable
+    private CustomPanelAPI getCustomPanelAPI(final AoTDFactionResearchManager manager, final Map.Entry<String, Integer> entry) {
+        if(entry.getValue()==0) return null;
+        CustomPanelAPI panel = mainPanel.createCustomPanel(400, 60, null);
+        TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(60, 60, false);
+        TooltipMakerAPI labelTooltip = panel.createUIElement(320, 60, false);
+        LabelAPI labelAPI1 = null;
+
+        if (Global.getSettings().getCommoditySpec(entry.getKey()) != null) {
+            tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), 60, 60, 10f);
+            labelAPI1 = labelTooltip.addPara(Global.getSettings().getCommoditySpec(entry.getKey()).getName() + " : " + entry.getValue(),10f);
+            labelTooltip.addPara("You have %s located in Research Storages", 10f,Color.ORANGE,""+(int) manager.retrieveAmountOfItems(entry.getKey()));
+
+        }
+        if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
+            tooltipMakerAPI.addImage(Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName(), 60, 60, 10f);
+            labelAPI1 = labelTooltip.addPara(Global.getSettings().getSpecialItemSpec(entry.getKey()).getName() + " : " + entry.getValue(),10f);
+            labelTooltip.addPara("You have %s located in Research Storages", 10f,Color.ORANGE,""+(int) manager.retrieveAmountOfItems(entry.getKey()));
+
+        }
+        if (manager.haveMetReqForItem(entry.getKey(), entry.getValue()) || manager.getResearchOptionFromRepo(TechToResearch.Id).havePaidForResearch) {
+            labelAPI1.setColor(Misc.getPositiveHighlightColor());
+
+        } else {
+            labelAPI1.setColor(Misc.getNegativeHighlightColor());
+        }
+        if (TechToResearch.isResearched) {
+            labelAPI1.setColor(Misc.getPositiveHighlightColor());
+        }
+        labelAPI1.autoSizeToWidth(320);
+        panel.addUIElement(tooltipMakerAPI).inTL(-10, -20);
+        panel.addUIElement(labelTooltip).inTL(60, -14);
+        return panel;
+    }
+
     public TechTreeResearchOptionPanel(ResearchOption res) {
         TechToResearch = res;
     }
@@ -396,11 +383,8 @@ public class TechTreeResearchOptionPanel extends UiPanel {
         marketToShowTooltip.addCondition(Conditions.RARE_ORE_MODERATE);
         marketToShowTooltip.addCondition(Conditions.ORGANICS_COMMON);
         marketToShowTooltip.addCondition(Conditions.VOLATILES_DIFFUSE);
-        marketToShowTooltip.addCondition("IcDemmand");
+
         marketToShowTooltip.addCondition("AoDFoodDemand");
-        marketToShowTooltip.addCondition("AodReci");
-        marketToShowTooltip.addCondition("AodSub");
-        marketToShowTooltip.addCondition("AodFood");
         marketToShowTooltip.addCondition(Conditions.VOLATILES_DIFFUSE);
         marketToShowTooltip.addIndustry("dummy_industry");
         marketToShowTooltip.setFactionId(Global.getSector().getPlayerFaction().getId());

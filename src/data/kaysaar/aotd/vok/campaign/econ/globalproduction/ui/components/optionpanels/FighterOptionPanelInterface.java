@@ -64,8 +64,11 @@ public class FighterOptionPanelInterface extends BaseOptionPanelManager implemen
     private void createFighterOptions(CustomPanelAPI panel) {
         if(orderButtons==null)orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages = GPManager.getInstance().getLearnedFighters();
-        if (!chosenManu.isEmpty() && !wantsAll && !resetToText) {
+        if (!chosenManu.isEmpty() && !wantsAll && !resetToText&&chosenType.isEmpty()) {
             packages = GPManager.getInstance().getFightersByManu(chosenManu);
+        }
+        if (chosenManu.isEmpty() && !wantsAll && !resetToText&&!chosenType.isEmpty()) {
+            packages = GPManager.getInstance().getFighterBasedOnType(chosenType.get(0));
         }
         if (resetToText) {
             packages = GPManager.getInstance().getMatchingFighterGPs(searchbar.getText());

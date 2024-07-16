@@ -2,19 +2,21 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.optio
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.*;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipInfoGenerator;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SpecialProjectManager extends BaseOptionPanelManager implements OptionPanelInterface {
     CustomPanelAPI listOfOptions;
@@ -66,8 +68,11 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
         TooltipMakerAPI tooltip2 = listOfOptions.createUIElement(width, height - 25, false);
         float pad = 5f;
         for (GpSpecialProjectData specialProject : GPManager.getInstance().getSpecialProjects()) {
-            tooltip2.addCustom(createProjectTab(specialProject, listOfOptions, width - 10, 80), pad);
-            pad = 20f;
+            if (specialProject.canShow) {
+                tooltip2.addCustom(createProjectTab(specialProject, listOfOptions, width - 10, 80), pad);
+                pad = 20f;
+            }
+
         }
         listOfOptions.addUIElement(tooltip).inTL(0, 0);
         listOfOptions.addUIElement(tooltip2).inTL(0, 25);
@@ -75,6 +80,7 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
 
 
     }
+
 
     public void createSpecialProjectShowcase(GpSpecialProjectData option) {
         UILinesRenderer renederer = new UILinesRenderer(0f);
@@ -101,13 +107,48 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
         CustomPanelAPI panel = parentPanel.createCustomPanel(width, height, null);
         TooltipMakerAPI tooltip = panel.createUIElement(width, height, false);
         ButtonAPI button = tooltip.addAreaCheckbox("", option, NidavelirMainPanelPlugin.base, NidavelirMainPanelPlugin.bg, NidavelirMainPanelPlugin.bright, width - 10, height, 0f);
-        tooltip.addPara(option.getSpec().getNameOverride(), Color.ORANGE, 0f).getPosition().inTL(10, 10);
+        LabelAPI title = tooltip.addPara(option.getSpec().getNameOverride(), Color.ORANGE, 0f);
+        title.getPosition().inTL(10, 10);
+
         LabelAPI label = tooltip.addPara("Status : " + option.getStatusString(), option.getStatusColor(), 0f);
-        label.getPosition().inTL(10, 35);
-        CustomPanelAPI shipImg = ShipInfoGenerator.getShipImage(Global.getSettings().getHullSpec(option.getSpec().getRewardId()), height-10, null).one;
-        tooltip.addCustom(shipImg, 5f).getPosition().inTL(width-10-shipImg.getPosition().getWidth(), 5);
+
+        CustomPanelAPI shipImg = ShipInfoGenerator.getShipImage(Global.getSettings().getHullSpec(option.getSpec().getRewardId()), height - 10, null).one;
+        tooltip.addCustom(shipImg, 5f).getPosition().inTL(width - 10 - shipImg.getPosition().getWidth(), 5);
         buttonsOfProjects.add(button);
+        title.autoSizeToWidth(width-tooltip.getPrev().getPosition().getWidth()-20);
+        label.getPosition().inTL(10, 10+title.computeTextHeight(title.getText())+20);
         panel.addUIElement(tooltip).inTL(0, 0);
+        return panel;
+    }
+
+    private CustomPanelAPI getItemLabel(final GpSpecialProjectData data,Map.Entry<String, Integer> entry) {
+        if (entry.getValue() == 0) return null;
+        CustomPanelAPI panel = mainPanel.createCustomPanel(400, 60, null);
+        TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(60, 60, false);
+        TooltipMakerAPI labelTooltip = panel.createUIElement(320, 60, false);
+        LabelAPI labelAPI1 = null;
+
+        if (Global.getSettings().getCommoditySpec(entry.getKey()) != null) {
+            tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), 60, 60, 10f);
+            labelAPI1 = labelTooltip.addPara(Global.getSettings().getCommoditySpec(entry.getKey()).getName() + " : " + entry.getValue(), 10f);
+            labelTooltip.addPara("You have %s located in Local Storages", 10f, Color.ORANGE, "" + (int) AoTDMisc.retrieveAmountOfItems(entry.getKey(), Submarkets.SUBMARKET_STORAGE));
+
+        }
+        if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
+            tooltipMakerAPI.addImage(Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName(), 60, 60, 10f);
+            labelAPI1 = labelTooltip.addPara(Global.getSettings().getSpecialItemSpec(entry.getKey()).getName() + " : " + entry.getValue(), 10f);
+            labelTooltip.addPara("You have %s located in Local Storages", 10f, Color.ORANGE, "" + (int) AoTDMisc.retrieveAmountOfItems(entry.getKey(), Submarkets.SUBMARKET_STORAGE));
+
+        }
+        if (GPManager.getInstance().haveMetReqForItem(entry.getKey(), entry.getValue()) ||data.havePaidInitalCost) {
+            labelAPI1.setColor(Misc.getPositiveHighlightColor());
+
+        } else {
+            labelAPI1.setColor(Misc.getNegativeHighlightColor());
+        }
+        labelAPI1.autoSizeToWidth(320);
+        panel.addUIElement(tooltipMakerAPI).inTL(-10, -20);
+        panel.addUIElement(labelTooltip).inTL(60, -14);
         return panel;
     }
 
@@ -115,9 +156,14 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
         CustomPanelAPI panel = parentPanel.createCustomPanel(width, height, null);
         TooltipMakerAPI tooltip = panel.createUIElement(width, height, false);
         ShipHullSpecAPI hull = Global.getSettings().getHullSpec(option.getSpec().getRewardId());
-        String vesselName = hull.getHullName();
         tooltip.setParaFont(Fonts.ORBITRON_12);
-        tooltip.addPara("Current state of renovation of " + vesselName + " %s", 0f, Color.ORANGE, option.getTotalProgressPercent() + "%");
+        ArrayList<String> hilights = new ArrayList<>();
+        hilights.addAll(option.getSpec().getHighlights());
+        hilights.add(option.getTotalProgressPercent() + "%");
+
+        String[] arr = new String[hilights.size()];
+        arr = hilights.toArray(arr);
+        tooltip.addPara(option.getSpec().getProgressString() + " %s", 0f, Color.ORANGE, arr);
         tooltip.addCustom(ShipInfoGenerator.getShipImage(hull, height - 50, Color.gray).one, 15f);
         PositionAPI pos = tooltip.getPrev().getPosition();
         tooltip.getPrev().getPosition().inTL(width / 2 - pos.getWidth() / 2, height / 1.5f - pos.getHeight() / 2);
@@ -145,14 +191,49 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
         return panel;
     }
 
-    public CustomPanelAPI createButtonBelow(GpSpecialProjectData option, CustomPanelAPI parentPanel, float width, float height) {
+    public CustomPanelAPI createButtonBelow(final GpSpecialProjectData option, CustomPanelAPI parentPanel, float width, float height) {
         CustomPanelAPI panel = parentPanel.createCustomPanel(width, height, null);
         TooltipMakerAPI tooltip = panel.createUIElement(width, height, false);
         SpecialProjectButtonData data = new SpecialProjectButtonData(option);
 
         currentProjectButton = tooltip.addButton(data.getNameForButton(), data, width - 5, height, 0f);
+        boolean hasReq = !option.havePaidInitalCost&&(!option.getSpec().getItemInitCostMap().isEmpty()||option.getSpec().getCredistCost()>0);
+        if(hasReq){
+            tooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
+                @Override
+                public boolean isTooltipExpandable(Object tooltipParam) {
+                    return true;
+                }
+
+                @Override
+                public float getTooltipWidth(Object tooltipParam) {
+                    return 400;
+                }
+
+                @Override
+                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                    tooltip.addTitle("Project requirements");
+                    if(option.getSpec().getCredistCost()>0){
+                        tooltip.addPara("Credit Cost : %s",10f,Color.ORANGE,Misc.getDGSCredits(option.getSpec().getCredistCost()));
+                    }
+                    if (!option.getSpec().getItemInitCostMap().isEmpty()){
+                        for (Map.Entry<String, Integer> entry : option.getSpec().getItemInitCostMap().entrySet()) {
+                            tooltip.addCustom(getItemLabel(option,entry),15f);
+                        }
+                    }
+                }
+            }, TooltipMakerAPI.TooltipLocation.ABOVE);
+            LabelAPI labela = tooltip.addPara("Warning! There is initial cost of project, hover over button to see cost!",Misc.getNegativeHighlightColor(),0f);
+            labela.getPosition().inTL(10,-35-labela.computeTextHeight(labela.getText()));
+        }
         if (option.isFinished() && !option.getSpec().isRepeatable()) {
             currentProjectButton.setEnabled(false);
+        }
+        if(!option.havePaidInitalCost&&hasReq){
+            if(!GPManager.getInstance().haveMetReqForItems(option.getSpec().getProjectId())||Global.getSector().getPlayerFleet().getCargo().getCredits().get()<option.getSpec().getCredistCost()){
+                currentProjectButton.setEnabled(false);
+            }
+
         }
         panel.addUIElement(tooltip).inTL(0, 0);
         return panel;

@@ -14,7 +14,6 @@ public class ConsumerIndustry extends BaseIndustry {
 
         int size = market.getSize();
         demand(Commodities.ORGANICS, size+2);
-        demand(AoTDCommodities.POLYMERS,size-2);
         demand(Commodities.HEAVY_MACHINERY,size);
         supply(Commodities.DOMESTIC_GOODS, size+2);
         //supply(Commodities.SUPPLIES, size - 3);
@@ -32,7 +31,7 @@ public class ConsumerIndustry extends BaseIndustry {
             supply(Commodities.DRUGS, 0);
         }
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS, AoTDCommodities.POLYMERS,Commodities.HEAVY_MACHINERY);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS,Commodities.HEAVY_MACHINERY);
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;
         applyDeficitToProduction(2, deficit,

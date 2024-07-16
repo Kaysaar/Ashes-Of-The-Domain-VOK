@@ -1,10 +1,7 @@
 package data.kaysaar.aotd.vok.ui.components;
 
-import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.coreui.Y;
-import data.kaysaar.aotd.vok.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 
 import java.util.ArrayList;
 import java.util.List;

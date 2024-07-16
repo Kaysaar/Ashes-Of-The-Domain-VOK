@@ -1,7 +1,7 @@
 package data.kaysaar.aotd.vok.scripts.research;
 
 import com.fs.starfarer.api.Global;
-import data.kaysaar.aotd.vok.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 
 import java.util.ArrayList;
 

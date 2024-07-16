@@ -7,7 +7,6 @@ import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.HazmatCondition;
-import data.kaysaar.aotd.vok.campaign.econ.conditions.IcDemmand;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.ResearchedUpkeepModifier;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMinningCond;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;

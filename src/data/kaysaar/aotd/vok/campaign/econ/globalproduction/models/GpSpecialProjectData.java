@@ -23,6 +23,15 @@ public class GpSpecialProjectData {
     public int getCurrentStage() {
         return currentStage;
     }
+    public boolean showedInfoAboutUnlocking = false;
+
+    public boolean isShowedInfoAboutUnlocking() {
+        return showedInfoAboutUnlocking;
+    }
+
+    public void setShowedInfoAboutUnlocking(boolean showedInfoAboutUnlocking) {
+        this.showedInfoAboutUnlocking = showedInfoAboutUnlocking;
+    }
 
     public void setSpec(GPSpec spec) {
         this.spec = spec;
@@ -31,11 +40,12 @@ public class GpSpecialProjectData {
         this.spec = spec;
     }
 
-    boolean havePaidInitalCost = false;
+    public boolean havePaidInitalCost = false;
     float totalDaysSpent = 0f;
     int currentStage = -1;
     float daysSpentOnStage = 0f;
     public boolean canShow = false;
+
     public boolean isMainFocus(){
         return GPManager.getInstance().getCurrProjOnGoing()!=null&&GPManager.getInstance().getCurrProjOnGoing().getSpec().getProjectId().equals(this.spec.getProjectId());
     }
@@ -132,6 +142,11 @@ public class GpSpecialProjectData {
             }
         }
     }
+
+    public void setCanShow(boolean canShow) {
+        this.canShow = canShow;
+    }
+
     public boolean hasStarted = false;
 
     public HashMap<String, Integer> retrieveCostForCurrStage() {

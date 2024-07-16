@@ -64,7 +64,6 @@ public class PlasmaCollector extends CoronalSegment{
     public void applyDemandForRepair() {
         super.applyDemandForRepair();
         demand(AoTDCommodities.REFINED_METAL,10);
-        demand(AoTDCommodities.POLYMERS,7);
         demand(Commodities.METALS,6);
     }
 
@@ -72,7 +71,6 @@ public class PlasmaCollector extends CoronalSegment{
     public void applyDemandAfterRepair() {
         super.applyDemandAfterRepair();
         demand(AoTDCommodities.REFINED_METAL,0);
-        demand(AoTDCommodities.POLYMERS,0);
         demand(Commodities.METALS,0);
     }
 

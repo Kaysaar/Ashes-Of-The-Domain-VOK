@@ -24,11 +24,10 @@ public class IsotopeSeparator extends BaseIndustry {
 
 
         demand(Commodities.HEAVY_MACHINERY, size - 2); // have to keep it low since it can be circular
-        demand(Commodities.RARE_ORE, size + 2);
-        demand(AoTDCommodities.COMPOUNDS, size - 2);
+        demand(Commodities.RARE_ORE, size + 3);
         supply(Commodities.RARE_METALS, size + 2);
         supply(AoTDCommodities.PURIFIED_TRANSPLUTONICS, size - 2);
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.RARE_ORE, AoTDCommodities.POLYMERS);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.RARE_ORE);
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;
         applyDeficitToProduction(2, deficit, Commodities.RARE_METALS, AoTDCommodities.PURIFIED_TRANSPLUTONICS);

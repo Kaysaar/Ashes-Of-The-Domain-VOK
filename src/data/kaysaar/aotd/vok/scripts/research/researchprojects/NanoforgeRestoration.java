@@ -1,6 +1,5 @@
 package data.kaysaar.aotd.vok.scripts.research.researchprojects;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -9,12 +8,11 @@ import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.ui.P;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.models.ResearchProject;
-import data.kaysaar.aotd.vok.models.SpecialProjectStage;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchProject;
+import data.kaysaar.aotd.vok.scripts.research.models.SpecialProjectStage;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lazywizard.lazylib.MathUtils;
 
