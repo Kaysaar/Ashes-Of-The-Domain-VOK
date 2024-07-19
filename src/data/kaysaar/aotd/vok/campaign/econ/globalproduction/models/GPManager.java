@@ -98,7 +98,7 @@ public class GPManager {
     public LinkedHashMap<String, Integer> getFighterTypeInfo() {
         return fighterTypeInfo;
     }
-    public static final int scale = 10;
+    public static final int scale = 20;
     public ArrayList<GPSpec> getSpecs() {
         return specs;
     }

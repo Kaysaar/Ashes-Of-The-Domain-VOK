@@ -53,7 +53,9 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager implement
         buttons.clear();
         sortingButtons.clear();
         chosenManu.clear();
-        searchbar.deleteAll();
+        if(searchbar!=null){
+            searchbar.deleteAll();
+        }
         this.mainPanel.removeComponent(panel);
     }
 

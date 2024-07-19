@@ -46,7 +46,9 @@ public class ShipOptionPanelInterface extends BaseOptionPanelManager implements 
         buttons.clear();
         sortingButtons.clear();
         chosenManu.clear();
-        searchbar.deleteAll();
+        if(searchbar!=null){
+            searchbar.deleteAll();
+        }
         this.mainPanel.removeComponent(panel);
     }
 

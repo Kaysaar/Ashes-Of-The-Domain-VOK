@@ -2,10 +2,12 @@ package data.kaysaar.aotd.vok.misc;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
+import com.fs.starfarer.api.campaign.EngagementResultForFleetAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
+import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
@@ -50,6 +52,12 @@ public class AoTDMisc {
 
         return variantId;
     }
+    public static EngagementResultForFleetAPI getNonPlayerFleet(EngagementResultAPI resultAPI){
+        if(!resultAPI.getLoserResult().isPlayer()){
+            return resultAPI.getLoserResult();
+        }
+        return resultAPI.getWinnerResult();
+    }
     public static boolean isPLayerHavingHeavyIndustry(){
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
             for (Industry industry : playerMarket.getIndustries()) {
@@ -61,7 +69,7 @@ public class AoTDMisc {
     public static float retrieveAmountOfItems(String id,String submarketID) {
         float numberRemaining = 0;
         for (MarketAPI marketAPI : Misc.getPlayerMarkets(true)) {
-            SubmarketAPI subMarket = marketAPI.getSubmarket(AoTDSubmarkets.RESEARCH_FACILITY_MARKET);
+            SubmarketAPI subMarket = marketAPI.getSubmarket(submarketID);
             if (Global.getSettings().getCommoditySpec(id) != null) {
                 if (subMarket != null) {
                     numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);

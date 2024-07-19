@@ -164,7 +164,7 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
         String[] arr = new String[hilights.size()];
         arr = hilights.toArray(arr);
         tooltip.addPara(option.getSpec().getProgressString() + " %s", 0f, Color.ORANGE, arr);
-        tooltip.addCustom(ShipInfoGenerator.getShipImage(hull, height - 50, Color.gray).one, 15f);
+        tooltip.addCustom(ShipInfoGenerator.getShipImage(hull, height - 50,new Color(24, 24, 24)).one, 15f);
         PositionAPI pos = tooltip.getPrev().getPosition();
         tooltip.getPrev().getPosition().inTL(width / 2 - pos.getWidth() / 2, height / 1.5f - pos.getHeight() / 2);
         pos = tooltip.getPrev().getPosition();

@@ -4,12 +4,15 @@ package data.kaysaar.aotd.vok.plugins;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
+import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
+import data.kaysaar.aotd.vok.listeners.AoTDCollabSpScript;
+import data.kaysaar.aotd.vok.listeners.AoTDxUafAfterCombatListener;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderInfoRepo;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
@@ -78,6 +81,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     @Override
     public void onNewGameAfterEconomyLoad() {
         super.onNewGameAfterEconomyLoad();
+        Global.getSector().addListener(new AoTDxUafAfterCombatListener());
         aoTDDataInserter.generatePreCollapseFacilities();
         aoTDDataInserter.spawnVeilPlanet();
     }
@@ -95,23 +99,26 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         }
         aoTDDataInserter.insertSophia();
         setListenersIfNeeded();
+
         AoTDMainResearchManager.getInstance().updateResearchOptionsFromSpec();
         AoTDMainResearchManager.getInstance().updateManagerRepo();
         if(!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)){
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
+
         AoTDMainResearchManager.getInstance().updateModIdRepo();
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
         if (newGame) {
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
 
                 aoTDDataInserter.RandomSetIndustryOnPlanet(AoTDIndustries.CLEANROOM_MANUFACTORY, 2, null);
-                aoTDDataInserter. RandomSetIndustryOnPlanet(AoTDIndustries.PURIFICATION_CENTER, 1, Planets.PLANET_WATER);
+                aoTDDataInserter.RandomSetIndustryOnPlanet(AoTDIndustries.PURIFICATION_CENTER, 1, Planets.PLANET_WATER);
                 aoTDDataInserter.initalizeEconomy(true);
             } else {
                 aoTDDataInserter.initalizeEconomy(false);
             }
         }
+        Global.getSector().addTransientScript(new AoTDCollabSpScript());
         aoTDSpecialItemRepo.putInfoForSpecialItems();
         aoTDDataInserter.setStarterIndustriesUpgrades();
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SOIL_NANITES, "subfarming");
@@ -127,7 +134,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         if(Global.getSettings().getModManager().isModEnabled("uaf")){
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker" ,"subfarming,artifarming");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_garrison_transmitter" ,AoTDIndustries.TERMINUS);
-
+            Global.getSettings().getHullSpec("uaf_supercap_slv_core").getHints().add(ShipHullSpecAPI.ShipTypeHints.UNBOARDABLE);
         }
             int highestTierUnlock = AoTDSettingsManager.getHighestTierEnabled();
             for (ResearchOption option : AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getResearchRepoOfFaction()) {

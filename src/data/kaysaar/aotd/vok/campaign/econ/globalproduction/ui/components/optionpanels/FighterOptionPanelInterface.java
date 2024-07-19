@@ -52,7 +52,10 @@ public class FighterOptionPanelInterface extends BaseOptionPanelManager implemen
         buttons.clear();
         sortingButtons.clear();
         chosenManu.clear();
-        searchbar.deleteAll();
+        if(searchbar!=null){
+            searchbar.deleteAll();
+        }
+
         this.mainPanel.removeComponent(panel);
     }
 
