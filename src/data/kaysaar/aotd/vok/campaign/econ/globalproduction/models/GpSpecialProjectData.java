@@ -6,6 +6,8 @@ import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.FactionProductionAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectFinishedIntel;
+import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -135,7 +137,7 @@ public class GpSpecialProjectData {
             }
             else{
                 for (String s : getSpec().getMemFlagsToMetForDiscovery()) {
-                    if(!Global.getSector().getMemory().is(s,true)){
+                    if(!Global.getSector().getPlayerFaction().getMemory().is(s,true)){
                         allIsTrue = false;
                         break;
                     }
@@ -216,7 +218,8 @@ public class GpSpecialProjectData {
                 if (gatheringPoint == null) return;
 
                 CargoAPI local = Misc.getStorageCargo(gatheringPoint);
-
+                SpecialProjectFinishedIntel intel = new SpecialProjectFinishedIntel(this);
+                Global.getSector().getIntelManager().addIntel(intel, false);
                 local.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(Global.getSettings().getHullSpec(getSpec().rewardId)));
                 for (FleetMemberAPI fleetMemberAPI : local.getMothballedShips().getMembersListCopy()) {
                     fleetMemberAPI.getVariant().clear();

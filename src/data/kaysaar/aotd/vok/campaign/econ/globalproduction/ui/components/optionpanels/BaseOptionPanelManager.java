@@ -30,7 +30,7 @@ public class BaseOptionPanelManager {
     CustomPanelAPI panelOfSearchBar;
     TextFieldAPI searchbar;
 
-    ArrayList<ButtonAPI> orderButtons;
+    ArrayList<ButtonAPI> orderButtons = new ArrayList<>();
     ArrayList<ButtonAPI> types = new ArrayList<>();
     ArrayList<ButtonAPI> sizes = new ArrayList<>();
     public HashMap<String, SortingState> mapOfButtonStates;

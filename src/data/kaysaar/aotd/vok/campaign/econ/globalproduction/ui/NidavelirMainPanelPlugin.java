@@ -295,9 +295,17 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         createOrders();
 
     }
-
-    public void resetPanelOfMarketData() {
+    public void clearPanelOfMarketData(){
         panel.removeComponent(panelOfMarketData);
+    }
+    public void clearAll(){
+        orderSortingButtons.clear();
+        clearPanelOfMarketData();
+        panel.removeComponent(sortingButtonsPanel);
+        panel.removeComponent(costConfirmOrders);
+    }
+    public void resetPanelOfMarketData() {
+        clearPanelOfMarketData();
         createMarketResourcesPanel();
     }
     public LinkedHashMap<String,Integer>getExpectedCosts(){
@@ -524,7 +532,19 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
             }
 
             if (event.getEventValue() == Keyboard.KEY_ESCAPE && !event.isRMBEvent()) {
+                specialProjectManager.clear();
+                shipPanelManager.clear();
+                fighterPanelInterface.clear();
+                weaponPanelManager.clear();
+                switchingButtons.clear();
+                ordersQueued.clear();
+                orders.clear();
+                orderSortingButtons.clear();
+                clearAll();
+                clearSpecProjBar();
                 dialog.dismiss();
+
+
                 Global.getSoundPlayer().pauseCustomMusic();
 
             }

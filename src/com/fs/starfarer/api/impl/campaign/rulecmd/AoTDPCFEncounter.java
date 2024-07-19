@@ -219,7 +219,6 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
                     if (context.didPlayerWinMostRecentBattleOfEncounter()) {
                         dialog.getInteractionTarget().getMemory().unset("$aotd_r_expedition_present");
 
-
                         SalvageGenFromSeed.SDMParams p = new SalvageGenFromSeed.SDMParams();
                         p.entity = entity;
                         p.factionId = defenders.getFaction().getId();
