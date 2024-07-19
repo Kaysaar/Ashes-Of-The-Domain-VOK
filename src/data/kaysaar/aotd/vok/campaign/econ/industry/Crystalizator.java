@@ -18,7 +18,6 @@ import static data.kaysaar.aotd.vok.plugins.AoDUtilis.checkForItemBeingInstalled
 public class Crystalizator extends BaseIndustry {
     public void apply() {
         super.apply(true);
-        AoDUtilis.ensureIndustryHasNoItem(this);
         int size = market.getSize();
 
 

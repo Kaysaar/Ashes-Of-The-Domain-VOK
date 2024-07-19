@@ -14,7 +14,6 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 public class CascadeReprocessor extends BaseIndustry {
     public void apply() {
         super.apply(true);
-        AoDUtilis.ensureIndustryHasNoItem(this);
         int size = market.getSize()-3;
 
         demand(Commodities.ORE, 7 + size);

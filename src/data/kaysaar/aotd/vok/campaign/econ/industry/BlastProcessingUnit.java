@@ -21,7 +21,7 @@ public class BlastProcessingUnit extends FuelProduction {
         int size = market.getSize();
         demand(Commodities.VOLATILES, size-2);
         demand(Commodities.HEAVY_MACHINERY, size);
-        supply(Commodities.FUEL, size +3);
+        supply(Commodities.FUEL, size +4);
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.VOLATILES,Commodities.HEAVY_MACHINERY);
 
         applyDeficitToProduction(1, deficit, Commodities.FUEL);
