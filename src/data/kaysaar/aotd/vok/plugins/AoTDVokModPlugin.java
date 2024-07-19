@@ -121,6 +121,9 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator,policrystalizator,cascade_reprocesor");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
+
         if(Global.getSettings().getModManager().isModEnabled("uaf")){
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker" ,"subfarming,artifarming");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_garrison_transmitter" ,AoTDIndustries.TERMINUS);

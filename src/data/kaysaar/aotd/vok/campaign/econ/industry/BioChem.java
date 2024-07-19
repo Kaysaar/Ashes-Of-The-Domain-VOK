@@ -13,7 +13,6 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 public class BioChem extends LightIndustry {
     public void apply() {
         super.apply(true);
-        AoDUtilis.ensureIndustryHasNoItem(this);
         int size = market.getSize();
         demand(Commodities.ORGANICS, size+2);
         //supply(Commodities.SUPPLIES, size - 3);
