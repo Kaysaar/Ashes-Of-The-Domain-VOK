@@ -41,7 +41,7 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
     public CustomPanelAPI getDesignPanel() {
         return null;
     }
-
+    float paddingY = 18;
     @Override
     public ArrayList<ButtonAPI> getOrderButtons() {
         return null;
@@ -52,7 +52,7 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
         mapOfButtonStates = new HashMap<>();
         this.mainPanel = panel;
         this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
-        YHeight = panel.getPosition().getHeight() - 40 - 70;
+        YHeight = panel.getPosition().getHeight() - paddingY - 70-19;
 
     }
 
@@ -76,7 +76,7 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
         }
         listOfOptions.addUIElement(tooltip).inTL(0, 0);
         listOfOptions.addUIElement(tooltip2).inTL(0, 25);
-        panel.addComponent(listOfOptions).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, 70);
+        panel.addComponent(listOfOptions).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 15, 70-paddingY);
 
 
     }
@@ -99,7 +99,7 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
         projectShowcase.addComponent(buttonPanel).inTL(widthOfProjPanel * 0.7f - 10, YHeight - 40);
         renederer.setPanel(projectShowcase);
         renederer.setPanel(stagePanel);
-        panel.addComponent(projectShowcase).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS + width * 0.3f, 70);
+        panel.addComponent(projectShowcase).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS + width * 0.3f, 70-paddingY);
 
     }
 
@@ -183,13 +183,7 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
         return panel;
     }
 
-    public CustomPanelAPI createProgressionBar(GpSpecialProjectData option, CustomPanelAPI parentPanel, float width, float height) {
-        UILinesRenderer renderer = new UILinesRenderer(0f);
-        CustomPanelAPI panel = parentPanel.createCustomPanel(width, height, renderer);
-        renderer.setPanel(panel);
-        renderer.enableProgressMode(0f);
-        return panel;
-    }
+
 
     public CustomPanelAPI createButtonBelow(final GpSpecialProjectData option, CustomPanelAPI parentPanel, float width, float height) {
         CustomPanelAPI panel = parentPanel.createCustomPanel(width, height, null);

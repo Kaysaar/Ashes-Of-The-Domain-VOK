@@ -72,6 +72,11 @@ public class GPManager {
     }
     public MutableStat productionSpeedBonus = new MutableStat(1f);
 
+    public MutableStat getProductionSpeedBonus() {
+        return productionSpeedBonus;
+    }
+
+
     public LinkedHashMap<String, Integer> getWeaponManInfo() {
         return weaponManInfo;
     }
@@ -134,16 +139,17 @@ public class GPManager {
     LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();
     LinkedHashMap<String, Integer> weaponManInfo = new LinkedHashMap<>();
     LinkedHashMap<String, Integer> fighterManInfo = new LinkedHashMap<>();
-    public HashMap<String, Integer> totalResources = new HashMap<>();
+    public LinkedHashMap<String, Integer> totalResources = new LinkedHashMap<>();
     public HashMap<String, Integer> reqResources = new HashMap<>();
     public HashMap<String, Integer> availableResources = new HashMap<>();
     HashMap<String, Boolean> productionAvailbilityMap = new HashMap<>();
     public static ArrayList<String> commodities = new ArrayList<>();
 
     static {
-        commodities.add("advanced_components");
+
         commodities.add(Commodities.SHIPS);
         commodities.add(Commodities.HAND_WEAPONS);
+        commodities.add("advanced_components");
     }
     public static String memkey = "aotd_gp_plugin";
 
@@ -225,8 +231,8 @@ public class GPManager {
 
     }
 
-    public HashMap<String, Integer> getTotalResources() {
-        if (totalResources == null) totalResources = new HashMap<>();
+    public LinkedHashMap<String, Integer> getTotalResources() {
+        if (totalResources == null) totalResources = new LinkedHashMap<>();
         totalResources.clear();
         for (String s : commodities) {
             totalResources.put(s, 0);

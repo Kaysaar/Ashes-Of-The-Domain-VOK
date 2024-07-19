@@ -49,7 +49,9 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
         if(saved!=null){
             CargoAPI cargoAPI = saved.getCargo();
             market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addAll(cargoAPI);
+
         }
+        Global.getSector().getListenerManager().removeListener(this);
         super.notifyBeingRemoved(mode, forUpgrade);
     }
 

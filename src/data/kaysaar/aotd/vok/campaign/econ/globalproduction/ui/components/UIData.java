@@ -10,6 +10,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.combat.entities.Ship;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
@@ -65,7 +66,9 @@ public class UIData {
         LabelAPI name = mainTooltip.addPara(option.getSpec().getShipHullSpecAPI().getHullName(),0f, Misc.getTooltipTitleAndLightHighlightColor());
         name.autoSizeToWidth(WIDTH_OF_NAME-35);
         name.getPosition().inTL(35, getyPad(name));
-        LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString(option.spec.days),0f);
+        float days = option.spec.days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
+        if(days<=1)days=1;
+        LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString((int)days),0f);
         String variantId = null;
         for (String allVariantId : Global.getSettings().getAllVariantIds()) {
             if(allVariantId.contains(option.spec.getIdOfItemProduced())){
@@ -129,8 +132,10 @@ public class UIData {
         Pair<CustomPanelAPI, WeaponSpriteRenderer> panelImage = WeaponInfoGenerator.getImageOfWeapon(option.getSpec().getWeaponSpec(),30);
         LabelAPI name = mainTooltip.addPara(option.getSpec().getWeaponSpec().getWeaponName(),0f, Misc.getTooltipTitleAndLightHighlightColor());
         name.autoSizeToWidth(WIDTH_OF_NAME-35);
+        float days = option.spec.days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
+        if(days<=1)days=1;
         name.getPosition().inTL(35, getyPad(name));
-        LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString(option.spec.days),0f);
+        LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString((int)days),0f);
         String variantId = null;
         for (String allVariantId : Global.getSettings().getAllVariantIds()) {
             if(allVariantId.contains(option.spec.getIdOfItemProduced())){
@@ -185,7 +190,10 @@ public class UIData {
         LabelAPI name = mainTooltip.addPara(option.getSpec().getWingSpecAPI().getWingName(),0f, Misc.getTooltipTitleAndLightHighlightColor());
         name.autoSizeToWidth(WIDTH_OF_NAME-35);
         name.getPosition().inTL(45, getyPad(name));
-        LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString(option.spec.days),0f);
+        float days = option.spec.days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
+        if(days<=1)days=1;
+
+        LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString((int)days),0f);
 
         LabelAPI type = mainTooltip.addPara(option.getSpec().getWingSpecAPI().getRoleDesc(),0f);
         LabelAPI designType =mainTooltip.addPara(option.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer(), Misc.getDesignTypeColor(option.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer()),0f);
@@ -296,7 +304,9 @@ public class UIData {
 
         qty = tooltip.addPara(""+order.getAmountToProduce(), Misc.getTooltipTitleAndLightHighlightColor(),0f);
         creditCost = tooltip.addPara(Misc.getDGSCredits(order.getSpecFromClass().getCredistCost()),Color.ORANGE,0f);
-        days = tooltip.addPara(""+(int)order.getDaysTillOrderFinished(),0f);
+        int daysINt = (int) order.getDaysTillOrderFinished();
+        if(daysINt<=1)daysINt=1;
+        days = tooltip.addPara(""+daysINt,0f);
         name.computeTextHeight(name.getText());
        PositionAPI pos =  name.autoSizeToWidth(WIDTH_OF_NAMES_ORDER-35);
         name.computeTextHeight(name.getText());
