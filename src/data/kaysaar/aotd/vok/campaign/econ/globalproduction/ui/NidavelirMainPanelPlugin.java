@@ -22,9 +22,10 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+
+import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
 public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     PositionAPI p;
@@ -70,6 +71,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         this.panel = panel;
         this.callbacks = callbacks;
         copyFromOriginal();
+        Global.getSoundPlayer().pauseMusic();
+        Global.getSoundPlayer().playCustomMusic(1,1,"aotd_shipyard",true);
         shipPanelManager = new ShipOptionPanelInterface(this.panel);
         weaponPanelManager = new WeaponOptionPanelInterface(this.panel);
         fighterPanelInterface = new FighterOptionPanelInterface(this.panel);
@@ -84,6 +87,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         createMarketResourcesPanel();
         createSpecialProjectBar();
         createOrders();
+
     }
 
     private void copyFromOriginal() {
@@ -178,6 +182,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         return credits;
     }
 
+
     public CustomPanelAPI createCurrentSpecialProjectShowcase(float width, float height) {
         GpSpecialProjectData data = GPManager.getInstance().getCurrProjOnGoing();
         UILinesRenderer progressionRenderer = new UILinesRenderer(0f);
@@ -210,7 +215,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         }
         renderer.setPanel(currentProjectPanel);
         currentProjectPanel.addUIElement(tooltip).inTL(0, 0);
-        panel.addComponent(currentProjectPanel).inTL(spacerX, 320);
+        panel.addComponent(currentProjectPanel).inTL(spacerX, 190);
     }
 
     public void clearSpecProjBar() {
@@ -224,7 +229,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         butt.add(tooltip.addButton("Ships", "ship", base, bg, Alignment.MID, CutStyle.TOP, 120, 20, 0f));
         butt.add(tooltip.addButton("Weapons", "weapon", base, bg, Alignment.MID, CutStyle.TOP, 120, 20, 0f));
         butt.add(tooltip.addButton("Fighters", "fighter", base, bg, Alignment.MID, CutStyle.TOP, 120, 20, 0f));
-        butt.add(tooltip.addButton("Special Project", "sp", base, bg, Alignment.MID, CutStyle.TOP, 150, 20, 0f));
+        butt.add(tooltip.addButton("Special Projects", "sp", base, bg, Alignment.MID, CutStyle.TOP, 150, 20, 0f));
         float currX = 0;
         float paddingX = 5f;
         for (ButtonAPI buttonAPI : butt) {
@@ -242,7 +247,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
 
     public void createOrders() {
         UILinesRenderer renderer = new UILinesRenderer(0f);
-        float yPad = 400;
+        float yPad = 270;
         float height = panel.getPosition().getHeight() - 20 - yPad - 85;
         sortingButtonsPanel = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 50, renderer);
         panelOfOrders = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, height, renderer);
@@ -295,18 +300,41 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         panel.removeComponent(panelOfMarketData);
         createMarketResourcesPanel();
     }
+    public LinkedHashMap<String,Integer>getExpectedCosts(){
+        LinkedHashMap<String,Integer>reqResources = new LinkedHashMap<>();
+        reqResources.clear();
+        for (String s : commodities) {
+            reqResources.put(s, 0);
+        }
+        if(GPManager.getInstance().getCurrProjOnGoing()!=null){
+            for (Map.Entry<String, Integer> entry : GPManager.getInstance().getCurrProjOnGoing().getSpec().getStageSupplyCost().get(GPManager.getInstance().getCurrProjOnGoing().getCurrentStage()).entrySet()) {
+                if (reqResources.get(entry.getKey()) == null) {
+                    reqResources.put(entry.getKey(), entry.getValue());
+                } else {
+                    int prev = reqResources.get(entry.getKey());
+                    reqResources.put(entry.getKey(), prev + entry.getValue() );
+                }
+            }
+        }
+        for (GPOrder productionOrder : ordersQueued) {
+            for (Map.Entry<String, Integer> entry : productionOrder.getReqResources().entrySet()) {
+                if (reqResources.get(entry.getKey()) == null) {
+                    reqResources.put(entry.getKey(), entry.getValue());
+                } else {
+                    int prev = reqResources.get(entry.getKey());
+                    reqResources.put(entry.getKey(), prev + entry.getValue() );
+                }
+            }
+        }
 
+        return reqResources;
+    }
     public void createMarketResourcesPanel() {
         UILinesRenderer renderer = new UILinesRenderer(0f);
-        panelOfMarketData = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 280, renderer);
+        panelOfMarketData = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 150, renderer);
         TooltipMakerAPI tooltip = panelOfMarketData.createUIElement(UIData.WIDTH_OF_ORDERS, 145, false);
-        TooltipMakerAPI bonusesTooltip = panelOfMarketData.createUIElement(UIData.WIDTH_OF_ORDERS, 100, true);
-        bonusesTooltip.addPara("Construction speed bonus: %s", 0f, Color.ORANGE, "50%");
-        bonusesTooltip.addPara("Orbital Skunk-work bonus %s", 5f, Misc.getPositiveHighlightColor(), "Each built ship have 1 built-in s-mod");
-        bonusesTooltip.addPara("Hypershunt bonus %s", 5f, Misc.getPositiveHighlightColor(), "Decrease cost of special project stages by 50%");
         tooltip.addSectionHeading("Produced resources", Alignment.MID, 0f);
         tooltip.addSectionHeading("Consumed resources", Alignment.MID, 55f);
-        tooltip.addSectionHeading("Production bonuses", Alignment.MID, 55f);
         float totalSize = UIData.WIDTH_OF_ORDERS;
         float sections = totalSize / 3;
         float positions = totalSize / 12;
@@ -324,7 +352,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         }
         x = positions;
         topYImage += 73;
-        for (Map.Entry<String, Integer> entry : GPManager.getInstance().getReqResources().entrySet()) {
+        for (Map.Entry<String, Integer> entry : getExpectedCosts().entrySet()) {
             tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconsize, iconsize, 0f);
             UIComponentAPI image = tooltip.getPrev();
             image.getPosition().inTL(x, topYImage);
@@ -334,7 +362,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         }
 
         panelOfMarketData.addUIElement(tooltip).inTL(0, 0);
-        panelOfMarketData.addUIElement(bonusesTooltip).inTL(0, 170);
         renderer.setPanel(panelOfMarketData);
         panel.addComponent(panelOfMarketData).inTL(spacerX, 30);
     }
@@ -434,6 +461,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                 if (!offsetOfOrdersToBeRemoved.isEmpty()) {
                     GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
                 }
+
                 resetPanelOfOrders();
                 break;
             }
@@ -497,6 +525,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
 
             if (event.getEventValue() == Keyboard.KEY_ESCAPE && !event.isRMBEvent()) {
                 dialog.dismiss();
+                Global.getSoundPlayer().pauseCustomMusic();
+
             }
         }
     }

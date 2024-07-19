@@ -7,7 +7,9 @@ import com.fs.starfarer.api.campaign.FactionProductionAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -225,8 +227,12 @@ public class GpSpecialProjectData {
             }
             return;
         }
-        totalDaysSpent += Global.getSector().getClock().convertToDays(amount);
-        daysSpentOnStage+=Global.getSector().getClock().convertToDays(amount);
+        float days =  Global.getSector().getClock().convertToDays(amount);
+        if(AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
+            days*=2;
+        }
+        totalDaysSpent += days;
+        daysSpentOnStage+=days;
         if (totalDaysSpent >= getReqTotalDaysToProgress(currentStage)) {
             currentStage++;
             daysSpentOnStage = 0f;

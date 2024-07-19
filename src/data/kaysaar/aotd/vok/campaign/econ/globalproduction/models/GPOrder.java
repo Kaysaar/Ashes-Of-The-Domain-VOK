@@ -40,7 +40,7 @@ public class GPOrder implements Cloneable{
         return  amountToProduce - alreadyProduced;
     }
     public float getDaysTillOrderFinished(){
-        return getSpecFromClass().days-daysSpentDoingOrder;
+        return (getSpecFromClass().days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue())-daysSpentDoingOrder;
     }
     HashMap<String, Integer>assignedResources = new HashMap<>();
     HashMap<String, Integer>resourcesGet = new HashMap<>();

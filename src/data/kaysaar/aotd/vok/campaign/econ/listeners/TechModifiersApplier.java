@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.conditions.GPModifiers;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.HazmatCondition;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.ResearchedUpkeepModifier;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMinningCond;
@@ -20,17 +21,24 @@ public class TechModifiersApplier implements PlayerColonizationListener, Economy
             if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.HAZMAT_WORKING_EQUIPMENT,m)){
                 HazmatCondition.applyRessourceCond(m);
             }
+            if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.SOPHISTICATED_ELECTRONIC_SYSTEMS,m)){
+                GPModifiers.applyRessourceCond(m);
+            }
         }
     }
 
     @Override
     public void reportPlayerColonizedPlanet(PlanetAPI planetAPI) {
         MarketAPI m = planetAPI.getMarket();
-        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION,m)){
+        if (AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION, m)) {
             ResearchedUpkeepModifier.applyRessourceCond(m);
         }
-        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.HAZMAT_WORKING_EQUIPMENT,m)){
+        if (AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.HAZMAT_WORKING_EQUIPMENT, m)) {
             HazmatCondition.applyRessourceCond(m);
+        }
+        if (AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.SOPHISTICATED_ELECTRONIC_SYSTEMS, m)) {
+            GPModifiers.applyRessourceCond(m);
+
         }
     }
 
