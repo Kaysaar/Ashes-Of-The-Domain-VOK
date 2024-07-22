@@ -22,6 +22,7 @@ import java.util.Map;
 public class GPOrder implements Cloneable{
     int amountToProduce;
     int alreadyProduced;
+    float dummyCounter;
     float daysSpentDoingOrder;// between 0 and 1
     boolean contributingToOrder;
     int priority = 0;
@@ -40,7 +41,9 @@ public class GPOrder implements Cloneable{
         return  amountToProduce - alreadyProduced;
     }
     public float getDaysTillOrderFinished(){
-        return (getSpecFromClass().days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue())-daysSpentDoingOrder;
+        float defDeays =  (getSpecFromClass().days);
+        if(defDeays<=1)defDeays = 1;
+        return defDeays-daysSpentDoingOrder;
     }
     HashMap<String, Integer>assignedResources = new HashMap<>();
     HashMap<String, Integer>resourcesGet = new HashMap<>();

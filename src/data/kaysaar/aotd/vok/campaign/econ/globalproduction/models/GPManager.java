@@ -780,6 +780,13 @@ public class GPManager {
 
         }
         for (GPSpec specialProjectSpec : specialProjectSpecs) {
+            try {
+                Global.getSettings().getHullSpec(specialProjectSpec.getRewardId());
+            }
+            catch (Exception e ){
+                //we do this to filter out projects that should not be (as long as mod is not enabled in save)
+                continue;
+            }
             boolean foundOne = false;
             for (GpSpecialProjectData datum : specialProjData) {
                 if(datum.getSpec().getProjectId().equals(specialProjectSpec.getProjectId())){

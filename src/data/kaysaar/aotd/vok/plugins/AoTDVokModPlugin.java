@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.plugins;
 
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
@@ -12,6 +13,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.AoTDCollabSpScript;
+import data.kaysaar.aotd.vok.listeners.AoTDRaidListener;
 import data.kaysaar.aotd.vok.listeners.AoTDxUafAfterCombatListener;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderInfoRepo;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
@@ -55,6 +57,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             l.addListener(new TechModifiersApplier(), true);
         if(!l.hasListenerOfClass(AIColonyManagerListener.class))
             l.addListener(new AIColonyManagerListener());
+        if(!l.hasListenerOfClass(AoTDRaidListener.class))
+            l.addListener(new AoTDRaidListener());
         l.removeListenerOfClass(CurrentResearchProgressUI.class);
         if(!l.hasListenerOfClass(CurrentResearchProgressUI.class)) {
             try {
@@ -84,6 +88,18 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSector().addListener(new AoTDxUafAfterCombatListener());
         aoTDDataInserter.generatePreCollapseFacilities();
         aoTDDataInserter.spawnVeilPlanet();
+        if(Global.getSettings().getModManager().isModEnabled("uaf")){
+            MarketAPI lunarium = AoTDDataInserter.getMarketBasedOnName("Aoi","Lunamun");
+            if(lunarium!=null){
+                lunarium.getMemory().set("$uaf_novaeria_bp",true);
+
+            }
+            MarketAPI auroria = AoTDDataInserter.getMarketBasedOnName("Aoi","Auroria");
+            if(auroria!=null){
+                auroria.getMemory().set("$uaf_cherry_bp",true);
+
+            }
+        }
     }
 
     public void onGameLoad(boolean newGame) {
