@@ -126,8 +126,7 @@ public class GpSpecialProjectData {
         return allRes;
     }
     public boolean isDiscovered(){
-        boolean allIsTrue = true;
-        if(Global.getSettings().isDevMode())return true;
+        boolean allIsTrue = true;;
         if(!getSpec().isDiscoverable){
             return false;
         }

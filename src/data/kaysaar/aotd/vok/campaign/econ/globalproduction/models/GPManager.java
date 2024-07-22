@@ -98,7 +98,7 @@ public class GPManager {
     public LinkedHashMap<String, Integer> getFighterTypeInfo() {
         return fighterTypeInfo;
     }
-    public static final int scale = 20;
+    public static final int scale = 10;
     public ArrayList<GPSpec> getSpecs() {
         return specs;
     }
@@ -1088,6 +1088,7 @@ public class GPManager {
     }
     public void advance(float amount) {
         Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).modifyMult("aotd_gp", 0, "Global Production Mechanic (AOTD)");
+       if(!AoTDMisc.isPLayerHavingHeavyIndustry())return;
         for (GpSpecialProjectData specialProjDatum : specialProjData) {
             if(specialProjDatum.isDiscovered()){
                 if(!specialProjDatum.isShowedInfoAboutUnlocking()){
