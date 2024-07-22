@@ -12,6 +12,7 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.IconRenderMode;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelDP;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 
@@ -25,14 +26,18 @@ public class NidavelirIndustryOptionProvider implements IndustryOptionProvider {
     public static Object NIDAVELIR = new Object();
     @Override
     public List<IndustryOptionData> getIndustryOptions(Industry ind) {
-        ArrayList<IndustryOptionData>data  = new ArrayList<>();
-        if(ind instanceof HeavyIndustry){
-            IndustryOptionData daten = new IndustryOptionData("Access Shipyard",NIDAVELIR,ind,this);
-            daten.color = new Color(220, 212, 127,255);
-            data.add(daten);
-        }
+        if(GPManager.isEnabled){
+            ArrayList<IndustryOptionData>data  = new ArrayList<>();
+            if(ind instanceof HeavyIndustry){
+                IndustryOptionData daten = new IndustryOptionData("Access Shipyard",NIDAVELIR,ind,this);
+                daten.color = new Color(220, 212, 127,255);
+                data.add(daten);
+            }
 
-        return data;
+            return data;
+        }
+        return new ArrayList<>();
+
     }
 
     @Override

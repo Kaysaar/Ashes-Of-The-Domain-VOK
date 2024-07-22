@@ -22,6 +22,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.Sortin
 import data.kaysaar.aotd.vok.campaign.econ.listeners.NidavelirIndustryOptionProvider;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
+import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 
 import java.util.*;
 
@@ -50,6 +51,7 @@ public class GPManager {
             return false;
         }
     };
+    public static boolean isEnabled = true;
     ArrayList<GpManufacturerData>manufacturerData = new ArrayList<>();
     ArrayList<GPOption> shipProductionOption = new ArrayList<>();
     ArrayList<GPOption> weaponProductionOption = new ArrayList<>();
@@ -98,7 +100,7 @@ public class GPManager {
     public LinkedHashMap<String, Integer> getFighterTypeInfo() {
         return fighterTypeInfo;
     }
-    public static final int scale = 10;
+    public static int scale = 10;
     public ArrayList<GPSpec> getSpecs() {
         return specs;
     }
@@ -217,17 +219,22 @@ public class GPManager {
         if(manufacturerData!=null){
             manufacturerData.clear();
         }
-        manufacturerData = new ArrayList<>();
-        manufacturerData.addAll(GpManufacturerData.getManufacturerDataFromCSV());
-        loadProductionSpecs();
-        loadProductionOptions();
-        for (GPOrder productionOrder : productionOrders) {
-            productionOrder.updateResourceCost();
+        isEnabled = AoTDSettingsManager.getBooleanValue("aotd_titans_of_industry");
+        scale = AoTDSettingsManager.getIntValue("aotd_scale");
+        if(isEnabled){
+            manufacturerData = new ArrayList<>();
+            manufacturerData.addAll(GpManufacturerData.getManufacturerDataFromCSV());
+            loadProductionSpecs();
+            loadProductionOptions();
+            for (GPOrder productionOrder : productionOrders) {
+                productionOrder.updateResourceCost();
+            }
+            ListenerManagerAPI l = Global.getSector().getListenerManager();
+            if (!l.hasListenerOfClass(NidavelirIndustryOptionProvider.class)) {
+                l.addListener(new NidavelirIndustryOptionProvider(), true);
+            }
         }
-        ListenerManagerAPI l = Global.getSector().getListenerManager();
-        if (!l.hasListenerOfClass(NidavelirIndustryOptionProvider.class)) {
-            l.addListener(new NidavelirIndustryOptionProvider(), true);
-        }
+
 
     }
 
@@ -1087,6 +1094,7 @@ public class GPManager {
         this.weaponSizeInfo.putAll(AoTDMisc.sortByValueDescending(weaponInfo));
     }
     public void advance(float amount) {
+        if(!GPManager.isEnabled)return;
         Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).modifyMult("aotd_gp", 0, "Global Production Mechanic (AOTD)");
        if(!AoTDMisc.isPLayerHavingHeavyIndustry())return;
         for (GpSpecialProjectData specialProjDatum : specialProjData) {

@@ -205,6 +205,7 @@ public class GpSpecialProjectData {
 
     }
     public void advance(float amount) {
+
         if(!hasStarted)return;
         if(!isMainFocus())return;
         if (isFinished()) {

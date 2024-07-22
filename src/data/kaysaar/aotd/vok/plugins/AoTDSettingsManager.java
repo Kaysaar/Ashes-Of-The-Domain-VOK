@@ -67,6 +67,19 @@ public class AoTDSettingsManager {
         }
         return val;
     }
+    public static boolean getBooleanValue(String key){
+        boolean val = false;
+        if(Global.getSettings().getModManager().isModEnabled("lunalib")){
+            if(LunaSettings.getBoolean("aotd_vok",key)!=null){
+                val =LunaSettings.getBoolean("aotd_vok",key);
+            }
+
+        }
+        else{
+            val = Global.getSettings().getBoolean(key);
+        }
+        return val;
+    }
     public static float getFloatValue(String key){
         float val = 1;
         if(Global.getSettings().getModManager().isModEnabled("lunalib")){
