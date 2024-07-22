@@ -9,6 +9,7 @@ import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
@@ -46,7 +47,7 @@ public class GpProductionButtonRenderer implements CampaignUIRenderingListener, 
 
     @Override
     public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
-
+        if(!GPManager.isEnabled)return;
         final CampaignUIAPI campaignUI = Global.getSector().getCampaignUI();
         if (campaignUI.isShowingDialog() || campaignUI.isShowingMenu() || campaignUI.getCurrentCoreTab() != null)
             return;
@@ -70,6 +71,7 @@ public class GpProductionButtonRenderer implements CampaignUIRenderingListener, 
 
     @Override
     public void processCampaignInputPreCore(java.util.List<InputEventAPI> events) {
+        if(!GPManager.isEnabled)return;
         if (buttonHide == null) return;
         if (buttonHideHighlighted == null) return;
         for (InputEventAPI event : events) {
