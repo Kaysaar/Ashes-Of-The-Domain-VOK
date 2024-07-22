@@ -12,7 +12,7 @@ import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Monoculture extends Farming {
+public class Monoculture extends BaseIndustry {
 
     public void apply() {
         super.apply(true);
@@ -35,7 +35,7 @@ public class Monoculture extends Farming {
     @Override
     public boolean isAvailableToBuild() {
         boolean canAquaculture = market.getPlanetEntity() != null &&
-                AQUA_PLANETS.contains(market.getPlanetEntity().getTypeId());
+                Farming.AQUA_PLANETS.contains(market.getPlanetEntity().getTypeId());
         if(canAquaculture){
             return false;
         }
@@ -50,7 +50,7 @@ public class Monoculture extends Farming {
     @Override
     public boolean showWhenUnavailable() {
         boolean canAquaculture = market.getPlanetEntity() != null &&
-                AQUA_PLANETS.contains(market.getPlanetEntity().getTypeId());
+                Farming.AQUA_PLANETS.contains(market.getPlanetEntity().getTypeId());
         if(canAquaculture) {
             return false;
         }

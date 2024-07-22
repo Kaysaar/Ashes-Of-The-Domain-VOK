@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.econ.impl.Farming;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
@@ -11,11 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Fishery extends BaseIndustry {
-    public static Set<String> AQUA_PLANETS = new HashSet<String>();
-
-    static {
-        AQUA_PLANETS.add(Planets.PLANET_WATER);
-    }
+    public static Set<String> AQUA_PLANETS = Farming.AQUA_PLANETS;
     @Override
     public void apply() {
         super.apply(true);
