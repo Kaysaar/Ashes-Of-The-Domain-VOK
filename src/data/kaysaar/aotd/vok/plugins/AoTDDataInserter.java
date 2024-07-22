@@ -288,6 +288,16 @@ public class AoTDDataInserter {
             }
         }
     }
+    public static MarketAPI getMarketBasedOnName(String SystemName, String Planetname){
+        if (Global.getSector().getStarSystem(SystemName) == null) return null;
+        for (MarketAPI market : Global.getSector().getEconomy().getMarkets(    Global.getSector().getStarSystem(SystemName).getCenter().getContainingLocation())) {
+            if(market.getName().equals(Planetname)){
+                return market;
+            }
+        }
+
+        return null;
+    }
     private void setIndustriesOnModdedPlanets() {
         int increased_farming = 3;
         int increased_biotiocs = 0;

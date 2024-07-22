@@ -71,7 +71,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         this.panel = panel;
         this.callbacks = callbacks;
         copyFromOriginal();
-        Global.getSoundPlayer().pauseMusic();
         Global.getSoundPlayer().playCustomMusic(1,1,"aotd_shipyard",true);
         shipPanelManager = new ShipOptionPanelInterface(this.panel);
         weaponPanelManager = new WeaponOptionPanelInterface(this.panel);
@@ -491,7 +490,9 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                 float money = calculateDifference();
                 Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(money);
                 GPManager.getInstance().getProductionOrders().clear();
-                GPManager.getInstance().getProductionOrders().addAll(ordersQueued);
+                for (GPOrder order : ordersQueued) {
+                    GPManager.getInstance().getProductionOrders().add(order.cloneOrder());
+                }
                 ordersQueued.clear();
                 copyFromOriginal();
                 resetPanelOfOrders();
@@ -538,14 +539,16 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                 weaponPanelManager.clear();
                 switchingButtons.clear();
                 ordersQueued.clear();
+                panel.removeComponent(panelOfOrders);
+                panel.removeComponent(sortingButtonsPanel);
+                panel.removeComponent(costConfirmOrders);
                 orders.clear();
                 orderSortingButtons.clear();
                 clearAll();
                 clearSpecProjBar();
-                dialog.dismiss();
-
-
                 Global.getSoundPlayer().pauseCustomMusic();
+                Global.getSoundPlayer().restartCurrentMusic();
+                dialog.dismiss();
 
             }
         }
