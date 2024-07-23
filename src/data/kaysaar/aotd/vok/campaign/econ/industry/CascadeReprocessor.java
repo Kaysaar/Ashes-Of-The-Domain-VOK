@@ -25,6 +25,7 @@ public class CascadeReprocessor extends BaseIndustry {
 
 
         Pair<String, Integer> deficit = getMaxDeficit( Commodities.ORE,Commodities.RARE_ORE);
+        applyDeficitToProduction(1,deficit,AoTDCommodities.PURIFIED_TRANSPLUTONICS,Commodities.RARE_METALS,Commodities.METALS);
         if (!isFunctional()) {
             supply.clear();
         }

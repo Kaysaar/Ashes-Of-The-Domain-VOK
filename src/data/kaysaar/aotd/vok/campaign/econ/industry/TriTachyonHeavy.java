@@ -100,12 +100,17 @@ public class TriTachyonHeavy extends HeavyIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ORBITAL_SKUNKWORK_FACILITIES,market);
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ORBITAL_SKUNKWORK_FACILITIES,market)&&market.getSize()>=6;
 
     }
     @Override
     public boolean showWhenUnavailable() {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ORBITAL_SKUNKWORK_FACILITIES,market);
+    }
+
+    @Override
+    public String getUnavailableReason() {
+        return "Market must be size 6 or greater";
     }
 
     @Override

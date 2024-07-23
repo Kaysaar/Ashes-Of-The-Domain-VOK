@@ -159,7 +159,7 @@ public class HegemonyHeavy extends HeavyIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ORBITAL_FLEETWORK_FACILITIES,market)&&market.getSize()>=5;
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ORBITAL_FLEETWORK_FACILITIES,market)&&market.getSize()>=6;
 
     }
     @Override
@@ -167,6 +167,9 @@ public class HegemonyHeavy extends HeavyIndustry {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ORBITAL_FLEETWORK_FACILITIES,market);
     }
 
-
+    @Override
+    public String getUnavailableReason() {
+        return "Market must be size 6 or greater";
+    }
 
 }
