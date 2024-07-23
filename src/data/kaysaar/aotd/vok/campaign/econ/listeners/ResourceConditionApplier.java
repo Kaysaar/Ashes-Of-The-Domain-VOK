@@ -5,14 +5,15 @@ import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
+import data.kaysaar.aotd.vok.campaign.econ.conditions.AoDFoodDemand;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMinningCond;
 
 
 public class ResourceConditionApplier implements PlayerColonizationListener, EconomyTickListener {
     public static void applyResourceConditionToAllMarkets() {
         for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
-
             WaterMinningCond.applyIndustryUpgradeCondition(m);
+            AoDFoodDemand.applyRessourceCond(m);
         }
     }
 
@@ -20,7 +21,7 @@ public class ResourceConditionApplier implements PlayerColonizationListener, Eco
     public void reportPlayerColonizedPlanet(PlanetAPI planetAPI) {
         MarketAPI m = planetAPI.getMarket();
         WaterMinningCond.applyIndustryUpgradeCondition(m);
-
+        AoDFoodDemand.applyRessourceCond(m);
 
     }
 

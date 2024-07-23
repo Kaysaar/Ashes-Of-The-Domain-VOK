@@ -513,13 +513,11 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     public void processInput(List<InputEventAPI> events) {
         for (InputEventAPI event : events) {
             if (event.isConsumed()) continue;
-            ;
             if (event.isRMBDownEvent() && !event.isLMBEvent()) {
-                float correction = tooltipOfOrders.getExternalScroller().getYOffset();
                 for (ButtonAPI buttonAPI : orders) {
                     if (AoTDMisc.isHoveringOverButton(buttonAPI, 0f)) {
                         buttonAPI.setChecked(false);
-
+                        Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
                         GPOrder order = (GPOrder) buttonAPI.getCustomData();
                         GPManager.getInstance().removeOrderFromDummy(order.getSpecFromClass().getProjectId(), 1, ordersQueued);
                         ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemovedFromDummy(ordersQueued);
