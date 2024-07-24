@@ -88,7 +88,7 @@ public class ResearchFleetRouteManager extends RouteFleetAssignmentAI implements
             });
         }
         if (intervals[3].value > 0) {
-            fleet.addAssignment(FleetAssignment.GO_TO_LOCATION, source, RouteLocationCalculator.getTravelDays(target, source), "Returning to " + route.getMarket(), new Script() {
+            fleet.addAssignment(FleetAssignment.GO_TO_LOCATION, source, RouteLocationCalculator.getTravelDays(target, source), "Returning to " + route.getMarket().getName(), new Script() {
                 @Override
                 public void run() {
                     for (IntelInfoPlugin intelInfoPlugin : Global.getSector().getIntelManager().getIntel(ResearchExpeditionIntel.class)) {
