@@ -225,10 +225,13 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         topPanel = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 20, null);
         TooltipMakerAPI tooltip = topPanel.createUIElement(UIData.WIDTH_OF_OPTIONS, 20, false);
         ArrayList<ButtonAPI> butt = new ArrayList<>();
-        butt.add(tooltip.addButton("Ships", "ship", base, bg, Alignment.MID, CutStyle.TOP, 120, 20, 0f));
-        butt.add(tooltip.addButton("Weapons", "weapon", base, bg, Alignment.MID, CutStyle.TOP, 120, 20, 0f));
-        butt.add(tooltip.addButton("Fighters", "fighter", base, bg, Alignment.MID, CutStyle.TOP, 120, 20, 0f));
-        butt.add(tooltip.addButton("Special Projects", "sp", base, bg, Alignment.MID, CutStyle.TOP, 150, 20, 0f));
+        LabelAPI text= Global.getSettings().createLabel("",Fonts.DEFAULT_SMALL);
+        butt.add(tooltip.addButton("Ships", "ship", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Ships")+30, 20, 0f));
+        butt.add(tooltip.addButton("Weapons", "weapon", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Weapons")+30, 20, 0f));
+        butt.add(tooltip.addButton("Fighters", "fighter", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Fighters")+30, 20, 0f));
+        butt.add(tooltip.addButton("Special Projects", "sp", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Special Projects")+30, 20, 0f));
+        butt.add(tooltip.addButton("Items", "sp", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Items")+30, 20, 0f));
+        butt.add(tooltip.addButton("Megastructures", "sp", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Megastructures")+30, 20, 0f));
         float currX = 0;
         float paddingX = 5f;
         for (ButtonAPI buttonAPI : butt) {
@@ -238,6 +241,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         if (!GPManager.getInstance().hasAtLestOneProjectUnlocked()) {
             butt.get(3).setEnabled(false);
         }
+        butt.get(4).setEnabled(false);
+        butt.get(5).setEnabled(false);
         switchingButtons.addAll(butt);
         topPanel.addUIElement(tooltip).inTL(-5, 0);
         panel.addComponent(topPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, 29);
