@@ -266,7 +266,8 @@ public class AoTDDataInserter {
 
                 if (planet.getMarket() == null) continue;
                 SpecialItemData data = null;
-                if (removeIndustry != null) {
+                if (removeIndustry != null&&planet.getMarket().getIndustry(removeIndustry)!=null) {
+
                     data = planet.getMarket().getIndustry(removeIndustry).getSpecialItem();
                     planet.getMarket().removeIndustry(removeIndustry, null, false);
 
@@ -279,7 +280,7 @@ public class AoTDDataInserter {
                         planet.getMarket().getIndustry(industryId).setSpecialItem(data);
                     }
                     if(itemToInsert!=null){
-                        SpecialItemData daten = new SpecialItemData(Items.MANTLE_BORE,null);
+                        SpecialItemData daten = new SpecialItemData(itemToInsert,null);
                         planet.getMarket().getIndustry(industryId).setSpecialItem(daten);
                     }
                 }
@@ -345,7 +346,7 @@ public class AoTDDataInserter {
     public void initalizeEconomy(boolean random){
         if(!random){
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ORBITAL_SKUNKWORK, Industries.ORBITALWORKS, null, false, Commodities.ALPHA_CORE,null);
-            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.HEGEMONY_HEAVY, Industries.ORBITALWORKS, null, false, null,null);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.HEGEMONY_HEAVY, Industries.ORBITALWORKS, null, false, null,Items.PRISTINE_NANOFORGE);
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, true, Commodities.ALPHA_CORE,null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, false, null,null);
             setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null,null);

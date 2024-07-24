@@ -126,13 +126,15 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
         if (newGame) {
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
-
-                aoTDDataInserter.RandomSetIndustryOnPlanet(AoTDIndustries.CLEANROOM_MANUFACTORY, 2, null);
                 aoTDDataInserter.RandomSetIndustryOnPlanet(AoTDIndustries.PURIFICATION_CENTER, 1, Planets.PLANET_WATER);
                 aoTDDataInserter.initalizeEconomy(true);
             } else {
                 aoTDDataInserter.initalizeEconomy(false);
             }
+        }
+        if(!Global.getSector().getMemory().is("$aotd_2.2.1_fix",true)){
+            Global.getSector().getMemory().set("$aotd_2.2.1_fix",true);
+            aoTDDataInserter.initalizeEconomy(false);
         }
         Global.getSector().addTransientScript(new AoTDCollabSpScript());
         aoTDSpecialItemRepo.putInfoForSpecialItems();
