@@ -19,8 +19,6 @@ public class ShipRenderInfoRepo {
     public static void populateRenderInfoRepo(){
         for (ShipHullSpecAPI allShipHullSpec : Global.getSettings().getAllShipHullSpecs()) {
             populateShip(allShipHullSpec);
-
-
         }
         for (FighterWingSpecAPI allShipHullSpec : Global.getSettings().getAllFighterWingSpecs()) {
             try {

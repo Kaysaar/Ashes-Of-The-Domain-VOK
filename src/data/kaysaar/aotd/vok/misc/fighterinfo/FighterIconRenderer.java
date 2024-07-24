@@ -32,14 +32,18 @@ public class FighterIconRenderer implements CustomUIPanelPlugin {
     float hegiht;
     float scale =1f;
     public void setDimensions(float scale){
-      this.scale = scale;
-      this.width = (float) (info.width*scale);
-      this.hegiht = (float) (info.height*scale);
-      wingSprite.setSize(this.width,this.hegiht);
+        if(info!=null){
+            this.scale = scale;
+            this.width = (float) (info.width*scale);
+            this.hegiht = (float) (info.height*scale);
+            wingSprite.setSize(this.width,this.hegiht);
+        }
+
     }
 
     public FighterIconRenderer(FighterWingSpecAPI specAPI){
         info = ShipRenderInfoRepo.renderInfoRepo.get(specAPI.getVariant().getHullSpec().getHullId());
+
         wingSprite = Global.getSettings().getSprite(specAPI.getVariant().getHullSpec().getSpriteName());
     }
     @Override
@@ -66,26 +70,29 @@ public class FighterIconRenderer implements CustomUIPanelPlugin {
 //            testSprite.setSize(panel.getPosition().getWidth(),panel.getPosition().getHeight());
 //            testSprite.renderAtCenter(panel.getPosition().getCenterX(),panel.getPosition().getCenterY());
 //        }
-        for (CustomPanelAPI panel : panels) {
-            wingSprite.renderAtCenter(panel.getPosition().getCenterX(),panel.getPosition().getCenterY());
-            for (ShipRenderInfo.Slot builtInSlot : info.built_in_slots) {
-                WeaponSpecAPI weapon = Global.getSettings().getWeaponSpec(builtInSlot.id);
-                String base = weapon.getTurretSpriteName();
-                String under = weapon.getTurretUnderSpriteName();
-                SpriteAPI baseSprite = Global.getSettings().getSprite(base);
-                SpriteAPI underSprite = Global.getSettings().getSprite(under);
-                setSizeOfSpriteToScale(baseSprite);
-                setSizeOfSpriteToScale(underSprite);
-                baseSprite.setAngle(builtInSlot.angle);
-                underSprite.setAngle(builtInSlot.angle);
-                float x = panel.getPosition().getCenterX() ;
-                float y = panel.getPosition().getCenterY();
+        if(info!=null){
+            for (CustomPanelAPI panel : panels) {
+                wingSprite.renderAtCenter(panel.getPosition().getCenterX(),panel.getPosition().getCenterY());
+                for (ShipRenderInfo.Slot builtInSlot : info.built_in_slots) {
+                    WeaponSpecAPI weapon = Global.getSettings().getWeaponSpec(builtInSlot.id);
+                    String base = weapon.getTurretSpriteName();
+                    String under = weapon.getTurretUnderSpriteName();
+                    SpriteAPI baseSprite = Global.getSettings().getSprite(base);
+                    SpriteAPI underSprite = Global.getSettings().getSprite(under);
+                    setSizeOfSpriteToScale(baseSprite);
+                    setSizeOfSpriteToScale(underSprite);
+                    baseSprite.setAngle(builtInSlot.angle);
+                    underSprite.setAngle(builtInSlot.angle);
+                    float x = panel.getPosition().getCenterX() ;
+                    float y = panel.getPosition().getCenterY();
 
-                renderSlotMoved(baseSprite, x + builtInSlot.locationOnShip.x * scale, y + builtInSlot.locationOnShip.y * scale);
+                    renderSlotMoved(baseSprite, x + builtInSlot.locationOnShip.x * scale, y + builtInSlot.locationOnShip.y * scale);
+
+                }
 
             }
-
         }
+
     }
     private static void renderSlotMoved(SpriteAPI underSprite, float x, float y) {
         underSprite.renderAtCenter(x, y);

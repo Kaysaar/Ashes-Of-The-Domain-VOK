@@ -129,11 +129,12 @@ public class GPSpec {
         spec.setType(ProductionType.FIGHTER);
         HashMap<String,Integer>commodityCost = new HashMap<>();
         int price =(int) basePrice/priceScaling;
-        if(price==0){
+        if(price<=2){
             price =2;
         }
         if(GPManager.getInstance().getManData(specAPI.getVariant().getHullSpec().getManufacturer())!=null){
             int advanced_Components = basePrice/advanced_comp_scaling;
+            if(advanced_Components==0)advanced_Components =1;
             commodityCost.put("advanced_components",Math.min(advanced_Components,GPManager.getInstance().getManData(specAPI.getVariant().getHullSpec().getManufacturer()).getMaxACCostForFighter()));
         }
         commodityCost.put(Commodities.SHIPS,price/2);
