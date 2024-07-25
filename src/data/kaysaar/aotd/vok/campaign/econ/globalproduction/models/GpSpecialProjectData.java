@@ -18,10 +18,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GpSpecialProjectData {
-    protected GPSpec spec;
-
+    String specID;
     public GPSpec getSpec() {
-        return this.spec;
+        for (GPSpec specialProjectSpec : GPManager.getInstance().getSpecialProjectSpecs()) {
+            if(this.specID.equals(specialProjectSpec.getProjectId())){
+                return specialProjectSpec;
+            }
+        }
+        return null;
+    }
+
+    public void setSpecID(String specID) {
+        this.specID = specID;
     }
 
     public int getCurrentStage() {
@@ -37,11 +45,8 @@ public class GpSpecialProjectData {
         this.showedInfoAboutUnlocking = showedInfoAboutUnlocking;
     }
 
-    public void setSpec(GPSpec spec) {
-        this.spec = spec;
-    }
-    public GpSpecialProjectData(GPSpec spec){
-        this.spec = spec;
+    public GpSpecialProjectData(String spec){
+        this.specID = spec;
     }
 
     public boolean havePaidInitalCost = false;
@@ -51,7 +56,7 @@ public class GpSpecialProjectData {
     public boolean canShow = false;
 
     public boolean isMainFocus(){
-        return GPManager.getInstance().getCurrProjOnGoing()!=null&&GPManager.getInstance().getCurrProjOnGoing().getSpec().getProjectId().equals(this.spec.getProjectId());
+        return GPManager.getInstance().getCurrProjOnGoing()!=null&&GPManager.getInstance().getCurrProjOnGoing().getSpec().getProjectId().equals(this.getSpec().getProjectId());
     }
     public String getStatusString(){
         if(!hasStarted){
@@ -107,7 +112,7 @@ public class GpSpecialProjectData {
         } else if (isFinished()) {
             return Misc.getPositiveHighlightColor();
         }
-        else if (GPManager.getInstance().getCurrProjOnGoing()!=null&&GPManager.getInstance().getCurrProjOnGoing().getSpec().getProjectId().equals(this.spec.getProjectId())){
+        else if (GPManager.getInstance().getCurrProjOnGoing()!=null&&GPManager.getInstance().getCurrProjOnGoing().getSpec().getProjectId().equals(this.getSpec().getProjectId())){
             return Color.ORANGE;
         }
         else{
@@ -153,7 +158,7 @@ public class GpSpecialProjectData {
     public boolean hasStarted = false;
 
     public HashMap<String, Integer> retrieveCostForCurrStage() {
-        return spec.getStageSupplyCost().get(currentStage);
+        return getSpec().getStageSupplyCost().get(currentStage);
     }
 
     public int getDurationOfStage(int stage) {
@@ -169,7 +174,7 @@ public class GpSpecialProjectData {
     public float getReqTotalDaysToProgress(int stage) {
         int index = 0;
         float totaldays = 0;
-        for (Integer integer : this.spec.getDaysPerStage()) {
+        for (Integer integer : this.getSpec().getDaysPerStage()) {
             if (index >= stage) {
                 totaldays += integer;
                 break;
@@ -181,7 +186,7 @@ public class GpSpecialProjectData {
     }
     public float getTotalProgress(){
         float totality = 0;
-        for (Integer integer :this.spec.getDaysPerStage()) {
+        for (Integer integer :this.getSpec().getDaysPerStage()) {
             totality+=integer;
         }
         float per = totalDaysSpent/totality;
@@ -193,7 +198,7 @@ public class GpSpecialProjectData {
     }
     public int getTotalProgressPercent(){
         float totality = 0;
-        for (Integer integer :this.spec.getDaysPerStage()) {
+        for (Integer integer :this.getSpec().getDaysPerStage()) {
             totality+=integer;
         }
         float per = totalDaysSpent/totality;

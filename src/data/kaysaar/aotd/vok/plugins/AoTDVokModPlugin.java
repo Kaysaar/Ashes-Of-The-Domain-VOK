@@ -34,6 +34,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     private static Logger log = Global.getLogger(AoTDVokModPlugin.class);
     AoTDDataInserter aoTDDataInserter = new AoTDDataInserter();
     AoTDSpecialItemRepo aoTDSpecialItemRepo = new AoTDSpecialItemRepo();
+
     private void setListenersIfNeeded() {
         ListenerManagerAPI l = Global.getSector().getListenerManager();
         if(!l.hasListenerOfClass(UiInitalizerScript.class)){
@@ -103,6 +104,13 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     }
 
     public void onGameLoad(boolean newGame) {
+        if(!Global.getSector().getMemory().is("$aotd_2.2.2_fix",true)){
+            Global.getSector().getMemory().set("$aotd_2.2.2_fix",true);
+                Global.getSector().getPersistentData().remove(GPManager.memkey);
+            GPManager manager = new GPManager();
+            Global.getSector().getPersistentData().put(GPManager.memkey, manager);
+
+        }
         GPManager.getInstance().reInitalize();
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
@@ -136,6 +144,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             Global.getSector().getMemory().set("$aotd_2.2.1_fix",true);
             aoTDDataInserter.initalizeEconomy(false);
         }
+
         Global.getSector().addTransientScript(new AoTDCollabSpScript());
         aoTDSpecialItemRepo.putInfoForSpecialItems();
         aoTDDataInserter.setStarterIndustriesUpgrades();

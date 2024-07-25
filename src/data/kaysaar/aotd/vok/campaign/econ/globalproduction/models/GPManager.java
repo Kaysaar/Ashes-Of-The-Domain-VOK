@@ -23,35 +23,20 @@ import data.kaysaar.aotd.vok.campaign.econ.listeners.NidavelirIndustryOptionProv
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
 public class GPManager {
-    ArrayList<GPSpec> specs = new ArrayList<GPSpec>() {
-        @Override
-        public boolean contains(Object o) {
-            String cnt = (String) o;
-            for (GPSpec spec : this) {
-                if (spec.getProjectId().contains(cnt)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    };
-    ArrayList<GPSpec> specialProjectSpecs = new ArrayList<GPSpec>() {
-        @Override
-        public boolean contains(Object o) {
-            String cnt = (String) o;
-            for (GPSpec spec : this) {
-                if (spec.getProjectId().contains(cnt)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    };
+    public static final Logger log = Global.getLogger(GPManager.class);
+    transient ArrayList<GPSpec> specs = new ArrayList<GPSpec>();
+    transient ArrayList<GPSpec> specialProjectSpecs = new ArrayList<GPSpec>();
     public static boolean isEnabled = true;
+
+    public ArrayList<GPSpec> getSpecialProjectSpecs() {
+        return specialProjectSpecs;
+    }
+
     ArrayList<GpManufacturerData>manufacturerData = new ArrayList<>();
     ArrayList<GPOption> shipProductionOption = new ArrayList<>();
     ArrayList<GPOption> weaponProductionOption = new ArrayList<>();
@@ -586,14 +571,7 @@ public class GPManager {
 
 
 
-    public GPOption getOption(String id) {
-        for (GPOption productionOption : shipProductionOption) {
-            if (productionOption.spec.getProjectId().equals(id)) {
-                return productionOption;
-            }
-        }
-        return null;
-    }
+
 
     public GPOrder getOrderViaSpec(String specID) {
         for (GPOrder productionOrder : productionOrders) {
@@ -661,8 +639,18 @@ public class GPManager {
         return false;
     }
     public void loadProductionSpecs() {
-        specs.clear();
-        specialProjectSpecs.clear();
+        if(specs!=null){
+            specs.clear();
+        }
+        else {
+            specs = new ArrayList<>();
+        }
+        if(specialProjectSpecs!=null){
+            specialProjectSpecs.clear();
+        }
+        else{
+            specialProjectSpecs = new ArrayList<>();
+        }
         specialProjectSpecs.addAll(GPSpec.loadSpecialProjects());
         for (ShipHullSpecAPI shipHullSpecAPI : Global.getSettings().getAllShipHullSpecs()) {
             if (shipHullSpecAPI.getHints().contains(ShipHullSpecAPI.ShipTypeHints.STATION)) continue;
@@ -773,15 +761,15 @@ public class GPManager {
         for (GPSpec spec : specs) {
 
             if (spec.type.equals(GPSpec.ProductionType.SHIP)) {
-                GPOption option = new GPOption(spec, true);
+                GPOption option = new GPOption(spec.getProjectId(), true, GPSpec.ProductionType.SHIP);
                 shipProductionOption.add(option);
             }
             if (spec.type.equals(GPSpec.ProductionType.WEAPON)) {
-                GPOption option = new GPOption(spec, true);
+                GPOption option = new GPOption(spec.getProjectId(), true, GPSpec.ProductionType.WEAPON);
                 weaponProductionOption.add(option);
             }
             if (spec.type.equals(GPSpec.ProductionType.FIGHTER)) {
-                GPOption option = new GPOption(spec, true);
+                GPOption option = new GPOption(spec.getProjectId(), true, GPSpec.ProductionType.FIGHTER);
                 fighterProductionOption.add(option);
             }
 
@@ -798,12 +786,12 @@ public class GPManager {
             for (GpSpecialProjectData datum : specialProjData) {
                 if(datum.getSpec().getProjectId().equals(specialProjectSpec.getProjectId())){
                     foundOne = true;
-                    datum.setSpec(specialProjectSpec);
+                    datum.setSpecID(specialProjectSpec.getProjectId());
                     break;
                 }
             }
             if(!foundOne){
-                GpSpecialProjectData data = new GpSpecialProjectData(specialProjectSpec);
+                GpSpecialProjectData data = new GpSpecialProjectData(specialProjectSpec.getProjectId());
                 specialProjData.add(data);
             }
         }
@@ -872,6 +860,10 @@ public class GPManager {
     public ArrayList<GPOption> getLearnedWeapons() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getWeaponProductionOption()) {
+            log.info("Spec id : "+option.getSpec().getProjectId()+" loaded");
+            if(option.getSpec().getProjectId().equals("guardian")){
+                String hehe = "hehe";
+            }
             if (Global.getSector().getPlayerFaction().knowsWeapon(option.getSpec().getWeaponSpec().getWeaponId()) || Global.getSettings().isDevMode()) {
                 options.add(option);
             }
@@ -938,7 +930,7 @@ public class GPManager {
         this.shipTypeInfo.clear();
         LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();
         for (GPOption learnedShipPackage : getLearnedShipPackages()) {
-            String indicator = AoTDMisc.getType(learnedShipPackage.spec.shipHullSpecAPI);
+            String indicator = AoTDMisc.getType(learnedShipPackage.getSpec().shipHullSpecAPI);
             if (shipManInfo.get(indicator) == null) {
                 shipManInfo.put(indicator, 1);
             } else {
@@ -1057,7 +1049,7 @@ public class GPManager {
         this.shipSizeInfo.clear();
         LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();
         for (GPOption learnedShipPackage : getLearnedShipPackages()) {
-            String indicator = Misc.getHullSizeStr(learnedShipPackage.spec.getShipHullSpecAPI().getHullSize());
+            String indicator = Misc.getHullSizeStr(learnedShipPackage.getSpec().getShipHullSpecAPI().getHullSize());
             if (shipManInfo.get(indicator) == null) {
                 shipManInfo.put(indicator, 1);
             } else {
