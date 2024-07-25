@@ -138,7 +138,7 @@ public class GPManager {
         commodities.add(Commodities.HAND_WEAPONS);
         commodities.add("advanced_components");
     }
-    public static String memkey = "aotd_gp_plugin_ver2";
+    public static String memkey = "aotd_gp_plugin";
 
     public ArrayList<GPOption> getSpecialProjectsOption() {
         return specialProjectsOption;
