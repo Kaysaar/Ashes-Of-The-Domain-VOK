@@ -1,25 +1,25 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 
 
+import com.fs.starfarer.api.Global;
+
 public class GPOption {
-    public GPSpec spec;
+    protected String specID;
     public boolean isDiscovered;
-    public void updateSpec(){
-        for (GPSpec GPSpec : GPManager.getInstance().getSpecs()) {
-            if(GPSpec.getIdOfItemProduced().isEmpty())continue;
-            if(GPSpec.getIdOfItemProduced().equals(spec.getIdOfItemProduced())){
-                spec = GPSpec;
-                break;
-            }
-        }
-    }
-    public GPOption(GPSpec spec , boolean isDiscovered){
-        this.spec = spec;
+    public GPSpec.ProductionType type;
+    public GPOption(String spec , boolean isDiscovered,GPSpec.ProductionType productionType){
+        this.specID = spec;
         this.isDiscovered = isDiscovered;
+        this. type = productionType;
     }
 
     public GPSpec getSpec() {
-        return spec;
+        for (GPSpec spec : GPManager.getInstance().getSpecs()) {
+            if(spec.getProjectId().equals(this.specID)&&spec.getType()==this.type){
+                return spec;
+            }
+        }
+        return null;
     }
 
 

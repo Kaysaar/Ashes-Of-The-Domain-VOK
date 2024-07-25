@@ -66,12 +66,12 @@ public class UIData {
         LabelAPI name = mainTooltip.addPara(option.getSpec().getShipHullSpecAPI().getHullName(),0f, Misc.getTooltipTitleAndLightHighlightColor());
         name.autoSizeToWidth(WIDTH_OF_NAME-35);
         name.getPosition().inTL(35, getyPad(name));
-        float days = option.spec.days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
+        float days = option.getSpec().days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
         if(days<=1)days=1;
         LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString((int)days),0f);
         String variantId = null;
         for (String allVariantId : Global.getSettings().getAllVariantIds()) {
-            if(allVariantId.contains(option.spec.getIdOfItemProduced())){
+            if(allVariantId.contains(option.getSpec().getIdOfItemProduced())){
                 variantId=allVariantId;
                 break;
             }
@@ -132,13 +132,13 @@ public class UIData {
         Pair<CustomPanelAPI, WeaponSpriteRenderer> panelImage = WeaponInfoGenerator.getImageOfWeapon(option.getSpec().getWeaponSpec(),30);
         LabelAPI name = mainTooltip.addPara(option.getSpec().getWeaponSpec().getWeaponName(),0f, Misc.getTooltipTitleAndLightHighlightColor());
         name.autoSizeToWidth(WIDTH_OF_NAME-35);
-        float days = option.spec.days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
+        float days = option.getSpec().days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
         if(days<=1)days=1;
         name.getPosition().inTL(35, getyPad(name));
         LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString((int)days),0f);
         String variantId = null;
         for (String allVariantId : Global.getSettings().getAllVariantIds()) {
-            if(allVariantId.contains(option.spec.getIdOfItemProduced())){
+            if(allVariantId.contains(option.getSpec().getIdOfItemProduced())){
                 variantId=allVariantId;
                 break;
             }
@@ -186,11 +186,11 @@ public class UIData {
         ButtonAPI button = mainTooltip.addAreaCheckbox("",option,base,bg,bright,WIDTH_OF_OPTIONS-5,HEIGHT_OF_BUTTONS,0f);
         button.getPosition().inTL(0,0);
 
-        Pair<CustomPanelAPI, FighterIconRenderer> panelImage = FighterInfoGenerator.createFormationPanel(option.spec.getWingSpecAPI(), FormationType.BOX,30,option.spec.getWingSpecAPI().getNumFighters());
+        Pair<CustomPanelAPI, FighterIconRenderer> panelImage = FighterInfoGenerator.createFormationPanel(option.getSpec().getWingSpecAPI(), FormationType.BOX,30,option.getSpec().getWingSpecAPI().getNumFighters());
         LabelAPI name = mainTooltip.addPara(option.getSpec().getWingSpecAPI().getWingName(),0f, Misc.getTooltipTitleAndLightHighlightColor());
         name.autoSizeToWidth(WIDTH_OF_NAME-35);
         name.getPosition().inTL(45, getyPad(name));
-        float days = option.spec.days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
+        float days = option.getSpec().days/GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
         if(days<=1)days=1;
 
         LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString((int)days),0f);

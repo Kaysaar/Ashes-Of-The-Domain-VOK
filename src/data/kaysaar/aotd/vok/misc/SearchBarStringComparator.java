@@ -20,16 +20,16 @@ public class SearchBarStringComparator implements Comparator<GPOption> {
        String s1S="";
        String s2S ="";
        if(s1.getSpec().getType().equals(GPSpec.ProductionType.SHIP)){
-            s1S = s1.spec.getShipHullSpecAPI().getHullName();
-            s2S = s2.spec.getShipHullSpecAPI().getHullName();
+            s1S = s1.getSpec().getShipHullSpecAPI().getHullName();
+            s2S = s2.getSpec().getShipHullSpecAPI().getHullName();
        }
         if(s1.getSpec().getType().equals(GPSpec.ProductionType.WEAPON)){
-             s1S = s1.spec.getWeaponSpec().getWeaponName();
-             s2S =s2.spec.getWeaponSpec().getWeaponName();
+             s1S = s1.getSpec().getWeaponSpec().getWeaponName();
+             s2S =s2.getSpec().getWeaponSpec().getWeaponName();
         }
         if(s1.getSpec().getType().equals(GPSpec.ProductionType.FIGHTER)){
-            s1S= s1.spec.getWingSpecAPI().getWingName();
-            s2S =s2.spec.getWingSpecAPI().getWingName();
+            s1S= s1.getSpec().getWingSpecAPI().getWingName();
+            s2S =s2.getSpec().getWingSpecAPI().getWingName();
         }
         int distance1 = AoTDMisc.levenshteinDistance(searchString, s1S);
         int distance2 = AoTDMisc.levenshteinDistance(searchString, s2S);
