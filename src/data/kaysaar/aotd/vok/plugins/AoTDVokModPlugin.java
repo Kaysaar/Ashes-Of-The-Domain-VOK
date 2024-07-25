@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.plugins;
 
 
 import com.fs.starfarer.api.BaseModPlugin;
+import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
@@ -104,13 +105,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     }
 
     public void onGameLoad(boolean newGame) {
-        if(!Global.getSector().getMemory().is("$aotd_2.2.2_fix",true)){
-            Global.getSector().getMemory().set("$aotd_2.2.2_fix",true);
-                Global.getSector().getPersistentData().remove(GPManager.memkey);
-            GPManager manager = new GPManager();
-            Global.getSector().getPersistentData().put(GPManager.memkey, manager);
-
-        }
         GPManager.getInstance().reInitalize();
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();

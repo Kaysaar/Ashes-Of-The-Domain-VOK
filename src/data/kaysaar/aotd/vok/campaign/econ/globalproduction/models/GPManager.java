@@ -138,7 +138,7 @@ public class GPManager {
         commodities.add(Commodities.HAND_WEAPONS);
         commodities.add("advanced_components");
     }
-    public static String memkey = "aotd_gp_plugin";
+    public static String memkey = "aotd_gp_plugin_ver2";
 
     public ArrayList<GPOption> getSpecialProjectsOption() {
         return specialProjectsOption;
@@ -163,22 +163,7 @@ public class GPManager {
     static GPManager setInstance() {
         GPManager manager = new GPManager();
         Global.getSector().getPersistentData().put(memkey, manager);
-        Global.getSector().addScript(new EveryFrameScript() {
-            @Override
-            public boolean isDone() {
-                return false;
-            }
-
-            @Override
-            public boolean runWhilePaused() {
-                return false;
-            }
-
-            @Override
-            public void advance(float amount) {
-                GPManager.getInstance().advance(amount);
-            }
-        });
+        Global.getSector().addScript(new GpManagerAdvance());
         return manager;
     }
 
