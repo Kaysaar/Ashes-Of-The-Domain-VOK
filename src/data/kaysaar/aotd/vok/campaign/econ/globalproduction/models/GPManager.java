@@ -185,6 +185,7 @@ public class GPManager {
         }
         return null;
     }
+
     public void reInitalize() {
         if(manufacturerData!=null){
             manufacturerData.clear();
@@ -746,15 +747,15 @@ public class GPManager {
         for (GPSpec spec : specs) {
 
             if (spec.type.equals(GPSpec.ProductionType.SHIP)) {
-                GPOption option = new GPOption(spec.getProjectId(), true, GPSpec.ProductionType.SHIP);
+                GPOption option = new GPOption(spec, true, GPSpec.ProductionType.SHIP);
                 shipProductionOption.add(option);
             }
             if (spec.type.equals(GPSpec.ProductionType.WEAPON)) {
-                GPOption option = new GPOption(spec.getProjectId(), true, GPSpec.ProductionType.WEAPON);
+                GPOption option = new GPOption(spec, true, GPSpec.ProductionType.WEAPON);
                 weaponProductionOption.add(option);
             }
             if (spec.type.equals(GPSpec.ProductionType.FIGHTER)) {
-                GPOption option = new GPOption(spec.getProjectId(), true, GPSpec.ProductionType.FIGHTER);
+                GPOption option = new GPOption(spec, true, GPSpec.ProductionType.FIGHTER);
                 fighterProductionOption.add(option);
             }
 
@@ -845,10 +846,6 @@ public class GPManager {
     public ArrayList<GPOption> getLearnedWeapons() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getWeaponProductionOption()) {
-            log.info("Spec id : "+option.getSpec().getProjectId()+" loaded");
-            if(option.getSpec().getProjectId().equals("guardian")){
-                String hehe = "hehe";
-            }
             if (Global.getSector().getPlayerFaction().knowsWeapon(option.getSpec().getWeaponSpec().getWeaponId()) || Global.getSettings().isDevMode()) {
                 options.add(option);
             }

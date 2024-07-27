@@ -747,7 +747,7 @@ public class ShipInfoGenerator {
             float remainingY = iconSize - newHeight;
             float scale = newWidth / originalWidth;
 
-            ShipRenderInfo.Module centralModule = info.createModule(info.center, info.width, info.height, info.center, specAPI.getHullId(), -1);
+            ShipRenderInfo.Module centralModule = info.getCentralModule() ;
             CustomPanelAPI center = panelHolder.createCustomPanel((float) (info.width * scale), (float) (info.height * scale), null);
             panelHolder.addComponent(center).inTL(remainingX / 2, remainingY / 2);
             HashMap<CustomPanelAPI, ShipRenderInfo.Module> renderingMap = new HashMap<>();
@@ -959,7 +959,7 @@ public class ShipInfoGenerator {
 
         float posX = info.center.x * scale;
         float posY = translatedY;
-        ShipRenderInfo.Module centralModule = info.createModule(info.center, info.width, info.height, info.center, specAPI.getHullId(), -100);
+        ShipRenderInfo.Module centralModule = info.getCentralModule();
         HashMap<CustomPanelAPI, ShipRenderInfo.Module> mapOfRendering = new HashMap<>();
         mapOfRendering.put(centralPanel, centralModule);
         for (ShipRenderInfo.Module module : info.moduleSlotsOnOriginalShip) {
@@ -989,7 +989,7 @@ public class ShipInfoGenerator {
         float furtherstXRight = 0f;
         float furtherstYBot = 0f;
 
-        ShipRenderInfo.Module centralModule = info.createModule(info.center, info.width, info.height, info.center, specAPI.getHullId(), -100);
+        ShipRenderInfo.Module centralModule = info.getCentralModule();
         HashMap<CustomPanelAPI, ShipRenderInfo.Module> mapOfRendering = new HashMap<>();
         mapOfRendering.put(centralPanel, centralModule);
         for (ShipRenderInfo.Module module : info.moduleSlotsOnOriginalShip) {

@@ -32,12 +32,22 @@ public class ShipRenderInfo {
         }
 
     }
+    public Module centralModule;
 
     public  Module createModule(Vector2f center, double width, double height, Vector2f locationOnShip, String moduleID,int renderingOrder){
         Module mod = new Module(center,width,height,new Slot(locationOnShip,moduleID,0,false),renderingOrder);
 
         return mod;
     }
+
+    public void setCentralModule(Module centralModule) {
+        this.centralModule = centralModule;
+    }
+
+    public Module getCentralModule() {
+        return centralModule;
+    }
+
     public class Module{
         public Slot slotOnOriginal;
         public double  width;
@@ -249,7 +259,6 @@ public class ShipRenderInfo {
                JSONArray locationArrayModule = moduleHull.getJSONArray("center");
                float xMod = (float) locationArrayModule.getDouble(0);
                float yMod = (float) locationArrayModule.getDouble(1);
-               ArrayList<Slot>built_in_slots = new ArrayList<>(populateBuiltInList(moduleSlotsShipHulls.get(id),false));
                Vector2f center = new Vector2f(xMod,yMod);
                int prev = current;
                if(Global.getSettings().getHullSpec(moduleSlotsShipHulls.get(id)).getHints().contains(ShipHullSpecAPI.ShipTypeHints.UNDER_PARENT)){
