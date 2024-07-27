@@ -54,6 +54,11 @@ public class ShipRenderInfoRepo {
                 info.getModuleSlotsFromVariantFile(filepath);
                 info.populateSlotShipHullsMap();
                 info.populateModuleList(allShipHullSpec.getHullId());
+                ShipRenderInfo.Module mod = info.createModule(info.center, info.width, info.height, info.center, allShipHullSpec.getHullId(), -100);
+                info.setCentralModule(mod);
+            }else{
+                ShipRenderInfo.Module mod = info.createModule(info.center, info.width, info.height, info.center, allShipHullSpec.getHullId(), -1);
+                info.setCentralModule(mod);
             }
             renderInfoRepo.put(allShipHullSpec.getHullId(),info);
         } catch (Exception e) {

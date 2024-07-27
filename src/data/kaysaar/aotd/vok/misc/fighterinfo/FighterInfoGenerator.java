@@ -63,7 +63,7 @@ public class FighterInfoGenerator {
         ArrayList<StatNumberUIPackage> firstColumnLogisticData = new ArrayList<>();
         String text1 = wing.getRoleDesc();
         firstColumnLogisticData.add(new StatNumberUIPackage(tooltipMakerAPI.addPara("Primary role", 3f), text1, null,Color.ORANGE, null));
-        text1 = (int)wing.getVariant().getHullSpec().getOrdnancePoints(null)+"";
+        text1 = (int)wing.getOpCost(null)+"";
         firstColumnLogisticData.add(new StatNumberUIPackage(tooltipMakerAPI.addPara("Ordnance points", 3f), text1, null,Color.ORANGE, null));
         text1 = String.valueOf((int)wing.getVariant().getHullSpec().getMinCrew());
         firstColumnLogisticData.add(new StatNumberUIPackage(tooltipMakerAPI.addPara("Crew per fighter", 3f), text1, null,Color.ORANGE, null));

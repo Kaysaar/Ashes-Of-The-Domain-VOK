@@ -82,6 +82,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     @Override
     public void onApplicationLoad() throws Exception {
         ShipRenderInfoRepo.populateRenderInfoRepo();
+
     }
 
     @Override

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin.maxItemsPerPage;
+import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin.maxItemsPerPageWEP;
 
 public class WeaponOptionPanelInterface extends BaseOptionPanelManager implements OptionPanelInterface {
 
@@ -88,10 +89,10 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager implement
         }
         wantsAll = false;
         resetToText = false;
-        currOffset = currPage * maxItemsPerPage;
+        currOffset = currPage * maxItemsPerPageWEP;
         float size = packages.size();
-        int maxPages = (int) (size / maxItemsPerPage);
-        if ((float) maxPages != size / maxItemsPerPage) maxPages++;
+        int maxPages = (int) (size / maxItemsPerPageWEP);
+        if ((float) maxPages != size / maxItemsPerPageWEP) maxPages++;
         Pair<CustomPanelAPI,ArrayList<ButtonAPI>> orders=OptionPanelDesigner.createWeaponPanel(UIData.WIDTH_OF_OPTIONS, YHeight, this.panel, packages, currOffset, maxItemsPerPage);
         pageInitalization(panel, maxPages, orders);
     }

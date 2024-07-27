@@ -18,6 +18,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILine
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.optionpanels.*;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipInfoGenerator;
+import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -32,7 +33,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     InteractionDialogAPI dialog;
     CustomVisualDialogDelegate.DialogCallbacks callbacks;
     CustomPanelAPI panel;
-    public static int maxItemsPerPage = 45;
+    public static int maxItemsPerPage = 70;
+    public static int maxItemsPerPageWEP = 45;
     boolean showProjectList;
     ArrayList<GPOrder> ordersQueued = new ArrayList<>();
 
@@ -71,6 +73,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         this.panel = panel;
         this.callbacks = callbacks;
         copyFromOriginal();
+        maxItemsPerPage = AoTDSettingsManager.getIntValue("aotd_shipyard_pag_per_page");
+        maxItemsPerPageWEP = maxItemsPerPage;
         Global.getSoundPlayer().playCustomMusic(1,1,"aotd_shipyard",true);
         shipPanelManager = new ShipOptionPanelInterface(this.panel);
         weaponPanelManager = new WeaponOptionPanelInterface(this.panel);
