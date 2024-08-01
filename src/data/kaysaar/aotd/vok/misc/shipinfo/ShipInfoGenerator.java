@@ -56,14 +56,14 @@ public class ShipInfoGenerator {
         CustomPanelAPI panelOfLogistics = generateLogisticalDataPanel(ship);
         panelAPI.addUIElement(tooltipOfShipSprite).inTL(0, 0);
         textPanel.addUIElement(tooltipOfShipDescription).inTL(0, 0);
-        float xCord = 700;
+        float xCord = 750;
         float maxXCord = widthOfTooltip;
 
         float widthLeft = maxXCord - xCord;
         float widthOfPanel = panelAPI.getPosition().getWidth();
         float leftSpace = widthOfPanel - widthOfPanel;
 
-        container.addComponent(panelAPI).inTL(700 + leftSpace / 2, 30);
+        container.addComponent(panelAPI).inTL(xCord + leftSpace / 2, 30);
 
         container.addComponent(panelOfLogistics).inTL(-12, 0);
 
@@ -213,20 +213,20 @@ public class ShipInfoGenerator {
     static CustomPanelAPI generateLogisticalDataPanel(FleetMemberAPI ship) {
         ship.getVariant().clear();
         ship.getRepairTracker().setCR(70);
-        CustomPanelAPI panelOfLogisticMain = Global.getSettings().createCustom(805, 185, null);
-        TooltipMakerAPI tooltipOfLogisticSub = panelOfLogisticMain.createUIElement(455, 185, false);
-        TooltipMakerAPI tooltipOfCombatPerfomance = panelOfLogisticMain.createUIElement(225, 185, false);
+        CustomPanelAPI panelOfLogisticMain = Global.getSettings().createCustom(895, 185, null);
+        TooltipMakerAPI tooltipOfLogisticSub = panelOfLogisticMain.createUIElement(505, 185, false);
+        TooltipMakerAPI tooltipOfCombatPerfomance = panelOfLogisticMain.createUIElement(245, 185, false);
 
 
         Color colorBase = Global.getSector().getPlayerFaction().getBaseUIColor();
         Color darkUIColor = Global.getSector().getPlayerFaction().getDarkUIColor();
         tooltipOfLogisticSub.addSectionHeading("Logistical Data", colorBase, darkUIColor, Alignment.MID, tooltipOfLogisticSub.getWidthSoFar() - 2, 0f).getPosition().inTL(7, 0);
         tooltipOfCombatPerfomance.addSectionHeading("Combat Performance", colorBase, darkUIColor, Alignment.MID, tooltipOfCombatPerfomance.getWidthSoFar() - 15, 0f).getPosition().inTL(5, 0);
-        CustomPanelAPI crewAndCRinfo = Global.getSettings().createCustom(240, 185, null);
-        TooltipMakerAPI tooltipFirstRowLogistic = crewAndCRinfo.createUIElement(240, 185, false);
+        CustomPanelAPI crewAndCRinfo = Global.getSettings().createCustom(250, 185, null);
+        TooltipMakerAPI tooltipFirstRowLogistic = crewAndCRinfo.createUIElement(250, 185, false);
 
-        CustomPanelAPI logisticInfo = Global.getSettings().createCustom(220, 185, null);
-        TooltipMakerAPI tooltipSecondRowLogistic = logisticInfo.createUIElement(220, 185, false);
+        CustomPanelAPI logisticInfo = Global.getSettings().createCustom(240, 185, null);
+        TooltipMakerAPI tooltipSecondRowLogistic = logisticInfo.createUIElement(240, 185, false);
         ;
 
 
@@ -245,10 +245,10 @@ public class ShipInfoGenerator {
         crewAndCRinfo.addUIElement(tooltipFirstRowLogistic).inTL(0, 0);
         logisticInfo.addUIElement(tooltipSecondRowLogistic).inTL(0, 0);
         tooltipOfLogisticSub.addCustom(crewAndCRinfo, 0f);
-        tooltipOfLogisticSub.addCustomDoNotSetPosition(logisticInfo).getPosition().setLocation(0, 0).inTL(250, -crewAndCRinfo.getPosition().getY() - crewAndCRinfo.getPosition().getHeight() + 2f);
+        tooltipOfLogisticSub.addCustomDoNotSetPosition(logisticInfo).getPosition().setLocation(0, 0).inTL(270, -crewAndCRinfo.getPosition().getY() - crewAndCRinfo.getPosition().getHeight() + 2f);
 
         panelOfLogisticMain.addUIElement(tooltipOfLogisticSub).inTL(0, 0);
-        panelOfLogisticMain.addUIElement(tooltipOfCombatPerfomance).inTL(476, 0);
+        panelOfLogisticMain.addUIElement(tooltipOfCombatPerfomance).inTL(506, 0);
 
 
         return panelOfLogisticMain;
@@ -681,63 +681,69 @@ public class ShipInfoGenerator {
         }
         if (modular) {
 
-            float scale = 1f;
-            Pair<HashMap<CustomPanelAPI, ShipRenderInfo.Module>, CustomPanelAPI> data = (generateImageOfModularShip(specAPI, panelHolder, info, scale));
-            HashMap<CustomPanelAPI, ShipRenderInfo.Module> imagePanels = new HashMap<>();
-            imagePanels.putAll(data.one);
+            try {
+                float scale = 1f;
+                Pair<HashMap<CustomPanelAPI, ShipRenderInfo.Module>, CustomPanelAPI> data = (generateImageOfModularShip(specAPI, panelHolder, info, scale));
+                HashMap<CustomPanelAPI, ShipRenderInfo.Module> imagePanels = new HashMap<>();
+                imagePanels.putAll(data.one);
 
-            float minX = 0;
-            float maxX = 0;
-            float minY = 0;
-            float maxY = 0;
-            for (Map.Entry<CustomPanelAPI, ShipRenderInfo.Module> imagePanel : imagePanels.entrySet()) {
-                if (imagePanel.getKey().getPosition().getX() <= minX) {
-                    minX = imagePanel.getKey().getPosition().getX();
+                float minX = 0;
+                float maxX = 0;
+                float minY = 0;
+                float maxY = 0;
+                for (Map.Entry<CustomPanelAPI, ShipRenderInfo.Module> imagePanel : imagePanels.entrySet()) {
+                    if (imagePanel.getKey().getPosition().getX() <= minX) {
+                        minX = imagePanel.getKey().getPosition().getX();
+                    }
+                    if (imagePanel.getKey().getPosition().getX() + imagePanel.getKey().getPosition().getWidth() >= maxX) {
+                        maxX = imagePanel.getKey().getPosition().getX() + imagePanel.getKey().getPosition().getWidth();
+                    }
+                    if (imagePanel.getKey().getPosition().getY() + imagePanel.getKey().getPosition().getHeight() >= maxY) {
+                        maxY = imagePanel.getKey().getPosition().getY() + imagePanel.getKey().getPosition().getHeight();
+                    }
+                    if (imagePanel.getKey().getPosition().getY() <= minY) {
+                        minY = imagePanel.getKey().getPosition().getY();
+                    }
                 }
-                if (imagePanel.getKey().getPosition().getX() + imagePanel.getKey().getPosition().getWidth() >= maxX) {
-                    maxX = imagePanel.getKey().getPosition().getX() + imagePanel.getKey().getPosition().getWidth();
-                }
-                if (imagePanel.getKey().getPosition().getY() + imagePanel.getKey().getPosition().getHeight() >= maxY) {
-                    maxY = imagePanel.getKey().getPosition().getY() + imagePanel.getKey().getPosition().getHeight();
-                }
-                if (imagePanel.getKey().getPosition().getY() <= minY) {
-                    minY = imagePanel.getKey().getPosition().getY();
-                }
-            }
-            float widthCombined = maxX - minX;
-            float heightCombined = maxY - minY;
+                float widthCombined = maxX - minX;
+                float heightCombined = maxY - minY;
 
-            aspectRatio = widthCombined / heightCombined;
+                aspectRatio = widthCombined / heightCombined;
 
-            if (widthCombined <= iconSize && heightCombined <= iconSize) {
-                newWidth = widthCombined;
-                newHeight = heightCombined;
-            } else {
-                if (widthCombined > heightCombined) {
-                    // Width is the larger dimension
-                    newWidth = iconSize;
-                    newHeight = iconSize / aspectRatio;
+                if (widthCombined <= iconSize && heightCombined <= iconSize) {
+                    newWidth = widthCombined;
+                    newHeight = heightCombined;
                 } else {
-                    // Height is the larger dimension or they are equal
-                    newHeight = iconSize;
-                    newWidth = iconSize * aspectRatio;
+                    if (widthCombined > heightCombined) {
+                        // Width is the larger dimension
+                        newWidth = iconSize;
+                        newHeight = iconSize / aspectRatio;
+                    } else {
+                        // Height is the larger dimension or they are equal
+                        newHeight = iconSize;
+                        newWidth = iconSize * aspectRatio;
+                    }
                 }
+
+                scale = newHeight / heightCombined;
+                Pair<HashMap<CustomPanelAPI, ShipRenderInfo.Module>, CustomPanelAPI> data2 = (generateImageOfModularShipSized(specAPI, panelHolder, info, scale, newWidth, newHeight));
+                panelHolder.getPosition().setSize(iconSize, iconSize);
+                ;
+                float remainingX = iconSize - data2.two.getPosition().getWidth();
+                float remainingY = iconSize - data2.two.getPosition().getHeight();
+                tooltip.addCustom(data2.two, 0f).getPosition().inTL(remainingX / 2, remainingY / 2);
+                renderer.setScale(scale);
+                renderer.setPartsOfShip(data2.one, data2.two);
+                renderer.setCollorOverride(colorOverride);
+                renderer.setStencilMaskBorder(panelHolder);
+
+                panelHolder.addUIElement(tooltip).inTL(0, 0);
+                return new Pair<>(panelHolder,renderer);
+            }
+            catch (Exception e ){
+                return getShipImage(Global.getSettings().getHullSpec("onslaught"),iconSize,Color.red);
             }
 
-            scale = newHeight / heightCombined;
-            Pair<HashMap<CustomPanelAPI, ShipRenderInfo.Module>, CustomPanelAPI> data2 = (generateImageOfModularShipSized(specAPI, panelHolder, info, scale, newWidth, newHeight));
-            panelHolder.getPosition().setSize(iconSize, iconSize);
-            ;
-            float remainingX = iconSize - data2.two.getPosition().getWidth();
-            float remainingY = iconSize - data2.two.getPosition().getHeight();
-            tooltip.addCustom(data2.two, 0f).getPosition().inTL(remainingX / 2, remainingY / 2);
-            renderer.setScale(scale);
-            renderer.setPartsOfShip(data2.one, data2.two);
-            renderer.setCollorOverride(colorOverride);
-            renderer.setStencilMaskBorder(panelHolder);
-
-            panelHolder.addUIElement(tooltip).inTL(0, 0);
-            return new Pair<>(panelHolder,renderer);
 
 
         }

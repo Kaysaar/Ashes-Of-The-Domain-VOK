@@ -11,10 +11,12 @@ import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.AoTDCollabSpScript;
 import data.kaysaar.aotd.vok.listeners.AoTDRaidListener;
+import data.kaysaar.aotd.vok.listeners.AoTDxIndieCollabListener;
 import data.kaysaar.aotd.vok.listeners.AoTDxUafAfterCombatListener;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderInfoRepo;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
@@ -105,6 +107,10 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         }
     }
 
+    public void initalizeNecessarySPListeners(){
+        Global.getSector().addTransientListener(new AoTDxIndieCollabListener());
+
+    }
     public void onGameLoad(boolean newGame) {
         GPManager.getInstance().reInitalize();
         super.onGameLoad(newGame);
@@ -141,6 +147,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         }
 
         Global.getSector().addTransientScript(new AoTDCollabSpScript());
+        Global.getSector().addTransientListener(new AoTDxUafAfterCombatListener());
         aoTDSpecialItemRepo.putInfoForSpecialItems();
         aoTDDataInserter.setStarterIndustriesUpgrades();
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SOIL_NANITES, "subfarming");
@@ -156,8 +163,17 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         if(Global.getSettings().getModManager().isModEnabled("uaf")){
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker" ,"subfarming,artifarming");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_garrison_transmitter" ,AoTDIndustries.TERMINUS);
-            Global.getSettings().getHullSpec("uaf_supercap_slv_core").getHints().add(ShipHullSpecAPI.ShipTypeHints.UNBOARDABLE);
         }
+        for (GPSpec specialProjectSpec : GPManager.getInstance().getSpecialProjectSpecs()) {
+            try {
+                Global.getSettings().getHullSpec(specialProjectSpec.getRewardId()).getHints().add(ShipHullSpecAPI.ShipTypeHints.UNBOARDABLE);
+            }
+            catch (Exception e ){
+
+            }
+
+        }
+        initalizeNecessarySPListeners();
             int highestTierUnlock = AoTDSettingsManager.getHighestTierEnabled();
             for (ResearchOption option : AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getResearchRepoOfFaction()) {
                 if(option.Tier.ordinal()<=highestTierUnlock){

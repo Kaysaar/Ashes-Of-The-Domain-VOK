@@ -11,6 +11,7 @@ import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.List;
 public class SpecialBlueprintPlugin extends ShipBlueprintItemPlugin {
     protected String memoryKeyToSet;
     @Override
-    public void init(CargoStackAPI stack) {
+    public void init(@NotNull CargoStackAPI stack) {
         this.stack = stack;
         String[]splitted =new String[2];
         String  raw = stack.getSpecialDataIfSpecial().getData();
