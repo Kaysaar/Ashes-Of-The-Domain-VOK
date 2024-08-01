@@ -17,6 +17,7 @@ import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.NidavelirIndustryOptionProvider;
@@ -25,6 +26,7 @@ import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import org.apache.log4j.Logger;
 
+import java.awt.*;
 import java.util.*;
 
 public class GPManager {
@@ -115,10 +117,8 @@ public class GPManager {
                 currentFocus.currentStage = -1;
                 currentFocus.haveRecivedAward = false;
                 currentFocus.havePaidInitalCost = false;
-
+            new Color(58, 63, 58);
             }
-
-
         }
         this.currentFocus = currentFocus;
     }

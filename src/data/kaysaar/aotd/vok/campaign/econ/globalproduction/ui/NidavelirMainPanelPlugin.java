@@ -352,8 +352,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         tooltip.addSectionHeading("Produced resources", Alignment.MID, 0f);
         tooltip.addSectionHeading("Consumed resources", Alignment.MID, 55f);
         float totalSize = UIData.WIDTH_OF_ORDERS;
-        float sections = totalSize / 3;
-        float positions = totalSize / 12;
+        float sections = totalSize / commodities.size();
+        float positions = totalSize / (commodities.size()*4);
         float iconsize = 40;
         float topYImage = 25;
         LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);

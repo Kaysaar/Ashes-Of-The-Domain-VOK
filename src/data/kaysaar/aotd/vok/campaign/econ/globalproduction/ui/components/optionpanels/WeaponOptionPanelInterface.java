@@ -68,6 +68,7 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager implement
     private void createWeaponOptions(CustomPanelAPI panel) {
         if(orderButtons==null)orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages = GPManager.getInstance().getLearnedWeapons();
+        packages= GPManager.getInstance().getWeaponPackagesBasedOnData("Cost",SortingState.ASCENDING,packages);
         if (!chosenManu.isEmpty() && !wantsAll && !resetToText&&chosenType.isEmpty()&&chosenSize.isEmpty()) {
             packages = GPManager.getInstance().getWeaponsByManu(chosenManu);
         }

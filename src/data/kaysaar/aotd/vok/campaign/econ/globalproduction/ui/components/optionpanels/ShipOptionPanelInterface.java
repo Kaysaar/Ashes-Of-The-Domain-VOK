@@ -64,6 +64,7 @@ public class ShipOptionPanelInterface extends BaseOptionPanelManager implements 
     private void createShipOptions(CustomPanelAPI panel) {
         if(orderButtons==null)orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages = GPManager.getInstance().getLearnedShipPackages();
+        packages= GPManager.getInstance().getShipPackagesBasedOnData("Cost",SortingState.ASCENDING,packages);
         if (!chosenManu.isEmpty() && !wantsAll && !resetToText&&chosenType.isEmpty()&&chosenSize.isEmpty()) {
             packages = GPManager.getInstance().getShipPackagesByManu(chosenManu);
         }

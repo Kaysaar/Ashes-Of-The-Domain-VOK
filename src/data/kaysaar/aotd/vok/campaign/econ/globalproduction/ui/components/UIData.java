@@ -107,12 +107,12 @@ public class UIData {
 
             @Override
             public float getTooltipWidth(Object tooltipParam) {
-                return 950;
+                return 1000;
             }
 
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                ShipInfoGenerator.generate(tooltip,member,null,panelAPIs,940);
+                ShipInfoGenerator.generate(tooltip,member,null,panelAPIs,990);
             }
         }, TooltipMakerAPI.TooltipLocation.BELOW);
         panel.addUIElement(mainTooltip).inTL(-5,0);
