@@ -322,8 +322,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         for (String s : commodities) {
             reqResources.put(s, 0);
         }
-        if(GPManager.getInstance().getCurrProjOnGoing()!=null){
-            for (Map.Entry<String, Integer> entry : GPManager.getInstance().getCurrProjOnGoing().getSpec().getStageSupplyCost().get(GPManager.getInstance().getCurrProjOnGoing().getCurrentStage()).entrySet()) {
+        if(GPManager.getInstance().getCurrProjOnGoing()!=null&&!GPManager.getInstance().getCurrProjOnGoing().isFinished()){
+            for (Map.Entry<String, Integer> entry : GPManager.getInstance().getCurrProjOnGoing().retrieveCostForCurrStage().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue());
                 } else {

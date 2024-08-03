@@ -120,6 +120,10 @@ public class GpSpecialProjectData {
         }
     }
     public boolean canSupportStageConsumption(HashMap<String, Integer> availableResources) {
+        if(availableResources==null)return false;
+        if(currentStage>= getSpec().amountOfStages){
+            return false;
+        }
         boolean allRes = true;
         for (Map.Entry<String, Integer> entry : getSpec().getStageSupplyCost().get(currentStage).entrySet()) {
             if(entry.getValue()>availableResources.get(entry.getKey())){
@@ -166,7 +170,7 @@ public class GpSpecialProjectData {
     }
 
     public boolean isFinished() {
-        return currentStage == getSpec().getAmountOfStages();
+        return currentStage >= getSpec().getAmountOfStages();
     }
 
     public boolean haveRecivedAward = false;
@@ -214,25 +218,6 @@ public class GpSpecialProjectData {
         if(!hasStarted)return;
         if(!isMainFocus())return;
         if (isFinished()) {
-            if (!haveRecivedAward) {
-                haveRecivedAward = true;
-                FactionAPI pf = Global.getSector().getPlayerFaction();
-                FactionProductionAPI prod = pf.getProduction();
-
-                MarketAPI gatheringPoint = prod.getGatheringPoint();
-                if (gatheringPoint == null) return;
-
-                CargoAPI local = Misc.getStorageCargo(gatheringPoint);
-                SpecialProjectFinishedIntel intel = new SpecialProjectFinishedIntel(this);
-                Global.getSector().getIntelManager().addIntel(intel, false);
-                local.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(Global.getSettings().getHullSpec(getSpec().rewardId)));
-                for (FleetMemberAPI fleetMemberAPI : local.getMothballedShips().getMembersListCopy()) {
-                    fleetMemberAPI.getVariant().clear();
-                }
-                GPManager.getInstance().setCurrentFocus(null);
-
-
-            }
             return;
         }
         float days =  Global.getSector().getClock().convertToDays(amount);
@@ -243,7 +228,28 @@ public class GpSpecialProjectData {
         daysSpentOnStage+=days;
         if (totalDaysSpent >= getReqTotalDaysToProgress(currentStage)) {
             currentStage++;
-            daysSpentOnStage = 0f;
+            if (isFinished()) {
+                if (!haveRecivedAward) {
+                    haveRecivedAward = true;
+                    FactionAPI pf = Global.getSector().getPlayerFaction();
+                    FactionProductionAPI prod = pf.getProduction();
+
+                    MarketAPI gatheringPoint = prod.getGatheringPoint();
+                    if (gatheringPoint == null) return;
+
+                    CargoAPI local = Misc.getStorageCargo(gatheringPoint);
+                    SpecialProjectFinishedIntel intel = new SpecialProjectFinishedIntel(this);
+                    Global.getSector().getIntelManager().addIntel(intel, false);
+                    FleetMemberAPI fleetMemberAPI = local.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(Global.getSettings().getHullSpec(getSpec().rewardId)));
+                    fleetMemberAPI.getVariant().clear();
+                    GPManager.getInstance().setCurrentFocus(null);
+
+
+                }
+                daysSpentOnStage = 0f;
+                return;
+            }
+
         }
 
 

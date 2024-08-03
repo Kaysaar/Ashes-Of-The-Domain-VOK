@@ -147,10 +147,8 @@ public class GPOrder implements Cloneable{
                 local.addWeapons(getSpecFromClass().getIdOfItemProduced(), 1);
             }
             if(getSpecFromClass().type== GPSpec.ProductionType.SHIP){
-                local.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(getSpecFromClass().getShipHullSpecAPI()));
-                for (FleetMemberAPI fleetMemberAPI : local.getMothballedShips().getMembersListCopy()) {
-                    fleetMemberAPI.getVariant().clear();
-                }
+                FleetMemberAPI member = local.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(getSpecFromClass().getShipHullSpecAPI()));
+                member.getVariant().clear();
             }
             if(getSpecFromClass().type== GPSpec.ProductionType.FIGHTER){
                 local.addFighters(getSpecFromClass().getIdOfItemProduced(), 1);
