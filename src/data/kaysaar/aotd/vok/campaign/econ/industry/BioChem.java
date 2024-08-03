@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
+import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.impl.campaign.econ.impl.LightIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -10,7 +11,14 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
+import java.util.List;
+
 public class BioChem extends LightIndustry {
+    @Override
+    public List<SpecialItemData> getVisibleInstalledItems() {
+        return super.getVisibleInstalledItems();
+    }
+
     public void apply() {
         super.apply(true);
         int size = market.getSize();

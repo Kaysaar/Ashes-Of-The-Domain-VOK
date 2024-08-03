@@ -212,8 +212,12 @@ public class GPManager {
     public LinkedHashMap<String, Integer> getTotalResources() {
         if (totalResources == null) totalResources = new LinkedHashMap<>();
         totalResources.clear();
+        int amount = 0;
+//        if(Global.getSettings().isDevMode()){
+//            amount = 10000;
+//        }
         for (String s : commodities) {
-            totalResources.put(s, 0);
+            totalResources.put(s, amount);
         }
         for (MarketAPI factionMarket : Misc.getPlayerMarkets(true)) {
             for (Industry ind : factionMarket.getIndustries()) {
@@ -1068,7 +1072,10 @@ public class GPManager {
         this.weaponSizeInfo.putAll(AoTDMisc.sortByValueDescending(weaponInfo));
     }
     public void advance(float amount) {
-        if(!GPManager.isEnabled)return;
+        if(!GPManager.isEnabled){
+            Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).unmodifyMult("aotd_gp");
+            return;
+        }
         Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).modifyMult("aotd_gp", 0, "Global Production Mechanic (AOTD)");
        if(!AoTDMisc.isPLayerHavingHeavyIndustry())return;
         for (GpSpecialProjectData specialProjDatum : specialProjData) {

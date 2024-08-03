@@ -74,6 +74,7 @@ public class GpProductionButtonRenderer implements CampaignUIRenderingListener, 
         if(!GPManager.isEnabled)return;
         if (buttonHide == null) return;
         if (buttonHideHighlighted == null) return;
+        if(!AoTDMisc.isPLayerHavingHeavyIndustry())return;
         for (InputEventAPI event : events) {
             float x = 1;
             float y = (Global.getSettings().getScreenHeight() - 300) + height;
