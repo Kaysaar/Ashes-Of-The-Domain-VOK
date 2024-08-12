@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -92,7 +93,15 @@ public class ShipRenderInfo {
             Filepath = AoTDMisc.cleanPath(Filepath);
             Filepath =Filepath.replace("\\", "/");
             obj = Global.getSettings().loadJSON(Filepath);
-            obj.getDouble("width");
+            if(obj.has("width")){
+                obj.getDouble("width");
+            }
+            else{
+                obj = Global.getSettings().loadJSON(Filepath,false);
+                obj.getDouble("width");
+            }
+;
+
 
 
         }

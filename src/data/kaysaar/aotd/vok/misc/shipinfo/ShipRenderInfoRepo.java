@@ -38,6 +38,9 @@ public class ShipRenderInfoRepo {
                 String test ="a";
 
             }
+            if(allShipHullSpec.getHullId().equals("vice_paragon_ai")){
+                String test ="a";
+            }
             ShipRenderInfo info = new ShipRenderInfo(allShipHullSpec.getBaseHullId(),false);
             if(allShipHullSpec.getHints().contains(ShipHullSpecAPI.ShipTypeHints.SHIP_WITH_MODULES)){
                 String variantId = getVaraint(allShipHullSpec);

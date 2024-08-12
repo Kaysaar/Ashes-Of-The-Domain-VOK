@@ -7,6 +7,7 @@ import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.RowData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -205,6 +206,8 @@ public class BaseOptionPanelManager {
             }
         }
         for (ButtonAPI button : buttons) {
+            handleButtonHighlight(chosenManu, button);
+
             if (button.isChecked()) {
                 if (button.getCustomData() instanceof String) {
                     button.setChecked(false);
@@ -215,8 +218,7 @@ public class BaseOptionPanelManager {
                         reset = true;
                         break;
                     }
-                    clearButtons();
-                    chosenManu.add((String) button.getCustomData());
+                    handleDataList(chosenManu,button);
                     currPage = 0;
                     reset = true;
                 }
@@ -248,18 +250,18 @@ public class BaseOptionPanelManager {
             }
         }
         for (ButtonAPI button : sizes) {
+            handleButtonHighlight(chosenSize, button);
             if (button.isChecked()) {
                 if (button.getCustomData() instanceof String) {
                     button.setChecked(false);
                     if (button.getCustomData().equals("All sizes")) {
                         wantsAll = true;
                         currPage = 0;
-                        clearButtons();
+                        chosenSize.clear();
                         reset = true;
                         break;
                     }
-                    clearButtons();
-                    chosenSize.add((String) button.getCustomData());
+                    handleDataList(chosenSize,button);
                     currPage = 0;
                     reset = true;
                 }
@@ -267,18 +269,18 @@ public class BaseOptionPanelManager {
             }
         }
         for (ButtonAPI button : types) {
+            handleButtonHighlight(chosenType, button);
             if (button.isChecked()) {
                 if (button.getCustomData() instanceof String) {
                     button.setChecked(false);
                     if (button.getCustomData().equals("All types")) {
                         wantsAll = true;
                         currPage = 0;
-                        clearButtons();
+                        chosenType.clear();
                         reset = true;
                         break;
                     }
-                    clearButtons();
-                    chosenType.add((String) button.getCustomData());
+                    handleDataList(chosenType,button);
                     currPage = 0;
                     reset = true;
                 }
@@ -288,6 +290,27 @@ public class BaseOptionPanelManager {
 
         if (reset) {
             reset();
+        }
+    }
+
+    private void handleButtonHighlight(ArrayList<String> chosenManu, ButtonAPI button) {
+        if (!chosenManu.isEmpty()) {
+            if (AoTDMisc.arrayContains(chosenManu, (String) button.getCustomData())) {
+                button.highlight();
+            } else {
+                button.unhighlight();
+            }
+        } else {
+            button.highlight();
+        }
+    }
+
+    private void handleDataList(ArrayList<String>array,ButtonAPI button) {
+        if(AoTDMisc.arrayContains(array, (String) button.getCustomData())){
+            array.remove((String) button.getCustomData());
+        }
+        else{
+            array.add((String) button.getCustomData());
         }
     }
 
