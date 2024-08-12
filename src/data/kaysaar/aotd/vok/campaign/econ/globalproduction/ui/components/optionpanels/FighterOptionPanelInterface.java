@@ -68,15 +68,7 @@ public class FighterOptionPanelInterface extends BaseOptionPanelManager implemen
         if(orderButtons==null)orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages = GPManager.getInstance().getLearnedFighters();
         packages= GPManager.getInstance().getFighterBasedOnData("Cost",SortingState.ASCENDING,packages);
-        if (!chosenManu.isEmpty() && !wantsAll && !resetToText&&chosenType.isEmpty()) {
-            packages = GPManager.getInstance().getFightersByManu(chosenManu);
-        }
-        if (chosenManu.isEmpty() && !wantsAll && !resetToText&&!chosenType.isEmpty()) {
-            packages = GPManager.getInstance().getFighterBasedOnType(chosenType.get(0));
-        }
-        if (resetToText) {
-            packages = GPManager.getInstance().getMatchingFighterGPs(searchbar.getText());
-        }
+        packages = GPManager.getInstance().getFighterPackagesBasedOnTags(chosenManu,chosenSize,chosenType);
         for (Map.Entry<String, SortingState> option : mapOfButtonStates.entrySet()) {
             if(option.getValue()!=SortingState.NON_INITIALIZED){
                 packages= GPManager.getInstance().getFighterBasedOnData(option.getKey(),option.getValue(),packages);

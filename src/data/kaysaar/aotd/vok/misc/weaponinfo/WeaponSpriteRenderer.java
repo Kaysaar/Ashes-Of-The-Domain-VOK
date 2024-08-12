@@ -38,14 +38,10 @@ public class WeaponSpriteRenderer implements CustomUIPanelPlugin {
 
     public WeaponSpriteRenderer(WeaponSpecAPI spec, float iconSize, float angle) {
         this.specWeapon =spec;
-        ShipHullSpecAPI specShip = Global.getSettings().getHullSpec("dem_drone");
-        ShipVariantAPI v = Global.getSettings().createEmptyVariant("dem_drone", specShip);
-        ShipAPI shipAPI = Global.getCombatEngine().createFXDrone(v);
-        WeaponAPI weapon = Global.getCombatEngine().createFakeWeapon(shipAPI, spec.getWeaponId());
         spritesToRedner = new ArrayList<>();
         spritesToRedner.add(Global.getSettings().getSprite(spec.getTurretUnderSpriteName()));
         spritesToRedner.add(Global.getSettings().getSprite(spec.getTurretSpriteName()));
-        SpriteAPI baseSprite = weapon.getSprite();
+        SpriteAPI baseSprite = Global.getSettings().getSprite(spec.getTurretSpriteName());
         if(spec instanceof ProjectileWeaponSpecAPI){
             spritesToRedner.add(Global.getSettings().getSprite(((ProjectileWeaponSpecAPI) spec).getTurretGunSpriteName()));
         }
@@ -62,20 +58,7 @@ public class WeaponSpriteRenderer implements CustomUIPanelPlugin {
         }
 
         scale = getScale(baseSprite,iconSize);
-        if (weapon != null && weapon.getMissileRenderData() != null&&!weapon.getMissileRenderData().isEmpty()) {
-            try {
-                String id = weapon.getMissileRenderData().get(0).getMissileSpecId();
-                JSONObject obj = Global.getSettings().loadJSON("data/weapons/proj/"+id+".proj");
-                idOfMissileSprite = obj.getString("sprite");
-                float x;
-                float y;
-                float width;
-                float height;
-
-            } catch (Exception e) {
-
-            }
-        }
+        idOfMissileSprite = WeaponMissileInfoRepo.weapontoMissleMap.get(spec.getWeaponId());
     }
     public float getScale(SpriteAPI sprite,float iconSize){
         float originalWidth = sprite.getWidth();

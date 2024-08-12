@@ -37,7 +37,6 @@ public class Fishery extends BaseIndustry {
     }
 
 
-
     @Override
     public boolean showWhenUnavailable() {
         boolean canAquaculture = market.getPlanetEntity() != null &&

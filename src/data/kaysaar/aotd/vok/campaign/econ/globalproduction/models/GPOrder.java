@@ -5,13 +5,10 @@ import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
-import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.fleets.DefaultFleetInflaterParams;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
-import com.fs.starfarer.api.loading.WeaponSlotAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
@@ -19,13 +16,15 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.fs.starfarer.api.util.Misc.random;
+
 public class GPOrder implements Cloneable{
     int amountToProduce;
     int alreadyProduced;
     float dummyCounter;
     float daysSpentDoingOrder;// between 0 and 1
     boolean contributingToOrder;
-    int priority = 0;
+    int atOnce = 1;
 
 
     public GPOrder cloneOrder(){
@@ -62,7 +61,7 @@ public class GPOrder implements Cloneable{
         // Check if the obtained resources meet or exceed the required resources
         for (Map.Entry<String, Integer> entry : assignedResources.entrySet()) {
             String resourceKey = entry.getKey();
-            Integer requiredAmount = entry.getValue();
+            Integer requiredAmount = entry.getValue()*getAmountOfItemsProduced();
 
             // Get the amount of the resource obtained, handling cases where the key might not be present
             Integer obtainedAmount = resourcesGet.containsKey(resourceKey) ? resourcesGet.get(resourceKey) : 0;
@@ -75,7 +74,10 @@ public class GPOrder implements Cloneable{
         // If all required resources meet or exceed the required amounts, return true
         return true;
     }
-
+    public int getAmountOfItemsProduced(){
+        int amount = GPManager.getInstance().getAmountForOrder(this);
+        return Math.min(amount, getAmountToProduce());
+    }
 
     public GPOrder(String specID, int amountToProduce){
         this.specId = specID;
@@ -119,12 +121,12 @@ public class GPOrder implements Cloneable{
         return alreadyProduced >=amountToProduce;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public void setAtOnce(int atOnce) {
+        this.atOnce = atOnce;
     }
 
-    public int getPriority() {
-        return priority;
+    public int getAtOnce() {
+        return atOnce;
     }
 
     public HashMap<String,Integer>getReqResources(){
@@ -134,9 +136,12 @@ public class GPOrder implements Cloneable{
     public void advance(float amount){
         daysSpentDoingOrder+=Global.getSector().getClock().convertToDays(amount);
         if(getDaysTillOrderFinished()<0){
-            amountToProduce--;
+            int produced = getAmountOfItemsProduced();
+            amountToProduce-=getAmountOfItemsProduced();
             FactionAPI pf = Global.getSector().getPlayerFaction();
             FactionProductionAPI prod = pf.getProduction();
+
+
 
             MarketAPI gatheringPoint = prod.getGatheringPoint();
             if (gatheringPoint == null) return;
@@ -146,9 +151,37 @@ public class GPOrder implements Cloneable{
             if(getSpecFromClass().type== GPSpec.ProductionType.WEAPON){
                 local.addWeapons(getSpecFromClass().getIdOfItemProduced(), 1);
             }
+
             if(getSpecFromClass().type== GPSpec.ProductionType.SHIP){
-                FleetMemberAPI member = local.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(getSpecFromClass().getShipHullSpecAPI()));
-                member.getVariant().clear();
+                float quality = -1f;
+                for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
+                    if (!market.isPlayerOwned()) continue;
+                    //quality = Math.max(quality, ShipQuality.getShipQuality(market, Factions.PLAYER));
+                    float currQuality = market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).computeEffective(0f);
+                    currQuality += market.getStats().getDynamic().getMod(Stats.FLEET_QUALITY_MOD).computeEffective(0f);
+                    quality = Math.max(quality, currQuality);
+                }
+                quality -= Global.getSector().getFaction(Factions.PLAYER).getDoctrine().getShipQualityContribution();
+                quality += 4f * Global.getSettings().getFloat("doctrineFleetQualityPerPoint");
+                CampaignFleetAPI ships = Global.getFactory().createEmptyFleet(Factions.PLAYER, "temp", true);
+                ships.setCommander(Global.getSector().getPlayerPerson());
+                DefaultFleetInflaterParams p = new DefaultFleetInflaterParams();
+                p.quality = quality;
+                p.mode = FactionAPI.ShipPickMode.PRIORITY_THEN_ALL;
+                p.persistent = false;
+                p.seed = random.nextLong();
+                p.timestamp = null;
+                FleetInflater inflater = Misc.getInflater(ships, p);
+                ships.setInflater(inflater);
+                for (int i = 0; i < produced; i++) {
+                    FleetMemberAPI member = ships.getFleetData().addFleetMember(AoTDMisc.getVaraint(getSpecFromClass().getShipHullSpecAPI()));
+                    member.getVariant().clear();
+                }
+                for (FleetMemberAPI fleetMemberAPI : ships.getFleetData().getMembersListCopy()) {
+                    local.getMothballedShips().addFleetMember(fleetMemberAPI);
+                }
+                ships.despawn();
+
             }
             if(getSpecFromClass().type== GPSpec.ProductionType.FIGHTER){
                 local.addFighters(getSpecFromClass().getIdOfItemProduced(), 1);

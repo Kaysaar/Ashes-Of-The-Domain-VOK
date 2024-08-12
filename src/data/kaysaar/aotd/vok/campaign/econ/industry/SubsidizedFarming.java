@@ -11,6 +11,7 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -34,16 +35,11 @@ public class SubsidizedFarming extends BaseIndustry {
         super.apply(true);
         int quantity = market.getSize()+2;
         supply(Commodities.FOOD,quantity);
-        if (this.special != null) {
-            if(!AoDUtilis.canInstallItem(this,this.special.getId())){
-                Misc.getStorageCargo(this.getMarket()).addSpecial(this.special, 1);
-                this.special = null;
-            }
-        }
         for (Pair<String, Integer> farmingCondition : FARMING_CONDITIONS) {
             Pair<String, Integer> prodBonus = AoDUtilis.getProductionBonusFromCondition(market, farmingCondition.one, farmingCondition.two);
             if (prodBonus != null) {
                 supply(prodBonus.one,Commodities.FOOD, prodBonus.two, prodBonus.one);
+
             }
         }
         demand(Commodities.HEAVY_MACHINERY, market.getSize()-3);

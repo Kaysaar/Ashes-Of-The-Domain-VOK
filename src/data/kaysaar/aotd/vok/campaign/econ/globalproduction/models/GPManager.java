@@ -34,31 +34,111 @@ public class GPManager {
     transient ArrayList<GPSpec> specs = new ArrayList<GPSpec>();
     transient ArrayList<GPSpec> specialProjectSpecs = new ArrayList<GPSpec>();
     public static boolean isEnabled = true;
-
+    public  int amountShipsPerOnce  =1;
+    public  int amountWepPerOnce  =1;
+    public  int amountFighterPerOnce  =1;
     public ArrayList<GPSpec> getSpecialProjectSpecs() {
+        if(specialProjectSpecs==null){specialProjectSpecs = new ArrayList<>();}
         return specialProjectSpecs;
     }
 
-    ArrayList<GpManufacturerData>manufacturerData = new ArrayList<>();
+     int getAmountFighterPerOnce() {
+        if(amountFighterPerOnce<=0)amountFighterPerOnce=1;
+        return amountFighterPerOnce;
+    }
+
+     int getAmountWepPerOnce() {
+         if(amountWepPerOnce<=0)amountWepPerOnce=1;
+         return amountWepPerOnce;
+    }
+
+     int getAmountShipsPerOnce() {
+         if(amountShipsPerOnce<=0)amountShipsPerOnce=1;
+         return amountShipsPerOnce;
+    }
+    public int getAmountForOrder(GPOrder order){
+        GPSpec.ProductionType type = order.getSpecFromClass().getType();
+        if(type.equals(GPSpec.ProductionType.FIGHTER)){
+            return getAmountFighterPerOnce();
+        }
+        if(type.equals(GPSpec.ProductionType.WEAPON)){
+            return getAmountWepPerOnce();
+        }
+        if(type.equals(GPSpec.ProductionType.SHIP)){
+            return getAmountShipsPerOnce();
+        }
+        return 1;
+
+    }
+    public int getAmountBasedOnType(String type){
+        if(type==null)return 1;
+        if(type.equals("fighter")){
+            return getAmountFighterPerOnce();
+        }
+        if(type.equals("weapon")){
+            return getAmountWepPerOnce();
+        }
+        if(type.equals("ship")){
+            return getAmountShipsPerOnce();
+        }
+        return 1;
+    }
+    public void setAmountBasedOnType(String type,int newValue){
+        if(type==null)return;
+        if(type.equals("fighter")){
+             setAmountFighterPerOnce(newValue);
+        }
+        if(type.equals("weapon")){
+            setAmountWepPerOnce(newValue);
+        }
+        if(type.equals("ship")){
+            setAmountShipsPerOnce(newValue);
+        }
+    }
+    public void setAmountFighterPerOnce(int amountFighterPerOnce) {
+        this.amountFighterPerOnce = amountFighterPerOnce;
+        if(this.amountFighterPerOnce>=10){
+            this.amountFighterPerOnce = 10;
+        }
+    }
+
+    public void setAmountWepPerOnce(int amountWepPerOnce) {
+        this.amountWepPerOnce = amountWepPerOnce;
+        if(this.amountWepPerOnce>=20){
+            this.amountWepPerOnce = 20;
+        }
+    }
+
+    public void setAmountShipsPerOnce(int amountShipsPerOnce) {
+        this.amountShipsPerOnce = amountShipsPerOnce;
+        if(this.amountShipsPerOnce>=10){
+            this.amountShipsPerOnce = 10;
+        }
+    }
+
+    ArrayList<GpManufacturerData> manufacturerData = new ArrayList<>();
     ArrayList<GPOption> shipProductionOption = new ArrayList<>();
     ArrayList<GPOption> weaponProductionOption = new ArrayList<>();
     ArrayList<GPOption> fighterProductionOption = new ArrayList<>();
     ArrayList<GPOption> specialProjectsOption = new ArrayList<>();
-    ArrayList<GpSpecialProjectData>specialProjData = new ArrayList<>();
+    ArrayList<GpSpecialProjectData> specialProjData = new ArrayList<>();
     ArrayList<GPOrder> productionOrders = new ArrayList<>();
     public LinkedHashMap<String, Integer> shipSizeInfo = new LinkedHashMap<>();
 
     public LinkedHashMap<String, Integer> getShipSizeInfo() {
         return shipSizeInfo;
     }
+
     public LinkedHashMap<String, Integer> weaponSizeInfo = new LinkedHashMap<>();
 
     public LinkedHashMap<String, Integer> getWeaponSizeInfo() {
         return weaponSizeInfo;
     }
+
     public LinkedHashMap<String, Integer> getShipManInfo() {
         return shipManInfo;
     }
+
     public MutableStat productionSpeedBonus = new MutableStat(1f);
 
     public MutableStat getProductionSpeedBonus() {
@@ -69,28 +149,37 @@ public class GPManager {
     public LinkedHashMap<String, Integer> getWeaponManInfo() {
         return weaponManInfo;
     }
+
     public LinkedHashMap<String, Integer> getFighterManInfo() {
         return fighterManInfo;
     }
+
     public LinkedHashMap<String, Integer> shipTypeInfo = new LinkedHashMap<>();
     public LinkedHashMap<String, Integer> weaponTypeInfo = new LinkedHashMap<>();
     public LinkedHashMap<String, Integer> fighterTypeInfo = new LinkedHashMap<>();
+
     public LinkedHashMap<String, Integer> getShipTypeInfo() {
         return shipTypeInfo;
     }
+
     public LinkedHashMap<String, Integer> getWeaponTypeInfo() {
         return weaponTypeInfo;
     }
+
     public ArrayList<GPOrder> getProductionOrders() {
         return productionOrders;
     }
+
     public LinkedHashMap<String, Integer> getFighterTypeInfo() {
         return fighterTypeInfo;
     }
+
     public static int scale = 10;
+
     public ArrayList<GPSpec> getSpecs() {
         return specs;
     }
+
     public GpSpecialProjectData currentFocus;
 
     public GpSpecialProjectData getCurrProjOnGoing() {
@@ -98,26 +187,26 @@ public class GPManager {
     }
 
     public void setCurrentFocus(GpSpecialProjectData currentFocus) {
-        if(currentFocus!=null){
+        if (currentFocus != null) {
             currentFocus.hasStarted = true;
-            if(!currentFocus.havePaidInitalCost){
+            if (!currentFocus.havePaidInitalCost) {
                 currentFocus.havePaidInitalCost = true;
                 for (Map.Entry<String, Integer> entry : currentFocus.getSpec().getItemInitCostMap().entrySet()) {
-                    AoTDMisc.eatItems(entry, Submarkets.SUBMARKET_STORAGE,Misc.getPlayerMarkets(true));
+                    AoTDMisc.eatItems(entry, Submarkets.SUBMARKET_STORAGE, Misc.getPlayerMarkets(true));
                 }
-                if(currentFocus.getSpec().getCredistCost()>0){
+                if (currentFocus.getSpec().getCredistCost() > 0) {
                     Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(currentFocus.getSpec().getCredistCost());
                 }
             }
-            if(currentFocus.getCurrentStage()==-1){
-                currentFocus.currentStage=0;
+            if (currentFocus.getCurrentStage() == -1) {
+                currentFocus.currentStage = 0;
             }
-            if(currentFocus.isFinished()){
+            if (currentFocus.isFinished()) {
                 currentFocus.totalDaysSpent = 0f;
                 currentFocus.currentStage = -1;
                 currentFocus.haveRecivedAward = false;
                 currentFocus.havePaidInitalCost = false;
-            new Color(58, 63, 58);
+                new Color(58, 63, 58);
             }
         }
         this.currentFocus = currentFocus;
@@ -138,17 +227,20 @@ public class GPManager {
         commodities.add(Commodities.HAND_WEAPONS);
         commodities.add("advanced_components");
     }
+
     public static String memkey = "aotd_gp_plugin";
 
     public ArrayList<GPOption> getSpecialProjectsOption() {
         return specialProjectsOption;
     }
-    public ArrayList<GpSpecialProjectData>getSpecialProjects(){
+
+    public ArrayList<GpSpecialProjectData> getSpecialProjects() {
         return specialProjData;
     }
-    public boolean hasAtLestOneProjectUnlocked(){
+
+    public boolean hasAtLestOneProjectUnlocked() {
         for (GpSpecialProjectData specialProjDatum : specialProjData) {
-            if(specialProjDatum.canShow)return true;
+            if (specialProjDatum.canShow) return true;
         }
         return false;
     }
@@ -160,13 +252,12 @@ public class GPManager {
         return (GPManager) Global.getSector().getPersistentData().get(memkey);
     }
 
-    static GPManager setInstance() {
+   public static GPManager setInstance() {
         GPManager manager = new GPManager();
         Global.getSector().getPersistentData().put(memkey, manager);
         Global.getSector().addScript(new GpManagerAdvance());
         return manager;
     }
-
 
 
     public GPSpec getSpec(String id) {
@@ -177,9 +268,10 @@ public class GPManager {
         }
         return null;
     }
-    public GpManufacturerData getManData(String manufacturer){
+
+    public GpManufacturerData getManData(String manufacturer) {
         for (GpManufacturerData manufacturerDatum : manufacturerData) {
-            if(manufacturerDatum.getManufacturerId().equals(manufacturer)){
+            if (manufacturerDatum.getManufacturerId().equals(manufacturer)) {
                 return manufacturerDatum;
             }
         }
@@ -187,23 +279,21 @@ public class GPManager {
     }
 
     public void reInitalize() {
-        if(manufacturerData!=null){
+        if (manufacturerData != null) {
             manufacturerData.clear();
         }
         isEnabled = AoTDSettingsManager.getBooleanValue("aotd_titans_of_industry");
         scale = AoTDSettingsManager.getIntValue("aotd_scale");
-        if(isEnabled){
-            manufacturerData = new ArrayList<>();
-            manufacturerData.addAll(GpManufacturerData.getManufacturerDataFromCSV());
-            loadProductionSpecs();
-            loadProductionOptions();
-            for (GPOrder productionOrder : productionOrders) {
-                productionOrder.updateResourceCost();
-            }
-            ListenerManagerAPI l = Global.getSector().getListenerManager();
-            if (!l.hasListenerOfClass(NidavelirIndustryOptionProvider.class)) {
-                l.addListener(new NidavelirIndustryOptionProvider(), true);
-            }
+        manufacturerData = new ArrayList<>();
+        manufacturerData.addAll(GpManufacturerData.getManufacturerDataFromCSV());
+        loadProductionSpecs();
+        loadProductionOptions();
+        for (GPOrder productionOrder : productionOrders) {
+            productionOrder.updateResourceCost();
+        }
+        ListenerManagerAPI l = Global.getSector().getListenerManager();
+        if (!l.hasListenerOfClass(NidavelirIndustryOptionProvider.class)) {
+            l.addListener(new NidavelirIndustryOptionProvider(), true);
         }
 
 
@@ -236,30 +326,43 @@ public class GPManager {
         }
         return totalResources;
     }
+    public LinkedHashMap<MarketAPI,Integer>getTotalResourceProductionFromMarkets(String commodity){
+        LinkedHashMap<MarketAPI,Integer>map  = new LinkedHashMap<>();
+        for (MarketAPI factionMarket : Misc.getPlayerMarkets(true)) {
+            for (Industry ind : factionMarket.getIndustries()) {
+                if (ind instanceof HeavyIndustry) {
+                        int val = ind.getSupply(commodity).getQuantity().getModifiedInt() * scale;
+                        if(val==0)break;
+                        map.put(factionMarket,val);
 
+                }
+            }
+        }
+        return map;
+    }
     public HashMap<String, Integer> getReqResources() {
         if (reqResources == null) reqResources = new HashMap<>();
         reqResources.clear();
         for (String s : commodities) {
             reqResources.put(s, 0);
         }
-        if(currentFocus!=null){
+        if (currentFocus != null) {
             for (Map.Entry<String, Integer> entry : currentFocus.getSpec().getStageSupplyCost().get(currentFocus.currentStage).entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue());
                 } else {
                     int prev = reqResources.get(entry.getKey());
-                    reqResources.put(entry.getKey(), prev + entry.getValue() );
+                    reqResources.put(entry.getKey(), prev + entry.getValue());
                 }
             }
         }
         for (GPOrder productionOrder : productionOrders) {
             for (Map.Entry<String, Integer> entry : productionOrder.getReqResources().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
-                    reqResources.put(entry.getKey(), entry.getValue());
+                    reqResources.put(entry.getKey(), entry.getValue()*getAmountForOrder(productionOrder));
                 } else {
                     int prev = reqResources.get(entry.getKey());
-                    reqResources.put(entry.getKey(), prev + entry.getValue() );
+                    reqResources.put(entry.getKey(), prev + entry.getValue()*getAmountForOrder(productionOrder));
                 }
             }
         }
@@ -277,8 +380,129 @@ public class GPManager {
         return shipProductionOption;
     }
 
+    public ArrayList<GPOption>getShipPackagesBasedOnTags(ArrayList<String> manufacturues,ArrayList<String>sizes,ArrayList<String> types){
+        boolean allMan = AoTDMisc.arrayContains(manufacturues,"All designs")||manufacturues.isEmpty();
+        boolean allSizes = AoTDMisc.arrayContains(sizes,"All sizes")||sizes.isEmpty();
+        boolean allTypes = AoTDMisc.arrayContains(types,"All types")||types.isEmpty();
+        ArrayList<GPOption>options = new ArrayList<>();
+        if(allMan&&allSizes&&allTypes)return getShipPackagesBasedOnData("Cost",SortingState.ASCENDING,getLearnedShipPackages());
+        for (GPOption learnedShipPackage :getShipPackagesBasedOnData("Cost",SortingState.ASCENDING,getLearnedShipPackages())) {
+            boolean valid = true;
+            if(!allMan){
+                valid = false;
+                for (String manufacturue : manufacturues) {
+                    if(learnedShipPackage.getSpec().getShipHullSpecAPI().getManufacturer().equals(manufacturue)){
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+            if(!valid)continue;
+            if(!allSizes){
+                valid = false;
+                for (String s : sizes) {
+                    if (Misc.getHullSizeStr(learnedShipPackage.getSpec().getShipHullSpecAPI().getHullSize()).equals(s)) {
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+            if(!valid)continue;
+            if(!allTypes){
+                valid = false;
+                for (String s : types) {
+                    if (AoTDMisc.getType(learnedShipPackage.getSpec().getShipHullSpecAPI()).equals(s)) {
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+            if(valid){
+                options.add(learnedShipPackage);
+            }
 
+        }
+        return options;
+    }
 
+    public ArrayList<GPOption>getWeaponPackagesBasedOnTags(ArrayList<String> manufacturues,ArrayList<String>sizes,ArrayList<String> types){
+        boolean allMan = AoTDMisc.arrayContains(manufacturues,"All designs")||manufacturues.isEmpty();
+        boolean allSizes = AoTDMisc.arrayContains(sizes,"All sizes")||sizes.isEmpty();
+        boolean allTypes = AoTDMisc.arrayContains(types,"All types")||types.isEmpty();
+        ArrayList<GPOption>options = new ArrayList<>();
+        if(allMan&&allSizes&&allTypes)return getWeaponPackagesBasedOnData("Cost",SortingState.ASCENDING,getLearnedWeapons());
+        for (GPOption option :getWeaponPackagesBasedOnData("Cost",SortingState.ASCENDING,getLearnedWeapons())) {
+            boolean valid = true;
+            if(!allMan){
+                valid = false;
+                for (String manufacturue : manufacturues) {
+                    if(option.getSpec().getWeaponSpec().getManufacturer().equals(manufacturue)){
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+            if(!valid)continue;
+            if(!allSizes){
+                valid = false;
+                for (String s : sizes) {
+                    if (option.getSpec().getWeaponSpec().getSize().getDisplayName().equals(s)) {
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+            if(!valid)continue;
+            if(!allTypes){
+                valid = false;
+                for (String s : types) {
+                    if (option.getSpec().getWeaponSpec().getType().getDisplayName().equals(s)) {
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+            if(valid){
+                options.add(option);
+            }
+
+        }
+        return options;
+    }
+    public ArrayList<GPOption>getFighterPackagesBasedOnTags(ArrayList<String> manufacturues,ArrayList<String>sizes,ArrayList<String> types){
+        boolean allMan = AoTDMisc.arrayContains(manufacturues,"All designs")||manufacturues.isEmpty();
+        boolean allSizes = AoTDMisc.arrayContains(sizes,"All sizes")||sizes.isEmpty();
+        boolean allTypes = AoTDMisc.arrayContains(types,"All types")||types.isEmpty();
+        ArrayList<GPOption>options = new ArrayList<>();
+        if(allMan&&allSizes&&allTypes)return getFighterBasedOnData("Cost",SortingState.ASCENDING,getLearnedFighters());
+        for (GPOption option :getFighterBasedOnData("Cost",SortingState.ASCENDING,getLearnedFighters())) {
+            boolean valid = true;
+            if(!allMan){
+                valid = false;
+                for (String manufacturue : manufacturues) {
+                    if(option.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer().equals(manufacturue)){
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+            if(!valid)continue;
+            if(!allTypes){
+                valid = false;
+                for (String s : types) {
+                    if (AoTDMisc.getType(option.getSpec().getWingSpecAPI()).equals(s)) {
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+            if(valid){
+                options.add(option);
+            }
+
+        }
+        return options;
+    }
     public ArrayList<GPOption> getShipPackagesBasedOnData(String nameOfSort, SortingState sortingState, ArrayList<GPOption> temp) {
         ArrayList<GPOption> packages = new ArrayList<>(temp);
         Comparator<GPOption> comparator = null;
@@ -368,6 +592,7 @@ public class GPManager {
         }
         return packages;
     }
+
     public ArrayList<GPOption> getFighterBasedOnData(String nameOfSort, SortingState sortingState, ArrayList<GPOption> temp) {
         ArrayList<GPOption> packages = new ArrayList<>(temp);
         Comparator<GPOption> comparator = null;
@@ -447,6 +672,7 @@ public class GPManager {
         }
         return packages;
     }
+
     public ArrayList<GPOption> getWeaponPackagesBasedOnData(String nameOfSort, SortingState sortingState, ArrayList<GPOption> temp) {
         ArrayList<GPOption> packages = new ArrayList<>(temp);
         Comparator<GPOption> comparator = null;
@@ -536,6 +762,7 @@ public class GPManager {
         }
         return packages;
     }
+
     public ArrayList<GPOption> getShipPackagesOrderedByPrice(boolean ascending) {
         ArrayList<GPOption> packages = new ArrayList<>(getLearnedShipPackages());
 
@@ -558,9 +785,6 @@ public class GPManager {
 
         return packages;
     }
-
-
-
 
 
     public GPOrder getOrderViaSpec(String specID) {
@@ -588,7 +812,8 @@ public class GPManager {
         }
 
     }
-    public void addOrderToDummy(String specId, int amount,ArrayList<GPOrder>dummyOrders) {
+
+    public void addOrderToDummy(String specId, int amount, ArrayList<GPOrder> dummyOrders) {
         boolean foundOrderForSameItem = false;
         for (GPOrder order : dummyOrders) {
             if (order.getSpecFromClass().getProjectId().equals(specId)) {
@@ -604,7 +829,8 @@ public class GPManager {
         }
 
     }
-    public void removeOrder(String specId,int amount){
+
+    public void removeOrder(String specId, int amount) {
         for (GPOrder order : productionOrders) {
             if (order.getSpecFromClass().getProjectId().equals(specId)) {
                 order.updateAmountToProduce(order.amountToProduce - amount);
@@ -612,7 +838,8 @@ public class GPManager {
             }
         }
     }
-    public void removeOrderFromDummy(String specId,int amount,ArrayList<GPOrder>dummy){
+
+    public void removeOrderFromDummy(String specId, int amount, ArrayList<GPOrder> dummy) {
         for (GPOrder order : dummy) {
             if (order.getSpecFromClass().getProjectId().equals(specId)) {
                 order.updateAmountToProduce(order.amountToProduce - amount);
@@ -620,25 +847,25 @@ public class GPManager {
             }
         }
     }
-    public boolean hasSpecialProject(String rewardId){
+
+    public boolean hasSpecialProject(String rewardId) {
         for (GPSpec projectSpec : specialProjectSpecs) {
-            if(projectSpec.getRewardId().equals(rewardId)){
+            if (projectSpec.getRewardId().equals(rewardId)) {
                 return true;
             }
         }
         return false;
     }
+
     public void loadProductionSpecs() {
-        if(specs!=null){
+        if (specs != null) {
             specs.clear();
-        }
-        else {
+        } else {
             specs = new ArrayList<>();
         }
-        if(specialProjectSpecs!=null){
+        if (specialProjectSpecs != null) {
             specialProjectSpecs.clear();
-        }
-        else{
+        } else {
             specialProjectSpecs = new ArrayList<>();
         }
         specialProjectSpecs.addAll(GPSpec.loadSpecialProjects());
@@ -657,22 +884,22 @@ public class GPManager {
                 if (!found) continue;
             }
             GPSpec spec = GPSpec.getSpecFromShip(shipHullSpecAPI);
-            if(!hasSpecialProject(spec.getIdOfItemProduced())){
+            if (!hasSpecialProject(spec.getIdOfItemProduced())) {
                 specs.add(spec);
             }
-   ;
+            ;
 
 
         }
         for (WeaponSpecAPI shipHullSpecAPI : Global.getSettings().getAllWeaponSpecs()) {
             GPSpec spec = GPSpec.getSpecFromWeapon(shipHullSpecAPI);
-            if(!hasSpecialProject(spec.getIdOfItemProduced())){
+            if (!hasSpecialProject(spec.getIdOfItemProduced())) {
                 specs.add(spec);
             }
         }
         for (FighterWingSpecAPI shipHullSpecAPI : Global.getSettings().getAllFighterWingSpecs()) {
             GPSpec spec = GPSpec.getSpecFromWing(shipHullSpecAPI);
-            if(!hasSpecialProject(spec.getIdOfItemProduced())){
+            if (!hasSpecialProject(spec.getIdOfItemProduced())) {
                 specs.add(spec);
             }
         }
@@ -693,25 +920,28 @@ public class GPManager {
         }
         return result;
     }
-    public GpSpecialProjectData getSpecialProject(String id ){
+
+    public GpSpecialProjectData getSpecialProject(String id) {
         for (GpSpecialProjectData specialProjDatum : specialProjData) {
-            if(specialProjDatum.getSpec().getProjectId().equals(id)){
+            if (specialProjDatum.getSpec().getProjectId().equals(id)) {
                 return specialProjDatum;
             }
         }
         return null;
     }
+
     public boolean haveMetReqForItems(String id) {
-        if (getSpecialProject(id).havePaidInitalCost)return true;
-        for (Map.Entry<String, Integer> entry :getSpecialProject(id).getSpec().getItemInitCostMap().entrySet()) {
+        if (getSpecialProject(id).havePaidInitalCost) return true;
+        for (Map.Entry<String, Integer> entry : getSpecialProject(id).getSpec().getItemInitCostMap().entrySet()) {
             if (!haveMetReqForItem(entry.getKey(), entry.getValue())) return false;
         }
         return true;
     }
 
     public boolean haveMetReqForItem(String id, float value) {
-        return value<=AoTDMisc.retrieveAmountOfItems(id, Submarkets.SUBMARKET_STORAGE);
+        return value <= AoTDMisc.retrieveAmountOfItems(id, Submarkets.SUBMARKET_STORAGE);
     }
+
     public ArrayList<GPOption> getWeaponsByManu(ArrayList<String> values) {
 
         ArrayList<GPOption> result = new ArrayList<>();
@@ -726,6 +956,7 @@ public class GPManager {
         }
         return result;
     }
+
     public ArrayList<GPOption> getFightersByManu(ArrayList<String> values) {
 
         ArrayList<GPOption> result = new ArrayList<>();
@@ -740,9 +971,10 @@ public class GPManager {
         }
         return result;
     }
+
     public void loadProductionOptions() {
         if (this.shipManInfo == null) this.shipManInfo = new LinkedHashMap<>();
-        if(this.fighterProductionOption == null)this.fighterProductionOption = new ArrayList<>();
+        if (this.fighterProductionOption == null) this.fighterProductionOption = new ArrayList<>();
         LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();
         shipProductionOption.clear();
         weaponProductionOption.clear();
@@ -767,20 +999,19 @@ public class GPManager {
         for (GPSpec specialProjectSpec : specialProjectSpecs) {
             try {
                 Global.getSettings().getHullSpec(specialProjectSpec.getRewardId());
-            }
-            catch (Exception e ){
+            } catch (Exception e) {
                 //we do this to filter out projects that should not be (as long as mod is not enabled in save)
                 continue;
             }
             boolean foundOne = false;
             for (GpSpecialProjectData datum : specialProjData) {
-                if(datum.getSpec().getProjectId().equals(specialProjectSpec.getProjectId())){
+                if (datum.getSpec().getProjectId().equals(specialProjectSpec.getProjectId())) {
                     foundOne = true;
                     datum.setSpecID(specialProjectSpec.getProjectId());
                     break;
                 }
             }
-            if(!foundOne){
+            if (!foundOne) {
                 GpSpecialProjectData data = new GpSpecialProjectData(specialProjectSpec.getProjectId());
                 specialProjData.add(data);
             }
@@ -802,51 +1033,60 @@ public class GPManager {
         }
         return options;
     }
-    public ArrayList<GPOption> getShipsBasedOnSize(String size) {
+
+    public ArrayList<GPOption> getShipsBasedOnSize(ArrayList<String> size) {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getLearnedShipPackages()) {
-            if(Misc.getHullSizeStr(option.getSpec().getShipHullSpecAPI().getHullSize()).equals(size)){
-                options.add(option);
+            for (String s : size) {
+                if (Misc.getHullSizeStr(option.getSpec().getShipHullSpecAPI().getHullSize()).equals(s)) {
+                    options.add(option);
+                }
             }
+
         }
         return options;
     }
+
     public ArrayList<GPOption> getWeaponBasedOnSize(String size) {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getLearnedWeapons()) {
-            if(option.getSpec().getWeaponSpec().getSize().getDisplayName().equals(size)){
+            if (option.getSpec().getWeaponSpec().getSize().getDisplayName().equals(size)) {
                 options.add(option);
             }
         }
         return options;
     }
+
     public ArrayList<GPOption> getShipBasedOnType(String type) {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getLearnedShipPackages()) {
-            if(AoTDMisc.getType(option.getSpec().getShipHullSpecAPI()).equals(type)){
+            if (AoTDMisc.getType(option.getSpec().getShipHullSpecAPI()).equals(type)) {
                 options.add(option);
             }
         }
         return options;
     }
+
     public ArrayList<GPOption> getWeaponBasedOnType(String type) {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getLearnedWeapons()) {
-            if(option.getSpec().getWeaponSpec().getType().getDisplayName().equals(type)){
+            if (option.getSpec().getWeaponSpec().getType().getDisplayName().equals(type)) {
                 options.add(option);
             }
         }
         return options;
     }
+
     public ArrayList<GPOption> getFighterBasedOnType(String type) {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getLearnedFighters()) {
-            if(AoTDMisc.getType(option.getSpec().getWingSpecAPI()).equals(type)){
+            if (AoTDMisc.getType(option.getSpec().getWingSpecAPI()).equals(type)) {
                 options.add(option);
             }
         }
         return options;
     }
+
     public ArrayList<GPOption> getLearnedWeapons() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getWeaponProductionOption()) {
@@ -856,6 +1096,7 @@ public class GPManager {
         }
         return options;
     }
+
     public ArrayList<GPOption> getLearnedFighters() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getFighterProductionOption()) {
@@ -865,6 +1106,7 @@ public class GPManager {
         }
         return options;
     }
+
     public ArrayList<GPOption> getWeaponProductionOption() {
         return weaponProductionOption;
     }
@@ -885,6 +1127,7 @@ public class GPManager {
         Collections.sort(options, comparator);
         return options;
     }
+
     public ArrayList<GPOption> getMatchingWeaponGps(String value) {
         ArrayList<GPOption> options = new ArrayList<>();
         int threshold = 2; // Adjust the threshold based on your tolerance for misspellings
@@ -897,6 +1140,7 @@ public class GPManager {
         Collections.sort(options, comparator);
         return options;
     }
+
     public ArrayList<GPOption> getMatchingFighterGPs(String value) {
         ArrayList<GPOption> options = new ArrayList<>();
         int threshold = 2; // Adjust the threshold based on your tolerance for misspellings
@@ -931,12 +1175,13 @@ public class GPManager {
         shipManInfo.put("All types", val);
         this.shipTypeInfo.putAll(AoTDMisc.sortByValueDescending(shipManInfo));
     }
+
     public void populateWeaponTypeInfo() {
         if (this.weaponTypeInfo == null) this.weaponTypeInfo = new LinkedHashMap<>();
         this.weaponTypeInfo.clear();
         LinkedHashMap<String, Integer> weaponInfo = new LinkedHashMap<>();
         for (GPOption learnedWeapons : getLearnedWeapons()) {
-            String indicator =learnedWeapons.getSpec().getWeaponSpec().getType().getDisplayName();
+            String indicator = learnedWeapons.getSpec().getWeaponSpec().getType().getDisplayName();
             if (weaponInfo.get(indicator) == null) {
                 weaponInfo.put(indicator, 1);
             } else {
@@ -951,12 +1196,13 @@ public class GPManager {
         weaponInfo.put("All types", val);
         this.weaponTypeInfo.putAll(AoTDMisc.sortByValueDescending(weaponInfo));
     }
+
     public void populateFighterTypeInfo() {
         if (this.fighterTypeInfo == null) this.fighterTypeInfo = new LinkedHashMap<>();
         this.fighterTypeInfo.clear();
         LinkedHashMap<String, Integer> weaponInfo = new LinkedHashMap<>();
         for (GPOption learnedWeapons : getLearnedFighters()) {
-            String indicator =AoTDMisc.getType(learnedWeapons.getSpec().getWingSpecAPI());
+            String indicator = AoTDMisc.getType(learnedWeapons.getSpec().getWingSpecAPI());
             if (weaponInfo.get(indicator) == null) {
                 weaponInfo.put(indicator, 1);
             } else {
@@ -971,6 +1217,7 @@ public class GPManager {
         weaponInfo.put("All types", val);
         this.fighterTypeInfo.putAll(AoTDMisc.sortByValueDescending(weaponInfo));
     }
+
     public void populateShipInfo() {
         this.shipManInfo.clear();
         LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();
@@ -990,6 +1237,7 @@ public class GPManager {
 
         this.shipManInfo.putAll(AoTDMisc.sortByValueDescending(shipManInfo));
     }
+
     public void populateWeaponInfo() {
         if (this.weaponManInfo == null) this.weaponManInfo = new LinkedHashMap<>();
         this.weaponManInfo.clear();
@@ -1010,6 +1258,7 @@ public class GPManager {
 
         this.weaponManInfo.putAll(AoTDMisc.sortByValueDescending(weaponManInfo));
     }
+
     public void populateFighterInfo() {
         if (this.fighterManInfo == null) this.fighterManInfo = new LinkedHashMap<>();
         this.fighterManInfo.clear();
@@ -1030,6 +1279,7 @@ public class GPManager {
 
         this.fighterManInfo.putAll(AoTDMisc.sortByValueDescending(fighterManInfo));
     }
+
     public void populateShipSizeInfo() {
         if (this.shipSizeInfo == null) this.shipSizeInfo = new LinkedHashMap<>();
         this.shipSizeInfo.clear();
@@ -1071,16 +1321,17 @@ public class GPManager {
         weaponInfo.put("All sizes", val);
         this.weaponSizeInfo.putAll(AoTDMisc.sortByValueDescending(weaponInfo));
     }
+
     public void advance(float amount) {
-        if(!GPManager.isEnabled){
+        if (!GPManager.isEnabled) {
             Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).unmodifyMult("aotd_gp");
             return;
         }
         Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).modifyMult("aotd_gp", 0, "Global Production Mechanic (AOTD)");
-       if(!AoTDMisc.isPLayerHavingHeavyIndustry())return;
+        if (!AoTDMisc.isPLayerHavingHeavyIndustry()) return;
         for (GpSpecialProjectData specialProjDatum : specialProjData) {
-            if(specialProjDatum.isDiscovered()){
-                if(!specialProjDatum.isShowedInfoAboutUnlocking()){
+            if (specialProjDatum.isDiscovered()) {
+                if (!specialProjDatum.isShowedInfoAboutUnlocking()) {
                     specialProjDatum.setShowedInfoAboutUnlocking(true);
                     SpecialProjectUnlockingIntel intel = new SpecialProjectUnlockingIntel(specialProjDatum);
                     Global.getSector().getIntelManager().addIntel(intel, false);
@@ -1098,8 +1349,8 @@ public class GPManager {
         available.putAll(getTotalResources());
         HashMap<String, Integer> availableUnchanged = new HashMap<>();
         availableUnchanged.putAll(getTotalResources());
-        if(currentFocus!=null){
-            if(currentFocus.canSupportStageConsumption(available)){
+        if (currentFocus != null) {
+            if (currentFocus.canSupportStageConsumption(available)) {
                 for (Map.Entry<String, Integer> entry : currentFocus.getSpec().getStageSupplyCost().get(currentFocus.currentStage).entrySet()) {
                     int availableCommoditySize = available.get(entry.getKey());
                     available.put(entry.getKey(), availableCommoditySize - entry.getValue());
@@ -1116,12 +1367,12 @@ public class GPManager {
             boolean metCriteriaWithResources = true;
             for (Map.Entry<String, Integer> entry : productionOrder.assignedResources.entrySet()) {
                 int availableCommoditySize = available.get(entry.getKey());
-                if (entry.getValue() > availableCommoditySize) {
+                if (entry.getValue()*this.getAmountForOrder(productionOrder) > availableCommoditySize) {
                     metCriteriaWithResources = false;
                     break;
                 } else {
                     available.put(entry.getKey(), availableCommoditySize - entry.getValue());
-                    productionOrder.resourcesGet.put(entry.getKey(), entry.getValue());
+                    productionOrder.resourcesGet.put(entry.getKey(), entry.getValue()*this.getAmountForOrder(productionOrder));
                 }
             }
             if (!metCriteriaWithResources) {
@@ -1149,7 +1400,8 @@ public class GPManager {
         }
         return map;
     }
-    public ArrayList<Integer> retrieveOrdersToBeRemovedFromDummy(ArrayList<GPOrder>dummyOrders) {
+
+    public ArrayList<Integer> retrieveOrdersToBeRemovedFromDummy(ArrayList<GPOrder> dummyOrders) {
         ArrayList<Integer> map = new ArrayList<>();
         int i = 0;
         for (GPOrder productionOrder : dummyOrders) {
@@ -1160,15 +1412,17 @@ public class GPManager {
         }
         return map;
     }
+
     public void removeDoneOrders(ArrayList<Integer> offsets) {
         for (Integer offset : offsets) {
-            if(offset.intValue()>=productionOrders.size())continue;
+            if (offset.intValue() >= productionOrders.size()) continue;
             productionOrders.remove(offset.intValue());
         }
     }
-    public void removeDoneOrdersDummy(ArrayList<Integer> offsets,ArrayList<GPOrder>dummyOrders) {
+
+    public void removeDoneOrdersDummy(ArrayList<Integer> offsets, ArrayList<GPOrder> dummyOrders) {
         for (Integer offset : offsets) {
-            if(offset.intValue()>=dummyOrders.size())continue;
+            if (offset.intValue() >= dummyOrders.size()) continue;
             dummyOrders.remove(offset.intValue());
         }
     }

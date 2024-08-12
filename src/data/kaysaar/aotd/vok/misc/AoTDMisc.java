@@ -52,6 +52,12 @@ public class AoTDMisc {
 
         return variantId;
     }
+    public static boolean arrayContains(ArrayList<String> array,String key){
+        for (String s : array) {
+            if(s.equals(key))return true;
+        }
+        return false;
+    }
     public static EngagementResultForFleetAPI getNonPlayerFleet(EngagementResultAPI resultAPI){
         if(!resultAPI.getLoserResult().isPlayer()){
             return resultAPI.getLoserResult();

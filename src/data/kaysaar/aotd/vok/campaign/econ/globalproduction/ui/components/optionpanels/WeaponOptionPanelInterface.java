@@ -18,7 +18,7 @@ import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirM
 
 public class WeaponOptionPanelInterface extends BaseOptionPanelManager implements OptionPanelInterface {
 
-    public WeaponOptionPanelInterface(CustomPanelAPI panel){
+    public WeaponOptionPanelInterface(CustomPanelAPI panel) {
         GPManager.getInstance().populateWeaponInfo();
         GPManager.getInstance().populateWeaponSizeInfo();
         GPManager.getInstance().populateWeaponTypeInfo();
@@ -27,6 +27,7 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager implement
         this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
         YHeight = panel.getPosition().getHeight() * 0.45f;
     }
+
     @Override
     public CustomPanelAPI getOptionPanel() {
         return optionPanel;
@@ -54,7 +55,7 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager implement
         buttons.clear();
         sortingButtons.clear();
         chosenManu.clear();
-        if(searchbar!=null){
+        if (searchbar != null) {
             searchbar.deleteAll();
         }
         this.mainPanel.removeComponent(panel);
@@ -65,27 +66,17 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager implement
         this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
         init();
     }
+
     private void createWeaponOptions(CustomPanelAPI panel) {
-        if(orderButtons==null)orderButtons = new ArrayList<>();
+        if (orderButtons == null) orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages = GPManager.getInstance().getLearnedWeapons();
-        packages= GPManager.getInstance().getWeaponPackagesBasedOnData("Cost",SortingState.ASCENDING,packages);
-        if (!chosenManu.isEmpty() && !wantsAll && !resetToText&&chosenType.isEmpty()&&chosenSize.isEmpty()) {
-            packages = GPManager.getInstance().getWeaponsByManu(chosenManu);
-        }
-        if (chosenManu.isEmpty() && !wantsAll && !resetToText&&!chosenType.isEmpty()&&chosenSize.isEmpty()) {
-            packages = GPManager.getInstance().getWeaponBasedOnType(chosenType.get(0));
-        }
-        if (chosenManu.isEmpty() && !wantsAll && !resetToText&&chosenType.isEmpty()&&!chosenSize.isEmpty()) {
-            packages = GPManager.getInstance().getWeaponBasedOnSize(chosenSize.get(0));
-        }
-
-
-            if (resetToText) {
+        packages = GPManager.getInstance().getWeaponPackagesBasedOnTags(chosenManu, chosenSize, chosenType);
+        if (resetToText) {
             packages = GPManager.getInstance().getMatchingWeaponGps(searchbar.getText());
         }
         for (Map.Entry<String, SortingState> option : mapOfButtonStates.entrySet()) {
-            if(option.getValue()!=SortingState.NON_INITIALIZED){
-                packages= GPManager.getInstance().getWeaponPackagesBasedOnData(option.getKey(),option.getValue(),packages);
+            if (option.getValue() != SortingState.NON_INITIALIZED) {
+                packages = GPManager.getInstance().getWeaponPackagesBasedOnData(option.getKey(), option.getValue(), packages);
             }
         }
         wantsAll = false;
@@ -94,7 +85,7 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager implement
         float size = packages.size();
         int maxPages = (int) (size / maxItemsPerPageWEP);
         if ((float) maxPages != size / maxItemsPerPageWEP) maxPages++;
-        Pair<CustomPanelAPI,ArrayList<ButtonAPI>> orders=OptionPanelDesigner.createWeaponPanel(UIData.WIDTH_OF_OPTIONS, YHeight, this.panel, packages, currOffset, maxItemsPerPage);
+        Pair<CustomPanelAPI, ArrayList<ButtonAPI>> orders = OptionPanelDesigner.createWeaponPanel(UIData.WIDTH_OF_OPTIONS, YHeight, this.panel, packages, currOffset, maxItemsPerPage);
         pageInitalization(panel, maxPages, orders);
     }
 

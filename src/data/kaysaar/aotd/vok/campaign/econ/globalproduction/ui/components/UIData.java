@@ -87,7 +87,7 @@ public class UIData {
         memberAPI.getRepairTracker().computeRepairednessFraction();
         final FleetMemberAPI member = memberAPI;
         LabelAPI size = mainTooltip.addPara(Misc.getHullSizeStr(option.getSpec().getShipHullSpecAPI().getHullSize()),0f);
-        LabelAPI type = mainTooltip.addPara(AoTDMisc.getType(memberAPI),0f);
+        LabelAPI type = mainTooltip.addPara(AoTDMisc.getType(option.getSpec().getShipHullSpecAPI()),0f);
         LabelAPI designType =mainTooltip.addPara(option.getSpec().getShipHullSpecAPI().getManufacturer(),Misc.getDesignTypeColor(option.getSpec().getShipHullSpecAPI().getManufacturer()),0f);
         LabelAPI credits = mainTooltip.addPara(Misc.getDGSCredits(option.getSpec().getCredistCost()),0f, Color.ORANGE);
         buildTime.getPosition().inTL(getxPad(buildTime, getCenter(WIDTH_OF_NAME,WIDTH_OF_BUILD_TIME)),getyPad(size));
