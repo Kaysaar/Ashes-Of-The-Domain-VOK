@@ -17,6 +17,7 @@ import com.fs.starfarer.api.loading.WingRole;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
+import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +52,27 @@ public class AoTDMisc {
         }
 
         return variantId;
+    }
+    public static ArrayList<String> loadEntries(String rawMap,String seperator) {
+        if(!AoTDMisc.isStringValid(rawMap)){
+            return  new ArrayList<>();
+        }
+        String[]splitted = rawMap.split(seperator);
+        ArrayList<String> map = new ArrayList<>(Arrays.asList(splitted));
+
+        return map;
+    }
+    public static AoTDAIStance getStanceFromString(String stance) {
+        if (stance == null || stance.isEmpty()) {
+            return AoTDAIStance.DEFAULT;
+        }
+
+        try {
+            return AoTDAIStance.valueOf(stance.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            // Handle the case where the string does not match any enum value
+            return AoTDAIStance.DEFAULT;
+        }
     }
     public static boolean arrayContains(ArrayList<String> array,String key){
         for (String s : array) {

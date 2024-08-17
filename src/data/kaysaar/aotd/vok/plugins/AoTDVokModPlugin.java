@@ -7,6 +7,8 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
@@ -124,13 +126,13 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         }
         aoTDDataInserter.insertSophia();
         setListenersIfNeeded();
-
         AoTDMainResearchManager.getInstance().updateResearchOptionsFromSpec();
         AoTDMainResearchManager.getInstance().updateManagerRepo();
+        AoTDMainResearchManager.getInstance().setAttitudeDataForAllFactions();
         if(!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)){
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
-
+        Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");
         AoTDMainResearchManager.getInstance().updateModIdRepo();
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
         if (newGame) {

@@ -165,6 +165,10 @@ public class GPOrder implements Cloneable{
                 quality += 4f * Global.getSettings().getFloat("doctrineFleetQualityPerPoint");
                 CampaignFleetAPI ships = Global.getFactory().createEmptyFleet(Factions.PLAYER, "temp", true);
                 ships.setCommander(Global.getSector().getPlayerPerson());
+                for (int i = 0; i < produced; i++) {
+                    FleetMemberAPI member = ships.getFleetData().addFleetMember(AoTDMisc.getVaraint(getSpecFromClass().getShipHullSpecAPI()));
+                    member.getVariant().clear();
+                }
                 DefaultFleetInflaterParams p = new DefaultFleetInflaterParams();
                 p.quality = quality;
                 p.mode = FactionAPI.ShipPickMode.PRIORITY_THEN_ALL;
@@ -173,10 +177,8 @@ public class GPOrder implements Cloneable{
                 p.timestamp = null;
                 FleetInflater inflater = Misc.getInflater(ships, p);
                 ships.setInflater(inflater);
-                for (int i = 0; i < produced; i++) {
-                    FleetMemberAPI member = ships.getFleetData().addFleetMember(AoTDMisc.getVaraint(getSpecFromClass().getShipHullSpecAPI()));
-                    member.getVariant().clear();
-                }
+                inflater.inflate(ships);
+
                 for (FleetMemberAPI fleetMemberAPI : ships.getFleetData().getMembersListCopy()) {
                     local.getMothballedShips().addFleetMember(fleetMemberAPI);
                 }

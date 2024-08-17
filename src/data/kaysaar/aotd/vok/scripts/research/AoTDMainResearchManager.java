@@ -11,6 +11,8 @@ import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.impl.campaign.intel.ResearchExpeditionIntel;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
+import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContract;
 import data.kaysaar.aotd.vok.scripts.research.models.*;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import org.apache.log4j.Logger;
@@ -44,6 +46,7 @@ public class AoTDMainResearchManager {
     public float expeditionCounter = 0;
     public String expeditionSender = null;
     public float expeditionThreshold = 120;
+
 
     @NotNull
     private Map<String, ResearchOptionSpec> researchOptionSpec = new HashMap<>();
@@ -248,6 +251,21 @@ public class AoTDMainResearchManager {
             }
         }
     }
+    public void setAttitudeDataForAllFactions() {
+        for (AoTDFactionResearchManager factionResearchManager : getFactionResearchManagers()) {
+            factionResearchManager.setAttitudeData(new FactionResearchAttitudeData(factionResearchManager.getFaction().getId(),AoTDAIStance.DEFAULT,0.2f,0.5f,null,new ArrayList<String>()));
+        }
+        try {
+            for (FactionResearchAttitudeData factionResearchAttitudeData : FactionResearchAttitudeData.getDataFromCSV()) {
+                 getSpecificFactionManager(Global.getSector().getFaction(factionResearchAttitudeData.factionID)).setAttitudeData(factionResearchAttitudeData);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     public void addNewFactionIfNotPresent(FactionAPI factionAPI) {
         boolean isPresent = false;
@@ -258,7 +276,7 @@ public class AoTDMainResearchManager {
             }
         }
         if (!isPresent) {
-            if ((factionAPI.isShowInIntelTab() || factionAPI.isPlayerFaction()) && !factionAPI.getId().equals(Factions.PIRATES)) {
+            if ((factionAPI.isShowInIntelTab() || factionAPI.isPlayerFaction())) {
                 factionResearchManagers.add(new AoTDFactionResearchManager(factionAPI, generateResearchOptions(getSpecsFromFiles())));
                 logger.info("Faction " + factionAPI.getDisplayName() + " has been added to research manager.");
             }
@@ -299,7 +317,7 @@ public class AoTDMainResearchManager {
         String faction = null;
 
         for (Map.Entry<String, Float> entry : weight.entrySet()) {
-            if (Misc.getFactionMarkets(entry.getKey()).isEmpty()) {
+            if (Misc.getFactionMarkets(entry.getKey()).isEmpty()||entry.getKey().equals(Factions.PIRATES)) {
                 continue;
             }
             if (biggest == 0f) {

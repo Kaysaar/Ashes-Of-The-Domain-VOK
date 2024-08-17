@@ -28,13 +28,13 @@ public class AIColonyManagerListener implements EconomyTickListener {
     @Override
     public void reportEconomyMonthEnd() {
         AoTDMainResearchManager manager = AoTDMainResearchManager.getInstance();
-        for (AoTDFactionResearchManager factionResearchManager : manager.getFactionResearchManagers()) {
-            if (factionResearchManager.getFaction().isPlayerFaction() || !factionResearchManager.canUpgrade) continue;
-            factionResearchManager.setCanUpgrade(false);
-            manageIndustriesConstruction(factionResearchManager.getFaction());
-
-
-        }
+//        for (AoTDFactionResearchManager factionResearchManager : manager.getFactionResearchManagers()) {
+//            if (factionResearchManager.getFaction().isPlayerFaction() || !factionResearchManager.canUpgrade) continue;
+//            factionResearchManager.setCanUpgrade(false);
+//            manageIndustriesConstruction(factionResearchManager.getFaction());
+//
+//
+//        }
     }
 
     public void manageIndustriesConstruction(FactionAPI faction){

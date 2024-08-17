@@ -51,6 +51,7 @@ public class FighterInfoGenerator {
         tooltip.addSpacer(10f);
         tooltip.addCustom(thirdRowOfData,5f);
         FleetMemberAPI ship = Global.getFactory().createFleetMember(FleetMemberType.FIGHTER_WING,wing.getId());
+        ship.getHullSpec().getHullId();
         CustomPanelAPI panelOfOtherInfo = generateOtherInfo(ship,widthOfTooltip,60,true);
         tooltip.addCustom(panelOfOtherInfo,5f);
         tooltip.addSectionHeading("Replacing Combat Losses",Alignment.MID,5f);
