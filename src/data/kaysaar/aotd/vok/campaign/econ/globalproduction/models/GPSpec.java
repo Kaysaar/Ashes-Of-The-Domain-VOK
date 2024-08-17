@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import static data.kaysaar.aotd.vok.misc.AoTDMisc.loadEntries;
+
 public class GPSpec {
     public void  setObjectToBeProduced(String id,ProductionType type){
         if (type.equals(ProductionType.FIGHTER)) {
@@ -475,15 +477,7 @@ public class GPSpec {
         }
         return map;
     }
-    public static ArrayList<String> loadEntries(String rawMap,String seperator) {
-        if(!AoTDMisc.isStringValid(rawMap)){
-            return  new ArrayList<>();
-        }
-        String[]splitted = rawMap.split(seperator);
-        ArrayList<String> map = new ArrayList<>(Arrays.asList(splitted));
 
-        return map;
-    }
     public static HashMap<Integer,Pair<String,String>>getStageMap(String rawmap,String descMap, int stageAmount){
         HashMap<Integer,Pair<String,String>>stageMap = new HashMap<>();
         ArrayList<String>names = loadEntries(rawmap,";");

@@ -100,8 +100,6 @@ public class ShipRenderInfo {
                 obj = Global.getSettings().loadJSON(Filepath,false);
                 obj.getDouble("width");
             }
-;
-
 
 
         }

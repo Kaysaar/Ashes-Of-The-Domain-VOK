@@ -22,6 +22,8 @@ import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.ResearchFleetDefeatListener;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
+import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContract;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
@@ -42,7 +44,25 @@ public class AoTDFactionResearchManager {
     }
 
     public ResearchQueueManager queueManager;
+    public BaseResearchContract contract;
+    public BaseResearchContract playerCurrentContract;
 
+    public BaseResearchContract getPlayerCurrentContract() {
+        return playerCurrentContract;
+    }
+
+    public void setPlayerCurrentContract(BaseResearchContract playerCurrentContract) {
+        this.playerCurrentContract = playerCurrentContract;
+    }
+
+    public BaseResearchContract getContract() {
+        return contract;
+
+    }
+
+    public void setContract(BaseResearchContract contract) {
+        this.contract = contract;
+    }
     public ResearchQueueManager getQueueManager() {
         if (queueManager == null) queueManager =new ResearchQueueManager(this.getFaction().getId());
         return queueManager;
@@ -61,6 +81,15 @@ public class AoTDFactionResearchManager {
 
     public ResearchOption getCurrentFocus() {
         return getResearchOptionFromRepo(currentFocusId);
+    }
+    public transient FactionResearchAttitudeData attitudeData;
+
+    public FactionResearchAttitudeData getAttitudeData() {
+        return attitudeData;
+    }
+
+    public void setAttitudeData(FactionResearchAttitudeData attitudeData) {
+        this.attitudeData = attitudeData;
     }
 
     public void setCurrentFocus(String currentFocus) {
@@ -187,7 +216,7 @@ public class AoTDFactionResearchManager {
         if(getCurrentFocus()==null){
             notifyFactionBeginResearch(getQueueManager().removeFromTop());
         }
-        if (!getFaction().isPlayerFaction()) {
+        if (!getFaction().isPlayerFaction()&&!getFaction().getId().equals(Factions.PIRATES)) {
             manageForAI(amount);
         }
         for (ResearchOption option : researchRepoOfFaction) {

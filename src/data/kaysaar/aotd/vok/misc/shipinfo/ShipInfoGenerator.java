@@ -13,6 +13,8 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.misc.fighterinfo.FighterInfo;
+import data.kaysaar.aotd.vok.misc.fighterinfo.FighterInfoRepo;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
@@ -175,15 +177,22 @@ public class ShipInfoGenerator {
             mountsLabel    = combineAndAddToTooltip(otherInfoTooltip, energyPairs, missilePairs, ballisticPairs, launchBayPairs, universalPairs, hybridPairs, synergyPairs, compositePairs);
         }
 
-        LabelAPI armanantsLabel = processShipData(ship.getHullSpec(), otherInfoTooltip);
+        LabelAPI armanantsLabel = processShipData(ship.getHullSpec(), otherInfoTooltip,isFighter);
 
         StringBuilder entries = new StringBuilder();
         ArrayList<String> hullmodNames = new ArrayList<>();
+        int i = 0;
         for (String compositePair : ship.getVariant().getHullMods()) {
             if (!Global.getSettings().getHullModSpec(compositePair).isHiddenEverywhere()) {
-                entries.append("%s ");
+                if(i<ship.getVariant().getHullMods().size()-1){
+                    entries.append("%s, ");
+                }
+                else{
+                    entries.append("%s ");
+                }
                 hullmodNames.add(Global.getSettings().getHullModSpec(compositePair).getDisplayName());
             }
+            i++;
 
         }
         LabelAPI hullmodsLabel = null;
@@ -275,34 +284,40 @@ public class ShipInfoGenerator {
         return tooltip.addPara(text, 3f, Color.ORANGE, highlights.toArray(new String[0]));
     }
 
-    static HashMap<String, Integer> countBuiltInWeapons(ShipHullSpecAPI ship) {
+    static HashMap<String, Integer> countBuiltInWeapons(ShipHullSpecAPI ship,boolean isFighter) {
         HashMap<String, Integer> builtInWeaponsMap = new HashMap<>();
 
-        for (Map.Entry<String, String> builtInWeapon : ship.getBuiltInWeapons().entrySet()) {
-            String weaponID = builtInWeapon.getValue();
-            if (ship.getWeaponSlot(builtInWeapon.getKey()).isDecorative()) continue;
-            if (ship.getWeaponSlot(builtInWeapon.getKey()).isStationModule()) continue;
-            if (builtInWeaponsMap.containsKey(weaponID)) {
-                builtInWeaponsMap.put(weaponID, builtInWeaponsMap.get(weaponID) + 1);
-            } else {
-                builtInWeaponsMap.put(weaponID, 1);
+        if(isFighter){
+            return FighterInfoRepo.getFromRepo(ship.getHullId()).getWeaponMap();
+        }
+        else{
+            for (Map.Entry<String, String> builtInWeapon : ship.getBuiltInWeapons().entrySet()) {
+                String weaponID = builtInWeapon.getValue();
+                if (ship.getWeaponSlot(builtInWeapon.getKey()).isDecorative()) continue;
+                if (ship.getWeaponSlot(builtInWeapon.getKey()).isStationModule()) continue;
+                if (builtInWeaponsMap.containsKey(weaponID)) {
+                    builtInWeaponsMap.put(weaponID, builtInWeaponsMap.get(weaponID) + 1);
+                } else {
+                    builtInWeaponsMap.put(weaponID, 1);
+                }
+            }
+            for (String builtInWing : ship.getBuiltInWings()) {
+                String weaponID = builtInWing;
+                if (builtInWeaponsMap.containsKey(weaponID)) {
+                    builtInWeaponsMap.put(weaponID, builtInWeaponsMap.get(weaponID) + 1);
+                } else {
+                    builtInWeaponsMap.put(weaponID, 1);
+                }
             }
         }
-        for (String builtInWing : ship.getBuiltInWings()) {
-            String weaponID = builtInWing;
-            if (builtInWeaponsMap.containsKey(weaponID)) {
-                builtInWeaponsMap.put(weaponID, builtInWeaponsMap.get(weaponID) + 1);
-            } else {
-                builtInWeaponsMap.put(weaponID, 1);
-            }
-        }
+
 
         return builtInWeaponsMap;
     }
 
-    static public LabelAPI processShipData(ShipHullSpecAPI ship, TooltipMakerAPI tooltip) {
+    static public LabelAPI processShipData(ShipHullSpecAPI ship, TooltipMakerAPI tooltip,boolean isFighter) {
         // Count built-in weapons
-        HashMap<String, Integer> builtInWeaponsMap = countBuiltInWeapons(ship);
+        HashMap<String, Integer> builtInWeaponsMap = countBuiltInWeapons(ship,isFighter);
 
         // Assuming you want to display this information similarly
         // Build the pairs for the built-in weapons

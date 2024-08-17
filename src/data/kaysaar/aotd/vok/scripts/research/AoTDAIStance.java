@@ -7,6 +7,8 @@ public enum AoTDAIStance {
     CLEANSE,
     SPECIAL,
     NEGLECT,
+    RESTRICTIVE,
+
     MERCENARY
 
 }
