@@ -29,5 +29,6 @@ public class WeaponMissileInfoRepo {
                 }
             }
         }
+        Global.getCombatEngine().removeEntity(shipAPI);
     }
 }
