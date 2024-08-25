@@ -12,7 +12,6 @@ import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.impl.campaign.intel.ResearchExpeditionIntel;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
-import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContract;
 import data.kaysaar.aotd.vok.scripts.research.models.*;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import org.apache.log4j.Logger;

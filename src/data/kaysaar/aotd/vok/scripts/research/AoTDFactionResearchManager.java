@@ -44,25 +44,9 @@ public class AoTDFactionResearchManager {
     }
 
     public ResearchQueueManager queueManager;
-    public BaseResearchContract contract;
-    public BaseResearchContract playerCurrentContract;
 
-    public BaseResearchContract getPlayerCurrentContract() {
-        return playerCurrentContract;
-    }
 
-    public void setPlayerCurrentContract(BaseResearchContract playerCurrentContract) {
-        this.playerCurrentContract = playerCurrentContract;
-    }
 
-    public BaseResearchContract getContract() {
-        return contract;
-
-    }
-
-    public void setContract(BaseResearchContract contract) {
-        this.contract = contract;
-    }
     public ResearchQueueManager getQueueManager() {
         if (queueManager == null) queueManager =new ResearchQueueManager(this.getFaction().getId());
         return queueManager;

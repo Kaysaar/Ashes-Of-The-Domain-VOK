@@ -56,12 +56,7 @@ public class ResearchContract extends BaseCommandPlugin{
         valueMult =attitudeData.getDatabankCashMultiplier();
         return true;
     }
-    public boolean isValidForContract(FactionAPI faction){
 
-        FactionResearchAttitudeData attitudeData = AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).getAttitudeData();
-        AoTDAIStance stance = attitudeData.getStance();
-        return stance!=AoTDAIStance.CLEANSE&&stance!=AoTDAIStance.NEGLECT&&AoTDMainResearchManager.getInstance().getManagerForPlayer().getPlayerCurrentContract()==null;
-    }
 
 
 }

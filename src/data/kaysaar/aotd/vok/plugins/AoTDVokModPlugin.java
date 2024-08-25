@@ -21,6 +21,8 @@ import data.kaysaar.aotd.vok.listeners.AoTDRaidListener;
 import data.kaysaar.aotd.vok.listeners.AoTDxIndieCollabListener;
 import data.kaysaar.aotd.vok.listeners.AoTDxUafAfterCombatListener;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderInfoRepo;
+import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContract;
+import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContractData;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
@@ -32,6 +34,7 @@ import org.json.JSONException;
 import org.lazywizard.lazylib.ui.FontException;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 
 
 public class AoTDVokModPlugin extends BaseModPlugin {
@@ -157,7 +160,14 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.BIOFACTORY_EMBRYO, "lightproduction,consumerindustry");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy");
-
+        LinkedHashMap<String,String >stages = new LinkedHashMap<>();
+        LinkedHashMap<String,Integer>stageValues = new LinkedHashMap<>();
+        LinkedHashMap<String,String>iconMap = new LinkedHashMap<>();
+       stages.put("stage1","End of Contract");
+       stageValues.put("stage1",500);
+       iconMap.put("stage1","hyperspace_topography");
+//        BaseResearchContractData  data = new BaseResearchContractData(Factions.TRITACHYON,stages,stageValues,iconMap,500);
+//        new BaseResearchContract(data,null,true);
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator,policrystalizator,cascade_reprocesor");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
 
