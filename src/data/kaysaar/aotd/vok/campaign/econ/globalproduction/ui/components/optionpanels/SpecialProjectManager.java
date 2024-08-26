@@ -47,12 +47,13 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
         return null;
     }
 
-    public SpecialProjectManager(CustomPanelAPI panel) {
+    public SpecialProjectManager(CustomPanelAPI panel,float padding) {
         ;
         mapOfButtonStates = new HashMap<>();
         this.mainPanel = panel;
-        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
-        YHeight = panel.getPosition().getHeight() - paddingY - 70-19;
+        this.padding = padding;
+        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight()-padding, null);
+        YHeight = panel.getPosition().getHeight() - paddingY - 70-19-padding;
 
     }
 
@@ -295,7 +296,7 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
     @Override
     public void init() {
         createSpecialProjectListPanel();
-        this.mainPanel.addComponent(panel).inTL(0, 0);
+        this.mainPanel.addComponent(panel).inTL(0, padding);
     }
 
     @Override
@@ -318,7 +319,8 @@ public class SpecialProjectManager extends BaseOptionPanelManager implements Opt
 
     @Override
     public void reInit() {
-        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
+        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight()-padding, null);
+
         init();
     }
 
