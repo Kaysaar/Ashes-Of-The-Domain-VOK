@@ -49,7 +49,7 @@ public class PlanetaryDefenceForce extends BaseIndustry implements EconomyTickLi
             extra = " (" + getDeficitText(com).toLowerCase() + ")";
         }
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD)
-                .modifyMult(getModId(), DEFENSE_BONUS_BASE*mult);
+                .modifyMult(getModId(), DEFENSE_BONUS_BASE*mult,"Planetary Defence Force");
 
 
 

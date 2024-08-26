@@ -149,7 +149,7 @@ public class GPOrder implements Cloneable{
             //CargoAPI local = Misc.getLocalResourcesCargo(gatheringPoint);
             CargoAPI local = Misc.getStorageCargo(gatheringPoint);
             if(getSpecFromClass().type== GPSpec.ProductionType.WEAPON){
-                local.addWeapons(getSpecFromClass().getIdOfItemProduced(), 1);
+                local.addWeapons(getSpecFromClass().getIdOfItemProduced(), produced);
             }
 
             if(getSpecFromClass().type== GPSpec.ProductionType.SHIP){
@@ -186,7 +186,7 @@ public class GPOrder implements Cloneable{
 
             }
             if(getSpecFromClass().type== GPSpec.ProductionType.FIGHTER){
-                local.addFighters(getSpecFromClass().getIdOfItemProduced(), 1);
+                local.addFighters(getSpecFromClass().getIdOfItemProduced(), produced);
             }
             if(!isAboutToBeRemoved()){
                 daysSpentDoingOrder = 0;
