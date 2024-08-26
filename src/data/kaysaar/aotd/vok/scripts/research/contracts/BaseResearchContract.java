@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.scripts.research.contracts;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.TextPanelAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Abilities;
@@ -37,9 +38,33 @@ public class BaseResearchContract extends BaseEventIntel {
         super();
 
         this.data = contract;
+        this.progress=10;
         setup();
+
         Global.getSector().getIntelManager().addIntel(this, !withIntelNotification, text);
     }
+
+    @Override
+    public void addStageDescriptionText(TooltipMakerAPI info, float width, Object stageId) {;
+
+        if (getLastActiveStage(true).id.equals(stageId)) {
+            FactionAPI faction = data.getFaction();
+            if(getStageId(stageId).equals("stage1")){
+                info.addPara("With our contract with %s now we are obliged to help them improve, in return for allowing us to use their databanks and gaining permission to undertake research programs.",0f,Color.ORANGE,faction.getDisplayName());
+                info.addPara("We can gain contract points by: ",5f);
+                info.addPara("Selling databanks to "+faction.getDisplayName(),Color.ORANGE,5f);
+                info.addPara("Researching technologies that faction is interested in (Gives points monthly)",Color.ORANGE,5f);
+                info.addPara("Effects till contract is finished:",10f);
+                info.addPara("Reduction of research cost (in items) by %s for technologies researched by %s",5f,Color.ORANGE,"100%",faction.getDisplayName());
+                info.addPara("Increase of research cost (in items) by %s for technologies not researched by %s",5,Color.ORANGE,"100%",faction.getDisplayName());
+            }
+            if(getStageId(stageId).equals("stage2")){
+                info.addPara("test",0f);
+            }
+        }
+
+    }
+
     @Override
     protected void notifyEnded() {
         super.notifyEnded();
@@ -49,8 +74,9 @@ public class BaseResearchContract extends BaseEventIntel {
     protected void setup() {
         factors.clear();
         stages.clear();
-
         setMaxProgress(data.maxProgress);
+
+
         for (Map.Entry<String, String> entry : data.stageNames.entrySet()) {
             addStage(entry.getKey(),data.stageValues.get(entry.getKey()),StageIconSize.MEDIUM);
             getDataFor(entry.getKey()).keepIconBrightWhenLaterStageReached = true;
@@ -67,6 +93,9 @@ public class BaseResearchContract extends BaseEventIntel {
     public float getImageIndentForStageDesc(Object stageId) {
 
         return 16f;
+    }
+    public String  getStageId(Object id){
+        return (String)id;
     }
 
     @Override
@@ -94,8 +123,60 @@ public class BaseResearchContract extends BaseEventIntel {
         return color;
     }
 
+
+    @Override
+    public TooltipMakerAPI.TooltipCreator getStageTooltip(Object stageId) {
+        if(getStageId(stageId).equals("stage2")){
+            return  new TooltipMakerAPI.TooltipCreator() {
+                @Override
+                public boolean isTooltipExpandable(Object tooltipParam) {
+                    return true;
+                }
+
+                @Override
+                public float getTooltipWidth(Object tooltipParam) {
+                    return 400;
+                }
+
+                @Override
+                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                    tooltip.addTitle("End of contract");
+                    tooltip.addPara("Contract with faction you have signed has ended, from now on you shall pursue your own goals",10f);
+                    tooltip.addPara("Allows for ending contract without penalties and researching under faction's banner without any negative modifiers",Color.ORANGE,5f);
+                }
+            };
+        }
+        if(getStageId(stageId).equals("stage1")){
+            return  new TooltipMakerAPI.TooltipCreator() {
+                @Override
+                public boolean isTooltipExpandable(Object tooltipParam) {
+                    return true;
+                }
+
+                @Override
+                public float getTooltipWidth(Object tooltipParam) {
+                    return 400;
+                }
+
+                @Override
+                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                    tooltip.addTitle("Begin of contract");
+                    tooltip.addPara("Contract with faction you have signed has ended, from now on you shall pursue your own goals",10f);
+                    tooltip.addPara("Allows for ending contract without penalties and researching under faction's banner without any negative modifiers",Color.ORANGE,5f);
+                }
+            };
+        }
+        return super.getStageTooltip(stageId);
+
+    }
+
+    @Override
+    public TooltipMakerAPI.TooltipCreator getBarTooltip() {
+        return super.getBarTooltip();
+    }
+
     @Override
     public boolean withMonthlyFactors() {
-        return false;
+        return true;
     }
 }

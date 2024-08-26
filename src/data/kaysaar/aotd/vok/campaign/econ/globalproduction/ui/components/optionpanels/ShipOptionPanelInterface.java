@@ -17,15 +17,15 @@ import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirM
 public class ShipOptionPanelInterface extends BaseOptionPanelManager implements OptionPanelInterface {
 
 
-    public ShipOptionPanelInterface(CustomPanelAPI panel) {
+    public ShipOptionPanelInterface(CustomPanelAPI panel,float padding) {
         GPManager.getInstance().populateShipInfo();
         GPManager.getInstance().populateShipSizeInfo();
         GPManager.getInstance().populateShipTypeInfo();
-
+        this.padding = padding;
         mapOfButtonStates = new HashMap<>();
         this.mainPanel = panel;
-        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
-        YHeight = panel.getPosition().getHeight() * 0.45f;
+        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight()-padding, null);
+        YHeight = panel.getPosition().getHeight() * 0.45f-padding;
 
     }
 
@@ -37,7 +37,7 @@ public class ShipOptionPanelInterface extends BaseOptionPanelManager implements 
         createTypeOptions(GPManager.getInstance().getShipTypeInfo());
         createSortingButtons(false, false);
         createSerachBarPanel();
-        this.mainPanel.addComponent(panel).inTL(0, 0);
+        this.mainPanel.addComponent(panel).inTL(0, padding);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ShipOptionPanelInterface extends BaseOptionPanelManager implements 
 
     @Override
     public void reInit() {
-        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
+        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight()-40, null);
         init();
     }
 

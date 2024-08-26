@@ -25,13 +25,14 @@ public class FighterOptionPanelInterface extends BaseOptionPanelManager implemen
         return null;
     }
 
-    public FighterOptionPanelInterface(CustomPanelAPI panel){
+    public FighterOptionPanelInterface(CustomPanelAPI panel,float padding){
         GPManager.getInstance().populateFighterInfo();
         GPManager.getInstance().populateFighterTypeInfo();
         mapOfButtonStates = new HashMap<>();
+        this.padding = padding;
         this.mainPanel = panel;
-        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
-        YHeight = panel.getPosition().getHeight() * 0.45f;
+        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight()-padding, null);
+        YHeight = panel.getPosition().getHeight() * 0.45f-40;
     }
 
 
@@ -42,7 +43,7 @@ public class FighterOptionPanelInterface extends BaseOptionPanelManager implemen
         createTypeOptions(GPManager.getInstance().getFighterTypeInfo());
         createSortingButtons(true, false);
         createSerachBarPanel();
-        this.mainPanel.addComponent(panel).inTL(0, 0);
+        this.mainPanel.addComponent(panel).inTL(0, padding);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class FighterOptionPanelInterface extends BaseOptionPanelManager implemen
 
     @Override
     public void reInit() {
-        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
+        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight()-padding, null);
         init();
     }
     private void createFighterOptions(CustomPanelAPI panel) {

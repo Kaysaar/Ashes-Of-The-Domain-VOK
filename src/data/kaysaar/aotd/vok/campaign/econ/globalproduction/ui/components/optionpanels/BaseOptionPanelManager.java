@@ -18,6 +18,8 @@ import java.util.Map;
 public class BaseOptionPanelManager {
     CustomPanelAPI mainPanel;
     CustomPanelAPI panel;
+    float padding;
+
     Color base = Global.getSector().getPlayerFaction().getBaseUIColor();
     Color bg = Global.getSector().getPlayerFaction().getDarkUIColor();
     Color bright = Global.getSector().getPlayerFaction().getBrightUIColor();
@@ -105,7 +107,7 @@ public class BaseOptionPanelManager {
         panelOfSearchBar = panel.createCustomPanel(230, 20, null);
         TooltipMakerAPI tooltip = panelOfSearchBar.createUIElement(230, 20, false);
         searchbar = tooltip.addTextField(230, 20, Fonts.DEFAULT_SMALL, 0f);
-        panelOfSearchBar.addUIElement(tooltip).inTL(-5, 0);
+        panelOfSearchBar.addUIElement(tooltip).inTL(0, 0);
         panel.addComponent(panelOfSearchBar).inTL(buttonSortingPnael.getPosition().getX() + buttonSortingPnael.getPosition().getWidth() - 245, 29);
     }
     public void createSortingButtons(boolean forFighter, boolean isWeapon) {

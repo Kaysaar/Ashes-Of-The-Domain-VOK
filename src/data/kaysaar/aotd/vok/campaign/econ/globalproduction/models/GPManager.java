@@ -226,6 +226,8 @@ public class GPManager {
         commodities.add(Commodities.SHIPS);
         commodities.add(Commodities.HAND_WEAPONS);
         commodities.add("advanced_components");
+        commodities.add("refined_metal");
+        commodities.add("purified_rare_metal");
     }
 
     public static String memkey = "aotd_gp_plugin";

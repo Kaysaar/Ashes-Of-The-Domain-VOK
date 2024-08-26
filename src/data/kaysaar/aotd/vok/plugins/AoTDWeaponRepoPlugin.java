@@ -11,6 +11,7 @@ import data.kaysaar.aotd.vok.misc.weaponinfo.WeaponMissileInfoRepo;
 public class AoTDWeaponRepoPlugin extends BaseEveryFrameCombatPlugin {
     @Override
     public void init(CombatEngineAPI engine) {
+
         if(Global.getCurrentState()== GameState.TITLE) {
             if (WeaponMissileInfoRepo.weapontoMissleMap.isEmpty()) {
                 WeaponMissileInfoRepo.initMap();

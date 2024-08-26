@@ -45,16 +45,11 @@ public class CommodityInfo implements TooltipMakerAPI.TooltipCreator {
         Color[] colors = new Color[2];
         colors[0] = Color.ORANGE;
         colors[1] = Misc.getTooltipTitleAndLightHighlightColor();
-        if(!isReqSection){
-            tooltip.addPara("Currently this faction is capable of producing globally around %s units of %s",10f,colors,""+currentTotal,spec.getName());
-
-        }
-        else{
-            tooltip.addPara("Currently this faction is consuming globally around %s units of %s",10f,colors,""+currentTotal2,spec.getName());
-
-        }
+        tooltip.addPara("Currently this faction is capable of producing globally around %s units of %s",10f,colors,""+currentTotal,spec.getName());
         tooltip.addPara("One unit of supply in colony translates towards %s units of global production of commodity",5,Color.ORANGE,""+GPManager.scale);
         tooltip.addPara("To increase Global Production of %s you need to either increase production across colonies, or make new colonies and develop them to support production.",5,Color.ORANGE,spec.getName());
+        tooltip.addSectionHeading("Global Consumption",Alignment.MID,10f);
+        tooltip.addPara("Currently this faction is consuming globally around %s units of %s",10f,colors,""+currentTotal2,spec.getName());
         tooltip.addSectionHeading("Production data from markets",Alignment.MID,10f);
         colors = new Color[3];
         colors[0] = Misc.getTooltipTitleAndLightHighlightColor();
