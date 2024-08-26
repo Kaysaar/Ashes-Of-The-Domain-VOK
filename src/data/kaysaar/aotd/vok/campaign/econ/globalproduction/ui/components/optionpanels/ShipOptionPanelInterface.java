@@ -54,7 +54,7 @@ public class ShipOptionPanelInterface extends BaseOptionPanelManager implements 
 
     @Override
     public void reInit() {
-        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight()-40, null);
+        this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight()-padding, null);
         init();
     }
 
