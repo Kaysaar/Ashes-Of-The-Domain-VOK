@@ -15,7 +15,7 @@ public class ConsumerIndustry extends BaseIndustry {
         int size = market.getSize();
         demand(Commodities.ORGANICS, size+2);
         demand(Commodities.HEAVY_MACHINERY,size);
-        supply(Commodities.DOMESTIC_GOODS, size+2);
+        supply(Commodities.DOMESTIC_GOODS, size+4);
         //supply(Commodities.SUPPLIES, size - 3);
 
         //if (!market.getFaction().isIllegal(Commodities.LUXURY_GOODS)) {
@@ -25,20 +25,15 @@ public class ConsumerIndustry extends BaseIndustry {
             supply(Commodities.LUXURY_GOODS, 0);
         }
         //if (!market.getFaction().isIllegal(Commodities.DRUGS)) {
-        if (!market.isIllegal(Commodities.DRUGS)) {
-            supply(Commodities.DRUGS, size);
-        } else {
-            supply(Commodities.DRUGS, 0);
-        }
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS,Commodities.HEAVY_MACHINERY);
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;
         applyDeficitToProduction(2, deficit,
                 Commodities.DOMESTIC_GOODS,
-                Commodities.LUXURY_GOODS,
-                //Commodities.SUPPLIES,
-                Commodities.DRUGS);
+                Commodities.LUXURY_GOODS
+                //Commodities.SUPPLIES
+                );
 
         if (!isFunctional()) {
             supply.clear();

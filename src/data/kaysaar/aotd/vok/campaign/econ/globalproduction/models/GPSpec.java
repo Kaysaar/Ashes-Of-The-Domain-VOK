@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionProductionAPI;
+import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.WeaponAPI;
@@ -29,6 +30,9 @@ public class GPSpec {
         }
         if (type.equals(ProductionType.WEAPON)) {
             this.weaponSpec = Global.getSettings().getWeaponSpec(id);
+        }
+        if(type.equals(ProductionType.ITEM)){
+            this.itemSpecAPI = Global.getSettings().getSpecialItemSpec(id);
         }
         this.type = type;
     }
@@ -145,6 +149,28 @@ public class GPSpec {
         spec.setSupplyCost(commodityCost);
         return spec;
     }
+    public static GPSpec getSpecFromItem(SpecialItemSpecAPI specAPI){
+        int advanced_component_mult = 10000;
+        int domain_grade_mult = 2000;
+        int daysMult = 2500;
+        int basePrice = (int) specAPI.getBasePrice();
+        float newDays = basePrice/daysMult;
+        float newPrice = basePrice*0.7f;
+        newPrice = Math.round(newPrice);
+        GPSpec spec = new GPSpec();
+        spec.setProjectId(specAPI.getId());
+        spec.setObjectToBeProduced(specAPI.getId(),ProductionType.ITEM);
+        spec.setDays((int) newDays);
+        spec.setType(ProductionType.ITEM);
+        HashMap<String,Integer>commodityCost = new HashMap<>();
+        int advanced_component = Math.max(basePrice/advanced_component_mult,1);
+        int domain_grade = Math.max(basePrice/domain_grade_mult,1);
+        commodityCost.put("advanced_components",advanced_component);
+        commodityCost.put("domain_heavy_machinvery",domain_grade);
+        spec.setCredistCost(newPrice);
+        spec.setSupplyCost(commodityCost);
+        return spec;
+    }
 
     public void setCommodityCost(HashMap<String, Integer> commodityCost) {
         this.commodityCost = commodityCost;
@@ -178,7 +204,7 @@ public class GPSpec {
         FIGHTER,
         WEAPON,
         SHIP,
-
+        ITEM
     }
     public String descriptionOfProject;
 
@@ -194,10 +220,15 @@ public class GPSpec {
     FighterWingSpecAPI wingSpecAPI;
     WeaponSpecAPI weaponSpec;
     ShipHullSpecAPI shipHullSpecAPI;
+    SpecialItemSpecAPI itemSpecAPI;
     boolean isRepeatable = true;
     public int  amountOfStages;
     public String progressString;
     public ArrayList<String> highlights;
+
+    public SpecialItemSpecAPI getItemSpecAPI() {
+        return itemSpecAPI;
+    }
 
     HashMap<String, Integer> commodityCost;
     HashMap<String, Integer> supplyCost;
@@ -439,6 +470,10 @@ public class GPSpec {
                 }
 
                 ArrayList<HashMap<String,Integer>>stageCosts = loadCostMapStages(entry.getString("stageCost"));
+                if(stageCosts.size()!=amountOfStages){
+
+                    throw new RuntimeException();
+                }
                 String rewardId = entry.getString("rewardId");
                 String progressString = entry.getString("progressString");
                 int cost = entry.getInt("initalCostMoney");

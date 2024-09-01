@@ -16,18 +16,7 @@ import java.awt.*;
 
 public class TriTachyonHeavy extends HeavyIndustry {
     public static float QUALITY_BONUS = 0.8f;
-    public int getAdvancedComponents(){
-        if(this.market.getSize()<5){
-            return 0;
-        }
-        if(this.market.getSize()>=5&&market.getSize()<=8){
-            return market.getSize()-2;
-        }
-        if(market.getSize()>8){
-            return market.getSize()-1;
-        }
-        return 0;
-    }
+
     public void apply() {
         super.apply(true);
         int size = market.getSize();
@@ -40,19 +29,18 @@ public class TriTachyonHeavy extends HeavyIndustry {
         supply(Commodities.SUPPLIES, size+3);
         supply(Commodities.HAND_WEAPONS, size+5);
         supply(Commodities.SHIPS, size+5);
-        supply("advanced_components", getAdvancedComponents()+1);
+        supply(AoTDCommodities.DOMAIN_GRADE_MACHINERY, size-5);
+
         market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(getModId(1), qualityBonus, "Orbital Skunkworks Facility");
 
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.METALS, Commodities.RARE_METALS, AoTDCommodities.PURIFIED_TRANSPLUTONICS);
-        int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
-        if (deficit.two > maxDeficit) deficit.two = maxDeficit;
-
         applyDeficitToProduction(2, deficit,
                 Commodities.HEAVY_MACHINERY,
                 Commodities.SUPPLIES,
                 Commodities.HAND_WEAPONS,
-                Commodities.SHIPS);
+                Commodities.SHIPS,
+                AoTDCommodities.DOMAIN_GRADE_MACHINERY);
 
         float stability = market.getPrevStability();
         if (stability < 5) {
@@ -69,7 +57,7 @@ public class TriTachyonHeavy extends HeavyIndustry {
         } else {
             if (!market.hasCondition(Conditions.POLLUTION)&&market.hasCondition(Conditions.HABITABLE)) {
                 if(market.hasIndustry("BOGGLED_GENELAB")){
-                    market.addCondition(Conditions.POLLUTION);
+                    market.removeCondition(Conditions.POLLUTION);
                 }
 
             }

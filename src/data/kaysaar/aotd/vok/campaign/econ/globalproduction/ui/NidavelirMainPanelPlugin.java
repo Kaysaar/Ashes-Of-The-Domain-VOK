@@ -6,20 +6,23 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.ProductionDataPanel;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhover.ButtonOnHoverInfo;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhover.CommodityInfo;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhover.GuideTootltip;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.optionpanels.*;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipInfoGenerator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -38,7 +41,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     public static int maxItemsPerPageWEP = 45;
     boolean showProjectList;
     ArrayList<GPOrder> ordersQueued = new ArrayList<>();
-
+    boolean isPressingShift = false;
     public NidavelirMainPanelPlugin(boolean showProjectList) {
         this.showProjectList = showProjectList;
     }
@@ -52,6 +55,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     WeaponOptionPanelInterface weaponPanelManager;
     FighterOptionPanelInterface fighterPanelInterface;
     SpecialProjectManager specialProjectManager;
+    ItemOptionPanelManager itemOptionPanelManager;
     OptionPanelInterface currentManager;
     CustomPanelAPI panelOfMarketData;
     CustomPanelAPI panelOfOrders;
@@ -65,7 +69,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     // 30 for top buttons , 60 for bottom ones rest is padding
     float leftHeight = UIData.HEIGHT - 30 - 145 - 20;
     float offset = 0f;
-    boolean isPressingShift = false;
     ProductionDataPanel panelOfProdDatas;
     ButtonAPI projectReference;
     CustomPanelAPI costConfirmOrders;
@@ -75,6 +78,10 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     public void init(CustomPanelAPI panel, CustomVisualDialogDelegate.DialogCallbacks callbacks, InteractionDialogAPI dialog) {
 
         this.panel = panel;
+        TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(30,30,false);
+        tooltipMakerAPI.addImage(Global.getSettings().getSpriteName("ui_campaign_components","question"),30,30,0f);
+        tooltipMakerAPI.addTooltipToPrevious(new GuideTootltip(), TooltipMakerAPI.TooltipLocation.BELOW);
+
         this.callbacks = callbacks;
         copyFromOriginal();
         maxItemsPerPage = AoTDSettingsManager.getIntValue("aotd_shipyard_pag_per_page");
@@ -85,6 +92,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         weaponPanelManager = new WeaponOptionPanelInterface(this.panel,padding);
         fighterPanelInterface = new FighterOptionPanelInterface(this.panel,padding);
         specialProjectManager = new SpecialProjectManager(this.panel,padding);
+        itemOptionPanelManager = new ItemOptionPanelManager(this.panel,padding);
         currentManager = shipPanelManager;
         if (showProjectList) {
             currentManager = specialProjectManager;
@@ -97,7 +105,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         createSpecialProjectBar();
         createOrders();
         isPressingShift = false;
-        panelOfProdDatas.createUI();
+        panel.addUIElement(tooltipMakerAPI).inTL(panel.getPosition().getWidth()-35,0);
     }
 
     private void copyFromOriginal() {
@@ -253,7 +261,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         }
         renderer.setPanel(currentProjectPanel);
         currentProjectPanel.addUIElement(tooltip).inTL(0, 0);
-        panel.addComponent(currentProjectPanel).inTL(spacerX, 190);
+        panel.addComponent(currentProjectPanel).inTL(spacerX, 51);
     }
 
     public void clearSpecProjBar() {
@@ -266,6 +274,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         ArrayList<ButtonAPI> butt = new ArrayList<>();
         LabelAPI text = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
         butt.add(tooltip.addButton("Ships", "ship", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Ships") + 30, 20, 0f));
+
         tooltip.addTooltipToPrevious(new ButtonOnHoverInfo(400, false, null, "Here you can order ships to be build in dockyards, and they will be delivered to gathering point when completed.", null, null, null, "Ship building section"), TooltipMakerAPI.TooltipLocation.BELOW, false);
 
         butt.add(tooltip.addButton("Weapons", "weapon", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Weapons") + 30, 20, 0f));
@@ -289,8 +298,35 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                 TooltipMakerAPI.TooltipLocation.BELOW,
                 false
         );
-        butt.add(tooltip.addButton("Items", "sp", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Items") + 30, 20, 0f));
-        tooltip.addTooltipToPrevious(new ButtonOnHoverInfo(400, true, "Work In Progress", null, null, null, null, "Colony item forge section"), TooltipMakerAPI.TooltipLocation.BELOW, false);
+        butt.add(tooltip.addButton("Items", "items", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Items") + 30, 20, 0f));
+        tooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
+            @Override
+            public boolean isTooltipExpandable(Object tooltipParam) {
+                return true;
+            }
+
+            @Override
+            public float getTooltipWidth(Object tooltipParam) {
+                return 500;
+            }
+
+            @Override
+            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                tooltip.addTitle("Colony item forge section");
+                if(GPManager.getInstance().getLearnedItems().isEmpty()){
+                    tooltip.addPara("We have no schematics of any colony item!",Misc.getNegativeHighlightColor(),10f);
+                    tooltip.addPara("To gain access we need to either find blueprints located in %s",5f,Color.ORANGE,"Pre Collapse Facilities");
+                    tooltip.addPara("Or research %s",5f,Color.ORANGE, AoTDMainResearchManager.getInstance().getSpecForSpecificResearch(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION).getName());
+
+                }
+                else{
+                    tooltip.addPara("This section leads to colony item production",10f);
+                    tooltip.addPara("With knowledge we have found and might of our industries we rise from Ashes of The Domain",10f);
+                    tooltip.addPara("To expand items we can craft we need either find blueprints located in %s",5f,Color.ORANGE,"Pre Collapse Facilities");
+                    tooltip.addPara("Or research %s",5f,Color.ORANGE, AoTDMainResearchManager.getInstance().getSpecForSpecificResearch(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION).getName());
+                }
+            }
+        }, TooltipMakerAPI.TooltipLocation.BELOW, false);
 
         butt.add(tooltip.addButton("Megastructures", "sp", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Megastructures") + 30, 20, 0f));
         tooltip.addTooltipToPrevious(new ButtonOnHoverInfo(400, true, "Work In Progress", null, null, null, null, "Megastrucutre construction section"), TooltipMakerAPI.TooltipLocation.BELOW, false);
@@ -303,7 +339,9 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         if (!GPManager.getInstance().hasAtLestOneProjectUnlocked()) {
             butt.get(3).setEnabled(false);
         }
-        butt.get(4).setEnabled(false);
+        if (GPManager.getInstance().getLearnedItems().isEmpty()) {
+            butt.get(4).setEnabled(false);
+        }
         butt.get(5).setEnabled(false);
         switchingButtons.addAll(butt);
         topPanel.addUIElement(tooltip).inTL(-5, 0);
@@ -313,7 +351,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
 
     public void createOrders() {
         UILinesRenderer renderer = new UILinesRenderer(0f);
-        float yPad = 290;
+        float yPad = 151;
         float height = panel.getPosition().getHeight() - 20 - yPad - 150;
         sortingButtonsPanel = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 50, renderer);
         panelOfOrders = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, height-50, renderer);
@@ -322,9 +360,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         LabelAPI label = tooltip.addSectionHeading("On-going production orders", Alignment.MID, 0f);
         float y = -label.getPosition().getY() + 5;
         ArrayList<ButtonAPI> butt = new ArrayList<>();
-        butt.add(tooltip.addAreaCheckbox("Name", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_NAMES_ORDER, 20, 0f));
-        butt.add(tooltip.addAreaCheckbox("Qty", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_NAMES_QTY, 20, 0f));
-        butt.add(tooltip.addAreaCheckbox("Days", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_NAMES_DAYS, 20, 0f));
+        butt.add(tooltip.addAreaCheckbox("Name", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_NAMES_ORDER, 20, 0f));;
         butt.add(tooltip.addAreaCheckbox("Cost(Credits)", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_NAMES_COST, 20, 0f));
         butt.add(tooltip.addAreaCheckbox("Cost(GP)", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_NAMES_GP + 1, 20, 0f));
         float x = 0;
@@ -510,6 +546,12 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                         fighterPanelInterface.reInit();
                         break;
                     }
+                    if (match.equals("items") && !currentManager.getClass().isInstance(itemOptionPanelManager)) {
+                        currentManager.clear();
+                        currentManager = itemOptionPanelManager;
+                        itemOptionPanelManager.reInit();
+                        break;
+                    }
                     if (match.equals("sp") && !currentManager.getClass().isInstance(specialProjectManager)) {
                         currentManager.clear();
                         currentManager = specialProjectManager;
@@ -522,15 +564,24 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         for (ButtonAPI order : orders) {
             if (order.isChecked()) {
                 order.setChecked(false);
-                GPOrder ordera = (GPOrder) order.getCustomData();
-                GPManager.getInstance().addOrderToDummy(ordera.getSpecFromClass().getProjectId(), 1, ordersQueued);
-                ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemovedFromDummy(ordersQueued);
-                if (!offsetOfOrdersToBeRemoved.isEmpty()) {
-                    GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
+                if(isPressingShift){
+                    GPOrder ordera = (GPOrder) order.getCustomData();
+                    ordera.setAtOnce(ordera.getAtOnce()+1);
+                    resetPanelOfOrders();
+                    break;
+                }
+                else{
+                    GPOrder ordera = (GPOrder) order.getCustomData();
+                    GPManager.getInstance().addOrderToDummy(ordera.getSpecFromClass().getProjectId(), 1, ordersQueued);
+                    ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemovedFromDummy(ordersQueued);
+                    if (!offsetOfOrdersToBeRemoved.isEmpty()) {
+                        GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
+                    }
+
+                    resetPanelOfOrders();
+                    break;
                 }
 
-                resetPanelOfOrders();
-                break;
             }
         }
         if (projectReference != null) {
@@ -577,26 +628,38 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
 
     @Override
     public void processInput(List<InputEventAPI> events) {
+        boolean pressedShift = false;
         for (InputEventAPI event : events) {
             if (event.isConsumed()) continue;
             if (event.isRMBDownEvent() && !event.isLMBEvent()) {
                 for (ButtonAPI buttonAPI : orders) {
                     if (AoTDMisc.isHoveringOverButton(buttonAPI, 0f)) {
-                        buttonAPI.setChecked(false);
-                        Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                        GPOrder order = (GPOrder) buttonAPI.getCustomData();
-                        GPManager.getInstance().removeOrderFromDummy(order.getSpecFromClass().getProjectId(), 1, ordersQueued);
-                        ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemovedFromDummy(ordersQueued);
-                        if (!offsetOfOrdersToBeRemoved.isEmpty()) {
-                            GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
+                        if(isPressingShift){
+                            buttonAPI.setChecked(false);
+                            Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+                            GPOrder order = (GPOrder) buttonAPI.getCustomData();
+                            order.setAtOnce(order.getAtOnce()-1);
+                            resetPanelOfOrders();
+                            break;
                         }
-                        resetPanelOfOrders();
-                        break;
+                        else{
+                            buttonAPI.setChecked(false);
+                            Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+                            GPOrder order = (GPOrder) buttonAPI.getCustomData();
+                            GPManager.getInstance().removeOrderFromDummy(order.getSpecFromClass().getProjectId(), 1, ordersQueued);
+                            ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemovedFromDummy(ordersQueued);
+                            if (!offsetOfOrdersToBeRemoved.isEmpty()) {
+                                GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
+                            }
+                            resetPanelOfOrders();
+                            break;
+                        }
+
                     }
                 }
             }
             if (event.isShiftDown()) {
-                isPressingShift = true;
+                pressedShift = true;
             }
             if (event.getEventValue() == Keyboard.KEY_ESCAPE && !event.isRMBEvent()) {
                 specialProjectManager.clear();
@@ -620,6 +683,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
 
             }
         }
+        isPressingShift = pressedShift;
     }
 
     public GPOrder getOrderFromDummy(String id) {

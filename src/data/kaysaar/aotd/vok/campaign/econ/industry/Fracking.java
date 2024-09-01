@@ -35,13 +35,7 @@ public class Fracking extends BaseIndustry {
         }
         demand(Commodities.HEAVY_MACHINERY, size - 2);
         demand(Commodities.DRUGS,  size - 2);
-        if(isCryovolcanicOrFrozen()) {
-            demand(AoTDCommodities.WATER,5);
-        }
-        else{
-            demand(AoTDCommodities.WATER,0);
-
-        }
+        demand(AoTDCommodities.WATER,size-1);
 
         if(AoDUtilis.getOrganicsAmount(market)>=-1){
             supply(Commodities.ORGANICS,AoDUtilis.getOrganicsAmount(market)+(market.getSize()+2));

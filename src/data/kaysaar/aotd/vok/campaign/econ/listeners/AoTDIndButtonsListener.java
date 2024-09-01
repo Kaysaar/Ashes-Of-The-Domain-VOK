@@ -21,7 +21,6 @@ import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.CoronalSegment;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
-import data.kaysaar.aotd.vok.ui.StellaManufactoriumUI;
 import data.kaysaar.aotd.vok.ui.UpgradeListUI;
 
 import java.awt.*;
@@ -74,13 +73,6 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
                data.add(opt);
            }
        }
-        if(ind.getId().equals("stella_manufactorium")){
-            List<IndustryOptionData> result = new ArrayList<>();
-            IndustryOptionData opt;
-            opt = new IndustryOptionData("Access Stellar Forge", STELLA, ind, this);
-            opt.color = new Color(246, 94, 0, 255);
-            data.add(opt);
-        }
 
         if(ind.getId().equals(AoTDIndustries.RESEARCH_CENTER)&&ind.getMarket().getFaction().isPlayerFaction()){
             List<IndustryOptionData> result = new ArrayList<>();
@@ -133,10 +125,6 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
             ui.showDialog(null, (new AoTDResearchUIDP()));
         }
 
-        if(opt.id == STELLA ){
-            CustomDialogDelegate delegate = new StellaManufactoriumUI(opt.ind);
-            ui.showDialog(StellaManufactoriumUI.WIDTH, StellaManufactoriumUI.HEIGHT, delegate);
-        }
         if (opt.id == AOTD_VOK_CANCEL_UPGRADE) {
             final BaseIndustry industry= (BaseIndustry) opt.ind;
             CustomDialogDelegate delegate = new BaseCustomDialogDelegate() {

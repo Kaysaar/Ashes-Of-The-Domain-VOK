@@ -63,46 +63,6 @@ public class AoTDSpecialItemRepo {
                         pad);
             }
         });
-        ItemEffectsRepo.ITEM_EFFECTS.put(Items.PRISTINE_NANOFORGE, new BoostIndustryInstallableItemEffect(
-                Items.PRISTINE_NANOFORGE, PRISTINE_NANOFORGE_PROD, 0) {
-                protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
-                        InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
-                    String heavyIndustry = "heavy industry ";
-                    if (mode == InstallableIndustryItemPlugin.InstallableItemDescriptionMode.MANAGE_ITEM_DIALOG_LIST) {
-                        heavyIndustry = "";
-                    }
-                    text.addPara(pre + "Increases ship and weapon production quality by %s. " +
-                                    "Increases " + heavyIndustry + "production by %s units." +"Increases production of advanced components by %s"+
-                                    " On habitable worlds, causes pollution which becomes permanent.",
-                            pad, Misc.getHighlightColor(),
-                            "" + (int) Math.round(PRISTINE_NANOFORGE_QUALITY_BONUS * 100f) + "%",
-                            "" + (int) PRISTINE_NANOFORGE_PROD,"1");
-
-                }
-            public void apply(Industry industry) {
-                super.apply(industry);
-                industry.getMarket().getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD)
-                        .modifyFlat("nanoforge", PRISTINE_NANOFORGE_QUALITY_BONUS, Misc.ucFirst(spec.getName().toLowerCase()));
-                industry.getSupply("advanced_components").getQuantity().modifyFlat("aotd_nano",1,"Pristine Nanoforge");
-            }
-            public void unapply(Industry industry) {
-                super.unapply(industry);
-                industry.getMarket().getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodifyFlat("nanoforge");
-                industry.getSupply("advanced_components").getQuantity().unmodifyFlat("aotd_nano");
-            }
-
-
-            @Override
-            public String[] getSimpleReqs(Industry industry) {
-                return new String[]{"does not have extreme weather","is not a gas giant"};
-            }
-
-            @Override
-            public List<String> getRequirements(Industry industry) {
-                return super.getRequirements(industry);
-            }
-
-        });
         ItemEffectsRepo.CORONAL_TAP_RANGE = "Coronal Network Center in 10 LY radius, 50 LY if Wormhole Stabilizer has been repaired.";
         ItemEffectsRepo.CORONAL_TAP_INDUSTRIES = 0;
         ItemEffectsRepo.CORONAL_TAP_TRANSPLUTONICS = 0;

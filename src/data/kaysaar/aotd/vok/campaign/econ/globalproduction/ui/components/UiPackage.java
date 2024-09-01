@@ -40,7 +40,13 @@ public class UiPackage {
 
 
     }
+    public UiPackage(CustomPanelAPI panel, GPOption option,ButtonAPI button) {
+        this.panelPackage = panel;
+        this.option = option;
+        this.button = button;
 
+
+    }
     public FighterIconRenderer getFighterIconRenderer() {
         return fighterIconRenderer;
     }

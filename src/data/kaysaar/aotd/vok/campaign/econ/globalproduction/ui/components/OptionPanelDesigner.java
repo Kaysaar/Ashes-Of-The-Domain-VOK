@@ -52,4 +52,21 @@ public class OptionPanelDesigner {
         panelTest.addUIElement(tooltip).inTL(-5, 0);
         return new Pair<>(panelTest,buttons);
     }
+    public static Pair<CustomPanelAPI, ArrayList<ButtonAPI>> createItemPanel(float width , float hegiht , CustomPanelAPI parent, ArrayList<GPOption>options, int currIndex, int amountPerPage){
+        CustomPanelAPI panelTest = parent.createCustomPanel(width, hegiht, null);
+        ArrayList<ButtonAPI>buttons = new ArrayList<>();
+        TooltipMakerAPI tooltip = panelTest.createUIElement(panelTest.getPosition().getWidth(), panelTest.getPosition().getHeight(), true);
+        for (int i = currIndex, j = 0; i < options.size() && j < amountPerPage; i++, j++) {
+            GPOption opt = options.get(i);
+            UiPackage shipPackage = UIData.getItemOpton(opt);
+            tooltip.addCustom(shipPackage.getPanelPackage(), 5f);
+            if(shipPackage.getRender()!=null){
+                shipPackage.getRender().setAbsoultePanel(panelTest);
+            }
+            buttons.add(shipPackage.button);
+
+        }
+        panelTest.addUIElement(tooltip).inTL(-5, 0);
+        return new Pair<>(panelTest,buttons);
+    }
 }

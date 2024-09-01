@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
@@ -9,6 +10,7 @@ import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
+import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
@@ -19,11 +21,13 @@ import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.NidavelirIndustryOptionProvider;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
@@ -57,17 +61,7 @@ public class GPManager {
          return amountShipsPerOnce;
     }
     public int getAmountForOrder(GPOrder order){
-        GPSpec.ProductionType type = order.getSpecFromClass().getType();
-        if(type.equals(GPSpec.ProductionType.FIGHTER)){
-            return getAmountFighterPerOnce();
-        }
-        if(type.equals(GPSpec.ProductionType.WEAPON)){
-            return getAmountWepPerOnce();
-        }
-        if(type.equals(GPSpec.ProductionType.SHIP)){
-            return getAmountShipsPerOnce();
-        }
-        return 1;
+        return order.getAtOnce();
 
     }
     public int getAmountBasedOnType(String type){
@@ -121,6 +115,7 @@ public class GPManager {
     ArrayList<GPOption> weaponProductionOption = new ArrayList<>();
     ArrayList<GPOption> fighterProductionOption = new ArrayList<>();
     ArrayList<GPOption> specialProjectsOption = new ArrayList<>();
+    ArrayList<GPOption> itemProductionOption = new ArrayList<>();
     ArrayList<GpSpecialProjectData> specialProjData = new ArrayList<>();
     ArrayList<GPOrder> productionOrders = new ArrayList<>();
     public LinkedHashMap<String, Integer> shipSizeInfo = new LinkedHashMap<>();
@@ -220,14 +215,13 @@ public class GPManager {
     public HashMap<String, Integer> availableResources = new HashMap<>();
     HashMap<String, Boolean> productionAvailbilityMap = new HashMap<>();
     public static ArrayList<String> commodities = new ArrayList<>();
-
+     LinkedHashMap<String,Integer> itemManInffo = new LinkedHashMap<>();
     static {
 
         commodities.add(Commodities.SHIPS);
         commodities.add(Commodities.HAND_WEAPONS);
         commodities.add("advanced_components");
-        commodities.add("refined_metal");
-        commodities.add("purified_rare_metal");
+        commodities.add("domain_heavy_machinvery");
     }
 
     public static String memkey = "aotd_gp_plugin";
@@ -381,7 +375,9 @@ public class GPManager {
     public ArrayList<GPOption> getShipProductionOption() {
         return shipProductionOption;
     }
-
+    public ArrayList<GPOption> getItemProductionOption() {
+        return itemProductionOption;
+    }
     public ArrayList<GPOption>getShipPackagesBasedOnTags(ArrayList<String> manufacturues,ArrayList<String>sizes,ArrayList<String> types){
         boolean allMan = AoTDMisc.arrayContains(manufacturues,"All designs")||manufacturues.isEmpty();
         boolean allSizes = AoTDMisc.arrayContains(sizes,"All sizes")||sizes.isEmpty();
@@ -426,7 +422,28 @@ public class GPManager {
         }
         return options;
     }
+    public ArrayList<GPOption>getItemsBasedOnTag(ArrayList<String> manufacturues){
+        boolean allMan = AoTDMisc.arrayContains(manufacturues,"All designs")||manufacturues.isEmpty();
+        ArrayList<GPOption>options = new ArrayList<>();
+        if(allMan)return getItemSortedBasedOnData("Cost",SortingState.ASCENDING,getLearnedItems());
+        for (GPOption learnedShipPackage :getItemSortedBasedOnData("Cost",SortingState.ASCENDING,getLearnedItems())) {
+            boolean valid = true;
+            if(!allMan){
+                valid = false;
+                for (String manufacturue : manufacturues) {
+                    if(learnedShipPackage.getSpec().getItemSpecAPI().getManufacturer().equals(manufacturue)){
+                        valid = true;
+                        break;
+                    }
+                }
+            }
+            if(valid){
+                options.add(learnedShipPackage);
+            }
 
+        }
+        return options;
+    }
     public ArrayList<GPOption>getWeaponPackagesBasedOnTags(ArrayList<String> manufacturues,ArrayList<String>sizes,ArrayList<String> types){
         boolean allMan = AoTDMisc.arrayContains(manufacturues,"All designs")||manufacturues.isEmpty();
         boolean allSizes = AoTDMisc.arrayContains(sizes,"All sizes")||sizes.isEmpty();
@@ -594,7 +611,75 @@ public class GPManager {
         }
         return packages;
     }
+    public ArrayList<GPOption> getItemSortedBasedOnData(String nameOfSort, SortingState sortingState, ArrayList<GPOption> temp) {
+        ArrayList<GPOption> packages = new ArrayList<>(temp);
+        Comparator<GPOption> comparator = null;
+        if (nameOfSort.equals("Name")) {
+            comparator = new Comparator<GPOption>() {
+                @Override
+                public int compare(GPOption o1, GPOption o2) {
+                    String s1 = o1.getSpec().getItemSpecAPI().getName();
+                    String s2 = o2.getSpec().getItemSpecAPI().getName();
+                    return s1.compareTo(s2);
+                }
+            };
+        }
+        if (nameOfSort.equals("Build time")) {
+            comparator = new Comparator<GPOption>() {
+                @Override
+                public int compare(GPOption o1, GPOption o2) {
+                    float price1 = o1.getSpec().days;
+                    float price2 = o2.getSpec().days;
+                    return Float.compare(price1, price2);
+                }
+            };
+        }
+        if (nameOfSort.equals("Design Type")) {
+            comparator = new Comparator<GPOption>() {
+                @Override
+                public int compare(GPOption o1, GPOption o2) {
+                    String s1 = o1.getSpec().getItemSpecAPI().getManufacturer();
+                    String s2 = o2.getSpec().getItemSpecAPI().getManufacturer();
+                    return s1.compareTo(s2);
+                }
+            };
+        }
+        if (nameOfSort.equals("Cost")) {
+            comparator = new Comparator<GPOption>() {
+                @Override
+                public int compare(GPOption o1, GPOption o2) {
+                    float price1 = o1.getSpec().getCredistCost();
+                    float price2 = o2.getSpec().getCredistCost();
+                    return Float.compare(price1, price2);
+                }
+            };
+        }
+        if (nameOfSort.equals("Gp cost")) {
+            comparator = new Comparator<GPOption>() {
+                @Override
+                public int compare(GPOption o1, GPOption o2) {
+                    float wage1 = 0;
+                    float wage2 = 0;
+                    // What we do is 1 advanced = 10 normal ones BUT not yet ;
+                    for (Map.Entry<String, Integer> option : o1.getSpec().getSupplyCost().entrySet()) {
+                        wage1 += option.getValue();
+                    }
+                    for (Map.Entry<String, Integer> option : o2.getSpec().getSupplyCost().entrySet()) {
+                        wage2 += option.getValue();
+                    }
 
+                    return Float.compare(wage1, wage2);
+                }
+            };
+        }
+        if (sortingState == SortingState.DESCENDING) {
+            Collections.sort(packages, comparator);
+        }
+        if (sortingState == SortingState.ASCENDING) {
+            Collections.sort(packages, Collections.reverseOrder(comparator));
+        }
+        return packages;
+    }
     public ArrayList<GPOption> getFighterBasedOnData(String nameOfSort, SortingState sortingState, ArrayList<GPOption> temp) {
         ArrayList<GPOption> packages = new ArrayList<>(temp);
         Comparator<GPOption> comparator = null;
@@ -905,7 +990,10 @@ public class GPManager {
                 specs.add(spec);
             }
         }
-
+        for (SpecialItemSpecAPI s : Global.getSettings().getAllSpecialItemSpecs()) {
+            GPSpec spec = GPSpec.getSpecFromItem(s);
+            specs.add(spec);
+        }
     }
 
     public ArrayList<GPOption> getShipPackagesByManu(ArrayList<String> values) {
@@ -977,11 +1065,13 @@ public class GPManager {
     public void loadProductionOptions() {
         if (this.shipManInfo == null) this.shipManInfo = new LinkedHashMap<>();
         if (this.fighterProductionOption == null) this.fighterProductionOption = new ArrayList<>();
+        if(this.itemProductionOption==null)this.itemProductionOption = new ArrayList<>();
         LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();
         shipProductionOption.clear();
         weaponProductionOption.clear();
         fighterProductionOption.clear();
         specialProjectsOption.clear();
+        itemProductionOption.clear();
         for (GPSpec spec : specs) {
 
             if (spec.type.equals(GPSpec.ProductionType.SHIP)) {
@@ -995,6 +1085,10 @@ public class GPManager {
             if (spec.type.equals(GPSpec.ProductionType.FIGHTER)) {
                 GPOption option = new GPOption(spec, true, GPSpec.ProductionType.FIGHTER);
                 fighterProductionOption.add(option);
+            }
+            if (spec.type.equals(GPSpec.ProductionType.ITEM)) {
+                GPOption option = new GPOption(spec, true, GPSpec.ProductionType.ITEM);
+                itemProductionOption.add(option);
             }
 
         }
@@ -1031,6 +1125,15 @@ public class GPManager {
                 }
 
 
+            }
+        }
+        return options;
+    }
+    public ArrayList<GPOption> getLearnedItems() {
+        ArrayList<GPOption> options = new ArrayList<>();
+        for (GPOption option : getItemProductionOption()) {
+            if(ItemEffectsRepo.ITEM_EFFECTS.get(option.getSpec().getProjectId())!=null&&AoTDMisc.knowsItem(option.getSpec().getItemSpecAPI().getId(),Global.getSector().getPlayerFaction())){
+                options.add(option);
             }
         }
         return options;
@@ -1129,7 +1232,18 @@ public class GPManager {
         Collections.sort(options, comparator);
         return options;
     }
-
+    public ArrayList<GPOption> getMatchingItemGps(String value) {
+        ArrayList<GPOption> options = new ArrayList<>();
+        int threshold = 2; // Adjust the threshold based on your tolerance for misspellings
+        SearchBarStringComparator comparator = new SearchBarStringComparator(value, threshold);
+        for (GPOption learnedShipPackage : getLearnedItems()) {
+            if (comparator.isValid(learnedShipPackage.getSpec().getItemSpecAPI().getName())) {
+                options.add(learnedShipPackage);
+            }
+        }
+        Collections.sort(options, comparator);
+        return options;
+    }
     public ArrayList<GPOption> getMatchingWeaponGps(String value) {
         ArrayList<GPOption> options = new ArrayList<>();
         int threshold = 2; // Adjust the threshold based on your tolerance for misspellings
@@ -1220,6 +1334,32 @@ public class GPManager {
         this.fighterTypeInfo.putAll(AoTDMisc.sortByValueDescending(weaponInfo));
     }
 
+    public LinkedHashMap<String, Integer> getItemManInffo() {
+        return itemManInffo;
+    }
+
+    public void populateItemInfo() {
+        if(this.itemManInffo==null)itemManInffo = new LinkedHashMap<>();
+        this.itemManInffo.clear();
+        LinkedHashMap<String, Integer> itemManInffo = new LinkedHashMap<>();
+        for (String s : ItemEffectsRepo.ITEM_EFFECTS.keySet()) {
+            if(!AoTDMisc.knowsItem(s,Global.getSector().getPlayerFaction()))continue;
+            SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(s);
+            if (itemManInffo.get(spec.getManufacturer()) == null) {
+                itemManInffo.put(spec.getManufacturer(), 1);
+            } else {
+                int amount = itemManInffo.get(spec.getManufacturer());
+                itemManInffo.put(spec.getManufacturer(), amount + 1);
+            }
+        }
+        int val = 0;
+        for (Integer value : itemManInffo.values()) {
+            val += value;
+        }
+        itemManInffo.put("All designs", val);
+
+        this.itemManInffo.putAll(AoTDMisc.sortByValueDescending(itemManInffo));
+    }
     public void populateShipInfo() {
         this.shipManInfo.clear();
         LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();

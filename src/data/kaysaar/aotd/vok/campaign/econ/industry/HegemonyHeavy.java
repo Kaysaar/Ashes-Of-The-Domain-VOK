@@ -20,16 +20,7 @@ import java.awt.*;
 public class HegemonyHeavy extends HeavyIndustry {
     public static float WIDE_FACTION_PRODUCTION_BONUS = 0.25f;
     public int getAdvancedComponents(){
-        if(this.market.getSize()<5){
-            return 0;
-        }
-        if(this.market.getSize()>=5&&market.getSize()<=8){
-            return market.getSize()-2;
-        }
-        if(market.getSize()>8){
-            return market.getSize()-1;
-        }
-        return 0;
+        return market.getSize()-7;
     }
     public void apply() {
         super.apply(true);
@@ -56,9 +47,8 @@ public class HegemonyHeavy extends HeavyIndustry {
 
         supply(Commodities.HEAVY_MACHINERY, size + 4);
         supply(Commodities.SUPPLIES, size + 4);
-        supply(Commodities.HAND_WEAPONS, size + 4);
+        supply(Commodities.HAND_WEAPONS, size + 5);
         supply(Commodities.SHIPS, size + 4);
-        supply("advanced_components", getAdvancedComponents());
         if(Global.getSettings().getModManager().isModEnabled("IndEvo")){
             supply("IndEvo_parts",market.getSize());
             demand("IndEvo_parts",market.getSize()-2);
@@ -92,7 +82,7 @@ public class HegemonyHeavy extends HeavyIndustry {
         } else {
             if (!market.hasCondition(Conditions.POLLUTION)&&market.hasCondition(Conditions.HABITABLE)) {
                 if(market.hasIndustry("BOGGLED_GENELAB")){
-                    market.addCondition(Conditions.POLLUTION);
+                    market.removeCondition(Conditions.POLLUTION);
                 }
 
             }
