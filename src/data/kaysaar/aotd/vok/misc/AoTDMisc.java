@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.misc;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.EngagementResultForFleetAPI;
+import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -17,7 +18,9 @@ import com.fs.starfarer.api.loading.WingRole;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +55,15 @@ public class AoTDMisc {
         }
 
         return variantId;
+    }
+    public String getNumberStringShort(int number){
+        if(number<1000){
+            return ""+number;
+        }
+        if(number<1000000){
+            return ""+(number/1000)+"k";
+        }
+        return ""+(number/1000000)+"m";
     }
     public static ArrayList<String> loadEntries(String rawMap,String seperator) {
         if(!AoTDMisc.isStringValid(rawMap)){
@@ -310,6 +322,9 @@ public class AoTDMisc {
             return "Carrier";
         }
         return "Warship";
+    }
+    public static boolean knowsItem(String id, FactionAPI faction){
+        return faction.getMemory().is("$aotd"+id,true)||AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).haveResearched(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION);
     }
 
     public static int levenshteinDistance(String a, String b) {

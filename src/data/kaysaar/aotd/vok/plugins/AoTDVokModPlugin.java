@@ -16,10 +16,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
-import data.kaysaar.aotd.vok.listeners.AoTDCollabSpScript;
-import data.kaysaar.aotd.vok.listeners.AoTDRaidListener;
-import data.kaysaar.aotd.vok.listeners.AoTDxIndieCollabListener;
-import data.kaysaar.aotd.vok.listeners.AoTDxUafAfterCombatListener;
+import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderInfoRepo;
 import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContract;
 import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContractData;
@@ -68,6 +65,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             l.addListener(new AIColonyManagerListener());
         if(!l.hasListenerOfClass(AoTDRaidListener.class))
             l.addListener(new AoTDRaidListener());
+
         l.removeListenerOfClass(CurrentResearchProgressUI.class);
         if(!l.hasListenerOfClass(CurrentResearchProgressUI.class)) {
             try {
@@ -117,7 +115,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
     }
     public void onGameLoad(boolean newGame) {
-        GPManager.getInstance().reInitalize();
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
         try {
@@ -153,6 +150,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
         Global.getSector().addTransientScript(new AoTDCollabSpScript());
         Global.getSector().addTransientListener(new AoTDxUafAfterCombatListener());
+        Global.getSector().addTransientListener(new AoTDSPListener());
         aoTDSpecialItemRepo.putInfoForSpecialItems();
         aoTDDataInserter.setStarterIndustriesUpgrades();
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SOIL_NANITES, "subfarming");
@@ -197,7 +195,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
                 }
             }
 
-
+        GPManager.getInstance().reInitalize();
 
     }
     }

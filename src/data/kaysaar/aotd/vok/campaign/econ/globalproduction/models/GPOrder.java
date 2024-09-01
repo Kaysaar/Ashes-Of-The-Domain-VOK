@@ -24,6 +24,7 @@ public class GPOrder implements Cloneable{
     float dummyCounter;
     float daysSpentDoingOrder;// between 0 and 1
     boolean contributingToOrder;
+
     int atOnce = 1;
 
 
@@ -75,7 +76,7 @@ public class GPOrder implements Cloneable{
         return true;
     }
     public int getAmountOfItemsProduced(){
-        int amount = GPManager.getInstance().getAmountForOrder(this);
+        int amount = atOnce;
         return Math.min(amount, getAmountToProduce());
     }
 
@@ -122,6 +123,12 @@ public class GPOrder implements Cloneable{
     }
 
     public void setAtOnce(int atOnce) {
+        if(atOnce<=1){
+            atOnce =1;
+        }
+        if(atOnce>getAmountToProduce()){
+            atOnce = getAmountToProduce();
+        }
         this.atOnce = atOnce;
     }
 
@@ -151,7 +158,9 @@ public class GPOrder implements Cloneable{
             if(getSpecFromClass().type== GPSpec.ProductionType.WEAPON){
                 local.addWeapons(getSpecFromClass().getIdOfItemProduced(), produced);
             }
-
+            if(getSpecFromClass().type== GPSpec.ProductionType.ITEM){
+                local.addSpecial(new SpecialItemData(getSpecFromClass().getItemSpecAPI().getId(),null),produced);
+            }
             if(getSpecFromClass().type== GPSpec.ProductionType.SHIP){
                 float quality = -1f;
                 for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
@@ -180,6 +189,7 @@ public class GPOrder implements Cloneable{
                 inflater.inflate(ships);
 
                 for (FleetMemberAPI fleetMemberAPI : ships.getFleetData().getMembersListCopy()) {
+                    fleetMemberAPI.getVariant().clear();
                     local.getMothballedShips().addFleetMember(fleetMemberAPI);
                 }
                 ships.despawn();

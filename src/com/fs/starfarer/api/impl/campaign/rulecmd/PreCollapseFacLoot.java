@@ -11,6 +11,7 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BaseSalvageSpecial;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 
 
 import java.util.*;
@@ -99,8 +100,15 @@ public class PreCollapseFacLoot extends BaseCommandPlugin {
         d.chances = 25;
         d.group = "ashes_research";
         planet.addDropRandom(d);
+        int rand = getRandomNumber(1,10);
 
         CargoAPI salvage = SalvageEntity.generateSalvage(random, 1f, 1f, 1f, 1f, planet.getDropValue(), planet.getDropRandom());
+
+        if(rand<2){
+            for (int i = 0; i < rand; i++) {
+                salvage.addSpecial(new SpecialItemData("aotd_item_bp",GPManager.getInstance().getItemProductionOption().get(getRandomNumber(0,GPManager.getInstance().getItemProductionOption().size()-1)).getSpec().getItemSpecAPI().getId()),1);
+            }
+        }
         BaseSalvageSpecial.clearExtraSalvage(memoryMap);
         salvage.sort();
         dialog.getVisualPanel().showLoot("Salvaged", salvage, false, true, true, new CoreInteractionListener() {
