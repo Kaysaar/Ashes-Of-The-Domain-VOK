@@ -16,6 +16,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +59,12 @@ public class ResearchSell extends BaseCommandPlugin{
 
         person = dialog.getInteractionTarget().getActivePerson();
         faction = person.getFaction();
-        attitudeData  = AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).getAttitudeData();
+        try {
+            attitudeData  = AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).getAttitudeData();
+        }
+        catch (Exception e ){
+            attitudeData = new FactionResearchAttitudeData(faction.getId(),AoTDAIStance.DEFAULT,0.2f,0.5f,null,new ArrayList<String>());
+        }
         buysDatabanks = !faction.isPlayerFaction();
         valueMult =attitudeData.getDatabankCashMultiplier();
         repMult = attitudeData.getDatabankRepMultiplier();
