@@ -174,6 +174,7 @@ public class AoDFoodDemand extends BaseMarketConditionPlugin {
     }
 
     public void applyOtherDemmands(BaseIndustry ind) {
+        if(market.isHidden())return;
         ind.demand(AoTDCommodities.WATER, calcuateWaterDemand(ind.getMarket()));
         ind.getDemand(AoTDCommodities.WATER).getQuantity().unmodify(getModId());
         ind.supply(AoTDCommodities.WATER, calcuateWaterSupply(ind.getMarket()));

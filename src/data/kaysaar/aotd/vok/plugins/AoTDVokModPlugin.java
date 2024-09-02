@@ -158,18 +158,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.BIOFACTORY_EMBRYO, "lightproduction,consumerindustry");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy");
-//        LinkedHashMap<String,String >stages = new LinkedHashMap<>();
-//        LinkedHashMap<String,Integer>stageValues = new LinkedHashMap<>();
-//        LinkedHashMap<String,String>iconMap = new LinkedHashMap<>();
-//        stages.put("stage2","End of Contract");
-//        stages.put("stage1","Beginning of Contract");
-//        stageValues.put("stage2",500);
-//        stageValues.put("stage1",0);
-//        iconMap.put("stage2","hyperspace_topography");
-//        iconMap.put("stage1","hyperspace_topography");
-//
-//        BaseResearchContractData  data = new BaseResearchContractData(Factions.TRITACHYON,stages,stageValues,iconMap,500);
-//        new BaseResearchContract(data,null,true);
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator,policrystalizator,cascade_reprocesor");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
 
