@@ -376,7 +376,17 @@ public class GPManager {
         return shipProductionOption;
     }
     public ArrayList<GPOption> getItemProductionOption() {
+
         return itemProductionOption;
+    }
+    public ArrayList<GPOption> getItemProductionOptionFiltered() {
+        ArrayList<GPOption> options = new ArrayList<>();
+        for (GPOption option : getItemProductionOption()) {
+            if(ItemEffectsRepo.ITEM_EFFECTS.get(option.getSpec().getProjectId())!=null){
+                options.add(option);
+            }
+        }
+        return options;
     }
     public ArrayList<GPOption>getShipPackagesBasedOnTags(ArrayList<String> manufacturues,ArrayList<String>sizes,ArrayList<String> types){
         boolean allMan = AoTDMisc.arrayContains(manufacturues,"All designs")||manufacturues.isEmpty();
