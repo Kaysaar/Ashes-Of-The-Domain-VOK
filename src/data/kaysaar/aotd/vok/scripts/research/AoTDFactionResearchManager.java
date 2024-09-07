@@ -28,6 +28,7 @@ import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
+import data.misc.QoLMisc;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -443,16 +444,16 @@ public class AoTDFactionResearchManager {
 
     public ArrayList<MarketAPI> retrieveMarketsOfThatFaction() {
         ArrayList<MarketAPI> marketsToReturn = new ArrayList<>();
-        String thisFacIsCommisioned = Misc.getCommissionFactionId();
         for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
             if (marketAPI.getFactionId().equals(getFaction().getId())) {
                 marketsToReturn.add(marketAPI);
             }
-            if (thisFacIsCommisioned != null && thisFacIsCommisioned.equals(managerTiedToFaction.getId())) {
-                if (marketAPI.getFaction().isPlayerFaction()) {
+            if(Global.getSettings().getModManager().isModEnabled("aotd_qol")){
+                if (QoLMisc.isCommissionedBy(marketAPI.getFactionId())) {
                     marketsToReturn.add(marketAPI);
                 }
             }
+
         }
 
         return marketsToReturn;

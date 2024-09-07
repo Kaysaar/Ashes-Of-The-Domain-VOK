@@ -581,6 +581,8 @@ public class GPManager {
                 public int compare(GPOption o1, GPOption o2) {
                     String s1 = o1.getSpec().getShipHullSpecAPI().getManufacturer();
                     String s2 = o2.getSpec().getShipHullSpecAPI().getManufacturer();
+                    s1 = AoTDMisc.ensureManBeingNotNull(s1);
+                    s2 = AoTDMisc.ensureManBeingNotNull(s2);
                     return s1.compareTo(s2);
                 }
             };
@@ -650,6 +652,8 @@ public class GPManager {
                 public int compare(GPOption o1, GPOption o2) {
                     String s1 = o1.getSpec().getItemSpecAPI().getManufacturer();
                     String s2 = o2.getSpec().getItemSpecAPI().getManufacturer();
+                    s1 = AoTDMisc.ensureManBeingNotNull(s1);
+                    s2 = AoTDMisc.ensureManBeingNotNull(s2);
                     return s1.compareTo(s2);
                 }
             };
@@ -727,8 +731,10 @@ public class GPManager {
             comparator = new Comparator<GPOption>() {
                 @Override
                 public int compare(GPOption o1, GPOption o2) {
-                    String s1 = o1.getSpec().getShipHullSpecAPI().getManufacturer();
-                    String s2 = o2.getSpec().getShipHullSpecAPI().getManufacturer();
+                    String s1 = o1.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer();
+                    String s2 =  o2.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer();
+                    s1 = AoTDMisc.ensureManBeingNotNull(s1);
+                    s2 = AoTDMisc.ensureManBeingNotNull(s2);
                     return s1.compareTo(s2);
                 }
             };
@@ -819,6 +825,8 @@ public class GPManager {
                 public int compare(GPOption o1, GPOption o2) {
                     String s1 = o1.getSpec().getWeaponSpec().getManufacturer();
                     String s2 = o2.getSpec().getWeaponSpec().getManufacturer();
+                    s1 = AoTDMisc.ensureManBeingNotNull(s1);
+                    s2 = AoTDMisc.ensureManBeingNotNull(s2);
                     return s1.compareTo(s2);
                 }
             };
@@ -1374,11 +1382,15 @@ public class GPManager {
         this.shipManInfo.clear();
         LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();
         for (GPOption learnedShipPackage : getLearnedShipPackages()) {
-            if (shipManInfo.get(learnedShipPackage.getSpec().getShipHullSpecAPI().getManufacturer()) == null) {
-                shipManInfo.put(learnedShipPackage.getSpec().getShipHullSpecAPI().getManufacturer(), 1);
+            String man = learnedShipPackage.getSpec().getShipHullSpecAPI().getManufacturer();
+            if(man==null){
+                man="Unknown";
+            }
+            if (shipManInfo.get(man) == null) {
+                shipManInfo.put(man, 1);
             } else {
-                int amount = shipManInfo.get(learnedShipPackage.getSpec().getShipHullSpecAPI().getManufacturer());
-                shipManInfo.put(learnedShipPackage.getSpec().getShipHullSpecAPI().getManufacturer(), amount + 1);
+                int amount = shipManInfo.get(man);
+                shipManInfo.put(man, amount + 1);
             }
         }
         int val = 0;
@@ -1395,11 +1407,15 @@ public class GPManager {
         this.weaponManInfo.clear();
         LinkedHashMap<String, Integer> weaponManInfo = new LinkedHashMap<>();
         for (GPOption learnedShipPackage : getLearnedWeapons()) {
-            if (weaponManInfo.get(learnedShipPackage.getSpec().getWeaponSpec().getManufacturer()) == null) {
-                weaponManInfo.put(learnedShipPackage.getSpec().getWeaponSpec().getManufacturer(), 1);
+            String man  = learnedShipPackage.getSpec().getWeaponSpec().getManufacturer();
+            if(man==null){
+                man = "Unknown";
+            }
+            if (weaponManInfo.get(man) == null) {
+                weaponManInfo.put(man, 1);
             } else {
-                int amount = weaponManInfo.get(learnedShipPackage.getSpec().getWeaponSpec().getManufacturer());
-                weaponManInfo.put(learnedShipPackage.getSpec().getWeaponSpec().getManufacturer(), amount + 1);
+                int amount = weaponManInfo.get(man);
+                weaponManInfo.put(man, amount + 1);
             }
         }
         int val = 0;
@@ -1416,11 +1432,15 @@ public class GPManager {
         this.fighterManInfo.clear();
         LinkedHashMap<String, Integer> fighterManInfo = new LinkedHashMap<>();
         for (GPOption learnedShipPackage : getLearnedFighters()) {
-            if (fighterManInfo.get(learnedShipPackage.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer()) == null) {
-                fighterManInfo.put(learnedShipPackage.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer(), 1);
+            String man  =learnedShipPackage.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer();
+            if(man==null){
+                man = "Unknown";
+            }
+            if (fighterManInfo.get(man) == null) {
+                fighterManInfo.put(man, 1);
             } else {
-                int amount = fighterManInfo.get(learnedShipPackage.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer());
-                fighterManInfo.put(learnedShipPackage.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer(), amount + 1);
+                int amount = fighterManInfo.get(man);
+                fighterManInfo.put(man, amount + 1);
             }
         }
         int val = 0;

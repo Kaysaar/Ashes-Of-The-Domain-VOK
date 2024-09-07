@@ -9,6 +9,8 @@ import com.fs.starfarer.api.impl.campaign.CoreReputationPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Ranks;
 import com.fs.starfarer.api.impl.campaign.ids.Strings;
+import com.fs.starfarer.api.impl.campaign.intel.AoTDCommIntelPlugin;
+import com.fs.starfarer.api.impl.campaign.intel.eventfactors.onetime.DatabankSellFactor;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
@@ -16,11 +18,12 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ResearchSell extends BaseCommandPlugin{
+public class ResearchSell extends BaseCommandPlugin {
     protected CampaignFleetAPI playerFleet;
     protected SectorEntityToken entity;
     protected FactionAPI playerFaction;
@@ -37,6 +40,7 @@ public class ResearchSell extends BaseCommandPlugin{
     protected boolean buysDatabanks;
     protected float valueMult;
     protected float repMult;
+
     public boolean execute(String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
 
         this.dialog = dialog;
@@ -60,45 +64,44 @@ public class ResearchSell extends BaseCommandPlugin{
         person = dialog.getInteractionTarget().getActivePerson();
         faction = person.getFaction();
         try {
-            attitudeData  = AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).getAttitudeData();
-        }
-        catch (Exception e ){
-            attitudeData = new FactionResearchAttitudeData(faction.getId(),AoTDAIStance.DEFAULT,0.2f,0.5f,null,new ArrayList<String>());
+            attitudeData = AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).getAttitudeData();
+        } catch (Exception e) {
+            attitudeData = new FactionResearchAttitudeData(faction.getId(), AoTDAIStance.DEFAULT, 0.2f, 0.5f, null, new ArrayList<String>());
         }
         buysDatabanks = !faction.isPlayerFaction();
-        valueMult =attitudeData.getDatabankCashMultiplier();
+        valueMult = attitudeData.getDatabankCashMultiplier();
         repMult = attitudeData.getDatabankRepMultiplier();
 
         if (command.equals("selectDatabanks")) {
             selectDatabanks();
         } else if (command.equals("playerHasDbs")) {
             return playerHasDbs();
-        }
-        else if (command.equals("generateInitResponse")) {
+        } else if (command.equals("generateInitResponse")) {
             return generateInitResponse(attitudeData);
 
-        }
-        else if (command.equals("generateAfterResponse")) {
+        } else if (command.equals("generateAfterResponse")) {
             return generateAfterResponse(attitudeData);
 
-        }
-        else if (command.equals("personCanAcceptDbs")) {
+        } else if (command.equals("personCanAcceptDbs")) {
             return personCanAcceptDbs();
         }
 
         return true;
     }
-    public boolean generateAfterResponse(FactionResearchAttitudeData data){
+
+    public boolean generateAfterResponse(FactionResearchAttitudeData data) {
         dialog.getTextPanel().addPara(data.getResponseAfter());
         return true;
     }
-    public boolean generateInitResponse(FactionResearchAttitudeData data){
+
+    public boolean generateInitResponse(FactionResearchAttitudeData data) {
         dialog.getOptionPanel().clearOptions();
         dialog.getTextPanel().addPara(data.getInitResponse());
-        dialog.getOptionPanel().addOption(data.getDialogOptionSelect(),"databanks_selectDbs");
-        dialog.getOptionPanel().addOption(data.getDialogOptionDissmay(),"databanks_neverMind");
+        dialog.getOptionPanel().addOption(data.getDialogOptionSelect(), "databanks_selectDbs");
+        dialog.getOptionPanel().addOption(data.getDialogOptionDissmay(), "databanks_neverMind");
         return true;
     }
+
     protected boolean personCanAcceptDbs() {
         if (person == null || !buysDatabanks) return false;
 
@@ -146,7 +149,7 @@ public class ResearchSell extends BaseCommandPlugin{
 
                 if (bounty > 0) {
                     playerCargo.getCredits().add(bounty);
-                    AddRemoveCommodity.addCreditsGainText((int)bounty, text);
+                    AddRemoveCommodity.addCreditsGainText((int) bounty, text);
                 }
 
                 if (repChange >= 1f) {
@@ -165,11 +168,15 @@ public class ResearchSell extends BaseCommandPlugin{
                                 person);
                     }
                 }
-
+                if(Global.getSettings().getModManager().isModEnabled("aotd_qol")){
+                    AoTDCommIntelPlugin.get().addFactor(new DatabankSellFactor((int) computeDBCommisionPoints(cargo,attitudeData.getStance())),dialog);
+                }
                 FireBest.fire(null, dialog, memoryMap, "DatabanksTurnedIn");
             }
+
             public void cancelledCargoSelection() {
             }
+
             public void recreateTextPanel(TooltipMakerAPI panel, CargoAPI cargo, CargoStackAPI pickedUp, boolean pickedUpFromSource, CargoAPI combined) {
 
                 float bounty = computeCoreCreditValue(combined);
@@ -197,8 +204,8 @@ public class ResearchSell extends BaseCommandPlugin{
                         "will result in:", opad);
                 panel.beginGridFlipped(width, 2, 40f, 10f);
                 //panel.beginGrid(150f, 1);
-                panel.addToGrid(0, 0, "Bounty value", "" + (int)(valueMult * 100f) + "%");
-                panel.addToGrid(0, 1, "Reputation gain", "" + (int)(repMult * 100f) + "%");
+                panel.addToGrid(0, 0, "Bounty value", "" + (int) (valueMult * 100f) + "%");
+                panel.addToGrid(0, 1, "Reputation gain", "" + (int) (repMult * 100f) + "%");
                 panel.addGrid(pad);
 
                 panel.addPara("If you turn in the selected databanks, you will receive a %s bounty " +
@@ -206,17 +213,20 @@ public class ResearchSell extends BaseCommandPlugin{
                         opad * 1f, Misc.getHighlightColor(),
                         Misc.getWithDGS(bounty) + Strings.C,
                         "" + (int) repChange);
-                if(attitudeData.getStance().equals(AoTDAIStance.MERCENARY)){
-                    panel.addPara("Selling databanks to this faction won't make them progress technologically, as they likely will sell those elsewhere.",Misc.getTooltipTitleAndLightHighlightColor(),10f);
+                if (attitudeData.getStance().equals(AoTDAIStance.MERCENARY)) {
+                    panel.addPara("Selling databanks to this faction won't make them progress technologically, as they likely will sell those elsewhere.", Misc.getTooltipTitleAndLightHighlightColor(), 10f);
+
+                } else if (attitudeData.getStance().equals(AoTDAIStance.RESTRICTIVE) || attitudeData.getStance().equals(AoTDAIStance.CLEANSE)) {
+                    panel.addPara("Selling databanks to this faction will result in their destruction, to prevent them being used in further research.", Misc.getTooltipTitleAndLightHighlightColor(), 10f);
+
+                } else {
+                    panel.addPara("Warning! More databanks we sell to this faction, more technologically advanced they will become!", Misc.getNegativeHighlightColor(), 10f);
 
                 }
-                else  if (attitudeData.getStance().equals(AoTDAIStance.RESTRICTIVE)||attitudeData.getStance().equals(AoTDAIStance.CLEANSE)){
-                    panel.addPara("Selling databanks to this faction will result in their destruction, to prevent them being used in further research.",Misc.getTooltipTitleAndLightHighlightColor(),10f);
-
-                }
-                else{
-                    panel.addPara("Warning! More databanks we sell to this faction, more technologically advanced they will become!",Misc.getNegativeHighlightColor(),10f);
-
+                if(Global.getSettings().getModManager().isModEnabled("aotd_qol")){
+                    if (Misc.getCommissionFaction().equals(faction)) {
+                        panel.addPara("This will result in increase of commission points by %s", 10f, Color.ORANGE, "" + computeDBCommisionPoints(combined,attitudeData.getStance()));
+                    }
                 }
 
 
@@ -250,7 +260,16 @@ public class ResearchSell extends BaseCommandPlugin{
         //if (rep < 1f) rep = 1f;
         return rep;
     }
-
+    protected float computeDBCommisionPoints(CargoAPI cargo,AoTDAIStance stance) {
+        float rep = 0;
+        for (CargoStackAPI stack : cargo.getStacksCopy()) {
+            CommoditySpecAPI spec = stack.getResourceIfResource();
+            if (spec != null && spec.getId().equals("research_databank")) {
+                rep += getPointsPerDataabank(stance) * stack.getSize();
+            }
+        }
+        return rep;
+    }
     public static float getBaseRepValue(String coreType) {
         return 0.5f;
     }
@@ -264,5 +283,15 @@ public class ResearchSell extends BaseCommandPlugin{
             }
         }
         return false;
+    }
+
+    public int getPointsPerDataabank(AoTDAIStance stance) {
+        if (stance.equals(AoTDAIStance.MERCENARY)) {
+            return 2;
+        } else if (stance.equals(AoTDAIStance.RESTRICTIVE) || stance.equals(AoTDAIStance.CLEANSE)) {
+            return 1;
+        } else {
+            return 3;
+        }
     }
 }
