@@ -31,6 +31,7 @@ public class ResearchTechnology implements BaseCommand {
         catch (NullPointerException exception){
             return CommandResult.ERROR;
         }
+
         option.setResearched(true);
         if(manager.getCurrentFocus()!=null){
             if(manager.getCurrentFocus().getSpec().getId().equals(option.Id)){

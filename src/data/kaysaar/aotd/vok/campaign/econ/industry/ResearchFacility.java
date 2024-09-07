@@ -11,6 +11,7 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import data.misc.QoLMisc;
 
 import java.awt.*;
 
@@ -73,6 +74,9 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
     public boolean isAvailableToBuild() {
         if (market.getFaction().isPlayerFaction()) {
             return true;
+        }
+        if(Global.getSettings().getModManager().isModEnabled("aotd_qol")){
+            return market.getFaction().isPlayerFaction()|| QoLMisc.isCommissionedBy(market.getFactionId());
         }
         return super.isAvailableToBuild();
 

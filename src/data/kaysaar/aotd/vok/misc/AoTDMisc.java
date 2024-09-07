@@ -56,6 +56,10 @@ public class AoTDMisc {
 
         return variantId;
     }
+    public static String ensureManBeingNotNull(String man){
+        if(man ==null)return "Unknown";
+        return man;
+    }
     public String getNumberStringShort(int number){
         if(number<1000){
             return ""+number;
