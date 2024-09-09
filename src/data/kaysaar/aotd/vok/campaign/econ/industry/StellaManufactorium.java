@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.ui.Alignment;
@@ -19,7 +20,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StellaManufactorium extends BaseIndustry  {
+public class StellaManufactorium extends HeavyIndustry {
     @Override
     public boolean isAvailableToBuild() {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STELLA_MANUFACTORIUM,market) &&super.isAvailableToBuild();

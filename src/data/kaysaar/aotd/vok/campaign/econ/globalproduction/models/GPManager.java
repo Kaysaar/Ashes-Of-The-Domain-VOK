@@ -307,7 +307,6 @@ public class GPManager {
         }
         for (MarketAPI factionMarket : Misc.getPlayerMarkets(true)) {
             for (Industry ind : factionMarket.getIndustries()) {
-                if (ind instanceof HeavyIndustry) {
                     for (String commodity : commodities) {
                         int val = ind.getSupply(commodity).getQuantity().getModifiedInt() * scale;
                         if (totalResources.get(commodity) == null) {
@@ -317,7 +316,7 @@ public class GPManager {
                             totalResources.put(commodity, val + prev);
                         }
                     }
-                }
+
             }
         }
         return totalResources;

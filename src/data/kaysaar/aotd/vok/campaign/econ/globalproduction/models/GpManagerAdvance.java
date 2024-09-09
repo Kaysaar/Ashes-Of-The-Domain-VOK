@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 
 import com.fs.starfarer.api.EveryFrameScript;
+import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 
 public class GpManagerAdvance implements EveryFrameScript {
     @Override
