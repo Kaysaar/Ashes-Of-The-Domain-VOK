@@ -28,7 +28,8 @@ import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
-import data.misc.QoLMisc;
+
+import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;

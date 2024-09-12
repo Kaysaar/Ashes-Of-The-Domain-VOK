@@ -72,6 +72,9 @@ public class GpSpecialProjectData {
         }
     }
     public float getProgressOfStage(int stage){
+        if(currentStage==-1){
+            currentStage = 0;
+        }
         if(stage<currentStage){
             return 1;
         }
