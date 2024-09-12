@@ -86,6 +86,9 @@ public class WeaponInfoGenerator {
             }
         }
         tooltip.addSpacer(10f);
+
+
+
         tooltip.addSectionHeading("Auxiliary data", Alignment.MID, 5f);
         CustomPanelAPI damageTypeInfoHolder = Global.getSettings().createCustom(widthOfTooltip, 50, null);
         CustomPanelAPI damageTypeParaHolder = damageTypeInfoHolder.createCustomPanel(widthOfText, 50, null);

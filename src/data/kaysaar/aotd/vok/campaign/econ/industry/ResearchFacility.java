@@ -11,7 +11,7 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import data.misc.QoLMisc;
+import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 
 import java.awt.*;
 

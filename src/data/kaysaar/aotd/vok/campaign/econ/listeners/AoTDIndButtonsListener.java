@@ -22,7 +22,7 @@ import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
 import data.kaysaar.aotd.vok.ui.UpgradeListUI;
-import data.misc.QoLMisc;
+import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 
 import java.awt.*;
 import java.util.ArrayList;

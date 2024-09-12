@@ -13,5 +13,6 @@
     <orderEntry type="library" name="LunaLib" level="project" />
     <orderEntry type="library" name="lw_Console" level="project" />
     <orderEntry type="library" name="starfarer.api" level="project" />
+    <orderEntry type="library" name="Qol" level="project" />
   </component>
 </module>
