@@ -12,6 +12,7 @@ import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
+import data.kaysaar.aotd.vok.listeners.CoreUiInterceptor;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
@@ -84,8 +85,13 @@ public class GpProductionButtonRenderer implements CampaignUIRenderingListener, 
                 if (detector.determineIfHoversOverButton(x, y, x + buttonHide.getWidth(), y - 11, x, y - height, x + buttonHide.getWidth(), y - height + 11, Global.getSettings().getMouseX(), (float) (Global.getSettings().getMouseY()))) {
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
                     NidavelirMainPanelPlugin.isShowingUI = true;
-                    Global.getSector().getCampaignUI().showInteractionDialog(new HolderDialog(CoreUITabId.OUTPOSTS,null), null);
-                    Global.getSector().getCampaignUI().getCurrentInteractionDialog().showCustomVisualDialog(UIData.WIDTH, UIData.HEIGHT, new NidavelirMainPanelDelegate(new NidavelirMainPanelPlugin(false, CoreUITabId.OUTPOSTS, null), Global.getSector().getCampaignUI().getCurrentInteractionDialog()));
+                    if(Global.getSector().getListenerManager().hasListenerOfClass(CoreUiInterceptor.class)){
+                        Global.getSector().getCampaignUI().showInteractionDialog(new HolderDialog(CoreUITabId.OUTPOSTS,null), null);
+                        Global.getSector().getCampaignUI().getCurrentInteractionDialog().showCustomVisualDialog(UIData.WIDTH, UIData.HEIGHT, new NidavelirMainPanelDelegate(new NidavelirMainPanelPlugin(false, CoreUITabId.OUTPOSTS, null), Global.getSector().getCampaignUI().getCurrentInteractionDialog()));
+                    }
+                    else{
+                        Global.getSector().getCampaignUI().showInteractionDialog(new NidavelirMainPanelDP(),null);
+                    }
                     event.consume();
                     break;
                 }

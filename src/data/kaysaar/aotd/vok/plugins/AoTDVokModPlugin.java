@@ -83,8 +83,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
                 throw new RuntimeException(e);
             }
         }
-        l.addListener(new GPButtonInterceptor(),true);
-        l.addListener(new CoreUiInterceptor(),true);
+//        l.addListener(new GPButtonInterceptor(),true);
+//        l.addListener(new CoreUiInterceptor(),true);
     }
 
     @Override

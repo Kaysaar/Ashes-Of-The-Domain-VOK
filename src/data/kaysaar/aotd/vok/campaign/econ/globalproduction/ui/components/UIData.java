@@ -30,8 +30,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class UIData {
-    public static final float WIDTH = Global.getSettings().getScreenWidth();
-    public static final float HEIGHT = Global.getSettings().getScreenHeight();
+    public static final float WIDTH = Global.getSettings().getScreenWidth()-20;
+    public static final float HEIGHT = Global.getSettings().getScreenHeight()-20;
     public static final float HEIGHT_OF_OPTIONS = HEIGHT*0.6f;
     public static final float WIDTH_OF_OPTIONS = WIDTH*0.65f;
     public static final float WIDTH_OF_ORDERS = WIDTH*0.35f-30f;
