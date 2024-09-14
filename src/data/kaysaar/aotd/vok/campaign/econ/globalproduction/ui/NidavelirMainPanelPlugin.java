@@ -120,8 +120,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         createGatheringPointBar();
         createSpecialProjectBar();
         createOrders();
-        mainPanel = createMainPanel();
-        panel.addComponent(mainPanel).inTL(-5, UIData.HEIGHT - 67);
 
         isPressingShift = false;
         isPressingCtrl = false;
@@ -318,7 +316,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         panelOfGatheringPoint = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 100, renderer);
         TooltipMakerAPI tooltip = panelOfGatheringPoint.createUIElement(UIData.WIDTH_OF_ORDERS, 100, false);
         tooltip.addSectionHeading("Production gathering point", Alignment.MID, 0f);
-        if(!Misc.getPlayerMarkets(true).isEmpty()){
+        if (!Misc.getPlayerMarkets(true).isEmpty()) {
             CustomPanelAPI panelHolder = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 - 5f, 82, renderer);
             TooltipMakerAPI tooltipHolder = panelHolder.createUIElement(UIData.WIDTH_OF_ORDERS / 2 - 5f, 80, false);
             CustomPanelAPI panelHolder2 = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 - 5f, 82, renderer);
@@ -348,7 +346,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
             tooltip.addCustom(panelHolder, 0).getPosition().inTL(0, y);
             tooltip.addCustom(panelHolder2, 0).getPosition().inTL(UIData.WIDTH_OF_ORDERS / 2, y);
         }
-
 
 
         panelOfGatheringPoint.addUIElement(tooltip).inTL(0, 0);
@@ -458,7 +455,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     public void createOrders() {
         UILinesRenderer renderer = new UILinesRenderer(0f);
         float yPad = 251;
-        float height = panel.getPosition().getHeight() - 20 - yPad - 180;
+        float height = panel.getPosition().getHeight() - 20 - yPad - 150;
         sortingButtonsPanel = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 50, renderer);
         panelOfOrders = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, height - 50, renderer);
         TooltipMakerAPI tooltip = sortingButtonsPanel.createUIElement(UIData.WIDTH_OF_ORDERS, 50, false);
@@ -614,18 +611,18 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                 }
             }
         }
-        for (ButtonAPI coreUITab : coreUITabs) {
-            if (coreUITab.isChecked()) {
-                coreUITab.setChecked(false);
-                clearUI();
-                Global.getSoundPlayer().pauseCustomMusic();
-                callbacks.dismissDialog();
-                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                dialog.getVisualPanel().showCore((CoreUITabId) coreUITab.getCustomData(), null, null, new CoreDismisserListener(dialog, true));
-                isShowingUI = false;
-                return;
-            }
-        }
+//        for (ButtonAPI coreUITab : coreUITabs) {
+//            if (coreUITab.isChecked()) {
+//                coreUITab.setChecked(false);
+//                clearUI();
+//                Global.getSoundPlayer().pauseCustomMusic();
+//                callbacks.dismissDialog();
+//                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+//                dialog.getVisualPanel().showCore((CoreUITabId) coreUITab.getCustomData(), null, null, new CoreDismisserListener(dialog, true));
+//                isShowingUI = false;
+//                return;
+//            }
+//        }
 
         if (currentManager != null) {
             boolean replace = false;
@@ -811,28 +808,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
             }
             if (event.getEventValue() == Keyboard.KEY_ESCAPE && !event.isRMBEvent()) {
                 clearUI();
-                if (prevCore != null) {
-                    Global.getSoundPlayer().pauseCustomMusic();
-                    Global.getSoundPlayer().restartCurrentMusic();
-                    callbacks.dismissDialog();
-                    dialog.getVisualPanel().showCore(prevCore, null, param, new CoreDismisserListener(dialog, true));
-                    Robot robot = null;
-                    try {
-                        robot = new Robot();
-                        // Simulate pressing the '1' key
-                        robot.keyPress(KeyEvent.VK_1);  // Press the '1' key
-                        robot.keyRelease(KeyEvent.VK_1);
-                    } catch (AWTException e) {
-                        throw new RuntimeException(e);
-                    }
-
-
-                    isShowingUI = false;
-
-                } else {
-                    isShowingUI = false;
-                    dialog.dismiss();
-                }
+                isShowingUI = false;
+                dialog.dismiss();
 
 
             }
