@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
+import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.listeners.CampaignInputListener;
 import com.fs.starfarer.api.campaign.listeners.CampaignUIRenderingListener;
 import com.fs.starfarer.api.combat.ViewportAPI;
@@ -10,6 +11,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
@@ -81,7 +83,9 @@ public class GpProductionButtonRenderer implements CampaignUIRenderingListener, 
             if (event.isLMBDownEvent()&&!event.isConsumed()) {
                 if (detector.determineIfHoversOverButton(x, y, x + buttonHide.getWidth(), y - 11, x, y - height, x + buttonHide.getWidth(), y - height + 11, Global.getSettings().getMouseX(), (float) (Global.getSettings().getMouseY()))) {
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                    Global.getSector().getCampaignUI().showInteractionDialog(new NidavelirMainPanelDP(), null);
+                    NidavelirMainPanelPlugin.isShowingUI = true;
+                    Global.getSector().getCampaignUI().showInteractionDialog(new HolderDialog(CoreUITabId.OUTPOSTS,null), null);
+                    Global.getSector().getCampaignUI().getCurrentInteractionDialog().showCustomVisualDialog(UIData.WIDTH, UIData.HEIGHT, new NidavelirMainPanelDelegate(new NidavelirMainPanelPlugin(false, CoreUITabId.OUTPOSTS, null), Global.getSector().getCampaignUI().getCurrentInteractionDialog()));
                     event.consume();
                     break;
                 }

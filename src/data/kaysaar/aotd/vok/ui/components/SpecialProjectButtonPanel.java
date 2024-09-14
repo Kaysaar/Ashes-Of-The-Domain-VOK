@@ -19,7 +19,7 @@ public class SpecialProjectButtonPanel extends UiPanel{
     public void createUI() {
 
         tooltip.setTitleOrbitronLarge();
-        LabelAPI labelAPI= tooltip.addPara("Technology Tree of "+ AoTDMainResearchManager.getInstance().getManagerForPlayer().getFaction().getDisplayName(), Color.ORANGE,10f);
+        LabelAPI labelAPI= tooltip.addPara("Technology Tree", Color.ORANGE,10f);
         labelAPI.getPosition().inTL(150-labelAPI.computeTextWidth(labelAPI.getText())/2,10);
         tooltip.setParaFontDefault();
         specialProjectButton=tooltip.addButton("Special Projects","UI_SPECIAL_PROJECTS",290,30,10f);

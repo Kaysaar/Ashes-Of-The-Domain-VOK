@@ -104,12 +104,7 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
     @Override
     protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
         super.addRightAfterDescriptionSection(tooltip, mode);
-        if (IndustryTooltipMode.NORMAL.equals(mode)) {
-            if (market.getAdmin().isPlayer() && !market.getFaction().isPlayerFaction()) {
-                tooltip.addPara("This research facility will be under control of " + market.getFaction().getDisplayName() + " therefore it will only contribute its research to them!", Misc.getNegativeHighlightColor(), 10f);
-            }
 
-        }
 
         if (IndustryTooltipMode.ADD_INDUSTRY.equals(mode)) {
             tooltip.addPara("Building that structure will enable your faction to research new technologies.", Misc.getHighlightColor(), 10f);
