@@ -14,6 +14,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GPButtonInterceptor;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
@@ -82,6 +83,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
                 throw new RuntimeException(e);
             }
         }
+        l.addListener(new GPButtonInterceptor(),true);
+        l.addListener(new CoreUiInterceptor(),true);
     }
 
     @Override

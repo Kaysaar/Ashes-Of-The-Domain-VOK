@@ -6,14 +6,14 @@ package data.kaysaar.aotd.vok.scripts;
             float topRightX, float topRightY,
             float botLeftX, float botLeftY,
             float botRightX, float botRightY,
-            int mouseX, float mouseY
+            float mouseX, float mouseY
     ) {
         // Split the trapezoid into two triangles and check each one
         return pointInTriangle(mouseX, mouseY, topLeftX, topLeftY, botLeftX, botLeftY, botRightX, botRightY)
                 || pointInTriangle(mouseX, mouseY, topLeftX, topLeftY, topRightX, topRightY, botRightX, botRightY);
     }
 
-    private boolean pointInTriangle(int px, float py, float ax, float ay, float bx, float by, float cx, float cy) {
+    private boolean pointInTriangle(float px, float py, float ax, float ay, float bx, float by, float cx, float cy) {
         float v0x = cx - ax;
         float v0y = cy - ay;
         float v1x = bx - ax;

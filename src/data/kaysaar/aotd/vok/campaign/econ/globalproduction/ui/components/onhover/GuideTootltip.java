@@ -22,7 +22,11 @@ public class GuideTootltip implements TooltipMakerAPI.TooltipCreator {
         tooltip.addSectionHeading("Useful key binds", Alignment.MID,10f);
         tooltip.addPara("Shift + LMB : %s",10f, Color.ORANGE,"Increase quantity of items in order being produced at once");
         tooltip.addPara("Shift + RMB : %s",5, Color.ORANGE,"Decrease quantity of items in order being produced at once");
+        tooltip.addPara("Ctrl + LMB : %s",10f, Color.ORANGE,"Increase amount of orders by 10");
+        tooltip.addPara("Ctrl + RMB : %s",5, Color.ORANGE,"Decrease amount of orders by 10");
 
+        tooltip.addPara("Shift + Ctrl + LMB : %s",10f, Color.ORANGE,"Increase quantity of items in order being produced at once by 10");
+        tooltip.addPara("Shift + Ctrl + RMB : %s",5, Color.ORANGE,"Decrease quantity of items in order being produced at once by 10");
 
     }
 }

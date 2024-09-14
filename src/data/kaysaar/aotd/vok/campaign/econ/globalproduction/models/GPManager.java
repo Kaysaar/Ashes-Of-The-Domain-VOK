@@ -14,6 +14,7 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
+import com.fs.starfarer.api.impl.campaign.intel.AoTDCommIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.PCFPlanetIntel;
 import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
@@ -28,6 +29,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import kaysaar.aotd_question_of_loyalty.data.tags.AoTDRankTags;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
@@ -1137,7 +1139,7 @@ public class GPManager {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getShipProductionOption()) {
             if (option.getSpec().type.equals(GPSpec.ProductionType.SHIP)) {
-                if (Global.getSector().getPlayerFaction().knowsShip(option.getSpec().getShipHullSpecAPI().getHullId()) || Global.getSettings().isDevMode()) {
+                if (isKnownByPlayer(option)) {
                     options.add(option);
                 }
 
@@ -1148,8 +1150,8 @@ public class GPManager {
     }
     public ArrayList<GPOption> getLearnedItems() {
         ArrayList<GPOption> options = new ArrayList<>();
-        for (GPOption option : getItemProductionOption()) {
-            if(ItemEffectsRepo.ITEM_EFFECTS.get(option.getSpec().getProjectId())!=null&&AoTDMisc.knowsItem(option.getSpec().getItemSpecAPI().getId(),Global.getSector().getPlayerFaction())){
+        for (GPOption option : getItemProductionOptionFiltered()) {
+            if(AoTDMisc.knowsItem(option.getSpec().getItemSpecAPI().getId(),Global.getSector().getPlayerFaction())||Global.getSettings().isDevMode()){
                 options.add(option);
             }
         }
@@ -1212,7 +1214,7 @@ public class GPManager {
     public ArrayList<GPOption> getLearnedWeapons() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getWeaponProductionOption()) {
-            if (Global.getSector().getPlayerFaction().knowsWeapon(option.getSpec().getWeaponSpec().getWeaponId()) || Global.getSettings().isDevMode()) {
+             if (isKnownByPlayer(option)) {
                 options.add(option);
             }
         }
@@ -1222,7 +1224,7 @@ public class GPManager {
     public ArrayList<GPOption> getLearnedFighters() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getFighterProductionOption()) {
-            if (Global.getSector().getPlayerFaction().knowsFighter(option.getSpec().getWingSpecAPI().getId()) || Global.getSettings().isDevMode()) {
+            if (isKnownByPlayer(option)) {
                 options.add(option);
             }
         }
@@ -1359,9 +1361,8 @@ public class GPManager {
         if(this.itemManInffo==null)itemManInffo = new LinkedHashMap<>();
         this.itemManInffo.clear();
         LinkedHashMap<String, Integer> itemManInffo = new LinkedHashMap<>();
-        for (String s : ItemEffectsRepo.ITEM_EFFECTS.keySet()) {
-            if(!AoTDMisc.knowsItem(s,Global.getSector().getPlayerFaction()))continue;
-            SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(s);
+        for (GPOption learnedItem : getLearnedItems()) {
+            SpecialItemSpecAPI spec = learnedItem.getSpec().getItemSpecAPI();
             if (itemManInffo.get(spec.getManufacturer()) == null) {
                 itemManInffo.put(spec.getManufacturer(), 1);
             } else {
@@ -1596,5 +1597,36 @@ public class GPManager {
             if (offset.intValue() >= dummyOrders.size()) continue;
             dummyOrders.remove(offset.intValue());
         }
+    }
+    public boolean isKnownByPlayer(GPOption option){
+        if(Global.getSettings().isDevMode())return true;
+        if(option.getSpec().getType().equals(GPSpec.ProductionType.SHIP)){
+            boolean knows = Global.getSector().getPlayerFaction().knowsShip(option.getSpec().getShipHullSpecAPI().getHullId());
+            if(Global.getSettings().getModManager().isModEnabled("aotd_qol")&&Misc.getCommissionFaction()!=null){
+                boolean factionKnows = Misc.getCommissionFaction().knowsShip(option.getSpec().getShipHullSpecAPI().getHullId());
+               boolean haveTag  =AoTDCommIntelPlugin.get().getCurrentRankData().hasTag(AoTDRankTags.ACCESS_TO_FACTION_BLUEPRINTS);
+               return knows || (factionKnows&&haveTag);
+            }
+            return knows;
+        }
+        if(option.getSpec().getType().equals(GPSpec.ProductionType.WEAPON)){
+            boolean knows = Global.getSector().getPlayerFaction().knowsWeapon(option.getSpec().getWeaponSpec().getWeaponId());
+            if(Global.getSettings().getModManager().isModEnabled("aotd_qol")&&Misc.getCommissionFaction()!=null){
+                boolean factionKnows = Misc.getCommissionFaction().knowsWeapon(option.getSpec().getWeaponSpec().getWeaponId());
+                boolean haveTag  =AoTDCommIntelPlugin.get().getCurrentRankData().hasTag(AoTDRankTags.ACCESS_TO_FACTION_BLUEPRINTS);
+                return knows || (factionKnows&&haveTag);
+            }
+            return knows;
+        }
+        if(option.getSpec().getType().equals(GPSpec.ProductionType.FIGHTER)){
+            boolean knows = Global.getSector().getPlayerFaction().knowsFighter(option.getSpec().getWingSpecAPI().getId());
+            if(Global.getSettings().getModManager().isModEnabled("aotd_qol")&&Misc.getCommissionFaction()!=null){
+                boolean factionKnows = Misc.getCommissionFaction().knowsFighter(option.getSpec().getWingSpecAPI().getId());
+                boolean haveTag  =AoTDCommIntelPlugin.get().getCurrentRankData().hasTag(AoTDRankTags.ACCESS_TO_FACTION_BLUEPRINTS);
+                return knows || (factionKnows&&haveTag);
+            }
+            return knows;
+        }
+        return true;
     }
 }

@@ -1,7 +1,10 @@
 package data.kaysaar.aotd.vok.misc.weaponinfo;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CargoAPI;
+import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.combat.*;
+import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.loading.*;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
@@ -25,6 +28,7 @@ public class WeaponInfoGenerator {
         if (desc.hasText2()) {
             tooltip.addPara(desc.getText2(), Misc.getGrayColor(), 2f);
         }
+        tooltip.addPara("You own total of %s weapons of this type",5f,Color.ORANGE,""+getWeaponAmount(weapon));
         tooltip.addSectionHeading("Primary Data", Alignment.MID, 10f);
         CustomPanelAPI firstRow = Global.getSettings().createCustom(widthOfTooltip, 100, null);
         WeaponSpriteRenderer renderer = new WeaponSpriteRenderer(weapon, 80, 0);
@@ -528,5 +532,11 @@ public class WeaponInfoGenerator {
         } else {
             return acc <= 20.0F ? "Very Poor" : "Terrible";
         }
+    }
+    public static int getWeaponAmount(WeaponSpecAPI spec){
+        if(Global.getSector().getPlayerFaction().getProduction().getGatheringPoint()==null)return 0;
+        if(!Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().hasSubmarket(Submarkets.SUBMARKET_STORAGE))return 0;
+        SubmarketAPI market = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getSubmarket(Submarkets.SUBMARKET_STORAGE);
+       return (int) market.getCargo().getQuantity(CargoAPI.CargoItemType.WEAPONS,spec.getWeaponId());
     }
 }
