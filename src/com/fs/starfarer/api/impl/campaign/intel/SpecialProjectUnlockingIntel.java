@@ -22,7 +22,13 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
         // The location on the map of the intel
-        return Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getPrimaryEntity();
+        try {
+            return Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getPrimaryEntity();
+        }
+        catch (Exception  e ){
+
+        }
+    return Global.getSector().getPlayerFleet();
     }
 
     @Override

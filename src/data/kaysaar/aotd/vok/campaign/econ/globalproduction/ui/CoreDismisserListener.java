@@ -5,6 +5,13 @@ import com.fs.starfarer.api.campaign.CoreInteractionListener;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
 import com.fs.starfarer.api.campaign.listeners.CoreUITabListener;
+import com.fs.starfarer.api.ui.ButtonAPI;
+import com.fs.starfarer.api.ui.UIComponentAPI;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CoreDismisserListener implements CoreInteractionListener {
     boolean shouldDismissdialog = false;
@@ -18,6 +25,13 @@ public class CoreDismisserListener implements CoreInteractionListener {
     public void coreUIDismissed() {
         if(!NidavelirMainPanelPlugin.isShowingUI){
             dialogAPI.dismiss();
+            ArrayList<UIComponentAPI> componentAPIS  = (ArrayList<UIComponentAPI>) ReflectionUtilis.invokeMethod("getChildrenCopy",ReflectionUtilis.invokeMethod("getButtons",ProductionUtil.getCoreUI()));
+            for (UIComponentAPI componentAPI : componentAPIS) {
+                if(ReflectionUtilis.hasMethodOfName("unhighlight",componentAPI)){
+                    ReflectionUtilis.invokeMethod("unhighlight",componentAPI);
+                }
+            }
+
         }
     }
 }

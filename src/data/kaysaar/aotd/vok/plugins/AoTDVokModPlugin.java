@@ -14,6 +14,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.CoreCorrectStateEnforcer;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GPButtonInterceptor;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
@@ -83,8 +84,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
                 throw new RuntimeException(e);
             }
         }
-//        l.addListener(new GPButtonInterceptor(),true);
-//        l.addListener(new CoreUiInterceptor(),true);
+        l.addListener(new GPButtonInterceptor(),true);
+        l.addListener(new CoreUiInterceptor(),true);
     }
 
     @Override
@@ -131,6 +132,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         setListenersIfNeeded();
         AoTDMainResearchManager.getInstance().updateResearchOptionsFromSpec();
         AoTDMainResearchManager.getInstance().updateManagerRepo();
+        Global.getSector().addTransientScript(new CoreCorrectStateEnforcer());
         AoTDMainResearchManager.getInstance().setAttitudeDataForAllFactions();
         if(!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)){
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());

@@ -449,11 +449,7 @@ public class AoTDFactionResearchManager {
             if (marketAPI.getFactionId().equals(getFaction().getId())) {
                 marketsToReturn.add(marketAPI);
             }
-            if(Global.getSettings().getModManager().isModEnabled("aotd_qol")){
-                if (QoLMisc.isCommissionedBy(marketAPI.getFactionId())) {
-                    marketsToReturn.add(marketAPI);
-                }
-            }
+
 
         }
 
@@ -462,11 +458,21 @@ public class AoTDFactionResearchManager {
 
     public int getAmountOfResearchFacilities() {
         int toReturn = 0;
-        for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
-            if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
-                toReturn++;
+        if(getFaction().isPlayerFaction()){
+            for (MarketAPI marketAPI : Misc.getPlayerMarkets(Global.getSettings().getModManager().isModEnabled("aotd_qol"))) {
+                if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
+                    toReturn++;
+                }
             }
         }
+        else{
+            for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
+                if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
+                    toReturn++;
+                }
+            }
+        }
+
         if(toReturn>8){
             toReturn = 8;
         }
