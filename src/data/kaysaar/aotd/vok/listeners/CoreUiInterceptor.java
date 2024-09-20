@@ -25,7 +25,6 @@ public class CoreUiInterceptor implements CoreUITabListener {
             }
         }
         if(Global.getSector().getCampaignUI().getCurrentInteractionDialog()==null){
-            Global.getSector().getCampaignUI().showInteractionDialog(new HolderDialog(tab,param),null);
 
         }
     }
