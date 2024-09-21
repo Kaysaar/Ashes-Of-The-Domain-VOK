@@ -1,27 +1,31 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CoreInteractionListener;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.InteractionDialogPlugin;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.ui.ButtonAPI;
+import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
+import com.fs.starfarer.api.util.IntervalUtil;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import org.lwjgl.input.Keyboard;
+import org.jetbrains.annotations.Nullable;
 
-import java.security.Key;
-import java.util.List;
 import java.util.Map;
+
+import static data.kaysaar.aotd.vok.misc.AoTDMisc.tryToGetButtonProd;
 
 public class HolderDialog implements InteractionDialogPlugin {
     transient CoreUITabId tab;
     transient Object param;
     transient InteractionDialogAPI api;
+    public static boolean sendSignalForPressing  =false;
+    public IntervalUtil util = new IntervalUtil(0.1f,0.2f);
     public HolderDialog(CoreUITabId tab,Object param ) {
         this.tab = tab;
         this.param = param;
@@ -34,7 +38,7 @@ public class HolderDialog implements InteractionDialogPlugin {
         this.api = dialog;
         dialog.getVisualPanel().finishFadeFast();
         dialog.setBackgroundDimAmount(0f);
-      dialog.getVisualPanel().showCore(tab, null, param, new CoreDismisserListener(api,true));
+        dialog.getVisualPanel().showCore(tab, null, param, new CoreDismisserListener(api,true));
 
 
 
@@ -52,22 +56,15 @@ public class HolderDialog implements InteractionDialogPlugin {
 
     @Override
     public void advance(float amount) {
-        try {
-            ButtonAPI button = (ButtonAPI) ReflectionUtilis.getChildrenCopy((UIPanelAPI) ReflectionUtilis.invokeMethod("getCurrentTab",ProductionUtil.getCoreUI())).get(4);
-            if(button.isChecked()&&!NidavelirMainPanelPlugin.isShowingUI){
-                button.setChecked(false);
-                CoreUITabId cur = Global.getSector().getCampaignUI().getCurrentCoreTab();
-                NidavelirMainPanelPlugin.isShowingUI = true;
-                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                Global.getSector().getCampaignUI().getCurrentInteractionDialog().showCustomVisualDialog(UIData.WIDTH, UIData.HEIGHT, new NidavelirMainPanelDelegate(new NidavelirMainPanelPlugin(false, cur, null), Global.getSector().getCampaignUI().getCurrentInteractionDialog()));
-            }
 
-        }
-        catch (Exception e) {
 
-        }
+
+
+
 
     }
+
+
 
     @Override
     public void backFromEngagement(EngagementResultAPI battleResult) {
