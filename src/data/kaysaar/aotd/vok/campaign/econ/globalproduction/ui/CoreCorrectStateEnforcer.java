@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui;
 
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.ui.UIComponentAPI;
+import com.fs.starfarer.api.ui.UIPanelAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
@@ -30,6 +31,13 @@ public class CoreCorrectStateEnforcer implements EveryFrameScript {
             for (UIComponentAPI componentAPI : componentAPIS) {
                 if(ReflectionUtilis.hasMethodOfName("unhighlight",componentAPI)){
                     ReflectionUtilis.invokeMethod("unhighlight",componentAPI);
+                }
+            }
+            UIPanelAPI panel = ProductionUtil.getCoreUI();
+            for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(panel)) {
+                if(ReflectionUtilis.hasMethodOfName("getPlanet",componentAPI)){
+                    panel.removeComponent(componentAPI);
+                    break;
                 }
             }
 

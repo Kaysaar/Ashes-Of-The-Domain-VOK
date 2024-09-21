@@ -41,7 +41,7 @@ public class BaseOptionPanelManager {
     float YHeight;
     int currOffset = 0;
     int currPage = 0;
-    float bottomHeight = UIData.HEIGHT - (UIData.HEIGHT * 0.45f) - 240;
+    float bottomHeight = UIData.HEIGHT - (UIData.HEIGHT * 0.45f) - 300;
     ArrayList<ButtonAPI> buttons = new ArrayList<>();
     ArrayList<String> chosenManu = new ArrayList<>();
     ArrayList<String> chosenType = new ArrayList<>();
@@ -84,7 +84,7 @@ public class BaseOptionPanelManager {
             sizes.add(button);
         }
         buttonSize.addUIElement(tooltip).inTL(0, 0);
-        panel.addComponent(buttonSize).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, panel.getPosition().getHeight() - 50);
+        panel.addComponent(buttonSize).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, panel.getPosition().getHeight() - 80);
 
     }
     public void createTypeOptions(LinkedHashMap<String, Integer> typeInfo) {
@@ -100,7 +100,7 @@ public class BaseOptionPanelManager {
             types.add(button);
         }
         buttonType.addUIElement(tooltip).inTL(0, 0);
-        panel.addComponent(buttonType).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, panel.getPosition().getHeight() - 85);
+        panel.addComponent(buttonType).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, panel.getPosition().getHeight() - 115);
     }
     public void createSerachBarPanel() {
         panelOfSearchBar = panel.createCustomPanel(230, 20, null);
