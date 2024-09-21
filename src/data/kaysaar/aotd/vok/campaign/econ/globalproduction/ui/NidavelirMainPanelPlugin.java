@@ -12,6 +12,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.ProductionDataPanel;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
@@ -24,6 +25,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.option
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipInfoGenerator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
+import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lwjgl.input.Keyboard;
 
@@ -120,6 +122,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         createGatheringPointBar();
         createSpecialProjectBar();
         createOrders();
+        mainPanel = createMainPanel();
+        panel.addComponent(mainPanel).inTL(-5, UIData.HEIGHT - 67);
 
         isPressingShift = false;
         isPressingCtrl = false;
@@ -316,7 +320,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         panelOfGatheringPoint = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 100, renderer);
         TooltipMakerAPI tooltip = panelOfGatheringPoint.createUIElement(UIData.WIDTH_OF_ORDERS, 100, false);
         tooltip.addSectionHeading("Production gathering point", Alignment.MID, 0f);
-        if (!Misc.getPlayerMarkets(true).isEmpty()) {
+        if(!Misc.getPlayerMarkets(true).isEmpty()){
             CustomPanelAPI panelHolder = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 - 5f, 82, renderer);
             TooltipMakerAPI tooltipHolder = panelHolder.createUIElement(UIData.WIDTH_OF_ORDERS / 2 - 5f, 80, false);
             CustomPanelAPI panelHolder2 = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 - 5f, 82, renderer);
@@ -344,8 +348,9 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
             panelHolder2.addUIElement(tooltipHolder2).inTL(0, 0);
             panelHolder2.addUIElement(tooltipHolder3).inTL(0, 20);
             tooltip.addCustom(panelHolder, 0).getPosition().inTL(0, y);
-            tooltip.addCustom(panelHolder2, 0).getPosition().inTL(UIData.WIDTH_OF_ORDERS / 2, y);
+            tooltip.addCustom(panelHolder2, 0).getPosition().inTL(UIData.WIDTH_OF_ORDERS / 2+5, y);
         }
+
 
 
         panelOfGatheringPoint.addUIElement(tooltip).inTL(0, 0);
@@ -455,7 +460,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     public void createOrders() {
         UILinesRenderer renderer = new UILinesRenderer(0f);
         float yPad = 251;
-        float height = panel.getPosition().getHeight() - 20 - yPad - 150;
+        float height = panel.getPosition().getHeight() - 20 - yPad - 180;
         sortingButtonsPanel = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 50, renderer);
         panelOfOrders = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, height - 50, renderer);
         TooltipMakerAPI tooltip = sortingButtonsPanel.createUIElement(UIData.WIDTH_OF_ORDERS, 50, false);
@@ -611,18 +616,23 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                 }
             }
         }
-//        for (ButtonAPI coreUITab : coreUITabs) {
-//            if (coreUITab.isChecked()) {
-//                coreUITab.setChecked(false);
-//                clearUI();
-//                Global.getSoundPlayer().pauseCustomMusic();
-//                callbacks.dismissDialog();
-//                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-//                dialog.getVisualPanel().showCore((CoreUITabId) coreUITab.getCustomData(), null, null, new CoreDismisserListener(dialog, true));
-//                isShowingUI = false;
-//                return;
-//            }
-//        }
+        for (ButtonAPI coreUITab : coreUITabs) {
+            if (coreUITab.isChecked()) {
+                coreUITab.setChecked(false);
+                clearUI();
+                Global.getSoundPlayer().pauseCustomMusic();
+                callbacks.dismissDialog();
+                dialog.getVisualPanel().closeCoreUI();
+                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+                dialog.getVisualPanel().showCore((CoreUITabId) coreUITab.getCustomData(), null, null, new CoreDismisserListener(dialog, true));
+                ButtonAPI button = AoTDMisc.tryToGetButtonProd("colonies");
+                if(button!=null){
+                    button.setChecked(true);
+                }
+                isShowingUI = false;
+                return;
+            }
+        }
 
         if (currentManager != null) {
             boolean replace = false;
@@ -808,8 +818,25 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
             }
             if (event.getEventValue() == Keyboard.KEY_ESCAPE && !event.isRMBEvent()) {
                 clearUI();
-                isShowingUI = false;
-                dialog.dismiss();
+                if (prevCore != null) {
+                    Global.getSoundPlayer().pauseCustomMusic();
+                    Global.getSoundPlayer().restartCurrentMusic();
+                    callbacks.dismissDialog();
+                    dialog.getVisualPanel().showCore(prevCore, null, param, new CoreDismisserListener(dialog, true));
+                    for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy((UIPanelAPI) ReflectionUtilis.invokeMethod("getCurrentTab", ProductionUtil.getCoreUI()))) {
+                        if(componentAPI instanceof  ButtonAPI){
+                            ((ButtonAPI) componentAPI).setChecked(true);
+                            break;
+                        }
+                    }
+
+
+                    isShowingUI = false;
+
+                } else {
+                    isShowingUI = false;
+                    dialog.dismiss();
+                }
 
 
             }

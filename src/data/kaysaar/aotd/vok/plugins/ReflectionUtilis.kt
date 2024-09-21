@@ -135,12 +135,12 @@ class ReflectionUtilis {
             return instance
         }
         @JvmStatic
-         fun hasMethodOfName(name: String, instance: Any) : Boolean {
+        fun hasMethodOfName(name: String, instance: Any) : Boolean {
 
             val instancesOfMethods: Array<out Any> = instance.javaClass.getDeclaredMethods()
             return instancesOfMethods.any { getMethodNameHandle.invoke(it) == name }
         }
-            @JvmStatic
+        @JvmStatic
         fun invokeMethod(methodName: String, instance: Any, vararg arguments: Any?) : Any?
         {
             var method: Any? = null
@@ -173,7 +173,7 @@ class ReflectionUtilis {
         }
         @JvmStatic
         //Extends the UI API by adding the required method to get the child objects of a panel, only when used within this class.
-         fun UIPanelAPI.getChildrenCopy() : List<UIComponentAPI> {
+        fun UIPanelAPI.getChildrenCopy() : List<UIComponentAPI> {
             return invokeMethod("getChildrenCopy", this) as List<UIComponentAPI>
         }
     }

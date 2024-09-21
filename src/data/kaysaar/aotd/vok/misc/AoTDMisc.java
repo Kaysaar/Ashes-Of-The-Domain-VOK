@@ -19,6 +19,8 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.jetbrains.annotations.Nullable;
@@ -95,6 +97,25 @@ public class AoTDMisc {
             if(s.equals(key))return true;
         }
         return false;
+    }
+    public static  ButtonAPI tryToGetButtonProd(String name) {
+        ButtonAPI button = null;
+        try {
+            for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy((UIPanelAPI) ReflectionUtilis.invokeMethod("getCurrentTab", ProductionUtil.getCoreUI()))) {
+                if(componentAPI instanceof  ButtonAPI){
+                    if(((ButtonAPI) componentAPI).getText().toLowerCase().contains(name)){
+                        button = (ButtonAPI) componentAPI;
+                        break;
+                    }
+                }
+            }
+            return button;
+        }
+        catch (Exception e) {
+
+        }
+        return button;
+
     }
     public static EngagementResultForFleetAPI getNonPlayerFleet(EngagementResultAPI resultAPI){
         if(!resultAPI.getLoserResult().isPlayer()){

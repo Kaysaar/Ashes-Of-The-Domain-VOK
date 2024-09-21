@@ -383,6 +383,7 @@ public class GPManager {
     public ArrayList<GPOption> getItemProductionOptionFiltered() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getItemProductionOption()) {
+            if(option.getSpec().getItemSpecAPI().hasTag("aotd_ignore_gp"))continue;
             if(ItemEffectsRepo.ITEM_EFFECTS.get(option.getSpec().getProjectId())!=null){
                 options.add(option);
             }
@@ -1151,6 +1152,7 @@ public class GPManager {
     public ArrayList<GPOption> getLearnedItems() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getItemProductionOptionFiltered()) {
+            if(option.getSpec().getItemSpecAPI().hasTag("aotd_ignore_gp"))continue;
             if(AoTDMisc.knowsItem(option.getSpec().getItemSpecAPI().getId(),Global.getSector().getPlayerFaction())||Global.getSettings().isDevMode()){
                 options.add(option);
             }

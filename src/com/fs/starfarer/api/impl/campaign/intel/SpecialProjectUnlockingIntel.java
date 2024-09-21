@@ -28,8 +28,10 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
         catch (Exception  e ){
 
         }
-    return Global.getSector().getPlayerFleet();
+
+        return Global.getSector().getPlayerFleet();
     }
+
 
     @Override
     public void createIntelInfo(TooltipMakerAPI info, ListInfoMode mode) {

@@ -15,11 +15,11 @@ import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.CoreCorrectStateEnforcer;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GPButtonInterceptor;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderInfoRepo;
+import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContract;
 import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContractData;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
@@ -84,7 +84,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
                 throw new RuntimeException(e);
             }
         }
-        l.addListener(new GPButtonInterceptor(),true);
         l.addListener(new CoreUiInterceptor(),true);
     }
 
@@ -132,11 +131,12 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         setListenersIfNeeded();
         AoTDMainResearchManager.getInstance().updateResearchOptionsFromSpec();
         AoTDMainResearchManager.getInstance().updateManagerRepo();
-        Global.getSector().addTransientScript(new CoreCorrectStateEnforcer());
         AoTDMainResearchManager.getInstance().setAttitudeDataForAllFactions();
         if(!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)){
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
+        Global.getSector().addTransientScript(new CoreCorrectStateEnforcer());
+        Global.getSector().addTransientScript(new CoreUITracker());
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");
         AoTDMainResearchManager.getInstance().updateModIdRepo();
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
