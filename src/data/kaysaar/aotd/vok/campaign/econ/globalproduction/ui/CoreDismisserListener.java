@@ -24,6 +24,7 @@ public class CoreDismisserListener implements CoreInteractionListener {
     @Override
     public void coreUIDismissed() {
         if(!NidavelirMainPanelPlugin.isShowingUI){
+            dialogAPI.getVisualPanel().fadeVisualOut();
             dialogAPI.dismiss();
             ArrayList<UIComponentAPI> componentAPIS  = (ArrayList<UIComponentAPI>) ReflectionUtilis.invokeMethod("getChildrenCopy",ReflectionUtilis.invokeMethod("getButtons",ProductionUtil.getCoreUI()));
             for (UIComponentAPI componentAPI : componentAPIS) {
