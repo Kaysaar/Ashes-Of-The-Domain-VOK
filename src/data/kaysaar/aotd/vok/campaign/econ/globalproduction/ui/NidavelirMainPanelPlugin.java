@@ -89,7 +89,19 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     ButtonAPI cancelButtono;
     TooltipMakerAPI tooltipMakerAPI;
     CustomPanelAPI panelOfGatheringPoint;
-    CustomPanelAPI mainPanel;
+    UIPanelAPI mainPanel;
+
+    public void setMainPanel(UIPanelAPI mainPanel) {
+        this.mainPanel = mainPanel;
+    }
+
+    public UIPanelAPI getMainPanel() {
+        return mainPanel;
+    }
+
+    public CustomPanelAPI getPanel() {
+        return panel;
+    }
 
     public void init(CustomPanelAPI panel, CustomVisualDialogDelegate.DialogCallbacks callbacks, InteractionDialogAPI dialog) {
 
@@ -122,8 +134,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         createGatheringPointBar();
         createSpecialProjectBar();
         createOrders();
-        mainPanel = createMainPanel();
-        panel.addComponent(mainPanel).inTL(-5, UIData.HEIGHT - 67);
 
         isPressingShift = false;
         isPressingCtrl = false;
@@ -320,7 +330,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         panelOfGatheringPoint = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 100, renderer);
         TooltipMakerAPI tooltip = panelOfGatheringPoint.createUIElement(UIData.WIDTH_OF_ORDERS, 100, false);
         tooltip.addSectionHeading("Production gathering point", Alignment.MID, 0f);
-        if(!Misc.getPlayerMarkets(true).isEmpty()){
+        if (!Misc.getPlayerMarkets(true).isEmpty()) {
             CustomPanelAPI panelHolder = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 - 5f, 82, renderer);
             TooltipMakerAPI tooltipHolder = panelHolder.createUIElement(UIData.WIDTH_OF_ORDERS / 2 - 5f, 80, false);
             CustomPanelAPI panelHolder2 = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 - 5f, 82, renderer);
@@ -348,9 +358,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
             panelHolder2.addUIElement(tooltipHolder2).inTL(0, 0);
             panelHolder2.addUIElement(tooltipHolder3).inTL(0, 20);
             tooltip.addCustom(panelHolder, 0).getPosition().inTL(0, y);
-            tooltip.addCustom(panelHolder2, 0).getPosition().inTL(UIData.WIDTH_OF_ORDERS / 2+5, y);
+            tooltip.addCustom(panelHolder2, 0).getPosition().inTL(UIData.WIDTH_OF_ORDERS / 2, y);
         }
-
 
 
         panelOfGatheringPoint.addUIElement(tooltip).inTL(0, 0);
@@ -460,7 +469,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     public void createOrders() {
         UILinesRenderer renderer = new UILinesRenderer(0f);
         float yPad = 251;
-        float height = panel.getPosition().getHeight() - 20 - yPad - 180;
+        float height = panel.getPosition().getHeight() - 20 - yPad - 150;
         sortingButtonsPanel = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 50, renderer);
         panelOfOrders = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, height - 50, renderer);
         TooltipMakerAPI tooltip = sortingButtonsPanel.createUIElement(UIData.WIDTH_OF_ORDERS, 50, false);
@@ -616,23 +625,18 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                 }
             }
         }
-        for (ButtonAPI coreUITab : coreUITabs) {
-            if (coreUITab.isChecked()) {
-                coreUITab.setChecked(false);
-                clearUI();
-                Global.getSoundPlayer().pauseCustomMusic();
-                callbacks.dismissDialog();
-                dialog.getVisualPanel().closeCoreUI();
-                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                dialog.getVisualPanel().showCore((CoreUITabId) coreUITab.getCustomData(), null, null, new CoreDismisserListener(dialog, true));
-                ButtonAPI button = AoTDMisc.tryToGetButtonProd("colonies");
-                if(button!=null){
-                    button.setChecked(true);
-                }
-                isShowingUI = false;
-                return;
-            }
-        }
+//        for (ButtonAPI coreUITab : coreUITabs) {
+//            if (coreUITab.isChecked()) {
+//                coreUITab.setChecked(false);
+//                clearUI();
+//                Global.getSoundPlayer().pauseCustomMusic();
+//                callbacks.dismissDialog();
+//                Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+//                dialog.getVisualPanel().showCore((CoreUITabId) coreUITab.getCustomData(), null, null, new CoreDismisserListener(dialog, true));
+//                isShowingUI = false;
+//                return;
+//            }
+//        }
 
         if (currentManager != null) {
             boolean replace = false;
@@ -818,25 +822,12 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
             }
             if (event.getEventValue() == Keyboard.KEY_ESCAPE && !event.isRMBEvent()) {
                 clearUI();
-                if (prevCore != null) {
-                    Global.getSoundPlayer().pauseCustomMusic();
-                    Global.getSoundPlayer().restartCurrentMusic();
-                    callbacks.dismissDialog();
-                    dialog.getVisualPanel().showCore(prevCore, null, param, new CoreDismisserListener(dialog, true));
-                    for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy((UIPanelAPI) ReflectionUtilis.invokeMethod("getCurrentTab", ProductionUtil.getCoreUI()))) {
-                        if(componentAPI instanceof  ButtonAPI){
-                            ((ButtonAPI) componentAPI).setChecked(true);
-                            break;
-                        }
-                    }
-
-
-                    isShowingUI = false;
-
-                } else {
-                    isShowingUI = false;
+                isShowingUI = false;
+                if(dialog!=null){
                     dialog.dismiss();
                 }
+                Object core = ProductionUtil.getCoreUI();
+                ReflectionUtilis.invokeMethod("closeCurrent",core);
 
 
             }
@@ -846,7 +837,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         isPressingCtrl = pressedCtrl;
     }
 
-    private void clearUI() {
+    public void clearUI() {
         specialProjectManager.clear();
         shipPanelManager.clear();
         fighterPanelInterface.clear();
@@ -863,10 +854,14 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         coreUITabs.clear();
         orders.clear();
         orderSortingButtons.clear();
+        panel.removeComponent(tooltipMakerAPI);
         clearAll();
         clearSpecProjBar();
         Global.getSoundPlayer().pauseCustomMusic();
         Global.getSoundPlayer().restartCurrentMusic();
+        if(mainPanel!=null){
+            mainPanel.removeComponent(panel);
+        }
     }
 
     public GPOrder getOrderFromDummy(String id) {
