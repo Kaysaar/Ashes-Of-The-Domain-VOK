@@ -77,14 +77,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             }
         }
         l.removeListenerOfClass(GpProductionButtonRenderer.class);
-        if(!l.hasListenerOfClass(GpProductionButtonRenderer.class)) {
-            try {
-                l.addListener(new GpProductionButtonRenderer(),true);
-            } catch (FontException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        l.addListener(new CoreUiInterceptor(),true);
     }
 
     @Override

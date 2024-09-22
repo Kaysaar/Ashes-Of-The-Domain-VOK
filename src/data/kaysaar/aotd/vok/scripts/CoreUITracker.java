@@ -4,6 +4,11 @@ import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.ui.ButtonAPI;
+import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.UIComponentAPI;
+import com.fs.starfarer.api.ui.UIPanelAPI;
+import com.fs.starfarer.campaign.command.CustomProductionPanel;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelDelegate;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
@@ -11,10 +16,14 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 
+import java.util.ArrayList;
+
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.HolderDialog.sendSignalForPressing;
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.tryToGetButtonProd;
 
 public class CoreUITracker implements EveryFrameScript {
+    boolean inserted = false;
+    NidavelirMainPanelPlugin plugin = null;
     @Override
     public boolean isDone() {
         return false;
@@ -27,51 +36,46 @@ public class CoreUITracker implements EveryFrameScript {
 
     @Override
     public void advance(float amount) {
-        if(Global.getSector().getCampaignUI().getCurrentInteractionDialog()==null)return;
-        if(sendSignalForPressing){
-
-            ButtonAPI button = AoTDMisc.tryToGetButtonProd("colonies");
-            if(button!=null){
-
-                try{
-                    Object tab = ReflectionUtilis.invokeMethod("getCurrentTab", ProductionUtil.getCoreUI());
-                    if(tab!=null){
-                        ReflectionUtilis.invokeMethod("showReportsTab",tab);
-                        sendSignalForPressing = false;
-                    }
-                } catch (Exception e) {
-
-                }
-
-
-
-            }
+        if(!GPManager.isEnabled)return;
+        if(Global.getSector().getCampaignUI().getCurrentCoreTab()==null){
+            inserted = false;
+            return;
         }
-        if(!NidavelirMainPanelPlugin.isShowingUI){
-            ButtonAPI button = tryToGetButtonProd("custom production");
-            if(button!=null){
-                if(button.isChecked()){
-                    ButtonAPI button2 = AoTDMisc.tryToGetButtonProd("colonies");
-                    if(button2!=null){
-                        button.setChecked(true);
-                    }
-                    button.setChecked(false);
-                    CoreUITabId cur = Global.getSector().getCampaignUI().getCurrentCoreTab();
-                    NidavelirMainPanelPlugin.isShowingUI = true;
-                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                    Global.getSector().getCampaignUI().getCurrentInteractionDialog().showCustomVisualDialog(UIData.WIDTH, UIData.HEIGHT, new NidavelirMainPanelDelegate(new NidavelirMainPanelPlugin(false, cur, null), Global.getSector().getCampaignUI().getCurrentInteractionDialog()));
-                    try {
-                        Object tab = ReflectionUtilis.invokeMethod("getCurrentTab", ProductionUtil.getCoreUI());
-                        if (tab != null) {
-                            ReflectionUtilis.invokeMethod("showReportsTab", tab);
-                            sendSignalForPressing = false;
-                        }
-                    } catch (Exception e) {
+        ButtonAPI button = tryToGetButtonProd("custom production");
 
+        if(button!=null){
+            UIPanelAPI mainParent = (UIPanelAPI) ReflectionUtilis.invokeMethod("getCurrentTab",ProductionUtil.getCoreUI());
+            if(button.isHighlighted()){
+                ArrayList<UIComponentAPI> componentAPIS  = (ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent);
+                boolean found = false;
+                for (UIComponentAPI componentAPI : componentAPIS) {
+                    if(componentAPI instanceof CustomProductionPanel){
+                        found = true;
+                        UIData.WIDTH = componentAPI.getPosition().getWidth();
+                        UIData.HEIGHT = componentAPI.getPosition().getHeight();
+                        UIData.recompute();
+                        mainParent.removeComponent(componentAPI);
+                        insertNewPanel(mainParent);
                     }
                 }
+                if(!found&&!inserted){
+                    insertNewPanel(mainParent);
+                }
+            }
+            else if (!button.isHighlighted()&&plugin!=null){
+                inserted = false;
+                plugin.clearUI();
+                plugin=null;
             }
         }
 
+    }
+
+    private void insertNewPanel(UIPanelAPI mainParent) {
+        plugin  = new NidavelirMainPanelPlugin(false,Global.getSector().getCampaignUI().getCurrentCoreTab(),null);
+        plugin.init(Global.getSettings().createCustom(UIData.WIDTH,UIData.HEIGHT,plugin),null,null);
+        mainParent.addComponent(plugin.getPanel());
+        mainParent.bringComponentToTop(plugin.getPanel());
+        inserted= true;
     }
 }
