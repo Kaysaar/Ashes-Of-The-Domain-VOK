@@ -17,7 +17,7 @@ public class AoTDFactionResearchProgressionScript implements EveryFrameScript {
 
     @Override
     public boolean runWhilePaused() {
-        return true;
+        return false;
     }
 
     @Override
