@@ -23,7 +23,6 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.ResearchFleetDefeatListener;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
-import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContract;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
@@ -32,10 +31,7 @@ import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
 import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class AoTDFactionResearchManager {
     private static final Logger logger = Global.getLogger(AoTDMainResearchManager.class);
@@ -443,17 +439,27 @@ public class AoTDFactionResearchManager {
 
 
 
-    public ArrayList<MarketAPI> retrieveMarketsOfThatFaction() {
+    public List<MarketAPI> retrieveMarketsOfThatFaction() {
         ArrayList<MarketAPI> marketsToReturn = new ArrayList<>();
+        if(getFaction().isPlayerFaction()){
+            return Misc.getPlayerMarkets(checkForQolEnabled());
+        }
         for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
             if (marketAPI.getFactionId().equals(getFaction().getId())) {
                 marketsToReturn.add(marketAPI);
             }
 
-
         }
 
         return marketsToReturn;
+    }
+    public boolean checkForQolEnabled(){
+        if(Global.getSettings().getModManager().isModEnabled("aotd_qol")){
+            if(QoLMisc.isCommissioned()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getAmountOfResearchFacilities() {
