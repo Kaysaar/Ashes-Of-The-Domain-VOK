@@ -23,7 +23,7 @@ public class ResearchFacilityMarket extends BaseSubmarketPlugin {
     }
 
     public boolean showInCargoScreen() {
-        return market.getFaction().isPlayerFaction();
+        return market.getFaction().isPlayerFaction()||market.isPlayerOwned();
     }
 
 

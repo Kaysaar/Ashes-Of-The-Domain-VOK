@@ -27,11 +27,6 @@ public class CoreDismisserListener implements CoreInteractionListener {
             dialogAPI.getVisualPanel().fadeVisualOut();
             dialogAPI.dismiss();
             ArrayList<UIComponentAPI> componentAPIS  = (ArrayList<UIComponentAPI>) ReflectionUtilis.invokeMethod("getChildrenCopy",ReflectionUtilis.invokeMethod("getButtons",ProductionUtil.getCoreUI()));
-            for (UIComponentAPI componentAPI : componentAPIS) {
-                if(ReflectionUtilis.hasMethodOfName("unhighlight",componentAPI)){
-                    ReflectionUtilis.invokeMethod("unhighlight",componentAPI);
-                }
-            }
 
         }
     }
