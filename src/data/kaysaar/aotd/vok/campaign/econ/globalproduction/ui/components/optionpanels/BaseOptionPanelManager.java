@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class BaseOptionPanelManager {
+public class BaseOptionPanelManager implements OptionPanelInterface {
     CustomPanelAPI mainPanel;
     CustomPanelAPI panel;
     float padding;
@@ -48,6 +48,7 @@ public class BaseOptionPanelManager {
     ArrayList<String> chosenSize = new ArrayList<>();
     ArrayList<ButtonAPI> sortingButtons = new ArrayList<>();
     boolean wantsAll = false;
+    boolean canClose = true;
     public void createDesignButtons( LinkedHashMap<String,Integer> designs) {
         buttonDesignPanel = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 120, null);
         TooltipMakerAPI tooltipButDesigners = buttonDesignPanel.createUIElement(panel.getPosition().getWidth() * 0.70f, bottomHeight, true);
@@ -181,9 +182,52 @@ public class BaseOptionPanelManager {
     public void reset(){
 
     }
+
+    @Override
+    public TextFieldAPI getTextField() {
+        return searchbar;
+    }
+
+    @Override
+    public boolean canClose() {
+        return canClose;
+    }
+
+    @Override
+    public CustomPanelAPI getOptionPanel() {
+        return null;
+    }
+
+    @Override
+    public CustomPanelAPI getDesignPanel() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<ButtonAPI> getOrderButtons() {
+        return null;
+    }
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
+    @Override
+    public void reInit() {
+
+    }
+
     public void advance(float amount) {
         boolean reset = false;
+
         if (searchbar != null) {
+            canClose = !searchbar.hasFocus();
             if (!searchbar.getText().equals(prevText)) {
                 if (searchbar.getText().isEmpty()) {
                     wantsAll = true;

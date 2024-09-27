@@ -16,7 +16,7 @@ import java.util.Map;
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin.maxItemsPerPage;
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin.maxItemsPerPageWEP;
 
-public class WeaponOptionPanelInterface extends BaseOptionPanelManager implements OptionPanelInterface {
+public class WeaponOptionPanelInterface extends BaseOptionPanelManager  {
 
     public WeaponOptionPanelInterface(CustomPanelAPI panel,float padding ) {
 

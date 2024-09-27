@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SpecialProjectManager extends BaseOptionPanelManager implements OptionPanelInterface {
+public class SpecialProjectManager extends BaseOptionPanelManager  {
     CustomPanelAPI listOfOptions;
     CustomPanelAPI projectShowcase;
     ArrayList<ButtonAPI> buttonsOfStages = new ArrayList<>();

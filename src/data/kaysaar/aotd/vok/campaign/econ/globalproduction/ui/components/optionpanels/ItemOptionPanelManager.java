@@ -17,7 +17,7 @@ import java.util.Map;
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin.maxItemsPerPage;
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData.*;
 
-public class ItemOptionPanelManager extends BaseOptionPanelManager implements OptionPanelInterface{
+public class ItemOptionPanelManager extends BaseOptionPanelManager {
     public ItemOptionPanelManager(CustomPanelAPI panel , float padding){
         GPManager.getInstance().populateItemInfo();
         this.padding = padding;

@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.combat.BeamAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -59,8 +60,8 @@ public class TechTreeResearchOptionPanel extends UiPanel {
         }
 
 
-            vTT.addImage(Global.getSettings().getSpriteName("ui_icons_tech_tree", TechToResearch.getSpec().getIconId()), 100, 100, 10f);
-            vTT.getPrev().getPosition().inTL(5, 5);
+            vTT.addImage(Global.getSettings().getSpriteName("ui_icons_tech_tree", TechToResearch.getSpec().getIconId()), 70, 70, 20f);
+            vTT.getPrev().getPosition().inTL(5, 20);
 
         double multiplier = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
 
@@ -156,23 +157,22 @@ public class TechTreeResearchOptionPanel extends UiPanel {
 
             }
         }, TooltipMakerAPI.TooltipLocation.RIGHT);
-        int beginx = 85;
+        int beginx = 65;
         int beginy = 36;
         hexagons.clear();
         for (final Map.Entry<String, ResearchRewardType> rewardsEntry : TechToResearch.Rewards.entrySet()) {
-            CustomPanelAPI dummyPanel = Global.getSettings().createCustom(65, 65, null);
-            TooltipMakerAPI tooltipMakerAPI=  dummyPanel.createUIElement(65,65,false);
+            CustomPanelAPI dummyPanel = Global.getSettings().createCustom(40, 40, null);
+            TooltipMakerAPI tooltipMakerAPI=  dummyPanel.createUIElement(40,40,false);
 
             String imagename;
             if(isImageExisting(rewardsEntry.getKey())){
                 imagename = Global.getSettings().getSpriteName("ui_icons_tech_tree",rewardsEntry.getKey()+"_sub");
 
-            }
+            }//K
             else{
                 imagename = Global.getSettings().getSpriteName("ui_icons_tech_tree","special");
-
             }
-          tooltipMakerAPI.addImage(imagename,65,65,0f);
+          tooltipMakerAPI.addImage(imagename,40,40,0f);
           dummyPanel.addUIElement(tooltipMakerAPI).inTL(0,0);
             vTT.addCustom(dummyPanel, 0f).getPosition().inTL(beginx, beginy);
             if (rewardsEntry.getValue().equals(ResearchRewardType.INDUSTRY)){
@@ -246,7 +246,7 @@ public class TechTreeResearchOptionPanel extends UiPanel {
             }
             hexagons.put(rewardsEntry.getKey(),dummyPanel);
 
-            beginx+=58;
+            beginx+=35;
         }
 
         float defaultDays = (TechToResearch.TimeToResearch*(float) multiplier);

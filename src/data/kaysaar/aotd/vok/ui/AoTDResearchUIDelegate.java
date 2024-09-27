@@ -4,8 +4,9 @@ import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
+import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 
-public class AoTDResearchUIDelegate implements CustomVisualDialogDelegate {
+public class AoTDResearchUIDelegate implements CustomVisualDialogDelegate, SoundUIManager {
     protected DialogCallbacks callbacks;
     protected AoTDResearchUI plugin;
     protected InteractionDialogAPI dialog;
@@ -39,6 +40,16 @@ public class AoTDResearchUIDelegate implements CustomVisualDialogDelegate {
 
     @Override
     public void reportDismissed(int option) {
+
+    }
+
+    @Override
+    public void playSound() {
+
+    }
+
+    @Override
+    public void pauseSound() {
 
     }
 }

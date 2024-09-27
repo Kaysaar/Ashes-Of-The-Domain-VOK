@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin.maxItemsPerPage;
 
-public class FighterOptionPanelInterface extends BaseOptionPanelManager implements OptionPanelInterface {
+public class FighterOptionPanelInterface extends BaseOptionPanelManager {
     @Override
     public CustomPanelAPI getOptionPanel() {
         return null;
