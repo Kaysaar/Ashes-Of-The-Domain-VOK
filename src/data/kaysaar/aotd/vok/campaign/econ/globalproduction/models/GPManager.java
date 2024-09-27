@@ -24,7 +24,6 @@ import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
-import data.kaysaar.aotd.vok.campaign.econ.listeners.NidavelirIndustryOptionProvider;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
@@ -290,9 +289,7 @@ public class GPManager {
             productionOrder.updateResourceCost();
         }
         ListenerManagerAPI l = Global.getSector().getListenerManager();
-        if (!l.hasListenerOfClass(NidavelirIndustryOptionProvider.class)) {
-            l.addListener(new NidavelirIndustryOptionProvider(), true);
-        }
+
 
 
     }
