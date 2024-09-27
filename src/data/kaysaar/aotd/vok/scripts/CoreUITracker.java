@@ -152,12 +152,12 @@ public class CoreUITracker implements EveryFrameScript {
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);
 
             mainParent.addComponent((UIComponentAPI) panelMap.get(currentTab));
-            mainParent.bringComponentToTop((UIComponentAPI) panelMap.get(currentTab));
             setMemFlag(currentTab.getText().toLowerCase());
    ;
         }
         handleButtonsHighlight();
         handleButtons();
+        tryToGetButtonProd("research").setEnabled(tryToGetButtonProd("custom production").isEnabled());
 
 
 
@@ -211,14 +211,17 @@ private void handleButtons(){
                 ProductionUtil.getCurrentTab().removeComponent((UIComponentAPI) panelMap.get(currentTab));
                 currentTab = buttonAPI;
                 setMemFlag(currentTab.getText().toLowerCase());
-                if(currentTab.getText().toLowerCase().contains("custom production")&& pausedMusic){
-                    plugin.playSound();
-                    pausedMusic = false;
+                if(plugin!=null){
+                    if(currentTab.getText().toLowerCase().contains("custom production")&& pausedMusic){
+                        plugin.playSound();
+                        pausedMusic = false;
+                    }
+                    else if (!pausedMusic){
+                        plugin.pauseSound();
+                        pausedMusic = true;
+                    }
                 }
-                else if (!pausedMusic){
-                    plugin.pauseSound();
-                    pausedMusic = true;
-                }
+
             }
 
 
