@@ -35,6 +35,7 @@ public class CoreUITracker implements EveryFrameScript {
     HashMap<ButtonAPI,Object>panelMap = null;
     ButtonAPI currentTab = null;
     String nameOfCurrentTab;
+    public static boolean sendSignalToOpenCore = false;
     public static final String memFlag  = "$aotd_outpost_state";
     public static void  setMemFlag(String value){
         Global.getSector().getMemory().set(memFlag, value);
@@ -63,7 +64,7 @@ public class CoreUITracker implements EveryFrameScript {
             panelMap = null;
             currentTab = null;
             if(plugin!=null){
-                plugin.clearUI();
+                plugin.clearUI(!sendSignalToOpenCore);
                 plugin=null;
             }
 
@@ -74,6 +75,9 @@ public class CoreUITracker implements EveryFrameScript {
             removed = false;
             insertedOnce = false;
             return;
+        }
+        if(Global.getSector().getCampaignUI().getCurrentCoreTab()!=null){
+            sendSignalToOpenCore = false;
         }
         ButtonAPI button = tryToGetButtonProd("custom production");
         if(button==null)return;

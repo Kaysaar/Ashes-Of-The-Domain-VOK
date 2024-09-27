@@ -824,7 +824,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                 if(!currentManager.canClose()){
                     continue;
                 }
-                clearUI();
+                clearUI(true);
                 isShowingUI = false;
                 if(dialog!=null){
                     dialog.dismiss();
@@ -839,7 +839,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         isPressingCtrl = pressedCtrl;
     }
 
-    public void clearUI() {
+    public void clearUI( boolean clearCoreUI) {
         specialProjectManager.clear();
         shipPanelManager.clear();
         fighterPanelInterface.clear();
@@ -863,10 +863,10 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         if(mainPanel!=null){
             mainPanel.removeComponent(panel);
         }
-
+        pauseSound();
         Object core = ProductionUtil.getCoreUI();
-        if(core!=null){
-            pauseSound();
+        if(core!=null&&clearCoreUI){
+
             ReflectionUtilis.invokeMethod("dismiss",core,1);
         }
 

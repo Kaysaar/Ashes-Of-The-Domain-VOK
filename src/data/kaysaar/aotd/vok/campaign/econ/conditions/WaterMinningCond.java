@@ -56,13 +56,6 @@ public class WaterMinningCond extends BaseMarketConditionPlugin {
         if (ind.getId().equals(Industries.MINING)) {
             ind.supply(AoTDCommodities.WATER, market.getSize()-2);
             ind.getSupply(AoTDCommodities.WATER).getQuantity().unmodify(getModId());
-            if (ind.getSpecialItem() != null) {
-                if (ind.getSpecialItem().getId().equals(Items.MANTLE_BORE)) {
-                    ind.getSupply(AoTDCommodities.WATER).getQuantity().modifyFlat("mantle_bore_water", +3, "Mantle Bore");
-                }
-
-
-            }
 
 
         }
