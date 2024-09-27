@@ -103,10 +103,8 @@ public class UIUtilis {
         float y = p.getPosition().getY() - 4;
         float w = width + 3;
         float h = height + 8;
-        GL11.glVertex2f(x, y);
         GL11.glVertex2f(x + w, y);
         GL11.glVertex2f(x + w, y + h);
-        GL11.glVertex2f(x, y + h);
         GL11.glEnd();
     }
     void drawMainPanelBorderSecondLayer(CustomPanelAPI p,float width, float height) {
@@ -115,10 +113,9 @@ public class UIUtilis {
         float y = p.getPosition().getY() - 2;
         float w = width + 7;
         float h = height + 4;
-        GL11.glVertex2f(x, y);
         GL11.glVertex2f(x + w, y);
         GL11.glVertex2f(x + w, y + h);
-        GL11.glVertex2f(x, y + h);
+
         GL11.glEnd();
     }
     void drawPanelBorder(PositionAPI p,boolean isResearched,float alphaMult,Color uiColor) {

@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.optio
 
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.TextFieldAPI;
 
 import java.util.ArrayList;
 
@@ -14,4 +15,6 @@ public interface OptionPanelInterface {
     public void reInit();
     public void advance(float amount);
     public void reset();
+    public TextFieldAPI getTextField();
+    public boolean canClose();
 }

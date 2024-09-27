@@ -3,11 +3,13 @@ package data.kaysaar.aotd.vok.ui;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
+import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchProject;
 import data.kaysaar.aotd.vok.scripts.research.models.SpecialProjectStage;
@@ -27,8 +29,8 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.*;
 
 public class AoTDResearchUI implements CustomUIPanelPlugin {
-    public static final float WIDTH = Global.getSettings().getScreenWidth() - 5;
-    public static final float HEIGHT = Global.getSettings().getScreenHeight() - 50;
+    public static  float WIDTH = Global.getSettings().getScreenWidth() - 5;
+    public static  float HEIGHT = Global.getSettings().getScreenHeight() - 50;
     PositionAPI pos;
     float oppacity = 0.0f;
     Color bgColor = new Color(6, 35, 40, 42);
@@ -44,15 +46,18 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
     public UIMODE mode = UIMODE.TECH_TREE;
     public String selected = null;
     public ArrayList<ButtonAPI> buttons = new ArrayList<>();
-
+    public static void recompute(){
+        spaceBetweenWidth = (Global.getSettings().getScreenWidth() - WIDTH) / 2;
+        spaceBetweenHeight = (Global.getSettings().getScreenHeight() - HEIGHT) / 2;
+    }
     boolean madeDecision = false;
     HorizontalTooltipMaker horizontalTooltipMaker = new HorizontalTooltipMaker();
     float scroller = 0f;
     float scrollerOfEventText = 0f;
     float scrolerOfOutcome = 0f;
 
-    private final float spaceBetweenWidth = (Global.getSettings().getScreenWidth() - WIDTH) / 2;
-    private final float spaceBetweenHeight = (Global.getSettings().getScreenHeight() - HEIGHT) / 2;
+    public   static float spaceBetweenWidth = (Global.getSettings().getScreenWidth() - WIDTH) / 2;
+    public static float spaceBetweenHeight = (Global.getSettings().getScreenHeight() - HEIGHT) / 2;
 
     private int stencilMask1 = 0x1;
     private int stencilMask2 = 0x2;
@@ -102,22 +107,23 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
     }
 
     public void createUIForSpecialProjects() {
-        techTreeButtonPanel = mainPanel.createCustomPanel(300, 102, null);
+        UILinesRenderer renderer  = new UILinesRenderer(0f);
+        techTreeButtonPanel = mainPanel.createCustomPanel(300, 102, renderer);
         techTreeButtonTooltip = techTreeButtonPanel.createUIElement(300, 102, false);
-
+        renderer.setPanel(techTreeButtonPanel);
         specialProjectListPanel = mainPanel.createCustomPanel(300, HEIGHT - 150, null);
-        specialProjectListTooltip = specialProjectListPanel.createUIElement(310, HEIGHT - 150, false);
-
+        specialProjectListTooltip = specialProjectListPanel.createUIElement(300, HEIGHT - 150, false);
+        renderer.setPanel(specialProjectListPanel);
         helpPanel = mainPanel.createCustomPanel(300, 51, null);
         helpTooltip = helpPanel.createUIElement(300, 51, false);
-
+        renderer.setPanel(helpPanel);
 
         techTreeButtonPanelUI = new TechTreeButtonPanel();
         techTreeButtonPanelUI.init(mainPanel, techTreeButtonPanel, techTreeButtonTooltip);
         techTreeButtonPanelUI.createUI();
         techTreeButtonPanelUI.placeTooltip(0, 0);
         techTreeButtonPanelUI.placeSubPanel(0, -2);
-
+        renderer.setPanel(techTreeButtonPanelUI.panel);
 
         projectListUI = new ResearchProjectListComponent();
         projectListUI.init(mainPanel, specialProjectListPanel, specialProjectListTooltip);
@@ -125,23 +131,23 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         projectListUI.createUI();
         projectListUI.placeTooltip(-5, 0);
         projectListUI.placeSubPanel(0, 100);
-
+        renderer.setPanel(projectListUI.panel);
         helpButtonPanelYU.init(mainPanel, helpPanel, helpTooltip);
         helpButtonPanelYU.createUI();
         helpButtonPanelYU.placeTooltip(0, 0);
         helpButtonPanelYU.placeSubPanel(0, HEIGHT - 50);
-
+        renderer.setPanel(helpButtonPanelYU.panel);
         if(currentlyFocused!=null){
 
             specialProjectTitlePanel =  mainPanel.createCustomPanel(WIDTH - 300, 51, null);
             specialProjectTitleTooltip =  specialProjectTitlePanel.createUIElement(WIDTH - 300, 51, false);
-
+            renderer.setPanel(specialProjectTitlePanel);
             specialProjectProgressionBarPanel =  mainPanel.createCustomPanel(WIDTH - 300, HEIGHT*0.54f, null);
-            specialProjectProgressionBarTooltip =  specialProjectProgressionBarPanel.createUIElement(WIDTH - 290, HEIGHT*0.54f, false);
-
+            specialProjectProgressionBarTooltip =  specialProjectProgressionBarPanel.createUIElement(WIDTH - 300, HEIGHT*0.54f, false);
+            renderer.setPanel(specialProjectProgressionBarPanel);
             specialProjectSectionOptionsPanel =  mainPanel.createCustomPanel(WIDTH - 300, HEIGHT-50-(HEIGHT*0.54f), null);
-            specialProjectSectionOptionsTooltip =  specialProjectSectionOptionsPanel.createUIElement(WIDTH -290, 30, false);
-
+            specialProjectSectionOptionsTooltip =  specialProjectSectionOptionsPanel.createUIElement(WIDTH -300, 30, false);
+            renderer.setPanel(specialProjectSectionOptionsPanel);
 
             projectTitleUI = new ProjectTitleComponent();
             projectTitleUI.init(mainPanel, specialProjectTitlePanel, specialProjectTitleTooltip);
@@ -149,7 +155,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             projectTitleUI.createUI();
             projectTitleUI.placeTooltip(-5, 0);
             projectTitleUI.placeSubPanel(specialProjectListPanel.getPosition().getX() + specialProjectListPanel.getPosition().getWidth() + 10, -2);
-
+            renderer.setPanel(projectTitleUI.panel);
             projectBarUI = new SpecialProjectBarComponent();
             projectBarUI.setWidthOfBar(WIDTH - 300);
             projectBarUI.setHeightOfUI(HEIGHT*0.54f);
@@ -158,7 +164,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             projectBarUI.createUI();
             projectBarUI.placeTooltip(-5, 0);
             projectBarUI.placeSubPanel(specialProjectListPanel.getPosition().getX() + specialProjectListPanel.getPosition().getWidth() + 10, specialProjectTitlePanel.getPosition().getHeight()-1);
-
+            renderer.setPanel(projectBarUI.panel);
             projectStageOptions = new StageEventComponent();
             projectStageOptions.init(mainPanel, specialProjectSectionOptionsPanel, specialProjectSectionOptionsTooltip);
             projectStageOptions.setWidth(WIDTH - 300);
@@ -167,30 +173,32 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             projectStageOptions.createUI();
             projectStageOptions.placeTooltip(-5, 0);
             projectStageOptions.placeSubPanel(specialProjectListPanel.getPosition().getX() + specialProjectListPanel.getPosition().getWidth() + 10, specialProjectProgressionBarPanel.getPosition().getHeight()+51);
+            renderer.setPanel(projectStageOptions.panel);
         }
 
 
 
 
 
-        panel.addComponent(mainPanel).inTL(2, 0);
+        panel.addComponent(mainPanel).inTL(2, 5);
     }
 
     public void createUIForTechInfo() {
 
         techTreeCoreUI.currentModToShow = currentModToShow;
-        researchCenterPanel = mainPanel.createCustomPanel(300, HEIGHT - 150, null);
-        researchCenterTooltip = researchCenterPanel.createUIElement(310, HEIGHT - 150, false);
-
-        helpPanel = mainPanel.createCustomPanel(300, 51, null);
-        helpTooltip = helpPanel.createUIElement(300, 51, false);
+        UILinesRenderer renderer = new UILinesRenderer(0f);
+        researchCenterPanel = mainPanel.createCustomPanel(300, HEIGHT - 150, renderer);
+        researchCenterTooltip = researchCenterPanel.createUIElement(300, HEIGHT - 150, false);
+        renderer.setPanel(researchCenterPanel);
+        helpPanel = mainPanel.createCustomPanel(300, 50, null);
+        helpTooltip = helpPanel.createUIElement(300, 50, false);
 
         techTreePanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT - 20, new handlerOfScrollbar(horizontalTooltipMaker));
         horizontalTooltipMaker.init(techTreePanel, WIDTH - 300, HEIGHT - 20, true, techTreeCoreUI.calculateWidthAndHeight().one, techTreeCoreUI.calculateWidthAndHeight().two);
         techTreeTooltip = horizontalTooltipMaker.getMainTooltip();
-
         buttonPanel = mainPanel.createCustomPanel(300, 102, null);
         buttonPanelTooltip = buttonPanel.createUIElement(300, 102, false);
+        renderer.setPanel(buttonPanel);
         researchCenterPanelUI = new ResearchCenterPanel();
         helpButtonPanelYU = new HelpPanel();
         buttonPanelUI = new SpecialProjectButtonPanel();
@@ -198,14 +206,14 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         researchCenterPanelUI.init(mainPanel, researchCenterPanel, researchCenterTooltip);
         researchCenterPanelUI.setHeight(HEIGHT - 150);
         researchCenterPanelUI.createUI();
-        researchCenterPanelUI.placeTooltip(-5, 0);
+        researchCenterPanelUI.placeTooltip(0, 0);
         researchCenterPanelUI.placeSubPanel(0, 100);
-
+        renderer.setPanel(researchCenterPanelUI.panel);
         helpButtonPanelYU.init(mainPanel, helpPanel, helpTooltip);
         helpButtonPanelYU.createUI();
         helpButtonPanelYU.placeTooltip(0, 0);
         helpButtonPanelYU.placeSubPanel(0, HEIGHT - 50);
-
+        renderer.setPanel(helpButtonPanelYU.panel);
         buttonPanelUI.init(mainPanel, buttonPanel, buttonPanelTooltip);
         buttonPanelUI.createUI();
         buttonPanelUI.placeTooltip(0, 0);
@@ -215,7 +223,6 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         techTreeCoreUI.init(mainPanel, techTreePanel, techTreeTooltip);
 
         techTreeCoreUI.createUI(researchCenterPanel.getPosition().getX() + researchCenterPanel.getPosition().getWidth() + 10, -2);
-
         horizontalTooltipMaker.getHorizontalScrollbar().setPosition(techTreePanel.getPosition().getX()  + spaceBetweenWidth, techTreePanel.getPosition().getY() + spaceBetweenHeight - 15);
         horizontalTooltipMaker.getHorizontalScrollbar().setScrollbarDimensions(30, 10);
 
@@ -319,6 +326,8 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             }
 
         }
+
+
     }
 
 
@@ -332,8 +341,6 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         Color color = Misc.getDarkPlayerColor();
         Color colorResearched = color.brighter().brighter();
         GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alphaMult);
-        openGlUtilis.drawMainPanelBorder(panel, WIDTH, HEIGHT);
-        openGlUtilis.drawMainPanelBorderSecondLayer(panel, WIDTH, HEIGHT);
         if (mode.equals(UIMODE.TECH_TREE)) {
             if (techTreeCoreUI != null && techTreePanel != null && !techTreeCoreUI.Eras.isEmpty()) {
                 glClear(GL_STENCIL_BUFFER_BIT);
@@ -392,26 +399,24 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
 
                 }
 
+                SpriteAPI sprite = Global.getSettings().getSprite("ui","panel01_right");
+                if (sprite != null) {
+                    sprite.setColor(new Color(119,182,181));
+                    sprite.setAlphaMult(1f);
 
+                    if(mainPanel!=null){
+                        sprite.setSize(sprite.getWidth(),12000);
+                        sprite.render(Global.getSettings().getScreenWidth()-sprite.getWidth(),-4900);
+                    }
+
+                }
                 glDisable(GL_STENCIL_TEST);
             }
             glDisable(GL_STENCIL_TEST);
             GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alphaMult);
 
-            if (helpPanel != null) openGlUtilis.drawPanelBorder(helpPanel);
-            if (techTreePanel != null) openGlUtilis.drawPanelBorder(techTreePanel);
-            if (helpPanel != null) openGlUtilis.drawPanelBorder(buttonPanel);
-            if (researchCenterPanel != null&&researchCenterPanelUI!=null) {
-
-                openGlUtilis.drawPanelBorder(researchCenterPanel);
-                openGlUtilis.drawPanelBorder(researchCenterPanelUI.getCoverPanel());
-                openGlUtilis.drawPanelBorder(researchCenterPanelUI.getImagePanel());
-                openGlUtilis.drawPanelBorder(researchCenterPanelUI.getBonusPanel());
-                openGlUtilis.drawPanelBorder(researchCenterPanelUI.getModPanel());
-            }
-
             if (horizontalTooltipMaker != null && horizontalTooltipMaker.getHorizontalScrollbar() != null&&horizontalTooltipMaker.mainPanel!=null) {
-                horizontalTooltipMaker.getHorizontalScrollbar().displayScrollbar(Misc.getDarkPlayerColor(), alphaMult);
+                horizontalTooltipMaker.getHorizontalScrollbar().displayScrollbar(Misc.getBrightPlayerColor(), 1f);
             }
 //            if (techTreeCoreUI != null && techTreePanel != null && !techTreeCoreUI.Eras.isEmpty()) {
 //                glEnable(GL_STENCIL_TEST);
@@ -488,17 +493,6 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
 
 
         } else {
-            if (techTreeButtonPanel != null) openGlUtilis.drawPanelBorder(techTreeButtonPanel);
-            if (projectListUI != null) {
-
-                openGlUtilis.drawPanelBorder(specialProjectListPanel);
-                openGlUtilis.drawPanelBorder(projectListUI.getCoverPanel());
-                openGlUtilis.drawPanelBorder(projectListUI.getImagePanel());
-                openGlUtilis.drawPanelBorder(projectListUI.getBonusPanel());
-                openGlUtilis.drawPanelBorder(projectListUI.getSpecialProjectsPanel());
-            }
-            if (helpPanel != null) openGlUtilis.drawPanelBorder(helpPanel);
-            if(specialProjectTitlePanel!=null)openGlUtilis.drawPanelBorder(specialProjectTitlePanel);
             if(specialProjectProgressionBarPanel!=null){
                 openGlUtilis.drawPanelBorder(specialProjectProgressionBarPanel);
                 openGlUtilis.drawPanelBorder(projectBarUI.getBar());
@@ -509,11 +503,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                 }
 
             }
-            if(specialProjectSectionOptionsPanel!=null){
-                openGlUtilis.drawPanelBorder(specialProjectSectionOptionsPanel);
-                if(projectStageOptions.getOptionsPanel()!=null)     openGlUtilis.drawPanelBorder(projectStageOptions.getOptionsPanel());
-                if(projectStageOptions.getDescriptionPanel()!=null)     openGlUtilis.drawPanelBorder(projectStageOptions.getDescriptionPanel());
-            }
+
 
         }
 
@@ -696,11 +686,8 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
     @Override
     public void processInput(List<InputEventAPI> events) {
         for (InputEventAPI event : events) {
-            if (event.isKeyDownEvent() && event.getEventValue() == Keyboard.KEY_ESCAPE) {
-                event.consume();
+            if (!event.isConsumed()&&event.isKeyDownEvent() && event.getEventValue() == Keyboard.KEY_ESCAPE) {
                 panel.removeComponent(mainPanel);
-                callbacks.dismissDialog();
-                dialog.dismiss();
                 if(researchCenterPanelUI!=null){
                     researchCenterPanelUI.buttons.clear();
                     researchCenterPanelUI=null;
@@ -746,6 +733,30 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
 
     }
 
+    public void clearUI() {
+        if(researchCenterPanelUI!=null){
+            researchCenterPanelUI.buttons.clear();
+            researchCenterPanelUI=null;
+        }
+        if(techTreeCoreUI!=null){
+            if(techTreeCoreUI.Eras!=null||techTreeCoreUI.Eras.isEmpty()){
+                for (TechTreeEraSection era : techTreeCoreUI.Eras) {
+                    for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
+                        researchOptionPanel.setTechToResearch(null);
+                    }
+                    era.researchOptionPanels.clear();
+                    era.sortedResearchOptions.clear();
+                }
+            }
+        }
+        if(projectListUI!=null){
+            projectListUI.buttons.clear();
+        }
+        if(projectStageOptions!=null){
+            projectStageOptions.buttons.clear();
+        }
+    }
+
     @Override
     public void buttonPressed(Object buttonId) {
 
@@ -762,6 +773,10 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         reset(false, false, null);
 
 
+    }
+
+    public CustomPanelAPI getPanel() {
+        return panel;
     }
 
     public void setEvent() {
@@ -787,7 +802,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                     buttons.clear();
                     mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, null);
                     createUIForTechInfo();
-                    dialog.setOpacity(1.0f);
+//                    dialog.setOpacity(1.0f);
                 } else if (mainPanel != null && resetForInfo) {
                     prevOffset = 0;
                     Xoffset = 0;
@@ -839,7 +854,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                 mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, null);
                 mode = UIMODE.SPECIAL_PROJECTS;
                 createUIForSpecialProjects();
-                dialog.setOpacity(1.0f);
+//                dialog.setOpacity(1.0f);
 
             }
         }
@@ -859,7 +874,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
                 mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, null);
                 mode = UIMODE.SPECIAL_PROJECTS;
                 createUIForSpecialProjects();
-                dialog.setOpacity(1.0f);
+//                dialog.setOpacity(1.0f);
             } else {
                 mode = UIMODE.TECH_TREE;
                 panel.removeComponent(mainPanel);
@@ -870,9 +885,14 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
             }
         }
         if (mainPanel == null) {
-            mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, null);
+            UILinesRenderer renderer = new UILinesRenderer(10f);
+            mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, renderer);
             createUIForTechInfo();
-            dialog.setOpacity(1.0f);
+            renderer.setPanel(mainPanel);
+            if(dialog!=null){
+                dialog.setOpacity(1.0f);
+            }
+
         }
 
 
@@ -887,12 +907,14 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         mainPanel.removeComponent(researchCenterPanelUI.getImagePanel());
         mainPanel.removeComponent(researchCenterPanel);
         researchCenterPanelUI.buttons.clear();
-        researchCenterPanel = mainPanel.createCustomPanel(300, HEIGHT - 150, null);
-        researchCenterTooltip = researchCenterPanel.createUIElement(310, HEIGHT - 150, false);
+        UILinesRenderer renderer = new UILinesRenderer(0f);
+        researchCenterPanel = mainPanel.createCustomPanel(300, HEIGHT - 150, renderer);
+        researchCenterTooltip = researchCenterPanel.createUIElement(300, HEIGHT - 150, false);
         researchCenterPanelUI.init(mainPanel, researchCenterPanel, researchCenterTooltip);
         researchCenterPanelUI.setHeight(HEIGHT - 150);
         researchCenterPanelUI.createUI();
-        researchCenterPanelUI.placeTooltip(-5, 0);
+        renderer.setPanel(researchCenterPanel);
+        researchCenterPanelUI.placeTooltip(0, 0);
         researchCenterPanelUI.placeSubPanel(0, 100);
     }
 

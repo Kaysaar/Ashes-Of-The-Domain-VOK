@@ -26,6 +26,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.shipinfo.ShipInfoGenerator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
+import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lwjgl.input.Keyboard;
 
@@ -36,7 +37,7 @@ import java.util.List;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
-public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
+public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIManager {
     PositionAPI p;
     InteractionDialogAPI dialog;
     CustomVisualDialogDelegate.DialogCallbacks callbacks;
@@ -115,7 +116,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         copyFromOriginal();
         maxItemsPerPage = AoTDSettingsManager.getIntValue("aotd_shipyard_pag_per_page");
         maxItemsPerPageWEP = maxItemsPerPage;
-        Global.getSoundPlayer().playCustomMusic(1, 1, "aotd_shipyard", true);
         float padding = 20f;
         shipPanelManager = new ShipOptionPanelInterface(this.panel, padding);
         weaponPanelManager = new WeaponOptionPanelInterface(this.panel, padding);
@@ -821,13 +821,15 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
                 pressedCtrl = true;
             }
             if (event.getEventValue() == Keyboard.KEY_ESCAPE && !event.isRMBEvent()) {
+                if(!currentManager.canClose()){
+                    continue;
+                }
                 clearUI();
                 isShowingUI = false;
                 if(dialog!=null){
                     dialog.dismiss();
                 }
-                Object core = ProductionUtil.getCoreUI();
-                ReflectionUtilis.invokeMethod("closeCurrent",core);
+
 
 
             }
@@ -857,11 +859,17 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
         panel.removeComponent(tooltipMakerAPI);
         clearAll();
         clearSpecProjBar();
-        Global.getSoundPlayer().pauseCustomMusic();
-        Global.getSoundPlayer().restartCurrentMusic();
+
         if(mainPanel!=null){
             mainPanel.removeComponent(panel);
         }
+
+        Object core = ProductionUtil.getCoreUI();
+        if(core!=null){
+            pauseSound();
+            ReflectionUtilis.invokeMethod("dismiss",core,1);
+        }
+
     }
 
     public GPOrder getOrderFromDummy(String id) {
@@ -876,5 +884,17 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin {
     @Override
     public void buttonPressed(Object buttonId) {
 
+    }
+
+    @Override
+    public void playSound() {
+        Global.getSoundPlayer().playCustomMusic(1, 1, "aotd_shipyard", true);
+
+    }
+
+    @Override
+    public void pauseSound() {
+        Global.getSoundPlayer().pauseCustomMusic();
+        Global.getSoundPlayer().restartCurrentMusic();
     }
 }

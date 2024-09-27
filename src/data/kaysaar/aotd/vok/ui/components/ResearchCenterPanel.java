@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.*;
 
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
@@ -44,7 +45,7 @@ public class ResearchCenterPanel extends UiPanel {
         bonusPanel = panel.createCustomPanel(300,100,null);
         modPanel = panel.createCustomPanel(300,130,null);
         queuePanel = panel.createCustomPanel(300,height-217-140,null);
-        TooltipMakerAPI tooltipQueue = queuePanel.createUIElement(300,height-217-140,true);
+        TooltipMakerAPI tooltipQueue = queuePanel.createUIElement(300,height-217-200,true);
         TooltipMakerAPI modPanelTooltip = modPanel.createUIElement(300,100,true);
         currentScientist = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().currentHeadOfCouncil;
         TooltipMakerAPI imageAnchor = imagePanel.createUIElement(128,128,false);
@@ -54,7 +55,7 @@ public class ResearchCenterPanel extends UiPanel {
 
         imagePanel.addUIElement(imageAnchor).inTL(-10,0);
         descriptionPanel = coverPanel.createCustomPanel(175,128,null);
-        TooltipMakerAPI tooltipMakerAPI = descriptionPanel.createUIElement(185,123,true);
+        TooltipMakerAPI tooltipMakerAPI = descriptionPanel.createUIElement(180,123,true);
         tooltipMakerAPI.addSectionHeading("Head of Research Council",Alignment.MID,10f);
         if(currentScientist!=null){
             tooltipMakerAPI.addPara(AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().currentHeadOfCouncil.getScientistPerson().getName().getFullName(), Misc.getTooltipTitleAndLightHighlightColor(),8f);
@@ -63,7 +64,7 @@ public class ResearchCenterPanel extends UiPanel {
         descriptionPanel.addUIElement(tooltipMakerAPI).inTL(-5,-5);
         coverPanel.addComponent(imagePanel).inTL(0,0);
         coverPanel.addComponent(descriptionPanel).inTL(125,5);
-        TooltipMakerAPI tooltipOfBonuses= bonusPanel.createUIElement(306,50,false);
+        TooltipMakerAPI tooltipOfBonuses= bonusPanel.createUIElement(295,50,false);
         tooltipOfBonuses.addSectionHeading("Current Bonuses:",Alignment.MID,10f);
         float amountOfFacilities = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getAmountOfResearchFacilities();
         float bonus = AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*100f;
@@ -86,7 +87,7 @@ public class ResearchCenterPanel extends UiPanel {
         for (String s : AoTDMainResearchManager.getInstance().getModIDsRepo()) {
            buttons.add(modPanelTooltip.addButton(Global.getSettings().getModManager().getModSpec(s).getName(),s,290,50,10f));
         }
-        modPanel.addUIElement(modPanelTooltip).inTL(0,0);
+        modPanel.addUIElement(modPanelTooltip).inTL(-5,0);
         tooltip.addCustom(modPanel,1f);
         tooltip.addSectionHeading("Queue",Alignment.MID,0f);
         tooltipQueue.addSpacer(10f);

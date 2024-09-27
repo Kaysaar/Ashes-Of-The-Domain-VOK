@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin.maxItemsPerPage;
 
-public class ShipOptionPanelInterface extends BaseOptionPanelManager implements OptionPanelInterface {
+public class ShipOptionPanelInterface extends BaseOptionPanelManager {
 
 
     public ShipOptionPanelInterface(CustomPanelAPI panel,float padding) {

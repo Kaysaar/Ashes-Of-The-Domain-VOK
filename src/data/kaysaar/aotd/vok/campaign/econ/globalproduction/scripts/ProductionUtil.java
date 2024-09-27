@@ -26,9 +26,16 @@ public class ProductionUtil {
         return core == null ? null : (UIPanelAPI) core;
     }
 
+    public static UIPanelAPI getCurrentTab() {
+        UIPanelAPI coreUltimate = getCoreUI();
+        UIPanelAPI core = (UIPanelAPI) ReflectionUtilis.invokeMethod("getCurrentTab",coreUltimate);
+        return core == null ? null : (UIPanelAPI) core;
+    }
+
     public static Object getField(Object o, String fieldName) {
         return getFieldExplicitClass(o.getClass(), o, fieldName);
     }
+
 
     public static Object getFieldExplicitClass(Class<?> cls, Object o, String fieldName) {
         if (o == null) return null;
