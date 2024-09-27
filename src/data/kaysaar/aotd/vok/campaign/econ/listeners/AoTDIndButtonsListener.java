@@ -75,28 +75,6 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
            }
        }
 
-        if(ind.getId().equals(AoTDIndustries.RESEARCH_CENTER)){
-            if(Global.getSettings().getModManager().isModEnabled("aotd_qol")){
-                if(QoLMisc.isCommissionedBy(ind.getMarket().getFactionId())||ind.getMarket().getFaction().isPlayerFaction()){
-                    List<IndustryOptionData> result = new ArrayList<>();
-                    IndustryOptionData opt;
-                    opt = new IndustryOptionData("Research Center", RESEARCH_CENTER, ind, this);
-                    opt.color = new Color(0, 217, 246, 255);
-                    data.add(opt);
-                }
-
-            }
-            else{
-                if(ind.getMarket().getFaction().isPlayerFaction()){
-                    List<IndustryOptionData> result = new ArrayList<>();
-                    IndustryOptionData opt;
-                    opt = new IndustryOptionData("Research Center", RESEARCH_CENTER, ind, this);
-                    opt.color = new Color(0, 217, 246, 255);
-                    data.add(opt);
-                }
-            }
-
-        }
        if(data.isEmpty()){
            return null;
        }

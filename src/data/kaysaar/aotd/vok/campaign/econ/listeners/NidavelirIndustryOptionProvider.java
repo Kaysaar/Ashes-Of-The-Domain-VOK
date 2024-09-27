@@ -26,18 +26,7 @@ public class NidavelirIndustryOptionProvider implements IndustryOptionProvider {
     public static Object NIDAVELIR = new Object();
     @Override
     public List<IndustryOptionData> getIndustryOptions(Industry ind) {
-        if(GPManager.isEnabled){
-            ArrayList<IndustryOptionData>data  = new ArrayList<>();
-            if(ind instanceof HeavyIndustry){
-                IndustryOptionData daten = new IndustryOptionData("Access Shipyard",NIDAVELIR,ind,this);
-                daten.color = new Color(220, 212, 127,255);
-                data.add(daten);
-            }
-
-            return data;
-        }
-        return new ArrayList<>();
-
+      return null;
     }
 
     @Override
