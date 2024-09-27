@@ -7,7 +7,7 @@ import java.lang.invoke.MethodType
 import java.lang.reflect.Method
 
 class ReflectionUtilis {
-
+        //Code taken and modified from Grand Colonies
     companion object{
         private val fieldClass = Class.forName("java.lang.reflect.Field", false, Class::class.java.classLoader)
         private val setFieldHandle = MethodHandles.lookup().findVirtual(fieldClass, "set", MethodType.methodType(Void.TYPE, Any::class.java, Any::class.java))
