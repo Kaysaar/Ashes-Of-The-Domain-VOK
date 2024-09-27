@@ -244,8 +244,6 @@ private HashMap<ButtonAPI,Object>getPanelMap(UIComponentAPI mainParent){
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
                 tooltip.addPara("This is where your faction can conduct all research projects!", Misc.getTooltipTitleAndLightHighlightColor(),5f);
-                tooltip.addPara("This UI will be accessible from here in next major Vaults of Knowledge patch!", Color.ORANGE,5f);
-
             }
         }).two;
         ButtonAPI button2= tryToGetButtonProd("colonies");
