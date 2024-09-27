@@ -26,6 +26,6 @@ public class CoreUiInterceptor implements CoreUITabListener {
         if(param instanceof MarketAPI){
             CoreUITracker.setMemFlag("colonies");
         }
-
+        CoreUITracker.sendSignalToOpenCore = true;
     }
 }
