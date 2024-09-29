@@ -65,6 +65,14 @@ class ReflectionUtilis {
                     return getMethod.invoke(obj, instanceToGetFrom)
                 }
             }
+            val instancesOfFields2: Array<out Any> = instanceToGetFrom.javaClass.fields
+            for (obj in instancesOfFields2) {
+                setAcessMethod.invoke(obj, true)
+                val name = getNameMethod.invoke(obj)
+                if (name.toString() == fieldName) {
+                    return getMethod.invoke(obj, instanceToGetFrom)
+                }
+            }
             return null
         }        @JvmStatic
         fun getPrivateVariableFromSuperClass(fieldName: String, instanceToGetFrom: Any): Any? {
@@ -159,7 +167,7 @@ class ReflectionUtilis {
         }
         @JvmStatic
         fun getMethodFromSuperclass(methodName: String, instance: Any): Pair<Any?, List<Class<*>>>? {
-            var currentClass: Class<*>? = instance.javaClass.superclass
+            var currentClass: Class<*>? = instance.javaClass
             while (currentClass != null) {
                 val methods = currentClass.declaredMethods
                 for (method in methods) {

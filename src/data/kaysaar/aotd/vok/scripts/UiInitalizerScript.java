@@ -22,13 +22,13 @@ public class UiInitalizerScript implements CampaignInputListener {
         if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities()==0){
             return;
         }
-        for (InputEventAPI event : events) {
-            if (event.isConsumed()) continue;
-            if (event.isCtrlDown() && event.getEventValue() == Keyboard.KEY_T) {
-                event.consume();
-                Global.getSector().getCampaignUI().showInteractionDialog(new AoTDResearchUIDP(), null);
-            }
-        }
+//        for (InputEventAPI event : events) {
+//            if (event.isConsumed()) continue;
+//            if (event.isCtrlDown() && event.getEventValue() == Keyboard.KEY_T) {
+//                event.consume();
+//                Global.getSector().getCampaignUI().showInteractionDialog(new AoTDResearchUIDP(), null);
+//            }
+//        }
     }
 
     @Override

@@ -14,8 +14,8 @@ import java.util.List;
 
 public class UILinesRenderer implements CustomUIPanelPlugin {
     ArrayList<CustomPanelAPI> panels = new ArrayList<>();
-    SpriteAPI box = Global.getSettings().getSprite("rendering","GlitchSquare");
-    Color boxColor = Misc.getDarkPlayerColor();
+    public SpriteAPI box = Global.getSettings().getSprite("rendering","GlitchSquare");
+     public Color boxColor = Misc.getDarkPlayerColor();
     Color progression = Misc.getBrightPlayerColor();
     public void setPanels(ArrayList<CustomPanelAPI> panels) {
         this.panels = panels;
