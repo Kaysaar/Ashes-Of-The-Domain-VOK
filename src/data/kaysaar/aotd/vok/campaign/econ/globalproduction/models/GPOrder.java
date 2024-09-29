@@ -49,15 +49,7 @@ public class GPOrder implements Cloneable{
     HashMap<String, Integer>resourcesGet = new HashMap<>();
     public boolean canProceed() {
         boolean haveHeavy = false;
-        for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
-            for (Industry industry : playerMarket.getIndustries()) {
-                if(industry instanceof HeavyIndustry){
-                    haveHeavy = true;
-                    break;
-                }
-            }
-        }
-        if(!haveHeavy)return false;
+
         if(!isCountingToContribution()||isAboutToBeRemoved())return false;
         // Check if the obtained resources meet or exceed the required resources
         for (Map.Entry<String, Integer> entry : assignedResources.entrySet()) {

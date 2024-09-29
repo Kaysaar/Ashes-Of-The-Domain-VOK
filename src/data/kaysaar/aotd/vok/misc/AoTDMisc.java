@@ -101,7 +101,7 @@ public class AoTDMisc {
     public static  ButtonAPI tryToGetButtonProd(String name) {
         ButtonAPI button = null;
         try {
-            for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy((UIPanelAPI) ReflectionUtilis.invokeMethod("getCurrentTab", ProductionUtil.getCoreUI()))) {
+            for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy((UIPanelAPI) ProductionUtil.getCurrentTab())) {
                 if(componentAPI instanceof  ButtonAPI){
                     if(((ButtonAPI) componentAPI).getText().toLowerCase().contains(name)){
                         button = (ButtonAPI) componentAPI;

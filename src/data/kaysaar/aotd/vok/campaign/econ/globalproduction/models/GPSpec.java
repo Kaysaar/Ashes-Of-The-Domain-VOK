@@ -446,7 +446,7 @@ public class GPSpec {
     public static ArrayList<GPSpec> loadSpecialProjects() {
         ArrayList<GPSpec> specs = new ArrayList<>();
         try {
-            JSONArray csvFile = Global.getSettings().loadCSV("data/campaign/aotd_production_projects.csv");
+            JSONArray csvFile = Global.getSettings().getMergedSpreadsheetDataForMod("id","data/campaign/aotd_production_projects.csv","aotd_vok");
             for (int i = 0; i < csvFile.length(); i++) {
                 JSONObject entry = csvFile.getJSONObject(i);
 
