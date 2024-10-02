@@ -148,6 +148,12 @@ public class CoreUITracker implements EveryFrameScript {
             for (ButtonAPI buttonAPI : panelMap.keySet()) {
                 if(buttonAPI.getText().toLowerCase().contains(getMemFlag())){
                     currentTab = buttonAPI;
+                    if(currentTab.getText().toLowerCase().contains("custom production")){
+                        plugin.playSound();
+                    }
+                    if(currentTab.getText().toLowerCase().contains("research")){
+                        pluginResearch.playSound();
+                    }
                 }
             }
         }
@@ -212,21 +218,23 @@ private void handleButtons(){
         if(buttonAPI.isChecked()){
             buttonAPI.setChecked(false);
             if(!currentTab.equals(buttonAPI)){
+                if(currentTab.getText().toLowerCase().contains("research")||currentTab.getText().toLowerCase().contains("custom production")){
+                    plugin.pauseSound();
+                }
                 ProductionUtil.getCurrentTab().removeComponent((UIComponentAPI) panelMap.get(currentTab));
+
                 currentTab = buttonAPI;
                 setMemFlag(currentTab.getText().toLowerCase());
-                if(plugin!=null){
-                    if(currentTab.getText().toLowerCase().contains("custom production")&& pausedMusic){
-                        plugin.playSound();
-                        pausedMusic = false;
-                    }
-                    else if (!pausedMusic){
-                        plugin.pauseSound();
-                        pausedMusic = true;
-                    }
+
+                if(currentTab.getText().toLowerCase().contains("custom production")){
+                    plugin.playSound();
+                }
+                if(currentTab.getText().toLowerCase().contains("research")){
+                    pluginResearch.playSound();
                 }
 
             }
+
 
 
         }

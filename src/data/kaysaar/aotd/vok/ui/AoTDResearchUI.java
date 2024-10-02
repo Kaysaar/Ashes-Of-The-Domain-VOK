@@ -10,6 +10,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
+import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchProject;
 import data.kaysaar.aotd.vok.scripts.research.models.SpecialProjectStage;
@@ -28,7 +29,7 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class AoTDResearchUI implements CustomUIPanelPlugin {
+public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
     public static  float WIDTH = Global.getSettings().getScreenWidth() - 5;
     public static  float HEIGHT = Global.getSettings().getScreenHeight() - 50;
     PositionAPI pos;
@@ -755,6 +756,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         if(projectStageOptions!=null){
             projectStageOptions.buttons.clear();
         }
+        pauseSound();
     }
 
     @Override
@@ -918,7 +920,20 @@ public class AoTDResearchUI implements CustomUIPanelPlugin {
         researchCenterPanelUI.placeSubPanel(0, 100);
     }
 
-    public static class  handlerOfScrollbar implements CustomUIPanelPlugin {
+    @Override
+    public void playSound() {
+        Global.getSoundPlayer().playCustomMusic(1, 1, "aotd_research", true);
+
+    }
+
+    @Override
+    public void pauseSound() {
+        Global.getSoundPlayer().pauseCustomMusic();
+        Global.getSoundPlayer().restartCurrentMusic();
+    }
+
+
+        public static class  handlerOfScrollbar implements CustomUIPanelPlugin {
         HorizontalTooltipMaker tooltipMaker;
         public handlerOfScrollbar(HorizontalTooltipMaker scrollbar){
             this.tooltipMaker = scrollbar;
