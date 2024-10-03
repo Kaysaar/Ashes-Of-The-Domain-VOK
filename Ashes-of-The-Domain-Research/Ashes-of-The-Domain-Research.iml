@@ -14,5 +14,6 @@
     <orderEntry type="library" name="lw_Console" level="project" />
     <orderEntry type="library" name="starfarer.api" level="project" />
     <orderEntry type="library" name="Qol" level="project" />
+    <orderEntry type="library" name="Goc" level="project" />
   </component>
 </module>
