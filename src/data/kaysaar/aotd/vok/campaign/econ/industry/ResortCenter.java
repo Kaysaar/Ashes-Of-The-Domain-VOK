@@ -113,7 +113,7 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
 
     }
     public boolean isAvailableToBuild() {
-        if(market.hasCondition(CONDITION_MILD)&&market.hasCondition(CONDITION_HABITABLE)&&market.hasSpaceport()&&!market.hasCondition("pollution")&& market.hasCondition("habitable")){
+        if(market.hasCondition(CONDITION_MILD)&&market.hasCondition(CONDITION_HABITABLE)&&market.hasSpaceport()&&!market.hasCondition("pollution")){
             return true;
         }
         return false;

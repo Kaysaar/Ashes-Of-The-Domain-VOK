@@ -1,10 +1,7 @@
 package data.kaysaar.aotd.vok.misc;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CargoAPI;
-import com.fs.starfarer.api.campaign.EngagementResultForFleetAPI;
-import com.fs.starfarer.api.campaign.FactionAPI;
-import com.fs.starfarer.api.campaign.SpecialItemData;
+import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
@@ -138,11 +135,24 @@ public class AoTDMisc {
             if (Global.getSettings().getCommoditySpec(id) != null) {
                 if (subMarket != null) {
                     numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);
+                    continue;
                 }
             }
             if (Global.getSettings().getSpecialItemSpec(id) != null) {
                 if (subMarket != null) {
                     numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id, null));
+                    continue;
+                }
+            }
+            if (Global.getSettings().getHullSpec(id) != null) {
+                if (subMarket != null) {
+                    int sameHull = 0;
+                    for (FleetMemberAPI o : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
+                        if(o.getHullSpec().getHullId().equals(id)){
+                            sameHull++;
+                        }
+                    }
+                    numberRemaining+=sameHull;
                 }
             }
 
@@ -177,6 +187,26 @@ public class AoTDMisc {
                     numberRemaining -= onMarket;
 
                 }
+                try {
+                    if (Global.getSettings().getHullSpec(entry.getKey()) != null) {
+                        ArrayList<FleetMemberAPI>toRemove = new ArrayList<>();
+                        for (FleetMemberAPI fleetMemberAPI : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
+                            if(fleetMemberAPI.getHullSpec().getHullId().equals(entry.getKey())){
+                                toRemove.add(fleetMemberAPI);
+                            }
+                        }
+                        for (FleetMemberAPI fleetMemberAPI : toRemove) {
+                            subMarket.getCargo().getMothballedShips().removeFleetMember(fleetMemberAPI);
+                            numberRemaining--;
+                            if(numberRemaining==0)break;
+                        }
+
+                    }
+                }
+                catch (Exception e){
+
+                }
+
             }
             if (numberRemaining <= 0) {
                 break;

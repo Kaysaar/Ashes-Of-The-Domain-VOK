@@ -756,7 +756,6 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         if(projectStageOptions!=null){
             projectStageOptions.buttons.clear();
         }
-        pauseSound();
     }
 
     @Override

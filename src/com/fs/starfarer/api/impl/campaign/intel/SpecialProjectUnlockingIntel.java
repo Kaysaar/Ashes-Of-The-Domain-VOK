@@ -1,6 +1,7 @@
 package com.fs.starfarer.api.impl.campaign.intel;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
@@ -9,6 +10,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProj
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelDP;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelDPSpecialProj;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SpecialProjectButtonData;
+import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 
 import java.awt.*;
 
@@ -70,7 +72,8 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if(buttonId==Button_SHIP){
-            ui.showDialog(null,new NidavelirMainPanelDPSpecialProj());
+            CoreUITracker.setMemFlag("custom production");
+            Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }
 
     }

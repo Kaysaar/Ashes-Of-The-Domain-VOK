@@ -65,6 +65,10 @@ public class CoreUITracker implements EveryFrameScript {
             currentTab = null;
             if(plugin!=null){
                 plugin.clearUI(!sendSignalToOpenCore);
+                if(!pausedMusic){
+                    plugin.pauseSound();
+                    pausedMusic = true;
+                }
                 plugin=null;
             }
 
@@ -150,9 +154,11 @@ public class CoreUITracker implements EveryFrameScript {
                     currentTab = buttonAPI;
                     if(currentTab.getText().toLowerCase().contains("custom production")){
                         plugin.playSound();
+                        pausedMusic = false;
                     }
                     if(currentTab.getText().toLowerCase().contains("research")){
                         pluginResearch.playSound();
+                        pausedMusic = false;
                     }
                 }
             }
@@ -220,6 +226,7 @@ private void handleButtons(){
             if(!currentTab.equals(buttonAPI)){
                 if(currentTab.getText().toLowerCase().contains("research")||currentTab.getText().toLowerCase().contains("custom production")){
                     plugin.pauseSound();
+                    pausedMusic = true;
                 }
                 ProductionUtil.getCurrentTab().removeComponent((UIComponentAPI) panelMap.get(currentTab));
 
@@ -228,9 +235,11 @@ private void handleButtons(){
 
                 if(currentTab.getText().toLowerCase().contains("custom production")){
                     plugin.playSound();
+                    pausedMusic = false;
                 }
                 if(currentTab.getText().toLowerCase().contains("research")){
                     pluginResearch.playSound();
+                    pausedMusic = false;
                 }
 
             }

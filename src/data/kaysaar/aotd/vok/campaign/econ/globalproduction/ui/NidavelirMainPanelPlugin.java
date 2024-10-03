@@ -863,7 +863,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         if(mainPanel!=null){
             mainPanel.removeComponent(panel);
         }
-        pauseSound();
         Object core = ProductionUtil.getCoreUI();
         if(core!=null&&clearCoreUI){
 

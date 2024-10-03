@@ -128,19 +128,29 @@ public class SpecialProjectManager extends BaseOptionPanelManager  {
         TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(60, 60, false);
         TooltipMakerAPI labelTooltip = panel.createUIElement(320, 60, false);
         LabelAPI labelAPI1 = null;
-
+        boolean wasNotAShip = false;
         if (Global.getSettings().getCommoditySpec(entry.getKey()) != null) {
             tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), 60, 60, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getCommoditySpec(entry.getKey()).getName() + " : " + entry.getValue(), 10f);
             labelTooltip.addPara("You have %s located in Local Storages", 10f, Color.ORANGE, "" + (int) AoTDMisc.retrieveAmountOfItems(entry.getKey(), Submarkets.SUBMARKET_STORAGE));
-
+            wasNotAShip = true;
         }
         if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
             tooltipMakerAPI.addImage(Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName(), 60, 60, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getSpecialItemSpec(entry.getKey()).getName() + " : " + entry.getValue(), 10f);
             labelTooltip.addPara("You have %s located in Local Storages", 10f, Color.ORANGE, "" + (int) AoTDMisc.retrieveAmountOfItems(entry.getKey(), Submarkets.SUBMARKET_STORAGE));
+            wasNotAShip = true;
 
         }
+        if(!wasNotAShip){
+            if (Global.getSettings().getHullSpec(entry.getKey()) != null) {
+                tooltipMakerAPI.addCustom(ShipInfoGenerator.getShipImage(Global.getSettings().getHullSpec(entry.getKey()),60,null).one,10f);
+                labelAPI1 = labelTooltip.addPara(Global.getSettings().getHullSpec(entry.getKey()).getHullName() + " : " + entry.getValue(), 10f);
+                labelTooltip.addPara("You have %s located in Local Storages", 10f, Color.ORANGE, "" + (int) AoTDMisc.retrieveAmountOfItems(entry.getKey(), Submarkets.SUBMARKET_STORAGE));
+
+            }
+        }
+
         if (GPManager.getInstance().haveMetReqForItem(entry.getKey(), entry.getValue()) ||data.havePaidInitalCost) {
             labelAPI1.setColor(Misc.getPositiveHighlightColor());
 
@@ -217,7 +227,7 @@ public class SpecialProjectManager extends BaseOptionPanelManager  {
                         }
                     }
                 }
-            }, TooltipMakerAPI.TooltipLocation.ABOVE);
+            }, TooltipMakerAPI.TooltipLocation.ABOVE,false);
             LabelAPI labela = tooltip.addPara("Warning! There is initial cost of project, hover over button to see cost!",Misc.getNegativeHighlightColor(),0f);
             labela.getPosition().inTL(10,-35-labela.computeTextHeight(labela.getText()));
         }
