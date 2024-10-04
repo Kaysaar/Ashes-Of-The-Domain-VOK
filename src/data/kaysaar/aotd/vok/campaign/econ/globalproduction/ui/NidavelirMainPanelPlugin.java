@@ -444,8 +444,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                 }
             }
         }, TooltipMakerAPI.TooltipLocation.BELOW, false);
-
-        butt.add(tooltip.addButton("Megastructures", "sp", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Megastructures") + 30, 20, 0f));
         tooltip.addTooltipToPrevious(new ButtonOnHoverInfo(400, true, "Work In Progress", null, null, null, null, "Megastrucutre construction section"), TooltipMakerAPI.TooltipLocation.BELOW, false);
         float currX = 0;
         float paddingX = 5f;
@@ -459,7 +457,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         if (GPManager.getInstance().getLearnedItems().isEmpty()) {
             butt.get(4).setEnabled(false);
         }
-        butt.get(5).setEnabled(false);
+
         switchingButtons.addAll(butt);
         topPanel.addUIElement(tooltip).inTL(-5, 0);
         panel.addComponent(topPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, padding + 30);
