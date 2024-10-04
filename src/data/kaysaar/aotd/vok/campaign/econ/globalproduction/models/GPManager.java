@@ -333,8 +333,8 @@ public class GPManager {
         for (MarketAPI factionMarket : Misc.getPlayerMarkets(true)) {
             for (Industry ind : factionMarket.getIndustries()) {
                 int val = ind.getSupply(commodity).getQuantity().getModifiedInt() * scale;
-                if (val == 0) break;
-                if(map.get(factionMarket) == null) {
+                if (val == 0) continue;
+                if(map.get(factionMarket) != null) {
                     if(val>=map.get(factionMarket)) {
                         map.put(factionMarket, val+map.get(factionMarket));
                     }
