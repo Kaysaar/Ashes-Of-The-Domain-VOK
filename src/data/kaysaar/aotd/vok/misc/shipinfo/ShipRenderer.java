@@ -135,7 +135,7 @@ public class ShipRenderer implements CustomUIPanelPlugin {
                 baseSprite.setAngle(builtInSlot.angle);
                 float x = entry.getKey().getPosition().getX() + entry.getValue().center.x * scale;
                 float y = entry.getKey().getPosition().getY() + entry.getValue().center.y * scale;
-                renderSlotMoved(baseSprite, x + builtInSlot.locationOnShip.x * scale, y + builtInSlot.locationOnShip.y * scale);
+                renderSlotMoved(baseSprite, x + (-builtInSlot.locationOnShip.x * scale), y + builtInSlot.locationOnShip.y * scale);
 
             }
         }
