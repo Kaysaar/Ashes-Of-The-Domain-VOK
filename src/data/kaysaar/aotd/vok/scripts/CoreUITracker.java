@@ -114,7 +114,7 @@ public class CoreUITracker implements EveryFrameScript {
                 public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
                     tooltip.addPara("This is where your faction can conduct all research projects!", Misc.getTooltipTitleAndLightHighlightColor(),5f);
                 }
-            },tryToGetButtonProd("colonies"),120, Keyboard.KEY_6);
+            },tryToGetButtonProd("colonies"),120, Keyboard.KEY_6,false);
         }
         if(tryToGetButtonProd("megastructures")==null){
             insertButton(tryToGetButtonProd("research"), mainParent,"Megastructures",new TooltipMakerAPI.TooltipCreator() {
@@ -131,8 +131,10 @@ public class CoreUITracker implements EveryFrameScript {
                 @Override
                 public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
                     tooltip.addPara("This is panel where you can manage all of your megastructures", Misc.getTooltipTitleAndLightHighlightColor(),5f);
+                    tooltip.addPara("This tab will be available once 2.5 version of Vaults of Knowledge will be released!", Misc.getTooltipTitleAndLightHighlightColor(),5f);
+
                 }
-            },tryToGetButtonProd("colonies"),180, Keyboard.KEY_7);
+            },tryToGetButtonProd("colonies"),180, Keyboard.KEY_7,true);
         }
         if(panelMap==null){
             panelMap = new HashMap<>();
@@ -286,8 +288,8 @@ private HashMap<ButtonAPI,Object>getPanelMap(UIComponentAPI mainParent){
    HashMap<ButtonAPI,Object>map =  (HashMap<ButtonAPI, Object>) ReflectionUtilis.invokeMethod("getButtonToTab",mainParent);
    return map;
 }
-    private void insertButton(ButtonAPI button, UIPanelAPI mainParent,String name ,TooltipMakerAPI.TooltipCreator creator,ButtonAPI button2,float size,int keyBind) {
-        ButtonAPI newButton = createPanelButton(name, size, button.getPosition().getHeight(),keyBind, false, creator).two;
+    private void insertButton(ButtonAPI button, UIPanelAPI mainParent,String name ,TooltipMakerAPI.TooltipCreator creator,ButtonAPI button2,float size,int keyBind,boolean dissabled) {
+        ButtonAPI newButton = createPanelButton(name, size, button.getPosition().getHeight(),keyBind, dissabled, creator).two;
 
         mainParent.addComponent(newButton).inTL(button.getPosition().getX()+ button.getPosition().getWidth()-button2.getPosition().getX()+1,0);
         mainParent.bringComponentToTop(newButton);

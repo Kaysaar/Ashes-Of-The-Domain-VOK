@@ -339,8 +339,11 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
             tooltipHolder2.addSectionHeading("Choose point", Alignment.MID, 0f);
             float opad = 0f;
             for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
-                if (playerMarket.getId().equals(Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getId()))
-                    continue;
+                if(Global.getSector().getPlayerFaction().getProduction().getGatheringPoint()!=null){
+                    if (playerMarket.getId().equals(Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getId()))
+                        continue;
+                }
+
                 Pair<CustomPanelAPI, ButtonAPI> pair = AoTDGatehringPointPlugin.getMarketEntitySpriteButton(UIData.WIDTH_OF_ORDERS / 2 - 5f, 60, 75, playerMarket);
                 tooltipHolder3.addCustom(pair.one, opad);
                 gatheringPoints.add(pair.two);
