@@ -353,7 +353,10 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
 
             float y = -tooltip.getPrev().getPosition().getY();
             tooltipHolder.addSectionHeading("Current point", Alignment.MID, 0f);
-            tooltipHolder.addCustom(AoTDGatehringPointPlugin.getMarketEntitySpriteWithName(200, 55, 80, Global.getSector().getPlayerFaction().getProduction().getGatheringPoint()), -12f);
+            if(Global.getSector().getPlayerFaction().getProduction().getGatheringPoint()!=null){
+                tooltipHolder.addCustom(AoTDGatehringPointPlugin.getMarketEntitySpriteWithName(200, 55, 80, Global.getSector().getPlayerFaction().getProduction().getGatheringPoint()), -12f);
+
+            }
             renderer.setPanel(panelOfGatheringPoint);
             renderer.setPanel(panelHolder);
             renderer.setPanel(panelHolder2);
@@ -822,14 +825,14 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                 pressedCtrl = true;
             }
             if (event.getEventValue() == Keyboard.KEY_ESCAPE && !event.isRMBEvent()) {
-                if(!currentManager.canClose()){
-                    continue;
-                }
-                clearUI(true);
-                isShowingUI = false;
-                if(dialog!=null){
-                    dialog.dismiss();
-                }
+//                if(!currentManager.canClose()){
+//                    continue;
+//                }
+//                clearUI(true);
+//                isShowingUI = false;
+//                if(dialog!=null){
+//                    dialog.dismiss();
+//                }
 
 
 
