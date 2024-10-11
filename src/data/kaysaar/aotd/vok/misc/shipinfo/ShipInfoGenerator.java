@@ -468,12 +468,22 @@ public class ShipInfoGenerator {
 
     static ArrayList<Pair<String, String>> buildWeaponSizePairs(HashMap<WeaponAPI.WeaponSize, Integer> sizeMap, String weaponType) {
         ArrayList<Pair<String, String>> pairs = new ArrayList<>();
-
-        for (Map.Entry<WeaponAPI.WeaponSize, Integer> entry : sizeMap.entrySet()) {
-            String countString = entry.getValue() + "x";
-            String titleString = entry.getKey().getDisplayName() + " " + weaponType;
-            pairs.add(new Pair<String, String>(countString, titleString));
+        if(weaponType.toLowerCase().contains("launch bay")){
+            int  amount = 0;
+            for (Map.Entry<WeaponAPI.WeaponSize, Integer> entry : sizeMap.entrySet()) {
+                amount+=entry.getValue();
+            }
+            String countString =  amount + "x";
+            pairs.add(new Pair<String, String>(countString, "Fighter bay"));
         }
+        else{
+            for (Map.Entry<WeaponAPI.WeaponSize, Integer> entry : sizeMap.entrySet()) {
+                String countString = entry.getValue() + "x";
+                String titleString = entry.getKey().getDisplayName() + " " + weaponType;
+                pairs.add(new Pair<String, String>(countString, titleString));
+            }
+        }
+
 
         return pairs;
     }

@@ -688,44 +688,44 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
     public void processInput(List<InputEventAPI> events) {
         for (InputEventAPI event : events) {
             if (!event.isConsumed()&&event.isKeyDownEvent() && event.getEventValue() == Keyboard.KEY_ESCAPE) {
-                panel.removeComponent(mainPanel);
-                if(researchCenterPanelUI!=null){
-                    researchCenterPanelUI.buttons.clear();
-                    researchCenterPanelUI=null;
-                }
-                if(techTreeCoreUI!=null){
-                    if(techTreeCoreUI.Eras!=null||techTreeCoreUI.Eras.isEmpty()){
-                        for (TechTreeEraSection era : techTreeCoreUI.Eras) {
-                            for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
-                                researchOptionPanel.setTechToResearch(null);
-                            }
-                            era.researchOptionPanels.clear();
-                            era.sortedResearchOptions.clear();
-                        }
-                    }
-                }
-                if(projectListUI!=null){
-                    projectListUI.buttons.clear();
-                }
-                if(projectStageOptions!=null){
-                    projectStageOptions.buttons.clear();
-                }
-                if (researchingBeforeUI != null && researching != null && !researchingBeforeUI.Id.equals(researching.Id)) {
-                    MessageIntel intel = new MessageIntel("Started Researching - " + researching.Name, Misc.getBasePlayerColor());
-                    intel.setIcon(manager.getFaction().getCrest());
-                    intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
-                    Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
-                    manager.payForResearch(researching.Id);
-                }
-                if (researchingBeforeUI == null && researching != null) {
-                    MessageIntel intel = new MessageIntel("Started Researching - " + researching.Name, Misc.getBasePlayerColor());
-                    intel.setIcon(manager.getFaction().getCrest());
-                    intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
-                    Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
-                    manager.payForResearch(researching.Id);
-                }
-
-                return;
+//                panel.removeComponent(mainPanel);
+//                if(researchCenterPanelUI!=null){
+//                    researchCenterPanelUI.buttons.clear();
+//                    researchCenterPanelUI=null;
+//                }
+//                if(techTreeCoreUI!=null){
+//                    if(techTreeCoreUI.Eras!=null||techTreeCoreUI.Eras.isEmpty()){
+//                        for (TechTreeEraSection era : techTreeCoreUI.Eras) {
+//                            for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
+//                                researchOptionPanel.setTechToResearch(null);
+//                            }
+//                            era.researchOptionPanels.clear();
+//                            era.sortedResearchOptions.clear();
+//                        }
+//                    }
+//                }
+//                if(projectListUI!=null){
+//                    projectListUI.buttons.clear();
+//                }
+//                if(projectStageOptions!=null){
+//                    projectStageOptions.buttons.clear();
+//                }
+//                if (researchingBeforeUI != null && researching != null && !researchingBeforeUI.Id.equals(researching.Id)) {
+//                    MessageIntel intel = new MessageIntel("Started Researching - " + researching.Name, Misc.getBasePlayerColor());
+//                    intel.setIcon(manager.getFaction().getCrest());
+//                    intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+//                    Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+//                    manager.payForResearch(researching.Id);
+//                }
+//                if (researchingBeforeUI == null && researching != null) {
+//                    MessageIntel intel = new MessageIntel("Started Researching - " + researching.Name, Misc.getBasePlayerColor());
+//                    intel.setIcon(manager.getFaction().getCrest());
+//                    intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+//                    Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+//                    manager.payForResearch(researching.Id);
+//                }
+//
+//                return;
 
             }
         }
@@ -755,6 +755,20 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         }
         if(projectStageOptions!=null){
             projectStageOptions.buttons.clear();
+        }
+        if (researchingBeforeUI != null && researching != null && !researchingBeforeUI.Id.equals(researching.Id)) {
+            MessageIntel intel = new MessageIntel("Started Researching - " + researching.Name, Misc.getBasePlayerColor());
+            intel.setIcon(manager.getFaction().getCrest());
+            intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+            manager.payForResearch(researching.Id);
+        }
+        if (researchingBeforeUI == null && researching != null) {
+            MessageIntel intel = new MessageIntel("Started Researching - " + researching.Name, Misc.getBasePlayerColor());
+            intel.setIcon(manager.getFaction().getCrest());
+            intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
+            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
+            manager.payForResearch(researching.Id);
         }
     }
 

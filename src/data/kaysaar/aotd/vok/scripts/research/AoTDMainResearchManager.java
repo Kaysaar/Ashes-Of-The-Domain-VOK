@@ -259,9 +259,8 @@ public class AoTDMainResearchManager {
                  getSpecificFactionManager(Global.getSector().getFaction(factionResearchAttitudeData.factionID)).setAttitudeData(factionResearchAttitudeData);
             }
         } catch (JSONException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
         }
 
     }

@@ -104,7 +104,8 @@ public class ResearchSell extends BaseCommandPlugin {
 
     protected boolean personCanAcceptDbs() {
         if (person == null || !buysDatabanks) return false;
-
+        if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction)==null)return false;
+        if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).getAttitudeData()==null)return false;
         return Ranks.POST_BASE_COMMANDER.equals(person.getPostId()) ||
                 Ranks.POST_STATION_COMMANDER.equals(person.getPostId()) ||
                 Ranks.POST_ADMINISTRATOR.equals(person.getPostId()) ||
