@@ -1,5 +1,6 @@
 package com.fs.starfarer.api.impl.campaign.rulecmd;
 
+
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
@@ -116,7 +117,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
             dialog.getInteractionTarget().getMemory().unset("$defenderFleet");
             dialog.getInteractionTarget().getMemory().set("$defenderFleetDefeated", true);
             dialog.getInteractionTarget().getMemory().unset("$aotd_r_expedition_present");
-            FleetInteractionDialogPluginImpl.FIDConfig config = (FleetInteractionDialogPluginImpl.FIDConfig) new ReflectionUtilis().getPrivateVariable("config", conf);
+            FleetInteractionDialogPluginImpl.FIDConfig config = (FleetInteractionDialogPluginImpl.FIDConfig)  ReflectionUtilis.getPrivateVariable("config", conf);
             conf.cleanUpBattle();
             config.delegate.notifyLeave(dialog);
             CampaignFleetAPI campaignFleetAPI = getNearby(dialog.getInteractionTarget());

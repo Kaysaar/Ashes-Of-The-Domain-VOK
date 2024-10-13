@@ -18,7 +18,6 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.CoreCorrectStateE
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
-import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderInfoRepo;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContract;
 import data.kaysaar.aotd.vok.scripts.research.contracts.BaseResearchContractData;
@@ -80,11 +79,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.removeListenerOfClass(GpProductionButtonRenderer.class);
     }
 
-    @Override
-    public void onApplicationLoad() throws Exception {
-        ShipRenderInfoRepo.populateRenderInfoRepo();
 
-    }
 
     @Override
     public void onNewGameAfterEconomyLoad() {

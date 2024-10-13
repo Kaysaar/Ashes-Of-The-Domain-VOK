@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ashlib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../AshLib/jars/ashlib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

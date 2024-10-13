@@ -1,5 +1,11 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components;
 
+import ashlib.data.plugins.info.FighterInfoGenerator;
+import ashlib.data.plugins.info.ShipInfoGenerator;
+import ashlib.data.plugins.info.WeaponInfoGenerator;
+import ashlib.data.plugins.rendering.FighterIconRenderer;
+import ashlib.data.plugins.rendering.ShipRenderer;
+import ashlib.data.plugins.rendering.WeaponSpriteRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
@@ -15,12 +21,6 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import data.kaysaar.aotd.vok.misc.fighterinfo.FighterIconRenderer;
-import data.kaysaar.aotd.vok.misc.fighterinfo.FighterInfoGenerator;
-import data.kaysaar.aotd.vok.misc.shipinfo.ShipInfoGenerator;
-import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderer;
-import data.kaysaar.aotd.vok.misc.weaponinfo.WeaponInfoGenerator;
-import data.kaysaar.aotd.vok.misc.weaponinfo.WeaponSpriteRenderer;
 
 
 import java.awt.*;
