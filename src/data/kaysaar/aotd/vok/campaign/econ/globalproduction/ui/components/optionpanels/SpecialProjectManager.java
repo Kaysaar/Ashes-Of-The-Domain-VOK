@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.optionpanels;
 
+import ashlib.data.plugins.info.ShipInfoGenerator;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
@@ -11,7 +12,6 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProj
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.*;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import data.kaysaar.aotd.vok.misc.shipinfo.ShipInfoGenerator;
 
 import java.awt.*;
 import java.util.ArrayList;

@@ -14,7 +14,6 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelDP;
-import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 
 import java.awt.*;
 import java.util.ArrayList;

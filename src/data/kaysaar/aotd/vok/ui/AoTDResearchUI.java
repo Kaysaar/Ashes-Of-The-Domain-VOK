@@ -1,5 +1,7 @@
 package data.kaysaar.aotd.vok.ui;
 
+import ashlib.data.plugins.ui.models.HorizontalTooltipMaker;
+import ashlib.data.plugins.ui.plugins.HorizontalTooltipPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
@@ -193,9 +195,10 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         renderer.setPanel(researchCenterPanel);
         helpPanel = mainPanel.createCustomPanel(300, 50, null);
         helpTooltip = helpPanel.createUIElement(300, 50, false);
-
-        techTreePanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT - 20, new handlerOfScrollbar(horizontalTooltipMaker));
-        horizontalTooltipMaker.init(techTreePanel, WIDTH - 300, HEIGHT - 20, true, techTreeCoreUI.calculateWidthAndHeight().one, techTreeCoreUI.calculateWidthAndHeight().two);
+        HorizontalTooltipPlugin plugin = new HorizontalTooltipPlugin();
+        techTreePanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT - 20,plugin );
+        plugin.init(techTreePanel, WIDTH - 300, HEIGHT - 20, true, techTreeCoreUI.calculateWidthAndHeight().one, techTreeCoreUI.calculateWidthAndHeight().two);
+        horizontalTooltipMaker = plugin.getHorizontalTooltipMaker();
         techTreeTooltip = horizontalTooltipMaker.getMainTooltip();
         buttonPanel = mainPanel.createCustomPanel(300, 102, null);
         buttonPanelTooltip = buttonPanel.createUIElement(300, 102, false);
@@ -515,10 +518,6 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
     public void advance(float amount) {
         glClearStencil(0);
         glStencilMask(0xff);
-        if (horizontalTooltipMaker != null && horizontalTooltipMaker.getHorizontalScrollbar() != null&&horizontalTooltipMaker.mainPanel!=null) {
-            horizontalTooltipMaker.getHorizontalScrollbar().moveTooltip(horizontalTooltipMaker.mainPanel.getPosition().getWidth(),horizontalTooltipMaker.horizontalScrollbar.startingX);
-            horizontalTooltipMaker.getHorizontalScrollbar().handleMouseDragging(horizontalTooltipMaker.mainPanel.getPosition().getWidth());
-        }
             GL11.glPushMatrix();
         int width = (int) (Display.getWidth() * Display.getPixelScaleFactor()),
                 height = (int) (Display.getHeight() * Display.getPixelScaleFactor());
@@ -946,44 +945,6 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
     }
 
 
-        public static class  handlerOfScrollbar implements CustomUIPanelPlugin {
-        HorizontalTooltipMaker tooltipMaker;
-        public handlerOfScrollbar(HorizontalTooltipMaker scrollbar){
-            this.tooltipMaker = scrollbar;
-        }
-        @Override
-        public void positionChanged(PositionAPI position) {
 
-        }
 
-        @Override
-        public void renderBelow(float alphaMult) {
-
-        }
-
-        @Override
-        public void render(float alphaMult) {
-
-        }
-
-        @Override
-        public void advance(float amount) {
-            if (tooltipMaker.getHorizontalScrollbar() != null) {
-                tooltipMaker.horizontalScrollbar.detectIfRightMouse();
-                tooltipMaker.getMainTooltip().getExternalScroller().setXOffset(tooltipMaker.horizontalScrollbar.getCurrOffset());
-            }
-        }
-
-        @Override
-        public void processInput(List<InputEventAPI> events) {
-            if (tooltipMaker.getHorizontalScrollbar() != null) {
-                tooltipMaker.getHorizontalScrollbar().processInputForScrollbar(events, tooltipMaker.mainPanel.getPosition().getWidth());
-            }
-        }
-
-        @Override
-        public void buttonPressed(Object buttonId) {
-
-        }
-    }
 }

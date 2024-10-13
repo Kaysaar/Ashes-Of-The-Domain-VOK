@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.listeners;
 
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.BaseCustomDialogDelegate;
 import com.fs.starfarer.api.campaign.CustomDialogDelegate;
@@ -37,7 +38,6 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
     public static Object CORONAL = new Object();
     public static Object RESEARCH_CENTER = new Object();
     public static Object PROGRAMMING = new Object();
-    ReflectionUtilis reflectionUtilis = new ReflectionUtilis();
     static ArrayList<Pair<String,String>> industries = new ArrayList<>();
     static {
         industries.add(new Pair<>(Industries.AQUACULTURE,"aotd_tech_aquatic_agriculture"));
@@ -90,7 +90,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
             tooltip.addPara("Access the interface of research center",0f);
         }
         if (opt.id == AOTD_VOK_CANCEL_UPGRADE) {
-            String upgradeId = (String) reflectionUtilis.getPrivateVariableFromSuperClass("upgradeId", opt.ind);
+            String upgradeId = (String) ReflectionUtilis.getPrivateVariableFromSuperClass("upgradeId", opt.ind);
             IndustrySpecAPI upgrdInd = Global.getSettings().getIndustrySpec(upgradeId);
             String costStr = Misc.getDGSCredits(upgrdInd.getCost());
             if (opt.ind.getBuildOrUpgradeProgress() != 0.0f) {
@@ -129,7 +129,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
                     TooltipMakerAPI info = panel.createUIElement(600, 100, false);
                     info.setParaInsigniaLarge();
                     info.addSpacer(2f);
-                    String upgradeId = (String) reflectionUtilis.getPrivateVariableFromSuperClass("upgradeId",industry);
+                    String upgradeId = (String) ReflectionUtilis.getPrivateVariableFromSuperClass("upgradeId",industry);
                     IndustrySpecAPI upgrdInd = Global.getSettings().getIndustrySpec(upgradeId);
 
 
@@ -157,7 +157,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
                 @Override
                 public void customDialogConfirm() {
 
-                    String upgradeId = (String) reflectionUtilis.getPrivateVariableFromSuperClass("upgradeId",industry);
+                    String upgradeId = (String) ReflectionUtilis.getPrivateVariableFromSuperClass("upgradeId",industry);
                     IndustrySpecAPI upgrdInd = Global.getSettings().getIndustrySpec(upgradeId);
                     boolean fullRefund = industry.getBuildOrUpgradeProgress() == 0.0f;
                     if (fullRefund) {
@@ -238,7 +238,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
         if(ind.getSpec().getUpgrade()!=null)return null;
         if(!ind.isUpgrading())return  null;
         BaseIndustry industry = (BaseIndustry) ind;
-        String upgradeId = (String) reflectionUtilis.getPrivateVariableFromSuperClass("upgradeId",industry);
+        String upgradeId = (String) ReflectionUtilis.getPrivateVariableFromSuperClass("upgradeId",industry);
         if(upgradeId!=null){
             IndustryOptionData opt = new IndustryOptionData("Cancel Upgrade", AOTD_VOK_CANCEL_UPGRADE, ind, this);
             return opt;

@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui;
 
+import ashlib.data.plugins.info.ShipInfoGenerator;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -23,7 +24,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhove
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.optionpanels.*;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import data.kaysaar.aotd.vok.misc.shipinfo.ShipInfoGenerator;
+
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.SoundUIManager;

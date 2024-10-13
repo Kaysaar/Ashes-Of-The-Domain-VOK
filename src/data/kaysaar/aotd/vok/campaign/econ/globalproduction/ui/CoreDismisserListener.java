@@ -1,5 +1,4 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui;
-
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreInteractionListener;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;

@@ -1,11 +1,11 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components;
 
+import ashlib.data.plugins.rendering.FighterIconRenderer;
+import ashlib.data.plugins.rendering.ShipRenderer;
+import ashlib.data.plugins.rendering.WeaponSpriteRenderer;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
-import data.kaysaar.aotd.vok.misc.fighterinfo.FighterIconRenderer;
-import data.kaysaar.aotd.vok.misc.shipinfo.ShipRenderer;
-import data.kaysaar.aotd.vok.misc.weaponinfo.WeaponSpriteRenderer;
 
 
 public class UiPackage {
