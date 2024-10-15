@@ -227,6 +227,9 @@ public class GpSpecialProjectData {
         if(AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
             days*=2;
         }
+        if(Global.getSettings().isDevMode()){
+            days*=20;
+        }
         totalDaysSpent += days;
         daysSpentOnStage+=days;
         if (totalDaysSpent >= getReqTotalDaysToProgress(currentStage)) {
@@ -239,12 +242,11 @@ public class GpSpecialProjectData {
 
                     MarketAPI gatheringPoint = prod.getGatheringPoint();
                     if (gatheringPoint == null) return;
-
                     CargoAPI local = Misc.getStorageCargo(gatheringPoint);
                     SpecialProjectFinishedIntel intel = new SpecialProjectFinishedIntel(this);
                     Global.getSector().getIntelManager().addIntel(intel, false);
-                    FleetMemberAPI fleetMemberAPI = local.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(Global.getSettings().getHullSpec(getSpec().rewardId)));
-                    fleetMemberAPI.getVariant().clear();
+                    getSpec().getListenerFromPlugin().receiveReward(Global.getSettings().getHullSpec(getSpec().rewardId),local);
+
                     GPManager.getInstance().setCurrentFocus(null);
 
 

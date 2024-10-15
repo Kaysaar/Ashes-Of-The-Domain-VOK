@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
+package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures;
 
 import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
 
