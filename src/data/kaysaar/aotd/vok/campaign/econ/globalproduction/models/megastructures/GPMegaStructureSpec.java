@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
+package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures;
 
 import java.util.ArrayList;
 

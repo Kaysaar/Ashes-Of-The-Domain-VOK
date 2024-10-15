@@ -10,6 +10,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.AoTDSpecialProjectListener;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -225,7 +226,7 @@ public class GPSpec {
     public int  amountOfStages;
     public String progressString;
     public ArrayList<String> highlights;
-
+    public String pluginForSpecialProj;
     public SpecialItemSpecAPI getItemSpecAPI() {
         return itemSpecAPI;
     }
@@ -423,6 +424,22 @@ public class GPSpec {
         isSpecialProject = specialProject;
     }
 
+    public void setPluginForSpecialProj(String pluginForSpecialProj) {
+        this.pluginForSpecialProj = pluginForSpecialProj;
+    }
+    public AoTDSpecialProjectListener getListenerFromPlugin(){
+        if(pluginForSpecialProj == null){return null;
+        }
+        try {
+            final Class<?> eventPlugin = Global.getSettings().getScriptClassLoader().loadClass(pluginForSpecialProj);
+            return (AoTDSpecialProjectListener) eventPlugin.newInstance();
+
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+
     public void setHighlights(ArrayList<String> highlights) {
         this.highlights = highlights;
     }
@@ -474,6 +491,10 @@ public class GPSpec {
 
                     throw new RuntimeException();
                 }
+                String plugin = entry.getString("rewardPlugin");
+                if(!AoTDMisc.isStringValid(plugin)){
+                    plugin = "data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.AoTDSpecialProjBaseListener";
+                }
                 String rewardId = entry.getString("rewardId");
                 String progressString = entry.getString("progressString");
                 int cost = entry.getInt("initalCostMoney");
@@ -493,6 +514,7 @@ public class GPSpec {
                 spec.setStageSupplyCost(stageCosts);
                 spec.setRepeatable(isRepeatable);
                 spec.setCredistCost(cost);
+                spec.setPluginForSpecialProj(plugin);
                 spec.setHighlights(highlights);
                 spec.setItemInitCostMap(itemCostMap);
                 spec.setProgressString(progressString);
