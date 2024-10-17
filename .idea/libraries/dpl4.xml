@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="dpl4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../DeepLearning4J/jars/dpl4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
