@@ -20,6 +20,7 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
     public static String subMarketId = "researchfacil";
     public static Float COST_PER_TIER = 10000F;
     protected transient SubmarketAPI saved = null;
+    public static int amountDatabanksMonthly = 1;
 
     @Override
     public void apply() {
@@ -135,11 +136,12 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
     @Override
     public void reportEconomyMonthEnd() {
         if (this.market.hasCondition("pre_collapse_facility")) {
+
             SubmarketAPI open = market.getSubmarket(subMarketId);
             if (open != null) {
-                open.getCargo().addCommodity("research_databank", 1);
+                open.getCargo().addCommodity("research_databank", amountDatabanksMonthly);
             } else {
-                market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addCommodity("research_databank", 1);
+                market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addCommodity("research_databank", amountDatabanksMonthly);
             }
         }
     }

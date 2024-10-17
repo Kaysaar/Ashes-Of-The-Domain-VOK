@@ -16,5 +16,6 @@
     <orderEntry type="library" name="Qol" level="project" />
     <orderEntry type="library" name="Goc" level="project" />
     <orderEntry type="library" name="ashlib" level="project" />
+    <orderEntry type="library" name="dpl4" level="project" />
   </component>
 </module>
