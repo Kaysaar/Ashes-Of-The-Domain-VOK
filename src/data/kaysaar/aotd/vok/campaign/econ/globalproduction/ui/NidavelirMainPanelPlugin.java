@@ -115,6 +115,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         isShowingUI = true;
         this.callbacks = callbacks;
         copyFromOriginal();
+        GPManager.getInstance().advance(ordersQueued);
         maxItemsPerPage = AoTDSettingsManager.getIntValue("aotd_shipyard_pag_per_page");
         maxItemsPerPageWEP = maxItemsPerPage;
         float padding = 20f;
@@ -202,7 +203,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         float x = positions;
         for (Map.Entry<String, Integer> entry : getExpectedCosts().entrySet()) {
             tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconsize, iconsize, 0f);
-            tooltip.addTooltipToPrevious(new CommodityInfo(entry.getKey(), 700, true, false), TooltipMakerAPI.TooltipLocation.BELOW);
+            tooltip.addTooltipToPrevious(new CommodityInfo(entry.getKey(), 700, true, false,ordersQueued), TooltipMakerAPI.TooltipLocation.BELOW);
             UIComponentAPI image = tooltip.getPrev();
             image.getPosition().inTL(x, topYImage);
             String text = "" + entry.getValue();
@@ -257,6 +258,9 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                 return true;
             } else {
                 if (order.getAmountToProduce() != queueOrder.getAmountToProduce()) {
+                    return true;
+                }
+                if (order.getAtOnce() != queueOrder.getAtOnce()) {
                     return true;
                 }
             }
@@ -511,6 +515,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
     }
 
     public void resetPanelOfOrders() {
+        GPManager.getInstance().advance(ordersQueued);
         orderSortingButtons.clear();
         orders.clear();
         panel.removeComponent(panelOfOrders);
@@ -580,12 +585,12 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         float x = positions;
         for (Map.Entry<String, Integer> entry : GPManager.getInstance().getTotalResources().entrySet()) {
             tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconsize, iconsize, 0f);
-            tooltip.addTooltipToPrevious(new CommodityInfo(entry.getKey(), 700, true, false), TooltipMakerAPI.TooltipLocation.BELOW);
+            tooltip.addTooltipToPrevious(new CommodityInfo(entry.getKey(), 700, true, false,ordersQueued), TooltipMakerAPI.TooltipLocation.BELOW);
             UIComponentAPI image = tooltip.getPrev();
             image.getPosition().inTL(x, topYImage);
             String text = "" + entry.getValue();
-            String text2 = text + "(" + GPManager.getInstance().getReqResources().get(entry.getKey()) + ")";
-            tooltip.addPara("" + entry.getValue() + " %s", 0f, Misc.getTooltipTitleAndLightHighlightColor(), Color.ORANGE, "(" + GPManager.getInstance().getReqResources().get(entry.getKey()) + ")").getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
+            String text2 = text + "(" + GPManager.getInstance().getReqResources(ordersQueued).get(entry.getKey()) + ")";
+            tooltip.addPara("" + entry.getValue() + " %s", 0f, Misc.getTooltipTitleAndLightHighlightColor(), Color.ORANGE, "(" +  getExpectedCosts().get(entry.getKey()) + ")").getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
             x += sections;
         }
         panelOfMarketData.addUIElement(tooltip).inTL(0, 0);
@@ -724,6 +729,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                 if (isPressingShift) {
                     GPOrder ordera = (GPOrder) order.getCustomData();
                     ordera.setAtOnce(ordera.getAtOnce() + amountClick);
+                    resetDaysIfMoreAtOnce();
                     resetPanelOfOrders();
                     break;
                 } else {
@@ -733,7 +739,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                     if (!offsetOfOrdersToBeRemoved.isEmpty()) {
                         GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
                     }
-
+                    resetDaysIfMoreAtOnce();
                     resetPanelOfOrders();
                     break;
                 }
@@ -756,6 +762,15 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                 confirmButton.setChecked(false);
                 float money = calculateDifference();
                 Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(money);
+                for (GPOrder productionOrder : GPManager.getInstance().getProductionOrders()) {
+                    for (GPOrder gpOrder : ordersQueued) {
+                        if(gpOrder.getSpecFromClass().equals(productionOrder.getSpecFromClass())){
+                            if(productionOrder.getAtOnce()<gpOrder.getAtOnce()){
+                                gpOrder.setDaysSpentDoingOrder(0);
+                            }
+                        }
+                    }
+                }
                 GPManager.getInstance().getProductionOrders().clear();
                 for (GPOrder order : ordersQueued) {
                     GPManager.getInstance().getProductionOrders().add(order.cloneOrder());
@@ -801,7 +816,9 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                             Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
                             GPOrder order = (GPOrder) buttonAPI.getCustomData();
                             order.setAtOnce(order.getAtOnce() - amountClick);
+                            resetDaysIfMoreAtOnce();
                             resetPanelOfOrders();
+                            resetPanelOfMarketData();
                             break;
                         } else {
                             buttonAPI.setChecked(false);
@@ -812,7 +829,9 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                             if (!offsetOfOrdersToBeRemoved.isEmpty()) {
                                 GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
                             }
+                            resetDaysIfMoreAtOnce();
                             resetPanelOfOrders();
+                            resetPanelOfMarketData();
                             break;
                         }
 
@@ -844,7 +863,25 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         isPressingCtrl = pressedCtrl;
     }
 
+    private void resetDaysIfMoreAtOnce() {
+        for (GPOrder productionOrder : GPManager.getInstance().getProductionOrders()) {
+            for (GPOrder gpOrder : ordersQueued) {
+                if(gpOrder.getSpecFromClass().equals(productionOrder.getSpecFromClass())){
+                    if(productionOrder.getAtOnce()<gpOrder.getAtOnce()){
+                        gpOrder.setDaysSpentDoingOrder(0);
+                    }
+                    else{
+                        gpOrder.setDaysSpentDoingOrder(productionOrder.getDaysSpentDoingOrder());
+                    }
+                }
+            }
+        }
+    }
+
     public void clearUI( boolean clearCoreUI) {
+
+        ordersQueued.clear();
+        copyFromOriginal();
         specialProjectManager.clear();
         shipPanelManager.clear();
         fighterPanelInterface.clear();

@@ -6,11 +6,14 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
+
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class CommodityInfo implements TooltipMakerAPI.TooltipCreator {
@@ -18,11 +21,13 @@ public class CommodityInfo implements TooltipMakerAPI.TooltipCreator {
     boolean expand;
     float width;
     boolean isReqSection;
-    public CommodityInfo(String id,float width, boolean expandable,boolean isReqSection){
+    ArrayList<GPOrder>orders = new ArrayList<>();
+    public CommodityInfo(String id,float width, boolean expandable,boolean isReqSection,ArrayList<GPOrder>orders) {
         this.id = id;
         this.width = width;
         this.expand = expandable;
         this.isReqSection = isReqSection;
+        this.orders = orders;
     }
     @Override
     public boolean isTooltipExpandable(Object tooltipParam) {
@@ -38,10 +43,11 @@ public class CommodityInfo implements TooltipMakerAPI.TooltipCreator {
     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
         CommoditySpecAPI spec = Global.getSettings().getCommoditySpec(id);
         tooltip.addTitle(spec.getName());
+        HashMap<String,Float>mapOfPenalty =  GPManager.getInstance().advance(orders);
         tooltip.addPara(Global.getSettings().getDescription(spec.getId(), Description.Type.RESOURCE).getText1(),10f);
         tooltip.addSectionHeading("Global Production (GP)", Alignment.MID,5f);
         int currentTotal =GPManager.getInstance().getTotalResources().get(id);
-        int currentTotal2 =GPManager.getInstance().getReqResources().get(id);
+        int currentTotal2 =GPManager.getInstance().getReqResources(orders).get(id);
         Color[] colors = new Color[2];
         colors[0] = Color.ORANGE;
         colors[1] = Misc.getTooltipTitleAndLightHighlightColor();
@@ -58,6 +64,28 @@ public class CommodityInfo implements TooltipMakerAPI.TooltipCreator {
         for (Map.Entry<MarketAPI, Integer> marketAPIIntegerEntry : GPManager.getInstance().getTotalResourceProductionFromMarkets(id).entrySet()) {
             tooltip.addPara("%s producing:%s GP units (%s supply units)",5f,colors,marketAPIIntegerEntry.getKey().getName(),""+marketAPIIntegerEntry.getValue(),""+(marketAPIIntegerEntry.getValue()/GPManager.scale));
         }
+        float penalty=1;
+        float penaltyFromMap = mapOfPenalty.get(spec.getId());
+
+        int percentage = (int) (penaltyFromMap*100f);
+        String str = String.valueOf(percentage);
+        if(penaltyFromMap!=1){
+            tooltip.addSectionHeading("Production Penalty : "+spec.getName(),Alignment.MID,5f);
+            Color[]colors1 = new Color[2];
+            colors1[0] = Color.ORANGE;
+            colors1[1] = Misc.getNegativeHighlightColor();
+            if(percentage==0){
+                tooltip.addPara("Due to lack of resources all production that is using %s is having production crippled to %s efficiency",5f,colors1,spec.getName(),"nearly 0%");
+
+            }
+            else {
+                tooltip.addPara("Due to lack of resources all production that is using %s is having production crippled to %s efficiency",5f,colors1,spec.getName(),str+"%");
+
+            }
+            tooltip.addPara("If you have lowered efficiency from lacking of both resources then total penalty is all penalties multiplied by each-other",Misc.getTooltipTitleAndLightHighlightColor(),5f);
+
+        }
+
 
     }
 }

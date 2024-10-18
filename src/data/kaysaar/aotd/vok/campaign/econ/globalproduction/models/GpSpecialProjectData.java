@@ -109,6 +109,7 @@ public class GpSpecialProjectData {
         percent*=100;
         return (int)percent;
     }
+
     public Color getStatusColor(){
         if(!hasStarted){
             return Misc.getNegativeHighlightColor();
@@ -129,7 +130,7 @@ public class GpSpecialProjectData {
         }
         boolean allRes = true;
         for (Map.Entry<String, Integer> entry : getSpec().getStageSupplyCost().get(currentStage).entrySet()) {
-            if(entry.getValue()>availableResources.get(entry.getKey())){
+            if(availableResources.get(entry.getKey())==0){
                 allRes = false;
                 break;
             }
@@ -216,6 +217,12 @@ public class GpSpecialProjectData {
         return (int)per;
 
     }
+    public float penalty=1;
+
+    public void setPenalty(float penalty) {
+        this.penalty = penalty;
+    }
+
     public void advance(float amount) {
 
         if(!hasStarted)return;
@@ -224,12 +231,20 @@ public class GpSpecialProjectData {
             return;
         }
         float days =  Global.getSector().getClock().convertToDays(amount);
+
         if(AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
             days*=2;
         }
         if(Global.getSettings().isDevMode()){
             days*=20;
         }
+        if(penalty<1){
+            days*= penalty*0.5f;
+        }
+        if(penalty>=1){
+            penalty=1;
+        }
+
         totalDaysSpent += days;
         daysSpentOnStage+=days;
         if (totalDaysSpent >= getReqTotalDaysToProgress(currentStage)) {

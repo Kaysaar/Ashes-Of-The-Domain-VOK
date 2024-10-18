@@ -391,7 +391,14 @@ public class UIData {
         tooltip.addCustom(panelImg, 5f).getPosition().setLocation(0, 0).inTL(beingX, 0);
         qty = tooltip.addPara("Quantity: " + order.getAmountToProduce() + " %s", 0f, Color.ORANGE, "(Produced at once : " + order.getAtOnce() + ")");
         qty.getPosition().inTL(10, -qty.getPosition().getY() - 14);
-        LabelAPI label = tooltip.addPara("Order will be completed in : %s", 5f, Color.ORANGE, AoTDMisc.convertDaysToString((int) order.getDaysTillOrderFinished()));
+        if(order.canProceed())
+        if(order.canProceed()){
+            tooltip.addPara("Order will be completed in : %s", 5f, Color.ORANGE, AoTDMisc.convertDaysToString((int) order.getDaysForLabel()));
+        }
+        else{
+            tooltip.addPara("Order will be %s", 5f, Misc.getNegativeHighlightColor(),"never completed! Lack of necessary resources.");
+        }
+
         panel.addUIElement(tooltip).inTL(-5, 0);
         return new Pair<>(panel, button);
 
