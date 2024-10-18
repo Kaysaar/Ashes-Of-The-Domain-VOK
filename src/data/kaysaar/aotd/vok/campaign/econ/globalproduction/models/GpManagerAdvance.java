@@ -16,6 +16,6 @@ public class GpManagerAdvance implements EveryFrameScript {
 
     @Override
     public void advance(float amount) {
-        GPManager.getInstance().advance(amount);
+        GPManager.getInstance().advanceProductions(amount);
     }
 }

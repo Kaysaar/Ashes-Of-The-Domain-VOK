@@ -128,6 +128,14 @@ public class AoTDMisc {
         }
         return false;
     }
+    public static boolean isHavingAdvancedHeavyIndustry(){
+        for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+            for (Industry industry : playerMarket.getIndustries()) {
+                if(industry.getSpec().hasTag("advanced_heavy_industry"))return true;
+            }
+        }
+        return false;
+    }
     public static float retrieveAmountOfItems(String id,String submarketID) {
         float numberRemaining = 0;
         for (MarketAPI marketAPI : Misc.getPlayerMarkets(true)) {

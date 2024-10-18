@@ -136,6 +136,7 @@ public class AoTDDataInserter {
             }
             if (allIndustrySpec.getId().equals(Industries.ORBITALWORKS)) {
                 allIndustrySpec.addTag(AOTD+Industries.HEAVYINDUSTRY);
+                allIndustrySpec.addTag("advanced_heavy_industry");
 
             }
             if (allIndustrySpec.getId().equals(Industries.WAYSTATION)) {

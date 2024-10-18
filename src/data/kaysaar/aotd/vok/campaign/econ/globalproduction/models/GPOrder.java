@@ -14,6 +14,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.fs.starfarer.api.util.Misc.random;
@@ -24,9 +25,12 @@ public class GPOrder implements Cloneable{
     float dummyCounter;
     float daysSpentDoingOrder;// between 0 and 1
     boolean contributingToOrder;
-
     int atOnce = 1;
+    LinkedHashMap<String,Float>progressMap = new LinkedHashMap<>();
 
+    public float getDaysSpentDoingOrder() {
+        return daysSpentDoingOrder;
+    }
 
     public GPOrder cloneOrder(){
         try {
@@ -41,14 +45,35 @@ public class GPOrder implements Cloneable{
         return  amountToProduce - alreadyProduced;
     }
     public float getDaysTillOrderFinished(){
-        float defDeays =  (getSpecFromClass().days);
-        if(defDeays<=1)defDeays = 1;
-        return defDeays-daysSpentDoingOrder;
+        float baseDays = getSpecFromClass().days;
+        if (baseDays <= 1) baseDays = 1; // Base days can't be less than 1
+
+        // Penalized days remaining (with penalty applied)
+        float effectiveDaysRemaining = baseDays - (daysSpentDoingOrder);
+
+        return effectiveDaysRemaining > 0 ? effectiveDaysRemaining : 0;
     }
+    public float getProgressPercentage() {
+        float baseDays = getSpecFromClass().days;
+        if (baseDays <= 1) baseDays = 1;
+
+        // Calculate progress using penalized time
+        float progressPercentage = daysSpentDoingOrder / (baseDays);
+
+        // Ensure the progress does not exceed 100%
+        return Math.min(progressPercentage, 1.0f);
+    }
+    public float getDaysForLabel(){
+        float baseDays = getSpecFromClass().days;
+        if (baseDays <= 1) baseDays = 1;
+        float toReturn = (baseDays/penalty) - (baseDays/penalty)*getProgressPercentage();
+        return toReturn;
+    }
+
     HashMap<String, Integer>assignedResources = new HashMap<>();
     HashMap<String, Integer>resourcesGet = new HashMap<>();
     public boolean canProceed() {
-        boolean haveHeavy = false;
+        if(AoTDMisc.isPLayerHavingHeavyIndustry())return false;
 
         if(!isCountingToContribution()||isAboutToBeRemoved())return false;
         // Check if the obtained resources meet or exceed the required resources
@@ -57,12 +82,10 @@ public class GPOrder implements Cloneable{
             Integer requiredAmount = entry.getValue()*getAmountOfItemsProduced();
 
             // Get the amount of the resource obtained, handling cases where the key might not be present
-            Integer obtainedAmount = resourcesGet.containsKey(resourceKey) ? resourcesGet.get(resourceKey) : 0;
+            Integer obtainedAmount = GPManager.getInstance().getTotalResources().containsKey(resourceKey) ?GPManager.getInstance().getTotalResources().get(resourceKey) : 0;
 
             // If the required amount is greater than the obtained amount, return false
-            if (requiredAmount > obtainedAmount) {
-                return false;
-            }
+            if(requiredAmount!=0&&obtainedAmount==0)return false;
         }
         // If all required resources meet or exceed the required amounts, return true
         return true;
@@ -109,6 +132,9 @@ public class GPOrder implements Cloneable{
 
     public void updateAmountToProduce(int newValue){
         this.amountToProduce = newValue;
+        if(this.atOnce>this.amountToProduce){
+            this.atOnce = amountToProduce;
+        }
     }
     public boolean haveMetQuota(){
         return alreadyProduced >=amountToProduce;
@@ -123,6 +149,11 @@ public class GPOrder implements Cloneable{
         }
         this.atOnce = atOnce;
     }
+    float penalty;
+
+    public void setPenalty(float penalty) {
+        this.penalty = penalty;
+    }
 
     public int getAtOnce() {
         return atOnce;
@@ -132,9 +163,13 @@ public class GPOrder implements Cloneable{
         return getSpecFromClass().supplyCost;
     }
 
+    public void setDaysSpentDoingOrder(float daysSpentDoingOrder) {
+        this.daysSpentDoingOrder = daysSpentDoingOrder;
+    }
+
     public void advance(float amount){
-        daysSpentDoingOrder+=Global.getSector().getClock().convertToDays(amount);
-        if(getDaysTillOrderFinished()<0){
+        daysSpentDoingOrder+=Global.getSector().getClock().convertToDays(amount)*penalty;
+        if(getDaysTillOrderFinished()<=0){
             int produced = getAmountOfItemsProduced();
             amountToProduce-=getAmountOfItemsProduced();
             FactionAPI pf = Global.getSector().getPlayerFaction();

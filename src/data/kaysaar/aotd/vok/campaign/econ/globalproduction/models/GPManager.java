@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -350,7 +351,7 @@ public class GPManager {
         return map;
     }
 
-    public HashMap<String, Integer> getReqResources() {
+    public HashMap<String, Integer> getReqResources(ArrayList<GPOrder> orders) {
         if (reqResources == null) reqResources = new HashMap<>();
         reqResources.clear();
         for (String s : commodities) {
@@ -366,7 +367,7 @@ public class GPManager {
                 }
             }
         }
-        for (GPOrder productionOrder : productionOrders) {
+        for (GPOrder productionOrder : orders) {
             for (Map.Entry<String, Integer> entry : productionOrder.getReqResources().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue() * getAmountForOrder(productionOrder));
@@ -1524,8 +1525,8 @@ public class GPManager {
         weaponInfo.put("All sizes", val);
         this.weaponSizeInfo.putAll(AoTDMisc.sortByValueDescending(weaponInfo));
     }
-
-    public void advance(float amount) {
+    public void advanceProductions(float amount){
+        advance(getProductionOrders());
         if (!GPManager.isEnabled) {
             Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).unmodifyMult("aotd_gp");
             return;
@@ -1543,52 +1544,50 @@ public class GPManager {
 
             }
         }
-        ArrayList<Integer> offsetOfOrdersToBeRemoved = retrieveOrdersToBeRemoved();
-        if (!offsetOfOrdersToBeRemoved.isEmpty()) {
-            removeDoneOrders(offsetOfOrdersToBeRemoved);
-        }
-
-        HashMap<String, Integer> available = new HashMap<>();
-        available.putAll(getTotalResources());
-        HashMap<String, Integer> availableUnchanged = new HashMap<>();
-        availableUnchanged.putAll(getTotalResources());
         if (currentFocus != null) {
-            if (currentFocus.canSupportStageConsumption(available)) {
-                for (Map.Entry<String, Integer> entry : currentFocus.getSpec().getStageSupplyCost().get(currentFocus.currentStage).entrySet()) {
-                    int availableCommoditySize = available.get(entry.getKey());
-                    available.put(entry.getKey(), availableCommoditySize - entry.getValue());
-
-                }
-                currentFocus.advance(amount);
-            }
-
+            currentFocus.advance(amount);
         }
-        availableUnchanged.clear();
-        availableUnchanged.putAll(available);
         for (GPOrder productionOrder : getProductionOrders()) {
             if (!productionOrder.isCountingToContribution()) continue;
-            boolean metCriteriaWithResources = true;
-            for (Map.Entry<String, Integer> entry : productionOrder.assignedResources.entrySet()) {
-                int availableCommoditySize = available.get(entry.getKey());
-                if (entry.getValue() * this.getAmountForOrder(productionOrder) > availableCommoditySize) {
-                    metCriteriaWithResources = false;
-                    break;
-                } else {
-                    available.put(entry.getKey(), availableCommoditySize - entry.getValue());
-                    productionOrder.resourcesGet.put(entry.getKey(), entry.getValue() * this.getAmountForOrder(productionOrder));
-                }
-            }
-            if (!metCriteriaWithResources) {
-                available.clear();
-                available.putAll(availableUnchanged);
-            } else {
-                availableUnchanged.clear();
-                availableUnchanged.putAll(available);
-            }
             if (productionOrder.canProceed()) {
                 productionOrder.advance(amount);
             }
         }
+    }
+
+    public HashMap<String,Float> advance(ArrayList<GPOrder>orders) {
+
+        ArrayList<Integer> offsetOfOrdersToBeRemoved = retrieveOrdersToBeRemoved();
+        if (!offsetOfOrdersToBeRemoved.isEmpty()) {
+            removeDoneOrders(offsetOfOrdersToBeRemoved);
+        }
+        HashMap<String,Float>penaltyMap = new HashMap<>();
+        for (Map.Entry<String, Integer> stringIntegerEntry : getTotalResources().entrySet()) {
+            Integer currentDemand = getReqResources(orders).get(stringIntegerEntry.getKey());
+            Integer total = stringIntegerEntry.getValue();
+            float penalty = (float) total /currentDemand;
+            if(penalty>=1){
+                penalty=1;
+            }
+            penaltyMap.put(stringIntegerEntry.getKey(), penalty);
+        }
+
+        for (GPOrder order : orders) {
+            float totalPenalty = 1;
+            for (String s : order.assignedResources.keySet()) {
+                totalPenalty*=penaltyMap.get(s);
+            }
+            order.setPenalty(totalPenalty);
+        }
+        if(currentFocus!=null){
+            float totalPenalty = 1;
+            for (Map.Entry<String, Integer> stringIntegerEntry : currentFocus.retrieveCostForCurrStage().entrySet()) {
+                totalPenalty*=penaltyMap.get(stringIntegerEntry.getKey());
+            }
+            currentFocus.setPenalty(totalPenalty);
+        }
+        return penaltyMap;
+
 
     }
 
