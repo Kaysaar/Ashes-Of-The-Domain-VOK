@@ -8,8 +8,10 @@ import ashlib.data.plugins.rendering.ShipRenderer;
 import ashlib.data.plugins.rendering.WeaponSpriteRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
+import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.loading.FormationType;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -199,7 +201,13 @@ public class UIData {
         panel.addUIElement(tooltip).inTL(0, 0);
         return panel;
     }
-
+    public static CustomPanelAPI getAiCoreRenderer(String id, float iconSize) {
+        CustomPanelAPI panel = Global.getSettings().createCustom(iconSize, iconSize, null);
+        TooltipMakerAPI tooltip = panel.createUIElement(iconSize, iconSize, false);
+        tooltip.addImage(Global.getSettings().getCommoditySpec(id).getIconName(), iconSize, iconSize, 0f);
+        panel.addUIElement(tooltip).inTL(0, 0);
+        return panel;
+    }
     public static UiPackage getItemOpton(final GPOption option) {
         FactionAPI faction = Global.getSector().getPlayerFaction();
         Color base = faction.getBaseUIColor();
@@ -239,6 +247,50 @@ public class UIData {
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
                 stack.getPlugin().createTooltip(tooltip, expanded, null, null);
+            }
+        }, TooltipMakerAPI.TooltipLocation.BELOW);
+        panel.addUIElement(mainTooltip).inTL(-5, 0);
+        return new UiPackage(panel, option, button);
+    }
+    public static UiPackage getAICoreOption(final GPOption option) {
+        FactionAPI faction = Global.getSector().getPlayerFaction();
+        Color base = faction.getBaseUIColor();
+        Color bright = faction.getBrightUIColor();
+        Color bg = faction.getDarkUIColor();
+        CustomPanelAPI panel = Global.getSettings().createCustom(WIDTH_OF_OPTIONS - 5, HEIGHT_OF_BUTTONS, null);
+        TooltipMakerAPI mainTooltip = panel.createUIElement(WIDTH_OF_OPTIONS - 5, HEIGHT_OF_BUTTONS, false);
+        ButtonAPI button = mainTooltip.addAreaCheckbox("", option, base, bg, bright, WIDTH_OF_OPTIONS - 5, HEIGHT_OF_BUTTONS, 0f);
+        button.getPosition().inTL(0, 0);
+        CustomPanelAPI panelImage = getAiCoreRenderer(option.getSpec().getAiCoreSpecAPI().getId(), 30);
+        LabelAPI name = mainTooltip.addPara(option.getSpec().getAiCoreSpecAPI().getName(), 0f, Misc.getTooltipTitleAndLightHighlightColor());
+        name.autoSizeToWidth(WIDTH_OF_NAME + WIDTH_OF_TYPE - 35);
+        name.getPosition().inTL(45, getyPad(name));
+        float days = option.getSpec().days / GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
+        if (days <= 1) days = 1;
+        LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString((int) days), 0f);
+        LabelAPI designType = mainTooltip.addPara("AI core",Color.ORANGE, 0f);
+        LabelAPI credits = mainTooltip.addPara(Misc.getDGSCredits(option.getSpec().getCredistCost()), 0f, Color.ORANGE);
+        buildTime.getPosition().inTL(getxPad(buildTime, getCenter(WIDTH_OF_NAME + WIDTH_OF_TYPE, WIDTH_OF_BUILD_TIME)), getyPad(name));
+        designType.getPosition().inTL(getxPad(designType, getCenter(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE, WIDTH_OF_DESIGN_TYPE)), getyPad(designType));
+        credits.getPosition().inTL(getxPad(credits, getCenter(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_DESIGN_TYPE, WIDTH_OF_CREDIT_COST + WIDTH_OF_SIZE)), getyPad(credits));
+        CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP, HEIGHT_OF_BUTTONS, option.getSpec());
+        mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
+        mainTooltip.addCustom(panelImage, 5f).getPosition().inTL(0, 4);
+        mainTooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
+            @Override
+            public boolean isTooltipExpandable(Object tooltipParam) {
+                return false;
+            }
+
+            @Override
+            public float getTooltipWidth(Object tooltipParam) {
+                return 500;
+            }
+
+            @Override
+            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                tooltip.addTitle(option.getSpec().getAiCoreSpecAPI().getName());
+                tooltip.addPara(Global.getSettings().getDescription(option.getSpec().getAiCoreSpecAPI().getName(), Description.Type.RESOURCE).getText1(),10f);
             }
         }, TooltipMakerAPI.TooltipLocation.BELOW);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
@@ -326,6 +378,11 @@ public class UIData {
             imagePanel = UIData.getItemRender(order.getSpecFromClass().getItemSpecAPI().getId(), 24);
             tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
         }
+        if (order.getSpecFromClass().getType() == GPSpec.ProductionType.AICORE) {
+            name = tooltip.addPara(order.getSpecFromClass().getItemSpecAPI().getName(), 0f);
+            imagePanel = UIData.getAiCoreRenderer(order.getSpecFromClass().getItemSpecAPI().getId(), 24);
+            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
+        }
         final GPSpec spec = order.getSpecFromClass();
         tooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
             @Override
@@ -376,6 +433,11 @@ public class UIData {
                     stack.getPlugin().createTooltip(tooltip, expanded, null, null);
 
                 }
+                if (spec.getType() == GPSpec.ProductionType.AICORE) {
+                    tooltip.addTitle(spec.getAiCoreSpecAPI().getName());
+                    tooltip.addPara(Global.getSettings().getDescription(spec.getAiCoreSpecAPI().getName(), Description.Type.RESOURCE).getText1(),10f);
+
+                }
             }
         }, TooltipMakerAPI.TooltipLocation.BELOW, false);
 
@@ -391,7 +453,6 @@ public class UIData {
         tooltip.addCustom(panelImg, 5f).getPosition().setLocation(0, 0).inTL(beingX, 0);
         qty = tooltip.addPara("Quantity: " + order.getAmountToProduce() + " %s", 0f, Color.ORANGE, "(Produced at once : " + order.getAtOnce() + ")");
         qty.getPosition().inTL(10, -qty.getPosition().getY() - 14);
-        if(order.canProceed())
         if(order.canProceed()){
             tooltip.addPara("Order will be completed in : %s", 5f, Color.ORANGE, AoTDMisc.convertDaysToString((int) order.getDaysForLabel()));
         }
