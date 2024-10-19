@@ -5,6 +5,7 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
 
 import java.util.ArrayList;
 
@@ -58,12 +59,23 @@ public class OptionPanelDesigner {
         TooltipMakerAPI tooltip = panelTest.createUIElement(panelTest.getPosition().getWidth(), panelTest.getPosition().getHeight(), true);
         for (int i = currIndex, j = 0; i < options.size() && j < amountPerPage; i++, j++) {
             GPOption opt = options.get(i);
-            UiPackage shipPackage = UIData.getItemOpton(opt);
-            tooltip.addCustom(shipPackage.getPanelPackage(), 5f);
-            if(shipPackage.getRender()!=null){
-                shipPackage.getRender().setAbsoultePanel(panelTest);
+            if(opt.getSpec().getType()== GPSpec.ProductionType.AICORE){
+                UiPackage shipPackage = UIData.getAICoreOption(opt);
+                tooltip.addCustom(shipPackage.getPanelPackage(), 5f);
+                if(shipPackage.getRender()!=null){
+                    shipPackage.getRender().setAbsoultePanel(panelTest);
+                }
+                buttons.add(shipPackage.button);
             }
-            buttons.add(shipPackage.button);
+            else{
+                UiPackage shipPackage = UIData.getItemOpton(opt);
+                tooltip.addCustom(shipPackage.getPanelPackage(), 5f);
+                if(shipPackage.getRender()!=null){
+                    shipPackage.getRender().setAbsoultePanel(panelTest);
+                }
+                buttons.add(shipPackage.button);
+            }
+
 
         }
         panelTest.addUIElement(tooltip).inTL(-5, 0);

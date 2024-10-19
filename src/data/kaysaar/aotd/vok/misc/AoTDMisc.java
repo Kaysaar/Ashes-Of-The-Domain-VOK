@@ -55,6 +55,9 @@ public class AoTDMisc {
 
         return variantId;
     }
+    public static boolean doesPlayerHaveTuringEngine(){
+        return false;
+    }
     public static String ensureManBeingNotNull(String man){
         if(man ==null)return "Unknown";
         return man;

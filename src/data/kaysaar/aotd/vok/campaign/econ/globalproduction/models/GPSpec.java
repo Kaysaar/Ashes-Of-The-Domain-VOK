@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionProductionAPI;
 import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
+import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.WeaponAPI;
@@ -35,7 +36,17 @@ public class GPSpec {
         if(type.equals(ProductionType.ITEM)){
             this.itemSpecAPI = Global.getSettings().getSpecialItemSpec(id);
         }
+        if(type.equals(ProductionType.ITEM)){
+            this.itemSpecAPI = Global.getSettings().getSpecialItemSpec(id);
+        }
+        if(type.equals(ProductionType.AICORE)){
+            this.aiCoreSpecAPI = Global.getSettings().getCommoditySpec(id);
+        }
         this.type = type;
+    }
+
+    public CommoditySpecAPI getAiCoreSpecAPI() {
+        return aiCoreSpecAPI;
     }
 
     public static GPSpec getSpecFromShip(ShipHullSpecAPI specAPI){
@@ -172,6 +183,28 @@ public class GPSpec {
         spec.setSupplyCost(commodityCost);
         return spec;
     }
+    public static GPSpec getSpecFromAICore(CommoditySpecAPI specAPI){
+        int advanced_component_mult = 3000;
+        int domain_grade_mult = 5000;
+        int daysMult = 2500;
+        int basePrice = (int) specAPI.getBasePrice();
+        float newDays = basePrice/daysMult;
+        float newPrice = basePrice*0.7f;
+        newPrice = Math.round(newPrice);
+        GPSpec spec = new GPSpec();
+        spec.setProjectId(specAPI.getId());
+        spec.setObjectToBeProduced(specAPI.getId(),ProductionType.AICORE);
+        spec.setDays((int) newDays);
+        spec.setType(ProductionType.AICORE);
+        HashMap<String,Integer>commodityCost = new HashMap<>();
+        int advanced_component = Math.max(basePrice/advanced_component_mult,1);
+        int domain_grade = Math.max(basePrice/domain_grade_mult,1);
+        commodityCost.put("advanced_components",advanced_component);
+        commodityCost.put("domain_heavy_machinvery",domain_grade);
+        spec.setCredistCost(newPrice);
+        spec.setSupplyCost(commodityCost);
+        return spec;
+    }
 
     public void setCommodityCost(HashMap<String, Integer> commodityCost) {
         this.commodityCost = commodityCost;
@@ -205,7 +238,8 @@ public class GPSpec {
         FIGHTER,
         WEAPON,
         SHIP,
-        ITEM
+        ITEM,
+        AICORE
     }
     public String descriptionOfProject;
 
@@ -222,6 +256,7 @@ public class GPSpec {
     WeaponSpecAPI weaponSpec;
     ShipHullSpecAPI shipHullSpecAPI;
     SpecialItemSpecAPI itemSpecAPI;
+    CommoditySpecAPI aiCoreSpecAPI;
     boolean isRepeatable = true;
     public int  amountOfStages;
     public String progressString;

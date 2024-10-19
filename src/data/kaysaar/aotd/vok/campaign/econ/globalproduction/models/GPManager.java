@@ -4,6 +4,7 @@ import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
+import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
@@ -21,6 +22,7 @@ import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.ui.P;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
@@ -399,6 +401,10 @@ public class GPManager {
     public ArrayList<GPOption> getItemProductionOptionFiltered() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getItemProductionOption()) {
+            if(option.getSpec().getItemSpecAPI()==null){
+                option.getSpec().setType(GPSpec.ProductionType.AICORE);
+                options.add(option);continue;
+            }
             if (option.getSpec().getItemSpecAPI().hasTag("aotd_ignore_gp")) continue;
             if (ItemEffectsRepo.ITEM_EFFECTS.get(option.getSpec().getProjectId()) != null) {
                 options.add(option);
@@ -406,7 +412,15 @@ public class GPManager {
         }
         return options;
     }
-
+    public ArrayList<GPOption> getAICores() {
+        ArrayList<GPOption> options = new ArrayList<>();
+        for (GPOption option : getItemProductionOption()) {
+            if(option.getSpec().getType().equals(GPSpec.ProductionType.AICORE)){
+                options.add(option);
+            }
+        }
+        return options;
+    }
     public ArrayList<GPOption> getShipPackagesBasedOnTags(ArrayList<String> manufacturues, ArrayList<String> sizes, ArrayList<String> types) {
         boolean allMan = AoTDMisc.arrayContains(manufacturues, "All designs") || manufacturues.isEmpty();
         boolean allSizes = AoTDMisc.arrayContains(sizes, "All sizes") || sizes.isEmpty();
@@ -458,6 +472,7 @@ public class GPManager {
         ArrayList<GPOption> options = new ArrayList<>();
         if (allMan) return getItemSortedBasedOnData("Cost", SortingState.ASCENDING, getLearnedItems());
         for (GPOption learnedShipPackage : getItemSortedBasedOnData("Cost", SortingState.ASCENDING, getLearnedItems())) {
+            if(learnedShipPackage.getSpec().getItemSpecAPI()==null)continue;
             boolean valid = true;
             if (!allMan) {
                 valid = false;
@@ -472,6 +487,9 @@ public class GPManager {
                 options.add(learnedShipPackage);
             }
 
+        }
+        if(AoTDMisc.arrayContains(manufacturues, "AI Cores")){
+            options.addAll(getAICores());
         }
         return options;
     }
@@ -1040,6 +1058,13 @@ public class GPManager {
             GPSpec spec = GPSpec.getSpecFromItem(s);
             specs.add(spec);
         }
+        for (CommoditySpecAPI s : Global.getSettings().getAllCommoditySpecs()) {
+            if(s.hasTag("ai_core")&&!s.hasTag("no_drop")&&!s.getId().equals("ai_cores")){
+                GPSpec spec = GPSpec.getSpecFromAICore(s);
+                specs.add(spec);
+            }
+
+        }
     }
 
     public ArrayList<GPOption> getShipPackagesByManu(ArrayList<String> values) {
@@ -1136,6 +1161,10 @@ public class GPManager {
                 GPOption option = new GPOption(spec, true, GPSpec.ProductionType.ITEM);
                 itemProductionOption.add(option);
             }
+            if(spec.type.equals(GPSpec.ProductionType.AICORE)){
+                GPOption option = new GPOption(spec, true, GPSpec.ProductionType.AICORE);
+                itemProductionOption.add(option);
+            }
 
         }
         for (GPSpec specialProjectSpec : specialProjectSpecs) {
@@ -1179,11 +1208,19 @@ public class GPManager {
     public ArrayList<GPOption> getLearnedItems() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getItemProductionOptionFiltered()) {
+            if(option.getSpec().getType().equals(GPSpec.ProductionType.AICORE)){
+                if(AoTDMisc.doesPlayerHaveTuringEngine()){
+                    options.add(option);
+                }
+                continue;
+            }
             if (option.getSpec().getItemSpecAPI().hasTag("aotd_ignore_gp")) continue;
+
             if (AoTDMisc.knowsItem(option.getSpec().getItemSpecAPI().getId(), Global.getSector().getPlayerFaction()) || Global.getSettings().isDevMode()) {
                 options.add(option);
             }
         }
+
         return options;
     }
 
@@ -1394,6 +1431,7 @@ public class GPManager {
         LinkedHashMap<String, Integer> itemManInffo = new LinkedHashMap<>();
         for (GPOption learnedItem : getLearnedItems()) {
             SpecialItemSpecAPI spec = learnedItem.getSpec().getItemSpecAPI();
+            if(spec==null)continue;
             if (itemManInffo.get(spec.getManufacturer()) == null) {
                 itemManInffo.put(spec.getManufacturer(), 1);
             } else {
@@ -1401,6 +1439,10 @@ public class GPManager {
                 itemManInffo.put(spec.getManufacturer(), amount + 1);
             }
         }
+        if(AoTDMisc.doesPlayerHaveTuringEngine()){
+            itemManInffo.put("AI Cores", getAICores().size());
+        }
+
         int val = 0;
         for (Integer value : itemManInffo.values()) {
             val += value;
