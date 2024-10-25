@@ -5,6 +5,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpOptionSorter;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.OptionPanelDesigner;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
@@ -20,9 +21,9 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager  {
 
     public WeaponOptionPanelInterface(CustomPanelAPI panel,float padding ) {
 
-        GPManager.getInstance().populateWeaponInfo();
-        GPManager.getInstance().populateWeaponSizeInfo();
-        GPManager.getInstance().populateWeaponTypeInfo();
+        GPManager.getInstance().getUIData().populateWeaponInfo();
+        GPManager.getInstance().getUIData().populateWeaponSizeInfo();
+        GPManager.getInstance().getUIData().populateWeaponTypeInfo();
         mapOfButtonStates = new HashMap<>();
         this.padding = padding;
         this.mainPanel = panel;
@@ -43,9 +44,9 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager  {
     @Override
     public void init() {
         createWeaponOptions(panel);
-        createDesignButtons(GPManager.getInstance().getWeaponManInfo());
-        createSizeOptions(GPManager.getInstance().getWeaponSizeInfo());
-        createTypeOptions(GPManager.getInstance().getWeaponTypeInfo());
+        createDesignButtons( GPManager.getInstance().getUIData().getWeaponManInfo());
+        createSizeOptions( GPManager.getInstance().getUIData().getWeaponSizeInfo());
+        createTypeOptions( GPManager.getInstance().getUIData().getWeaponTypeInfo());
         createSortingButtons(false, false);
         createSerachBarPanel();
         this.mainPanel.addComponent(panel).inTL(0, padding);
@@ -72,13 +73,13 @@ public class WeaponOptionPanelInterface extends BaseOptionPanelManager  {
     private void createWeaponOptions(CustomPanelAPI panel) {
         if (orderButtons == null) orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages = GPManager.getInstance().getLearnedWeapons();
-        packages = GPManager.getInstance().getWeaponPackagesBasedOnTags(chosenManu, chosenSize, chosenType);
+        packages = GpOptionSorter.getWeaponPackagesBasedOnTags(chosenManu, chosenSize, chosenType);
         if (resetToText) {
             packages = GPManager.getInstance().getMatchingWeaponGps(searchbar.getText());
         }
         for (Map.Entry<String, SortingState> option : mapOfButtonStates.entrySet()) {
             if (option.getValue() != SortingState.NON_INITIALIZED) {
-                packages = GPManager.getInstance().getWeaponPackagesBasedOnData(option.getKey(), option.getValue(), packages);
+                packages = GpOptionSorter.getWeaponPackagesBasedOnData(option.getKey(), option.getValue(), packages);
             }
         }
         wantsAll = false;

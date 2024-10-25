@@ -6,6 +6,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpOptionSorter;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.OptionPanelDesigner;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
@@ -19,7 +20,7 @@ import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components
 
 public class ItemOptionPanelManager extends BaseOptionPanelManager {
     public ItemOptionPanelManager(CustomPanelAPI panel , float padding){
-        GPManager.getInstance().populateItemInfo();
+        GPManager.getInstance().getUIData().populateItemInfo();
         this.padding = padding;
         mapOfButtonStates = new HashMap<>();
         this.mainPanel = panel;
@@ -52,7 +53,7 @@ public class ItemOptionPanelManager extends BaseOptionPanelManager {
     @Override
     public void init() {
         createItemPanels(panel);
-        createDesignButtons(GPManager.getInstance().getItemManInffo());
+        createDesignButtons(GPManager.getInstance().getUIData().getItemManInffo());
         createSortingButtons(false, false);
         createSerachBarPanel();
         this.mainPanel.addComponent(panel).inTL(0, padding);
@@ -102,13 +103,13 @@ public class ItemOptionPanelManager extends BaseOptionPanelManager {
     public void createItemPanels(CustomPanelAPI panel){
         if(orderButtons==null)orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages;
-        packages = GPManager.getInstance().getItemsBasedOnTag(chosenManu);
+        packages = GpOptionSorter.getItemsBasedOnTag(chosenManu);
         if (resetToText) {
             packages = GPManager.getInstance().getMatchingItemGps(searchbar.getText());
         }
         for (Map.Entry<String, SortingState> option : mapOfButtonStates.entrySet()) {
             if(option.getValue()!=SortingState.NON_INITIALIZED){
-                packages= GPManager.getInstance().getItemSortedBasedOnData(option.getKey(),option.getValue(),packages);
+                packages= GpOptionSorter.getItemSortedBasedOnData(option.getKey(),option.getValue(),packages);
             }
         }
         wantsAll = false;

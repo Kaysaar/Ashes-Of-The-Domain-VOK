@@ -93,7 +93,7 @@ public class ProductionDataPanel {
         buttonOfDisplay.setClickable(false);
         buttonOfDisplay.setHighlightBrightness(0f);
         buttonOfDisplay.getPosition().inTL(buttonWidth*2+seperator*2,0);
-        LabelAPI label = tooltipOfButtonSection.addPara(""+GPManager.getInstance().getAmountBasedOnType(type), Color.ORANGE,0f);
+        LabelAPI label = tooltipOfButtonSection.addPara("", Color.ORANGE,0f);
         LabelAPI label2 =  tooltipOfButtonSection.addPara(getStringForType(type)+" Produced Per Order", Color.ORANGE,0f);
         float centerX = buttonOfDisplay.getPosition().getX()+buttonOfDisplay.getPosition().getWidth()/2;
         label.getPosition().inTL(centerX-(label.computeTextWidth(label.getText())/2),15-(label.computeTextHeight(label.getText())/2));
@@ -124,16 +124,6 @@ public class ProductionDataPanel {
             for (ButtonAPI button : buttons) {
                 if (button.isChecked()) {
                     button.setChecked(false);
-                    if (button.getCustomData() instanceof ProductionButtonData) {
-                        ProductionButtonData data = (ProductionButtonData) button.getCustomData();
-                        int currValue = GPManager.getInstance().getAmountBasedOnType(data.type);
-                        int newValue = currValue + data.valueOfEq;
-                        if (newValue <= 0) newValue = 1;
-                        GPManager.getInstance().setAmountBasedOnType(data.type, newValue);
-                        resets = true;
-                        break;
-
-                    }
                 }
 
             }

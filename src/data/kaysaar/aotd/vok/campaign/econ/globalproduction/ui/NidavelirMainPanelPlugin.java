@@ -201,7 +201,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         float topYImage = 0;
         LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
         float x = positions;
-        for (Map.Entry<String, Integer> entry : getExpectedCosts().entrySet()) {
+        for (Map.Entry<String, Integer> entry : GPManager.getInstance().getExpectedCosts(ordersQueued).entrySet()) {
             tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconsize, iconsize, 0f);
             tooltip.addTooltipToPrevious(new CommodityInfo(entry.getKey(), 700, true, false,ordersQueued), TooltipMakerAPI.TooltipLocation.BELOW);
             UIComponentAPI image = tooltip.getPrev();
@@ -542,35 +542,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         createMarketResourcesPanel();
     }
 
-    public LinkedHashMap<String, Integer> getExpectedCosts() {
-        LinkedHashMap<String, Integer> reqResources = new LinkedHashMap<>();
-        reqResources.clear();
-        for (String s : commodities) {
-            reqResources.put(s, 0);
-        }
-        if (GPManager.getInstance().getCurrProjOnGoing() != null && !GPManager.getInstance().getCurrProjOnGoing().isFinished()) {
-            for (Map.Entry<String, Integer> entry : GPManager.getInstance().getCurrProjOnGoing().retrieveCostForCurrStage().entrySet()) {
-                if (reqResources.get(entry.getKey()) == null) {
-                    reqResources.put(entry.getKey(), entry.getValue());
-                } else {
-                    int prev = reqResources.get(entry.getKey());
-                    reqResources.put(entry.getKey(), prev + entry.getValue());
-                }
-            }
-        }
-        for (GPOrder productionOrder : ordersQueued) {
-            for (Map.Entry<String, Integer> entry : productionOrder.getReqResources().entrySet()) {
-                if (reqResources.get(entry.getKey()) == null) {
-                    reqResources.put(entry.getKey(), entry.getValue() * GPManager.getInstance().getAmountForOrder(productionOrder));
-                } else {
-                    int prev = reqResources.get(entry.getKey());
-                    reqResources.put(entry.getKey(), prev + entry.getValue() * GPManager.getInstance().getAmountForOrder(productionOrder));
-                }
-            }
-        }
 
-        return reqResources;
-    }
 
     public void createMarketResourcesPanel() {
         float width = UIData.WIDTH / 2;
@@ -590,7 +562,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
             image.getPosition().inTL(x, topYImage);
             String text = "" + entry.getValue();
             String text2 = text + "(" + GPManager.getInstance().getReqResources(ordersQueued).get(entry.getKey()) + ")";
-            tooltip.addPara("" + entry.getValue() + " %s", 0f, Misc.getTooltipTitleAndLightHighlightColor(), Color.ORANGE, "(" +  getExpectedCosts().get(entry.getKey()) + ")").getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
+            tooltip.addPara("" + entry.getValue() + " %s", 0f, Misc.getTooltipTitleAndLightHighlightColor(), Color.ORANGE, "(" +  GPManager.getInstance().getExpectedCosts(ordersQueued).get(entry.getKey()) + ")").getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
             x += sections;
         }
         panelOfMarketData.addUIElement(tooltip).inTL(0, 0);
