@@ -8,6 +8,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.campaign.command.CustomProductionPanel;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
@@ -28,6 +29,7 @@ public class CoreUITracker implements EveryFrameScript {
     boolean removed = false;
     NidavelirMainPanelPlugin plugin = null;
     AoTDResearchUI pluginResearch = null;
+    GPMegasturcutreMenu pluginMenu = null;
     boolean pausedMusic = true;
 
     @Override
@@ -75,6 +77,10 @@ public class CoreUITracker implements EveryFrameScript {
                     pausedMusic = true;
                 }
                 plugin = null;
+            }
+            if(pluginMenu != null) {
+                pluginMenu.clearUI();
+                pluginMenu = null;
             }
 
             if (pluginResearch != null) {
@@ -139,7 +145,7 @@ public class CoreUITracker implements EveryFrameScript {
                     tooltip.addPara("This tab will be available once 2.5 version of Vaults of Knowledge will be released!", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
 
                 }
-            }, tryToGetButtonProd("colonies"), 180, Keyboard.KEY_7, true);
+            }, tryToGetButtonProd("colonies"), 180, Keyboard.KEY_7, false);
         }
         if (panelMap == null) {
             panelMap = new HashMap<>();
@@ -183,8 +189,9 @@ public class CoreUITracker implements EveryFrameScript {
                 if (GPManager.isEnabled) {
                     insertNewPanel(button);
                 }
+                UIData.recompute();
                 insertNewResearchPanel(tryToGetButtonProd("research"));
-
+                insertNewMegastructuresPanel(tryToGetButtonProd("megastructures"));
             }
 
 
@@ -321,7 +328,14 @@ public class CoreUITracker implements EveryFrameScript {
 
         panelMap.put(tiedButton, pluginResearch.getPanel());
     }
+    private void insertNewMegastructuresPanel(ButtonAPI tiedButton) {
+        if (pluginMenu == null) {
+            pluginMenu = new GPMegasturcutreMenu();
+            pluginMenu.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, plugin));
+        }
 
+        panelMap.put(tiedButton, pluginMenu.getMainPanel());
+    }
     private Pair<CustomPanelAPI, ButtonAPI> createPanelButton(String buttonName, float width, float height, int bindingValue, boolean dissabled, TooltipMakerAPI.TooltipCreator onHoverTooltip) {
         CustomPanelAPI panel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(width, height, false);

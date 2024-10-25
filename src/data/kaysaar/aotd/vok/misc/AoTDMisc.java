@@ -21,17 +21,21 @@ import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
+import javax.json.JsonArray;
 import java.awt.*;
 import java.io.IOException;
+import java.sql.Ref;
 import java.util.*;
 import java.util.List;
 
 public class AoTDMisc {
+    public static Class<?> confirmDialogClass;
     @Nullable
     public static String getVaraint(ShipHullSpecAPI allShipHullSpec) {
         String variantId = null;
@@ -78,6 +82,14 @@ public class AoTDMisc {
         String[]splitted = rawMap.split(seperator);
         ArrayList<String> map = new ArrayList<>(Arrays.asList(splitted));
 
+        return map;
+    }
+    public static HashMap<String,Integer> loadCostMap(String rawMap) {
+        HashMap<String,Integer>map = new HashMap<>();
+        for (String s : loadEntries(rawMap,",")) {
+            String[] extracted = s.split(":");
+            map.put(extracted[0],Integer.valueOf(extracted[1]));
+        }
         return map;
     }
     public static AoTDAIStance getStanceFromString(String stance) {
@@ -489,12 +501,13 @@ public class AoTDMisc {
         }
         return spriteName;
     }
-
-    public static String getNumberString(float number) {
-        int numberButInt = (int) number;
-        if ((float) numberButInt == number) {
-            return "" + numberButInt;
+    public static ArrayList<JSONObject>getObjectListFromArray(JSONArray array) throws JSONException {
+        ArrayList<JSONObject> list = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            list.add(array.getJSONObject(i));
         }
-        return String.format("%.1f", number);
+        return list;
     }
+
+
 }

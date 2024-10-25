@@ -4,6 +4,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpOptionSorter;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.OptionPanelDesigner;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
@@ -18,9 +19,9 @@ public class ShipOptionPanelInterface extends BaseOptionPanelManager {
 
 
     public ShipOptionPanelInterface(CustomPanelAPI panel,float padding) {
-        GPManager.getInstance().populateShipInfo();
-        GPManager.getInstance().populateShipSizeInfo();
-        GPManager.getInstance().populateShipTypeInfo();
+        GPManager.getInstance().getUIData().populateShipInfo();
+        GPManager.getInstance().getUIData().populateShipSizeInfo();
+        GPManager.getInstance().getUIData().populateShipTypeInfo();
         this.padding = padding;
         mapOfButtonStates = new HashMap<>();
         this.mainPanel = panel;
@@ -32,9 +33,9 @@ public class ShipOptionPanelInterface extends BaseOptionPanelManager {
 
     public void init() {
         createShipOptions(panel);
-        createDesignButtons(GPManager.getInstance().getShipManInfo());
-        createSizeOptions(GPManager.getInstance().getShipSizeInfo());
-        createTypeOptions(GPManager.getInstance().getShipTypeInfo());
+        createDesignButtons(GPManager.getInstance().getUIData().getShipManInfo());
+        createSizeOptions(GPManager.getInstance().getUIData().getShipSizeInfo());
+        createTypeOptions(GPManager.getInstance().getUIData().getShipTypeInfo());
         createSortingButtons(false, false);
         createSerachBarPanel();
         this.mainPanel.addComponent(panel).inTL(0, padding);
@@ -64,13 +65,13 @@ public class ShipOptionPanelInterface extends BaseOptionPanelManager {
     private void createShipOptions(CustomPanelAPI panel) {
         if(orderButtons==null)orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages = GPManager.getInstance().getLearnedShipPackages();
-        packages = GPManager.getInstance().getShipPackagesBasedOnTags(chosenManu,chosenSize,chosenType);
+        packages = GpOptionSorter.getShipPackagesBasedOnTags(chosenManu,chosenSize,chosenType);
         if (resetToText) {
             packages = GPManager.getInstance().getMatchingShipGps(searchbar.getText());
         }
         for (Map.Entry<String, SortingState> option : mapOfButtonStates.entrySet()) {
             if(option.getValue()!=SortingState.NON_INITIALIZED){
-                packages= GPManager.getInstance().getShipPackagesBasedOnData(option.getKey(),option.getValue(),packages);
+                packages= GpOptionSorter.getShipPackagesBasedOnData(option.getKey(),option.getValue(),packages);
             }
         }
         wantsAll = false;

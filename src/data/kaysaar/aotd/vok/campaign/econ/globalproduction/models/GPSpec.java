@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import static data.kaysaar.aotd.vok.misc.AoTDMisc.loadCostMap;
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.loadEntries;
 
 public class GPSpec {
@@ -561,14 +562,7 @@ public class GPSpec {
         return specs;
     }
 
-    public static HashMap<String,Integer> loadCostMap(String rawMap) {
-        HashMap<String,Integer>map = new HashMap<>();
-        for (String s : loadEntries(rawMap,",")) {
-            String[] extracted = s.split(":");
-            map.put(extracted[0],Integer.valueOf(extracted[1]));
-        }
-        return map;
-    }
+
 
     public static HashMap<Integer,Pair<String,String>>getStageMap(String rawmap,String descMap, int stageAmount){
         HashMap<Integer,Pair<String,String>>stageMap = new HashMap<>();

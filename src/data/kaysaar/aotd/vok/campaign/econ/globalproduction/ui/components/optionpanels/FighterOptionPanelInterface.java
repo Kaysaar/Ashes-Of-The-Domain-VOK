@@ -4,6 +4,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpOptionSorter;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.OptionPanelDesigner;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
@@ -26,8 +27,8 @@ public class FighterOptionPanelInterface extends BaseOptionPanelManager {
     }
 
     public FighterOptionPanelInterface(CustomPanelAPI panel,float padding){
-        GPManager.getInstance().populateFighterInfo();
-        GPManager.getInstance().populateFighterTypeInfo();
+        GPManager.getInstance().getUIData().populateFighterInfo();
+        GPManager.getInstance().getUIData().populateFighterTypeInfo();
         mapOfButtonStates = new HashMap<>();
         this.padding = padding;
         this.mainPanel = panel;
@@ -39,8 +40,8 @@ public class FighterOptionPanelInterface extends BaseOptionPanelManager {
     @Override
     public void init() {
         createFighterOptions(panel);
-        createDesignButtons(GPManager.getInstance().getFighterManInfo());
-        createTypeOptions(GPManager.getInstance().getFighterTypeInfo());
+        createDesignButtons(GPManager.getInstance().getUIData().getFighterManInfo());
+        createTypeOptions(GPManager.getInstance().getUIData().getFighterTypeInfo());
         createSortingButtons(true, false);
         createSerachBarPanel();
         this.mainPanel.addComponent(panel).inTL(0, padding);
@@ -68,14 +69,14 @@ public class FighterOptionPanelInterface extends BaseOptionPanelManager {
     private void createFighterOptions(CustomPanelAPI panel) {
         if(orderButtons==null)orderButtons = new ArrayList<>();
         ArrayList<GPOption> packages = GPManager.getInstance().getLearnedFighters();
-        packages= GPManager.getInstance().getFighterBasedOnData("Cost",SortingState.ASCENDING,packages);
-        packages = GPManager.getInstance().getFighterPackagesBasedOnTags(chosenManu,chosenSize,chosenType);
+        packages= GpOptionSorter.getFighterBasedOnData("Cost",SortingState.ASCENDING,packages);
+        packages = GpOptionSorter.getFighterPackagesBasedOnTags(chosenManu,chosenSize,chosenType);
         if (resetToText) {
             packages = GPManager.getInstance().getMatchingFighterGPs(searchbar.getText());
         }
         for (Map.Entry<String, SortingState> option : mapOfButtonStates.entrySet()) {
             if(option.getValue()!=SortingState.NON_INITIALIZED){
-                packages= GPManager.getInstance().getFighterBasedOnData(option.getKey(),option.getValue(),packages);
+                packages= GpOptionSorter.getFighterBasedOnData(option.getKey(),option.getValue(),packages);
             }
         }
         wantsAll = false;
