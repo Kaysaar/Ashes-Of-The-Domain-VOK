@@ -253,7 +253,7 @@ public class SpecialProjectManager extends BaseOptionPanelManager  {
     }
 
     public Pair<CustomPanelAPI, ArrayList<ButtonAPI>> createProjectStagePanel(GpSpecialProjectData option, CustomPanelAPI parentPanel, float width, float height) {
-        ProgressBarRender renderer = new ProgressBarRender();
+        ProgressBarRenderForButton renderer = new ProgressBarRenderForButton();
         CustomPanelAPI panel = parentPanel.createCustomPanel(width, height, renderer);
         ArrayList<ButtonAPI> buttons = new ArrayList<>();
         TooltipMakerAPI tooltip = panel.createUIElement(width, height - 25, true);

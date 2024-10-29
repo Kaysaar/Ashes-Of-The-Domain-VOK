@@ -212,6 +212,10 @@ public class CoreUITracker implements EveryFrameScript {
                         pluginResearch.playSound();
                         pausedMusic = false;
                     }
+                    if (currentTab.getText().toLowerCase().contains("research")) {
+                        pluginMenu.playSound();
+                        pausedMusic = false;
+                    }
                 }
             }
         }
@@ -331,7 +335,7 @@ public class CoreUITracker implements EveryFrameScript {
     private void insertNewMegastructuresPanel(ButtonAPI tiedButton) {
         if (pluginMenu == null) {
             pluginMenu = new GPMegasturcutreMenu();
-            pluginMenu.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, plugin));
+            pluginMenu.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, pluginMenu));
         }
 
         panelMap.put(tiedButton, pluginMenu.getMainPanel());

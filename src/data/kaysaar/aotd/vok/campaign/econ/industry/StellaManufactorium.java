@@ -41,7 +41,7 @@ public class StellaManufactorium extends HeavyIndustry {
         demand(AoTDCommodities.PURIFIED_TRANSPLUTONICS, size + 1);
         supply(Commodities.HEAVY_MACHINERY, size+2);
         supply(Commodities.SUPPLIES, size+4);
-        supply(AoTDCommodities.DOMAIN_GRADE_MACHINERY, size);
+        supply("domain_heavy_machinery", size);
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.METALS,Commodities.RARE_ORE);
         Pair<String, Integer> deficit2 = getMaxDeficit(AoTDCommodities.REFINED_METAL,AoTDCommodities.PURIFIED_TRANSPLUTONICS);
 
@@ -50,7 +50,7 @@ public class StellaManufactorium extends HeavyIndustry {
                 Commodities.SUPPLIES,
                 Commodities.HAND_WEAPONS,
                 Commodities.SHIPS);
-        applyDeficitToProduction(3, deficit2,AoTDCommodities.DOMAIN_GRADE_MACHINERY
+        applyDeficitToProduction(3, deficit2,"domain_heavy_machinery"
         );
 
 //		if (market.getId().equals("chicomoztoc")) {

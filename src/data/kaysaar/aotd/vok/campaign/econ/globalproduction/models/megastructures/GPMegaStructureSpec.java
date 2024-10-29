@@ -3,10 +3,8 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructur
 import com.fs.starfarer.api.Global;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -21,6 +19,16 @@ public class GPMegaStructureSpec {
     public String sectorEntityTokenId;
     public ArrayList<String>sectionIds;
     public String description;
+    public String imageForMegastructure;
+
+
+    public String getImageForMegastructure() {
+        return imageForMegastructure;
+    }
+
+    public void setImageForMegastructure(String imageForMegastructure) {
+        this.imageForMegastructure = imageForMegastructure;
+    }
 
     public String getMegastructureID() {
         return megastructureID;
@@ -38,9 +46,11 @@ public class GPMegaStructureSpec {
         this.name = name;
     }
 
+
     public GPBaseMegastructure getScript() {
         try {
-            GPBaseMegastructure megastructure = (GPBaseMegastructure) Global.getSettings().getScriptClassLoader().loadClass(script).getConstructor(String.class).newInstance(this.megastructureID);
+            GPBaseMegastructure megastructure = (GPBaseMegastructure) Global.getSettings().getScriptClassLoader().loadClass(script).newInstance();
+            megastructure.mockUpInit(megastructureID);
             return megastructure;
 
         } catch (Exception e) {
@@ -114,6 +124,7 @@ public class GPMegaStructureSpec {
                 String sectorEntityTokenId = jsonObject.getString("entityId");
                 ArrayList<String>sectionIds = AoTDMisc.loadEntries(jsonObject.getString("sections"),",");
                 String description = jsonObject.getString("description");
+                String image = jsonObject.getString("image");
                 for (String sectionId : sectionIds) {
                     if(GPManager.getInstance().getMegaSectionSpecFromList(sectionId)==null){
                         throw new RuntimeException("Section spec of id "+sectionId+" not found, check  aotd_megastructure_sections.csv ");
@@ -129,6 +140,7 @@ public class GPMegaStructureSpec {
                 spec.setSectorEntityTokenId(sectorEntityTokenId);
                 spec.setSectionIds(sectionIds);
                 spec.setDescription(description);
+                spec.setImageForMegastructure(image);
                 specs.add(spec);
 
             }

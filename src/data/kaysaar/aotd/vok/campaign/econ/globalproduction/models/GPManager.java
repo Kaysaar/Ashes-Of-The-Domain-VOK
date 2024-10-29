@@ -1,40 +1,29 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 
-import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
-import com.fs.starfarer.api.impl.campaign.intel.AoTDCommIntelPlugin;
-import com.fs.starfarer.api.impl.campaign.intel.PCFPlanetIntel;
 import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.ui.P;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
-import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
-import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GpMegaStructureSectionsSpec;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import kaysaar.aotd_question_of_loyalty.data.tags.AoTDRankTags;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
@@ -51,6 +40,7 @@ public class GPManager {
     public int amountWepPerOnce = 1;
     public int amountFighterPerOnce = 1;
     GPUIData gpuiData;
+    protected ArrayList<GPBaseMegastructure> megastructures;
 
     public GPUIData getUIData() {
         if (gpuiData == null) {
@@ -137,7 +127,7 @@ public class GPManager {
         commodities.add(Commodities.SHIPS);
         commodities.add(Commodities.HAND_WEAPONS);
         commodities.add("advanced_components");
-        commodities.add("domain_heavy_machinvery");
+        commodities.add("domain_heavy_machinery");
         commodities.add("refined_metal");
         commodities.add("purified_rare_metal");
     }
@@ -162,6 +152,14 @@ public class GPManager {
         return (GPManager) Global.getSector().getPersistentData().get(memkey);
     }
 
+    public static ArrayList<String> getCommodities() {
+        return commodities;
+    }
+
+    public ArrayList<GPBaseMegastructure> getMegastructures() {
+        return megastructures;
+    }
+
     public static GPManager setInstance() {
         GPManager manager = new GPManager();
         Global.getSector().getPersistentData().put(memkey, manager);
@@ -169,7 +167,9 @@ public class GPManager {
         return manager;
     }
 
-
+    public void addMegastructureToList(GPBaseMegastructure megastructure){
+        megastructures.add(megastructure);
+    }
     public GPSpec getSpec(String id) {
         for (GPSpec spec : specs) {
             if (spec.getProjectId().equals(id)) {
@@ -192,6 +192,10 @@ public class GPManager {
         if (manufacturerData != null) {
             manufacturerData.clear();
         }
+        if(megastructures==null){
+            megastructures = new ArrayList<>();
+        }
+
         isEnabled = AoTDSettingsManager.getBooleanValue("aotd_titans_of_industry");
         scale = AoTDSettingsManager.getIntValue("aotd_scale");
         manufacturerData = new ArrayList<>();
@@ -218,18 +222,17 @@ public class GPManager {
             for (Industry ind : factionMarket.getIndustries()) {
                 for (String commodity : commodities) {
                     int val = ind.getSupply(commodity).getQuantity().getModifiedInt() * scale;
-                    if (totalResources.get(commodity) == null) {
-                        totalResources.put(commodity, val);
-                    } else {
-                        int prev = totalResources.get(commodity);
-                        totalResources.put(commodity, val + prev);
-                    }
+                    AoTDMisc.putCommoditiesIntoMap(totalResources,commodity, val);
                 }
 
             }
         }
+        AoTDListenerUtilis.increaseProductionCapacity(totalResources);
         return totalResources;
     }
+
+
+
 
     public LinkedHashMap<MarketAPI, Integer> getTotalResourceProductionFromMarkets(String commodity) {
         LinkedHashMap<MarketAPI, Integer> map = new LinkedHashMap<>();
@@ -274,6 +277,16 @@ public class GPManager {
                 } else {
                     int prev = reqResources.get(entry.getKey());
                     reqResources.put(entry.getKey(), prev + entry.getValue() * getAmountForOrder(productionOrder));
+                }
+            }
+        }
+        for (GPBaseMegastructure megastructure : megastructures) {
+            for (Map.Entry<String, Integer> entry : megastructure.getCosts().entrySet()) {
+                if (reqResources.get(entry.getKey()) == null) {
+                    reqResources.put(entry.getKey(), entry.getValue());
+                } else {
+                    int prev = reqResources.get(entry.getKey());
+                    reqResources.put(entry.getKey(), prev + entry.getValue());
                 }
             }
         }
@@ -427,6 +440,13 @@ public class GPManager {
         }
         return null;
     }
+    public GPMegaStructureSpec getMegaSpecFromListByEntityId(String id ){
+        for (GPMegaStructureSpec spec : megaStructureSpecs) {
+            if(spec.getSectorEntityTokenId().equals(id))return spec;
+        }
+        return null;
+    }
+
     public GpMegaStructureSectionsSpec getMegaSectionSpecFromList(String id ){
         for (GpMegaStructureSectionsSpec spec : megaStructureSectionsSpecs) {
             if(spec.getSectionID().equals(id))return spec;
@@ -480,7 +500,16 @@ public class GPManager {
                 }
             }
         }
-
+        for (GPBaseMegastructure s : megastructures) {
+            for (Map.Entry<String, Integer> entry : s.getCosts().entrySet()) {
+                if (reqResources.get(entry.getKey()) == null) {
+                    reqResources.put(entry.getKey(), entry.getValue());
+                } else {
+                    int prev = reqResources.get(entry.getKey());
+                    reqResources.put(entry.getKey(), prev + entry.getValue());
+                }
+            }
+        }
         return reqResources;
     }
 
@@ -661,12 +690,14 @@ public class GPManager {
 
 
     public void advanceProductions(float amount) {
-        advance(getProductionOrders());
         if (!GPManager.isEnabled) {
             Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).unmodifyMult("aotd_gp");
             return;
         }
-        Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).modifyMult("aotd_gp", 0, "Global Production Mechanic (AOTD)");
+        for (GPBaseMegastructure megastructure : megastructures) {
+            megastructure.advance(amount);
+        }
+        advance(getProductionOrders());
         if (!AoTDMisc.isPLayerHavingHeavyIndustry()) return;
         for (GpSpecialProjectData specialProjDatum : specialProjData) {
             if (specialProjDatum.isDiscovered()) {
@@ -721,6 +752,17 @@ public class GPManager {
             }
             currentFocus.setPenalty(totalPenalty);
         }
+
+        for (GPBaseMegastructure megastructure : getMegastructures()) {
+            float totalPenalty = 1;
+            for (GPMegaStructureSection s : megastructure.getMegaStructureSections()) {
+                for (Map.Entry<String, Integer> entry : s.getGPUpkeep().entrySet()) {
+                    totalPenalty *= penaltyMap.get(entry.getKey());
+                }
+                s.setPenaltyFromLackOfResources(totalPenalty);
+            }
+        }
+
         return penaltyMap;
 
 

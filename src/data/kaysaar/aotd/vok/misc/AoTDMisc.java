@@ -59,6 +59,14 @@ public class AoTDMisc {
 
         return variantId;
     }
+    public static void putCommoditiesIntoMap(HashMap<String,Integer> map, String commodity, int val) {
+        if (map.get(commodity) == null) {
+            map.put(commodity, val);
+        } else {
+            int prev = map.get(commodity);
+            map.put(commodity, val + prev);
+        }
+    }
     public static boolean doesPlayerHaveTuringEngine(){
         return false;
     }
@@ -283,6 +291,68 @@ public class AoTDMisc {
         GL11.glVertex2f(x + width, y);
         GL11.glVertex2f(x + width, y + height*scale);
         GL11.glVertex2f(x, y + height*scale);
+        GL11.glEnd();
+
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        GL11.glColorMask(true, true, true, true);
+
+        GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+    }
+    public static void startStencilWithYPad(CustomPanelAPI panel,float yPad) {
+        GL11.glClearStencil(0);
+        GL11.glStencilMask(0xff);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+
+        GL11.glColorMask(false, false, false, false);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xff);
+        GL11.glStencilMask(0xff);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+
+        GL11.glBegin(GL11.GL_POLYGON);
+        PositionAPI position = panel.getPosition();
+        float x = position.getX()-5;
+        float y = position.getY();
+        float width = position.getWidth()+10;
+        float height = position.getHeight();
+
+        // Define the rectangle
+        GL11.glVertex2f(x, y);
+        GL11.glVertex2f(x + width, y);
+        GL11.glVertex2f(x + width, y + height-yPad);
+        GL11.glVertex2f(x, y + height-yPad);
+        GL11.glEnd();
+
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+        GL11.glColorMask(true, true, true, true);
+
+        GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+    }
+    public static void startStencilWithXPad(CustomPanelAPI panel,float xPad) {
+        GL11.glClearStencil(0);
+        GL11.glStencilMask(0xff);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+
+        GL11.glColorMask(false, false, false, false);
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xff);
+        GL11.glStencilMask(0xff);
+        GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+
+        GL11.glBegin(GL11.GL_POLYGON);
+        PositionAPI position = panel.getPosition();
+        float x = position.getX()-5;
+        float y = position.getY()-10;
+        float width = position.getWidth()+10;
+        float height = position.getHeight()+20;
+
+        // Define the rectangle
+        GL11.glVertex2f(x, y);
+        GL11.glVertex2f(x + width-xPad, y);
+        GL11.glVertex2f(x + width-xPad, y + height);
+        GL11.glVertex2f(x, y + height);
         GL11.glEnd();
 
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);

@@ -7,14 +7,13 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
-import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProgressBarRender implements CustomUIPanelPlugin {
+public class ProgressBarRenderForButton implements CustomUIPanelPlugin {
     transient SpriteAPI spriteToRender = Global.getSettings().getSprite("rendering","GlitchSquare");
     transient CustomPanelAPI panelAPI;
     public transient ArrayList<ButtonAPI>buttons = new ArrayList<>();

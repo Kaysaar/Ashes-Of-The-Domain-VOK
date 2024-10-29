@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts;
+package data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.models;
 
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
