@@ -15,6 +15,7 @@ public class GpMegaStructureSectionsSpec {
     public String sectionID;
     public HashMap<String,Integer> gpUpkeepOfSection;
     public HashMap<String,Integer>gpRestorationCost;
+    public HashMap<String,Integer>gpAfterRestorationCost;
     public float daysForRenovation;
     public float runningCost;
     public float renovationCost;
@@ -33,6 +34,14 @@ public class GpMegaStructureSectionsSpec {
 
     public void setScript(String script) {
         this.script = script;
+    }
+
+    public HashMap<String, Integer> getGpAfterRestorationCost() {
+        return gpAfterRestorationCost;
+    }
+
+    public void setGpAfterRestorationCost(HashMap<String, Integer> gpAfterRestorationCost) {
+        this.gpAfterRestorationCost = gpAfterRestorationCost;
     }
 
     public GPMegaStructureSection getScript() {
@@ -122,7 +131,9 @@ public class GpMegaStructureSectionsSpec {
                 HashMap<String, Integer> baseGPCost = new HashMap<>();
                 baseGPCost = AoTDMisc.loadCostMap(jsonObject.getString("baseGPUpkeep"));
                 HashMap<String, Integer> gpResorationCost = new HashMap<>();
-                gpResorationCost = AoTDMisc.loadCostMap(jsonObject.getString("gPRestorationCost"));
+                gpResorationCost = AoTDMisc.loadCostMap(jsonObject.getString("gPRestoredCost"));
+                HashMap<String, Integer> gpAfterRestoration = new HashMap<>();
+                gpAfterRestoration = AoTDMisc.loadCostMap(jsonObject.getString("gPRestoredCost"));
                 String iconId = jsonObject.getString("icon");
                 String description = jsonObject.getString("description");
                 int daysTillRestored = jsonObject.getInt("daysTillRestored");
@@ -137,6 +148,7 @@ public class GpMegaStructureSectionsSpec {
                 spec.setIcon(iconId);
                 spec.setDescription(description);
                 spec.setDaysForRenovation(daysTillRestored);
+                spec.setGpAfterRestorationCost(gpAfterRestoration);
                 specs.add(spec);
             }
 

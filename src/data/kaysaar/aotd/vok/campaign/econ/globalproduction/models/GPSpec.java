@@ -11,13 +11,12 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.AoTDSpecialProjectListener;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.models.AoTDSpecialProjectListener;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.loadCostMap;

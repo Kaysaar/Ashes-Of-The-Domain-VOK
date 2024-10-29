@@ -31,6 +31,12 @@ public class SubsidizedFarming extends BaseIndustry {
         FARMING_CONDITIONS.add(new Pair<>(Conditions.FARMLAND_BOUNTIFUL, 2));
         FARMING_CONDITIONS.add(new Pair<>(Conditions.SOLAR_ARRAY, 2));
     }
+
+    @Override
+    public float getBaseUpkeep() {
+        return super.getBaseUpkeep();
+    }
+
     public void apply() {
         super.apply(true);
         int quantity = market.getSize()+2;

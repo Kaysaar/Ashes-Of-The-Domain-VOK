@@ -12,6 +12,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureProductionListener;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureUpkeepListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.CoreCorrectStateEnforcer;
@@ -40,6 +42,11 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     private static Logger log = Global.getLogger(AoTDVokModPlugin.class);
     AoTDDataInserter aoTDDataInserter = new AoTDDataInserter();
     AoTDSpecialItemRepo aoTDSpecialItemRepo = new AoTDSpecialItemRepo();
+    public static String fontInsigniaMedium = "graphics/fonts/insignia17LTaa.fnt";
+    @Override
+    public void onApplicationLoad() throws Exception {
+        Global.getSettings().loadFont(fontInsigniaMedium);
+    }
 
     private void setListenersIfNeeded() {
         ListenerManagerAPI l = Global.getSector().getListenerManager();
@@ -77,6 +84,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         }
         l.addListener(new CoreUiInterceptor(),true);
         l.removeListenerOfClass(GpProductionButtonRenderer.class);
+        l.addListener(new AoTDMegastructureProductionListener(),true);
+        l.addListener( new AoTDMegastructureUpkeepListener(),true);
     }
 
 
