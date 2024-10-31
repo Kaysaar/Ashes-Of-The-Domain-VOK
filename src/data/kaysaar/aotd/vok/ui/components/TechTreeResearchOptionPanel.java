@@ -270,19 +270,18 @@ public class TechTreeResearchOptionPanel extends UiPanel {
 
         }
         if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()==null){
-            currentButton = vTT.addButton("Research","research:"+TechToResearch.Id,110,25,10f);
+            currentButton = vTT.addButton("More Info","research:"+TechToResearch.Id,110,25,10f);
         }
         else{
             if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getId().equals(TechToResearch.Id)){
-                currentButton = vTT.addButton("Stop","stop:"+TechToResearch.Id,110,25,10f);
+                currentButton = vTT.addButton("More Info","stop:"+TechToResearch.Id,110,25,10f);
             }
             else{
-                currentButton = vTT.addButton("Queue","queue:"+TechToResearch.Id,110,25,10f);
+                currentButton = vTT.addButton("More Info","queue:"+TechToResearch.Id,110,25,10f);
 
             }
         }
-        currentButton.setEnabled(AoTDMainResearchManager.getInstance().getManagerForPlayer().canResearch(TechToResearch.Id,false)&&!AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().isInQueue(TechToResearch.Id));
-
+        currentButton.setEnabled(true);
         currentButton.getPosition().inTL(AoTDUiComp.WIDTH_OF_TECH_PANEL-115,AoTDUiComp.HEIGHT_OF_TECH_PANEL-50);
 
         buttonPanel.addUIElement(vTT).inTL(0, -1);

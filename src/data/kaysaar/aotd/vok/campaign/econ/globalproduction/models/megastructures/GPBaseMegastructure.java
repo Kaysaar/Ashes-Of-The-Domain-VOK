@@ -48,7 +48,7 @@ public class GPBaseMegastructure {
 
         tooltipOfCosts.addSectionHeading("Upkeep",Alignment.MID,5f);
         tooltipOfCosts.addPara("Monthly running cost %s",0,Color.ORANGE,Misc.getDGSCredits(getUpkeep())).getPosition().inTL(10,25);
-        tooltipOfCosts.addCustom(createResourcePanelForSmallTooltip(width,20,20,getCosts(),null),10f);
+        tooltipOfCosts.addCustom(createResourcePanelForSmallTooltip(width,20,20,getCosts(),Misc.getNegativeHighlightColor()),10f);
         tooltipOfIcon.addImage(getIcon(),50,50,5f);
         String starSystem = "Proxima Star System";
         if(entityTiedTo!=null){

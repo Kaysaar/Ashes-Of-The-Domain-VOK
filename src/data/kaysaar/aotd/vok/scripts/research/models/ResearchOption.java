@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.scripts.research.models;
 
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +68,9 @@ public class ResearchOption {
         }
         return null;
     }
-
+    public int getPercentageProgress(){
+        return (int) ( 100*AoDUtilis.calculatePercentOfProgression(this));
+    }
     public ResearchOptionSpec getSpec() {
         return spec;
     }
