@@ -7,7 +7,9 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
 import org.lwjgl.input.Keyboard;
 
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class PopUpUI implements CustomUIPanelPlugin {
     SpriteAPI blackBackground = Global.getSettings().getSprite("rendering","GlitchSquare");
+    SpriteAPI borders = Global.getSettings().getSprite("rendering","GlitchSquare");
     SpriteAPI panelBackground  = Global.getSettings().getSprite("ui","panel00_center");
     SpriteAPI bot= Global.getSettings().getSprite("ui","panel00_bot");
     SpriteAPI top= Global.getSettings().getSprite("ui","panel00_top");
@@ -27,13 +30,17 @@ public class PopUpUI implements CustomUIPanelPlugin {
     SpriteAPI bottomRight= Global.getSettings().getSprite("ui","panel00_bot_right");
     public static float buttonConfirmWidth = 160;
     float frames;
-    CustomPanelAPI panelToInfluence;
-
-    ButtonAPI confirmButton;
-    ButtonAPI cancelButton;
-    boolean isDialog =true;
+    public CustomPanelAPI panelToInfluence;
+    public UILinesRenderer rendererBorder = new UILinesRenderer(0f);
+   public ButtonAPI confirmButton;
+    public ButtonAPI cancelButton;
+    public boolean isDialog =true;
     public ButtonAPI getConfirmButton() {
         return confirmButton;
+    }
+
+    public CustomPanelAPI getPanelToInfluence() {
+        return panelToInfluence;
     }
 
     public ButtonAPI getCancelButton() {
@@ -45,6 +52,7 @@ public class PopUpUI implements CustomUIPanelPlugin {
     public void positionChanged(PositionAPI position) {
 
     }
+
     public void init(CustomPanelAPI panelAPI,float x, float y,boolean isDialog) {
         panelToInfluence = panelAPI;
         UIPanelAPI mainPanel =  ProductionUtil.getCoreUI();
@@ -52,25 +60,33 @@ public class PopUpUI implements CustomUIPanelPlugin {
         this.isDialog = isDialog;
         mainPanel.addComponent(panelToInfluence).inTL(x, mainPanel.getPosition().getHeight()-y);
         mainPanel.bringComponentToTop(panelToInfluence);
+        rendererBorder.setPanel(panelToInfluence);
 
     }
     public void createUI(CustomPanelAPI panelAPI){
         //Note here is where you create UI : Methods you need to change is advance , createUI, and inputEvents handler
         //Also remember super.apply()
 
+
     }
     @Override
     public void renderBelow(float alphaMult) {
         if(panelToInfluence != null){
-            blackBackground.setSize(ProductionUtil.getCoreUI().getPosition().getWidth(), ProductionUtil.getCoreUI().getPosition().getHeight());
-            blackBackground.setColor(Color.black);
-            blackBackground.setAlphaMult(0.6f);
-            blackBackground.renderAtCenter( ProductionUtil.getCoreUI().getPosition().getCenterX(),ProductionUtil.getCoreUI().getPosition().getCenterY());
+            if(isDialog){
+                blackBackground.setSize(ProductionUtil.getCoreUI().getPosition().getWidth(), ProductionUtil.getCoreUI().getPosition().getHeight());
+                blackBackground.setColor(Color.black);
+                blackBackground.setAlphaMult(0.6f);
+                blackBackground.renderAtCenter( ProductionUtil.getCoreUI().getPosition().getCenterX(),ProductionUtil.getCoreUI().getPosition().getCenterY());
+            }
             TiledTextureRenderer renderer = new TiledTextureRenderer(panelBackground.getTextureId());
             renderer.renderTiledTexture(panelToInfluence.getPosition().getX(), panelToInfluence.getPosition().getY(), panelToInfluence.getPosition().getWidth(),  panelToInfluence.getPosition().getHeight(), panelBackground.getTextureWidth(),  panelBackground.getTextureHeight());
             if(isDialog){
                 renderBorders(panelToInfluence);
             }
+            else{
+                rendererBorder.render(alphaMult);
+            }
+
 
         }
     }
@@ -174,6 +190,7 @@ public class PopUpUI implements CustomUIPanelPlugin {
     }
     public ButtonAPI generateCancelButton(TooltipMakerAPI tooltip){
         ButtonAPI button = tooltip.addButton("Cancel","cancel", NidavelirMainPanelPlugin.base,NidavelirMainPanelPlugin.bg,Alignment.MID,CutStyle.TL_BR,buttonConfirmWidth,25,0f);
+        button.setShortcut(Keyboard.KEY_ESCAPE,false);
         cancelButton = button;
         return button;
     }

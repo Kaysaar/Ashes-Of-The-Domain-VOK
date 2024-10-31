@@ -7,6 +7,7 @@ import com.fs.starfarer.api.impl.campaign.intel.MegastructureSectionCompletedInt
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
@@ -62,8 +63,12 @@ public class GPMegaStructureSection {
         if(isRestoring){
             upkeep= getSpec().getRenovationCost();
         }
+        upkeep+=addAdditionalUpkeep();
         AoTDListenerUtilis.applyUpkeepReductionCredits(this,upkeepMult);
         return upkeep*upkeepMult.getModifiedValue();
+    }
+    public float addAdditionalUpkeep(){
+        return 0f;
     }
 
     public HashMap<String, Integer> getGPUpkeep() {
@@ -74,8 +79,12 @@ public class GPMegaStructureSection {
         else{
             costs.putAll(getSpec().getGpUpkeepOfSection());
         }
+        applyAdditionalGPCost(costs);
         AoTDListenerUtilis.applyUpkeepReductionForGP(this,costs);
         return costs;
+    }
+    public void applyAdditionalGPCost(HashMap<String,Integer> map){
+
     }
 
     public GpMegaStructureSectionsSpec getSpec() {
@@ -92,6 +101,9 @@ public class GPMegaStructureSection {
         apply();
         if (isRestoring) {
             progressOfRestoration += Global.getSector().getClock().convertToDays(amount) * penaltyFromLackOfResources;
+            if(Global.getSettings().isDevMode()){
+                progressOfRestoration*=100;
+            }
             if (progressOfRestoration >= getSpec().daysForRenovation) {
                 isRestoring = false;
                 isRestored = true;
@@ -141,7 +153,7 @@ public class GPMegaStructureSection {
         createTooltipForBenefits(tooltip);
         if (isRestoring) {
             tooltip.addPara("Restored to %s capacity", 5f, Color.ORANGE, (int) (getProgressPercentage() * 100) + "%");
-            ProgressBarComponent component = new ProgressBarComponent(width-25,21,getProgressPercentage(),Misc.getBrightPlayerColor());
+            ProgressBarComponent component = new ProgressBarComponent(width-25,21,getProgressPercentage(), Misc.getDarkPlayerColor().brighter().brighter());
             tooltip.addCustom(component.getRenderingPanel(),5f);
         }
         createProductionSection(tooltip,width);
@@ -177,8 +189,11 @@ public class GPMegaStructureSection {
             if (progressOfRestoration > 0f) {
                 restoration = "Continue Restoration";
             }
-            ButtonData data = new ButtonData(restoration, this, true, Color.ORANGE, "restore", new OnHoverButtonTooltip(this, "restore"), "restore", this.getSpec().getSectionID());
-            buttons.put("restore", data);
+            if(!isRestored){
+                ButtonData data = new ButtonData(restoration, this, true, Color.ORANGE, "restore", new OnHoverButtonTooltip(this, "restore"), "restore", this.getSpec().getSectionID());
+                buttons.put("restore", data);
+            }
+
         }
         addButtonsToList(buttons);
 

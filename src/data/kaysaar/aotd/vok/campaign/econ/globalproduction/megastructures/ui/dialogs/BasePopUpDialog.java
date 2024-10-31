@@ -27,6 +27,17 @@ public class BasePopUpDialog extends PopUpUI {
 
     @Override
     public void createUI(CustomPanelAPI panelAPI) {
+        createHeaader(panelAPI);
+
+        TooltipMakerAPI tooltip = panelAPI.createUIElement(panelAPI.getPosition().getWidth()-30,panelAPI.getPosition().getHeight()-y,true);
+        createContentForDialog(tooltip,panelAPI.getPosition().getWidth()-30);
+        panelAPI.addUIElement(tooltip).inTL(x,y);
+        createConfirmAndCancelSection(panelAPI);
+
+
+    }
+
+    public void createHeaader(CustomPanelAPI panelAPI) {
         if(AoTDMisc.isStringValid(title)) {
             headerTooltip = panelAPI.createUIElement(panelAPI.getPosition().getWidth()-30,20,false);
             headerTooltip.setParaFont(Fonts.ORBITRON_20AABOLD);
@@ -38,14 +49,8 @@ public class BasePopUpDialog extends PopUpUI {
         else {
             y = 10;
         }
-
-        TooltipMakerAPI tooltip = panelAPI.createUIElement(panelAPI.getPosition().getWidth()-30,panelAPI.getPosition().getHeight()-y,true);
-        createContentForDialog(tooltip,panelAPI.getPosition().getWidth()-30);
-        panelAPI.addUIElement(tooltip).inTL(x,y);
-        createConfirmAndCancelSection(panelAPI);
-
-
     }
+
     public void createContentForDialog(TooltipMakerAPI tooltip,float width){
 
     }

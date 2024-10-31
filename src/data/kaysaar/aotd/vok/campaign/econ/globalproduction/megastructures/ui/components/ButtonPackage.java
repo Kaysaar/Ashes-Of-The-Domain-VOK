@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.c
 
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 
 import java.util.ArrayList;
@@ -32,5 +33,35 @@ public class ButtonPackage {
 
     public void setPanelOfButtons(CustomPanelAPI panelOfButtons) {
         this.panelOfButtons = panelOfButtons;
+    }
+    public TooltipMakerAPI tooltipOptions;
+    public TooltipMakerAPI tooltipOther;
+
+    public void setTooltipOptions(TooltipMakerAPI tooltipOptions) {
+        this.tooltipOptions = tooltipOptions;
+    }
+
+    public void setTooltipOther(TooltipMakerAPI tooltipOther) {
+        this.tooltipOther = tooltipOther;
+    }
+
+    public TooltipMakerAPI getTooltipOptions() {
+        return tooltipOptions;
+    }
+
+    public TooltipMakerAPI getTooltipOther() {
+        return tooltipOther;
+    }
+    public float getTooltipHeightOptions(){
+        if(tooltipOptions.getExternalScroller()==null){
+            return 0;
+        }
+        return tooltipOptions.getExternalScroller().getYOffset();
+    }
+    public float getTooltipHeightOther(){
+        if(tooltipOther.getExternalScroller()==null){
+            return 0;
+        }
+        return tooltipOther.getExternalScroller().getYOffset();
     }
 }

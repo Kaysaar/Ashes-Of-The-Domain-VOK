@@ -53,6 +53,7 @@ public class AoDUtilis {
     public static float calculatePercentOfProgression(ResearchOption option) {
         float multiplier = AoTDSettingsManager.getFloatValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
         float bonusResearch = (float) (option.getSpec().getTimeToResearch() * multiplier * (AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC * (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities() - 1)));
+        if(option.isResearched)return 1f;
         return (float) (option.daysSpentOnResearching / ((option.getSpec().getTimeToResearch() * multiplier) - bonusResearch));
     }
 

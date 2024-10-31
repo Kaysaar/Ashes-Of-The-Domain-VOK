@@ -55,7 +55,7 @@ public class MegastructureUIMisc {
  return mainTitlePanel;
 
     }
-    public static ButtonPackage createWidgetForSection(CustomPanelAPI mainPanel, GPMegaStructureSection section){
+    public static ButtonPackage createWidgetForSection(CustomPanelAPI mainPanel, GPMegaStructureSection section,float offsetOpt,float offsetOther){
         CustomPanelAPI sectionsPanel;
         float imageWidth,imageHeight;
         imageWidth = 250;
@@ -108,15 +108,31 @@ public class MegastructureUIMisc {
 
             pad= 5f;
         }
+
+
+
         panel.addUIElement(titleTooltip).inTL(0, 0);
         panel.addUIElement(otherInfoTooltip).inTL(panel.getPosition().getWidth()*0.4f,25);
         panel.addUIElement(optionTooltip).inTL(0,25);
         sectionsPanel.addComponent(panel).inTL(imageWidth,0);
         ButtonPackage buttonPackage = new ButtonPackage();
+        buttonPackage.setTooltipOptions(optionTooltip);
+        buttonPackage.setTooltipOther(otherInfoTooltip);
         buttonPackage.setButtonsPlaced(buttons);
         buttonPackage.setSection(section);
         buttonPackage.setPanelOfButtons(sectionsPanel);
-
+        if(offsetOpt>=optionTooltip.getHeightSoFar()){
+            offsetOpt = optionTooltip.getHeightSoFar()-10;
+        }
+        if(offsetOther>=otherInfoTooltip.getHeightSoFar()){
+            offsetOther = otherInfoTooltip.getHeightSoFar()-10f;
+        }
+        if(optionTooltip.getExternalScroller()!=null){
+            optionTooltip.getExternalScroller().setYOffset(offsetOpt);
+        }
+        if(otherInfoTooltip.getExternalScroller()!=null){
+            otherInfoTooltip.getExternalScroller().setYOffset(offsetOther);
+        }
         return buttonPackage;
     }
 

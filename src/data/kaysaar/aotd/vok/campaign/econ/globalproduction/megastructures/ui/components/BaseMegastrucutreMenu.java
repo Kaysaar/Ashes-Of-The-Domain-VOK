@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.c
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
+import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
@@ -27,7 +28,7 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
     CustomPanelAPI mainTitlePanel;
     CustomPanelAPI toolTipPanel;
     TooltipMakerAPI tooltipOfSections;
-    ArrayList<ButtonAPI>buttons = new ArrayList<>();
+    ArrayList<ButtonPackage>buttons = new ArrayList<>();
     float offset =0f;
     float lastY = 0f;
     float lastYForSection = 0f;
@@ -48,10 +49,10 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
         lastY+=mainTitlePanel.getPosition().getHeight();
 
     }
-    public void createSectionMenu(GPMegaStructureSection section){
-        ButtonPackage Bpackage = MegastructureUIMisc.createWidgetForSection(mainPanel,section);
+    public void createSectionMenu(GPMegaStructureSection section,float offsetOpt,float offsetOther){
+        ButtonPackage Bpackage = MegastructureUIMisc.createWidgetForSection(mainPanel,section,offsetOpt,offsetOther);
         CustomPanelAPI sectionsPanel = Bpackage.getPanelOfButtons();
-        buttons.addAll(Bpackage.getButtonsPlaced());
+        buttons.add(Bpackage);
         tooltipOfSections.addCustom(sectionsPanel,5f);
 
     }
@@ -75,7 +76,7 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
 
         tooltipOfSections = toolTipPanel.createUIElement(width,height-lastY-10f,true);
         for (GPMegaStructureSection megaStructureSection : megastructureReferedTo.getMegaStructureSections()) {
-            createSectionMenu(megaStructureSection);
+            createSectionMenu(megaStructureSection,0f,0f);
         }
         lastYForSection = lastY;
         toolTipPanel.addUIElement(tooltipOfSections).inTL(0,0);
@@ -92,6 +93,10 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
     }
     public void resetSection(String sectionID){
         offset = tooltipOfSections.getExternalScroller().getYOffset();
+        LinkedHashMap<String, Pair<Float,Float>> offsets = new LinkedHashMap<>();
+        for (ButtonPackage buttonPackage : buttons) {
+            offsets.put(buttonPackage.section.getSpec().getSectionID(),new Pair<>(buttonPackage.getTooltipHeightOptions(),buttonPackage.getTooltipHeightOther()));
+        }
         buttons.clear();
         toolTipPanel.removeComponent(tooltipOfSections);
         mainPanel.removeComponent(toolTipPanel);
@@ -100,8 +105,10 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
         tooltipOfSections = toolTipPanel.createUIElement(width,height-lastYForSection-10f,true);
 
         for (GPMegaStructureSection megaStructureSection : megastructureReferedTo.getMegaStructureSections()) {
-            createSectionMenu(megaStructureSection);
+            Pair<Float,Float> pair = offsets.get(megaStructureSection.getSpec().getSectionID());
+            createSectionMenu(megaStructureSection,pair.one,pair.two);
         }
+        offsets.clear();
         toolTipPanel.addUIElement(tooltipOfSections).inTL(0,0);
         mainPanel.addComponent(toolTipPanel).inTL(-5,lastYForSection);
         tooltipOfSections.getExternalScroller().setYOffset(offset);
@@ -138,29 +145,36 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
 
     @Override
     public void advance(float amount) {
-        for (ButtonAPI button : buttons) {
-            if(button.isChecked()){
-                button.setChecked(false);
-                ButtonData buttonData = (ButtonData) button.getCustomData();
-                if(AoTDMisc.isStringValid(buttonData.getCustomCommand())){
-                    if(buttonData.getCustomCommand().contains("restore")){
-                        BasePopUpDialog dialog = new RestorationDialog((GPMegaStructureSection) buttonData.getCustomData(),this,"Megastructure Restoration");
-                        CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,360,dialog);
-                        UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-                        dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);
+        for (ButtonPackage b : buttons) {
+            for (ButtonAPI button : b.getButtonsPlaced()) {
+                if(button.isChecked()){
+                    button.setChecked(false);
+                    ButtonData buttonData = (ButtonData) button.getCustomData();
+                    if(AoTDMisc.isStringValid(buttonData.getCustomCommand())){
+                        if(buttonData.getCustomCommand().contains("restore")){
+                            BasePopUpDialog dialog = new RestorationDialog((GPMegaStructureSection) buttonData.getCustomData(),this,"Megastructure Restoration");
+                            CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,360,dialog);
+                            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
+                            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);
+                        }
+                        if(buttonData.getCustomCommand().contains("pauseRestore")){
+                            BasePopUpDialog dialog = new PauseRestoration((GPMegaStructureSection) buttonData.getCustomData(),this,null);
+                            CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,200,dialog);
+                            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
+                            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);
+                        }
+                        buttonHasBeenPressed(buttonData);
                     }
-                    if(buttonData.getCustomCommand().contains("pauseRestore")){
-                        BasePopUpDialog dialog = new PauseRestoration((GPMegaStructureSection) buttonData.getCustomData(),this,null);
-                        CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,200,dialog);
-                        UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-                        dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);
-                    }
-                }
 
+                }
             }
         }
+
     }
 
+    public void buttonHasBeenPressed(ButtonData data){
+
+    }
     @Override
     public void processInput(List<InputEventAPI> events) {
 

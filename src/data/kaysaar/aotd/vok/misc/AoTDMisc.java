@@ -20,6 +20,8 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUt
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchRewardType;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +68,12 @@ public class AoTDMisc {
             int prev = map.get(commodity);
             map.put(commodity, val + prev);
         }
+    }
+    public static boolean hasRewardOfType(ResearchRewardType type, ResearchOption option){
+        for (Map.Entry<String,ResearchRewardType> o :  option.Rewards.entrySet()) {
+            if(o.getValue().equals(type))return true;
+        }
+        return false;
     }
     public static boolean doesPlayerHaveTuringEngine(){
         return false;

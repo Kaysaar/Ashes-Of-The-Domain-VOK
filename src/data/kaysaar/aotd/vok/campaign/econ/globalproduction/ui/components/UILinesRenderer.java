@@ -66,6 +66,7 @@ public class UILinesRenderer implements CustomUIPanelPlugin {
             if (panel != null) {
                 box.setSize(panel.getPosition().getWidth()+widthPadding,1);
                 box.setColor(boxColor);
+                box.setAlphaMult(alphaMult);
                 box.render(panel.getPosition().getX(),panel.getPosition().getY());
                 box.render(panel.getPosition().getX(),panel.getPosition().getY()+panel.getPosition().getHeight());
                 box.setSize(1,panel.getPosition().getHeight());

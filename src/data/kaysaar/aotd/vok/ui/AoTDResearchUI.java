@@ -11,10 +11,13 @@ import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchProject;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchRewardType;
 import data.kaysaar.aotd.vok.scripts.research.models.SpecialProjectStage;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
@@ -32,8 +35,8 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.*;
 
 public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
-    public static  float WIDTH = Global.getSettings().getScreenWidth() - 5;
-    public static  float HEIGHT = Global.getSettings().getScreenHeight() - 50;
+    public static float WIDTH = Global.getSettings().getScreenWidth() - 5;
+    public static float HEIGHT = Global.getSettings().getScreenHeight() - 50;
     PositionAPI pos;
     float oppacity = 0.0f;
     Color bgColor = new Color(6, 35, 40, 42);
@@ -49,17 +52,19 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
     public UIMODE mode = UIMODE.TECH_TREE;
     public String selected = null;
     public ArrayList<ButtonAPI> buttons = new ArrayList<>();
-    public static void recompute(){
+
+    public static void recompute() {
         spaceBetweenWidth = (Global.getSettings().getScreenWidth() - WIDTH) / 2;
         spaceBetweenHeight = (Global.getSettings().getScreenHeight() - HEIGHT) / 2;
     }
+
     boolean madeDecision = false;
     HorizontalTooltipMaker horizontalTooltipMaker = new HorizontalTooltipMaker();
     float scroller = 0f;
     float scrollerOfEventText = 0f;
     float scrolerOfOutcome = 0f;
 
-    public   static float spaceBetweenWidth = (Global.getSettings().getScreenWidth() - WIDTH) / 2;
+    public static float spaceBetweenWidth = (Global.getSettings().getScreenWidth() - WIDTH) / 2;
     public static float spaceBetweenHeight = (Global.getSettings().getScreenHeight() - HEIGHT) / 2;
 
     private int stencilMask1 = 0x1;
@@ -93,7 +98,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
     String currentModToShow = "aotd_vok";
     ResearchOption researchingBeforeUI = AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus();
     ResearchOption researching = AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus();
-    AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction();
+    public AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction();
     ResearchCenterPanel researchCenterPanelUI;
     HelpPanel helpButtonPanelYU;
     SpecialProjectButtonPanel buttonPanelUI;
@@ -103,14 +108,23 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
     SpecialProjectBarComponent projectBarUI;
     StageEventComponent projectStageOptions;
 
+    public void setResearching(ResearchOption researching) {
+        this.researching = researching;
+    }
+
+    public ResearchOption getResearching() {
+        return researching;
+    }
+
     ResearchProject currentlyFocused = AoTDMainResearchManager.getInstance().getCurrentProject();
+
     @Override
     public void positionChanged(PositionAPI position) {
         this.pos = position;
     }
 
     public void createUIForSpecialProjects() {
-        UILinesRenderer renderer  = new UILinesRenderer(0f);
+        UILinesRenderer renderer = new UILinesRenderer(0f);
         techTreeButtonPanel = mainPanel.createCustomPanel(300, 102, renderer);
         techTreeButtonTooltip = techTreeButtonPanel.createUIElement(300, 102, false);
         renderer.setPanel(techTreeButtonPanel);
@@ -140,16 +154,16 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         helpButtonPanelYU.placeTooltip(0, 0);
         helpButtonPanelYU.placeSubPanel(0, HEIGHT - 50);
         renderer.setPanel(helpButtonPanelYU.panel);
-        if(currentlyFocused!=null){
+        if (currentlyFocused != null) {
 
-            specialProjectTitlePanel =  mainPanel.createCustomPanel(WIDTH - 300, 51, null);
-            specialProjectTitleTooltip =  specialProjectTitlePanel.createUIElement(WIDTH - 300, 51, false);
+            specialProjectTitlePanel = mainPanel.createCustomPanel(WIDTH - 300, 51, null);
+            specialProjectTitleTooltip = specialProjectTitlePanel.createUIElement(WIDTH - 300, 51, false);
             renderer.setPanel(specialProjectTitlePanel);
-            specialProjectProgressionBarPanel =  mainPanel.createCustomPanel(WIDTH - 300, HEIGHT*0.54f, null);
-            specialProjectProgressionBarTooltip =  specialProjectProgressionBarPanel.createUIElement(WIDTH - 300, HEIGHT*0.54f, false);
+            specialProjectProgressionBarPanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT * 0.54f, null);
+            specialProjectProgressionBarTooltip = specialProjectProgressionBarPanel.createUIElement(WIDTH - 300, HEIGHT * 0.54f, false);
             renderer.setPanel(specialProjectProgressionBarPanel);
-            specialProjectSectionOptionsPanel =  mainPanel.createCustomPanel(WIDTH - 300, HEIGHT-50-(HEIGHT*0.54f), null);
-            specialProjectSectionOptionsTooltip =  specialProjectSectionOptionsPanel.createUIElement(WIDTH -300, 30, false);
+            specialProjectSectionOptionsPanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT - 50 - (HEIGHT * 0.54f), null);
+            specialProjectSectionOptionsTooltip = specialProjectSectionOptionsPanel.createUIElement(WIDTH - 300, 30, false);
             renderer.setPanel(specialProjectSectionOptionsPanel);
 
             projectTitleUI = new ProjectTitleComponent();
@@ -161,26 +175,23 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
             renderer.setPanel(projectTitleUI.panel);
             projectBarUI = new SpecialProjectBarComponent();
             projectBarUI.setWidthOfBar(WIDTH - 300);
-            projectBarUI.setHeightOfUI(HEIGHT*0.54f);
+            projectBarUI.setHeightOfUI(HEIGHT * 0.54f);
             projectBarUI.setProjectOfIntrest(currentlyFocused);
             projectBarUI.init(mainPanel, specialProjectProgressionBarPanel, specialProjectProgressionBarTooltip);
             projectBarUI.createUI();
             projectBarUI.placeTooltip(-5, 0);
-            projectBarUI.placeSubPanel(specialProjectListPanel.getPosition().getX() + specialProjectListPanel.getPosition().getWidth() + 10, specialProjectTitlePanel.getPosition().getHeight()-1);
+            projectBarUI.placeSubPanel(specialProjectListPanel.getPosition().getX() + specialProjectListPanel.getPosition().getWidth() + 10, specialProjectTitlePanel.getPosition().getHeight() - 1);
             renderer.setPanel(projectBarUI.panel);
             projectStageOptions = new StageEventComponent();
             projectStageOptions.init(mainPanel, specialProjectSectionOptionsPanel, specialProjectSectionOptionsTooltip);
             projectStageOptions.setWidth(WIDTH - 300);
-            projectStageOptions.setHeight(HEIGHT-50-(HEIGHT*0.54f));
+            projectStageOptions.setHeight(HEIGHT - 50 - (HEIGHT * 0.54f));
             projectStageOptions.setCurrentProject(currentlyFocused);
             projectStageOptions.createUI();
             projectStageOptions.placeTooltip(-5, 0);
-            projectStageOptions.placeSubPanel(specialProjectListPanel.getPosition().getX() + specialProjectListPanel.getPosition().getWidth() + 10, specialProjectProgressionBarPanel.getPosition().getHeight()+51);
+            projectStageOptions.placeSubPanel(specialProjectListPanel.getPosition().getX() + specialProjectListPanel.getPosition().getWidth() + 10, specialProjectProgressionBarPanel.getPosition().getHeight() + 51);
             renderer.setPanel(projectStageOptions.panel);
         }
-
-
-
 
 
         panel.addComponent(mainPanel).inTL(2, 5);
@@ -196,7 +207,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         helpPanel = mainPanel.createCustomPanel(300, 50, null);
         helpTooltip = helpPanel.createUIElement(300, 50, false);
         HorizontalTooltipPlugin plugin = new HorizontalTooltipPlugin();
-        techTreePanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT - 20,plugin );
+        techTreePanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT - 20, plugin);
         plugin.init(techTreePanel, WIDTH - 300, HEIGHT - 20, true, techTreeCoreUI.calculateWidthAndHeight().one, techTreeCoreUI.calculateWidthAndHeight().two);
         horizontalTooltipMaker = plugin.getHorizontalTooltipMaker();
         techTreeTooltip = horizontalTooltipMaker.getMainTooltip();
@@ -227,7 +238,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         techTreeCoreUI.init(mainPanel, techTreePanel, techTreeTooltip);
 
         techTreeCoreUI.createUI(researchCenterPanel.getPosition().getX() + researchCenterPanel.getPosition().getWidth() + 10, -2);
-        horizontalTooltipMaker.getHorizontalScrollbar().setPosition(techTreePanel.getPosition().getX()  + spaceBetweenWidth, techTreePanel.getPosition().getY() + spaceBetweenHeight - 15);
+        horizontalTooltipMaker.getHorizontalScrollbar().setPosition(techTreePanel.getPosition().getX() + spaceBetweenWidth, techTreePanel.getPosition().getY() + spaceBetweenHeight - 15);
         horizontalTooltipMaker.getHorizontalScrollbar().setScrollbarDimensions(30, 10);
 
         if (Xoffset == 0 && prevOffset == 0) {
@@ -243,8 +254,8 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
             for (TechTreeEraSection era : techTreeCoreUI.Eras) {
                 for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
                     if (researchOptionPanel.TechToResearch.Id.equals(researching.Id)) {
-                        prevOffset = researchOptionPanel.x-550 + era.panel.getPosition().getX()-5;
-                        Xoffset = researchOptionPanel.getCoordinates().getX()-40;
+                        prevOffset = researchOptionPanel.x - 550 + era.panel.getPosition().getX() - 5;
+                        Xoffset = researchOptionPanel.getCoordinates().getX() - 40;
                     }
                 }
             }
@@ -252,14 +263,14 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
             for (TechTreeEraSection era : techTreeCoreUI.Eras) {
                 for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
                     if (researchOptionPanel.TechToResearch.isResearched) {
-                        prevOffset = researchOptionPanel.x-550 + era.panel.getPosition().getX()-5;
+                        prevOffset = researchOptionPanel.x - 550 + era.panel.getPosition().getX() - 5;
                         Xoffset = researchOptionPanel.getCoordinates().getX();
                     }
                 }
             }
         }
 
-        if (prevOffset <=  techTreeCoreUI.calculateWidthAndHeight().one ) {
+        if (prevOffset <= techTreeCoreUI.calculateWidthAndHeight().one) {
             prevOffset = 0;
             Xoffset = 0;
 
@@ -323,10 +334,9 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
             }
 
             glDisable(GL_STENCIL_TEST);
-        }
-        else{
-            if(specialProjectProgressionBarPanel!=null)  {
-                openGlUtilis.drawProgressionBar(projectBarUI.getBar().getPosition(),alphaMult,Misc.getTooltipTitleAndLightHighlightColor(),projectBarUI.projectOfIntrest.calculateProgress());
+        } else {
+            if (specialProjectProgressionBarPanel != null) {
+                openGlUtilis.drawProgressionBar(projectBarUI.getBar().getPosition(), alphaMult, Misc.getTooltipTitleAndLightHighlightColor(), projectBarUI.projectOfIntrest.calculateProgress());
             }
 
         }
@@ -371,7 +381,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
                     if (techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id) == null) continue;
                     GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alphaMult);
 
-                    openGlUtilis.drawPanelBorder(techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id),allResearchOption.isResearched,alphaMult,colorResearched);
+                    openGlUtilis.drawPanelBorder(techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id), allResearchOption.isResearched, alphaMult, colorResearched);
 
                     int alligment = 0;
                     int amount = 0;
@@ -379,7 +389,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
 
                     for (ResearchOption researchOption : techTreeCoreUI.allResearchOptions) {
                         for (String s : researchOption.ReqTechsToResearchFirst) {
-                            if (s.equals(allResearchOption.Id)&&allResearchOption.isResearched()) {
+                            if (s.equals(allResearchOption.Id) && allResearchOption.isResearched()) {
 
                                 if (techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id) == null || techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(researchOption.Id) == null)
                                     continue;
@@ -391,7 +401,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
 
                     for (ResearchOption researchOption : techTreeCoreUI.allResearchOptions) {
                         for (String s : researchOption.ReqTechsToResearchFirst) {
-                            if (s.equals(allResearchOption.Id)&&!allResearchOption.isResearched) {
+                            if (s.equals(allResearchOption.Id) && !allResearchOption.isResearched) {
 
                                 if (techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(allResearchOption.Id) == null || techTreeCoreUI.retrieveCoordinatesOfSpecificPanel(researchOption.Id) == null)
                                     continue;
@@ -403,14 +413,14 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
 
                 }
 
-                SpriteAPI sprite = Global.getSettings().getSprite("ui","panel01_right");
+                SpriteAPI sprite = Global.getSettings().getSprite("ui", "panel01_right");
                 if (sprite != null) {
-                    sprite.setColor(new Color(119,182,181));
+                    sprite.setColor(new Color(119, 182, 181));
                     sprite.setAlphaMult(1f);
 
-                    if(mainPanel!=null){
-                        sprite.setSize(sprite.getWidth(),12000);
-                        sprite.render(Global.getSettings().getScreenWidth()-sprite.getWidth(),-4900);
+                    if (mainPanel != null) {
+                        sprite.setSize(sprite.getWidth(), 12000);
+                        sprite.render(Global.getSettings().getScreenWidth() - sprite.getWidth(), -4900);
                     }
 
                 }
@@ -419,7 +429,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
             glDisable(GL_STENCIL_TEST);
             GL11.glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, alphaMult);
 
-            if (horizontalTooltipMaker != null && horizontalTooltipMaker.getHorizontalScrollbar() != null&&horizontalTooltipMaker.mainPanel!=null) {
+            if (horizontalTooltipMaker != null && horizontalTooltipMaker.getHorizontalScrollbar() != null && horizontalTooltipMaker.mainPanel != null) {
                 horizontalTooltipMaker.getHorizontalScrollbar().displayScrollbar(Misc.getBrightPlayerColor(), 1f);
             }
 //            if (techTreeCoreUI != null && techTreePanel != null && !techTreeCoreUI.Eras.isEmpty()) {
@@ -497,13 +507,13 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
 
 
         } else {
-            if(specialProjectProgressionBarPanel!=null){
+            if (specialProjectProgressionBarPanel != null) {
                 openGlUtilis.drawPanelBorder(specialProjectProgressionBarPanel);
                 openGlUtilis.drawPanelBorder(projectBarUI.getBar());
                 float delta = 0.0f;
                 for (SpecialProjectStage stage : projectBarUI.projectOfIntrest.stages) {
-                    delta+=stage.durationOfStage/projectBarUI.projectOfIntrest.calculateTotalDays();
-                    openGlUtilis.drawPanelBorderPercentage(projectBarUI.getBar(),delta);
+                    delta += stage.durationOfStage / projectBarUI.projectOfIntrest.calculateTotalDays();
+                    openGlUtilis.drawPanelBorderPercentage(projectBarUI.getBar(), delta);
                 }
 
             }
@@ -518,7 +528,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
     public void advance(float amount) {
         glClearStencil(0);
         glStencilMask(0xff);
-            GL11.glPushMatrix();
+        GL11.glPushMatrix();
         int width = (int) (Display.getWidth() * Display.getPixelScaleFactor()),
                 height = (int) (Display.getHeight() * Display.getPixelScaleFactor());
         GL11.glViewport(0, 0, width, height);
@@ -536,90 +546,111 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
                     if (button.isChecked()) {
                         button.setChecked(false);
                         String data = (String) button.getCustomData();
-                        String[]splitted = data.split(":");
+                        String[] splitted = data.split(":");
                         for (ResearchOption allResearchOption : techTreeCoreUI.allResearchOptions) {
                             if (allResearchOption.Id.equals(splitted[1])) {
                                 wantsToKnow = allResearchOption;
-                                if(splitted[0].equals("research")){
-                                    manager.pickResearchFocus(wantsToKnow.Id);
-                                    researching = wantsToKnow;
-                                    mustReset = true;
-                                    Global.getSoundPlayer().playUISound("aotd_research_started",1f,1f);
-                                    researchOptionPanel.reset();
-                                }
-                                if(splitted[0].equals("queue")){
-                                    mustReset = true;
-                                    manager.getQueueManager().addToQueue(wantsToKnow.Id);
-                                    Global.getSoundPlayer().playUISound("aotd_research_started",1f,1f);
-                                    researchOptionPanel.reset();
+                                ResearchInfoUI ui = new ResearchInfoUI(this, button, wantsToKnow, researchOptionPanel);
+                                float width1 = 410;
+                                float height1 = ui.createUIMockup(Global.getSettings().createCustom(410, 660, null));
+                                CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, ui);
+
+                                float x = button.getPosition().getX() + 110;
+                                float y = button.getPosition().getY() + 200;
+                                if (x + width1 >= Global.getSettings().getScreenWidth()) {
+                                    float diff = x + width1 - Global.getSettings().getScreenWidth();
+                                    x = x - diff - 5;
 
                                 }
-                                if(splitted[0].equals("stop")){
-                                    manager.setCurrentFocus(null);
-                                    researching=null;
-                                    if(!manager.getQueueManager().getQueuedResearchOptions().isEmpty()){
-                                      researching =manager.getQueueManager().removeFromTop();
-                                      manager.setCurrentFocus(researching.Id);
-                                    }
-                                    researchOptionPanel.reset();
-                                    mustReset = true;
+                                if (y - height1 <= 0) {
+                                    y = height1;
                                 }
+                                if (y > Global.getSettings().getScreenHeight()) {
+                                    y = Global.getSettings().getScreenHeight() - 10;
+                                }
+
+                                ui.init(panelAPI, x, y, false);
+
+//
+//                                if(splitted[0].equals("research")){
+//                                    manager.pickResearchFocus(wantsToKnow.Id);
+//                                    researching = wantsToKnow;
+//                                    mustReset = true;
+//                                    Global.getSoundPlayer().playUISound("aotd_research_started",1f,1f);
+//                                    researchOptionPanel.reset();
+//                                }
+//                                if(splitted[0].equals("queue")){
+//                                    mustReset = true;
+//                                    manager.getQueueManager().addToQueue(wantsToKnow.Id);
+//                                    Global.getSoundPlayer().playUISound("aotd_research_started",1f,1f);
+//                                    researchOptionPanel.reset();
+//
+//                                }
+//                                if(splitted[0].equals("stop")){
+//                                    manager.setCurrentFocus(null);
+//                                    researching=null;
+//                                    if(!manager.getQueueManager().getQueuedResearchOptions().isEmpty()){
+//                                      researching =manager.getQueueManager().removeFromTop();
+//                                      manager.setCurrentFocus(researching.Id);
+//                                    }
+//                                    researchOptionPanel.reset();
+//                                    mustReset = true;
+//                                }
                             }
-                            if(mustReset){
+                            if (mustReset) {
                                 break;
                             }
                         }
 
                     }
-                    if(mustReset){
+                    if (mustReset) {
                         break;
                     }
                 }
-                if(mustReset){
+                if (mustReset) {
                     break;
                 }
             }
         }
 
 
-        if (researchCenterPanel != null&&researchCenterPanelUI!=null) {
+        if (researchCenterPanel != null && researchCenterPanelUI != null) {
 
-            if(!researchCenterPanelUI.buttons.isEmpty()){
+            if (!researchCenterPanelUI.buttons.isEmpty()) {
                 for (ButtonAPI button : researchCenterPanelUI.buttons) {
                     if (button.isChecked()) {
                         button.setChecked(false);
                         String data = (String) button.getCustomData();
-                        if(data.contains(":")){
+                        if (data.contains(":")) {
                             String[] splitted = data.split(":");
-                            if(splitted[0].equals("up")){
+                            if (splitted[0].equals("up")) {
                                 manager.getQueueManager().moveUp(splitted[1]);
                             }
-                            if(splitted[0].equals("down")){
+                            if (splitted[0].equals("down")) {
                                 manager.getQueueManager().moveDown(splitted[1]);
                             }
-                            if(splitted[0].equals("top")){
+                            if (splitted[0].equals("top")) {
                                 manager.getQueueManager().moveToTop(splitted[1]);
                             }
-                            if(splitted[0].equals("bottom")){
+                            if (splitted[0].equals("bottom")) {
                                 manager.getQueueManager().moveToBottom(splitted[1]);
                             }
-                            if(splitted[0].equals("remove")){
+                            if (splitted[0].equals("remove")) {
                                 manager.getQueueManager().removeFromQueue(splitted[1]);
                                 boolean found = false;
                                 for (TechTreeEraSection era : techTreeCoreUI.Eras) {
                                     for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
-                                        if(researchOptionPanel.TechToResearch.Id.equals(splitted[1])){
+                                        if (researchOptionPanel.TechToResearch.Id.equals(splitted[1])) {
                                             found = true;
                                             researchOptionPanel.reset();
                                         }
-                                        if(found)break;
+                                        if (found) break;
                                     }
                                 }
                             }
                             mustResetPanel = true;
                             break;
-                        }
-                        else{
+                        } else {
                             currentModToShow = (String) button.getCustomData();
                             mustHardReset = true;
                             mustReset = true;
@@ -631,7 +662,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
             }
 
         }
-        if(mustResetPanel){
+        if (mustResetPanel) {
             resetCentralPanel();
         }
         if (buttonPanelUI != null && buttonPanelUI.getSpecialProjectButton().isChecked()) {
@@ -641,13 +672,13 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
             reset(false, true, UIMODE.SPECIAL_PROJECTS);
             return;
         }
-        if(specialProjectListPanel!=null){
-            if(!projectListUI.buttons.isEmpty()){
+        if (specialProjectListPanel != null) {
+            if (!projectListUI.buttons.isEmpty()) {
                 for (ButtonAPI button : projectListUI.buttons) {
                     if (button.isChecked()) {
                         button.setChecked(false);
                         currentlyFocused = AoTDMainResearchManager.getInstance().getResearchProjectFromRepo((String) button.getCustomData());
-                        reset(false, false,null);
+                        reset(false, false, null);
                         return;
                     }
                 }
@@ -659,20 +690,20 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
             reset(false, true, UIMODE.TECH_TREE);
             return;
         }
-        if(specialProjectTitlePanel!=null&&projectTitleUI.getButtonAPI().isChecked()&&projectTitleUI.getButtonAPI().isEnabled()){
+        if (specialProjectTitlePanel != null && projectTitleUI.getButtonAPI().isChecked() && projectTitleUI.getButtonAPI().isEnabled()) {
             AoTDMainResearchManager.getInstance().getResearchProjectFromRepo((String) projectTitleUI.getButtonAPI().getCustomData()).startResearchProject();
             currentlyFocused = AoTDMainResearchManager.getInstance().getCurrentProject();
-            reset(false, false,null);
+            reset(false, false, null);
             return;
 
         }
 
-        if(projectStageOptions!=null&&specialProjectSectionOptionsPanel!=null){
+        if (projectStageOptions != null && specialProjectSectionOptionsPanel != null) {
             for (ButtonAPI button : projectStageOptions.buttons) {
-                if(button.isChecked()){
+                if (button.isChecked()) {
                     button.setChecked(false);
                     currentlyFocused.applyOptionResults((String) button.getCustomData());
-                    reset(false, false,null);
+                    reset(false, false, null);
                     return;
                 }
             }
@@ -686,7 +717,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
     @Override
     public void processInput(List<InputEventAPI> events) {
         for (InputEventAPI event : events) {
-            if (!event.isConsumed()&&event.isKeyDownEvent() && event.getEventValue() == Keyboard.KEY_ESCAPE) {
+            if (!event.isConsumed() && event.isKeyDownEvent() && event.getEventValue() == Keyboard.KEY_ESCAPE) {
 //                panel.removeComponent(mainPanel);
 //                if(researchCenterPanelUI!=null){
 //                    researchCenterPanelUI.buttons.clear();
@@ -730,16 +761,15 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         }
 
 
-
     }
 
     public void clearUI() {
-        if(researchCenterPanelUI!=null){
+        if (researchCenterPanelUI != null) {
             researchCenterPanelUI.buttons.clear();
-            researchCenterPanelUI=null;
+            researchCenterPanelUI = null;
         }
-        if(techTreeCoreUI!=null){
-            if(techTreeCoreUI.Eras!=null||techTreeCoreUI.Eras.isEmpty()){
+        if (techTreeCoreUI != null) {
+            if (techTreeCoreUI.Eras != null || techTreeCoreUI.Eras.isEmpty()) {
                 for (TechTreeEraSection era : techTreeCoreUI.Eras) {
                     for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
                         researchOptionPanel.setTechToResearch(null);
@@ -749,10 +779,10 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
                 }
             }
         }
-        if(projectListUI!=null){
+        if (projectListUI != null) {
             projectListUI.buttons.clear();
         }
-        if(projectStageOptions!=null){
+        if (projectStageOptions != null) {
             projectStageOptions.buttons.clear();
         }
         if (researchingBeforeUI != null && researching != null && !researchingBeforeUI.Id.equals(researching.Id)) {
@@ -827,26 +857,31 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
                             for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
                                 String id = (String) researchOptionPanel.getCurrentButton().getCustomData();
                                 id = id.split(":")[1];
-                                if(researchOptionPanel.TechToResearch.isResearched())continue;
-                                if (!id.equals(researching.Id)&&manager.getCurrentFocus()!=null) {
-                                    researchOptionPanel.getCurrentButton().setText("Queue");
-                                    researchOptionPanel.getCurrentButton().setCustomData("queue:"+researchOptionPanel.TechToResearch.Id);
-                                    researchOptionPanel.getCurrentButton().setEnabled(!manager.getQueueManager().isInQueue(researchOptionPanel.TechToResearch.Id)&&manager.canResearch(researchOptionPanel.TechToResearch.Id,false));
+                                if (researchOptionPanel.TechToResearch.isResearched()) continue;
+                                if (!id.equals(researching.Id) && manager.getCurrentFocus() != null) {
+                                    researchOptionPanel.getCurrentButton().setText("More Info");
+                                    researchOptionPanel.getCurrentButton().setCustomData("queue:" + researchOptionPanel.TechToResearch.Id);
+
                                 }
-                                if (!id.equals(researching.Id)&&manager.getCurrentFocus()==null&&manager.getQueueManager().getQueuedResearchOptions().isEmpty()) {
-                                    researchOptionPanel.getCurrentButton().setText("Research");
-                                    researchOptionPanel.getCurrentButton().setCustomData("research:"+researchOptionPanel.TechToResearch.Id);
-                                    researchOptionPanel.getCurrentButton().setEnabled(!manager.getQueueManager().isInQueue(researchOptionPanel.TechToResearch.Id)&&manager.canResearch(researchOptionPanel.TechToResearch.Id,false));
+                                if (!id.equals(researching.Id) && manager.getCurrentFocus() == null && manager.getQueueManager().getQueuedResearchOptions().isEmpty()) {
+                                    researchOptionPanel.getCurrentButton().setText("More Info");
+                                    researchOptionPanel.getCurrentButton().setCustomData("research:" + researchOptionPanel.TechToResearch.Id);
                                 }
-                                if(id.equals(researching.Id)){
+                                if (id.equals(researching.Id)) {
                                     researchOptionPanel.reset();
-                                    researchOptionPanel.getCurrentButton().setText("Stop");
-                                    researchOptionPanel.getCurrentButton().setCustomData("stop:"+researchOptionPanel.TechToResearch.Id);
-                                    researchOptionPanel.getCurrentButton().setEnabled(true);
+                                    researchOptionPanel.getCurrentButton().setText("More info");
+                                    researchOptionPanel.getCurrentButton().setCustomData("stop:" + researchOptionPanel.TechToResearch.Id);
                                 }
 
 
+                            }
 
+                        } else {
+                            for (TechTreeResearchOptionPanel researchOptionPanel : era.getResearchOptionPanels()) {
+                                String id = (String) researchOptionPanel.getCurrentButton().getCustomData();
+                                if (researchOptionPanel.TechToResearch.isResearched()) continue;
+                                researchOptionPanel.getCurrentButton().setText("More Info");
+                                researchOptionPanel.getCurrentButton().setCustomData("research:" + researchOptionPanel.TechToResearch.Id);
 
                             }
 
@@ -855,12 +890,11 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
                     }
                     resetCentralPanel();
                 }
-            }
-            else{
-                if(projectListUI!=null){
+            } else {
+                if (projectListUI != null) {
                     projectListUI.buttons.clear();
                 }
-                if(projectStageOptions!=null){
+                if (projectStageOptions != null) {
                     projectStageOptions.buttons.clear();
                 }
                 panel.removeComponent(mainPanel);
@@ -893,7 +927,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
                 mode = UIMODE.TECH_TREE;
                 panel.removeComponent(mainPanel);
                 buttons.clear();
-                currentlyFocused=AoTDMainResearchManager.getInstance().getCurrentProject();
+                currentlyFocused = AoTDMainResearchManager.getInstance().getCurrentProject();
                 mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, null);
                 createUIForTechInfo();
             }
@@ -903,7 +937,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
             mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, renderer);
             createUIForTechInfo();
             renderer.setPanel(mainPanel);
-            if(dialog!=null){
+            if (dialog != null) {
                 dialog.setOpacity(1.0f);
             }
 
@@ -943,8 +977,6 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         Global.getSoundPlayer().pauseCustomMusic();
         Global.getSoundPlayer().restartCurrentMusic();
     }
-
-
 
 
 }
