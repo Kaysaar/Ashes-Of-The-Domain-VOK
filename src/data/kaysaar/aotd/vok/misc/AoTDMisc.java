@@ -19,6 +19,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
+import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchRewardType;
@@ -37,7 +38,6 @@ import java.util.*;
 import java.util.List;
 
 public class AoTDMisc {
-    public static Class<?> confirmDialogClass;
     @Nullable
     public static String getVaraint(ShipHullSpecAPI allShipHullSpec) {
         String variantId = null;
@@ -196,6 +196,30 @@ public class AoTDMisc {
             }
 
         }
+
+        return numberRemaining;
+    }
+    public static float retrieveAmountOfItemsFromPlayer(String id) {
+        float numberRemaining = 0;
+        if(Global.getSettings().getCommoditySpec(id) != null) {
+            numberRemaining += Global.getSector().getPlayerFleet().getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);
+        }
+        if(Global.getSettings().getSpecialItemSpec(id) != null) {
+            numberRemaining += Global.getSector().getPlayerFleet().getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id,null));
+        }
+
+
+        return numberRemaining;
+    }
+    public static float eatPlayerItems(String id, int amount) {
+        float numberRemaining = 0;
+        if(Global.getSettings().getCommoditySpec(id) != null) {
+          Global.getSector().getPlayerFleet().getCargo().removeItems(CargoAPI.CargoItemType.RESOURCES, id,amount);
+        }
+        if(Global.getSettings().getSpecialItemSpec(id) != null) {
+            Global.getSector().getPlayerFleet().getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id,null),amount);
+        }
+
 
         return numberRemaining;
     }

@@ -26,7 +26,9 @@ public class GPMegaStructureSection {
     public String getName() {
         return getSpec().getName();
     }
-
+    public float getPenaltyFromManager(String ... resources){
+        return GPManager.getInstance().getTotalPenaltyFromResources(resources);
+    }
     public void init(GPBaseMegastructure megastructureTiedTo, boolean isRestored) {
         progressOfRestoration = 0f;
         this.megastructureTiedTo = megastructureTiedTo;
@@ -40,10 +42,6 @@ public class GPMegaStructureSection {
     public boolean isRestored;
     public boolean isRestoring;
     public float penaltyFromLackOfResources=1f;
-
-    public void setPenaltyFromLackOfResources(float penaltyFromLackOfResources) {
-        this.penaltyFromLackOfResources = penaltyFromLackOfResources;
-    }
 
     boolean isAboutToBeRemoved = false;
 
@@ -64,8 +62,14 @@ public class GPMegaStructureSection {
             upkeep= getSpec().getRenovationCost();
         }
         upkeep+=addAdditionalUpkeep();
+        for (GPMegaStructureSection megaStructureSection : megastructureTiedTo.getMegaStructureSections()) {
+            megaStructureSection.applyReductionOfUpkeep(upkeepMult);
+        }
         AoTDListenerUtilis.applyUpkeepReductionCredits(this,upkeepMult);
         return upkeep*upkeepMult.getModifiedValue();
+    }
+    public void applyReductionOfUpkeep(MutableStat statToChange){
+
     }
     public float addAdditionalUpkeep(){
         return 0f;
@@ -76,8 +80,11 @@ public class GPMegaStructureSection {
         if (isRestoring) {
             costs.putAll(getSpec().getGpRestorationCost());
         }
-        else{
+        else if(!isRestored){
             costs.putAll(getSpec().getGpUpkeepOfSection());
+        }
+        else {
+            costs.putAll(getSpec().getGpAfterRestorationCost());
         }
         applyAdditionalGPCost(costs);
         AoTDListenerUtilis.applyUpkeepReductionForGP(this,costs);
@@ -100,7 +107,7 @@ public class GPMegaStructureSection {
         unapply();
         apply();
         if (isRestoring) {
-            progressOfRestoration += Global.getSector().getClock().convertToDays(amount) * penaltyFromLackOfResources;
+            progressOfRestoration += Global.getSector().getClock().convertToDays(amount) * getPenaltyFromManager(getGPUpkeep().keySet().toArray(new String[0]));
             if(Global.getSettings().isDevMode()){
                 progressOfRestoration*=100;
             }

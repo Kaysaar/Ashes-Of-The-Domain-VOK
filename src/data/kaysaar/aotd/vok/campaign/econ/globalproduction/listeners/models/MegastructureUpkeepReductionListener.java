@@ -8,5 +8,5 @@ import java.util.HashMap;
 
 public interface MegastructureUpkeepReductionListener {
     public void applyUpkeepReductionGP(GPMegaStructureSection megastructure, HashMap<String,Integer> currentGPUpkeep);
-    public void applyUpkeepReductionCredits(GPMegaStructureSection megastructure,MutableStat upkeepMult);
+    public void applyUpkeepReductionCredits(GPMegaStructureSection section,MutableStat upkeepMult);
 }

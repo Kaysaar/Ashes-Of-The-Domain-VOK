@@ -25,6 +25,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.*;
@@ -158,6 +159,42 @@ public class GPManager {
 
     public ArrayList<GPBaseMegastructure> getMegastructures() {
         return megastructures;
+    }
+    public ArrayList<GPBaseMegastructure> getMegastructuresBasedOnClass(Class<?> t) {
+        ArrayList<GPBaseMegastructure>mega = new ArrayList<>();
+        for (GPBaseMegastructure megastructure : megastructures) {
+            if(megastructure.getClass().equals(t)){
+                mega.add(megastructure);
+            }
+        }
+        return mega;
+    }
+    public float getTotalUpkeeepCreditsForMega(){
+        float upkeep  = 0f;
+        for (GPBaseMegastructure megastructure : megastructures) {
+            upkeep+=megastructure.getUpkeep();
+        }
+        return upkeep;
+    }
+    public HashMap<String,Integer>getTotalUpkeepGPForMega(){
+       HashMap<String,Integer> upkeep = new HashMap<>();
+        for (GPBaseMegastructure megastructure : megastructures) {
+            for (Map.Entry<String, Integer> s : megastructure.getCosts().entrySet()) {
+                AoTDMisc.putCommoditiesIntoMap(upkeep,s.getKey(),s.getValue());
+            }
+        }
+        return upkeep;
+    }
+    public float getTotalPenaltyFromResources(String...resources){
+        float penalty = 1f;
+        HashMap<String,Float>pen = getPenaltyMap();
+        for (String resource : resources) {
+            if(pen.get(resource) != null){
+                penalty*=pen.get(resource);
+            }
+
+        }
+        return penalty;
     }
 
     public static GPManager setInstance() {
@@ -727,16 +764,7 @@ public class GPManager {
         if (!offsetOfOrdersToBeRemoved.isEmpty()) {
             removeDoneOrders(offsetOfOrdersToBeRemoved);
         }
-        HashMap<String, Float> penaltyMap = new HashMap<>();
-        for (Map.Entry<String, Integer> stringIntegerEntry : getTotalResources().entrySet()) {
-            Integer currentDemand = getReqResources(orders).get(stringIntegerEntry.getKey());
-            Integer total = stringIntegerEntry.getValue();
-            float penalty = (float) total / currentDemand;
-            if (penalty >= 1) {
-                penalty = 1;
-            }
-            penaltyMap.put(stringIntegerEntry.getKey(), penalty);
-        }
+        HashMap<String, Float> penaltyMap = getPenaltyMap(orders);
 
         for (GPOrder order : orders) {
             float totalPenalty = 1;
@@ -753,19 +781,27 @@ public class GPManager {
             currentFocus.setPenalty(totalPenalty);
         }
 
-        for (GPBaseMegastructure megastructure : getMegastructures()) {
-            float totalPenalty = 1;
-            for (GPMegaStructureSection s : megastructure.getMegaStructureSections()) {
-                for (Map.Entry<String, Integer> entry : s.getGPUpkeep().entrySet()) {
-                    totalPenalty *= penaltyMap.get(entry.getKey());
-                }
-                s.setPenaltyFromLackOfResources(totalPenalty);
-            }
-        }
 
         return penaltyMap;
 
 
+    }
+
+    public @NotNull HashMap<String, Float> getPenaltyMap() {
+        return getPenaltyMap(getProductionOrders());
+    }
+    private @NotNull HashMap<String, Float> getPenaltyMap(ArrayList<GPOrder> orders) {
+        HashMap<String, Float> penaltyMap = new HashMap<>();
+        for (Map.Entry<String, Integer> stringIntegerEntry : getTotalResources().entrySet()) {
+            Integer currentDemand = getReqResources(orders).get(stringIntegerEntry.getKey());
+            Integer total = stringIntegerEntry.getValue();
+            float penalty = (float) total / currentDemand;
+            if (penalty >= 1) {
+                penalty = 1;
+            }
+            penaltyMap.put(stringIntegerEntry.getKey(), penalty);
+        }
+        return penaltyMap;
     }
 
     public ArrayList<Integer> retrieveOrdersToBeRemoved() {

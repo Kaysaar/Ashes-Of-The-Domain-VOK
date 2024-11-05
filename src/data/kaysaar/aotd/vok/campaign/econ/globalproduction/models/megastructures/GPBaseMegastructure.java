@@ -35,6 +35,9 @@ public class GPBaseMegastructure {
     public static String memKey = "$aotd_megastructure";
     //Note : Width will always be 400, height can be customized
     public boolean wasInitalized = false;
+    public float getPenaltyFromManager(){
+        return GPManager.getInstance().getTotalPenaltyFromResources(getCosts().keySet().toArray(new String[0]));
+    }
     public CustomPanelAPI createButtonSection(float width){
         UILinesRenderer renderer = new UILinesRenderer(0f);
         CustomPanelAPI panel = Global.getSettings().createCustom(width,250,null);

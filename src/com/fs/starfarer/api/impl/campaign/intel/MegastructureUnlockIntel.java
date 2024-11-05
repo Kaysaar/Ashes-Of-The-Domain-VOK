@@ -13,12 +13,13 @@ import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 
 import java.awt.*;
 
-public class MegastructureUnlockIntel extends BaseIntelPlugin{
-    public GPBaseMegastructure data;
+public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
     public static Object Button_Megastructure = new Object();
-    public MegastructureUnlockIntel(GPBaseMegastructure unlockedProj){
-        this.data=unlockedProj;
+
+    public MegastructureUnlockIntel(GPBaseMegastructure unlockedProj) {
+        super(unlockedProj);
     }
+
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
      return  data.getEntityTiedTo();   // The location on the map of the intel

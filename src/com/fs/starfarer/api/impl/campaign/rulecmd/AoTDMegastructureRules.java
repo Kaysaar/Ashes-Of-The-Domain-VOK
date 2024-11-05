@@ -74,7 +74,6 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
         }
         GPManager.getInstance().addMegastructureToList(megastructure);
         token.getMemory().set("$aotd_claimed", true);
-        token.getMemory().set("$usable", true);
         token.setFaction(Factions.PLAYER);
 
         MegastructureUnlockIntel intel = new MegastructureUnlockIntel(megastructure);
