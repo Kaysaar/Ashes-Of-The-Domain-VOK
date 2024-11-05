@@ -1,5 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.sections;
 
+import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.impl.campaign.intel.CWFailsafeNotification;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
@@ -23,6 +25,15 @@ public class WormholeGenerator extends GPMegaStructureSection {
         tooltip.addPara("Allow to increase effective range of Hypershunt up to %s, as long as upkeep of purified transplutonics is met.",5f,Color.ORANGE,"70 LY");
         tooltip.addSectionHeading("Effective range",Alignment.MID,5f);
         tooltip.addPara("Current effective range is %s LY which costs us %s purified transplutonics",5f,Color.ORANGE,""+getCalculatedRange(),""+getPurifiedTransplutonicsPerRange());
+    }
+
+    @Override
+    public void apply() {
+        float penalty = getPenaltyFromManager(AoTDCommodities.PURIFIED_TRANSPLUTONICS);
+        if(penalty<1&&range!=1){
+            range = 1;
+            Global.getSector().getIntelManager().addIntel(new CWFailsafeNotification(this.megastructureTiedTo));
+        }
     }
 
     @Override

@@ -7,22 +7,22 @@ import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 
 import java.awt.*;
 
-public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
+public class CWFailsafeNotification extends BaseMegastuctureIntelPlugin {
     public static Object Button_Megastructure = new Object();
 
-    public MegastructureUnlockIntel(GPBaseMegastructure unlockedProj) {
+    public CWFailsafeNotification(GPBaseMegastructure unlockedProj) {
         super(unlockedProj);
     }
 
+
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
-     return  data.getEntityTiedTo();   // The location on the map of the intel
+        return data.getEntityTiedTo();   // The location on the map of the intel
     }
 
 
@@ -31,18 +31,18 @@ public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
         Color title = getTitleColor(mode);
 
         // Title of the intel
-        info.addPara(getName(), title,0f);
-        info.addPara("A new megastucture has been claimed by our faction!",5f);
-        info.addPara("Received a story point!", Misc.getPositiveHighlightColor(),5f);
+        info.addPara(getName(), title, 0f);
+        info.addPara("Critical failure of Wormhole Stabilizator", 5f);
+        info.addPara("Reduced range of hypershunt to %s in %s", 5f,Color.ORANGE,"10 LY",data.getEntityTiedTo().getStarSystem().getBaseName());
 
     }
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara("New Megastructure  : %s",5f,Color.ORANGE,data.getName());
-        addGenericButton(info,width,"Access Megastructure Tab", Button_Megastructure);
-    }
+        info.addPara("Reduced range of hypershunt to %s in %s", 5f,Color.ORANGE,"10 LY",data.getEntityTiedTo().getStarSystem().getBaseName());
+        info.addPara("Increase global production of %s so range can be increased again!",5f,Color.ORANGE,"Purified Transplutonics");
 
+    }
 
 
     @Override
@@ -52,7 +52,7 @@ public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
 
     @Override
     protected String getName() {
-        return "Megastructure : "+data.getName();
+        return "Megastructure : " + data.getName();
     }
 
     @Override
@@ -62,11 +62,10 @@ public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
 
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
-        if(buttonId== Button_Megastructure){
+        if (buttonId == Button_Megastructure) {
             CoreUITracker.setMemFlag("megastructures");
             Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }
 
     }
-
 }

@@ -212,10 +212,6 @@ public class CoreUITracker implements EveryFrameScript {
                         pluginResearch.playSound();
                         pausedMusic = false;
                     }
-                    if (currentTab.getText().toLowerCase().contains("research")) {
-                        pluginMenu.playSound();
-                        pausedMusic = false;
-                    }
                 }
             }
         }

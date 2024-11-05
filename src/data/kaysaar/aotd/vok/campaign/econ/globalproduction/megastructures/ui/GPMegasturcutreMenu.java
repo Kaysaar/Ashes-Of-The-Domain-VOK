@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
@@ -98,6 +99,10 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
         renderer.setPanel(totalCostOfMegastructuresPanel);
         TooltipMakerAPI tooltip = totalCostOfMegastructuresPanel.createUIElement(totalCostOfMegastructuresPanel.getPosition().getWidth(), totalCostOfMegastructuresPanel.getPosition().getHeight(), false);
         tooltip.addSectionHeading("Total Cost of Operations", Alignment.MID, 0f);
+        tooltip.addPara("Monthly credit cost : %s",5f,Color.ORANGE,Misc.getDGSCredits(GPManager.getInstance().getTotalUpkeeepCreditsForMega()));
+        tooltip.addSectionHeading("Usage of resources", Alignment.MID, 5f);
+        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltip(staticWidthOfMegaButtons,30,30,GPManager.getInstance().getTotalUpkeepGPForMega(),Misc.getNegativeHighlightColor()),5f);
+
         totalCostOfMegastructuresPanel.addUIElement(tooltip).inTL(0, 0);
         panel.addComponent(totalCostOfMegastructuresPanel).inTL(spacerX, panel.getPosition().getHeight() - totalCostHeight);
 
@@ -166,8 +171,10 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
         buttonsOfMegastructures.clear();
         float currentOffset = buttonTooltipMaker.getExternalScroller().getYOffset();
         panel.removeComponent(currentMegastructureSectionsPanel);
+        panel.removeComponent(totalCostOfMegastructuresPanel);
         buttonTooltipMaker=null;
         createMegastructureList();
+        createTotalCostOfMegastructuresTab();
         buttonTooltipMaker.getExternalScroller().setYOffset(currentOffset);
     }
     public void init(CustomPanelAPI mainPanel) {

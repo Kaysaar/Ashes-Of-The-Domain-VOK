@@ -131,7 +131,7 @@ public class GpMegaStructureSectionsSpec {
                 HashMap<String, Integer> baseGPCost = new HashMap<>();
                 baseGPCost = AoTDMisc.loadCostMap(jsonObject.getString("baseGPUpkeep"));
                 HashMap<String, Integer> gpResorationCost = new HashMap<>();
-                gpResorationCost = AoTDMisc.loadCostMap(jsonObject.getString("gPRestoredCost"));
+                gpResorationCost = AoTDMisc.loadCostMap(jsonObject.getString("gPRestorationCost"));
                 HashMap<String, Integer> gpAfterRestoration = new HashMap<>();
                 gpAfterRestoration = AoTDMisc.loadCostMap(jsonObject.getString("gPRestoredCost"));
                 String iconId = jsonObject.getString("icon");
