@@ -1,0 +1,133 @@
+{
+	"aotd_nidavelir":{
+		"name":"Nidavelir",	
+		"tilt":-27, # left-right (>0 tilts to the left)
+		"pitch":2, # towards-away from the viewer (>0 pitches towards)
+		"rotation":-2, # degrees/second
+		"planetColor":[255,255,255,255],
+		"atmosphereThickness":0, # as fraction of radius.  Set to 0 for no atmosphere
+		"atmosphereThicknessMin":1, #  minimum thickness in pixels
+		"atmosphereColor":[100,140,160,155],
+		"texture":"graphics/entities/aotd_nidavelir.png",
+		"icon":"graphics/stations/gate.png",
+		"iconColor":[102,103,106,255],
+		"isStar":false,
+		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
+		"showIconOnMap":false,
+		"showNameOnMap":false,
+		"tags":["radar_nodraw","non_clickable"],
+	},	
+	"aotd_nidavelir_shadow":{
+		"name":"Nidavelir",	
+		"tilt":-27, # left-right (>0 tilts to the left)
+		"pitch":2, # towards-away from the viewer (>0 pitches towards)
+		"rotation":-2, # degrees/second
+		"planetColor":[255,255,255,255],
+		"atmosphereThickness":0, # as fraction of radius.  Set to 0 for no atmosphere
+		"atmosphereThicknessMin":1, #  minimum thickness in pixels
+		"atmosphereColor":[100,140,160,155],
+		"texture":"graphics/entities/ring_v3_shadow.png",
+		"icon":"graphics/stations/gate.png",
+		"iconColor":[102,103,106,255],
+		"isStar":false,
+		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
+		"showIconOnMap":false,
+		"showNameOnMap":false,
+		"tags":["radar_nodraw","non_clickable"],
+	},
+	"aotd_nidavelir_inner_bottom":{
+		"name":"Nidavelir",	
+		"tilt":-27, # left-right (>0 tilts to the left)
+		"pitch":2, # towards-away from the viewer (>0 pitches towards)
+		"rotation":3, # degrees/second
+		"planetColor":[255,255,255,255],
+		"atmosphereThickness":0, # as fraction of radius.  Set to 0 for no atmosphere
+		"atmosphereThicknessMin":1, #  minimum thickness in pixels
+		"atmosphereColor":[100,140,160,155],
+		"texture":"graphics/fx/ring_v3_vic_inner_bottom.png",
+		"icon":"graphics/stations/gate.png",
+		"iconColor":[102,103,106,255],
+		"isStar":false,
+		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
+		"showIconOnMap":false,
+		"showNameOnMap":false,
+		"tags":["radar_nodraw","non_clickable"],
+	},	
+	"aotd_nidavelir_inner_top":{
+		"name":"Nidavelir",	
+		"tilt":-27, # left-right (>0 tilts to the left)
+		"pitch":2, # towards-away from the viewer (>0 pitches towards)
+		"rotation":-3, # degrees/second
+		"planetColor":[255,255,255,255],
+		"atmosphereThickness":0, # as fraction of radius.  Set to 0 for no atmosphere
+		"atmosphereThicknessMin":1, #  minimum thickness in pixels
+		"atmosphereColor":[100,140,160,155],
+		"texture":"graphics/fx/ring_v3_vic_inner_top.png",
+		"icon":"graphics/stations/gate.png",
+		"iconColor":[102,103,106,255],
+		"isStar":false,
+		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
+		"showIconOnMap":false,
+		"showNameOnMap":false,
+		"tags":["radar_nodraw","non_clickable"],
+	},
+	"aotd_nidavelir_outer_bottom":{
+		"name":"Nidavelir",	
+		"tilt":-27, # left-right (>0 tilts to the left)
+		"pitch":2, # towards-away from the viewer (>0 pitches towards)
+		"rotation":-4, # degrees/second
+		"planetColor":[255,255,255,255],
+		"atmosphereThickness":0, # as fraction of radius.  Set to 0 for no atmosphere
+		"atmosphereThicknessMin":1, #  minimum thickness in pixels
+		"atmosphereColor":[100,140,160,155],
+		"texture":"graphics/fx/ring_v3_vic_outter_bottom.png",
+		"icon":"graphics/stations/gate.png",
+		"iconColor":[102,103,106,255],
+		"isStar":false,
+		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
+		"showIconOnMap":false,
+		"showNameOnMap":false,
+		"tags":["radar_nodraw","non_clickable"],
+	},
+	"aotd_nidavelir_outer_top":{
+		"name":"Nidavelir",	
+		"tilt":-27, # left-right (>0 tilts to the left)
+		"pitch":2, # towards-away from the viewer (>0 pitches towards)
+		"rotation":4, # degrees/second
+		"planetColor":[255,255,255,255],
+		"atmosphereThickness":0, # as fraction of radius.  Set to 0 for no atmosphere
+		"atmosphereThicknessMin":1, #  minimum thickness in pixels
+		"atmosphereColor":[100,140,160,155],
+		"texture":"graphics/fx/ring_v3_vic_outter_top.png",
+		"icon":"graphics/stations/gate.png",
+		"iconColor":[102,103,106,255],	
+		"isStar":false,
+		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
+		"showIconOnMap":false,
+		"showNameOnMap":false,
+		"tags":["radar_nodraw","non_clickable"],
+	},		
+	"aotd_nidavelir_destroyed":{
+		"name":"Nidavelir",	
+		"tilt":-27, # left-right (>0 tilts to the left)
+		"pitch":2, # towards-away from the viewer (>0 pitches towards)
+		"rotation":0, # degrees/second
+		"planetColor":[255,255,255,255],
+		"atmosphereThickness":0, # as fraction of radius.  Set to 0 for no atmosphere
+		"atmosphereThicknessMin":1, #  minimum thickness in pixels
+		"atmosphereColor":[100,140,160,155],
+		"texture":"graphics/entities/aotd_nidavelir_damaged.png",
+		"icon":"graphics/stations/gate.png",
+		"iconColor":[102,103,106,255],	
+		"isStar":false,
+		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
+		"showIconOnMap":false,
+		"showNameOnMap":false,
+		"tags":["radar_nodraw","non_clickable"],
+	},		
+}
+
+
+
+
+

@@ -10,6 +10,7 @@ import com.fs.starfarer.api.characters.ImportantPeopleAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
+import com.fs.starfarer.api.impl.campaign.rulecmd.AoTDMegastructureRules;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDConditions;
@@ -52,6 +53,7 @@ public class AoTDDataInserter {
                     MarketConditionAPI marketConditionAPI = planet.getMarket().getSpecificCondition(token);
                     planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SPEC_ID_OVERRIDE, "aotd_pre_collapse_fac");
                     planet.getMemoryWithoutUpdate().set("$hasDefenders", "aotd_pre_collapse_fac");
+                    planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
                     marketConditionAPI.setSurveyed(false);
                     planetsWithFac.add(planet);
                     preCollapseFacAmount--;
@@ -194,6 +196,30 @@ public class AoTDDataInserter {
                 }
             }
         }
+    }
+    public  void spawnNidavleir() {
+            List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
+            Collections.shuffle(starSystems);
+            for (StarSystemAPI starSystem : starSystems) {
+                if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
+                    for (PlanetAPI planet : starSystem.getPlanets()) {
+                        if (planet.isStar()) continue;
+                        if (planet.isMoon()) continue;
+                        if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
+                        if (planet.hasTag(Tags.NOT_RANDOM_MISSION_TARGET)) continue;
+                        if (planet.hasTag(Tags.MISSION_ITEM)) continue;
+                        if (planet.isStar()) continue;
+                        if (planet.isGasGiant()) continue;
+                        if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
+                        AoTDMegastructureRules.putMegastructure(planet,"aotd_nidavelir");
+                        planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
+                        planet.setName("Yggdrasil");
+                        starSystem.setBaseName("Yggdrasil");
+                        return;
+                    }
+                }
+            }
+
     }
     public  HashMap<String,Integer>getItemCost(String reqItems){
         String[] splitedAll = reqItems.split(",");

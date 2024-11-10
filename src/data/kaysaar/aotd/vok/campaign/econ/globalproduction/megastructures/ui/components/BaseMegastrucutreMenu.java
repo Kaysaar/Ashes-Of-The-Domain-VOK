@@ -163,6 +163,28 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
                             UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
                             dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);
                         }
+                        if(buttonData.getCustomCommand().contains("moreInfo")){
+                            OtherInfoPopUp dialog = new OtherInfoPopUp((GPMegaStructureSection) buttonData.getCustomData());
+                            float width1 = 500;
+                            float height1 = dialog.createUIMockup(Global.getSettings().createCustom(width1, 200, null));
+                            CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, dialog);
+                            float x = button.getPosition().getX()-(width1/4);
+                            float y = button.getPosition().getY();
+                            if (x + width1 >= Global.getSettings().getScreenWidth()) {
+                                float diff = x + width1 - Global.getSettings().getScreenWidth();
+                                x = x - diff - 5;
+
+                            }
+                            if (y - height1 <= 0) {
+                                y = height1;
+                            }
+                            if (y > Global.getSettings().getScreenHeight()) {
+                                y = Global.getSettings().getScreenHeight() - 10;
+                            }
+
+                            dialog.init(panelAPI, x, y, false);
+
+                        }
                         buttonHasBeenPressed(buttonData);
                     }
 

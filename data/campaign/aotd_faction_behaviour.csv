@@ -1,8 +1,9 @@
-factionId,researchStance
-independent,MERCENARY
-tritachyon,PRIORITIZE
-hegemony,BALANCE
-sindrian_diktat,INBALANCE
-luddic_church,CLEANSE
-luddic_path,CLEANSE
-persean_league,BALANCE
+factionId,researchStance,forbidden_tech,db_cash_mult,db_rep_mult,initResponse,dialogSelectOptionName,dialogDismayOptionName,responseAfter,
+independent,MERCENARY,,1,1,I think we can arrange a transfer to your account that is respectful of your time and effort.,Select databanks to trade.,"Apologies, I can't commit to this venture at the moment.","As always Commander, thank you for assisting us. I look forward to our next meeting.",
+tritachyon,PRIORITIZE,,3,0.2,"Of course Commander, I believe we happen to have an account already prepared for such ventures. Follow me and we can negotiate the final terms.",Select databanks for transfer.,"Actually, I think someone else can offer a better choice.","Thank you for choosing Tri Tachyon, goodbye Commander.",
+hegemony,BALANCE,,0.2,0.2,Thank you for performing your duty Citizen. If you fill out the following forms I will make sure the correct compensation is awarded.,"Select databanks to ""volunteer"".",Unfortunately I think I'll be holding onto these for now.,Thank you for your time Citizen. Remember to always come back to us.,
+sindrian_diktat,BALANCE,,0.2,0.2,Of course Commander. The Admiral himself has informed us to make funds available should you have what we desire.,Select databanks to trade.,Perhaps I'll hold onto them for now.,Safe travels Commander and may your aim be true.,
+luddic_church,RESTRICTIVE,,0.2,0.2,"Follow me Pilgrim, lest the unpriviliged come to the wrong conclusions.",Select databanks to donate.,"On second thought, perhaps I might have need of these afterall.",May Ludd guide your step Commander.,
+luddic_path,CLEANSE,,0.2,1,So the Heretic comes to us for forgiveness. Make it quick lest we come to a verdict.,Select databanks to sacrifice.,"You know, I just remembered that I forgot to make observances at your wonderful shrine down the hallway.","Perhaps your soul can be saved Heretic, we will pray that you find absolvement before death.",
+persean,BALANCE,,0.2,0.2,Thank you for waiting Commander. You have most definitely made the right decision to back our cause. This way and we can see about getting you fair compensation.,Select databanks to trade.,Perhaps I'll consider my options for now. Thank you for your time.,I'm glad we were able to come to an arrangement Commander. Stay safe out there and until next time.,
+pirates,MERCENARY,,0.2,0.2,So you came to barter for your life then? Better hope it's worth our time.,"Select databanks to ""trade"".",I just remembered that my ship had an emergency and I best be going.,Perhaps you're worth keeping around after all. You'd best have a better offer for us next time.,

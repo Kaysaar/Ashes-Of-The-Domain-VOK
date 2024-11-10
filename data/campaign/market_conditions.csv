@@ -1,16 +1,16 @@
 name,id,planetary,decivRemove,script,desc,icon,order
-IcDemand,IcDemmand,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.IcDemmand,,graphics/icons/markets/cryosanctum.png,1000
+,,,,,,,
 AoDFoodDemand,AoDFoodDemand,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.AoDFoodDemand,,graphics/icons/markets/cryosanctum.png,1000
-ReciSup,AodReci,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.AodReci,,graphics/icons/markets/am_fuel_facility.png,500
-BioSup,AodSub,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.AodSub,,graphics/icons/markets/cryosanctum.png,600
+,,,,,,,
+,,,,,,,
 WaterMiningSupply,watterSupplyMining,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMinningCond,,graphics/icons/markets/capital.png,601
 Industrial Center,industrial_might,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.IndustrialMightCondition,,graphics/icons/markets/capital.png,602
-AodFoodSup,AodFood,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.AodFoodSup,,graphics/icons/markets/light_industrial.png,603
+GP mod,aotd_gp_mod,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.GPModifiers,,graphics/icons/markets/capital.png,610
 BiFrostGateRemoving,bifrost_removal,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.BiFrostGateRemovingCondtion,,graphics/icons/markets/light_industrial.png,603
-Pre Collapse Facility,pre_collapse_facility,,,data.kaysaar.aotd.vok.campaign.econ.conditions.PreCollapseFacility,"This planet harbors numerous Domain era facilities, rich with potentially valuable data.",graphics/icons/markets/light_industrial.png,604
+Pre Collapse Facility,pre_collapse_facility,,,data.kaysaar.aotd.vok.campaign.econ.conditions.PreCollapseFacility,"This planet harbors numerous ancient Domain-marked facilities, rich with potential valuable data.",graphics/icons/markets/light_industrial.png,604
 AodHazmat,aotd_tech_hazard,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.HazmatCondition,,graphics/icons/markets/light_industrial.png,606
 AodUpkeep,aotd_tech_upkeep,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.ResearchedUpkeepModifier,,graphics/icons/markets/light_industrial.png,607
-Coronal Hypershunt,aotd_coronal_market_cond,,,data.kaysaar.aotd.vok.campaign.econ.conditions.CoronalHypershunt,"Former crown jewel of domain engineering, this megastructure is capable of harnessing the power of a star.",graphics/icons/markets/coronal_hypershunt.png,608
+Coronal Hypershunt,aotd_coronal_market_cond,,,data.kaysaar.aotd.vok.campaign.econ.conditions.CoronalHypershunt,"Former Domain gem, this megastructure is capable of harnessing power of the star.",graphics/icons/markets/coronal_hypershunt.png,608
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,

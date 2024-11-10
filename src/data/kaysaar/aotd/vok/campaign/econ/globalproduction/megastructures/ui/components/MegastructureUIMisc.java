@@ -32,12 +32,12 @@ public class MegastructureUIMisc {
         TooltipMakerAPI imageTootlip,mapTooltip,descriptionTooltip;
 
         imageTootlip = titlePanel.createUIElement(sectionWidth*2,100,false);
-        imageTootlip.addImage(Global.getSettings().getSpriteName("megastructureImage",mega.getSpec().getImageForMegastructure()),sectionWidth*2,5f);
+        imageTootlip.addImage(Global.getSettings().getSpriteName("megastructureImage",mega.getSpec().getImageForMegastructure()),sectionWidth*2,0f);
         height = imageTootlip.getPrev().getPosition().getHeight();
         imageTootlip.getPosition().setSize(sectionWidth*2,height);
         titlePanel.getPosition().setSize(titlePanel.getPosition().getWidth(),height);
         mapTooltip = titlePanel.createUIElement(sectionWidth,height,false);
-        mapTooltip.addSectorMap(sectionWidth,height-20,Global.getSector().getPlayerFleet().getStarSystem(), 0f);
+        mapTooltip.addSectorMap(sectionWidth,height-20,mega.getEntityTiedTo().getStarSystem(), 0f);
         descriptionTooltip = titlePanel.createUIElement(sectionWidth*3,height,true);
         descriptionTooltip.addPara(mega.getSpec().getDescription(),5f);
 
@@ -75,45 +75,66 @@ public class MegastructureUIMisc {
         sectionsPanel.addUIElement(tooltipOfImage).inTL(0,0);
         CustomPanelAPI panel = sectionsPanel.createCustomPanel(sectionsPanel.getPosition().getWidth()-imageWidth,imageHeight,null);
         renderer.setPanel(panel);
-        TooltipMakerAPI titleTooltip,optionTooltip,descriptionTooltip,otherInfoTooltip;
-        titleTooltip = panel.createUIElement(panel.getPosition().getWidth(),20,false);
-        titleTooltip.addSectionHeading("Options", Misc.getTextColor(),Misc.getDarkPlayerColor(),Alignment.MID,panel.getPosition().getWidth()*0.4f-15f,0f);
-        titleTooltip.addSectionHeading("Other Info", Misc.getTextColor(),Misc.getDarkPlayerColor(),Alignment.MID,panel.getPosition().getWidth()*0.6f-15f,0f).getPosition().inTL(panel.getPosition().getWidth()*0.4f,0);
+        TooltipMakerAPI optionTooltip,descriptionTooltip,otherInfoTooltip;
         optionTooltip = panel.createUIElement(panel.getPosition().getWidth()*0.4f-15f,imageHeight-25,true);
         otherInfoTooltip = panel.createUIElement(panel.getPosition().getWidth()*0.6f-15f,imageHeight-25,true);
-        section.createTooltipForOtherInfoSection(otherInfoTooltip,panel.getPosition().getWidth()*0.6f);
+//        section.createProdUpkeepInfo(otherInfoTooltip,panel.getPosition().getWidth()*0.6f);
+
         float pad =0f;
 //        for (int i = 0; i < 3; i++) {
 
 //        }
         ArrayList<ButtonAPI>buttons = new ArrayList<>();
+        //Quick fix : awful but works
         for (Map.Entry<String, ButtonData> entry : section.generateButtons().entrySet()) {
-            TooltipMakerAPI testTooltip= optionTooltip.beginSubTooltip(panel.getPosition().getWidth()*0.4f-30f);
-            LabelAPI label1 = testTooltip.addPara(entry.getValue().textButton,0f);
-            TooltipMakerAPI tooltipInsert = optionTooltip.beginSubTooltip(panel.getPosition().getWidth()*0.4f+30f);
+            if(entry.getKey().equals("moreInfo")){
+                TooltipMakerAPI testTooltip= otherInfoTooltip.beginSubTooltip(panel.getPosition().getWidth()*0.6f-30f);
+                LabelAPI label1 = testTooltip.addPara(entry.getValue().textButton,0f);
+                TooltipMakerAPI tooltipInsert = otherInfoTooltip.beginSubTooltip(panel.getPosition().getWidth()*0.6f+30f);
 
-            float height = label1.computeTextHeight(label1.getText());
-            float width = label1.computeTextWidth(label1.getText());
-            float totalWidth = panel.getPosition().getWidth()*0.4f-30f;
-            float neededPadding = (totalWidth-width)/2;
-            ButtonAPI button = tooltipInsert.addAreaCheckbox("",entry.getValue(), NidavelirMainPanelPlugin.base,NidavelirMainPanelPlugin.bg,NidavelirMainPanelPlugin.bright,panel.getPosition().getWidth()*0.4f-30f,height+20,pad);
-            if(entry.getValue().getCreator()!=null){
-                tooltipInsert.addTooltipToPrevious(entry.getValue().creator, TooltipMakerAPI.TooltipLocation.BELOW,false);
+                float height = label1.computeTextHeight(label1.getText());
+                float width = label1.computeTextWidth(label1.getText());
+                float totalWidth = panel.getPosition().getWidth()*0.6f-30f;
+                float neededPadding = (totalWidth-width)/2;
+                ButtonAPI button = tooltipInsert.addAreaCheckbox("",entry.getValue(), NidavelirMainPanelPlugin.base,NidavelirMainPanelPlugin.bg,NidavelirMainPanelPlugin.bright,panel.getPosition().getWidth()*0.6f-30f,height+20,0);
+                if(entry.getValue().getCreator()!=null){
+                    tooltipInsert.addTooltipToPrevious(entry.getValue().creator, TooltipMakerAPI.TooltipLocation.BELOW,false);
+                }
+                button.setEnabled(entry.getValue().isButtonEnabled());
+                tooltipInsert.addPara(label1.getText(),entry.getValue().getTextColor(),0f).getPosition().inTL(button.getPosition().getX()+neededPadding,-button.getPosition().getY()-button.getPosition().getHeight()+10);
+                otherInfoTooltip.addCustom(tooltipInsert,0f);
+                otherInfoTooltip.addSpacer(height*2+10);
+                buttons.add(button);
             }
-            button.setEnabled(entry.getValue().isButtonEnabled());
-            tooltipInsert.addPara(label1.getText(),entry.getValue().getTextColor(),0f).getPosition().inTL(button.getPosition().getX()+neededPadding,-button.getPosition().getY()-button.getPosition().getHeight()+10);
-            optionTooltip.addCustom(tooltipInsert,0f);
-            optionTooltip.addSpacer(height*2+10);
-            buttons.add(button);
+            else{
+                TooltipMakerAPI testTooltip= optionTooltip.beginSubTooltip(panel.getPosition().getWidth()*0.4f-30f);
+                LabelAPI label1 = testTooltip.addPara(entry.getValue().textButton,0f);
+                TooltipMakerAPI tooltipInsert = optionTooltip.beginSubTooltip(panel.getPosition().getWidth()*0.4f+30f);
 
-            pad= 5f;
+                float height = label1.computeTextHeight(label1.getText());
+                float width = label1.computeTextWidth(label1.getText());
+                float totalWidth = panel.getPosition().getWidth()*0.4f-30f;
+                float neededPadding = (totalWidth-width)/2;
+                ButtonAPI button = tooltipInsert.addAreaCheckbox("",entry.getValue(), NidavelirMainPanelPlugin.base,NidavelirMainPanelPlugin.bg,NidavelirMainPanelPlugin.bright,panel.getPosition().getWidth()*0.4f-30f,height+20,pad);
+                if(entry.getValue().getCreator()!=null){
+                    tooltipInsert.addTooltipToPrevious(entry.getValue().creator, TooltipMakerAPI.TooltipLocation.BELOW,false);
+                }
+                button.setEnabled(entry.getValue().isButtonEnabled());
+                tooltipInsert.addPara(label1.getText(),entry.getValue().getTextColor(),0f).getPosition().inTL(button.getPosition().getX()+neededPadding,-button.getPosition().getY()-button.getPosition().getHeight()+10);
+                optionTooltip.addCustom(tooltipInsert,0f);
+                optionTooltip.addSpacer(height*2+10);
+                buttons.add(button);
+
+                pad= 5f;
+            }
+
         }
 
 
 
-        panel.addUIElement(titleTooltip).inTL(0, 0);
-        panel.addUIElement(otherInfoTooltip).inTL(panel.getPosition().getWidth()*0.4f,25);
-        panel.addUIElement(optionTooltip).inTL(0,25);
+
+        panel.addUIElement(otherInfoTooltip).inTL(panel.getPosition().getWidth()*0.4f,5);
+        panel.addUIElement(optionTooltip).inTL(0,5);
         sectionsPanel.addComponent(panel).inTL(imageWidth,0);
         ButtonPackage buttonPackage = new ButtonPackage();
         buttonPackage.setTooltipOptions(optionTooltip);
@@ -228,7 +249,7 @@ public class MegastructureUIMisc {
             if(overrideColor!=null){
                 col = overrideColor;
             }
-            tooltipMakerAPI.addPara("%s", 0f, col, col, text).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
+            tooltipMakerAPI.addPara("%s", 0f, Misc.getTooltipTitleAndLightHighlightColor(), col, text).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
             panelTemp.addUIElement(tooltipMakerAPI).inTL(0, 0);
             panelsWithImage.add(panelTemp);
         }
@@ -271,6 +292,92 @@ public class MegastructureUIMisc {
         }
 
         customPanel.addUIElement(tooltip).inTL(0, 0);
+        return customPanel;
+    }
+    public static CustomPanelAPI createResourcePanelForSmallTooltipCondensed(float width, float height, float iconSize, HashMap<String,Integer> costs,HashMap<String,Integer>production) {
+        CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
+        TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
+        float totalSize = width;
+        float sections = totalSize /commodities.size();
+        float positions = totalSize / (commodities.size() * 4);
+        float iconsize = iconSize;
+        float topYImage = 0;
+        LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
+        float x = positions;
+        ArrayList<CustomPanelAPI> panelsWithImage = new ArrayList<>();
+        for (String commodity : GPManager.getCommodities()) {
+            float widthTempPanel = iconsize;
+            int number = 0;
+            int cost = 0;
+            int prod =0;
+
+            if(costs.get(commodity)!=null){
+                cost = costs.get(commodity);
+            }
+            if(production.get(commodity)!=null){
+                prod = production.get(commodity);
+            }
+            number = prod - cost;
+            widthTempPanel+=test.computeTextWidth(""+number+5);
+            CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel,iconSize,null);
+            TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel,iconSize,false);
+            tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(commodity).getIconName(), iconsize, iconsize, 0f);
+            UIComponentAPI image = tooltipMakerAPI.getPrev();
+            image.getPosition().inTL(x, topYImage);
+            String text = "" +number;
+            Color col = Misc.getPositiveHighlightColor();
+            if(number==0){
+                col = Misc.getTooltipTitleAndLightHighlightColor();
+            }
+            if(number<0){
+                col = Misc.getNegativeHighlightColor();
+            }
+            if(number>0){
+                text = "+"+number;
+            }
+            tooltipMakerAPI.addPara("%s", 0f, col, col, text).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text) / 3));
+            panelTemp.addUIElement(tooltipMakerAPI).inTL(0, 0);
+            panelsWithImage.add(panelTemp);
+        }
+        float lastX = 0f;
+        float lastY = 0f;
+        float totalWidth =0f;
+        float secondRowWidth = 0f;
+        float left;
+        for (CustomPanelAPI panelAPI : panelsWithImage) {
+            totalWidth+=panelAPI.getPosition().getWidth()+15;
+        }
+        left = totalWidth;
+        ArrayList<CustomPanelAPI> panelsSecondRow = new ArrayList<>();
+        if(totalWidth>=width){
+            for (int i = panelsWithImage.size()-1; i >=0 ; i--) {
+                left-=panelsWithImage.get(i).getPosition().getWidth()-15;
+                panelsSecondRow.add(panelsWithImage.get(i));
+                if(left<width){
+                    break;
+                }
+                panelsWithImage.remove(i);
+            }
+        }
+        for (CustomPanelAPI panelAPI : panelsSecondRow) {
+            secondRowWidth+=panelAPI.getPosition().getWidth()+15;
+        }
+        float startingXFirstRow =  0;
+        float startingXSecondRow =  0;
+        if(!panelsSecondRow.isEmpty()){
+            tooltip.getPosition().setSize(width,height*2+5);
+            customPanel.getPosition().setSize(width,height*2+5);
+        }
+        for (CustomPanelAPI panelAPI : panelsWithImage) {
+            tooltip.addCustom(panelAPI,0f).getPosition().inTL(startingXFirstRow,0);
+            startingXFirstRow+=panelAPI.getPosition().getWidth()+5;
+        }
+        for (CustomPanelAPI panelAPI : panelsSecondRow) {
+            tooltip.addCustom(panelAPI,0f).getPosition().inTL(startingXSecondRow,iconSize+5);
+            startingXSecondRow+=panelAPI.getPosition().getWidth()+5;
+        }
+
+        customPanel.addUIElement(tooltip).inTL(-15, 0);
         return customPanel;
     }
 }

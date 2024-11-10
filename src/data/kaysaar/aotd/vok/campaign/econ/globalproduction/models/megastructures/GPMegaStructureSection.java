@@ -45,6 +45,14 @@ public class GPMegaStructureSection {
 
     boolean isAboutToBeRemoved = false;
 
+    public void setProgressOfRestoration(float progressOfRestoration) {
+        this.progressOfRestoration = progressOfRestoration;
+    }
+
+    public void setRestoring(boolean restoring) {
+        isRestoring = restoring;
+    }
+
     public void apply() {
         if (!isAboutToBeRemoved) {
             if (isRestored) {
@@ -140,6 +148,7 @@ public class GPMegaStructureSection {
     }
     public HashMap<String,Integer>getProduction(){
         HashMap<String,Integer>production = new HashMap<>();
+
         return production;
     }
 
@@ -163,10 +172,13 @@ public class GPMegaStructureSection {
             ProgressBarComponent component = new ProgressBarComponent(width-25,21,getProgressPercentage(), Misc.getDarkPlayerColor().brighter().brighter());
             tooltip.addCustom(component.getRenderingPanel(),5f);
         }
-        createProductionSection(tooltip,width);
         createUpkeepSection(tooltip,width);
         addPenaltyFromLackOfResourcesInfo(tooltip,width);
 
+    }
+    public void createProdUpkeepInfo(TooltipMakerAPI tooltip,float width){
+
+        createUpkeepSection(tooltip,width);
     }
     public void createProductionSection(TooltipMakerAPI tooltip, float width) {
         tooltip.addSectionHeading("Production",Alignment.MID,5f);
@@ -175,9 +187,8 @@ public class GPMegaStructureSection {
 
     }
     public void createUpkeepSection(TooltipMakerAPI tooltip, float width) {
-        tooltip.addSectionHeading("Upkeep",Alignment.MID,5f);
         tooltip.addPara("Current monthly upkeep : %s", 5f, Color.ORANGE, Misc.getDGSCredits(getUpkeep()));
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltip(width, 20, 20, getGPUpkeep(), null), 5f);
+        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed(width*1.5f, 20, 20, getGPUpkeep(), getProduction()), 5f);
 
 
     }
@@ -197,11 +208,13 @@ public class GPMegaStructureSection {
                 restoration = "Continue Restoration";
             }
             if(!isRestored){
-                ButtonData data = new ButtonData(restoration, this, true, Color.ORANGE, "restore", new OnHoverButtonTooltip(this, "restore"), "restore", this.getSpec().getSectionID());
+                ButtonData data = new ButtonData(restoration, this, isRestorationAllowed(), Color.ORANGE, "restore", new OnHoverButtonTooltip(this, "restore"), "restore", this.getSpec().getSectionID());
                 buttons.put("restore", data);
             }
 
         }
+        ButtonData data1 = new ButtonData("Show info", this, true, Color.ORANGE, "moreInfo", new OnHoverButtonTooltip(this, "moreInfo"), "moreInfo", this.getSpec().getSectionID());
+        buttons.put("moreInfo", data1);
         addButtonsToList(buttons);
 
         return buttons;
@@ -221,8 +234,17 @@ public class GPMegaStructureSection {
     public IntelInfoPlugin notifyAboutCompletion() {
         return null;
     }
+    public void createTooltipForButtonsBeforeRest(TooltipMakerAPI tooltip, String buttonId){
 
+    }
+    public void createTooltipForButtonsAfterRest(TooltipMakerAPI tooltip, String buttonId){
+
+    }
+    public boolean isRestorationAllowed(){
+        return true;
+    }
     public void createTooltipForButtons(TooltipMakerAPI tooltip, String buttonId) {
+        createTooltipForButtonsBeforeRest(tooltip,buttonId);
         if (buttonId.equals("restore")) {
             tooltip.addPara("Currently this section is in ruins, but with enough effort and resources can be restored", 5f);
             createTooltipForBenefits(tooltip);
@@ -230,6 +252,10 @@ public class GPMegaStructureSection {
         if (buttonId.equals("pauseRestore")) {
             tooltip.addPara("Restoration will be halted, so we can use our resources elsewhere.", 5f);
         }
+        if (buttonId.equals("moreInfo")) {
+            tooltip.addPara("Show more info about this section like progress of restoration etc etc", 5f);
+        }
+        createTooltipForButtonsAfterRest(tooltip,buttonId);
     }
 
     public void createTooltipForBenefits(TooltipMakerAPI tooltip) {

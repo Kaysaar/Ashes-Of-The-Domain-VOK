@@ -207,6 +207,9 @@ public class GPManager {
     public void addMegastructureToList(GPBaseMegastructure megastructure){
         megastructures.add(megastructure);
     }
+    public void removeMegastructureFromList(GPBaseMegastructure megastructure){
+        megastructures.remove(megastructure);
+    }
     public GPSpec getSpec(String id) {
         for (GPSpec spec : specs) {
             if (spec.getProjectId().equals(id)) {

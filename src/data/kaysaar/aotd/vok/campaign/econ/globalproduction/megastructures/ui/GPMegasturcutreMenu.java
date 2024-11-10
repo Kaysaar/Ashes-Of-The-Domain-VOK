@@ -42,10 +42,10 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
         }
         buttonsOfMegastructures.clear();
         UILinesRenderer renderer = new UILinesRenderer(0f);
-        currentMegastructureSectionsPanel = panel.createCustomPanel(staticWidthOfMegaButtons, panel.getPosition().getHeight() - 51 - totalCostHeight - 10, renderer);
+        currentMegastructureSectionsPanel = panel.createCustomPanel(staticWidthOfMegaButtons, panel.getPosition().getHeight() - 51 , renderer);
         renderer.setPanel(currentMegastructureSectionsPanel);
         TooltipMakerAPI tooltip = currentMegastructureSectionsPanel.createUIElement(currentMegastructureSectionsPanel.getPosition().getWidth(), currentMegastructureSectionsPanel.getPosition().getHeight(), false);
-        tooltip.addSectionHeading("Megastructure List", Alignment.MID, 0f);
+        tooltip.addSectionHeading("Megastructures", Alignment.MID, 0f);
         TooltipMakerAPI buttonTooltip = currentMegastructureSectionsPanel.createUIElement(currentMegastructureSectionsPanel.getPosition().getWidth(), currentMegastructureSectionsPanel.getPosition().getHeight() - 20, true);
         float pad = 0f;
         for (GPBaseMegastructure megastructure : GPManager.getInstance().getMegastructures()) {
@@ -76,11 +76,11 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
         currentMegastructureSelected = panel.createCustomPanel(panel.getPosition().getWidth() - staticWidthOfMegaButtons - 10, panel.getPosition().getHeight() - 51, renderer);
         renderer.setPanel(currentMegastructureSelected);
         TooltipMakerAPI tooltip = currentMegastructureSelected.createUIElement(currentMegastructureSelected.getPosition().getWidth(), currentMegastructureSelected.getPosition().getHeight(), true);
-        String str = ": ";
+        String str = "";
         if (megastructure != null) {
-            str += megastructure.getSpec().getName();
+            str += megastructure.getSpec().getName()+" : "+megastructure.getEntityTiedTo().getStarSystem().getName();
         }
-        tooltip.addSectionHeading("Current Megastructure"+str, Alignment.MID, 0f);
+        tooltip.addSectionHeading(str, Alignment.MID, 0f);
         if(megastructure!=null){
             currentOne = megastructure.createUIPlugin(currentMegastructureSelected,this);
             currentOne.initUI();
@@ -90,21 +90,6 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
         currentMegastructureSelected.addUIElement(tooltip).inTL(0, 0);
         panel.addComponent(currentMegastructureSelected).inTL(spacerX + staticWidthOfMegaButtons + 5, 51);
 
-
-    }
-
-    public void createTotalCostOfMegastructuresTab() {
-        UILinesRenderer renderer = new UILinesRenderer(0f);
-        totalCostOfMegastructuresPanel = panel.createCustomPanel(staticWidthOfMegaButtons, totalCostHeight, renderer);
-        renderer.setPanel(totalCostOfMegastructuresPanel);
-        TooltipMakerAPI tooltip = totalCostOfMegastructuresPanel.createUIElement(totalCostOfMegastructuresPanel.getPosition().getWidth(), totalCostOfMegastructuresPanel.getPosition().getHeight(), false);
-        tooltip.addSectionHeading("Total Cost of Operations", Alignment.MID, 0f);
-        tooltip.addPara("Monthly credit cost : %s",5f,Color.ORANGE,Misc.getDGSCredits(GPManager.getInstance().getTotalUpkeeepCreditsForMega()));
-        tooltip.addSectionHeading("Usage of resources", Alignment.MID, 5f);
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltip(staticWidthOfMegaButtons,30,30,GPManager.getInstance().getTotalUpkeepGPForMega(),Misc.getNegativeHighlightColor()),5f);
-
-        totalCostOfMegastructuresPanel.addUIElement(tooltip).inTL(0, 0);
-        panel.addComponent(totalCostOfMegastructuresPanel).inTL(spacerX, panel.getPosition().getHeight() - totalCostHeight);
 
     }
 
@@ -174,7 +159,6 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
         panel.removeComponent(totalCostOfMegastructuresPanel);
         buttonTooltipMaker=null;
         createMegastructureList();
-        createTotalCostOfMegastructuresTab();
         buttonTooltipMaker.getExternalScroller().setYOffset(currentOffset);
     }
     public void init(CustomPanelAPI mainPanel) {
@@ -183,7 +167,6 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
         createMarketResourcesPanel();
         createMegastructureList();
         createCurrentMegastructureTab();
-        createTotalCostOfMegastructuresTab();
     }
 
     public CustomPanelAPI getMainPanel() {
