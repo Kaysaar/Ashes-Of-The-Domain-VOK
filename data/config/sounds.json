@@ -1,5 +1,27 @@
 {
 
+"music":{
+		"aotd_shipyard":[
+			{
+				"source":"sounds/sfx_interface/shipyard",
+				"volume":0.4,
+				"files":[
+					"shipyard.ogg",
+				],
+				"randomStart":true,
+			}
+		],"aotd_research":[
+			{
+				"source":"sounds/sfx_interface/research",
+				"volume":0.4,
+				"files":[
+					"research.ogg",
+				],
+				"randomStart":true,
+			}
+		]
+	
+	},
 	"aotd_research_complete":[
 			{"file":"sounds/sfx_interface/Research_Complete.ogg","volume":0.6}
 		],

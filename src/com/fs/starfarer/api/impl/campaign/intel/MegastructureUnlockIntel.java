@@ -32,14 +32,28 @@ public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
 
         // Title of the intel
         info.addPara(getName(), title,0f);
-        info.addPara("A new megastucture has been claimed by our faction!",5f);
-        info.addPara("Received a story point!", Misc.getPositiveHighlightColor(),5f);
+
+        if(!data.haveRecivedStoryPoint){
+            info.addPara("A new megastucture has been claimed by our faction!",5f);
+            info.addPara("Received a story point!", Misc.getPositiveHighlightColor(),5f);
+        }
+        else{
+            info.addPara("Megastructure has been reclaimed by our faction",5f);
+
+        }
+
 
     }
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara("New Megastructure  : %s",5f,Color.ORANGE,data.getName());
+        if(!data.haveRecivedStoryPoint){
+            info.addPara("New Megastructure  : %s",5f,Color.ORANGE,data.getName());
+        }
+        else{
+            info.addPara("Reclaimed Megastructure  : %s",5f,Color.ORANGE,data.getName());
+        }
+
         addGenericButton(info,width,"Access Megastructure Tab", Button_Megastructure);
     }
 

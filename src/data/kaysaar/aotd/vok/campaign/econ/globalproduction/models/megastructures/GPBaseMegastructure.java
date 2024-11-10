@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc.createResourcePanelForSmallTooltip;
+import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed;
 
 public class GPBaseMegastructure {
     public String  specId;
@@ -38,37 +39,43 @@ public class GPBaseMegastructure {
     public float getPenaltyFromManager(){
         return GPManager.getInstance().getTotalPenaltyFromResources(getCosts().keySet().toArray(new String[0]));
     }
+    public boolean haveRecivedStoryPoint = false;
     public CustomPanelAPI createButtonSection(float width){
         UILinesRenderer renderer = new UILinesRenderer(0f);
+
+
         CustomPanelAPI panel = Global.getSettings().createCustom(width,250,null);
         renderer.setPanel(panel);
-        TooltipMakerAPI tooltip = panel.createUIElement(width,50,false);
-        TooltipMakerAPI tooltipOfIcon = tooltip.beginSubTooltip(width);
-        TooltipMakerAPI tooltipOfCosts = tooltip.beginSubTooltip(width);
-        TooltipMakerAPI tooltipOfProduciton = tooltip.beginSubTooltip(width);
-        tooltipOfProduciton.addSectionHeading("Production",Alignment.MID,5f);
-        tooltipOfProduciton.addCustom(createResourcePanelForSmallTooltip(width,20,20,getProduction(),Misc.getPositiveHighlightColor()),10f);
-
-        tooltipOfCosts.addSectionHeading("Upkeep",Alignment.MID,5f);
-        tooltipOfCosts.addPara("Monthly running cost %s",0,Color.ORANGE,Misc.getDGSCredits(getUpkeep())).getPosition().inTL(10,25);
-        tooltipOfCosts.addCustom(createResourcePanelForSmallTooltip(width,20,20,getCosts(),Misc.getNegativeHighlightColor()),10f);
-        tooltipOfIcon.addImage(getIcon(),50,50,5f);
-        String starSystem = "Proxima Star System";
-        if(entityTiedTo!=null){
-            starSystem = entityTiedTo.getStarSystem().getName();
-        }
-        tooltipOfIcon.addTitle(getName()+" : "+starSystem).getPosition().inTL(60,10);
-        tooltip.addCustom(tooltipOfIcon,0f);
-        tooltip.addSpacer(tooltipOfIcon.getHeightSoFar());
-        tooltip.addCustom(tooltipOfProduciton,-5f);
-        tooltip.addSpacer(tooltipOfProduciton.getHeightSoFar());
-        tooltip.addCustom(tooltipOfCosts,0f);
-        tooltip.addSpacer(tooltipOfCosts.getHeightSoFar());
+        TooltipMakerAPI tooltip  =createTooltipButton(panel,width);
         panel.getPosition().setSize(width,tooltip.getHeightSoFar()+5);
-
         panel.addUIElement(tooltip).inTL(-5,0);
         return panel;
     }
+   public TooltipMakerAPI createTooltipButton(CustomPanelAPI panel, float width){
+       UILinesRenderer renderer = new UILinesRenderer(0f);
+
+       renderer.setPanel(panel);
+       TooltipMakerAPI tooltip = panel.createUIElement(width,50,false);
+       TooltipMakerAPI tooltipOfIcon = tooltip.beginSubTooltip(width);
+       TooltipMakerAPI tooltipOfCosts = tooltip.beginSubTooltip(width);
+       tooltipOfCosts.addPara("Monthly running cost %s",0,Color.ORANGE,Misc.getDGSCredits(getUpkeep())).getPosition().inTL(10,25);
+       tooltipOfCosts.addCustom(createResourcePanelForSmallTooltipCondensed(width,20,20,getCosts(),getProduction()),5f);
+       tooltipOfIcon.addImage(getIcon(),50,50,5f);
+       String starSystem = "Proxima Star System";
+       if(entityTiedTo!=null){
+           starSystem = entityTiedTo.getStarSystem().getName();
+       }
+       tooltipOfIcon.addTitle(getName()+" : "+starSystem).getPosition().inTL(60,10);
+       tooltip.addCustom(tooltipOfIcon,0f);
+       tooltip.addSpacer(tooltipOfIcon.getHeightSoFar());
+       tooltip.addCustom(tooltipOfCosts,-25f);
+       tooltip.addSpacer(tooltipOfCosts.getHeightSoFar()+25);
+       createAdditionalInfoToButton(tooltip);
+       return tooltip;
+   }
+   public void createAdditionalInfoToButton(TooltipMakerAPI tooltipMakerAPI){
+
+   }
 
     public  HashMap<String, Integer> getCosts(){
         HashMap<String,Integer> costs = new HashMap<>();
@@ -150,6 +157,14 @@ public class GPBaseMegastructure {
         wasInitalized  = true;
         entityTiedTo.getMemory().set("$aotd_megastructure",this);
 
+    }
+
+    public boolean isHaveRecivedStoryPoint() {
+        return haveRecivedStoryPoint;
+    }
+
+    public void setHaveRecivedStoryPoint(boolean haveRecivedStoryPoint) {
+        this.haveRecivedStoryPoint = haveRecivedStoryPoint;
     }
 
     public ArrayList<GPMegaStructureSection> getMegaStructureSections() {

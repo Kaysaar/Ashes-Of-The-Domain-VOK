@@ -1,6 +1,6 @@
 id,name,faction,desc,script,icon,order
 researchfacil,"Research
-Facility",player,Storage for materials that will be used for research,data.kaysaar.aotd.vok.submarkets.ResearchFacilityMarket,graphics/factions/researchfacil.png,1700
+Facility",player,"Storage for materials, that are used for research",data.kaysaar.aotd.vok.submarkets.ResearchFacilityMarket,graphics/factions/researchfacil.png,1700
 ,,,,,,
 ,,,,,,
 ,,,,,,

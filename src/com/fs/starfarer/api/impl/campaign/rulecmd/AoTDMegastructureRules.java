@@ -75,6 +75,7 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
         GPManager.getInstance().addMegastructureToList(megastructure);
         token.getMemory().set("$aotd_claimed", true);
         token.setFaction(Factions.PLAYER);
+        token.getMemory().set(GPBaseMegastructure.memKey, megastructure);
 
         MegastructureUnlockIntel intel = new MegastructureUnlockIntel(megastructure);
         Global.getSector().getIntelManager().addIntel(intel, false);
@@ -99,8 +100,19 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
             megastructure.trueInit(spec.getMegastructureID(), token);
         }
         GPManager.getInstance().addMegastructureToList(megastructure);
+        token.getMemory().set(GPBaseMegastructure.memKey, megastructure);
         MegastructureUnlockIntel intel = new MegastructureUnlockIntel(megastructure);
         Global.getSector().getIntelManager().addIntel(intel, false);
         Global.getSector().getPlayerFleet().getCommanderStats().addStoryPoints(1);
+    }
+    public static GPBaseMegastructure putMegastructure(SectorEntityToken token, String specOfmegastructure) {
+        GPBaseMegastructure megastructure;
+        GPMegaStructureSpec spec = GPManager.getInstance().getMegaSpecFromList(specOfmegastructure);
+        megastructure = spec.getScript();
+        if (!megastructure.wasInitalized) {
+            megastructure.trueInit(spec.getMegastructureID(), token);
+        }
+        token.getMemory().set(GPBaseMegastructure.memKey,megastructure);
+        return megastructure;
     }
 }

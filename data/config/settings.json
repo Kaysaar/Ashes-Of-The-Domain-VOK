@@ -1,7 +1,25 @@
 {
+	
+	"aotd_tier_1_unlock":false, # Unlock vanilla tier of buildings by default
+	"aotd_tier_2_unlock":false, # Unlock tier 2 of industries ( such as fracking , orbital assembly etc etc) and all bellow this tier.
+	"aotd_tier_3_unlock":false, # Unlock tier 3 of industries (Benefication , sublimation and all using advanced resources) and all bellow this tier.
+	"aotd_tier_4_unlock":false, # Unlock tier 4 of industries (Skunkwork, Fleetwork , and Blast Processing Unit) and all bellow this tier.
+	"aotd_tier_experimental_unlock":false, #Unlock experimental tier of tech tree and all bellow this tier.
+	"aotd_research_speed_multiplier":1.0, #Increase/Decrease multiplier of research speed. If research by default takes 30 days with multiplier 2 will take 60 days etc etc.
+	"aotd_defence_min_val":140, # Incresae/Decrease minimal DP value of PCF defence fleet (should be lower than max)
+	"aotd_defence_max_val":180, # Incresae/Decrease maximal  DP value of PCF defence fleet 
+	"aotd_pcf_amount":50, # Increase/Decrease amount of Pre Collapse Facilities spawning per sector.
+	"aotd_expedition_threshold":240, # Increase/Decrease frequency of research expeditions, conducted by faction. (Days)
+	"aotd_expedition_begin":210, # Increase/Decrease year, where research expeditions are beginning.
+	"aotd_titans_of_industry":true, # Disables/enables total rework of custom production mechanic for colonies
+	"aotd_scale":10, # Increase/Decrease multiplier of Global Production commodities ( x amount of supply times scale)
+	"aotd_shipyard_pag_per_page":70, # Increase/Decrease amount of items displayed per page ( WARNING : INCREASING THIS NUMBER MIGHT RESULT IN PRODUCTION UI LAGGING )
 	"graphics":{
 		"characters": {
-			"sophia":"graphics/portraits/characters/sophia.png",
+			"sophia":"graphics/portraits/characters/sophia.png"
+		},
+		"intel": {
+			"respite40":"graphics/icons/markets/respite40.png",
 		},
 		"ui_icons_tech_tree":{
 			"farming1":"graphics/icons/tech/farming1.png",
@@ -70,9 +88,10 @@
 			"orbitalheavy_sub":"graphics/icons/tech/subicon_orbital_manu.png",
 			"bifrost_sub":"graphics/icons/tech/subicon_bifrost.png",
 			"stella_manufactorium_sub":"graphics/icons/tech/subicon_stella.png",
-			"modula_program_sub":"graphics/icons/tech/subicon_modula_program.png",
+			"hightech_sub":"graphics/icons/tech/subicon_modula_program.png",
 			"none":"graphics/icons/tech/generic.png",
 			"researched":"graphics/icons/tech/researched.png",
+			"mining_megaplex_sub":"graphics/icons/tech/subicon_mining_megaplex.png",
 			"test":"graphics/icons/tech/test.png",
 
 		},
@@ -80,10 +99,48 @@
 			"tech_panel":"graphics/ui/tech_progression_campaign.png",
 			"tech_button_hide":"graphics/ui/tech_hide_button.png",
 			"tech_hide_button_highlighted":"graphics/ui/tech_hide_button_highlighted.png",
+			"gp_button_hide":"graphics/ui/gp_button.png",
+			"gp_button_hide_highlight":"graphics/ui/gp_button_highlighted.png",
 			"tech_progression":"graphics/ui/tech_progression.png",
-			"tech_button":"graphics/ui/tech_button.png",
-			"tech_button_highlighted":"graphics/ui/tech_button_highlighted.png"
+			"tech_button":"graphics/ui/aotd_button.png",
+			"tech_button_highlighted":"graphics/ui/aotd_button_highlighted.png",
+			"dmg_type_kin":"graphics/ui/icons/damagetype_kinetic.png",
+			"dmg_type_ene":"graphics/ui/icons/damagetype_energy.png",
+			"dmg_type_boom":"graphics/ui/icons/damagetype_high_explosive.png",
+			"dmg_type_frag":"graphics/ui/icons/damagetype_fragmentation.png",
+			"dmg_type_other":"graphics/ui/icons/damagetype_other.png",
+						"question":"graphics/ui/more_info.png"
+		},
+		"ui":{
+			"aotd_text_glow":"graphics/ui/buttons/text_glow.png",
+			"aotd_holder":"graphics/ui/holder.png"
+		},
+		"rendering":{
+            "GlitchSquare":"graphics/fx/solid_square.png",
+
+		},
+		"megastructures":{
+            "hypershunt":"graphics/icons/coronal_shunt.png",
+			"nidavelir":"graphics/icons/nidavelir.png",
+			
+		},
+		"sectionImage":{
+            "WormholeGenerator":"graphics/icons/megastructures/coronal_reciver.png",
+			"CoronalCollector":"graphics/icons/megastructures/plasma_shield_generator.png",
+			"AegisSystem":"graphics/icons/megastructures/coronal_port.png",
+			"NexusCore":"graphics/icons/megastructures/nid_3.png",
+			"VanguardForge":"graphics/icons/megastructures/nid_2.png",
+			"BulwarkFoundry":"graphics/icons/megastructures/nid_4.png",
+			"EterniumCore":"graphics/icons/megastructures/nid_1.png",
+			"SentinelCore":"graphics/icons/megastructures/nid_5.png"
+
 		}
+		,
+		"megastructureImage":{
+            "hypershunt":"graphics/illustrations/coronal_tap.jpg",
+			"nidavelir":"graphics/illustrations/nidavelir.png",
+		}
+
 	}
 }
 
