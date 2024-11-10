@@ -1,9 +1,13 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections;
 
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -32,9 +36,19 @@ public class EterniumCore extends GPMegaStructureSection {
         tooltip.addPara("Increase GP demand of %s by %s for each assigned point of manpower",5f,Color.ORANGE,"refined metal",""+10);
 
     }
-
+    @Override
+    public void applyAdditionalGPCost(HashMap<String, Integer> map) {
+        map.put(AoTDCommodities.REFINED_METAL,50);
+    }
     @Override
     public HashMap<String, Integer> getProduction() {
-        return super.getProduction();
+        HashMap<String, Integer>map = new HashMap<>();
+        float val = 10;
+        int manpower =5;
+        float totalVal = val*manpower;
+        for (String s : NidavelirComplexMegastructure.commoditiesProd) {
+            AoTDMisc.putCommoditiesIntoMap(map,s, (int) totalVal);
+        }
+        return map;
     }
 }
