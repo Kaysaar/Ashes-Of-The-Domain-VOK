@@ -318,12 +318,6 @@ public class MegastructureUIMisc {
                 prod = production.get(commodity);
             }
             number = prod - cost;
-            widthTempPanel+=test.computeTextWidth(""+number+5);
-            CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel,iconSize,null);
-            TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel,iconSize,false);
-            tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(commodity).getIconName(), iconsize, iconsize, 0f);
-            UIComponentAPI image = tooltipMakerAPI.getPrev();
-            image.getPosition().inTL(x, topYImage);
             String text = "" +number;
             Color col = Misc.getPositiveHighlightColor();
             if(number==0){
@@ -335,7 +329,14 @@ public class MegastructureUIMisc {
             if(number>0){
                 text = "+"+number;
             }
-            tooltipMakerAPI.addPara("%s", 0f, col, col, text).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text) / 3));
+            widthTempPanel+=test.computeTextWidth(text)+5;
+            CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel,iconSize,null);
+            TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel,iconSize,false);
+            tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(commodity).getIconName(), iconsize, iconsize, 0f);
+            UIComponentAPI image = tooltipMakerAPI.getPrev();
+            image.getPosition().inTL(x, topYImage);
+
+            tooltipMakerAPI.addPara("%s", 0f, col, col, text).getPosition().inTL(x + iconsize + 2, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text) / 3));
             panelTemp.addUIElement(tooltipMakerAPI).inTL(0, 0);
             panelsWithImage.add(panelTemp);
         }

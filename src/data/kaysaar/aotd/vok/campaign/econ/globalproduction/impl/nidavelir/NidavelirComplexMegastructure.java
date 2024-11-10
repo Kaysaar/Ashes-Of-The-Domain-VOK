@@ -5,26 +5,34 @@ import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.impl.campaign.NidavelirDestroyedShipyard;
 import com.fs.starfarer.api.impl.campaign.NidavelirShipyard;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     public NidavelirShipyard shipyard;
     public int manpowerPoints;
+    public static ArrayList<String>commoditiesProd = new ArrayList<>();
+    public static ArrayList<String>commoditiesDemand = new ArrayList<>();
+    static {
+        commoditiesProd.add(AoTDCommodities.DOMAIN_GRADE_MACHINERY);
+        commoditiesProd.add(AoTDCommodities.ADVANCED_COMPONENTS);
+        commoditiesProd.add(Commodities.SHIPS);
+        commoditiesProd.add(Commodities.HAND_WEAPONS);
+        commoditiesDemand.add(AoTDCommodities.REFINED_METAL);
+
+    }
 
     public int getManpowerPoints() {
-        if(entityTiedTo.getMarket().getFaction()==null){
-            manpowerPoints=0;
-        }
-        else{
-            manpowerPoints = entityTiedTo.getMarket().getSize()*2;
-        }
-        return manpowerPoints;
+        return entityTiedTo.getMarket().getSize()*2;
     }
 
     @Override
@@ -40,8 +48,6 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
         return super.createUIPlugin(parentPanel, menu);
     }
-
-
 
 
     @Override
