@@ -33,10 +33,6 @@ public class NexusCore extends GPMegaStructureSection {
     @Override
     public void addButtonsToList(LinkedHashMap<String, ButtonData> currentButtons) {
         super.addButtonsToList(currentButtons);
-        ButtonData data1 = new ButtonData("Assign Manpower", this, this.isRestored, new Color(239, 60, 60, 255), "adjustRange", new OnHoverButtonTooltip(this, "adjustRange"), "adjustRange", this.getSpec().getSectionID());
-        currentButtons.put("adjustRange", data1);
-        ButtonData data2 = new ButtonData("Automate Section", this, this.isRestored, new Color(98, 231, 184, 255), "adjustRange", new OnHoverButtonTooltip(this, "adjustRange"), "adjustRange", this.getSpec().getSectionID());
-        currentButtons.put("adjustRange2", data2);
     }
 
     @Override

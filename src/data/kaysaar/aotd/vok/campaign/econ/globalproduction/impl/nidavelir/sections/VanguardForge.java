@@ -12,15 +12,8 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class VanguardForge  extends GPMegaStructureSection {
-    @Override
-    public void addButtonsToList(LinkedHashMap<String, ButtonData> currentButtons) {
-        super.addButtonsToList(currentButtons);
-        ButtonData data1 = new ButtonData("Assign Manpower", this, this.isRestored, new Color(239, 60, 60, 255), "adjustRange", new OnHoverButtonTooltip(this, "adjustRange"), "adjustRange", this.getSpec().getSectionID());
-        currentButtons.put("adjustRange", data1);
-        ButtonData data2 = new ButtonData("Automate Section", this, this.isRestored, new Color(98, 231, 184, 255), "adjustRange", new OnHoverButtonTooltip(this, "adjustRange"), "adjustRange", this.getSpec().getSectionID());
-        currentButtons.put("adjustRange2", data2);
-    }
+public class VanguardForge  extends NidavelirBaseSection {
+
     @Override
     public boolean isRestorationAllowed() {
         return  megastructureTiedTo.getSectionById("nidavelir_nexus").isRestored;
@@ -38,14 +31,16 @@ public class VanguardForge  extends GPMegaStructureSection {
         map.put(AoTDCommodities.REFINED_METAL,50);
     }
     @Override
-    public HashMap<String, Integer> getProduction() {
-        HashMap<String, Integer>map =new HashMap<>();
+    public HashMap<String, Integer> getProduction(HashMap<String, Float> penaltyMap) {
+        HashMap<String, Integer>map = new HashMap<>();
         float val = 10;
         int manpower =5;
-        float totalVal = val*manpower;
+        float totalVal = val*manpower*(float)AoTDMisc.getOrDefault(penaltyMap,AoTDCommodities.REFINED_METAL,1f);
         for (String s : NidavelirComplexMegastructure.commoditiesProd) {
             AoTDMisc.putCommoditiesIntoMap(map,s, (int) totalVal);
         }
+
         return map;
+
     }
 }

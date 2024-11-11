@@ -9,9 +9,12 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.NidavelirBaseSection;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.ui.NidavelirUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -46,7 +49,7 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
 
     @Override
     public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
-        return super.createUIPlugin(parentPanel, menu);
+        return new NidavelirUI(this,parentPanel,menu);
     }
 
 
@@ -56,6 +59,19 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
         shipyard = (NidavelirDestroyedShipyard)entityTiedTo.getStarSystem().addCustomEntity(null,"Nid","nid_shipyards_damaged",null).getCustomPlugin();
         shipyard.trueInit("aotd_nidavelir_destroyed",null, (PlanetAPI) entityTiedTo);
     }
-
+    public ArrayList<NidavelirBaseSection> getSections(){
+        ArrayList<NidavelirBaseSection>sections = new ArrayList<>();
+        for (GPMegaStructureSection megaStructureSection : getMegaStructureSections()) {
+            sections.add((NidavelirBaseSection) megaStructureSection);
+        }
+        return sections;
+    }
+    public int getRemainingManpowerPoints(){
+        int current = 0;
+        for (NidavelirBaseSection section : getSections()) {
+            current+=section.getCurrentManpowerAssigned();
+        }
+        return current;
+    }
 
 }

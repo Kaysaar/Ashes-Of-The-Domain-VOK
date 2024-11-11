@@ -11,7 +11,7 @@ public class HypershuntReciverEntityPlugin extends BaseCustomEntityPlugin{
     @Override
     public void advance(float amount) {
         if(!this.entity.isExpired()){
-            boolean range = HypershuntMegastrcutre.isWithinRangeOfAtLeastOneHypershunt(entity);
+            boolean range = isWithinRange();
             for (MarketAPI market : Global.getSector().getEconomy().getMarkets(this.entity.getStarSystem())) {
                 if(!market.isPlayerOwned()&&!market.getFaction().isPlayerFaction())continue;
                 if(range){
@@ -27,6 +27,9 @@ public class HypershuntReciverEntityPlugin extends BaseCustomEntityPlugin{
             unmodify();
         }
 
+    }
+    public boolean isWithinRange(){
+        return HypershuntMegastrcutre.isWithinRangeOfAtLeastOneHypershunt(entity);
     }
     public void unmodify(){
         for (MarketAPI market : Global.getSector().getEconomy().getMarkets(this.entity.getStarSystem())) {

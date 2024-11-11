@@ -24,9 +24,9 @@ public class AoTDListenerUtilis {
         }
 
     }
-    public static void increaseProductionCapacity(HashMap<String,Integer>currentResourceOutput){
+    public static void increaseProductionCapacity(HashMap<String,Integer>currentResourceOutput,Object toIgonre){
         for (AoTDResourceListener listener : Global.getSector().getListenerManager().getListeners(AoTDResourceListener.class)) {
-            HashMap<String,Integer> data = listener.increaseProductionCapacity();
+            HashMap<String,Integer> data = listener.increaseProductionCapacity(toIgonre);
             for (Map.Entry<String, Integer> entry : data.entrySet()) {
                 AoTDMisc.putCommoditiesIntoMap(currentResourceOutput,entry.getKey(),entry.getValue());
             }

@@ -10,7 +10,6 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.Objectives;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import com.sun.jna.platform.win32.GL;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;

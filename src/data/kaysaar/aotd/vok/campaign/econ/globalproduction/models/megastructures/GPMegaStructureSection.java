@@ -116,8 +116,11 @@ public class GPMegaStructureSection {
         apply();
         if (isRestoring) {
             progressOfRestoration += Global.getSector().getClock().convertToDays(amount) * getPenaltyFromManager(getGPUpkeep().keySet().toArray(new String[0]));
+            if(progressOfRestoration<0){
+                progressOfRestoration = 0;
+            }
             if(Global.getSettings().isDevMode()){
-                progressOfRestoration*=100;
+                progressOfRestoration+= Global.getSector().getClock().convertToDays(amount) *100;
             }
             if (progressOfRestoration >= getSpec().daysForRenovation) {
                 isRestoring = false;
@@ -147,6 +150,9 @@ public class GPMegaStructureSection {
         unapplyEffectOfSection();
     }
     public HashMap<String,Integer>getProduction(){
+        return getProduction(GPManager.getInstance().getPenaltyMap());
+    }
+    public HashMap<String,Integer>getProduction(HashMap<String,Float> penaltyMap){
         HashMap<String,Integer>production = new HashMap<>();
 
         return production;
@@ -182,13 +188,13 @@ public class GPMegaStructureSection {
     }
     public void createProductionSection(TooltipMakerAPI tooltip, float width) {
         tooltip.addSectionHeading("Production",Alignment.MID,5f);
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltip(width, 20, 20, getProduction(), Misc.getPositiveHighlightColor()), 5f);
+        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltip(width, 20, 20, getProduction(GPManager.getInstance().getPenaltyMap()), Misc.getPositiveHighlightColor()), 5f);
 
 
     }
     public void createUpkeepSection(TooltipMakerAPI tooltip, float width) {
         tooltip.addPara("Current monthly upkeep : %s", 5f, Color.ORANGE, Misc.getDGSCredits(getUpkeep()));
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed(width*1.5f, 20, 20, getGPUpkeep(), getProduction()), 5f);
+        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed(width*1.5f, 20, 20, getGPUpkeep(), getProduction(GPManager.getInstance().getPenaltyMap())), 5f);
 
 
     }

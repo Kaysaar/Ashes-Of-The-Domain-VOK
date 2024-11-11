@@ -10,14 +10,16 @@ import java.util.Map;
 
 public class AoTDMegastructureProductionListener implements AoTDResourceListener {
     @Override
-    public HashMap<String,Integer> increaseProductionCapacity() {
-        HashMap<String,Integer>map = new HashMap<>();
-        for (GPBaseMegastructure megastructure : GPManager.getInstance().getMegastructures()) {
-            HashMap<String,Integer> megaMap = megastructure.getProduction();
-            for (Map.Entry<String, Integer> entry : megaMap.entrySet()) {
-                AoTDMisc.putCommoditiesIntoMap(map,entry.getKey(),entry.getValue());
-            }
-        }
-        return map;
+    public HashMap<String,Integer> increaseProductionCapacity(Object toIgnore) {
+//        HashMap<String,Integer>map = new HashMap<>();
+//        for (GPBaseMegastructure megastructure : GPManager.getInstance().getMegastructures()) {
+//            HashMap<String,Integer> megaMap = megastructure.getProduction();
+//            HashMap<String,Integer>demandMap = megastructure.getDemand();
+//            for (Map.Entry<String, Integer> entry : megaMap.entrySet()) {
+//                AoTDMisc.putCommoditiesIntoMap(map,entry.getKey(),entry.getValue());
+//            }
+//        }
+//        return map;
+        return new HashMap<>();
     }
 }
