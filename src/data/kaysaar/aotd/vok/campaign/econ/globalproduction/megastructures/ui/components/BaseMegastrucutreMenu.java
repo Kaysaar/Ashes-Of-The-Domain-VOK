@@ -201,7 +201,7 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
     public void processInput(List<InputEventAPI> events) {
 
     }
-
+    @Deprecated
     @Override
     public void buttonPressed(Object buttonId) {
 

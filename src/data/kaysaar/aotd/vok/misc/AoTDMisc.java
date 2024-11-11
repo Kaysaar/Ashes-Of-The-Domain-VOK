@@ -30,7 +30,6 @@ import org.json.JSONObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
-import javax.json.JsonArray;
 import java.awt.*;
 import java.io.IOException;
 import java.sql.Ref;
@@ -60,6 +59,12 @@ public class AoTDMisc {
         }
 
         return variantId;
+    }
+    public static  Object getOrDefault(Map map, Object key,Object defaultValue){
+        if(map.get(key)==null){
+            return defaultValue;
+        }
+        return map.get(key);
     }
     public static void putCommoditiesIntoMap(HashMap<String,Integer> map, String commodity, int val) {
         if (map.get(commodity) == null) {

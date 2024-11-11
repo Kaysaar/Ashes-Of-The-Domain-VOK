@@ -18,7 +18,6 @@ import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GpMegaStructureSectionsSpec;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -179,7 +178,7 @@ public class GPManager {
     public HashMap<String,Integer>getTotalUpkeepGPForMega(){
        HashMap<String,Integer> upkeep = new HashMap<>();
         for (GPBaseMegastructure megastructure : megastructures) {
-            for (Map.Entry<String, Integer> s : megastructure.getCosts().entrySet()) {
+            for (Map.Entry<String, Integer> s : megastructure.getDemand().entrySet()) {
                 AoTDMisc.putCommoditiesIntoMap(upkeep,s.getKey(),s.getValue());
             }
         }
@@ -249,6 +248,7 @@ public class GPManager {
     }
 
     public LinkedHashMap<String, Integer> getTotalResources() {
+
         if (totalResources == null) totalResources = new LinkedHashMap<>();
         totalResources.clear();
         int amount = 0;
@@ -267,11 +267,26 @@ public class GPManager {
 
             }
         }
-        AoTDListenerUtilis.increaseProductionCapacity(totalResources);
+        HashMap<String,Integer>resourcesFromMega =new HashMap<>();
+        for (GPBaseMegastructure megastructure : GPManager.getInstance().getMegastructures()) {
+            HashMap<String, Integer> megaMap = megastructure.getProductionWithoutPenalty();
+            for (Map.Entry<String, Integer> entry : megaMap.entrySet()) {
+                AoTDMisc.putCommoditiesIntoMap(resourcesFromMega, entry.getKey(), entry.getValue());
+            }
+        }
+        resourcesFromMega.putAll(totalResources);
+        HashMap<String,Float> map = getPenaltyMap(getProductionOrders(),resourcesFromMega);
+        for (GPBaseMegastructure megastructure : GPManager.getInstance().getMegastructures()) {
+            HashMap<String, Integer> megaMap = megastructure.getProduction(map);
+            for (Map.Entry<String, Integer> entry : megaMap.entrySet()) {
+                AoTDMisc.putCommoditiesIntoMap(totalResources, entry.getKey(), entry.getValue());
+            }
+        }
+
+
         return totalResources;
     }
-
-
+    
 
 
     public LinkedHashMap<MarketAPI, Integer> getTotalResourceProductionFromMarkets(String commodity) {
@@ -321,7 +336,7 @@ public class GPManager {
             }
         }
         for (GPBaseMegastructure megastructure : megastructures) {
-            for (Map.Entry<String, Integer> entry : megastructure.getCosts().entrySet()) {
+            for (Map.Entry<String, Integer> entry : megastructure.getDemand().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue());
                 } else {
@@ -541,7 +556,7 @@ public class GPManager {
             }
         }
         for (GPBaseMegastructure s : megastructures) {
-            for (Map.Entry<String, Integer> entry : s.getCosts().entrySet()) {
+            for (Map.Entry<String, Integer> entry : s.getDemand().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue());
                 } else {
@@ -806,7 +821,19 @@ public class GPManager {
         }
         return penaltyMap;
     }
-
+    private @NotNull HashMap<String, Float> getPenaltyMap(ArrayList<GPOrder> orders,HashMap<String,Integer>totalProd) {
+        HashMap<String, Float> penaltyMap = new HashMap<>();
+        for (Map.Entry<String, Integer> stringIntegerEntry : totalProd.entrySet()) {
+            Integer currentDemand = getReqResources(orders).get(stringIntegerEntry.getKey());
+            Integer total = stringIntegerEntry.getValue();
+            float penalty = (float) total / currentDemand;
+            if (penalty >= 1) {
+                penalty = 1;
+            }
+            penaltyMap.put(stringIntegerEntry.getKey(), penalty);
+        }
+        return penaltyMap;
+    }
     public ArrayList<Integer> retrieveOrdersToBeRemoved() {
         ArrayList<Integer> map = new ArrayList<>();
         int i = 0;

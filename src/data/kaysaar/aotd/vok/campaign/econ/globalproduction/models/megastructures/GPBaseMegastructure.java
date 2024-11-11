@@ -6,7 +6,6 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc.createResourcePanelForSmallTooltip;
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed;
 
 public class GPBaseMegastructure {
@@ -37,7 +35,7 @@ public class GPBaseMegastructure {
     //Note : Width will always be 400, height can be customized
     public boolean wasInitalized = false;
     public float getPenaltyFromManager(){
-        return GPManager.getInstance().getTotalPenaltyFromResources(getCosts().keySet().toArray(new String[0]));
+        return GPManager.getInstance().getTotalPenaltyFromResources(getDemand().keySet().toArray(new String[0]));
     }
     public boolean haveRecivedStoryPoint = false;
     public CustomPanelAPI createButtonSection(float width){
@@ -59,7 +57,7 @@ public class GPBaseMegastructure {
        TooltipMakerAPI tooltipOfIcon = tooltip.beginSubTooltip(width);
        TooltipMakerAPI tooltipOfCosts = tooltip.beginSubTooltip(width);
        tooltipOfCosts.addPara("Monthly running cost %s",0,Color.ORANGE,Misc.getDGSCredits(getUpkeep())).getPosition().inTL(10,25);
-       tooltipOfCosts.addCustom(createResourcePanelForSmallTooltipCondensed(width,20,20,getCosts(),getProduction()),5f);
+       tooltipOfCosts.addCustom(createResourcePanelForSmallTooltipCondensed(width,20,20, getDemand(),getProduction()),5f);
        tooltipOfIcon.addImage(getIcon(),50,50,5f);
        String starSystem = "Proxima Star System";
        if(entityTiedTo!=null){
@@ -77,7 +75,7 @@ public class GPBaseMegastructure {
 
    }
 
-    public  HashMap<String, Integer> getCosts(){
+    public  HashMap<String, Integer> getDemand(){
         HashMap<String,Integer> costs = new HashMap<>();
         for (GPMegaStructureSection megaStructureSection : megaStructureSections) {
             for (Map.Entry<String, Integer> stringIntegerEntry : megaStructureSection.getGPUpkeep().entrySet()) {
@@ -92,15 +90,21 @@ public class GPBaseMegastructure {
 
         return costs;
     }
-    public HashMap<String,Integer>getProduction(){
+    public HashMap<String,Integer>getProduction(HashMap<String,Float> penaltyMap){
         HashMap<String,Integer> production = new HashMap<>();
         for (GPMegaStructureSection megaStructureSection : megaStructureSections) {
-            for (Map.Entry<String, Integer> entry : megaStructureSection.getProduction().entrySet()) {
+            for (Map.Entry<String, Integer> entry : megaStructureSection.getProduction( penaltyMap).entrySet()) {
                 AoTDMisc.putCommoditiesIntoMap(production,entry.getKey(),entry.getValue());
             }
         }
 
         return production;
+    }
+    public HashMap<String,Integer>getProduction(){
+       return getProduction(GPManager.getInstance().getPenaltyMap());
+    }
+    public HashMap<String,Integer>getProductionWithoutPenalty(){
+        return getProduction(new HashMap<String, Float>());
     }
     public void createTooltipInfoBeforeClaiming(InteractionDialogAPI dialogAPI){
         TooltipMakerAPI tooltip = dialogAPI.getTextPanel().beginTooltip();

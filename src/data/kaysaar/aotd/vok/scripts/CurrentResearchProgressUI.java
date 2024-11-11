@@ -21,8 +21,7 @@ import org.lazywizard.lazylib.ui.FontException;
 import org.lazywizard.lazylib.ui.LazyFont;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
-import org.magiclib.util.MagicRender;
-import org.magiclib.util.MagicSettings;
+;
 
 import java.awt.*;
 import java.util.List;
