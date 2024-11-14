@@ -40,6 +40,32 @@ public class GPManager {
     public int amountWepPerOnce = 1;
     public int amountFighterPerOnce = 1;
     GPUIData gpuiData;
+    public MutableStat specialProjSpeed = new MutableStat(1f);
+    public MutableStat cruiserCapitalSpeed = new MutableStat(1f);
+    public MutableStat frigateDestroyerSpeed = new MutableStat(1f);
+
+    public MutableStat getCruiserCapitalSpeed() {
+        if(cruiserCapitalSpeed==null){
+            cruiserCapitalSpeed = new MutableStat(1f);
+        }
+        return cruiserCapitalSpeed;
+    }
+
+    public MutableStat getFrigateDestroyerSpeed() {
+        if(frigateDestroyerSpeed==null){
+            frigateDestroyerSpeed = new MutableStat(1f);
+        }
+        return frigateDestroyerSpeed;
+    }
+
+    public MutableStat getSpecialProjSpeed() {
+        if(specialProjSpeed==null){
+            specialProjSpeed = new MutableStat(1f);
+        }
+        return specialProjSpeed;
+    }
+
+
     protected ArrayList<GPBaseMegastructure> megastructures;
 
     public GPUIData getUIData() {

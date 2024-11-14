@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.fleets.DefaultFleetInflaterParams;
@@ -45,7 +46,7 @@ public class GPOrder implements Cloneable{
         return  amountToProduce - alreadyProduced;
     }
     public float getDaysTillOrderFinished(){
-        float baseDays = getSpecFromClass().days;
+        float baseDays = getSpecFromClass().days*getBonus();
         if (baseDays <= 1) baseDays = 1; // Base days can't be less than 1
 
         // Penalized days remaining (with penalty applied)
@@ -54,7 +55,7 @@ public class GPOrder implements Cloneable{
         return effectiveDaysRemaining > 0 ? effectiveDaysRemaining : 0;
     }
     public float getProgressPercentage() {
-        float baseDays = getSpecFromClass().days;
+        float baseDays = getSpecFromClass().days*getBonus();
         if (baseDays <= 1) baseDays = 1;
 
         // Calculate progress using penalized time
@@ -64,12 +65,26 @@ public class GPOrder implements Cloneable{
         return Math.min(progressPercentage, 1.0f);
     }
     public float getDaysForLabel(){
-        float baseDays = getSpecFromClass().days;
+
+
+        float baseDays = getSpecFromClass().days*getBonus();
         if (baseDays <= 1) baseDays = 1;
         float toReturn = (baseDays/penalty) - (baseDays/penalty)*getProgressPercentage();
         return toReturn;
     }
+public float getBonus(){
+    float bonus =1f;
+    if(this.getSpecFromClass().getType().equals(GPSpec.ProductionType.SHIP)){
+        if(this.getSpecFromClass().getShipHullSpecAPI().getHullSize().equals(ShipAPI.HullSize.CAPITAL_SHIP)||this.getSpecFromClass().getShipHullSpecAPI().getHullSize().equals(ShipAPI.HullSize.CRUISER)){
+            bonus = GPManager.getInstance().getCruiserCapitalSpeed().getModifiedValue();
+        }
+        else{
+            bonus = GPManager.getInstance().getFrigateDestroyerSpeed().getModifiedValue();
 
+        }
+    }
+    return bonus;
+}
     HashMap<String, Integer>assignedResources = new HashMap<>();
     HashMap<String, Integer>resourcesGet = new HashMap<>();
     public boolean canProceed() {

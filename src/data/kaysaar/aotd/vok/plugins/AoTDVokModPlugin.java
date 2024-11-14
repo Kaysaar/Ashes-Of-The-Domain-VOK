@@ -13,6 +13,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureProductionListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureUpkeepListener;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDSupertencileListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.CoreCorrectStateEnforcer;
@@ -84,6 +85,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.addListener(new AoTDMegastructureProductionListener(), true);
         l.addListener(new AoTDMegastructureUpkeepListener(), true);
         l.addListener(new NidavelirClaimMegastructure(),true);
+        l.addListener(new AoTDSupertencileListener(),true);
     }
 
 

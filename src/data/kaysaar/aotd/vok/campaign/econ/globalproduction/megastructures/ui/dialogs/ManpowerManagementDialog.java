@@ -10,13 +10,39 @@ import java.awt.*;
 
 public class ManpowerManagementDialog extends BaseSliderDialog{
     NidavelirBaseSection section;
-    public ManpowerManagementDialog(String headerTitle, NidavelirBaseSection section, BaseMegastrucutreMenu menu) {
-        super(menu, headerTitle, 1, NidavelirBaseSection.MaxManpowerPerSection, section.getCurrentManpowerAssigned(),0);
+    public ManpowerManagementDialog(String headerTitle, NidavelirBaseSection section, BaseMegastrucutreMenu menu, int availableManpower) {
+
+        super(menu, headerTitle, 1, Math.max(availableManpower,section.getCurrentManpowerAssigned()+availableManpower), section.getCurrentManpowerAssigned(),0);
+        this.section = section;
     }
 
     @Override
-    public void populateTooltipBelowBar(TooltipMakerAPI tooltip, int effectiveSegment) {
-        tooltip.addPara("Currently assigned manpower %s light years",5f, Color.ORANGE,""+(currentSegment*mult));}
+    public void populateTooltipTop(TooltipMakerAPI tooltip, int effectiveSegment) {
+
+        section.printMenu(tooltip,effectiveSegment+1,false);
+
+    }
+
+    @Override
+    public void populateTooltipBelow(TooltipMakerAPI tooltip, int effectiveSegment) {
+        section.printEffects(tooltip,effectiveSegment+1,false);
+    }
+
+    @Override
+    public float getBarX() {
+        return 5f;
+    }
+
+    @Override
+    public float getBarY() {
+        return 85f;
+    }
+
+    @Override
+    public void applyConfirmScript() {
+        section.setCurrentManpowerAssigned(currentSegment);
+        menu.resetSection(section.getSpec().getSectionID());
+    }
 
     @Override
     public LabelAPI createLabelForBar(TooltipMakerAPI tooltip) {

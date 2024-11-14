@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.d
 
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
@@ -33,16 +34,32 @@ public class RangeIncreaseDialog extends BaseSliderDialog{
     }
     public void createUIForFirstTime(){
         component = new ProgressBarComponent(panelToUpdate.getPosition().getWidth()-10,barHeight,currentSegment,maxSegment,Misc.getDarkPlayerColor().brighter().brighter(),1);
-        panelToUpdate.addComponent(component.getRenderingPanel()).inTL(0,20);
+        panelToUpdate.addComponent(component.getRenderingPanel()).inTL(getBarX(),getBarY());
         createTooltipUI();
 
     }
     @Override
-    public void populateTooltipBelowBar(TooltipMakerAPI tooltip, int effectiveSegment) {
-        tooltip.addPara("Range of hypershunt %s light years",5f, Color.ORANGE,""+(currentSegment*mult));
+    public void populateTooltipTop(TooltipMakerAPI tooltip, int effectiveSegment) {
+        tooltip.setParaFont(Fonts.ORBITRON_16
+        );
+        tooltip.addPara("Range of hypershunt: %s light years",5f, Color.ORANGE,""+(currentSegment*mult));
         tooltip.addPara("Upkeep : %s", 5f, Color.ORANGE, Misc.getDGSCredits(20000 * effectiveSegment));
         tooltip.addPara("Consumption of %s : %s",5f,Color.ORANGE,"purified transplutonics",""+(effectiveSegment *mult*2));
-        tooltip.setParaFontDefault();
+    }
+
+    @Override
+    public float getBarY() {
+        return 110f;
+    }
+
+    @Override
+    public float getBarX() {
+        return 5f;
+    }
+
+    @Override
+    public void populateTooltipBelow(TooltipMakerAPI tooltip, int effectiveSegment) {
+        tooltip.setParaFont(Fonts.ORBITRON_12);
         tooltip.addPara("Note! if demand of purified transplutonics won't be met, emergency systems of hypershunt will reduce effetive range to %s",10f,Color.ORANGE,"10 light years");
     }
 

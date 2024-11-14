@@ -285,10 +285,15 @@ public class CoreUITracker implements EveryFrameScript {
 
                     if (currentTab.getText().toLowerCase().contains("custom production")&&GPManager.isEnabled) {
                         plugin.playSound();
+                        plugin.resetPanelOfMarketData();
                         pausedMusic = false;
                     }
                     if (currentTab.getText().toLowerCase().contains("research")) {
                         pluginResearch.playSound();
+                        pausedMusic = false;
+                    }
+                    if (currentTab.getText().toLowerCase().contains("megastructures")) {
+                        pluginMenu.resetMarketData();
                         pausedMusic = false;
                     }
 
