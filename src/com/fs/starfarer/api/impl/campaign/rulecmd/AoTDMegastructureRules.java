@@ -10,9 +10,11 @@ import com.fs.starfarer.api.impl.campaign.intel.MegastructureUnlockIntel;
 import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSpec;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -37,6 +39,17 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
             dialog.getOptionPanel().clearOptions();
             dialog.getOptionPanel().addOption("Leave", "defaultLeave");
             dialog.getOptionPanel().setShortcut("defaultLeave", Keyboard.KEY_ESCAPE, false, false, false, true);
+        }
+        if(arg.equals("researchedTech")){
+            if(!AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ANALYSIS)){
+                dialog.getOptionPanel().setEnabled("aotd_claim_megastructure",false);
+                dialog.getOptionPanel().setTooltip("aotd_claim_megastructure","We need to research first Megastructure Analysis!");
+                dialog.getTextPanel().addPara("With our current technological advancements, it is not advised to take control of this megastructure, due to massive logistical requirements to restore it!");
+            }
+            return AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ANALYSIS);
+        }
+        if(arg.equals("researchedReciver")){
+            return AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.HP_ENERGY_DISTRIB);
         }
 
         return true;

@@ -6,13 +6,9 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.sections.WormholeGenerator;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
-import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
 
-import java.awt.*;
 import java.util.List;
 
 public class BaseSliderDialog extends BasePopUpDialog{
@@ -45,31 +41,43 @@ public class BaseSliderDialog extends BasePopUpDialog{
     }
     public void createUIForFirstTime(){
         component = new ProgressBarComponent(panelToUpdate.getPosition().getWidth()-10,barHeight,currentSegment,maxSegment,Misc.getDarkPlayerColor().brighter().brighter(),minSection);
-        panelToUpdate.addComponent(component.getRenderingPanel()).inTL(0,20);
+        panelToUpdate.addComponent(component.getRenderingPanel()).inTL(getBarX(),getBarY());
         createTooltipUI();
 
     }
     public  void createTooltipUI(){
         panelForTooltip = panelToUpdate.createCustomPanel(panelToUpdate.getPosition().getWidth(),panelToUpdate.getPosition().getHeight()-50,null);
-        TooltipMakerAPI tooltip = panelForTooltip.createUIElement(panelForTooltip.getPosition().getWidth(),panelToUpdate.getPosition().getHeight(),true);
+        TooltipMakerAPI tooltipBottom = panelForTooltip.createUIElement(panelForTooltip.getPosition().getWidth(),panelToUpdate.getPosition().getHeight()-70-(getBarY()+barHeight),true);
+        TooltipMakerAPI tooltipTop = panelForTooltip.createUIElement(panelForTooltip.getPosition().getWidth(),getBarY(),true);
+
         float centerX = (panelToUpdate.getPosition().getWidth()-20)/2;
         float centerY = barHeight/2;
         TooltipMakerAPI tooltipOfBar = panelForTooltip.createUIElement(panelToUpdate.getPosition().getWidth()-20,barHeight,false);
         LabelAPI labelAPI = createLabelForBar(tooltipOfBar);
         labelAPI.getPosition().inTL(centerX-(labelAPI.computeTextWidth(labelAPI.getText())/2),centerY-(labelAPI.computeTextHeight(labelAPI.getText())/2));
-        panelForTooltip.addUIElement(tooltipOfBar).inTL(0,0);
-        tooltip.setParaInsigniaLarge();
+        panelForTooltip.addUIElement(tooltipOfBar).inTL(getBarX(),getBarY()-barHeight/6);
+        tooltipBottom.setParaInsigniaLarge();
         int effectiveSegment = currentSegment-1;
-        populateTooltipBelowBar(tooltip, effectiveSegment);
-        panelForTooltip.addUIElement(tooltip).inTL(0,40);
-        panelToUpdate.addComponent(panelForTooltip).inTL(0,20);
+        populateTooltipTop(tooltipTop, effectiveSegment);
+        populateTooltipBelow(tooltipBottom, effectiveSegment);
+        panelForTooltip.addUIElement(tooltipTop).inTL(0,0f);
+        panelForTooltip.addUIElement(tooltipBottom).inTL(0,getBarY()+barHeight+10f);
+        panelToUpdate.addComponent(panelForTooltip).inTL(0,5);
 
     }
-
-    public void populateTooltipBelowBar(TooltipMakerAPI tooltip, int effectiveSegment) {
-
+    public float getBarX(){
+        return 0f;
+    }
+    public float getBarY(){
+        return 0f;
     }
 
+    public void populateTooltipTop(TooltipMakerAPI tooltip, int effectiveSegment) {
+
+    }
+    public void populateTooltipBelow(TooltipMakerAPI tooltip, int effectiveSegment) {
+
+    }
     public LabelAPI createLabelForBar(TooltipMakerAPI tooltip){
         return tooltip.addPara("Currently assigned manpower : "+currentSegment*mult+" / "+maxSegment*mult,Misc.getTooltipTitleAndLightHighlightColor(),5f);
 

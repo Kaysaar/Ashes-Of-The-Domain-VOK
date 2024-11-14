@@ -32,6 +32,9 @@ public class AoTDTechIds {
     public static final String DRUGS_AMPLIFICATION = "aotd_tech_drug_prodcution";
     public static final String STELLA_MANUFACTORIUM = "aotd_tech_stella_manufactorium";
     public static final String BIFROST_GATE = "aotd_tech_bifrost_gate";
+    public static final String MEGA_ANALYSIS = "aotd_tech_megastructure_analysis";
+    public static final String HP_ENERGY_DISTRIB = "aotd_tech_hp_distribution";
+    public static final String SUPERTENCILES = "aotd_tech_supertensile";
 
 
 }

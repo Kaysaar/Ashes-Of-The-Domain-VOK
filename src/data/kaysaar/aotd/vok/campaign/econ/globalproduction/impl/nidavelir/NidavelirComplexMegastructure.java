@@ -19,18 +19,18 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructure
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     public NidavelirShipyard shipyard;
-    public int manpowerPoints;
-    public static ArrayList<String>commoditiesProd = new ArrayList<>();
-    public static ArrayList<String>commoditiesDemand = new ArrayList<>();
+    public static LinkedHashMap<String,Float> commoditiesProd = new LinkedHashMap<>();
+    public static LinkedHashMap<String,Float> commoditiesDemand = new LinkedHashMap<>();
     static {
-        commoditiesProd.add(AoTDCommodities.DOMAIN_GRADE_MACHINERY);
-        commoditiesProd.add(AoTDCommodities.ADVANCED_COMPONENTS);
-        commoditiesProd.add(Commodities.SHIPS);
-        commoditiesProd.add(Commodities.HAND_WEAPONS);
-        commoditiesDemand.add(AoTDCommodities.REFINED_METAL);
+        commoditiesProd.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,20f);
+        commoditiesProd.put(AoTDCommodities.ADVANCED_COMPONENTS,30f);
+        commoditiesProd.put(Commodities.SHIPS,50f);
+        commoditiesProd.put(Commodities.HAND_WEAPONS,50f);
+        commoditiesDemand.put(AoTDCommodities.REFINED_METAL,50f);
 
     }
 
@@ -42,7 +42,7 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     public void createAdditionalInfoToButton(TooltipMakerAPI tooltipMakerAPI) {
 
         TooltipMakerAPI tooltip =  tooltipMakerAPI.beginSubTooltip(tooltipMakerAPI.getWidthSoFar());
-        tooltip.addPara("Current manpower points : %s",5f, Color.ORANGE,""+getManpowerPoints()).getPosition().inTL(10,5);
+        tooltip.addPara("Current manpower points : %s",5f, Color.ORANGE,""+getRemainingManpowerPoints()).getPosition().inTL(10,5);
         tooltipMakerAPI.addCustom(tooltip,5f);
         tooltipMakerAPI.setHeightSoFar(tooltipMakerAPI.getHeightSoFar()+20);
     }
@@ -62,7 +62,10 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     public ArrayList<NidavelirBaseSection> getSections(){
         ArrayList<NidavelirBaseSection>sections = new ArrayList<>();
         for (GPMegaStructureSection megaStructureSection : getMegaStructureSections()) {
-            sections.add((NidavelirBaseSection) megaStructureSection);
+            if(megaStructureSection instanceof NidavelirBaseSection){
+                sections.add((NidavelirBaseSection) megaStructureSection);
+
+            }
         }
         return sections;
     }
@@ -71,7 +74,7 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
         for (NidavelirBaseSection section : getSections()) {
             current+=section.getCurrentManpowerAssigned();
         }
-        return current;
+        return getManpowerPoints()-current;
     }
 
 }

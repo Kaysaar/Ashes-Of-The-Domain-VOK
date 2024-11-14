@@ -9,6 +9,7 @@ import ashlib.data.plugins.rendering.WeaponSpriteRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
+import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.loading.Description;
@@ -82,7 +83,15 @@ public class UIData {
         LabelAPI name = mainTooltip.addPara(option.getSpec().getShipHullSpecAPI().getHullName(), 0f, Misc.getTooltipTitleAndLightHighlightColor());
         name.autoSizeToWidth(WIDTH_OF_NAME - 35);
         name.getPosition().inTL(35, getyPad(name));
-        float days = option.getSpec().days / GPManager.getInstance().getProductionSpeedBonus().getModifiedValue();
+        float bonus =1f;
+        if(option.getSpec().getShipHullSpecAPI().getHullSize().equals(ShipAPI.HullSize.CAPITAL_SHIP)||option.getSpec().getShipHullSpecAPI().getHullSize().equals(ShipAPI.HullSize.CRUISER)){
+            bonus = GPManager.getInstance().getCruiserCapitalSpeed().getModifiedValue();
+        }
+        else{
+            bonus = GPManager.getInstance().getFrigateDestroyerSpeed().getModifiedValue();
+
+        }
+        float days = option.getSpec().days *bonus;
         if (days <= 1) days = 1;
         LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString((int) days), 0f);
         String variantId = null;

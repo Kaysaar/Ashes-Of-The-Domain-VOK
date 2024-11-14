@@ -381,4 +381,97 @@ public class MegastructureUIMisc {
         customPanel.addUIElement(tooltip).inTL(-15, 0);
         return customPanel;
     }
+    public static CustomPanelAPI createResourcePanelForSmallTooltipNotCondensed(float width, float height, float iconSize, HashMap<String,Integer> costs,HashMap<String,Integer>production) {
+        CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
+        TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
+        float totalSize = width;
+        float sections = totalSize /commodities.size();
+        float positions = totalSize / (commodities.size() * 4);
+        float iconsize = iconSize;
+        float topYImage = 0;
+        LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
+        float x = positions;
+        ArrayList<CustomPanelAPI> panelsWithImage = new ArrayList<>();
+        for (String commodity : GPManager.getCommodities()) {
+            float widthTempPanel = iconsize;
+            int number = 0;
+            int cost = 0;
+            int prod =0;
+            if(costs.get(commodity)!=null){
+                cost = costs.get(commodity);
+            }
+            if(production.get(commodity)!=null){
+                prod = production.get(commodity);
+            }
+            number = prod - cost;
+            String text = "" +number;
+            Color col = Misc.getPositiveHighlightColor();
+            if(number==0){
+                col = Misc.getTooltipTitleAndLightHighlightColor();
+            }
+            if(number<0){
+                col = Misc.getNegativeHighlightColor();
+            }
+            if(number>0){
+                text = "+"+number;
+            }
+            widthTempPanel+=test.computeTextWidth(text)+5;
+            CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel,iconSize,null);
+            TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel,iconSize,false);
+            tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(commodity).getIconName(), iconsize, iconsize, 0f);
+            UIComponentAPI image = tooltipMakerAPI.getPrev();
+            image.getPosition().inTL(x, topYImage);
+
+            tooltipMakerAPI.addPara("%s", 0f, col, col, text).getPosition().inTL(x + iconsize + 2, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text) / 3));
+            panelTemp.addUIElement(tooltipMakerAPI).inTL(0, 0);
+            panelsWithImage.add(panelTemp);
+        }
+        float lastX = 0f;
+        float lastY = 0f;
+        float totalWidth =0f;
+        float secondRowWidth = 0f;
+        float left;
+        for (CustomPanelAPI panelAPI : panelsWithImage) {
+            totalWidth+=panelAPI.getPosition().getWidth()+15;
+        }
+        left = totalWidth;
+        ArrayList<CustomPanelAPI> panelsSecondRow = new ArrayList<>();
+        if(totalWidth>=width){
+            for (int i = panelsWithImage.size()-1; i >=0 ; i--) {
+                left-=panelsWithImage.get(i).getPosition().getWidth()-15;
+                panelsSecondRow.add(panelsWithImage.get(i));
+                if(left<width){
+                    break;
+                }
+                panelsWithImage.remove(i);
+            }
+        }
+        for (CustomPanelAPI panelAPI : panelsSecondRow) {
+            secondRowWidth+=panelAPI.getPosition().getWidth()+15;
+        }
+        float startingXFirstRow =  0;
+        float startingXSecondRow =  0;
+        float leftFirstRow =  (width-totalWidth)/2;
+        float leftSecondRow =  (width-secondRowWidth/2);
+        float seperatoFirst,seperatorSecond;
+        seperatoFirst = totalWidth/panelsWithImage.size();
+        seperatorSecond = secondRowWidth/panelsSecondRow.size();
+        startingXFirstRow = leftFirstRow;
+        startingXSecondRow = leftSecondRow;
+        if(!panelsSecondRow.isEmpty()){
+            tooltip.getPosition().setSize(width,height*2+5);
+            customPanel.getPosition().setSize(width,height*2+5);
+        }
+        for (CustomPanelAPI panelAPI : panelsWithImage) {
+            tooltip.addCustom(panelAPI,0f).getPosition().inTL(startingXFirstRow,0);
+            startingXFirstRow+=seperatoFirst;
+        }
+        for (CustomPanelAPI panelAPI : panelsSecondRow) {
+            tooltip.addCustom(panelAPI,0f).getPosition().inTL(startingXSecondRow,iconSize+5);
+            startingXSecondRow+=seperatorSecond;
+        }
+
+        customPanel.addUIElement(tooltip).inTL(-15, 0);
+        return customPanel;
+    }
 }
