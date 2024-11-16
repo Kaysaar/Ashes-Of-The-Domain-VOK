@@ -42,11 +42,16 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
         }
         if(arg.equals("researchedTech")){
             if(!AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ANALYSIS)){
-                dialog.getOptionPanel().setEnabled("aotd_claim_megastructure",false);
-                dialog.getOptionPanel().setTooltip("aotd_claim_megastructure","We need to research first Megastructure Analysis!");
-                dialog.getTextPanel().addPara("With our current technological advancements, it is not advised to take control of this megastructure, due to massive logistical requirements to restore it!");
+                    if(token.getMemory().contains(GPBaseMegastructure.memKey)){
+                            dialog.getOptionPanel().setEnabled("aotd_claim_megastructure",false);
+                        dialog.getOptionPanel().setTooltip("aotd_claim_megastructure","We need to research first Megastructure Analysis!");
+                        dialog.getTextPanel().addPara("With our current technological advancements, it is not advised to take control of this megastructure, due to massive logistical requirements to restore it!");
+                        return AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ANALYSIS);
+                    }
+
+
             }
-            return AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ANALYSIS);
+
         }
         if(arg.equals("researchedReciver")){
             return AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.HP_ENERGY_DISTRIB);

@@ -2,10 +2,11 @@ package com.fs.starfarer.api.impl.campaign.rulecmd;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import com.fs.starfarer.api.impl.campaign.ids.Items;
-import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.impl.campaign.CoreReputationPlugin;
+import com.fs.starfarer.api.impl.campaign.HypershuntReciverEntityPlugin;
+import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.Objectives;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.ui.*;
@@ -51,7 +52,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
 //		DebugFlags.OBJECTIVES_DEBUG = true;
     }
     @Override
-    public boolean execute(String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
+    public boolean execute(String ruleId, final InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
         this.dialog = dialog;
         this.memoryMap = memoryMap;
 
@@ -74,7 +75,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
                 dialog.getTextPanel().addPara(Global.getSettings().getDescription("aotd_hypershunt_reciver", Description.Type.CUSTOM).getText1());
                TooltipMakerAPI tooltipMakerAPI =  dialog.getTextPanel().beginTooltip();
                tooltipMakerAPI.addTitle("Resources: consumed (available)");
-               tooltipMakerAPI.addCustom(createResourcePanelForSmallTooltip(550,45,45,getCost(arg)),5f);
+               tooltipMakerAPI.addCustom(createResourcePanelForSmallTooltip(550,45,45,getCost(arg),false),5f);
 
                 for (Map.Entry<String, Integer> entry : getCost(arg).entrySet()) {
                     if(AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey())<entry.getValue()){
@@ -83,6 +84,21 @@ public class AoTDStableHandler extends BaseCommandPlugin {
                     }
                 }
                dialog.getTextPanel().addTooltip();
+
+            }
+
+
+        }
+        if(command.contains("salvageExplain")){
+            String arg = command.split(":")[1];
+            if(arg.equals("aotd_hypershunt_reciver")){
+                dialog.getOptionPanel().clearOptions();
+                dialog.getOptionPanel().addOption("Proceed","SL_aotd_hypershunt_deconstruct",Color.ORANGE,null);
+                dialog.getOptionPanel().addOption("Nevermind","defaultLeave");
+                TooltipMakerAPI tooltipMakerAPI =  dialog.getTextPanel().beginTooltip();
+                tooltipMakerAPI.addTitle("Potential Salvage");
+                tooltipMakerAPI.addCustom(createResourcePanelForSmallTooltip(550,45,45,getCostForSalvage(arg),true),5f);
+                dialog.getTextPanel().addTooltip();
 
             }
 
@@ -99,9 +115,46 @@ public class AoTDStableHandler extends BaseCommandPlugin {
         }
         if(command.contains("salvageStart")){
             dialog.getOptionPanel().clearOptions();
+            HypershuntReciverEntityPlugin plugin = (HypershuntReciverEntityPlugin) entity.getCustomPlugin();
+
             dialog.getOptionPanel().addOption("Break it for salvage","AoTD_Mega_Salvage");
             dialog.getOptionPanel().addOption("Leave","defaultLeave");
             dialog.getOptionPanel().setShortcut("defaultLeave",Keyboard.KEY_ESCAPE,false,false,false,false);
+        }
+        if(command.contains("salvageComplete")){
+            CargoAPI salvage = Global.getFactory().createCargo(true);
+            for (Map.Entry<String, Integer> entry : getCostForSalvage("aotd_hypershunt_reciver").entrySet()) {
+                if(Global.getSettings().getSpecialItemSpec(entry.getKey())==null){
+                    salvage.addCommodity(entry.getKey(),entry.getValue());
+                }
+                else{
+                    salvage.addSpecial(new SpecialItemData(entry.getKey(),null),entry.getValue());
+                }
+
+            }
+            dialog.getVisualPanel().showLoot("Salvaged", salvage, false, true, true, new CoreInteractionListener() {
+                public void coreUIDismissed() {
+                    dialog.dismiss();
+                    dialog.hideTextPanel();
+                    dialog.hideVisualPanel();
+                    LocationAPI loc = entity.getContainingLocation();
+                    SectorEntityToken built = loc.addCustomEntity(null,
+                            null,
+                            Entities.STABLE_LOCATION, // type of object, defined in custom_entities.json
+                            Factions.NEUTRAL); // faction
+                    if (entity.getOrbit() != null) {
+                        built.setOrbit(entity.getOrbit().makeCopy());
+                    }
+                    loc.removeEntity(entity);
+                    updateOrbitingEntities(loc, entity, built);
+
+                    built.getMemoryWithoutUpdate().set(MemFlags.RECENTLY_SALVAGED, true, 30f);
+
+                    ListenerUtil.reportObjectiveDestroyed(entity, built, Global.getSector().getFaction(Factions.PLAYER));
+                }
+            });
+            options.clearOptions();
+            dialog.setPromptText("");
         }
         return true;
     }
@@ -110,6 +163,15 @@ public class AoTDStableHandler extends BaseCommandPlugin {
         if(idOfStructure.equals("aotd_hypershunt_reciver")){
             costs.put(AoTDCommodities.REFINED_METAL,1000);
             costs.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,100);
+            costs.put(Items.CORONAL_PORTAL,1);
+        }
+        return costs;
+    }
+    public LinkedHashMap<String,Integer>getCostForSalvage(String idOfStructure){
+        LinkedHashMap<String,Integer>costs = new LinkedHashMap<>();
+        if(idOfStructure.equals("aotd_hypershunt_reciver")){
+            costs.put(AoTDCommodities.REFINED_METAL,700);
+            costs.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,50);
             costs.put(Items.CORONAL_PORTAL,1);
         }
         return costs;
@@ -152,7 +214,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
     public void printCost(){
 
     }
-    public static CustomPanelAPI createResourcePanelForSmallTooltip(float width, float height, float iconSize, HashMap<String,Integer> costs) {
+    public static CustomPanelAPI createResourcePanelForSmallTooltip(float width, float height, float iconSize, HashMap<String,Integer> costs,boolean isForSalvage) {
         CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
         float totalSize = width;
@@ -178,6 +240,9 @@ public class AoTDStableHandler extends BaseCommandPlugin {
 
             String text = "" +number;
             String text2 = "("+owned+")";
+            if(isForSalvage){
+                text2="";
+            }
             widthTempPanel+=test.computeTextWidth(text+text2);
             CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel+iconSize+5,iconSize,null);
             TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel+iconSize+5,iconSize,false);
@@ -186,7 +251,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
             image.getPosition().inTL(x, topYImage);
 
             Color col = Misc.getTooltipTitleAndLightHighlightColor();
-            if(number>owned){
+            if(number>owned&&!isForSalvage){
                 col = Misc.getNegativeHighlightColor();
             }
 
