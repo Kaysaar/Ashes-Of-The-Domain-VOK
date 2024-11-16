@@ -54,6 +54,13 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
         }
     }
 
+    @Override
+    public void advance(float amount) {
+        super.advance(amount);
+        if(!HypershuntMegastrcutre.isWithinReciverSystem(this.getMegastructureTiedTo().entityTiedTo)){
+            isAutomated = false;
+        }
+    }
 
     public void setAutomated(boolean automated) {
         isAutomated = automated;
