@@ -61,7 +61,7 @@
 	},
 	"aotd_hypershunt_reciver":{
 		"baseId":"base_campaign_objective",
-		"defaultName":"Hypershunt Reciver", # used if name=null in addCustomEntity()
+		"defaultName":"Hypershunt Receiver", # used if name=null in addCustomEntity()
 		"nameInText":"hypershunt reciver",
 		"shortName":"reciver",
 		"icon":"graphics/icons/sensor_array.png",
