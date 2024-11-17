@@ -24,7 +24,7 @@ public class GPBaseMegastructure {
     public String  specId;
     MutableStat operationCostMult = new MutableStat(1);
     public SectorEntityToken entityTiedTo;
-    ArrayList<GPMegaStructureSection>megaStructureSections;
+    public ArrayList<GPMegaStructureSection>megaStructureSections;
     public String getIcon(){ //Icon that should be displayed in megastructures TAB
         return Global.getSettings().getSpriteName("megastructures",getSpec().getIconId());
     }

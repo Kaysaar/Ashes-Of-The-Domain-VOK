@@ -19,19 +19,19 @@ import java.util.*;
 public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
     public GPBaseMegastructure megastructureReferedTo;
     //This is where main panel is placed
-    CustomPanelAPI parentPanel;
-    CustomPanelAPI mainPanel;
-    float width,height;
-    GPMegasturcutreMenu mainMenu;
-    LinkedHashMap<String,CustomPanelAPI>panelsOfSections = new LinkedHashMap<>();
-    CustomPanelAPI titlePanel;
-    CustomPanelAPI mainTitlePanel;
-    CustomPanelAPI toolTipPanel;
-    TooltipMakerAPI tooltipOfSections;
-    ArrayList<ButtonPackage>buttons = new ArrayList<>();
-    float offset =0f;
-    float lastY = 0f;
-    float lastYForSection = 0f;
+    public CustomPanelAPI parentPanel;
+    public CustomPanelAPI mainPanel;
+    public  float width,height;
+    public GPMegasturcutreMenu mainMenu;
+    public LinkedHashMap<String,CustomPanelAPI>panelsOfSections = new LinkedHashMap<>();
+    public CustomPanelAPI titlePanel;
+    public CustomPanelAPI mainTitlePanel;
+    public CustomPanelAPI toolTipPanel;
+    public TooltipMakerAPI tooltipOfSections;
+    public ArrayList<ButtonPackage>buttons = new ArrayList<>();
+    public  float offset =0f;
+    public float lastY = 0f;
+    public float lastYForSection = 0f;
     public BaseMegastrucutreMenu(GPBaseMegastructure megastructure, CustomPanelAPI parentPanel,GPMegasturcutreMenu menu) {
         this.megastructureReferedTo = megastructure;
         this.parentPanel = parentPanel;
@@ -44,7 +44,7 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
 
     }
     public void createTitleSection(){
-        mainTitlePanel = MegastructureUIMisc.createTitleSection(mainPanel, megastructureReferedTo);
+        mainTitlePanel = MegastructureUIMisc.createTitleSection(mainPanel, megastructureReferedTo,"Megastructure Sections");
         mainPanel.addComponent(mainTitlePanel).inTL(-5,lastY);
         lastY+=mainTitlePanel.getPosition().getHeight();
 
