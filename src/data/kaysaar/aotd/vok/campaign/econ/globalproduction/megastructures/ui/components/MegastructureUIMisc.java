@@ -25,6 +25,13 @@ public class MegastructureUIMisc {
         float widthForUsage  = mainPanel.getPosition().getWidth()-20;
         float sectionWidth = widthForUsage/6;
         float height = 0f;
+        float imageSection = sectionWidth*2;
+        float mapSection = sectionWidth;
+        float descriptionSection = sectionWidth*3;
+        if(mega.getEntityTiedTo()==null){
+            mapSection = 0;
+            descriptionSection = sectionWidth*4;
+        }
         CustomPanelAPI titlePanel;
         UILinesRenderer renderer = new UILinesRenderer(0f);
         titlePanel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(),40,renderer);
@@ -42,15 +49,18 @@ public class MegastructureUIMisc {
         descriptionTooltip.addPara(mega.getSpec().getDescription(),5f);
 
         titlePanel.addUIElement(imageTootlip).inTL(0,0);
-        titlePanel.addUIElement(descriptionTooltip).inTL(sectionWidth*2+5,0);
-        titlePanel.addUIElement(mapTooltip).inTL(sectionWidth*5+10,0);
+        titlePanel.addUIElement(descriptionTooltip).inTL(imageSection+5,0);
+        if(mapSection!=0){
+            titlePanel.addUIElement(mapTooltip).inTL(imageSection+descriptionSection+10,0);
+        }
+
         return titlePanel;
     }
-    public static CustomPanelAPI createTitleSection(CustomPanelAPI mainPanel, GPBaseMegastructure mega){
+    public static CustomPanelAPI createTitleSection(CustomPanelAPI mainPanel, GPBaseMegastructure mega,String title){
         CustomPanelAPI mainTitlePanel;
         mainTitlePanel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(),20,null);
         TooltipMakerAPI tooltip = mainTitlePanel.createUIElement(mainTitlePanel.getPosition().getWidth(),20,false);
-        tooltip.addSectionHeading("Megastructure Sections", Alignment.MID,0f);
+        tooltip.addSectionHeading(title, Alignment.MID,0f);
         mainTitlePanel.addUIElement(tooltip).inTL(0,0);
  return mainTitlePanel;
 
