@@ -9,7 +9,9 @@ import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
+import com.fs.starfarer.api.impl.campaign.rulecmd.AoTDMegastructureRules;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureProductionListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureUpkeepListener;
@@ -86,6 +88,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.addListener(new AoTDMegastructureUpkeepListener(), true);
         l.addListener(new NidavelirClaimMegastructure(),true);
         l.addListener(new AoTDSupertencileListener(),true);
+        l.addListener(new BifrostReesarchListener(),true);
     }
 
 
@@ -186,6 +189,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             }
         }
         GPManager.getInstance().reInitalize();
+
 //        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
 //            if(planet.isStar())continue;
 //            NidavelirShipyard shipyard = (NidavelirShipyard)planet.getStarSystem().addCustomEntity(null,"Nid","nid_shipyards",null).getCustomPlugin();

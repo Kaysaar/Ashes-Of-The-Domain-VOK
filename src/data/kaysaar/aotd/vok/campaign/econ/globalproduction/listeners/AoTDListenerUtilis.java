@@ -1,12 +1,15 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.combat.MutableStat;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.models.AoTDResourceListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.models.MegastructureUpkeepReductionListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
+import data.kaysaar.aotd.vok.campaign.econ.listeners.AoTDResearchListener;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +36,11 @@ public class AoTDListenerUtilis {
 
         }
 
+    }
+    public static void finishedResearch(String option, FactionAPI faction){
+        for (AoTDResearchListener listener : Global.getSector().getListenerManager().getListeners(AoTDResearchListener.class)) {
+            listener.finishedResearchOfTechnology(option,faction);
+        }
     }
 
 }

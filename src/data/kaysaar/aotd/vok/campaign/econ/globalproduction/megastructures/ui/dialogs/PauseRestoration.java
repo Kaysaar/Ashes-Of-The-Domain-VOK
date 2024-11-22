@@ -12,19 +12,20 @@ import java.awt.*;
 public class PauseRestoration extends BasePopUpDialog{
     BaseMegastrucutreMenu menu;
     GPMegaStructureSection sectionToRestore;
-    public PauseRestoration(GPMegaStructureSection section, BaseMegastrucutreMenu menu, String headerTitle) {
+    String content;
+    public PauseRestoration(GPMegaStructureSection section, BaseMegastrucutreMenu menu, String headerTitle,String content) {
         super(headerTitle);
         this.sectionToRestore = section;
         this.menu = menu;
+        this.content = content;
     }
 
     @Override
     public void createContentForDialog(TooltipMakerAPI tooltip, float width) {
         tooltip.setParaFont(Fonts.INSIGNIA_LARGE);
-        tooltip.addPara("By pausing restoration efforts we wont be spending further money until project is resumed and it will free resources that is currently consuming",2f);
+        tooltip.addPara(content,2f);
         tooltip.addSectionHeading("Currently consumed", Alignment.MID,10f);
         tooltip.addCustom(MegastructureUIMisc.createResourcePanel(width,40,40,sectionToRestore.getSpec().getGpRestorationCost(),Color.ORANGE),10f);
-
     }
 
     @Override

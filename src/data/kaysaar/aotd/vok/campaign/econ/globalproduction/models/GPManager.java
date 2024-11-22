@@ -194,6 +194,15 @@ public class GPManager {
         }
         return mega;
     }
+    public ArrayList<GPBaseMegastructure> getMegastructureBasedOnSpecID(Class<?> t) {
+        ArrayList<GPBaseMegastructure>mega = new ArrayList<>();
+        for (GPBaseMegastructure megastructure : megastructures) {
+            if(megastructure.getClass().equals(t)){
+                mega.add(megastructure);
+            }
+        }
+        return mega;
+    }
     public float getTotalUpkeeepCreditsForMega(){
         float upkeep  = 0f;
         for (GPBaseMegastructure megastructure : megastructures) {

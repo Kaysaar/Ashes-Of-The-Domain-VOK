@@ -7,6 +7,7 @@ import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
 import com.fs.starfarer.api.util.*;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastrcutre;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -37,8 +38,37 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
     protected FaderUtil jitterFader = null;
     transient protected boolean scaledSprites = false;
     protected IntervalUtil moteSpawn = null;
+    public boolean isDeActivated;
+
+    public void setDeActivated(boolean deActivated) {
+        isDeActivated = deActivated;
+    }
+
+    public boolean isDeActivated() {
+        return isDeActivated;
+    }
+
 
     public void render(CampaignEngineLayers layer, ViewportAPI viewport) {
+        if(scannedGlow==null){
+            scannedGlow = Global.getSettings().getSprite("gates", "glow_scanned");
+            activeGlow = Global.getSettings().getSprite("gates", "glow_ring_active");
+            concentric = Global.getSettings().getSprite("gates", "glow_concentric");
+            rays = Global.getSettings().getSprite("gates", "glow_rays");
+            whirl1 = Global.getSettings().getSprite("gates", "glow_whirl1");
+            whirl2 = Global.getSettings().getSprite("gates", "glow_whirl2");
+            starfield = Global.getSettings().getSprite("gates", "starfield");
+            int height = 90;
+            scannedGlow.setSize(height, height);
+            activeGlow.setSize(height, height);
+            concentric.setSize(height, height);
+            rays.setSize(height, height);
+            whirl1.setSize(height, height);
+            whirl2.setSize(height, height);
+            starfield.setSize(height, height);
+
+
+        }
         if (layer == CampaignEngineLayers.BELOW_STATIONS) {
             boolean beingUsed = !beingUsedFader.isFadedOut();
             if (beingUsed) {
@@ -153,6 +183,54 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
                 whirl2.renderAtCenter(loc.x + 1.5f, loc.y);
             }
         }
+    }
+
+    @Override
+    public void advance(float amount) {
+        super.advance(amount);
+        if (this.entity.getMemory().is("$used", true)) {
+            float value = this.entity.getMemory().getFloat("$cooldown");
+            value -= Global.getSector().getClock().convertToDays(amount);
+            this.entity.getMemory().set("$cooldown", value);
+            if (value <= 0) {
+                this.entity.getMemory().set("$cooldown", 0);
+                this.entity.getMemory().set("$used", false);
+            }
+        }
+        if(HypershuntMegastrcutre.isWithinReciverSystem(this.entity)){
+            this.entity.getMemory().set("$cooldown", 0);
+            this.entity.getMemory().set("$used", false);
+            this.entity.getMemory().set("$connected",true);
+        }
+        else{
+            this.entity.getMemory().set("$connected",false);
+        }
+        if (showBeingUsedDur > 0 || !beingUsedFader.isIdle()) {
+            showBeingUsedDur -= amount;
+            if (showBeingUsedDur > 0) {
+                beingUsedFader.fadeIn();
+            } else {
+                showBeingUsedDur = 0f;
+            }
+            inUseAngle += amount * 60f;
+            if (warp != null) {
+                warp.advance(amount);
+            }
+        }
+        glowFader.advance(amount);
+
+//		if (entity.isInCurrentLocation()) {
+//			System.out.println("BRIGHTNESS: " + beingUsedFader.getBrightness());
+//		}
+
+        if (jitterFader != null) {
+            jitterFader.advance(amount);
+            if (jitterFader.isFadedOut()) {
+                jitterFader = null;
+            }
+        }
+
+        beingUsedFader.advance(amount);
     }
 
     public void showBeingUsed(float transitDistLY) {

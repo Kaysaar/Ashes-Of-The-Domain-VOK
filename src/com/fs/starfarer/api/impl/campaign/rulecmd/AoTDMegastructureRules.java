@@ -108,17 +108,27 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
     public static void claimMegastructureManually(InteractionDialogAPI dialogAPI, SectorEntityToken token, String specOfmegastructure) {
         GPBaseMegastructure megastructure;
         GPMegaStructureSpec spec = GPManager.getInstance().getMegaSpecFromList(specOfmegastructure);
-        token.setFaction(Factions.PLAYER);
-        if (token.getMemory().contains(GPBaseMegastructure.memKey)) {
-            megastructure = (GPBaseMegastructure) token.getMemory().get(GPBaseMegastructure.memKey);
-        } else {
+        if(token!=null){
+            token.setFaction(Factions.PLAYER);
+            if (token.getMemory().contains(GPBaseMegastructure.memKey)) {
+                megastructure = (GPBaseMegastructure) token.getMemory().get(GPBaseMegastructure.memKey);
+            } else {
+                megastructure = spec.getScript();
+            }
+            if (!megastructure.wasInitalized) {
+                megastructure.trueInit(spec.getMegastructureID(), token);
+            }
+            GPManager.getInstance().addMegastructureToList(megastructure);
+            token.getMemory().set(GPBaseMegastructure.memKey, megastructure);
+        }
+        else{
             megastructure = spec.getScript();
+            if (!megastructure.wasInitalized) {
+                megastructure.trueInit(spec.getMegastructureID(), token);
+            }
+            GPManager.getInstance().addMegastructureToList(megastructure);
         }
-        if (!megastructure.wasInitalized) {
-            megastructure.trueInit(spec.getMegastructureID(), token);
-        }
-        GPManager.getInstance().addMegastructureToList(megastructure);
-        token.getMemory().set(GPBaseMegastructure.memKey, megastructure);
+
         MegastructureUnlockIntel intel = new MegastructureUnlockIntel(megastructure);
         Global.getSector().getIntelManager().addIntel(intel, false);
         Global.getSector().getPlayerFleet().getCommanderStats().addStoryPoints(1);

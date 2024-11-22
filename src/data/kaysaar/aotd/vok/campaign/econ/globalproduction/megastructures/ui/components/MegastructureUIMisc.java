@@ -43,16 +43,18 @@ public class MegastructureUIMisc {
         height = imageTootlip.getPrev().getPosition().getHeight();
         imageTootlip.getPosition().setSize(sectionWidth*2,height);
         titlePanel.getPosition().setSize(titlePanel.getPosition().getWidth(),height);
-        mapTooltip = titlePanel.createUIElement(sectionWidth,height,false);
-        mapTooltip.addSectorMap(sectionWidth,height-20,mega.getEntityTiedTo().getStarSystem(), 0f);
-        descriptionTooltip = titlePanel.createUIElement(sectionWidth*3,height,true);
+        if(mapSection!=0){
+            mapTooltip = titlePanel.createUIElement(sectionWidth,height,false);
+            mapTooltip.addSectorMap(sectionWidth,height-20,mega.getEntityTiedTo().getStarSystem(), 0f);
+            titlePanel.addUIElement(mapTooltip).inTL(imageSection+descriptionSection+10,0);
+        }
+
+        descriptionTooltip = titlePanel.createUIElement(descriptionSection,height,true);
         descriptionTooltip.addPara(mega.getSpec().getDescription(),5f);
 
         titlePanel.addUIElement(imageTootlip).inTL(0,0);
         titlePanel.addUIElement(descriptionTooltip).inTL(imageSection+5,0);
-        if(mapSection!=0){
-            titlePanel.addUIElement(mapTooltip).inTL(imageSection+descriptionSection+10,0);
-        }
+
 
         return titlePanel;
     }
@@ -75,7 +77,7 @@ public class MegastructureUIMisc {
         sectionsPanel = Global.getSettings().createCustom(mainPanel.getPosition().getWidth(),imageHeight,renderer);
         renderer.setPanel(sectionsPanel);
         TooltipMakerAPI tooltipOfImage = sectionsPanel.createUIElement(imageWidth,imageHeight,false);
-        LabelAPI label = tooltipOfImage.addTitle(section.getSpec().getName());
+        LabelAPI label = tooltipOfImage.addTitle(section.getName());
         ImagePanel panelPl = new ImagePanel();
         CustomPanelAPI panelImage = sectionsPanel.createCustomPanel(imageWidth,imageHeight-20,panelPl);
         panelPl.init(panelImage,Global.getSettings().getSprite("sectionImage",section.getSpec().getIcon()));
