@@ -6,6 +6,8 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ColonyDecivListener;
 import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
 import com.fs.starfarer.api.impl.campaign.intel.MegastructureUnlockIntel;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.NidavelirBaseSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
@@ -22,6 +24,9 @@ public class NidavelirClaimMegastructure implements PlayerColonizationListener, 
                 Global.getSector().getPlayerFleet().getCommanderStats().addStoryPoints(1);
                 megastructure.setHaveRecivedStoryPoint(true);
             }
+            if(!planet.getMarket().hasIndustry("nidavelir_complex")){
+                planet.getMarket().addIndustry("nidavelir_complex");
+            }
 
         }
     }
@@ -29,10 +34,14 @@ public class NidavelirClaimMegastructure implements PlayerColonizationListener, 
     @Override
     public void reportPlayerAbandonedColony(MarketAPI colony) {
         if(colony.getPrimaryEntity().getMemory().get(GPBaseMegastructure.memKey)!=null){
-            GPBaseMegastructure mega = (GPBaseMegastructure) colony.getPrimaryEntity().getMemory().get(GPBaseMegastructure.memKey);
+            NidavelirComplexMegastructure mega = (NidavelirComplexMegastructure) colony.getPrimaryEntity().getMemory().get(GPBaseMegastructure.memKey);
             for (GPMegaStructureSection megaStructureSection : mega.getMegaStructureSections()) {
                 megaStructureSection.setRestoring(false);
                 megaStructureSection.setProgressOfRestoration(0f);
+            }
+            for (NidavelirBaseSection megaStructureSection : mega.getSections()) {
+                megaStructureSection.setAutomated(false);
+                megaStructureSection.setCurrentManpowerAssigned(0);
             }
             GPManager.getInstance().removeMegastructureFromList((GPBaseMegastructure) colony.getPrimaryEntity().getMemory().get(GPBaseMegastructure.memKey));
         }
