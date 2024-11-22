@@ -455,7 +455,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                 }
             }
         }, TooltipMakerAPI.TooltipLocation.BELOW, false);
-        tooltip.addTooltipToPrevious(new ButtonOnHoverInfo(400, true, "Work In Progress", null, null, null, null, "Megastrucutre construction section"), TooltipMakerAPI.TooltipLocation.BELOW, false);
         float currX = 0;
         float paddingX = 5f;
         for (ButtonAPI buttonAPI : butt) {
@@ -465,7 +464,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         if (!GPManager.getInstance().hasAtLestOneProjectUnlocked()) {
             butt.get(3).setEnabled(false);
         }
-        if (GPManager.getInstance().getLearnedItems().isEmpty()) {
+        if (GPManager.getInstance().getLearnedItems().isEmpty()&&!AoTDMisc.doesPlayerHaveTuringEngine()) {
             butt.get(4).setEnabled(false);
         }
 

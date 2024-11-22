@@ -11,6 +11,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.models.AoTDSpecialProjectListener;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import org.json.JSONArray;
@@ -178,7 +179,7 @@ public class GPSpec {
         int advanced_component = Math.max(basePrice/advanced_component_mult,1);
         int domain_grade = Math.max(basePrice/domain_grade_mult,1);
         commodityCost.put("advanced_components",advanced_component);
-        commodityCost.put("domain_heavy_machinvery",domain_grade);
+        commodityCost.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,domain_grade);
         spec.setCredistCost(newPrice);
         spec.setSupplyCost(commodityCost);
         return spec;
@@ -200,7 +201,7 @@ public class GPSpec {
         int advanced_component = Math.max(basePrice/advanced_component_mult,1);
         int domain_grade = Math.max(basePrice/domain_grade_mult,1);
         commodityCost.put("advanced_components",advanced_component);
-        commodityCost.put("domain_heavy_machinvery",domain_grade);
+        commodityCost.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,domain_grade);
         spec.setCredistCost(newPrice);
         spec.setSupplyCost(commodityCost);
         return spec;
