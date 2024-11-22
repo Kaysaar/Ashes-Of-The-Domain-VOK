@@ -40,7 +40,7 @@ public class BiFrostGate extends BaseIndustry {
     @Override
     public boolean showWhenUnavailable() {
         //TODO - implement research later
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.BIFROST_GATE,market);
+        return false;
     }
 
 

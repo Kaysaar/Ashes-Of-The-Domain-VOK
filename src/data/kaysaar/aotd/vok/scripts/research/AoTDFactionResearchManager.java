@@ -45,11 +45,11 @@ public class AoTDFactionResearchManager {
     public ResearchQueueManager queueManager;
 
 
-
     public ResearchQueueManager getQueueManager() {
-        if (queueManager == null) queueManager =new ResearchQueueManager(this.getFaction().getId());
+        if (queueManager == null) queueManager = new ResearchQueueManager(this.getFaction().getId());
         return queueManager;
     }
+
     public ArrayList<ScientistAPI> researchCouncil = new ArrayList<>();
     public ScientistAPI currentHeadOfCouncil;
     public ArrayList<ResearchOption> researchRepoOfFaction;
@@ -65,6 +65,7 @@ public class AoTDFactionResearchManager {
     public ResearchOption getCurrentFocus() {
         return getResearchOptionFromRepo(currentFocusId);
     }
+
     public transient FactionResearchAttitudeData attitudeData;
 
     public FactionResearchAttitudeData getAttitudeData() {
@@ -196,10 +197,10 @@ public class AoTDFactionResearchManager {
         if (currentHeadOfCouncil != null) {
             currentHeadOfCouncil.advance(amount);
         }
-        if(getCurrentFocus()==null){
+        if (getCurrentFocus() == null) {
             notifyFactionBeginResearch(getQueueManager().removeFromTop());
         }
-        if (!getFaction().isPlayerFaction()&&!getFaction().getId().equals(Factions.PIRATES)) {
+        if (!getFaction().isPlayerFaction() && !getFaction().getId().equals(Factions.PIRATES)) {
             manageForAI(amount);
         }
         for (ResearchOption option : researchRepoOfFaction) {
@@ -215,23 +216,23 @@ public class AoTDFactionResearchManager {
             }
         }
 
-        if (getFaction().isPlayerFaction()) {
-            boolean hadMetreq = false;
-            for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
-                if (marketAPI.getFaction().getId().equals(managerTiedToFaction.getId())) {
-                    if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
-                        if (marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER).getSpecialItem() != null) {
-                            hadMetreq = true;
-                        }
-                    }
+
+        boolean hadMetreq = false;
+        for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
+            if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
+                if (marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER).getSpecialItem() != null) {
+                    hadMetreq = true;
                 }
             }
-            if (hadMetreq) {
-                Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
-            } else {
-                Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
-            }
         }
+
+
+        if (hadMetreq) {
+            Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
+        } else {
+            Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
+        }
+
 
         if (this.getFaction().isPlayerFaction()) {
             if (this.haveResearched(AoTDTechIds.AGRICULTURE_INDUSTRIALIZATION)) {
@@ -267,10 +268,10 @@ public class AoTDFactionResearchManager {
                 }
                 researchOption.daysSpentOnResearching += Global.getSector().getClock().convertToDays(amount);
                 double multiplier = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
-                if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch() * multiplier-researchOption.getSpec().getTimeToResearch() * multiplier*(AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*(getAmountOfResearchFacilities()-1))) {
+                if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch() * multiplier - researchOption.getSpec().getTimeToResearch() * multiplier * (AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC * (getAmountOfResearchFacilities() - 1))) {
                     researchOption.daysSpentOnResearching = 0;
                     researchOption.setResearched(true);
-                    AoTDListenerUtilis.finishedResearch(researchOption.Id,this.getFaction());
+                    AoTDListenerUtilis.finishedResearch(researchOption.Id, this.getFaction());
                     currentFocusId = null;
                     if (getFaction().isPlayerFaction()) {
                         notifyResearchCompletion(researchOption);
@@ -310,15 +311,15 @@ public class AoTDFactionResearchManager {
         intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
         Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.INTERACTION_DIALOG, new AoTDResearchUIDP());
     }
-    private void notifyFactionBeginResearch(ResearchOption researchOption){
-        if(researchOption==null)return;
-        if(!this.canResearch(researchOption.Id,false)){
-            MessageIntel intel = new MessageIntel("Could not research - " + researchOption.Name+": Requirements not met ", Misc.getNegativeHighlightColor());
+
+    private void notifyFactionBeginResearch(ResearchOption researchOption) {
+        if (researchOption == null) return;
+        if (!this.canResearch(researchOption.Id, false)) {
+            MessageIntel intel = new MessageIntel("Could not research - " + researchOption.Name + ": Requirements not met ", Misc.getNegativeHighlightColor());
             intel.setIcon(getFaction().getCrest());
             intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
             Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.NOTHING);
-        }
-        else{
+        } else {
             MessageIntel intel = new MessageIntel("Started Research - " + researchOption.Name, Misc.getBasePlayerColor());
             intel.setIcon(getFaction().getCrest());
             intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
@@ -329,6 +330,7 @@ public class AoTDFactionResearchManager {
 
 
     }
+
     public void pickResearchFocus(String id) {
         setCurrentFocus(id);
     }
@@ -406,8 +408,9 @@ public class AoTDFactionResearchManager {
     }
 
     public boolean haveMetReqForItem(String id, float value) {
-        return value<=retrieveAmountOfItems(id);
+        return value <= retrieveAmountOfItems(id);
     }
+
     public float retrieveAmountOfItems(String id) {
         float numberRemaining = 0;
         for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
@@ -427,10 +430,11 @@ public class AoTDFactionResearchManager {
 
         return numberRemaining;
     }
+
     public void payForResearch(String id) {
         if (getResearchOptionFromRepo(id).havePaidForResearch) return;
         for (Map.Entry<String, Integer> entry : getResearchOptionFromRepo(id).ReqItemsToResearchFirst.entrySet()) {
-            AoTDMisc.eatItems(entry,AoTDSubmarkets.RESEARCH_FACILITY_MARKET,retrieveMarketsOfThatFaction());
+            AoTDMisc.eatItems(entry, AoTDSubmarkets.RESEARCH_FACILITY_MARKET, retrieveMarketsOfThatFaction());
 
         }
         getResearchOptionFromRepo(id).havePaidForResearch = true;
@@ -439,10 +443,9 @@ public class AoTDFactionResearchManager {
     }
 
 
-
     public List<MarketAPI> retrieveMarketsOfThatFaction() {
         ArrayList<MarketAPI> marketsToReturn = new ArrayList<>();
-        if(getFaction().isPlayerFaction()){
+        if (getFaction().isPlayerFaction()) {
             return Misc.getPlayerMarkets(checkForQolEnabled());
         }
         for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
@@ -454,9 +457,10 @@ public class AoTDFactionResearchManager {
 
         return marketsToReturn;
     }
-    public boolean checkForQolEnabled(){
-        if(Global.getSettings().getModManager().isModEnabled("aotd_qol")){
-            if(QoLMisc.isCommissioned()){
+
+    public boolean checkForQolEnabled() {
+        if (Global.getSettings().getModManager().isModEnabled("aotd_qol")) {
+            if (QoLMisc.isCommissioned()) {
                 return true;
             }
         }
@@ -465,14 +469,13 @@ public class AoTDFactionResearchManager {
 
     public int getAmountOfResearchFacilities() {
         int toReturn = 0;
-        if(getFaction().isPlayerFaction()){
+        if (getFaction().isPlayerFaction()) {
             for (MarketAPI marketAPI : Misc.getPlayerMarkets(Global.getSettings().getModManager().isModEnabled("aotd_qol"))) {
                 if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
                     toReturn++;
                 }
             }
-        }
-        else{
+        } else {
             for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
                 if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
                     toReturn++;
@@ -480,7 +483,7 @@ public class AoTDFactionResearchManager {
             }
         }
 
-        if(toReturn>8){
+        if (toReturn > 8) {
             toReturn = 8;
         }
         return toReturn;

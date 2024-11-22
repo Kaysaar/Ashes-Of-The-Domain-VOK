@@ -295,6 +295,7 @@ public class GPManager {
         }
         for (MarketAPI factionMarket : Misc.getPlayerMarkets(true)) {
             for (Industry ind : factionMarket.getIndustries()) {
+                if(ind.getSpec().hasTag("ignore_gp"))continue;
                 for (String commodity : commodities) {
                     int val = ind.getSupply(commodity).getQuantity().getModifiedInt() * scale;
                     AoTDMisc.putCommoditiesIntoMap(totalResources,commodity, val);
@@ -328,6 +329,7 @@ public class GPManager {
         LinkedHashMap<MarketAPI, Integer> map = new LinkedHashMap<>();
         for (MarketAPI factionMarket : Misc.getPlayerMarkets(true)) {
             for (Industry ind : factionMarket.getIndustries()) {
+                if(ind.getSpec().hasTag("ignore_gp"))continue;
                 int val = ind.getSupply(commodity).getQuantity().getModifiedInt() * scale;
                 if (val == 0) continue;
                 if (map.get(factionMarket) != null) {
