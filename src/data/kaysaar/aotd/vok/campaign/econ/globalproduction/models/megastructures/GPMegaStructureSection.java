@@ -7,7 +7,6 @@ import com.fs.starfarer.api.impl.campaign.intel.MegastructureSectionCompletedInt
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
@@ -48,7 +47,12 @@ public class GPMegaStructureSection {
     public void setProgressOfRestoration(float progressOfRestoration) {
         this.progressOfRestoration = progressOfRestoration;
     }
-
+    public String getContentForPauseRestoration(){
+        return "By pausing restoration efforts we wont be spending further money until project is resumed and it will free resources that is currently consuming";
+    }
+    public String getRestorationStringForDialog(){
+        return "Restoration";
+    }
     public void setRestoring(boolean restoring) {
         isRestoring = restoring;
     }
@@ -71,10 +75,19 @@ public class GPMegaStructureSection {
         }
         upkeep+=addAdditionalUpkeep();
         for (GPMegaStructureSection megaStructureSection : megastructureTiedTo.getMegaStructureSections()) {
-            megaStructureSection.applyReductionOfUpkeep(upkeepMult);
+            if(megaStructureSection == this){
+                applyReductionOfUpkeep();
+            }
+            else{
+                megaStructureSection.applyReductionOfUpkeep(upkeepMult);
+            }
         }
+
         AoTDListenerUtilis.applyUpkeepReductionCredits(this,upkeepMult);
         return upkeep*upkeepMult.getModifiedValue();
+    }
+    public void applyReductionOfUpkeep(){
+
     }
     public void applyReductionOfUpkeep(MutableStat statToChange){
 
@@ -94,11 +107,11 @@ public class GPMegaStructureSection {
         else {
             costs.putAll(getSpec().getGpAfterRestorationCost());
         }
-        applyAdditionalGPCost(costs);
+        applyAdditionalGPChanges(costs);
         AoTDListenerUtilis.applyUpkeepReductionForGP(this,costs);
         return costs;
     }
-    public void applyAdditionalGPCost(HashMap<String,Integer> map){
+    public void applyAdditionalGPChanges(HashMap<String,Integer> map){
 
     }
 
@@ -131,6 +144,7 @@ public class GPMegaStructureSection {
 
             }
         }
+
     }
     public float getProgressPercentage() {
         float baseDays = getSpec().daysForRenovation;
@@ -201,17 +215,26 @@ public class GPMegaStructureSection {
     public void addPenaltyFromLackOfResourcesInfo(TooltipMakerAPI tooltip, float width) {;
 
     }
+    public String getPauseRestorationString (){
+        return "Pause restoration";
+    }
+    public String getRestorationString(){
+        return "Restore Section";
+    }
+    public String getContinueRestoration(){
+        return "Continue restoration";
+    }
     public LinkedHashMap<String, ButtonData> generateButtons() {
         LinkedHashMap<String, ButtonData> buttons = new LinkedHashMap<>();
 
 
         if (isRestoring && !isRestored) {
-            ButtonData data1 = new ButtonData("Pause restoration", this, true, Color.ORANGE, "pauseRestore", new OnHoverButtonTooltip(this, "pauseRestore"), "pauseRestore", this.getSpec().getSectionID());
+            ButtonData data1 = new ButtonData(getPauseRestorationString(), this, true, Color.ORANGE, "pauseRestore", new OnHoverButtonTooltip(this, "pauseRestore"), "pauseRestore", this.getSpec().getSectionID());
             buttons.put("pauseRestore", data1);
         } else {
-            String restoration = "Restore section";
+            String restoration = getRestorationString();
             if (progressOfRestoration > 0f) {
-                restoration = "Continue Restoration";
+                restoration = getContinueRestoration();
             }
             if(!isRestored){
                 ButtonData data = new ButtonData(restoration, this, isRestorationAllowed(), Color.ORANGE, "restore", new OnHoverButtonTooltip(this, "restore"), "restore", this.getSpec().getSectionID());

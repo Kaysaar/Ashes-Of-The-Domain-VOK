@@ -37,7 +37,7 @@ public class WormholeGenerator extends GPMegaStructureSection {
     }
 
     @Override
-    public void applyAdditionalGPCost(HashMap<String, Integer> map) {
+    public void applyAdditionalGPChanges(HashMap<String, Integer> map) {
         if(isRestored){
             map.put(AoTDCommodities.PURIFIED_TRANSPLUTONICS,getPurifiedTransplutonicsPerRange());
         }

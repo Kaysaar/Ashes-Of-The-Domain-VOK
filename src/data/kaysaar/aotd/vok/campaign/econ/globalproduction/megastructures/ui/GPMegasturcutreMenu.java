@@ -78,7 +78,10 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
         TooltipMakerAPI tooltip = currentMegastructureSelected.createUIElement(currentMegastructureSelected.getPosition().getWidth(), currentMegastructureSelected.getPosition().getHeight(), true);
         String str = "";
         if (megastructure != null) {
-            str += megastructure.getSpec().getName()+" : "+megastructure.getEntityTiedTo().getStarSystem().getName();
+            str += megastructure.getSpec().getName();
+            if(megastructure.getEntityTiedTo()!=null){
+                str+=" : "+megastructure.getEntityTiedTo().getStarSystem().getName();
+            }
         }
         tooltip.addSectionHeading(str, Alignment.MID, 0f);
         if(megastructure!=null){

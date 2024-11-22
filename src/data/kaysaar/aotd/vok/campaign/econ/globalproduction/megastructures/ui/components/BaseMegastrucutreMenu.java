@@ -89,6 +89,9 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
     }
     public void resetEntireUI(){
         clearUI();
+        mainPanel.removeComponent(mainTitlePanel);
+        mainMenu.reInitalizeButtonUI();
+        lastY = 0;
         addUI();
     }
     public void resetSection(String sectionID){
@@ -101,6 +104,7 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
         toolTipPanel.removeComponent(tooltipOfSections);
         mainPanel.removeComponent(toolTipPanel);
         panelsOfSections.clear();
+
         toolTipPanel = mainPanel.createCustomPanel(width,height-lastYForSection-10f,null);
         tooltipOfSections = toolTipPanel.createUIElement(width,height-lastYForSection-10f,true);
 
@@ -152,13 +156,13 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
                     ButtonData buttonData = (ButtonData) button.getCustomData();
                     if(AoTDMisc.isStringValid(buttonData.getCustomCommand())){
                         if(buttonData.getCustomCommand().contains("restore")){
-                            BasePopUpDialog dialog = new RestorationDialog((GPMegaStructureSection) buttonData.getCustomData(),this,"Megastructure Restoration");
+                            BasePopUpDialog dialog = new RestorationDialog((GPMegaStructureSection) buttonData.getCustomData(),this,"Megastructure "+((GPMegaStructureSection) buttonData.getCustomData()).getRestorationStringForDialog(), ((GPMegaStructureSection) buttonData.getCustomData()).getRestorationStringForDialog());
                             CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,360,dialog);
                             UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
                             dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);
                         }
                         if(buttonData.getCustomCommand().contains("pauseRestore")){
-                            BasePopUpDialog dialog = new PauseRestoration((GPMegaStructureSection) buttonData.getCustomData(),this,null);
+                            BasePopUpDialog dialog = new PauseRestoration((GPMegaStructureSection) buttonData.getCustomData(),this,null,((GPMegaStructureSection) buttonData.getCustomData()).getContentForPauseRestoration());
                             CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,200,dialog);
                             UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
                             dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);

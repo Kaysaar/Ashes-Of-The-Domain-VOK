@@ -54,7 +54,7 @@ public class BulwarkFoundry extends NidavelirBaseSection {
         GPManager.getInstance().getCruiserCapitalSpeed().modifyMult("aotd_nidav",1f-bonus);
     }
     @Override
-    public void applyAdditionalGPCost(HashMap<String, Integer> map) {
+    public void applyAdditionalGPChanges(HashMap<String, Integer> map) {
         map.put(AoTDCommodities.REFINED_METAL,40*getCurrentManpowerAssigned());
     }
 

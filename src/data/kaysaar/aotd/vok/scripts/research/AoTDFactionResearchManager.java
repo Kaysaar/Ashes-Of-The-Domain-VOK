@@ -20,6 +20,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.ResearchFleetDefeatListener;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
@@ -269,7 +270,7 @@ public class AoTDFactionResearchManager {
                 if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch() * multiplier-researchOption.getSpec().getTimeToResearch() * multiplier*(AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*(getAmountOfResearchFacilities()-1))) {
                     researchOption.daysSpentOnResearching = 0;
                     researchOption.setResearched(true);
-
+                    AoTDListenerUtilis.finishedResearch(researchOption.Id,this.getFaction());
                     currentFocusId = null;
                     if (getFaction().isPlayerFaction()) {
                         notifyResearchCompletion(researchOption);

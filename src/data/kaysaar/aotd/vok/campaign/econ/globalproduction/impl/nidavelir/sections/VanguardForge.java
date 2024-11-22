@@ -44,7 +44,7 @@ public class VanguardForge  extends NidavelirBaseSection {
         tooltip.addPara("Increase speed of special projects completion by %s",3f,Color.ORANGE,points+"%");
     }
     @Override
-    public void applyAdditionalGPCost(HashMap<String, Integer> map) {
+    public void applyAdditionalGPChanges(HashMap<String, Integer> map) {
         map.put(AoTDCommodities.REFINED_METAL,40*getCurrentManpowerAssigned());
     }
 

@@ -8,10 +8,15 @@ import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -50,18 +55,16 @@ public class BiFrostCMD extends BaseCommandPlugin {
         return true;
     }
 
-    ArrayList<SectorEntityToken>getAllBifrostGates(){
-        ArrayList<SectorEntityToken> toReturn = new ArrayList<>();
-        for (MarketAPI factionMarket : Misc.getFactionMarkets(Global.getSector().getPlayerFaction())) {
-            for (SectorEntityToken connectedEntity : factionMarket.getConnectedEntities()) {
-                if(connectedEntity.hasTag("bifrost")){
-                    toReturn.add(connectedEntity);
-                }
+    public static ArrayList<SectorEntityToken>getAllBifrostGates(){
+        ArrayList<GPBaseMegastructure> megastructures = GPManager.getInstance().getMegastructuresBasedOnClass(BifrostMega.class);
+        ArrayList<SectorEntityToken>toReturn = new ArrayList<>();
+        for (GPBaseMegastructure megastructure : megastructures) {
+            BifrostMega mega = (BifrostMega) megastructure;
+            for (BifrostSection section : mega.getSections()) {
+                toReturn.add(section.getGateTiedTo());
             }
         }
-        if(toReturn.isEmpty()){
-            return null;
-        }
+
         return toReturn;
     }
 
@@ -69,6 +72,13 @@ public class BiFrostCMD extends BaseCommandPlugin {
         final ArrayList<SectorEntityToken> gates =
                 new ArrayList<>(getAllBifrostGates());
         gates.remove(entity);
+        Iterator<SectorEntityToken>iterator = gates.iterator();
+        while (iterator.hasNext()) {
+            SectorEntityToken token = iterator.next();
+            if(token.getMemory().is("$used",true)){
+                iterator.remove();
+            }
+        }
         dialog.showCampaignEntityPicker("Select destination", "Destination:", "Initiate transit",
                 Global.getSector().getPlayerFaction(), gates,
                 new BaseCampaignEntityPickerListener() {
@@ -87,11 +97,10 @@ public class BiFrostCMD extends BaseCommandPlugin {
                             BiFrostGateEntity plugin = (BiFrostGateEntity) entity.getCustomPlugin();
                             plugin.showBeingUsed(distLY);
                         }
-                        if (entity.getCustomPlugin() instanceof BiFrostGateEntity) {
-                            BiFrostGateEntity plugin = (BiFrostGateEntity) entity.getCustomPlugin();
+                        if (entityToTravel.getCustomPlugin() instanceof BiFrostGateEntity) {
+                            BiFrostGateEntity plugin = (BiFrostGateEntity) entityToTravel.getCustomPlugin();
                             plugin.showBeingUsed(distLY);
                         }
-
                         ListenerUtil.reportFleetTransitingGate(Global.getSector().getPlayerFleet(),
                                 entity, entityToTravel);
                     }

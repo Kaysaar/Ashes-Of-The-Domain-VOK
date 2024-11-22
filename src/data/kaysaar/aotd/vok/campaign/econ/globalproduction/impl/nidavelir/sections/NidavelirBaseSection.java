@@ -128,7 +128,7 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
 
     }
     @Override
-    public void applyAdditionalGPCost(HashMap<String, Integer> map) {
+    public void applyAdditionalGPChanges(HashMap<String, Integer> map) {
         int manpower = getCurrentManpowerAssigned();
         if(isAutomated){
             manpower =12;

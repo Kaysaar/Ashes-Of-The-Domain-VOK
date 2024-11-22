@@ -59,11 +59,11 @@ public class GPBaseMegastructure {
        tooltipOfCosts.addPara("Monthly running cost %s",0,Color.ORANGE,Misc.getDGSCredits(getUpkeep())).getPosition().inTL(10,25);
        tooltipOfCosts.addCustom(createResourcePanelForSmallTooltipCondensed(width,20,20, getDemand(),getProduction()),5f);
        tooltipOfIcon.addImage(getIcon(),50,50,5f);
-       String starSystem = "Proxima Star System";
+       String starSystem = "";
        if(entityTiedTo!=null){
-           starSystem = entityTiedTo.getStarSystem().getName();
+           starSystem = " : "+entityTiedTo.getStarSystem().getName();
        }
-       tooltipOfIcon.addTitle(getName()+" : "+starSystem).getPosition().inTL(60,10);
+       tooltipOfIcon.addTitle(getName()+starSystem).getPosition().inTL(60,10);
        tooltip.addCustom(tooltipOfIcon,0f);
        tooltip.addSpacer(tooltipOfIcon.getHeightSoFar());
        tooltip.addCustom(tooltipOfCosts,-25f);

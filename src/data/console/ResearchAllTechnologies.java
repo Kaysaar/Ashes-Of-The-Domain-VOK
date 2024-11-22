@@ -1,5 +1,7 @@
 package data.console;
 
+import com.fs.starfarer.api.Global;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -18,6 +20,7 @@ public class ResearchAllTechnologies implements BaseCommand {
         AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayer();
         for (ResearchOption option : manager.getResearchRepoOfFaction()) {
             option.setResearched(true);
+            AoTDListenerUtilis.finishedResearch(option.getSpec().getId(), manager.getFaction());
         }
 
         Console.showMessage("All technologies researched");
