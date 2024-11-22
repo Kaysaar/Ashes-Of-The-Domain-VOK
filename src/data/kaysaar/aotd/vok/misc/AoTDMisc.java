@@ -81,6 +81,15 @@ public class AoTDMisc {
         return false;
     }
     public static boolean doesPlayerHaveTuringEngine(){
+        for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+            for (Industry industry : playerMarket.getIndustries()) {
+                if(industry.getSpecialItem()!=null){
+                    if(industry.getSpecialItem().getId().equals("turing_engine")){
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
     public static String ensureManBeingNotNull(String man){

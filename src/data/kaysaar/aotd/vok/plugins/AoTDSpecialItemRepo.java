@@ -13,6 +13,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorPlugin;
 
 import java.awt.*;
@@ -61,6 +62,26 @@ public class AoTDSpecialItemRepo {
                 }
                 text.addPara(pre + "Unlocks the Experimental tier of Tech Tree",
                         pad);
+            }
+        });
+        ItemEffectsRepo.ITEM_EFFECTS.put("turing_engine", new BoostIndustryInstallableItemEffect(
+                "turing_engine", 0, 0) {
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+                List<String> commodities = new ArrayList<String>();
+                text.addPara(pre+" Increase production of advanced components by %s",5f,Color.ORANGE,""+6);
+                text.addPara( "Gain ability to produce AI cores.",
+                        pad);
+            }
+
+            @Override
+            public void apply(Industry industry) {
+                industry.getSupply(AoTDCommodities.ADVANCED_COMPONENTS).getQuantity().modifyFlat("aotd_turing",6);
+            }
+
+            @Override
+            public void unapply(Industry industry) {
+                industry.getSupply(AoTDCommodities.ADVANCED_COMPONENTS).getQuantity().unmodifyFlat("aotd_turing");
             }
         });
         ItemEffectsRepo.CORONAL_TAP_RANGE = "Coronal Network Center in 10 LY radius, 50 LY if Wormhole Stabilizer has been repaired.";

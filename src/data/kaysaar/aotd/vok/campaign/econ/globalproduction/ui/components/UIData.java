@@ -388,8 +388,8 @@ public class UIData {
             tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
         }
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.AICORE) {
-            name = tooltip.addPara(order.getSpecFromClass().getItemSpecAPI().getName(), 0f);
-            imagePanel = UIData.getAiCoreRenderer(order.getSpecFromClass().getItemSpecAPI().getId(), 24);
+            name = tooltip.addPara(order.getSpecFromClass().getAiCoreSpecAPI().getName(), 0f);
+            imagePanel = UIData.getAiCoreRenderer(order.getSpecFromClass().getAiCoreSpecAPI().getId(), 24);
             tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
         }
         final GPSpec spec = order.getSpecFromClass();

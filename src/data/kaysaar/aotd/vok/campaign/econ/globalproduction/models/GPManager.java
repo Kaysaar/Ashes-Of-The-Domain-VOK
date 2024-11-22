@@ -397,7 +397,7 @@ public class GPManager {
     public ArrayList<GPOption> getItemProductionOptionFiltered() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getItemProductionOption()) {
-            if (option.getSpec().getItemSpecAPI() == null) {
+            if (option.getSpec().getItemSpecAPI() == null&&option.getSpec().getAiCoreSpecAPI()!=null) {
                 option.getSpec().setType(GPSpec.ProductionType.AICORE);
                 options.add(option);
                 continue;
