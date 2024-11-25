@@ -218,7 +218,7 @@ public class Terminus extends Waystation {
 
     @Override
     public boolean canImprove() {
-        return false;
+        return true;
     }
 
 }

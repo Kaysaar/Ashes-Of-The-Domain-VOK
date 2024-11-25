@@ -211,8 +211,8 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         plugin.init(techTreePanel, WIDTH - 300, HEIGHT - 20, true, techTreeCoreUI.calculateWidthAndHeight().one, techTreeCoreUI.calculateWidthAndHeight().two);
         horizontalTooltipMaker = plugin.getHorizontalTooltipMaker();
         techTreeTooltip = horizontalTooltipMaker.getMainTooltip();
-        buttonPanel = mainPanel.createCustomPanel(300, 102, null);
-        buttonPanelTooltip = buttonPanel.createUIElement(300, 102, false);
+        buttonPanel = mainPanel.createCustomPanel(300, 100, null);
+        buttonPanelTooltip = buttonPanel.createUIElement(300, 100, false);
         renderer.setPanel(buttonPanel);
         researchCenterPanelUI = new ResearchCenterPanel();
         helpButtonPanelYU = new HelpPanel();
@@ -232,7 +232,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         buttonPanelUI.init(mainPanel, buttonPanel, buttonPanelTooltip);
         buttonPanelUI.createUI();
         buttonPanelUI.placeTooltip(0, 0);
-        buttonPanelUI.placeSubPanel(0, -2);
+        buttonPanelUI.placeSubPanel(0, 0);
 
 
         techTreeCoreUI.init(mainPanel, techTreePanel, techTreeTooltip);
@@ -665,13 +665,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         if (mustResetPanel) {
             resetCentralPanel();
         }
-        if (buttonPanelUI != null && buttonPanelUI.getSpecialProjectButton().isChecked()) {
-            buttonPanelUI.getSpecialProjectButton().setChecked(false);
-            mustHardReset = true;
-            mustReset = true;
-            reset(false, true, UIMODE.SPECIAL_PROJECTS);
-            return;
-        }
+
         if (specialProjectListPanel != null) {
             if (!projectListUI.buttons.isEmpty()) {
                 for (ButtonAPI button : projectListUI.buttons) {

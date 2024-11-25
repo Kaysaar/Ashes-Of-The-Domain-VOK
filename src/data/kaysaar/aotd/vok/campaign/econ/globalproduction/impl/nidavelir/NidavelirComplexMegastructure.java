@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.impl.campaign.NidavelirDestroyedShipyard;
 import com.fs.starfarer.api.impl.campaign.NidavelirShipyard;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
@@ -36,6 +37,18 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
 
     public int getManpowerPoints() {
         return entityTiedTo.getMarket().getSize()*2;
+    }
+
+    @Override
+    public void createAdditionalInfoForMega(TooltipMakerAPI tooltip) {
+        tooltip.addSectionHeading("Current effects", Alignment.MID,5f);
+        tooltip.addPara("Speeds up special projects by %s",5f,Color.ORANGE,"70%");
+        tooltip.addPara("Gives all patrol fleets %s S-mods",5f,Color.ORANGE,"2-3");
+        tooltip.addPara("Increases fleet size in this market by %s",5f,Color.ORANGE,"100%");
+        tooltip.addPara("Allows one time special project to be repeatable",Color.ORANGE,5f);
+
+
+
     }
 
     @Override

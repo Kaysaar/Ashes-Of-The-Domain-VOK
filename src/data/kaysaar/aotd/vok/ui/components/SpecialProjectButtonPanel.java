@@ -22,25 +22,6 @@ public class SpecialProjectButtonPanel extends UiPanel{
         LabelAPI labelAPI= tooltip.addPara("Technology Tree", Color.ORANGE,10f);
         labelAPI.getPosition().inTL(150-labelAPI.computeTextWidth(labelAPI.getText())/2,10);
         tooltip.setParaFontDefault();
-        specialProjectButton=tooltip.addButton("Special Projects","UI_SPECIAL_PROJECTS",290,30,10f);
-        specialProjectButton.getPosition().inTL(5,52);
-        tooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
-            @Override
-            public boolean isTooltipExpandable(Object tooltipParam) {
-                return true;
-            }
-
-            @Override
-            public float getTooltipWidth(Object tooltipParam) {
-                return 500;
-            }
-
-            @Override
-            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                tooltip.addPara("Special projects are special type of research options, that appear once certain criteria are met.\nThese projects unlike research options in the tech tree are not guaranteed to be successful." +
-                        "\nCurrently special projects are inaccessible due to being WIP",10f);
-            }
-        }, TooltipMakerAPI.TooltipLocation.RIGHT,false);
 
     }
 }

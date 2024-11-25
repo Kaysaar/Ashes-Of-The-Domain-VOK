@@ -4,7 +4,9 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection;
@@ -15,6 +17,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -24,6 +27,12 @@ public class BifrostMega extends GPBaseMegastructure {
     static {
         bifrostGateCost.put(AoTDCommodities.REFINED_METAL, 200);
         bifrostGateCost.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY, 100);
+    }
+
+    @Override
+    public void createAdditionalInfoForMega(TooltipMakerAPI tooltip) {
+        tooltip.addSectionHeading("Current effects", Alignment.MID,5f);
+        tooltip.addPara("Accessibility bonus to all colonies with Bifrost gate in system : %s",5f, Color.ORANGE,(getTotalAccessibility()*100)+"%");
     }
 
     public static SectorEntityToken spawnGate(MarketAPI market) {
@@ -70,6 +79,23 @@ public class BifrostMega extends GPBaseMegastructure {
     public void advance(float amount) {
         super.advance(amount);
 
+        float totality = getTotalAccessibility();
+
+        if(getSections().size()>=2){
+            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+                playerMarket.getAccessibilityMod().modifyFlat("aotd_bifrost", totality,"Bifrost Network");
+            }
+        }
+        else{
+            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+                playerMarket.getAccessibilityMod().unmodifyFlat("aotd_bifrost");
+            }
+        }
+
+
+    }
+
+    public float getTotalAccessibility() {
         float totality = 0f;
         for (BifrostSection section : getSections()) {
             float totalBonus = 0f;
@@ -90,19 +116,7 @@ public class BifrostMega extends GPBaseMegastructure {
 
         }
         totality*=getPenaltyFromManager();
-
-        if(getSections().size()>=2){
-            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
-                playerMarket.getAccessibilityMod().modifyFlat("aotd_bifrost", totality,"Bifrost Network");
-            }
-        }
-        else{
-            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
-                playerMarket.getAccessibilityMod().unmodifyFlat("aotd_bifrost");
-            }
-        }
-
-
+        return totality;
     }
 
     public void removeBifrostGate(BifrostSection section) {
