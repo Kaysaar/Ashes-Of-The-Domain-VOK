@@ -72,7 +72,8 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if(buttonId==Button_SHIP){
-            CoreUITracker.setMemFlag("custom production");
+            CoreUITracker.setMemFlag("technology");
+            CoreUITracker.setMemFlagForTechTab("production");
             Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }
 

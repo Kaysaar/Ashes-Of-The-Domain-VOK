@@ -14,6 +14,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUt
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
+import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUI;
 import org.lwjgl.input.Keyboard;
 
@@ -30,6 +31,7 @@ public class CoreUITracker implements EveryFrameScript {
     NidavelirMainPanelPlugin plugin = null;
     AoTDResearchUI pluginResearch = null;
     GPMegasturcutreMenu pluginMenu = null;
+    TechnologyCoreUI coreUiTech = null;
     boolean pausedMusic = true;
 
     @Override
@@ -42,11 +44,23 @@ public class CoreUITracker implements EveryFrameScript {
     String nameOfCurrentTab;
     public static boolean sendSignalToOpenCore = false;
     public static final String memFlag = "$aotd_outpost_state";
-
+    public static final String memFlag2 = "$aotd_technology_tab_state";
     public static void setMemFlag(String value) {
         Global.getSector().getMemory().set(memFlag, value);
     }
+    public static void setMemFlagForTechTab(String value) {
+        Global.getSector().getMemory().set(memFlag2, value);
+    }
+    public static String getMemFlagForTechTab(){
+        String s = null;
+        try {
+            s = Global.getSector().getMemory().getString(memFlag2);
 
+        } catch (Exception e) {
+
+        }
+        return s;
+    }
     public static String getMemFlag() {
         String s = null;
         try {
@@ -70,22 +84,10 @@ public class CoreUITracker implements EveryFrameScript {
             inserted = false;
             panelMap = null;
             currentTab = null;
-            if (plugin != null) {
-                plugin.clearUI(!sendSignalToOpenCore);
-                if (!pausedMusic) {
-                    plugin.pauseSound();
-                    pausedMusic = true;
-                }
-                plugin = null;
-            }
-            if(pluginMenu != null) {
-                pluginMenu.clearUI();
-                pluginMenu = null;
-            }
+            if(coreUiTech!=null){
+                coreUiTech.clearUI();
+                coreUiTech = null;
 
-            if (pluginResearch != null) {
-                pluginResearch.clearUI();
-                pluginResearch = null;
             }
             removed = false;
             insertedOnce = false;
@@ -94,10 +96,35 @@ public class CoreUITracker implements EveryFrameScript {
         if (Global.getSector().getCampaignUI().getCurrentCoreTab() != null) {
             sendSignalToOpenCore = false;
         }
-        ButtonAPI button = tryToGetButtonProd("custom production");
-        if (button == null) return;
         UIPanelAPI mainParent = ProductionUtil.getCurrentTab();
         if (mainParent == null) return;
+        ButtonAPI button = tryToGetButtonProd("doctrine & blueprints");
+        ButtonAPI toRemove = tryToGetButtonProd("custom production");
+
+        if (button == null){
+            return;
+        }
+        if(toRemove!=null) {
+            mainParent.removeComponent(toRemove);
+        }
+        if (tryToGetButtonProd("technology") == null) {
+            insertButton(button, mainParent, "Technology", new TooltipMakerAPI.TooltipCreator() {
+                @Override
+                public boolean isTooltipExpandable(Object tooltipParam) {
+                    return false;
+                }
+
+                @Override
+                public float getTooltipWidth(Object tooltipParam) {
+                    return 400;
+                }
+
+                @Override
+                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                    tooltip.addPara("test",5f);
+                }
+            }, tryToGetButtonProd("colonies"), 150, Keyboard.KEY_5, false);
+        }
 
         if (shouldHandleReset()) {
             removed = false;
@@ -109,44 +136,7 @@ public class CoreUITracker implements EveryFrameScript {
             currentTab = null;
             panelMap = null;
         }
-        if (tryToGetButtonProd("research") == null) {
-            insertButton(button, mainParent, "Research", new TooltipMakerAPI.TooltipCreator() {
-                @Override
-                public boolean isTooltipExpandable(Object tooltipParam) {
-                    return false;
-                }
 
-                @Override
-                public float getTooltipWidth(Object tooltipParam) {
-                    return 400;
-                }
-
-                @Override
-                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                    tooltip.addPara("This is where your faction can conduct all research projects!", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
-                }
-            }, tryToGetButtonProd("colonies"), 120, Keyboard.KEY_6, false);
-        }
-        if (tryToGetButtonProd("megastructures") == null) {
-            insertButton(tryToGetButtonProd("research"), mainParent, "Megastructures", new TooltipMakerAPI.TooltipCreator() {
-                @Override
-                public boolean isTooltipExpandable(Object tooltipParam) {
-                    return false;
-                }
-
-                @Override
-                public float getTooltipWidth(Object tooltipParam) {
-                    return 400;
-                }
-
-                @Override
-                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                    tooltip.addPara("This is panel where you can manage all of your megastructures", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
-                    tooltip.addPara("This tab will be available once 2.5 version of Vaults of Knowledge will be released!", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
-
-                }
-            }, tryToGetButtonProd("colonies"), 180, Keyboard.KEY_7, false);
-        }
         if (panelMap == null) {
             panelMap = new HashMap<>();
             panelMap.putAll(getPanelMap(mainParent));
@@ -154,17 +144,10 @@ public class CoreUITracker implements EveryFrameScript {
         if (panelMap == null) {
             return;
         }
-        if (currentTab == null && getMemFlag() == null) {
-            for (ButtonAPI buttonAPI : panelMap.keySet()) {
-                if (buttonAPI.isHighlighted()) {
-                    currentTab = buttonAPI;
-                    setMemFlag(currentTab.getText().toLowerCase());
-                    break;
-                }
-            }
-        }
+
 
         float y = button.getPosition().getY();
+        float x = button.getPosition().getX();
         if (y < 0) {
             y *= -1;
         }
@@ -183,49 +166,37 @@ public class CoreUITracker implements EveryFrameScript {
 
             }
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);
-
-            if (!insertedOnce) {
-                insertedOnce = true;
-                if (GPManager.isEnabled) {
-                    insertNewPanel(button);
-                }
-                UIData.recompute();
-                insertNewResearchPanel(tryToGetButtonProd("research"));
-                insertNewMegastructuresPanel(tryToGetButtonProd("megastructures"));
-            }
+            insertNewPanel(tryToGetButtonProd("technology"));
 
 
         }
-
+        if (currentTab == null && getMemFlag() == null) {
+            for (ButtonAPI buttonAPI : panelMap.keySet()) {
+                if (buttonAPI.isHighlighted()) {
+                    currentTab = buttonAPI;
+                    setMemFlag(currentTab.getText().toLowerCase());
+                    break;
+                }
+            }
+        }
         if (currentTab == null && getMemFlag() != null) {
             for (ButtonAPI buttonAPI : panelMap.keySet()) {
                 if (buttonAPI.getText().toLowerCase().contains(getMemFlag())) {
                     currentTab = buttonAPI;
-                    if (currentTab.getText().toLowerCase().contains("custom production")) {
-                        if (GPManager.isEnabled) {
-                            plugin.playSound();
-                            pausedMusic = false;
-                        }
-
-                    }
-                    if (currentTab.getText().toLowerCase().contains("research")) {
-                        pluginResearch.playSound();
-                        pausedMusic = false;
-                    }
                 }
             }
         }
 
         if (!hasComponentPresent((UIComponentAPI) panelMap.get(currentTab))) {
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);
-
             mainParent.addComponent((UIComponentAPI) panelMap.get(currentTab));
-            setMemFlag(currentTab.getText().toLowerCase());
+                setMemFlag(currentTab.getText().toLowerCase());
+
+
             ;
         }
         handleButtonsHighlight();
         handleButtons();
-        tryToGetButtonProd("research").setEnabled(tryToGetButtonProd("custom production").isEnabled());
 
 
     }
@@ -273,30 +244,9 @@ public class CoreUITracker implements EveryFrameScript {
             if (buttonAPI.isChecked()) {
                 buttonAPI.setChecked(false);
                 if (!currentTab.equals(buttonAPI)) {
-                    if (currentTab.getText().toLowerCase().contains("research") || currentTab.getText().toLowerCase().contains("custom production")) {
-                        pluginResearch.pauseSound();
-                        pausedMusic = true;
-
-                    }
                     ProductionUtil.getCurrentTab().removeComponent((UIComponentAPI) panelMap.get(currentTab));
-
                     currentTab = buttonAPI;
                     setMemFlag(currentTab.getText().toLowerCase());
-
-                    if (currentTab.getText().toLowerCase().contains("custom production")&&GPManager.isEnabled) {
-                        plugin.playSound();
-                        plugin.resetPanelOfMarketData();
-                        pausedMusic = false;
-                    }
-                    if (currentTab.getText().toLowerCase().contains("research")) {
-                        pluginResearch.playSound();
-                        pausedMusic = false;
-                    }
-                    if (currentTab.getText().toLowerCase().contains("megastructures")) {
-                        pluginMenu.resetMarketData();
-                        pausedMusic = false;
-                    }
-
                 }
 
 
@@ -317,30 +267,14 @@ public class CoreUITracker implements EveryFrameScript {
     }
 
     private void insertNewPanel(ButtonAPI tiedButton) {
-        if (plugin == null) {
-            plugin = new NidavelirMainPanelPlugin(false, Global.getSector().getCampaignUI().getCurrentCoreTab(), null);
-            plugin.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, plugin), null, null);
+        if (coreUiTech == null) {
+            coreUiTech = new TechnologyCoreUI();
+            coreUiTech.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, coreUiTech), getMemFlagForTechTab(), null);
         }
 
-        panelMap.put(tiedButton, plugin.getPanel());
+        panelMap.put(tiedButton, coreUiTech.getMainPanel());
     }
 
-    private void insertNewResearchPanel(ButtonAPI tiedButton) {
-        if (pluginResearch == null) {
-            pluginResearch = new AoTDResearchUI();
-            pluginResearch.init(Global.getSettings().createCustom(AoTDResearchUI.WIDTH + 6, AoTDResearchUI.HEIGHT, pluginResearch), null, null);
-        }
-
-        panelMap.put(tiedButton, pluginResearch.getPanel());
-    }
-    private void insertNewMegastructuresPanel(ButtonAPI tiedButton) {
-        if (pluginMenu == null) {
-            pluginMenu = new GPMegasturcutreMenu();
-            pluginMenu.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, pluginMenu));
-        }
-
-        panelMap.put(tiedButton, pluginMenu.getMainPanel());
-    }
     private Pair<CustomPanelAPI, ButtonAPI> createPanelButton(String buttonName, float width, float height, int bindingValue, boolean dissabled, TooltipMakerAPI.TooltipCreator onHoverTooltip) {
         CustomPanelAPI panel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(width, height, false);

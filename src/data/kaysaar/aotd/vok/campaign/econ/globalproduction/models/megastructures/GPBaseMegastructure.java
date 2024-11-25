@@ -90,6 +90,9 @@ public class GPBaseMegastructure {
 
         return costs;
     }
+    public void createAdditionalInfoForMega(TooltipMakerAPI tooltip){
+
+    }
     public HashMap<String,Integer>getProduction(HashMap<String,Float> penaltyMap){
         HashMap<String,Integer> production = new HashMap<>();
         for (GPMegaStructureSection megaStructureSection : megaStructureSections) {

@@ -51,7 +51,7 @@ public class MegastructureUIMisc {
 
         descriptionTooltip = titlePanel.createUIElement(descriptionSection,height,true);
         descriptionTooltip.addPara(mega.getSpec().getDescription(),5f);
-
+        mega.createAdditionalInfoForMega(descriptionTooltip);
         titlePanel.addUIElement(imageTootlip).inTL(0,0);
         titlePanel.addUIElement(descriptionTooltip).inTL(imageSection+5,0);
 

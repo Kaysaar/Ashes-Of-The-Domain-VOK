@@ -23,13 +23,7 @@ public class Policrystalizator extends BaseIndustry {
         supply(Commodities.METALS, market.getSize()+2);
         supply(Commodities.RARE_METALS, market.getSize()-2);
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORE, Commodities.RARE_ORE);
-        if(deficit.two>market.getSize()-4){
-            deficit.two = market.getSize()-4;
-            if(deficit.two<0){
-                deficit.two=0;
-            }
-        }
-        applyDeficitToProduction(2, deficit, AoTDCommodities.REFINED_METAL);
+        applyDeficitToProduction(3, deficit, AoTDCommodities.REFINED_METAL,Commodities.METALS,Commodities.RARE_METALS);
 
         if (!isFunctional()) {
             supply.clear();

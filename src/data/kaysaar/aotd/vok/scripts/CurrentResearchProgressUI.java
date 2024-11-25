@@ -207,7 +207,8 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 float buttonYBeginning = Global.getSettings().getScreenHeight() - 166;
                 if (!isHidden&&detector.determineIfHoversOverButton(buttonXBeginning, buttonYBeginning, buttonXBeginning + 170, buttonYBeginning, buttonXBeginning, buttonYBeginning - 20, buttonXBeginning + 170, buttonYBeginning - 20, Global.getSettings().getMouseX(), Global.getSettings().getMouseY())) {
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                   CoreUITracker.setMemFlag("research");
+                    CoreUITracker.setMemFlag("technology");
+                    CoreUITracker.setMemFlagForTechTab("research");
                    Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
                     event.consume();
                 }

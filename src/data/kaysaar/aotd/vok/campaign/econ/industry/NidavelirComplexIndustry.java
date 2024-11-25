@@ -21,6 +21,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class NidavelirComplexIndustry extends BaseIndustry {
@@ -30,13 +31,19 @@ public class NidavelirComplexIndustry extends BaseIndustry {
         try {
             if(!GPManager.getInstance().getMegastructuresBasedOnClass(NidavelirComplexMegastructure.class).isEmpty()){
                 GPBaseMegastructure mega = GPManager.getInstance().getMegastructuresBasedOnClass(NidavelirComplexMegastructure.class).get(0);
-                for (Map.Entry<String, Integer> entry : mega.getProduction().entrySet()) {
-                    int amountTotal = entry.getValue()/GPManager.scale;
-                    float accessibility = market.getAccessibilityMod().getFlatBonus();
-                    accessibility*=10;
-                    accessibility = (float) Math.floor(accessibility);
-                    supply(entry.getKey(), (int) Math.min(accessibility,amountTotal));
+                HashMap<String,Integer>map = mega.getProduction();
+                for (String commodity : GPManager.commodities) {
+                    if(map.containsKey(commodity)){
+                        int amountTotal = map.get(commodity)/GPManager.scale;
+                        float accessibility = market.getAccessibilityMod().getFlatBonus();
+                        accessibility*=10;
+                        accessibility = (float) Math.floor(accessibility);
+                        supply(commodity, (int) Math.min(accessibility,amountTotal));
+                    }
+
+
                 }
+
 
             }
         }
