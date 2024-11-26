@@ -16,6 +16,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;
 import data.kaysaar.aotd.vok.ui.AoTDResearchUI;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -107,8 +108,8 @@ public class CoreUITracker implements EveryFrameScript {
         if(toRemove!=null) {
             mainParent.removeComponent(toRemove);
         }
-        if (tryToGetButtonProd("technology") == null) {
-            insertButton(button, mainParent, "Technology", new TooltipMakerAPI.TooltipCreator() {
+        if (tryToGetButtonProd(getStringForCoreTab()) == null) {
+            insertButton(button, mainParent, "Research & Development", new TooltipMakerAPI.TooltipCreator() {
                 @Override
                 public boolean isTooltipExpandable(Object tooltipParam) {
                     return false;
@@ -121,9 +122,10 @@ public class CoreUITracker implements EveryFrameScript {
 
                 @Override
                 public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                    tooltip.addPara("test",5f);
+                    tooltip.addSectionHeading("Ashes of the Domain : Vaults of Knowledge",Alignment.MID,0f);
+                    tooltip.addPara("%s, %s and %s can be found here",5f,Color.ORANGE,"Research","Custom production","Megastructures");
                 }
-            }, tryToGetButtonProd("colonies"), 150, Keyboard.KEY_5, false);
+            }, tryToGetButtonProd("colonies"), 250, Keyboard.KEY_5, false);
         }
 
         if (shouldHandleReset()) {
@@ -166,7 +168,7 @@ public class CoreUITracker implements EveryFrameScript {
 
             }
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);
-            insertNewPanel(tryToGetButtonProd("technology"));
+            insertNewPanel(tryToGetButtonProd(getStringForCoreTab()));
 
 
         }
@@ -199,6 +201,10 @@ public class CoreUITracker implements EveryFrameScript {
         handleButtons();
 
 
+    }
+
+    public static @NotNull String getStringForCoreTab() {
+        return "research & development";
     }
 
     private static void removePanels(ArrayList<UIComponentAPI> componentAPIS, UIPanelAPI mainParent, UIComponentAPI panelToIgnore) {
@@ -245,6 +251,11 @@ public class CoreUITracker implements EveryFrameScript {
                 buttonAPI.setChecked(false);
                 if (!currentTab.equals(buttonAPI)) {
                     ProductionUtil.getCurrentTab().removeComponent((UIComponentAPI) panelMap.get(currentTab));
+                    if(buttonAPI.getText().toLowerCase().contains(getStringForCoreTab())){
+                        coreUiTech.playSound(coreUiTech.getCurrentlyChosen());
+                    } else if (currentTab.getText().toLowerCase().contains(getStringForCoreTab())) {
+                        coreUiTech.pauseSound();
+                    }
                     currentTab = buttonAPI;
                     setMemFlag(currentTab.getText().toLowerCase());
                 }

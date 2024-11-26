@@ -63,7 +63,7 @@ public class CWFailsafeNotification extends BaseMegastuctureIntelPlugin {
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if (buttonId == Button_Megastructure) {
-            CoreUITracker.setMemFlag("technology");
+            CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTab());
             CoreUITracker.setMemFlagForTechTab("megastructures");
             Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }

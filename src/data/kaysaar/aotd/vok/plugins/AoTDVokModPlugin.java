@@ -189,7 +189,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             }
         }
         GPManager.getInstance().reInitalize();
-
+        CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTab());
 //        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
 //            if(planet.isStar())continue;
 //            NidavelirShipyard shipyard = (NidavelirShipyard)planet.getStarSystem().addCustomEntity(null,"Nid","nid_shipyards",null).getCustomPlugin();
