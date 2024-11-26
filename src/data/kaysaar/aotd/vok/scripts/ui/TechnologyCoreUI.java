@@ -198,7 +198,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         if(button.getText().toLowerCase().contains("research")){
             pluginResearch.playSound();
         }
-        if(button.getText().toLowerCase().contains("megastructrures")){
+        if(button.getText().toLowerCase().contains("megastructures")){
             pluginMega.playSound();
         }
     }

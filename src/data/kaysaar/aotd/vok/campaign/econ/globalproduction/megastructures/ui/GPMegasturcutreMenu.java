@@ -188,7 +188,7 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
 
     @Override
     public void playSound() {
-
+        Global.getSoundPlayer().playCustomMusic(1, 1, "aotd_mega", true);
     }
 
     @Override
