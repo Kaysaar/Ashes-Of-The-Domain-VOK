@@ -11,6 +11,7 @@ import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -32,6 +33,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static data.kaysaar.aotd.vok.misc.AoTDMisc.placePopUpUI;
 import static org.lwjgl.opengl.GL11.*;
 
 public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
@@ -131,9 +133,8 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         specialProjectListPanel = mainPanel.createCustomPanel(300, HEIGHT - 150, null);
         specialProjectListTooltip = specialProjectListPanel.createUIElement(300, HEIGHT - 150, false);
         renderer.setPanel(specialProjectListPanel);
-        helpPanel = mainPanel.createCustomPanel(300, 51, null);
-        helpTooltip = helpPanel.createUIElement(300, 51, false);
-        renderer.setPanel(helpPanel);
+        helpPanel = mainPanel.createCustomPanel(30, 30, null);
+        helpTooltip = helpPanel.createUIElement(30, 30, false);
 
         techTreeButtonPanelUI = new TechTreeButtonPanel();
         techTreeButtonPanelUI.init(mainPanel, techTreeButtonPanel, techTreeButtonTooltip);
@@ -152,8 +153,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         helpButtonPanelYU.init(mainPanel, helpPanel, helpTooltip);
         helpButtonPanelYU.createUI();
         helpButtonPanelYU.placeTooltip(0, 0);
-        helpButtonPanelYU.placeSubPanel(0, HEIGHT - 50);
-        renderer.setPanel(helpButtonPanelYU.panel);
+        helpButtonPanelYU.placeSubPanel(Global.getSettings().getScreenWidth()-45, 0);
         if (currentlyFocused != null) {
 
             specialProjectTitlePanel = mainPanel.createCustomPanel(WIDTH - 300, 51, null);
@@ -201,14 +201,14 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
 
         techTreeCoreUI.currentModToShow = currentModToShow;
         UILinesRenderer renderer = new UILinesRenderer(0f);
-        researchCenterPanel = mainPanel.createCustomPanel(300, HEIGHT - 150, renderer);
-        researchCenterTooltip = researchCenterPanel.createUIElement(300, HEIGHT - 150, false);
+        researchCenterPanel = mainPanel.createCustomPanel(300, HEIGHT - 100, renderer);
+        researchCenterTooltip = researchCenterPanel.createUIElement(300, HEIGHT - 100, false);
         renderer.setPanel(researchCenterPanel);
-        helpPanel = mainPanel.createCustomPanel(300, 50, null);
-        helpTooltip = helpPanel.createUIElement(300, 50, false);
+        helpPanel = mainPanel.createCustomPanel(30, 30, null);
+        helpTooltip = helpPanel.createUIElement(30, 30, false);
         HorizontalTooltipPlugin plugin = new HorizontalTooltipPlugin();
-        techTreePanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT - 20, plugin);
-        plugin.init(techTreePanel, WIDTH - 300, HEIGHT - 20, true, techTreeCoreUI.calculateWidthAndHeight().one, techTreeCoreUI.calculateWidthAndHeight().two);
+        techTreePanel = mainPanel.createCustomPanel(WIDTH - 300, HEIGHT - 35, plugin);
+        plugin.init(techTreePanel, WIDTH - 300, HEIGHT - 35, true, techTreeCoreUI.calculateWidthAndHeight().one, techTreeCoreUI.calculateWidthAndHeight().two);
         horizontalTooltipMaker = plugin.getHorizontalTooltipMaker();
         techTreeTooltip = horizontalTooltipMaker.getMainTooltip();
         buttonPanel = mainPanel.createCustomPanel(300, 100, null);
@@ -219,7 +219,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         buttonPanelUI = new SpecialProjectButtonPanel();
 
         researchCenterPanelUI.init(mainPanel, researchCenterPanel, researchCenterTooltip);
-        researchCenterPanelUI.setHeight(HEIGHT - 150);
+        researchCenterPanelUI.setHeight(HEIGHT - 100);
         researchCenterPanelUI.createUI();
         researchCenterPanelUI.placeTooltip(0, 0);
         researchCenterPanelUI.placeSubPanel(0, 100);
@@ -227,8 +227,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         helpButtonPanelYU.init(mainPanel, helpPanel, helpTooltip);
         helpButtonPanelYU.createUI();
         helpButtonPanelYU.placeTooltip(0, 0);
-        helpButtonPanelYU.placeSubPanel(0, HEIGHT - 50);
-        renderer.setPanel(helpButtonPanelYU.panel);
+        helpButtonPanelYU.placeSubPanel(Global.getSettings().getScreenWidth()-47, 0);
         buttonPanelUI.init(mainPanel, buttonPanel, buttonPanelTooltip);
         buttonPanelUI.createUI();
         buttonPanelUI.placeTooltip(0, 0);
@@ -237,7 +236,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
 
         techTreeCoreUI.init(mainPanel, techTreePanel, techTreeTooltip);
 
-        techTreeCoreUI.createUI(researchCenterPanel.getPosition().getX() + researchCenterPanel.getPosition().getWidth() + 10, -2);
+        techTreeCoreUI.createUI(researchCenterPanel.getPosition().getX() + researchCenterPanel.getPosition().getWidth() + 10, 33);
         horizontalTooltipMaker.getHorizontalScrollbar().setPosition(techTreePanel.getPosition().getX() + spaceBetweenWidth, techTreePanel.getPosition().getY() + spaceBetweenHeight - 15);
         horizontalTooltipMaker.getHorizontalScrollbar().setScrollbarDimensions(30, 10);
 
@@ -550,26 +549,8 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
                         for (ResearchOption allResearchOption : techTreeCoreUI.allResearchOptions) {
                             if (allResearchOption.Id.equals(splitted[1])) {
                                 wantsToKnow = allResearchOption;
-                                ResearchInfoUI ui = new ResearchInfoUI(this, button, wantsToKnow, researchOptionPanel);
-                                float width1 = 410;
-                                float height1 = ui.createUIMockup(Global.getSettings().createCustom(410, 660, null));
-                                CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, ui);
-
-                                float x = button.getPosition().getX() + 110;
-                                float y = button.getPosition().getY() + 200;
-                                if (x + width1 >= Global.getSettings().getScreenWidth()) {
-                                    float diff = x + width1 - Global.getSettings().getScreenWidth();
-                                    x = x - diff - 5;
-
-                                }
-                                if (y - height1 <= 0) {
-                                    y = height1;
-                                }
-                                if (y > Global.getSettings().getScreenHeight()) {
-                                    y = Global.getSettings().getScreenHeight() - 10;
-                                }
-
-                                ui.init(panelAPI, x, y, false);
+                                PopUpUI ui = new ResearchInfoUI(this, button, wantsToKnow, researchOptionPanel);
+                                placePopUpUI(ui, button,410,660);
 
 //
 //                                if(splitted[0].equals("research")){
@@ -702,11 +683,20 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
                 }
             }
         }
+        if(helpButtonPanelYU!=null&&helpButtonPanelYU.getButton()!=null){
+            if(helpButtonPanelYU.getButton().isChecked()){
+                helpButtonPanelYU.getButton().setChecked(false);
+                PopUpUI ui = new HelpPanelPopUp();
+                placePopUpUI(ui,   helpButtonPanelYU.getButton(),700,700);
+            }
+        }
         if (mustReset && !mustHardReset) reset(true, false, null);
 
         if (mustReset && mustHardReset) reset(false, false, null);
 
     }
+
+
 
     @Override
     public void processInput(List<InputEventAPI> events) {
@@ -929,6 +919,7 @@ public class AoTDResearchUI implements CustomUIPanelPlugin, SoundUIManager {
         if (mainPanel == null) {
             UILinesRenderer renderer = new UILinesRenderer(10f);
             mainPanel = this.panel.createCustomPanel(WIDTH, HEIGHT, renderer);
+
             createUIForTechInfo();
             renderer.setPanel(mainPanel);
             if (dialog != null) {

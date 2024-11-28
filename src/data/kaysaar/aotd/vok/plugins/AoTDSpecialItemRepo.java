@@ -69,7 +69,7 @@ public class AoTDSpecialItemRepo {
             protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
                                                   InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
                 List<String> commodities = new ArrayList<String>();
-                text.addPara(pre+" Increase production of advanced components by %s",5f,Color.ORANGE,""+6);
+                text.addPara("Increase production of advanced components by %s",5f,Color.ORANGE,""+6);
                 text.addPara( "Gain ability to produce AI cores.",
                         pad);
             }

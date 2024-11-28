@@ -509,7 +509,7 @@ public class GPManager {
             specs.add(spec);
         }
         for (CommoditySpecAPI s : Global.getSettings().getAllCommoditySpecs()) {
-            if (s.hasTag("ai_core") && !s.hasTag("no_drop") && !s.getId().equals("ai_cores")) {
+            if (s.hasTag("ai_core") && !s.hasTag("no_drop") && !s.getId().equals("ai_cores")&&s.hasTag("aotd_ai_core")) {
                 GPSpec spec = GPSpec.getSpecFromAICore(s);
                 specs.add(spec);
             }

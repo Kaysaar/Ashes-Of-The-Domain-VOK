@@ -69,6 +69,9 @@ public class PopUpUI implements CustomUIPanelPlugin {
 
 
     }
+    public float createUIMockup(CustomPanelAPI panelAPI){
+        return 0f;
+    }
     @Override
     public void renderBelow(float alphaMult) {
         if(panelToInfluence != null){

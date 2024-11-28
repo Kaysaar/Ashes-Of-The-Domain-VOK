@@ -64,7 +64,6 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
 
         if(currentlyChosen!=null){
             panelForPlugins.addComponent(panelMap.get(currentlyChosen)).inTL(0,0);
-            playSound(currentlyChosen);
         }
         this.mainPanel.addComponent(panelForPlugins).inTL(0,35);
     }

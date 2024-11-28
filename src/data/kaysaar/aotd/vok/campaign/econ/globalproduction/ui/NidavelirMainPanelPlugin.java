@@ -14,37 +14,31 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.ProductionDataPanel;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.gatheringpoint.AoTDGatehringPointPlugin;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhover.ButtonOnHoverInfo;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhover.CommodityInfo;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhover.GuideTootltip;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.optionpanels.*;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
-
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lwjgl.input.Keyboard;
-
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.*;
 import java.util.List;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
 public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIManager {
-    PositionAPI p;
     InteractionDialogAPI dialog;
     CustomVisualDialogDelegate.DialogCallbacks callbacks;
     CustomPanelAPI panel;
     CoreUITabId prevCore;
     Object param;
+    ButtonAPI helpButton;
     public static int maxItemsPerPage = 70;
     public static int maxItemsPerPageWEP = 45;
     boolean showProjectList;
@@ -109,7 +103,10 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
 
         this.panel = panel;
         tooltipMakerAPI = panel.createUIElement(30, 30, false);
+         helpButton =  tooltipMakerAPI.addAreaCheckbox("",null,Global.getSettings().getBasePlayerColor(), Global.getSettings().getBasePlayerColor(),Global.getSettings().getBrightPlayerColor(),29,30,0f);
+    helpButton.getPosition().inTL(0,0);
         tooltipMakerAPI.addImage(Global.getSettings().getSpriteName("ui_campaign_components", "question"), 30, 30, 0f);
+        tooltipMakerAPI.getPrev().getPosition().inTL(0,0);
         //tooltipMakerAPI.addCustom(AoTDGatehringPointPlugin.getMarketEntitySpriteWithName(200,60,55,Misc.getPlayerMarkets(true).get(1)),5f);
         tooltipMakerAPI.addTooltipToPrevious(new GuideTootltip(), TooltipMakerAPI.TooltipLocation.BELOW);
         isShowingUI = true;
@@ -590,7 +587,13 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
 
     @Override
     public void advance(float amount) {
-
+        if(helpButton!=null){
+            if(helpButton.isChecked()){
+                helpButton.setChecked(false);
+                HelpPopUpUINid nid = new HelpPopUpUINid(true);
+                AoTDMisc.placePopUpUI(nid,helpButton,700,400);
+            }
+        }
         if (tooltipOfOrders != null) {
             offset = tooltipOfOrders.getExternalScroller().getYOffset();
         }

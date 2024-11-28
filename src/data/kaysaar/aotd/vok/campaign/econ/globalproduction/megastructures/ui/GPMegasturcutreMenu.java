@@ -10,8 +10,10 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.co
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.HelpPopUpUINid;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhover.CommodityInfo;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 
 import java.awt.*;
@@ -29,6 +31,8 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
     public CustomPanelAPI currentMegastructureSectionsPanel;
     public CustomPanelAPI currentMegastructureSelected;
     public CustomPanelAPI totalCostOfMegastructuresPanel;
+    public CustomPanelAPI helpButtonPanel;
+    public ButtonAPI helpButton;
     public static float staticWidthOfMegaButtons = 450;
     public static float totalCostHeight = 100f;
     public GPIndividualMegastructreMenu currentOne;
@@ -120,7 +124,17 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
         panelOfMarketData.addUIElement(tooltip).inTL(0, 0);
         panel.addComponent(panelOfMarketData).inTL(5 + width / 2, 5);
     }
+    public void createHelpButtonPanel(){
+        CustomPanelAPI panel = this.panel.createCustomPanel(30,30,null);
+        TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(30, 30, false);
+        helpButton =  tooltipMakerAPI.addAreaCheckbox("",null,Global.getSettings().getBasePlayerColor(), Global.getSettings().getBasePlayerColor(),Global.getSettings().getBrightPlayerColor(),29,30,0f);
+        helpButton.getPosition().inTL(0,0);
+        tooltipMakerAPI.addImage(Global.getSettings().getSpriteName("ui_campaign_components", "question"), 30, 30, 0f);
+        tooltipMakerAPI.getPrev().getPosition().inTL(0,0);
+        panel.addUIElement(tooltipMakerAPI).inTL(0,0);
+        this.panel.addComponent(panel).inTL(Global.getSettings().getScreenWidth()-45,0);
 
+    }
     @Override
     public void positionChanged(PositionAPI position) {
 
@@ -138,6 +152,13 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
 
     @Override
     public void advance(float amount) {
+        if(helpButton!=null){
+            if(helpButton.isChecked()){
+                helpButton.setChecked(false);
+                HelpPopUpUINid nid = new HelpPopUpUINid(false);
+                AoTDMisc.placePopUpUI(nid,helpButton,700,400);
+            }
+        }
         if(buttonsOfMegastructures!=null){
             for (ButtonAPI buttonsOfMegastructure : buttonsOfMegastructures) {
                 if(buttonsOfMegastructure.isChecked()){
@@ -169,6 +190,7 @@ public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager 
         this.manager = GPManager.getInstance();
         createMarketResourcesPanel();
         createMegastructureList();
+        createHelpButtonPanel();
         createCurrentMegastructureTab();
     }
 

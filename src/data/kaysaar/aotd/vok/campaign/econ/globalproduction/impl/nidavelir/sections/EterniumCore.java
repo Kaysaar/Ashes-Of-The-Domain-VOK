@@ -33,16 +33,22 @@ public class EterniumCore extends NidavelirBaseSection {
         int manpowerAssigned = getEffectiveManpowerForEffects();
         int points = (int) (manpowerAssigned *effectivePercent*getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));;
         tooltip.addPara("For each assigned manpower point to section:", 5f);
-        tooltip.addPara("Increase speed of special projects completion by %s", 3f, Color.ORANGE, points+"%");
-        printEffects(tooltip,manpowerAssigned,isAutomated);
+        createTooltipForMainSection(tooltip);
     }
     @Override
     public void unapplyEffectOfSection() {
         GPManager.getInstance().getSpecialProjSpeed().unmodifyMult("aotd_nidav");
     }
-
     @Override
+    public void createTooltipForMainSection(TooltipMakerAPI tooltip) {
+
+        int manpowerAssigned = getEffectiveManpowerForEffects();
+        int points = (int) (manpowerAssigned * effectivePercent * getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));
+        tooltip.addPara("Production speed of %s is increased by %s", 3f, Color.ORANGE, "special projects", points + "%");
+    }
+        @Override
     public void applyEffectOfSection() {
+            effectivePercent =5;
         float percent = (float) effectivePercent /100;
         float bonus = percent*getEffectiveManpowerForEffects();
         bonus*=getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0]));
@@ -57,7 +63,7 @@ public class EterniumCore extends NidavelirBaseSection {
     @Override
     public void printMenu(TooltipMakerAPI tooltip, int manpowerToBeAssigned, boolean wantToAutomate) {
         int effective = effectivePercent * manpowerToBeAssigned;
-        tooltip.setParaFont(Fonts.INSIGNIA_LARGE);
+
         if (!wantToAutomate) {
             tooltip.addPara("Currently assigned manpower to this structure %s", 10f, Color.ORANGE, "" + (manpowerToBeAssigned));
         }

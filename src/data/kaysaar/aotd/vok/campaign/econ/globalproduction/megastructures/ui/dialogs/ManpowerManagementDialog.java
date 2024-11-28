@@ -18,7 +18,7 @@ public class ManpowerManagementDialog extends BaseSliderDialog{
 
     @Override
     public void populateTooltipTop(TooltipMakerAPI tooltip, int effectiveSegment) {
-
+        tooltip.setParaInsigniaLarge();
         section.printMenu(tooltip,effectiveSegment+1,false);
 
     }

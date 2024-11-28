@@ -32,15 +32,23 @@ public class BulwarkFoundry extends NidavelirBaseSection {
         int manpowerAssigned = getEffectiveManpowerForEffects();
         int points = (int) (manpowerAssigned *effectivePercent*getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));;
         tooltip.addPara("For each assigned manpower point to section:",5f);
-        tooltip.addPara("Production speed of %s is increased by %s",3f,Color.ORANGE,"cruisers and capitals",points+"%");
+        createTooltipForMainSection(tooltip);
     }
+    @Override
+    public void createTooltipForMainSection(TooltipMakerAPI tooltip) {
+
+        int manpowerAssigned = getEffectiveManpowerForEffects();
+        int points = (int) (manpowerAssigned *effectivePercent*getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));;
+        tooltip.addPara("Production speed of %s is increased by %s",3f,Color.ORANGE,"cruisers and capitals",points+"%");
+
+    }
+
     @Override
     public void unapplyEffectOfSection() {
         GPManager.getInstance().getCruiserCapitalSpeed().unmodifyMult("aotd_nidav");
     }
     @Override
     public void printMenu(TooltipMakerAPI tooltip, int manpowerToBeAssigned, boolean wantToAutomate) {
-        tooltip.setParaFont(Fonts.INSIGNIA_LARGE);
         if (!wantToAutomate) {
             tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerToBeAssigned));
         }
@@ -48,6 +56,7 @@ public class BulwarkFoundry extends NidavelirBaseSection {
     }
     @Override
     public void applyEffectOfSection() {
+        effectivePercent =5;
         float percent = (float) effectivePercent /100;
         float bonus = percent*getEffectiveManpowerForEffects();
         bonus*=getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0]));
