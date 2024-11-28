@@ -52,7 +52,7 @@ public class ResearchInfoUI extends PopUpUI {
         createUIMockup(panelAPI);
         panelAPI.addComponent(mainPanel).inTL(0, 0);
     }
-
+@Override
     public float createUIMockup(CustomPanelAPI panelAPI) {
         mainPanel = panelAPI.createCustomPanel(panelAPI.getPosition().getWidth(), panelAPI.getPosition().getHeight(), null);
 

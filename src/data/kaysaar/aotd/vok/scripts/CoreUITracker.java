@@ -43,6 +43,7 @@ public class CoreUITracker implements EveryFrameScript {
     HashMap<ButtonAPI, Object> panelMap = null;
     ButtonAPI currentTab = null;
     String nameOfCurrentTab;
+    boolean tunedMusicOnce= false;
     public static boolean sendSignalToOpenCore = false;
     public static final String memFlag = "$aotd_outpost_state";
     public static final String memFlag2 = "$aotd_technology_tab_state";
@@ -90,6 +91,7 @@ public class CoreUITracker implements EveryFrameScript {
                 coreUiTech = null;
 
             }
+            tunedMusicOnce = false;
             removed = false;
             insertedOnce = false;
             return;
@@ -117,13 +119,13 @@ public class CoreUITracker implements EveryFrameScript {
 
                 @Override
                 public float getTooltipWidth(Object tooltipParam) {
-                    return 400;
+                    return 500;
                 }
 
                 @Override
                 public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
                     tooltip.addSectionHeading("Ashes of the Domain : Vaults of Knowledge",Alignment.MID,0f);
-                    tooltip.addPara("%s, %s and %s can be found here",5f,Color.ORANGE,"Research","Custom production","Megastructures");
+                    tooltip.addPara("In this tab, you can find the research tab to manage your technological advancement and special technology projects, the custom order tab to build new ships and weapons as well as launch special military projects, and the megastructure tab to manage the Domain-era marvels you've seized or built.",5f);
                 }
             }, tryToGetButtonProd("colonies"), 250, Keyboard.KEY_5, false);
         }
@@ -188,7 +190,14 @@ public class CoreUITracker implements EveryFrameScript {
                 }
             }
         }
-
+        if(currentTab.getText().toLowerCase().contains(getStringForCoreTab())){
+            if(!tunedMusicOnce){
+                tunedMusicOnce = true;
+                if(coreUiTech.getCurrentlyChosen()!=null){
+                    coreUiTech.playSound(coreUiTech.getCurrentlyChosen());
+                }
+            }
+        }
         if (!hasComponentPresent((UIComponentAPI) panelMap.get(currentTab))) {
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);
             mainParent.addComponent((UIComponentAPI) panelMap.get(currentTab));
@@ -252,7 +261,9 @@ public class CoreUITracker implements EveryFrameScript {
                 if (!currentTab.equals(buttonAPI)) {
                     ProductionUtil.getCurrentTab().removeComponent((UIComponentAPI) panelMap.get(currentTab));
                     if(buttonAPI.getText().toLowerCase().contains(getStringForCoreTab())){
-                        coreUiTech.playSound(coreUiTech.getCurrentlyChosen());
+                        if(coreUiTech.getCurrentlyChosen()!=null){
+                            coreUiTech.playSound(coreUiTech.getCurrentlyChosen());
+                        }
                     } else if (currentTab.getText().toLowerCase().contains(getStringForCoreTab())) {
                         coreUiTech.pauseSound();
                     }

@@ -213,8 +213,8 @@ public class AoTDDataInserter {
                         if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
                         AoTDMegastructureRules.putMegastructure(planet,"aotd_nidavelir");
                         planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
-                        planet.setName("Yggdrasil");
-                        starSystem.setBaseName("Yggdrasil");
+                        String token = planet.getMarket().addCondition("aotd_nidavelir_complex");
+                        planet.getMarket().getSpecificCondition(token).setSurveyed(false);
                         return;
                     }
                 }

@@ -188,8 +188,12 @@ public class AoTDVokModPlugin extends BaseModPlugin {
                 option.havePaidForResearch = true;
             }
         }
+        Global.getSettings().getCommoditySpec(Commodities.GAMMA_CORE).getTags().add("aotd_ai_core");
+        Global.getSettings().getCommoditySpec(Commodities.BETA_CORE).getTags().add("aotd_ai_core");
+        Global.getSettings().getCommoditySpec(Commodities.ALPHA_CORE).getTags().add("aotd_ai_core");
         GPManager.getInstance().reInitalize();
         CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTab());
+
 //        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
 //            if(planet.isStar())continue;
 //            NidavelirShipyard shipyard = (NidavelirShipyard)planet.getStarSystem().addCustomEntity(null,"Nid","nid_shipyards",null).getCustomPlugin();

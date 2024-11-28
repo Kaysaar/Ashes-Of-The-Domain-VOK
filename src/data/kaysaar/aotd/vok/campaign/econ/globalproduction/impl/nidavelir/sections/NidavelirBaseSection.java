@@ -84,6 +84,9 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
 
 
     }
+    public void createTooltipForMainSection(TooltipMakerAPI tooltip) {
+
+    }
     public void printMenu(TooltipMakerAPI  tooltip, int manpowerToBeAssigned, boolean wantToAutomate){
 
     }

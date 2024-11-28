@@ -42,10 +42,12 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     @Override
     public void createAdditionalInfoForMega(TooltipMakerAPI tooltip) {
         tooltip.addSectionHeading("Current effects", Alignment.MID,5f);
-        tooltip.addPara("Speeds up special projects by %s",5f,Color.ORANGE,"70%");
-        tooltip.addPara("Gives all patrol fleets %s S-mods",5f,Color.ORANGE,"2-3");
-        tooltip.addPara("Increases fleet size in this market by %s",5f,Color.ORANGE,"100%");
-        tooltip.addPara("Allows one time special project to be repeatable",Color.ORANGE,5f);
+        for (NidavelirBaseSection section : getSections()) {
+            if(section.isRestored){
+                section.createTooltipForMainSection(tooltip);
+            }
+
+        }
 
 
 
