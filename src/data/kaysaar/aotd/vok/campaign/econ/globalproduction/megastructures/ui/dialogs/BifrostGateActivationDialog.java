@@ -20,10 +20,10 @@ public class BifrostGateActivationDialog extends BasePopUpDialog{
     public void createContentForDialog(TooltipMakerAPI tooltip, float width) {
         tooltip.setParaInsigniaLarge();
         if(!section.isDisabled()){
-            tooltip.addPara("De-activation of gate will result in lowering monthly upkeep to %s and lowering resource upkeep of purified transplutonics to %s, but it won't be usable untill activated again!",5f, Color.ORANGE, Misc.getDGSCredits(section.getUpkeep()/2),"0");
+            tooltip.addPara("De-activation of gate will result in lowering monthly upkeep to %s and lowering resource upkeep of purified transplutonics to %s, but it won't be usable untill activated again!",5f, Color.ORANGE, Misc.getDGSCredits(section.getUpkeep(false)/2),"0");
         }
         else{
-            tooltip.addPara("Activation of gate will result in monthly upkeep of %s and increasing resource upkeep of purified transplutonics to %s",5f,Color.ORANGE, Misc.getDGSCredits(section.getUpkeep()*2),"10");
+            tooltip.addPara("Activation of gate will result in monthly upkeep of %s and increasing resource upkeep of purified transplutonics to %s",5f,Color.ORANGE, Misc.getDGSCredits(section.getUpkeep(false)*2),"10");
         }
     }
 

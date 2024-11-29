@@ -67,11 +67,16 @@ public class GPMegaStructureSection {
 
     }
 
-    public float getUpkeep() {
+    public float getUpkeep(boolean override) {
         upkeepMult.unmodify();
         float upkeep = getSpec().getRunningCost();
         if(isRestoring){
             upkeep= getSpec().getRenovationCost();
+        }
+        else{
+            if(!isRestored&&!override){
+                upkeep*=0.2f;
+            }
         }
         upkeep+=addAdditionalUpkeep();
         for (GPMegaStructureSection megaStructureSection : megastructureTiedTo.getMegaStructureSections()) {
@@ -207,7 +212,7 @@ public class GPMegaStructureSection {
 
     }
     public void createUpkeepSection(TooltipMakerAPI tooltip, float width) {
-        tooltip.addPara("Current monthly upkeep : %s", 5f, Color.ORANGE, Misc.getDGSCredits(getUpkeep()));
+        tooltip.addPara("Current monthly upkeep : %s", 5f, Color.ORANGE, Misc.getDGSCredits(getUpkeep(false)));
         tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed(width*1.5f, 20, 20, getGPUpkeep(), getProduction(GPManager.getInstance().getPenaltyMap())), 5f);
 
 

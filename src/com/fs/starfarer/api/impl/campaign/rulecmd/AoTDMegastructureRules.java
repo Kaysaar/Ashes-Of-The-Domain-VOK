@@ -40,20 +40,28 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
             dialog.getOptionPanel().addOption("Leave", "defaultLeave");
             dialog.getOptionPanel().setShortcut("defaultLeave", Keyboard.KEY_ESCAPE, false, false, false, true);
         }
-        if(arg.equals("researchedTech")){
-            if(!AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ANALYSIS)){
-                    if(token.getMemory().contains(GPBaseMegastructure.memKey)){
-                            dialog.getOptionPanel().setEnabled("aotd_claim_megastructure",false);
-                        dialog.getOptionPanel().setTooltip("aotd_claim_megastructure","We need to research first Megastructure Analysis!");
-                        dialog.getTextPanel().addPara("With our current technological advancements, it is not advised to take control of this megastructure, due to massive logistical requirements to restore it!");
-                        return AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ANALYSIS);
-                    }
+        if (arg.equals("researchedTech")) {
+            if (!AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ANALYSIS)) {
+                if (token.getMemory().contains(GPBaseMegastructure.memKey)) {
+                    dialog.getOptionPanel().setEnabled("aotd_claim_megastructure", false);
+                    dialog.getOptionPanel().setTooltip("aotd_claim_megastructure", "We need to research first Megastructure Analysis!");
+                    dialog.getTextPanel().addPara("With our current technological advancements, it is not advised to take control of this megastructure, due to massive logistical requirements to restore it!");
+                    return AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ANALYSIS);
+                } else {
+                    return true;
+                }
 
 
+            } else {
+                if (token.getMemory().contains(GPBaseMegastructure.memKey)) {
+                    GPBaseMegastructure megastructure = (GPBaseMegastructure) token.getMemory().get(GPBaseMegastructure.memKey);
+                    megastructure.createTooltipInfoBeforeClaiming(dialog);
+                    return true;
+                }
             }
 
         }
-        if(arg.equals("researchedReciver")){
+        if (arg.equals("researchedReciver")) {
             return AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.HP_ENERGY_DISTRIB);
         }
 
@@ -108,7 +116,7 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
     public static void claimMegastructureManually(InteractionDialogAPI dialogAPI, SectorEntityToken token, String specOfmegastructure) {
         GPBaseMegastructure megastructure;
         GPMegaStructureSpec spec = GPManager.getInstance().getMegaSpecFromList(specOfmegastructure);
-        if(token!=null){
+        if (token != null) {
             token.setFaction(Factions.PLAYER);
             if (token.getMemory().contains(GPBaseMegastructure.memKey)) {
                 megastructure = (GPBaseMegastructure) token.getMemory().get(GPBaseMegastructure.memKey);
@@ -120,8 +128,7 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
             }
             GPManager.getInstance().addMegastructureToList(megastructure);
             token.getMemory().set(GPBaseMegastructure.memKey, megastructure);
-        }
-        else{
+        } else {
             megastructure = spec.getScript();
             if (!megastructure.wasInitalized) {
                 megastructure.trueInit(spec.getMegastructureID(), token);
@@ -133,6 +140,7 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
         Global.getSector().getIntelManager().addIntel(intel, false);
         Global.getSector().getPlayerFleet().getCommanderStats().addStoryPoints(1);
     }
+
     public static GPBaseMegastructure putMegastructure(SectorEntityToken token, String specOfmegastructure) {
         GPBaseMegastructure megastructure;
         GPMegaStructureSpec spec = GPManager.getInstance().getMegaSpecFromList(specOfmegastructure);
@@ -140,7 +148,7 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
         if (!megastructure.wasInitalized) {
             megastructure.trueInit(spec.getMegastructureID(), token);
         }
-        token.getMemory().set(GPBaseMegastructure.memKey,megastructure);
+        token.getMemory().set(GPBaseMegastructure.memKey, megastructure);
         return megastructure;
     }
 }
