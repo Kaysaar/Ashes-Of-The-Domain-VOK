@@ -201,7 +201,7 @@ public class AoTDDataInserter {
             List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
             Collections.shuffle(starSystems);
             for (StarSystemAPI starSystem : starSystems) {
-                if (starSystem.getTags().contains(Tags.THEME_RUINS_MAIN)) {
+                if (starSystem.getTags().contains(Tags.THEME_DERELICT)) {
                     for (PlanetAPI planet : starSystem.getPlanets()) {
                         if (planet.isStar()) continue;
                         if (planet.isMoon()) continue;
@@ -210,6 +210,7 @@ public class AoTDDataInserter {
                         if (planet.hasTag(Tags.MISSION_ITEM)) continue;
                         if (planet.isStar()) continue;
                         if (planet.isGasGiant()) continue;
+                        if(!planet.getMarket().hasCondition(Conditions.RUINS_VAST))continue;
                         if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
                         AoTDMegastructureRules.putMegastructure(planet,"aotd_nidavelir");
                         planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);

@@ -109,7 +109,7 @@ public class BeyondQuest  extends BaseCommandPlugin {
             ListenerUtil.reportExtraSalvageShown(planet);
         }
         salvage.addSpecial(new SpecialItemData("omega_processor", null), 1);
-
+        salvage.addSpecial(new SpecialItemData("turing_engine", null), 1);
         salvage.sort();
 
         dialog.getVisualPanel().showLoot("Salvaged", salvage, false, true, true, new CoreInteractionListener() {

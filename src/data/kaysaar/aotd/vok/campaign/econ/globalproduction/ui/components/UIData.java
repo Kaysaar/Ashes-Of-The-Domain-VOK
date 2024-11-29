@@ -23,6 +23,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhover.ProducitonHoverInfo;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 
@@ -101,16 +102,6 @@ public class UIData {
                 break;
             }
         }
-        CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(Global.getSector().getPlayerFaction().getId(), "test", false);
-
-        FleetMemberAPI memberAPI = Global.getFactory().createFleetMember(FleetMemberType.SHIP, Global.getSettings().createEmptyVariant(variantId, option.getSpec().getShipHullSpecAPI()));
-        fleet.getCargo().addCrew((int) memberAPI.getMinCrew());
-        fleet.getCargo().addSupplies(memberAPI.getCargoCapacity() - 10);
-        fleet.getCargo().addFuel(memberAPI.getFuelCapacity());
-        fleet.getFleetData().addFleetMember(memberAPI);
-        memberAPI.getRepairTracker().setCR(70);
-        memberAPI.getRepairTracker().computeRepairednessFraction();
-        final FleetMemberAPI member = memberAPI;
         LabelAPI size = mainTooltip.addPara(Misc.getHullSizeStr(option.getSpec().getShipHullSpecAPI().getHullSize()), 0f);
         LabelAPI type = mainTooltip.addPara(AoTDMisc.getType(option.getSpec().getShipHullSpecAPI()), 0f);
         LabelAPI designType = mainTooltip.addPara(option.getSpec().getShipHullSpecAPI().getManufacturer(), Misc.getDesignTypeColor(option.getSpec().getShipHullSpecAPI().getManufacturer()), 0f);
@@ -123,23 +114,7 @@ public class UIData {
         CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP, HEIGHT_OF_BUTTONS, option.getSpec());
         mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
         mainTooltip.addCustom(panelImage.one, 5f).getPosition().inTL(0, 4);
-        final CustomPanelAPI panelAPIs = ShipInfoGenerator.getShipImage(option.getSpec().getShipHullSpecAPI(), 250, null).one;
-        mainTooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
-            @Override
-            public boolean isTooltipExpandable(Object tooltipParam) {
-                return false;
-            }
-
-            @Override
-            public float getTooltipWidth(Object tooltipParam) {
-                return 1000;
-            }
-
-            @Override
-            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                ShipInfoGenerator.generate(tooltip, member, null, panelAPIs, 990);
-            }
-        }, TooltipMakerAPI.TooltipLocation.BELOW);
+        mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,false);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
         return new UiPackage(panel, panelImage.two, option, button);
 
@@ -182,22 +157,7 @@ public class UIData {
         CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP, HEIGHT_OF_BUTTONS, option.getSpec());
         mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
         mainTooltip.addCustom(panelImage.one, 5f).getPosition().inTL(0, 8);
-        mainTooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
-            @Override
-            public boolean isTooltipExpandable(Object tooltipParam) {
-                return false;
-            }
-
-            @Override
-            public float getTooltipWidth(Object tooltipParam) {
-                return 400;
-            }
-
-            @Override
-            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                WeaponInfoGenerator.generate(tooltip, option.getSpec().getWeaponSpec(), getTooltipWidth(tooltipParam));
-            }
-        }, TooltipMakerAPI.TooltipLocation.BELOW);
+        mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,false);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
         return new UiPackage(panel, panelImage.two, option, button);
 
@@ -242,22 +202,7 @@ public class UIData {
         mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
         mainTooltip.addCustom(panelImage, 5f).getPosition().inTL(0, 4);
         final CargoStackAPI stack = Global.getFactory().createCargoStack(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(option.getSpec().getItemSpecAPI().getId(), null), null);
-        mainTooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
-            @Override
-            public boolean isTooltipExpandable(Object tooltipParam) {
-                return false;
-            }
-
-            @Override
-            public float getTooltipWidth(Object tooltipParam) {
-                return 500;
-            }
-
-            @Override
-            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                stack.getPlugin().createTooltip(tooltip, expanded, null, null);
-            }
-        }, TooltipMakerAPI.TooltipLocation.BELOW);
+        mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,false);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
         return new UiPackage(panel, option, button);
     }
@@ -285,23 +230,7 @@ public class UIData {
         CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP, HEIGHT_OF_BUTTONS, option.getSpec());
         mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
         mainTooltip.addCustom(panelImage, 5f).getPosition().inTL(0, 4);
-        mainTooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
-            @Override
-            public boolean isTooltipExpandable(Object tooltipParam) {
-                return false;
-            }
-
-            @Override
-            public float getTooltipWidth(Object tooltipParam) {
-                return 500;
-            }
-
-            @Override
-            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                tooltip.addTitle(option.getSpec().getAiCoreSpecAPI().getName());
-                tooltip.addPara(Global.getSettings().getDescription(option.getSpec().getAiCoreSpecAPI().getName(), Description.Type.RESOURCE).getText1(),10f);
-            }
-        }, TooltipMakerAPI.TooltipLocation.BELOW);
+        mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,false);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
         return new UiPackage(panel, option, button);
     }
@@ -335,22 +264,7 @@ public class UIData {
         CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP, HEIGHT_OF_BUTTONS, option.getSpec());
         mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
         mainTooltip.addCustom(panelImage.one, 5f).getPosition().inTL(5, 4);
-        mainTooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
-            @Override
-            public boolean isTooltipExpandable(Object tooltipParam) {
-                return false;
-            }
-
-            @Override
-            public float getTooltipWidth(Object tooltipParam) {
-                return 400;
-            }
-
-            @Override
-            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                FighterInfoGenerator.generate(tooltip, option.getSpec().getWingSpecAPI(), getTooltipWidth(tooltipParam));
-            }
-        }, TooltipMakerAPI.TooltipLocation.BELOW);
+        mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,true);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
         return new UiPackage(panel, panelImage.two, option, button);
 
@@ -393,62 +307,7 @@ public class UIData {
             tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
         }
         final GPSpec spec = order.getSpecFromClass();
-        tooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
-            @Override
-            public boolean isTooltipExpandable(Object tooltipParam) {
-                return true;
-            }
-
-            @Override
-            public float getTooltipWidth(Object tooltipParam) {
-                if (spec.getType().equals(GPSpec.ProductionType.SHIP)) {
-                    return 990f;
-                } else {
-                    return 400f;
-                }
-            }
-
-            @Override
-            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                if (spec.getType().equals(GPSpec.ProductionType.SHIP)) {
-                    String variantId = null;
-                    for (String allVariantId : Global.getSettings().getAllVariantIds()) {
-                        if (allVariantId.contains(spec.getIdOfItemProduced())) {
-                            variantId = allVariantId;
-                            break;
-                        }
-                    }
-                    final CustomPanelAPI panelAPIs = ShipInfoGenerator.getShipImage(spec.getShipHullSpecAPI(), 250, null).one;
-                    CampaignFleetAPI fleet = Global.getFactory().createEmptyFleet(Global.getSector().getPlayerFaction().getId(), "test", false);
-
-                    FleetMemberAPI memberAPI = Global.getFactory().createFleetMember(FleetMemberType.SHIP, Global.getSettings().createEmptyVariant(variantId, spec.getShipHullSpecAPI()));
-                    fleet.getCargo().addCrew((int) memberAPI.getMinCrew());
-                    fleet.getCargo().addSupplies(memberAPI.getCargoCapacity() - 10);
-                    fleet.getCargo().addFuel(memberAPI.getFuelCapacity());
-                    fleet.getFleetData().addFleetMember(memberAPI);
-                    memberAPI.getRepairTracker().setCR(70);
-                    memberAPI.getRepairTracker().computeRepairednessFraction();
-                    ShipInfoGenerator.generate(tooltip, memberAPI, null, panelAPIs, getTooltipWidth(tooltipParam));
-                    fleet.deflate();
-                }
-                if (spec.getType() == GPSpec.ProductionType.WEAPON) {
-                    WeaponInfoGenerator.generate(tooltip, spec.getWeaponSpec(), getTooltipWidth(tooltipParam));
-                }
-                if (spec.getType() == GPSpec.ProductionType.FIGHTER) {
-                    FighterInfoGenerator.generate(tooltip, spec.getWingSpecAPI(), getTooltipWidth(tooltipParam));
-                }
-                if (spec.getType() == GPSpec.ProductionType.ITEM) {
-                    final CargoStackAPI stack = Global.getFactory().createCargoStack(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(spec.getItemSpecAPI().getId(), null), null);
-                    stack.getPlugin().createTooltip(tooltip, expanded, null, null);
-
-                }
-                if (spec.getType() == GPSpec.ProductionType.AICORE) {
-                    tooltip.addTitle(spec.getAiCoreSpecAPI().getName());
-                    tooltip.addPara(Global.getSettings().getDescription(spec.getAiCoreSpecAPI().getName(), Description.Type.RESOURCE).getText1(),10f);
-
-                }
-            }
-        }, TooltipMakerAPI.TooltipLocation.BELOW, false);
+        tooltip.addTooltipToPrevious(new ProducitonHoverInfo(spec), TooltipMakerAPI.TooltipLocation.BELOW, spec.getWingSpecAPI()!=null);
 
         creditCost = tooltip.addPara(Misc.getDGSCredits(order.getSpecFromClass().getCredistCost()), Color.ORANGE, 0f);
         name.computeTextHeight(name.getText());

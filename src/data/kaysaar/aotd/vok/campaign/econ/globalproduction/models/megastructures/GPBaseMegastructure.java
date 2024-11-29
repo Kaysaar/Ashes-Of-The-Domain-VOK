@@ -131,7 +131,7 @@ public class GPBaseMegastructure {
         int total =0;
         operationCostMult.unmodify();
         for (GPMegaStructureSection megaStructureSection : megaStructureSections) {
-            total+= (int) megaStructureSection.getUpkeep();
+            total+= (int) megaStructureSection.getUpkeep(false);
         }
         return total;
     }
