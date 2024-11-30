@@ -72,7 +72,7 @@ public class MilitaryHI extends HeavyIndustry {
 
     @Override
     public boolean showWhenUnavailable() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market);
+        return false;
     }
     @Override
     protected boolean canImproveToIncreaseProduction() {

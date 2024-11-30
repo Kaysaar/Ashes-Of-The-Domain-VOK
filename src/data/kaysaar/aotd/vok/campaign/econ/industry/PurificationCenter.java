@@ -59,14 +59,14 @@ public class PurificationCenter extends BaseIndustry {
     @Override
     public boolean isAvailableToBuild() {
 
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.AQUATIC_BIOSPHERE_HARVEST, market) &&super.isAvailableToBuild();
+        return false;
     }
 
 
     @Override
     public boolean showWhenUnavailable() {
 
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PRODUCTION_MATRIX, market) &&super.isAvailableToBuild();
+        return false;
 
     }
 
