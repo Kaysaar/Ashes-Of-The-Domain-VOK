@@ -20,7 +20,6 @@ public class AoDFoodDemand extends BaseMarketConditionPlugin {
         super.apply(id);
         if (!market.hasIndustry(Industries.POPULATION)) return;
         applyFoodRequirements(market.getIndustry(Industries.POPULATION));
-        applyOtherDemmands((BaseIndustry) market.getIndustry(Industries.POPULATION));
 
     }
 
@@ -30,7 +29,6 @@ public class AoDFoodDemand extends BaseMarketConditionPlugin {
         if (!market.hasIndustry(Industries.POPULATION)) return;
         Industry ind = market.getIndustry(Industries.POPULATION);
         resetDemmand(ind);
-        unapplyOtherDemand((BaseIndustry) ind);
         market.getStability().unmodifyFlat("aotd_water");
         market.getIncoming().set("aotd_water", 0);
         market.getAccessibilityMod().unmodifyFlat("aotd_water");
