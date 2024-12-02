@@ -405,6 +405,7 @@ public class GPManager {
                 continue;
             }
             if (option.getSpec().getItemSpecAPI().hasTag("aotd_ignore_gp")) continue;
+            if(option.getSpec().getItemSpecAPI().hasTag("mission_item"))continue;
             if (ItemEffectsRepo.ITEM_EFFECTS.get(option.getSpec().getProjectId()) != null) {
                 options.add(option);
             }

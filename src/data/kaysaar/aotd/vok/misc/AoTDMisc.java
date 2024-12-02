@@ -14,28 +14,27 @@ import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WingRole;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
-import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchRewardType;
+import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 import java.io.IOException;
-import java.sql.Ref;
 import java.util.*;
 import java.util.List;
+
+import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
 public class AoTDMisc {
     @Nullable
@@ -60,7 +59,124 @@ public class AoTDMisc {
         }
 
         return variantId;
+
     }
+    public static List<MarketAPI> retrieveFactionMarkets(FactionAPI faction) {
+        ArrayList<MarketAPI> marketsToReturn = new ArrayList<>();
+        if (faction.isPlayerFaction()) {
+            return Misc.getPlayerMarkets(checkForQolEnabled());
+        }
+        for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
+            if (marketAPI.getFactionId().equals(faction.getId())) {
+                marketsToReturn.add(marketAPI);
+            }
+
+        }
+
+        return marketsToReturn;
+    }
+    public static boolean doesMarketBelongToFaction(FactionAPI faction,MarketAPI marketAPI){
+        if(marketAPI.getFaction()==null)return false;
+        if(checkForQolEnabled()&&faction.isPlayerFaction()){
+            return marketAPI.getFaction().getId().equals(faction.getId())||marketAPI.isPlayerOwned();
+        }
+        return marketAPI.getFaction().getId().equals(faction.getId());
+    }
+    public static  boolean checkForQolEnabled() {
+        if (Global.getSettings().getModManager().isModEnabled("aotd_qol")) {
+            if (QoLMisc.isCommissioned()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static CustomPanelAPI createTooltipOfResorucesForDialog(float width, float height, float iconSize, HashMap<String,Integer> costs, boolean isForSalvage) {
+        CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
+        TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
+        float totalSize = width;
+        float positions = totalSize / (commodities.size() * 4);
+        float iconsize = iconSize;
+        float topYImage = 0;
+        LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
+
+
+        float x = positions;
+        ArrayList<CustomPanelAPI> panelsWithImage = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : costs.entrySet()) {
+            float widthTempPanel = iconsize;
+            int number = entry.getValue();
+            int owned = (int) AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey());
+            String icon = null;
+            if(Global.getSettings().getSpecialItemSpec(entry.getKey())!=null){
+                icon =Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName();
+            }
+            else{
+                icon = Global.getSettings().getCommoditySpec(entry.getKey()).getIconName();
+            }
+
+            String text = "" +number;
+            String text2 = "("+owned+")";
+            if(isForSalvage){
+                text2="";
+            }
+            widthTempPanel+=test.computeTextWidth(text+text2);
+            CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel+iconSize+5,iconSize,null);
+            TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel+iconSize+5,iconSize,false);
+            tooltipMakerAPI.addImage(icon, iconsize, iconsize, 0f);
+            UIComponentAPI image = tooltipMakerAPI.getPrev();
+            image.getPosition().inTL(x, topYImage);
+
+            Color col = Misc.getTooltipTitleAndLightHighlightColor();
+            if(number>owned&&!isForSalvage){
+                col = Misc.getNegativeHighlightColor();
+            }
+
+            tooltipMakerAPI.addPara("%s %s", 0f, col, col, text,text2).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
+            panelTemp.addUIElement(tooltipMakerAPI).inTL(0, 0);
+            panelsWithImage.add(panelTemp);
+        }
+
+
+        float totalWidth =0f;
+        float secondRowWidth = 0f;
+        float left;
+        for (CustomPanelAPI panelAPI : panelsWithImage) {
+            totalWidth+=panelAPI.getPosition().getWidth()+15;
+        }
+        left = totalWidth;
+        ArrayList<CustomPanelAPI> panelsSecondRow = new ArrayList<>();
+        if(totalWidth>=width){
+            for (int i = panelsWithImage.size()-1; i >=0 ; i--) {
+                left-=panelsWithImage.get(i).getPosition().getWidth()-15;
+                panelsSecondRow.add(panelsWithImage.get(i));
+                if(left<width){
+                    break;
+                }
+                panelsWithImage.remove(i);
+            }
+        }
+        for (CustomPanelAPI panelAPI : panelsSecondRow) {
+            secondRowWidth+=panelAPI.getPosition().getWidth()+15;
+        }
+        float startingXFirstRow = 0;
+        float startingXSecondRow = 0;
+        if(!panelsSecondRow.isEmpty()){
+            tooltip.getPosition().setSize(width,height*2+5);
+            customPanel.getPosition().setSize(width,height*2+5);
+        }
+        for (CustomPanelAPI panelAPI : panelsWithImage) {
+            tooltip.addCustom(panelAPI,0f).getPosition().inTL(startingXFirstRow,0);
+            startingXFirstRow+=panelAPI.getPosition().getWidth()+5;
+        }
+        for (CustomPanelAPI panelAPI : panelsSecondRow) {
+            tooltip.addCustom(panelAPI,0f).getPosition().inTL(startingXSecondRow,iconSize+5);
+            startingXSecondRow+=panelAPI.getPosition().getWidth()+5;
+        }
+
+        customPanel.addUIElement(tooltip).inTL(0, 0);
+        return customPanel;
+    }
+
     public static  Object getOrDefault(Map map, Object key,Object defaultValue){
         if(map.get(key)==null){
             return defaultValue;

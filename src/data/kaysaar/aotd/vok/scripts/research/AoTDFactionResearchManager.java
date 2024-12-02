@@ -34,6 +34,8 @@ import org.apache.log4j.Logger;
 
 import java.util.*;
 
+import static data.kaysaar.aotd.vok.misc.AoTDMisc.checkForQolEnabled;
+
 public class AoTDFactionResearchManager {
     private static final Logger logger = Global.getLogger(AoTDMainResearchManager.class);
     private float AIChrages = 0f;
@@ -458,14 +460,7 @@ public class AoTDFactionResearchManager {
         return marketsToReturn;
     }
 
-    public boolean checkForQolEnabled() {
-        if (Global.getSettings().getModManager().isModEnabled("aotd_qol")) {
-            if (QoLMisc.isCommissioned()) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 
     public int getAmountOfResearchFacilities() {
         int toReturn = 0;
