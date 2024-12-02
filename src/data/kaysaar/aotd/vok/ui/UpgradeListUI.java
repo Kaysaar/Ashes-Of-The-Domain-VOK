@@ -310,9 +310,6 @@ public class UpgradeListUI implements CustomDialogDelegate {
                     if (AoDUtilis.getVolatilesAmount(marketAPI) >= -1) {
                         helper.addIcons(marketAPI.getCommodityData(Commodities.VOLATILES), marketAPI.getSize() + AoDUtilis.getVolatilesAmount(marketAPI) - 2, IconRenderMode.NORMAL);
                     }
-                    if (isCryovolcanicOrFrozen(marketAPI)) {
-                        helper.addIcons(marketAPI.getCommodityData(AoTDCommodities.WATER), marketAPI.getSize() - 2, IconRenderMode.NORMAL);
-                    }
 
 
                 }
@@ -495,9 +492,6 @@ public class UpgradeListUI implements CustomDialogDelegate {
                     }
                     if (AoDUtilis.getVolatilesAmount(marketAPI) >= -1) {
                         anchor.addIcons(marketAPI.getCommodityData(Commodities.VOLATILES), marketAPI.getSize() + AoDUtilis.getVolatilesAmount(marketAPI) - 2, IconRenderMode.NORMAL);
-                    }
-                    if (isCryovolcanicOrFrozen(marketAPI)) {
-                        anchor.addIcons(marketAPI.getCommodityData(AoTDCommodities.WATER), marketAPI.getSize() - 2, IconRenderMode.NORMAL);
                     }
 
                 }

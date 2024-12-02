@@ -39,7 +39,7 @@ public class MiningMegaplex extends BaseIndustry {
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;
         applyDeficitToProduction(2, deficit,
-                Commodities.ORE,Commodities.ORGANICS, AoTDCommodities.WATER,Commodities.RARE_ORE,Commodities.VOLATILES);
+                Commodities.ORE,Commodities.ORGANICS,Commodities.RARE_ORE,Commodities.VOLATILES);
         super.apply(true);
 
     }
