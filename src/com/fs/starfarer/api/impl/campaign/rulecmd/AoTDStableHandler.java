@@ -4,15 +4,12 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.impl.campaign.CoreReputationPlugin;
 import com.fs.starfarer.api.impl.campaign.HypershuntReciverEntityPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.*;
-import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.Objectives;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import org.lwjgl.input.Keyboard;
 
@@ -20,7 +17,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
+import static data.kaysaar.aotd.vok.misc.AoTDMisc.createTooltipOfResorucesForDialog;
 
 public class AoTDStableHandler extends BaseCommandPlugin {
     protected CampaignFleetAPI playerFleet;
@@ -75,7 +72,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
                 dialog.getTextPanel().addPara(Global.getSettings().getDescription("aotd_hypershunt_reciver", Description.Type.CUSTOM).getText1());
                TooltipMakerAPI tooltipMakerAPI =  dialog.getTextPanel().beginTooltip();
                tooltipMakerAPI.addTitle("Resources: consumed (available)");
-               tooltipMakerAPI.addCustom(createResourcePanelForSmallTooltip(550,45,45,getCost(arg),false),5f);
+               tooltipMakerAPI.addCustom(createTooltipOfResorucesForDialog(550,45,45,getCost(arg),false),5f);
 
                 for (Map.Entry<String, Integer> entry : getCost(arg).entrySet()) {
                     if(AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey())<entry.getValue()){
@@ -97,7 +94,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
                 dialog.getOptionPanel().addOption("Nevermind","defaultLeave");
                 TooltipMakerAPI tooltipMakerAPI =  dialog.getTextPanel().beginTooltip();
                 tooltipMakerAPI.addTitle("Potential Salvage");
-                tooltipMakerAPI.addCustom(createResourcePanelForSmallTooltip(550,45,45,getCostForSalvage(arg),true),5f);
+                tooltipMakerAPI.addCustom(createTooltipOfResorucesForDialog(550,45,45,getCostForSalvage(arg),true),5f);
                 dialog.getTextPanel().addTooltip();
 
             }
@@ -214,90 +211,5 @@ public class AoTDStableHandler extends BaseCommandPlugin {
     public void printCost(){
 
     }
-    public static CustomPanelAPI createResourcePanelForSmallTooltip(float width, float height, float iconSize, HashMap<String,Integer> costs,boolean isForSalvage) {
-        CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
-        TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
-        float totalSize = width;
-        float positions = totalSize / (commodities.size() * 4);
-        float iconsize = iconSize;
-        float topYImage = 0;
-        LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
 
-
-        float x = positions;
-        ArrayList<CustomPanelAPI> panelsWithImage = new ArrayList<>();
-        for (Map.Entry<String, Integer> entry : costs.entrySet()) {
-            float widthTempPanel = iconsize;
-            int number = entry.getValue();
-            int owned = (int) AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey());
-            String icon = null;
-            if(Global.getSettings().getSpecialItemSpec(entry.getKey())!=null){
-                icon =Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName();
-            }
-            else{
-                icon = Global.getSettings().getCommoditySpec(entry.getKey()).getIconName();
-            }
-
-            String text = "" +number;
-            String text2 = "("+owned+")";
-            if(isForSalvage){
-                text2="";
-            }
-            widthTempPanel+=test.computeTextWidth(text+text2);
-            CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel+iconSize+5,iconSize,null);
-            TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel+iconSize+5,iconSize,false);
-            tooltipMakerAPI.addImage(icon, iconsize, iconsize, 0f);
-            UIComponentAPI image = tooltipMakerAPI.getPrev();
-            image.getPosition().inTL(x, topYImage);
-
-            Color col = Misc.getTooltipTitleAndLightHighlightColor();
-            if(number>owned&&!isForSalvage){
-                col = Misc.getNegativeHighlightColor();
-            }
-
-            tooltipMakerAPI.addPara("%s %s", 0f, col, col, text,text2).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
-            panelTemp.addUIElement(tooltipMakerAPI).inTL(0, 0);
-            panelsWithImage.add(panelTemp);
-        }
-
-
-        float totalWidth =0f;
-        float secondRowWidth = 0f;
-        float left;
-        for (CustomPanelAPI panelAPI : panelsWithImage) {
-            totalWidth+=panelAPI.getPosition().getWidth()+15;
-        }
-        left = totalWidth;
-        ArrayList<CustomPanelAPI> panelsSecondRow = new ArrayList<>();
-        if(totalWidth>=width){
-            for (int i = panelsWithImage.size()-1; i >=0 ; i--) {
-                left-=panelsWithImage.get(i).getPosition().getWidth()-15;
-                panelsSecondRow.add(panelsWithImage.get(i));
-                if(left<width){
-                    break;
-                }
-                panelsWithImage.remove(i);
-            }
-        }
-        for (CustomPanelAPI panelAPI : panelsSecondRow) {
-            secondRowWidth+=panelAPI.getPosition().getWidth()+15;
-        }
-        float startingXFirstRow = 0;
-        float startingXSecondRow = 0;
-        if(!panelsSecondRow.isEmpty()){
-            tooltip.getPosition().setSize(width,height*2+5);
-            customPanel.getPosition().setSize(width,height*2+5);
-        }
-        for (CustomPanelAPI panelAPI : panelsWithImage) {
-            tooltip.addCustom(panelAPI,0f).getPosition().inTL(startingXFirstRow,0);
-            startingXFirstRow+=panelAPI.getPosition().getWidth()+5;
-        }
-        for (CustomPanelAPI panelAPI : panelsSecondRow) {
-            tooltip.addCustom(panelAPI,0f).getPosition().inTL(startingXSecondRow,iconSize+5);
-            startingXSecondRow+=panelAPI.getPosition().getWidth()+5;
-        }
-
-        customPanel.addUIElement(tooltip).inTL(0, 0);
-        return customPanel;
-    }
 }

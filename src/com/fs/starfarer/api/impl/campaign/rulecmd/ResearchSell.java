@@ -17,6 +17,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
+import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -225,7 +226,7 @@ public class ResearchSell extends BaseCommandPlugin {
 
                 }
                 if(Global.getSettings().getModManager().isModEnabled("aotd_qol")){
-                    if (Misc.getCommissionFaction().equals(faction)) {
+                    if (QoLMisc.isCommissionedBy(faction.getId())) {
                         panel.addPara("This will result in increase of commission points by %s", 10f, Color.ORANGE, "" + computeDBCommisionPoints(combined,attitudeData.getStance()));
                     }
                 }

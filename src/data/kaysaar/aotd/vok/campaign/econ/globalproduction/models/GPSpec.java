@@ -12,6 +12,7 @@ import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDSpecialProjBaseListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.models.AoTDSpecialProjectListener;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import org.json.JSONArray;
@@ -464,7 +465,7 @@ public class GPSpec {
         this.pluginForSpecialProj = pluginForSpecialProj;
     }
     public AoTDSpecialProjectListener getListenerFromPlugin(){
-        if(pluginForSpecialProj == null){return null;
+        if(pluginForSpecialProj == null){return  new AoTDSpecialProjBaseListener();
         }
         try {
             final Class<?> eventPlugin = Global.getSettings().getScriptClassLoader().loadClass(pluginForSpecialProj);
@@ -473,7 +474,7 @@ public class GPSpec {
         } catch (Exception e) {
 
         }
-        return null;
+        return new AoTDSpecialProjBaseListener();
     }
 
     public void setHighlights(ArrayList<String> highlights) {
