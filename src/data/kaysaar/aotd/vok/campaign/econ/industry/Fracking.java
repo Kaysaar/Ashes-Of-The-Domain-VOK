@@ -35,7 +35,6 @@ public class Fracking extends BaseIndustry {
         }
         demand(Commodities.HEAVY_MACHINERY, size - 2);
         demand(Commodities.DRUGS,  size - 2);
-        demand(AoTDCommodities.WATER,size-1);
 
         if(AoDUtilis.getOrganicsAmount(market)>=-1){
             supply(Commodities.ORGANICS,AoDUtilis.getOrganicsAmount(market)+(market.getSize()+2));
@@ -53,7 +52,7 @@ public class Fracking extends BaseIndustry {
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;
         applyDeficitToProduction(2, deficit,
-                Commodities.ORE,Commodities.ORGANICS, AoTDCommodities.WATER,Commodities.RARE_ORE,Commodities.VOLATILES);
+                Commodities.ORE,Commodities.ORGANICS,Commodities.RARE_ORE,Commodities.VOLATILES);
         if (!isFunctional()) {
             supply.clear();
             unapply();

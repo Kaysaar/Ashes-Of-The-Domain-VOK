@@ -29,17 +29,11 @@ public class ExtractiveOperation extends BaseIndustry {
             supply(Commodities.RARE_ORE,(AoDUtilis.getRareOreAmount(market)));
         }
 
-
-        if(market.getPlanetEntity()!=null){
-            if(market.getPlanetEntity().getTypeId().equals("frozen") ||market.getPlanetEntity().getTypeId().equals("cryovolcanic")){
-             supply(AoTDCommodities.WATER,market.getSize()-4,"Frozen Water");
-            }
-        }
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.DRUGS, Commodities.HEAVY_MACHINERY);
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
         if (deficit.two > maxDeficit) deficit.two = maxDeficit;
         applyDeficitToProduction(2, deficit,
-                Commodities.ORE,Commodities.ORGANICS, AoTDCommodities.WATER);
+                Commodities.ORE,Commodities.ORGANICS);
         if (!isFunctional()) {
             supply.clear();
             unapply();

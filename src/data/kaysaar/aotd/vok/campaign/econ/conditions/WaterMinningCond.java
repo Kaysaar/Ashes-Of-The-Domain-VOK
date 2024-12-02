@@ -13,44 +13,21 @@ public class WaterMinningCond extends BaseMarketConditionPlugin {
     @Override
     public void apply(String id) {
         super.apply(id);
-      ApplyWaterSupply();
     }
     @Override
     public void unapply(String id) {
         super.unapply(id);
-        for (Industry ind : market.getIndustries()) {
-            unapplyElectronicsDemand((BaseIndustry) ind);
-        }
 
     }
     public void ApplyWaterSupply() {
         int size = market.getSize();
-        boolean isCryovolcanicOrFrozen = isCryovolcanicOrFrozen();
-        for (Industry ind : market.getIndustries()) {
-            if (ind.getId().equals(Industries.MINING)) {
-                applyCommoditySupplyToIndustry((BaseIndustry) ind, market.getSize(),isCryovolcanicOrFrozen);
-
-            }
 
 
-        }
 
     }
 
-    private boolean isCryovolcanicOrFrozen() {
-        boolean isCryovolcanicOrFrozen = false;
-        if(market.getPlanetEntity()!=null){
-            if(market.getPlanetEntity().getTypeId().equals("frozen") ||market.getPlanetEntity().getTypeId().equals("cryovolcanic")||market.getPlanetEntity().getTypeId().equals("frozen1")){
-                isCryovolcanicOrFrozen= true;
-            }
-        }
-        return isCryovolcanicOrFrozen;
-    }
 
-    public void unapplyElectronicsDemand(BaseIndustry ind) {
-        ind.supply(AoTDCommodities.WATER, 0, "");
-        ind.getSupply(AoTDCommodities.WATER).getQuantity().unmodifyFlat("mantle_bore_water");
-    }
+
     public void applyCommoditySupplyToIndustry(BaseIndustry ind, int demand,boolean canApply) {
         if (!canApply) return;
         if (ind.getId().equals(Industries.MINING)) {
@@ -61,9 +38,7 @@ public class WaterMinningCond extends BaseMarketConditionPlugin {
         }
     }
     public static void applyIndustryUpgradeCondition(MarketAPI marketAPI) {
-        if (marketAPI.isInEconomy() && !marketAPI.hasCondition(UpgradeCond)){
-            marketAPI.addCondition(UpgradeCond);
-        }
+
     }
     @Override
     public boolean showIcon() {
