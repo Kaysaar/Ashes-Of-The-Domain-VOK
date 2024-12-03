@@ -1,9 +1,8 @@
 package com.fs.starfarer.api.impl.campaign.rulecmd;
 
-import com.fs.starfarer.api.impl.campaign.BiFrostGateEntity;
+import com.fs.starfarer.api.impl.campaign.aotd_entities.BiFrostGateEntity;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
