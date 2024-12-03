@@ -1,9 +1,8 @@
-package com.fs.starfarer.api.impl.campaign;
+package com.fs.starfarer.api.impl.campaign.aotd_entities;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.impl.campaign.econ.CommRelayCondition;
+import com.fs.starfarer.api.impl.campaign.BaseCampaignObjectivePlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -12,7 +11,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.Hype
 
 import java.awt.*;
 
-public class HypershuntReciverEntityPlugin extends BaseCampaignObjectivePlugin{
+public class HypershuntReciverEntityPlugin extends BaseCampaignObjectivePlugin {
     boolean isAboutToBeRemoved = false;
     @Override
     public void advance(float amount) {

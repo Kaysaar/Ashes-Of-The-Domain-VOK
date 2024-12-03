@@ -42,7 +42,7 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
         }
         if (arg.equals("researchedTech")) {
             if (!AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.MEGA_ANALYSIS)) {
-                if (token.getMemory().contains(GPBaseMegastructure.memKey)) {
+                if (token.getMemory().contains(GPBaseMegastructure.memKey)||GPManager.getInstance().getMegaSpecFromListByEntityId(token.getCustomEntityType())!=null){;
                     dialog.getOptionPanel().setEnabled("aotd_claim_megastructure", false);
                     dialog.getOptionPanel().setTooltip("aotd_claim_megastructure", "We need to research first Megastructure Analysis!");
                     dialog.getTextPanel().addPara("With our current technological advancements, it is not advised to take control of this megastructure, due to massive logistical requirements to restore it!");

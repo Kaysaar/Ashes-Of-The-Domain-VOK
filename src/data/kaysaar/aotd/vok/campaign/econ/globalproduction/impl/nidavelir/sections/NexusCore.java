@@ -2,15 +2,13 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sect
 
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import com.fs.starfarer.api.impl.campaign.NidavelirShipyard;
+import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyard;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 
-import java.awt.*;
 import java.util.LinkedHashMap;
 
 public class NexusCore extends GPMegaStructureSection {

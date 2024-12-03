@@ -8,8 +8,11 @@ import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.characters.ImportantPeopleAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
+import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
+import com.fs.starfarer.api.impl.campaign.econ.impl.Mining;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
+import com.fs.starfarer.api.impl.campaign.procgen.themes.MiscellaneousThemeGenerator;
 import com.fs.starfarer.api.impl.campaign.rulecmd.AoTDMegastructureRules;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.util.Misc;
@@ -17,18 +20,15 @@ import data.kaysaar.aotd.vok.Ids.AoTDConditions;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import lunalib.lunaSettings.LunaSettings;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static data.kaysaar.aotd.vok.Ids.AoTDMemFlags.preCollapseFacList;
 
@@ -198,30 +198,64 @@ public class AoTDDataInserter {
         }
     }
     public  void spawnNidavleir() {
-            List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
-            Collections.shuffle(starSystems);
-            for (StarSystemAPI starSystem : starSystems) {
-                if (starSystem.getTags().contains(Tags.THEME_DERELICT)) {
-                    for (PlanetAPI planet : starSystem.getPlanets()) {
-                        if (planet.isStar()) continue;
-                        if (planet.isMoon()) continue;
-                        if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
-                        if (planet.hasTag(Tags.NOT_RANDOM_MISSION_TARGET)) continue;
-                        if (planet.hasTag(Tags.MISSION_ITEM)) continue;
-                        if (planet.isStar()) continue;
-                        if (planet.isGasGiant()) continue;
-                        if(!planet.getMarket().hasCondition(Conditions.RUINS_VAST))continue;
-                        if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
-                        AoTDMegastructureRules.putMegastructure(planet,"aotd_nidavelir");
-                        planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
-                        String token = planet.getMarket().addCondition("aotd_nidavelir_complex");
-                        planet.getMarket().getSpecificCondition(token).setSurveyed(false);
-                        return;
-                    }
-                }
-            }
+        SectorEntityToken planet = getEntityWithCriteria(null);
+        AoTDMegastructureRules.putMegastructure(planet,"aotd_nidavelir");
+        planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
+        String token = planet.getMarket().addCondition("aotd_nidavelir_complex");
+        planet.getMarket().getSpecificCondition(token).setSurveyed(false);
+        planet.getMarket().removeCondition(Conditions.RUINS_EXTENSIVE);
+        planet.getMarket().removeCondition(Conditions.RUINS_SCATTERED);
+        planet.getMarket().removeCondition(Conditions.RUINS_WIDESPREAD);
+        if(!planet.getMarket().hasCondition(Conditions.RUINS_VAST)){
+            planet.getMarket().addCondition(Conditions.RUINS_VAST);
+        }
+        planet.getStarSystem().setBaseName("Yggdrasil");
+
 
     }
+
+    private  SectorEntityToken getEntityWithCriteria(String planetType) {
+        List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
+        Collections.shuffle(starSystems);
+        for (StarSystemAPI starSystem : starSystems) {
+            if (starSystem.getTags().contains(Tags.THEME_DERELICT)) {
+                for (PlanetAPI planet : starSystem.getPlanets()) {
+                    if (planet.isStar()) continue;
+                    if (planet.isMoon()) continue;
+                    if (!planet.getMarket().isPlanetConditionMarketOnly()) continue;
+                    if (planet.hasTag(Tags.NOT_RANDOM_MISSION_TARGET)) continue;
+                    if (planet.hasTag(Tags.MISSION_ITEM)) continue;
+                    if (planet.isStar()) continue;
+                    if (planet.isGasGiant()) continue;
+                    if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
+                    if(planet.getMemory().contains(GPBaseMegastructure.memKey))continue;
+                    if(planetType!=null){
+                        if(!planet.getTypeId().equals(planetType))continue;
+                    }
+                    return planet;
+                }
+            }
+        }
+        return null;
+    }
+
+    public  void spawnPluto() {
+        PlanetAPI planet = (PlanetAPI) getEntityWithCriteria(Planets.PLANET_LAVA);
+        for (Map.Entry<String, String> entry : ResourceDepositsCondition.COMMODITY.entrySet()) {
+            if(entry.getValue().equals(Commodities.RARE_ORE)||entry.getValue().equals(Commodities.ORE)){
+                planet.getMarket().removeCondition(entry.getKey());
+            }
+        }
+        planet.getStarSystem().setBaseName("Pluto");
+        planet.getMarket().addCondition(Conditions.RARE_ORE_ULTRARICH);
+        planet.getMarket().addCondition(Conditions.ORE_ULTRARICH);
+        SectorEntityToken token = planet.getMarket().getStarSystem().addCustomEntity("aotd_pluto_station","Pluto Mining Station","aotd_pluto_station",Factions.NEUTRAL);
+        float angle = planet.getCircularOrbitAngle();
+        float period = planet.getCircularOrbitPeriod(); // 270 : height
+        token.setCircularOrbitPointingDown(planet,angle, planet.getRadius()+270+70,period);
+        MiscellaneousThemeGenerator.makeDiscoverable(token,40000,3000f);
+    }
+
     public  HashMap<String,Integer>getItemCost(String reqItems){
         String[] splitedAll = reqItems.split(",");
         HashMap<String, Integer> itemsReq = new HashMap<>();

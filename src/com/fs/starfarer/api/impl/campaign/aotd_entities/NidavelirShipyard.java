@@ -1,4 +1,4 @@
-package com.fs.starfarer.api.impl.campaign;
+package com.fs.starfarer.api.impl.campaign.aotd_entities;
 
 import com.fs.graphics.util.Fader;
 import com.fs.starfarer.api.Global;
@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.PlanetSpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.combat.ViewportAPI;
+import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.combat.CombatViewport;
 import com.fs.starfarer.combat.entities.terrain.Planet;

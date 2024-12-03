@@ -100,6 +100,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDDataInserter.generatePreCollapseFacilities();
         aoTDDataInserter.spawnVeilPlanet();
         aoTDDataInserter.spawnNidavleir();
+        aoTDDataInserter.spawnPluto();
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             MarketAPI lunarium = AoTDDataInserter.getMarketBasedOnName("Aoi", "Lunamun");
             if (lunarium != null) {

@@ -2,7 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt;
 
 import com.fs.starfarer.api.campaign.CustomCampaignEntityAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import com.fs.starfarer.api.impl.campaign.HypershuntReciverEntityPlugin;
+import com.fs.starfarer.api.impl.campaign.aotd_entities.HypershuntReciverEntityPlugin;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.sections.WormholeGenerator;

@@ -4,7 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.impl.campaign.HypershuntReciverEntityPlugin;
+import com.fs.starfarer.api.impl.campaign.aotd_entities.HypershuntReciverEntityPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.ui.*;
