@@ -5,6 +5,8 @@ import com.fs.starfarer.api.campaign.CampaignEngineLayers;
 import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.PlutoMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 
 public class PlutoMiningStation extends BaseCustomEntityPlugin {
     protected SpriteAPI aotd_pluto_general_glow = Global.getSettings().getSprite("rendering", "aotd_pluto_general_glow");
@@ -33,9 +35,16 @@ public class PlutoMiningStation extends BaseCustomEntityPlugin {
             aotd_beam3 = Global.getSettings().getSprite("rendering", "aotd_beam3");
             aotd_beam4 = Global.getSettings().getSprite("rendering", "aotd_beam4");
         }
-        renderAtCenter(aotd_pluto_general_glow);
-        renderAtCenter(aotd_pluto_laser_glow);
-        renderAtCenter(aotd_pluto_laserflare_glow);
+        if(entity.getMemory().contains(GPBaseMegastructure.memKey)){
+            PlutoMegastructure megastructure = (PlutoMegastructure) entity.getMemory().get(GPBaseMegastructure.memKey);
+            renderAtCenter(aotd_pluto_general_glow);
+            if(megastructure.getLaserSection().isRestored){
+                renderAtCenter(aotd_pluto_laser_glow);
+                renderAtCenter(aotd_pluto_laserflare_glow);
+            }
+        }
+
+
     }
     public void renderAtCenter(SpriteAPI sprite){
         sprite.setAngle(this.entity.getCircularOrbitAngle() - 90);

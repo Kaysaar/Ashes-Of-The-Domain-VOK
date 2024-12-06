@@ -89,9 +89,11 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
     }
     public void resetEntireUI(){
         clearUI();
+        mainPanel.removeComponent(titlePanel);
         mainPanel.removeComponent(mainTitlePanel);
         mainMenu.reInitalizeButtonUI();
         lastY = 0;
+        mainMenu.resetMarketData();
         addUI();
     }
     public void resetSection(String sectionID){
