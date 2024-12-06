@@ -25,7 +25,7 @@ public class HypershuntMegastrcutre extends GPBaseMegastructure {
                     float rangeMax = ((WormholeGenerator) megaStructureSection).getCalculatedRange();
                     float currRange = Misc.getDistanceLY(megastructure.getEntityTiedTo(),target);
                     if(currRange<=rangeMax){
-                        return true;
+                        return megastructure.getSectionById("coronal_collector").isRestored;
                     }
                 }
             }

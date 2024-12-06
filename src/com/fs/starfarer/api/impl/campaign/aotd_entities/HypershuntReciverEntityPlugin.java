@@ -54,6 +54,12 @@ public class HypershuntReciverEntityPlugin extends BaseCampaignObjectivePlugin {
         text.addPara(BaseIntelPlugin.INDENT + "%s industry slots in all colonies in system (As long as is within range of hypershunt)",
                 pad, Misc.getHighlightColor(), "+" + bonus);
         text.addPara(BaseIntelPlugin.INDENT+"Allow some megastructures to gain unique bonuses", Color.ORANGE,5f);
+        if(!isWithinRange()){
+            text.addPara("This receiver is not within range!",Misc.getNegativeHighlightColor(),5f);
+        }
+        else{
+            text.addPara("Receiver within range!",Misc.getPositiveHighlightColor(),5f);
+        }
     }
 
 
