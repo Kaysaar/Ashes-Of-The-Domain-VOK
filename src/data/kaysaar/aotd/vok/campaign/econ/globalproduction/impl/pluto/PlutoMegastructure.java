@@ -106,6 +106,12 @@ public class PlutoMegastructure extends GPBaseMegastructure {
             int cur = consumerSection.getAssignedResources(key);
             have -= cur;
         }
+        if(have<0){
+            for (PlutoForgeSection consumerSection : getConsumerSections()) {
+                consumerSection.updateResourceDesignated(key,0);
+            }
+            have = produced;
+        }
         return have;
     }
     public ArrayList<PlutoForgeSection>getConsumerSections(){
