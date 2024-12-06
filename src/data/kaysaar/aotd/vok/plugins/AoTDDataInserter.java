@@ -180,6 +180,7 @@ public class AoTDDataInserter {
                         if (planet.hasTag(Tags.MISSION_ITEM)) continue;
                         if (planet.isStar()) continue;
                         if (planet.isGasGiant()) continue;
+
                         if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
                         long seed = StarSystemGenerator.random.nextLong();
                         planet.getMemoryWithoutUpdate().set(MemFlags.SALVAGE_SEED, seed);
@@ -209,6 +210,7 @@ public class AoTDDataInserter {
         if(!planet.getMarket().hasCondition(Conditions.RUINS_VAST)){
             planet.getMarket().addCondition(Conditions.RUINS_VAST);
         }
+
         planet.getStarSystem().setBaseName("Yggdrasil");
 
 
@@ -227,6 +229,7 @@ public class AoTDDataInserter {
                     if (planet.hasTag(Tags.MISSION_ITEM)) continue;
                     if (planet.isStar()) continue;
                     if (planet.isGasGiant()) continue;
+                    if(planet.getRadius()<=70)continue;
                     if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
                     if(planet.getMemory().contains(GPBaseMegastructure.memKey))continue;
                     if(planetType!=null){
@@ -249,6 +252,8 @@ public class AoTDDataInserter {
         planet.getStarSystem().setBaseName("Pluto");
         planet.getMarket().addCondition(Conditions.RARE_ORE_ULTRARICH);
         planet.getMarket().addCondition(Conditions.ORE_ULTRARICH);
+        String t = planet.getMarket().addCondition("aotd_pluto_station");
+        planet.getMarket().getSpecificCondition(t).setSurveyed(false);
         SectorEntityToken token = planet.getMarket().getStarSystem().addCustomEntity("aotd_pluto_station","Pluto Mining Station","aotd_pluto_station",Factions.NEUTRAL);
         float angle = planet.getCircularOrbitAngle();
         float period = planet.getCircularOrbitPeriod(); // 270 : height

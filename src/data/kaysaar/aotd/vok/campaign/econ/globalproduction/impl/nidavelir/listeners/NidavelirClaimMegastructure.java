@@ -11,6 +11,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.secti
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
+import data.kaysaar.aotd.vok.campaign.econ.industry.BaseMegastructureIndustry;
 
 public class NidavelirClaimMegastructure implements PlayerColonizationListener, ColonyDecivListener {
     @Override
@@ -25,7 +26,7 @@ public class NidavelirClaimMegastructure implements PlayerColonizationListener, 
                 megastructure.setHaveRecivedStoryPoint(true);
             }
             if(!planet.getMarket().hasIndustry("nidavelir_complex")){
-                planet.getMarket().addIndustry("nidavelir_complex");
+                BaseMegastructureIndustry.addMegastructureIndustry("nidavelir_complex",planet.getMarket(),megastructure);
             }
 
         }

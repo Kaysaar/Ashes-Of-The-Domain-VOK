@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructur
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -199,6 +200,18 @@ public class GPBaseMegastructure {
         for (GPMegaStructureSection megaStructureSection : megaStructureSections) {
             megaStructureSection.advance(amount);
         }
+    }
+    //This is for megastructures that have tied industry
+    public void applySupplyToIndustryFirst(Industry ind){
+
+
+    }
+    public void applySupplyToIndustryLast(Industry ind){
+
+
+    }
+    public void unapplySupplyToIndustry(Industry ind){
+
     }
     //This is UI plugin you wanna create to handle all things in Megastrucutres tab (for each instance of megastrucutre) because it is interface extending
     //CustomUIPanelPlugin you should have there all components handled

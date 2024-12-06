@@ -8,29 +8,40 @@ import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.DebugFlags;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.impl.campaign.ids.Strings;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.IconRenderMode;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.Map;
 
-public class NidavelirComplexIndustry extends BaseIndustry {
+public class BaseMegastructureIndustry extends BaseIndustry {
+    GPBaseMegastructure megastructure;
+    public void setMegastructure(GPBaseMegastructure megastructure) {
+        this.megastructure = megastructure;
+    }
+
+    public GPBaseMegastructure getMegastructure() {
+        return megastructure;
+    }
+
+    public static void addMegastructureIndustry(String id, MarketAPI market, GPBaseMegastructure megastructure){
+        market.addIndustry(id);
+        BaseMegastructureIndustry ind = (BaseMegastructureIndustry) market.getIndustry(id);
+        ind.setMegastructure(megastructure);
+    }
     @Override
     public void apply() {
 
         try {
-            if(!GPManager.getInstance().getMegastructuresBasedOnClass(NidavelirComplexMegastructure.class).isEmpty()){
-                GPBaseMegastructure mega = GPManager.getInstance().getMegastructuresBasedOnClass(NidavelirComplexMegastructure.class).get(0);
+            if(megastructure!=null){
+                GPBaseMegastructure mega = megastructure;
+                megastructure.applySupplyToIndustryFirst(this);
                 HashMap<String,Integer>map = mega.getProduction();
                 for (String commodity : GPManager.commodities) {
                     if(map.containsKey(commodity)){
@@ -43,9 +54,10 @@ public class NidavelirComplexIndustry extends BaseIndustry {
 
 
                 }
-
+                megastructure.applySupplyToIndustryLast(this);
 
             }
+
         }
         catch (Exception e) {
 
@@ -281,9 +293,14 @@ public class NidavelirComplexIndustry extends BaseIndustry {
                 int income = getIncome().getModifiedInt();
                 tooltip.addPara("Monthly income: %s", opad, highlight, Misc.getDGSCredits(income));
             }
+                if(megastructure!=null){
+                    tooltip.addPara("Monthly upkeep: %s", opad, highlight, Misc.getDGSCredits(megastructure.getUpkeep()));
 
-                GPBaseMegastructure mega = (GPBaseMegastructure) this.market.getPrimaryEntity().getMemory().get(GPBaseMegastructure.memKey);
-                tooltip.addPara("Monthly upkeep: %s", opad, highlight, Misc.getDGSCredits(mega.getUpkeep()));
+                }
+                else{
+                    tooltip.addPara("Monthly upkeep: %s", opad, highlight, Misc.getDGSCredits(0));
+
+                }
 
             boolean hasSupply = false;
             for (MutableCommodityQuantity curr : supply.values()) {
@@ -390,6 +407,9 @@ public class NidavelirComplexIndustry extends BaseIndustry {
             }
 
             tooltip.addPara("*Shown production values are already adjusted to stats of Megastructure", gray, opad);
+            if(megastructure==null){
+                tooltip.addPara("You have not yet claimed this megastructure, claim it to unlock it's benefits",Misc.getNegativeHighlightColor(),5f);
+            }
         }
 
         if (needToAddIndustry) {
@@ -401,6 +421,14 @@ public class NidavelirComplexIndustry extends BaseIndustry {
         if (!needToAddIndustry) {
             reapply();
         }
+    }
+
+    @Override
+    public void unapply() {
+        if(megastructure!=null){
+            megastructure.unapplySupplyToIndustry(this);
+        }
+        super.unapply();
     }
 
     @Override

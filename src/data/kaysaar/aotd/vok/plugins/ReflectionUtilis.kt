@@ -1,10 +1,10 @@
 package data.kaysaar.aotd.vok.plugins
 
+import ashlib.data.plugins.reflection.ReflectionBetterUtilis
 import com.fs.starfarer.api.ui.UIComponentAPI
 import com.fs.starfarer.api.ui.UIPanelAPI
 import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodType
-import java.lang.reflect.Method
 
 class ReflectionUtilis {
         //Code taken and modified from Grand Colonies
@@ -166,19 +166,20 @@ class ReflectionUtilis {
             return invokeMethodHandle.invoke(method, instance, arguments)
         }
         @JvmStatic
-        fun getMethodFromSuperclass(methodName: String, instance: Any): Pair<Any?, List<Class<*>>>? {
+         fun getMethodFromSuperclass(methodName: String, instance: Any): Pair<Any?, Any?>? {
             var currentClass: Class<*>? = instance.javaClass
             while (currentClass != null) {
                 val methods = currentClass.declaredMethods
                 for (method in methods) {
                     // Get a MethodHandle for the getParameterTypes method
-                    val getParameterTypesHandle = ReflectionBetterUtilis.getParameterTypesHandle(method::class.java, "getParameterTypes")
+                    val getParameterTypesHandle =
+                        ReflectionBetterUtilis.getParameterTypesHandle(method::class.java, "getParameterTypes")
 
                     // Use your getMethodNameHandle to retrieve the method name
-                    if (getMethodNameHandle.invoke(method) == methodName) {
+                    if (getMethodNameHandle.invoke(method as Any) == methodName) {
                         // Invoke the MethodHandle to get the parameter types
-                        val parameterTypes = getParameterTypesHandle.invoke(method) as Array<Class<*>>
-                        return Pair(method, parameterTypes.toList())
+                        val parameterTypes = getParameterTypesHandle.invoke(method as Any)
+                        return Pair(method, parameterTypes)
                     }
                 }
                 currentClass = currentClass.superclass
@@ -190,36 +191,40 @@ class ReflectionUtilis {
 
 
         @JvmStatic
-        fun invokeMethodWithAutoProjection(methodName: String, instance: Any, vararg arguments: Any?): Any? {
-            // Retrieve the method and its parameter types
-            val methodPair = getMethodFromSuperclass(methodName, instance)
+             fun invokeMethodWithAutoProjection(methodName: String, instance: Any, vararg arguments: Any?): Any? {
+                // Retrieve the method and its parameter types
+                val methodPair = getMethodFromSuperclass(methodName, instance) as Pair<Any?, Array<Class<*>>>
 
-            // Check if the method was found
-            val (method, parameterTypes) = methodPair ?: throw NoSuchMethodException("Method $methodName not found in class hierarchy of ${instance.javaClass.name}")
+                // Check if the method was found
+                val (method, parameterTypes) = methodPair
+                    ?: throw NoSuchMethodException("Method $methodName not found in class hierarchy of ${instance.javaClass.name}")
 
-            // Prepare arguments by projecting them to the correct types
-            val projectedArgs = Array(parameterTypes.size) { index ->
-                val arg = arguments.getOrNull(index) // Safely get the argument
+                // Prepare arguments by projecting them to the correct types
+                val projectedArgs = Array(parameterTypes.size) { index ->
+                    val arg = arguments.getOrNull(index) // Safely get the argument
 
-                if (arg == null) {
-                    // If the expected type is a primitive type, throw an exception
-                    if (parameterTypes[index].isPrimitive) {
-                        throw IllegalArgumentException("Argument at index $index cannot be null for primitive type ${parameterTypes[index].name}")
-                    }
-                    null // Keep nulls as null for reference types
-                } else {
-                    // Try to convert the argument to the expected parameter type
-                    try {
-                        convertArgument(arg, parameterTypes[index])
-                    } catch (e: Exception) {
-                        throw IllegalArgumentException("Cannot convert argument at index $index to ${parameterTypes[index].name}", e)
+                    if (arg == null) {
+                        // If the expected type is a primitive type, throw an exception
+                        if (parameterTypes[index].isPrimitive) {
+                            throw IllegalArgumentException("Argument at index $index cannot be null for primitive type ${parameterTypes[index].name}")
+                        }
+                        null // Keep nulls as null for reference types
+                    } else {
+                        // Try to convert the argument to the expected parameter type
+                        try {
+                            convertArgument(arg, parameterTypes[index])
+                        } catch (e: Exception) {
+                            throw IllegalArgumentException(
+                                "Cannot convert argument at index $index to ${parameterTypes[index].name}",
+                                e
+                            )
+                        }
                     }
                 }
-            }
-            return invokeMethodHandle.invoke(method, instance, arguments)
-            // Invoke the method with the projected arguments
 
-        }
+                // Invoke the method with the projected arguments
+                return invokeMethodHandle.invoke(method, instance, projectedArgs)
+            }
 
         // Helper function to convert an argument to the expected type
         fun convertArgument(arg: Any, targetType: Class<*>): Any? {
