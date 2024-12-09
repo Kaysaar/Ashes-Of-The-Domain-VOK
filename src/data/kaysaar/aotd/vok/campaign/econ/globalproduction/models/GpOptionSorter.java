@@ -264,8 +264,21 @@ public class GpOptionSorter {
             comparator = new Comparator<GPOption>() {
                 @Override
                 public int compare(GPOption o1, GPOption o2) {
-                    String s1 = o1.getSpec().getItemSpecAPI().getName();
-                    String s2 = o2.getSpec().getItemSpecAPI().getName();
+                    String s1,s2;
+                    if(o1.getSpec().getItemSpecAPI()!=null){
+                        s1=o1.getSpec().getItemSpecAPI().getName();
+                    }
+                    else {
+                        s1= o1.getSpec().getAiCoreSpecAPI().getName();
+                    }
+                    if(o2.getSpec().getItemSpecAPI()!=null){
+                        s2=o2.getSpec().getItemSpecAPI().getName();
+                    }
+                    else{
+                        s2= o2.getSpec().getAiCoreSpecAPI().getName();
+                    }
+
+
                     return s1.compareTo(s2);
                 }
             };
@@ -284,8 +297,19 @@ public class GpOptionSorter {
             comparator = new Comparator<GPOption>() {
                 @Override
                 public int compare(GPOption o1, GPOption o2) {
-                    String s1 = o1.getSpec().getItemSpecAPI().getManufacturer();
-                    String s2 = o2.getSpec().getItemSpecAPI().getManufacturer();
+                    String s1,s2;
+                    if(o1.getSpec().getItemSpecAPI()!=null){
+                        s1=o1.getSpec().getItemSpecAPI().getManufacturer();
+                    }
+                    else {
+                        s1= "Ai cores";
+                    }
+                    if(o2.getSpec().getItemSpecAPI()!=null){
+                        s2=o2.getSpec().getItemSpecAPI().getManufacturer();
+                    }
+                    else{
+                        s2= "Ai cores";
+                    }
                     s1 = AoTDMisc.ensureManBeingNotNull(s1);
                     s2 = AoTDMisc.ensureManBeingNotNull(s2);
                     return s1.compareTo(s2);

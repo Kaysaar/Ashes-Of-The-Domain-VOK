@@ -46,7 +46,9 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
             }
 
         }
-
+        tooltip.addSectionHeading("Accessibility selling power",Alignment.MID,5f);
+        int access = (int) Math.floor((getEntityTiedTo().getMarket().getAccessibilityMod().getFlatBonus()*10));
+        tooltip.addPara("Maximum amount of %s units of supply can sold due to %s accessibility",5f,Color.ORANGE,access+"",(int)(getEntityTiedTo().getMarket().getAccessibilityMod().getFlatBonus()*100)+"%");
 
 
     }

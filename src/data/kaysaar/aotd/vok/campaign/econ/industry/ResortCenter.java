@@ -113,13 +113,13 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
 
     }
     public boolean isAvailableToBuild() {
-        if(market.hasCondition(CONDITION_MILD)&&market.hasCondition(CONDITION_HABITABLE)&&market.hasSpaceport()&&!market.hasCondition("pollution")){
+        if(market.hasCondition(CONDITION_HABITABLE)&&market.hasSpaceport()&&!market.hasCondition("pollution")){
             return true;
         }
         return false;
     }
     public String getUnavailableReason() {
-        return "Requires a functional spaceport and a habitable planet that has mild climate without any pollution.";
+        return "Requires a functional spaceport and a habitable planet without any pollution.";
     }
     @Override
     protected void applyAlphaCoreModifiers() {

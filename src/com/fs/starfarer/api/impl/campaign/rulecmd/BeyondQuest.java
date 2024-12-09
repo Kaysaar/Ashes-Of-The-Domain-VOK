@@ -13,9 +13,11 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BaseSalvageSpecial;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import org.magiclib.achievements.MagicAchievementManager;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 public class BeyondQuest  extends BaseCommandPlugin {
@@ -127,6 +129,9 @@ public class BeyondQuest  extends BaseCommandPlugin {
                 planet.getMemoryWithoutUpdate().unset("$aotd_quest_veil");
                 Global.getSector().getPersistentData().remove("$aotd_v_planet");
                 Global.getSector().getMemory().set("$aotd_veil_done",true);
+                if(Global.getSettings().getModManager().isModEnabled("MagicLib")){
+                    Objects.requireNonNull(MagicAchievementManager.getInstance().getAchievement("aotd_veil_of_knowledge")).completeAchievement();
+                }
                 long xp = BeyondVeilIntel.FINISHED_XP;
                 Global.getSector().getPlayerPerson().getStats().addXP(xp);
             }

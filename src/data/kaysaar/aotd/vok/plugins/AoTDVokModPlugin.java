@@ -32,8 +32,11 @@ import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValid
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.lazywizard.lazylib.ui.FontException;
+import org.magiclib.achievements.MagicAchievement;
+import org.magiclib.achievements.MagicAchievementManager;
 
 import java.io.IOException;
+import java.util.Map;
 
 
 public class AoTDVokModPlugin extends BaseModPlugin {
@@ -101,6 +104,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDDataInserter.spawnVeilPlanet();
         aoTDDataInserter.spawnNidavleir();
         aoTDDataInserter.spawnPluto();
+
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             MarketAPI lunarium = AoTDDataInserter.getMarketBasedOnName("Aoi", "Lunamun");
             if (lunarium != null) {
@@ -132,6 +136,9 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         }
         aoTDDataInserter.insertSophia();
         setListenersIfNeeded();
+//        for (Map.Entry<String, MagicAchievement> stringMagicAchievementEntry : MagicAchievementManager.getInstance().getAchievements().entrySet()) {
+//            stringMagicAchievementEntry.getValue().uncompleteAchievement(true);
+//        }
         AoTDMainResearchManager.getInstance().updateResearchOptionsFromSpec();
         AoTDMainResearchManager.getInstance().updateManagerRepo();
         AoTDMainResearchManager.getInstance().setAttitudeDataForAllFactions();

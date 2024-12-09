@@ -75,7 +75,12 @@ public class GPBaseMegastructure {
    public void createAdditionalInfoToButton(TooltipMakerAPI tooltipMakerAPI){
 
    }
-
+    public boolean isFullyRestored(){
+        for (GPMegaStructureSection megaStructureSection : megaStructureSections) {
+            if(!megaStructureSection.isRestored)return false;
+        }
+        return true;
+    }
     public  HashMap<String, Integer> getDemand(){
         HashMap<String,Integer> costs = new HashMap<>();
         for (GPMegaStructureSection megaStructureSection : megaStructureSections) {
