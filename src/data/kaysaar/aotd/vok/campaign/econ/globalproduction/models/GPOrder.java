@@ -88,8 +88,6 @@ public float getBonus(){
     HashMap<String, Integer>assignedResources = new HashMap<>();
     HashMap<String, Integer>resourcesGet = new HashMap<>();
     public boolean canProceed() {
-        if(!AoTDMisc.isPLayerHavingHeavyIndustry())return false;
-
         if(isAboutToBeRemoved())return false;
         // Check if the obtained resources meet or exceed the required resources
         for (Map.Entry<String, Integer> entry : assignedResources.entrySet()) {
