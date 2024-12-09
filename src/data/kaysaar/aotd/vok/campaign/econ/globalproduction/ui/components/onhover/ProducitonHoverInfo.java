@@ -101,7 +101,7 @@ public class ProducitonHoverInfo implements TooltipMakerAPI.TooltipCreator {
         }
         if (spec.getType() == GPSpec.ProductionType.AICORE) {
             tooltip.addTitle(spec.getAiCoreSpecAPI().getName());
-            tooltip.addPara(Global.getSettings().getDescription(spec.getAiCoreSpecAPI().getName(), Description.Type.RESOURCE).getText1(),10f);
+            tooltip.addPara(Global.getSettings().getDescription(spec.getAiCoreSpecAPI().getId(), Description.Type.RESOURCE).getText1FirstPara(),10f);
 
         }
     }

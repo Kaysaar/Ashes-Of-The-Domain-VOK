@@ -91,15 +91,11 @@ public class AoTDSpecialItemRepo {
                 Items.CORONAL_PORTAL, ItemEffectsRepo.CORONAL_TAP_TRANSPLUTONICS, 0) {
             protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
                                                   InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
-                text.addPara(pre + "Increases the maximum number of industries for all colonies in the system by %s, and increases production of all industries in the system by %s units when demand for " +
-                                "%s units of transplutonics is fully met.",
-                        pad, Misc.getHighlightColor(),
-                        "" + (int) 1, "" + (int) 1,
-                        "" + (int) 10);
+
             }
 
         });
-        Global.getSettings().getSpecialItemSpec(Items.CORONAL_PORTAL).setParams("coronal_pylon");
+
     }
 
     public void setSpecialItemNewIndustries(String specialItemID, String listOfAdditionalIndustries) {

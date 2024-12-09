@@ -40,6 +40,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
                 layer.setSpec(getSpec(layers.get(layer)));
                 layer.advance(amount);
                 layer.getLocation().set(tiedToPlanet.getLocation());
+
             }
         }
         if(isVanising&&!isAppearing){

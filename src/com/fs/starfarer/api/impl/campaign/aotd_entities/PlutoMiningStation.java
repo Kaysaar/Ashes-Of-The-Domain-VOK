@@ -24,6 +24,7 @@ public class PlutoMiningStation extends BaseCustomEntityPlugin {
     public float lastMagnitude;
     public float distance;
     float magnitudeEffect = 0.0f; //Strength of effect between 0 and 1
+
     @Override
     public void render(CampaignEngineLayers layer, ViewportAPI viewport) {
         if (aotd_pluto_general_glow == null) {

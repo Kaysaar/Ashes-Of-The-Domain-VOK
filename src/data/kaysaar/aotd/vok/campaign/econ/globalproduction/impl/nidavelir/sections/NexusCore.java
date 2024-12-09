@@ -25,7 +25,7 @@ public class NexusCore extends GPMegaStructureSection {
         nid.shipyard = null;
         nid.shipyard = (NidavelirShipyard) nid.getEntityTiedTo().getStarSystem().addCustomEntity(null, "Nid", "nid_shipyards", null).getCustomPlugin();
         nid.shipyard.trueInit("aotd_nidavelir", "aotd_nidavelir_shadow", (PlanetAPI) nid.getEntityTiedTo());
-        nid.shipyard.waitingTime = 1f;
+        nid.shipyard.waitingTime = 0.8f;
     }
 
     @Override

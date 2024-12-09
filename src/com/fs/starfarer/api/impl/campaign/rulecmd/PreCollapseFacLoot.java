@@ -12,6 +12,7 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BaseSalvageSpecial;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import org.magiclib.achievements.MagicAchievementManager;
 
 
 import java.util.*;
@@ -111,6 +112,9 @@ public class PreCollapseFacLoot extends BaseCommandPlugin {
         }
         BaseSalvageSpecial.clearExtraSalvage(memoryMap);
         salvage.sort();
+        if(Global.getSettings().getModManager().isModEnabled("MagicLib")){
+            Objects.requireNonNull(MagicAchievementManager.getInstance().getAchievement("aotd_pcf")).completeAchievement();
+        }
         dialog.getVisualPanel().showLoot("Salvaged", salvage, false, true, true, new CoreInteractionListener() {
             public void coreUIDismissed() {
                 dialog.dismiss();

@@ -123,7 +123,11 @@ public class ItemBlueprintPlugin  extends BaseSpecialItemPlugin {
 
     @Override
     public int getPrice(MarketAPI market, SubmarketAPI submarket) {
-        return (int) (itemSpec.getBasePrice()*2);
+        int price = (int) (itemSpec.getBasePrice()*2);
+        if(price>=2000000){
+            price = 2000000;
+        }
+        return price ;
     }
 
     @Override
