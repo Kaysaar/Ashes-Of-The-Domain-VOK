@@ -201,7 +201,6 @@ public class UIData {
         CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP, HEIGHT_OF_BUTTONS, option.getSpec());
         mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
         mainTooltip.addCustom(panelImage, 5f).getPosition().inTL(0, 4);
-        final CargoStackAPI stack = Global.getFactory().createCargoStack(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(option.getSpec().getItemSpecAPI().getId(), null), null);
         mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,false);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
         return new UiPackage(panel, option, button);

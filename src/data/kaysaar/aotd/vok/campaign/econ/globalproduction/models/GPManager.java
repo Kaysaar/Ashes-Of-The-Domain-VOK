@@ -15,6 +15,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
+import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
@@ -43,23 +44,24 @@ public class GPManager {
     public MutableStat specialProjSpeed = new MutableStat(1f);
     public MutableStat cruiserCapitalSpeed = new MutableStat(1f);
     public MutableStat frigateDestroyerSpeed = new MutableStat(1f);
+    public IntervalUtil intervalUtil = new IntervalUtil(1f, 2f);
 
     public MutableStat getCruiserCapitalSpeed() {
-        if(cruiserCapitalSpeed==null){
+        if (cruiserCapitalSpeed == null) {
             cruiserCapitalSpeed = new MutableStat(1f);
         }
         return cruiserCapitalSpeed;
     }
 
     public MutableStat getFrigateDestroyerSpeed() {
-        if(frigateDestroyerSpeed==null){
+        if (frigateDestroyerSpeed == null) {
             frigateDestroyerSpeed = new MutableStat(1f);
         }
         return frigateDestroyerSpeed;
     }
 
     public MutableStat getSpecialProjSpeed() {
-        if(specialProjSpeed==null){
+        if (specialProjSpeed == null) {
             specialProjSpeed = new MutableStat(1f);
         }
         return specialProjSpeed;
@@ -185,46 +187,51 @@ public class GPManager {
     public ArrayList<GPBaseMegastructure> getMegastructures() {
         return megastructures;
     }
+
     public ArrayList<GPBaseMegastructure> getMegastructuresBasedOnClass(Class<?> t) {
-        ArrayList<GPBaseMegastructure>mega = new ArrayList<>();
+        ArrayList<GPBaseMegastructure> mega = new ArrayList<>();
         for (GPBaseMegastructure megastructure : megastructures) {
-            if(megastructure.getClass().equals(t)){
+            if (megastructure.getClass().equals(t)) {
                 mega.add(megastructure);
             }
         }
         return mega;
     }
+
     public ArrayList<GPBaseMegastructure> getMegastructureBasedOnSpecID(Class<?> t) {
-        ArrayList<GPBaseMegastructure>mega = new ArrayList<>();
+        ArrayList<GPBaseMegastructure> mega = new ArrayList<>();
         for (GPBaseMegastructure megastructure : megastructures) {
-            if(megastructure.getClass().equals(t)){
+            if (megastructure.getClass().equals(t)) {
                 mega.add(megastructure);
             }
         }
         return mega;
     }
-    public float getTotalUpkeeepCreditsForMega(){
-        float upkeep  = 0f;
+
+    public float getTotalUpkeeepCreditsForMega() {
+        float upkeep = 0f;
         for (GPBaseMegastructure megastructure : megastructures) {
-            upkeep+=megastructure.getUpkeep();
+            upkeep += megastructure.getUpkeep();
         }
         return upkeep;
     }
-    public HashMap<String,Integer>getTotalUpkeepGPForMega(){
-       HashMap<String,Integer> upkeep = new HashMap<>();
+
+    public HashMap<String, Integer> getTotalUpkeepGPForMega() {
+        HashMap<String, Integer> upkeep = new HashMap<>();
         for (GPBaseMegastructure megastructure : megastructures) {
             for (Map.Entry<String, Integer> s : megastructure.getDemand().entrySet()) {
-                AoTDMisc.putCommoditiesIntoMap(upkeep,s.getKey(),s.getValue());
+                AoTDMisc.putCommoditiesIntoMap(upkeep, s.getKey(), s.getValue());
             }
         }
         return upkeep;
     }
-    public float getTotalPenaltyFromResources(String...resources){
+
+    public float getTotalPenaltyFromResources(String... resources) {
         float penalty = 1f;
-        HashMap<String,Float>pen = getPenaltyMap();
+        HashMap<String, Float> pen = getPenaltyMap();
         for (String resource : resources) {
-            if(pen.get(resource) != null){
-                penalty*=pen.get(resource);
+            if (pen.get(resource) != null) {
+                penalty *= pen.get(resource);
             }
 
         }
@@ -238,12 +245,14 @@ public class GPManager {
         return manager;
     }
 
-    public void addMegastructureToList(GPBaseMegastructure megastructure){
+    public void addMegastructureToList(GPBaseMegastructure megastructure) {
         megastructures.add(megastructure);
     }
-    public void removeMegastructureFromList(GPBaseMegastructure megastructure){
+
+    public void removeMegastructureFromList(GPBaseMegastructure megastructure) {
         megastructures.remove(megastructure);
     }
+
     public GPSpec getSpec(String id) {
         for (GPSpec spec : specs) {
             if (spec.getProjectId().equals(id)) {
@@ -266,7 +275,7 @@ public class GPManager {
         if (manufacturerData != null) {
             manufacturerData.clear();
         }
-        if(megastructures==null){
+        if (megastructures == null) {
             megastructures = new ArrayList<>();
         }
 
@@ -295,15 +304,15 @@ public class GPManager {
         }
         for (MarketAPI factionMarket : Misc.getPlayerMarkets(true)) {
             for (Industry ind : factionMarket.getIndustries()) {
-                if(ind.getSpec().hasTag("ignore_gp"))continue;
+                if (ind.getSpec().hasTag("ignore_gp")) continue;
                 for (String commodity : commodities) {
                     int val = ind.getSupply(commodity).getQuantity().getModifiedInt() * scale;
-                    AoTDMisc.putCommoditiesIntoMap(totalResources,commodity, val);
+                    AoTDMisc.putCommoditiesIntoMap(totalResources, commodity, val);
                 }
 
             }
         }
-        HashMap<String,Integer>resourcesFromMega =new HashMap<>();
+        HashMap<String, Integer> resourcesFromMega = new HashMap<>();
         for (GPBaseMegastructure megastructure : GPManager.getInstance().getMegastructures()) {
             HashMap<String, Integer> megaMap = megastructure.getProductionWithoutPenalty();
             for (Map.Entry<String, Integer> entry : megaMap.entrySet()) {
@@ -311,7 +320,7 @@ public class GPManager {
             }
         }
         resourcesFromMega.putAll(totalResources);
-        HashMap<String,Float> map = getPenaltyMap(getProductionOrders(),resourcesFromMega);
+        HashMap<String, Float> map = getPenaltyMap(getProductionOrders(), resourcesFromMega);
         for (GPBaseMegastructure megastructure : GPManager.getInstance().getMegastructures()) {
             HashMap<String, Integer> megaMap = megastructure.getProduction(map);
             for (Map.Entry<String, Integer> entry : megaMap.entrySet()) {
@@ -322,14 +331,13 @@ public class GPManager {
 
         return totalResources;
     }
-    
 
 
     public LinkedHashMap<MarketAPI, Integer> getTotalResourceProductionFromMarkets(String commodity) {
         LinkedHashMap<MarketAPI, Integer> map = new LinkedHashMap<>();
         for (MarketAPI factionMarket : Misc.getPlayerMarkets(true)) {
             for (Industry ind : factionMarket.getIndustries()) {
-                if(ind.getSpec().hasTag("ignore_gp"))continue;
+                if (ind.getSpec().hasTag("ignore_gp")) continue;
                 int val = ind.getSupply(commodity).getQuantity().getModifiedInt() * scale;
                 if (val == 0) continue;
                 if (map.get(factionMarket) != null) {
@@ -399,13 +407,13 @@ public class GPManager {
     public ArrayList<GPOption> getItemProductionOptionFiltered() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getItemProductionOption()) {
-            if (option.getSpec().getItemSpecAPI() == null&&option.getSpec().getAiCoreSpecAPI()!=null) {
+            if (option.getSpec().getItemSpecAPI() == null && option.getSpec().getAiCoreSpecAPI() != null) {
                 option.getSpec().setType(GPSpec.ProductionType.AICORE);
                 options.add(option);
                 continue;
             }
             if (option.getSpec().getItemSpecAPI().hasTag("aotd_ignore_gp")) continue;
-            if(option.getSpec().getItemSpecAPI().hasTag("mission_item"))continue;
+            if (option.getSpec().getItemSpecAPI().hasTag("mission_item")) continue;
             if (ItemEffectsRepo.ITEM_EFFECTS.get(option.getSpec().getProjectId()) != null) {
                 options.add(option);
             }
@@ -510,16 +518,17 @@ public class GPManager {
             specs.add(spec);
         }
         for (CommoditySpecAPI s : Global.getSettings().getAllCommoditySpecs()) {
-            if (s.hasTag("ai_core") && !s.hasTag("no_drop") && !s.getId().equals("ai_cores")&&s.hasTag("aotd_ai_core")) {
+            if (s.hasTag("ai_core") && !s.hasTag("no_drop") && !s.getId().equals("ai_cores") && s.hasTag("aotd_ai_core")) {
                 GPSpec spec = GPSpec.getSpecFromAICore(s);
                 specs.add(spec);
             }
 
         }
     }
-    public void loadMegastructureSpecs(){
-        if(megaStructureSpecs==null)megaStructureSpecs = new ArrayList<>();
-        if(megaStructureSectionsSpecs==null)megaStructureSectionsSpecs = new ArrayList<>();
+
+    public void loadMegastructureSpecs() {
+        if (megaStructureSpecs == null) megaStructureSpecs = new ArrayList<>();
+        if (megaStructureSectionsSpecs == null) megaStructureSectionsSpecs = new ArrayList<>();
         megaStructureSpecs.clear();
         megaStructureSectionsSpecs.clear();
         megaStructureSectionsSpecs.addAll(GpMegaStructureSectionsSpec.getSpecFromFiles());
@@ -527,25 +536,28 @@ public class GPManager {
 
 
     }
-    public GPMegaStructureSpec getMegaSpecFromList(String id ){
+
+    public GPMegaStructureSpec getMegaSpecFromList(String id) {
         for (GPMegaStructureSpec spec : megaStructureSpecs) {
-            if(spec.getMegastructureID().equals(id))return spec;
-        }
-        return null;
-    }
-    public GPMegaStructureSpec getMegaSpecFromListByEntityId(String id ){
-        for (GPMegaStructureSpec spec : megaStructureSpecs) {
-            if(spec.getSectorEntityTokenId().equals(id))return spec;
+            if (spec.getMegastructureID().equals(id)) return spec;
         }
         return null;
     }
 
-    public GpMegaStructureSectionsSpec getMegaSectionSpecFromList(String id ){
-        for (GpMegaStructureSectionsSpec spec : megaStructureSectionsSpecs) {
-            if(spec.getSectionID().equals(id))return spec;
+    public GPMegaStructureSpec getMegaSpecFromListByEntityId(String id) {
+        for (GPMegaStructureSpec spec : megaStructureSpecs) {
+            if (spec.getSectorEntityTokenId().equals(id)) return spec;
         }
         return null;
     }
+
+    public GpMegaStructureSectionsSpec getMegaSectionSpecFromList(String id) {
+        for (GpMegaStructureSectionsSpec spec : megaStructureSectionsSpecs) {
+            if (spec.getSectionID().equals(id)) return spec;
+        }
+        return null;
+    }
+
     public GpSpecialProjectData getSpecialProject(String id) {
         for (GpSpecialProjectData specialProjDatum : specialProjData) {
             if (specialProjDatum.getSpec().getProjectId().equals(id)) {
@@ -781,8 +793,18 @@ public class GPManager {
         return options;
     }
 
+    public void mainAdvance(float amount) {
+        if (intervalUtil == null) {
+            intervalUtil = new IntervalUtil(1f, 2f);
+        }
+        intervalUtil.advance(amount);
+        if (intervalUtil.intervalElapsed()) {
+            advanceProductions(intervalUtil.getElapsed());
+        }
+    }
 
     public void advanceProductions(float amount) {
+
         if (!GPManager.isEnabled) {
             Global.getSector().getPlayerStats().getDynamic().getMod(Stats.CUSTOM_PRODUCTION_MOD).unmodifyMult("aotd_gp");
             return;
@@ -846,6 +868,7 @@ public class GPManager {
     public @NotNull HashMap<String, Float> getPenaltyMap() {
         return getPenaltyMap(getProductionOrders());
     }
+
     private @NotNull HashMap<String, Float> getPenaltyMap(ArrayList<GPOrder> orders) {
         HashMap<String, Float> penaltyMap = new HashMap<>();
         for (Map.Entry<String, Integer> stringIntegerEntry : getTotalResources().entrySet()) {
@@ -859,7 +882,8 @@ public class GPManager {
         }
         return penaltyMap;
     }
-    private @NotNull HashMap<String, Float> getPenaltyMap(ArrayList<GPOrder> orders,HashMap<String,Integer>totalProd) {
+
+    private @NotNull HashMap<String, Float> getPenaltyMap(ArrayList<GPOrder> orders, HashMap<String, Integer> totalProd) {
         HashMap<String, Float> penaltyMap = new HashMap<>();
         for (Map.Entry<String, Integer> stringIntegerEntry : totalProd.entrySet()) {
             Integer currentDemand = getReqResources(orders).get(stringIntegerEntry.getKey());
@@ -872,6 +896,7 @@ public class GPManager {
         }
         return penaltyMap;
     }
+
     public ArrayList<Integer> retrieveOrdersToBeRemoved() {
         ArrayList<Integer> map = new ArrayList<>();
         int i = 0;
