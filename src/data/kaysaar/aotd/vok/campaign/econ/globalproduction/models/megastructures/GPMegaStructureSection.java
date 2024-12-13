@@ -75,7 +75,7 @@ public class GPMegaStructureSection {
         }
         else{
             if(!isRestored&&!override){
-                upkeep*=0.2f;
+                upkeep= getSpec().getRunningCostBeforeRepair();
             }
         }
         upkeep+=addAdditionalUpkeep();

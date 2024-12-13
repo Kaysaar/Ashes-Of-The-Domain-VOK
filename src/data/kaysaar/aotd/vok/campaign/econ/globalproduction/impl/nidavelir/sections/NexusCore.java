@@ -9,6 +9,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.Nidav
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 
+import java.awt.*;
 import java.util.LinkedHashMap;
 
 public class NexusCore extends GPMegaStructureSection {
@@ -39,6 +40,8 @@ public class NexusCore extends GPMegaStructureSection {
         tooltip.addPara("Allows restoration of rest sections",Misc.getTooltipTitleAndLightHighlightColor(),5f);
         tooltip.addPara("Colony with Nidavelir complex will start producing ship hulls, weapons, advanced components and domain heavy machinery",Misc.getTooltipTitleAndLightHighlightColor(),5f);
         tooltip.addPara("Each section restored will provide colony with ability to produce more",Misc.getTooltipTitleAndLightHighlightColor(),5f);
+        tooltip.addPara("Once entire megastructure is restored : ",5f);
+        tooltip.addPara("Increase fleet size on market by %s",5f, Color.ORANGE,"400%");
     }
 
     @Override

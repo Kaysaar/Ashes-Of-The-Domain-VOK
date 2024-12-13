@@ -158,6 +158,9 @@ public class GPBaseMegastructure {
             megaStructureSections.add(section);
         }
     }
+    public boolean isClaimed(){
+        return GPManager.getInstance().getMegastructures().contains(this);
+    }
     public void trueInit(String specId,SectorEntityToken entityTiedTo){
         this.specId = specId;
         this.entityTiedTo = entityTiedTo;

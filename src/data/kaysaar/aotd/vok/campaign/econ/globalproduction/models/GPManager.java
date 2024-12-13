@@ -17,6 +17,8 @@ import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.campaign.CampaignClock;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSpec;
@@ -44,7 +46,7 @@ public class GPManager {
     public MutableStat specialProjSpeed = new MutableStat(1f);
     public MutableStat cruiserCapitalSpeed = new MutableStat(1f);
     public MutableStat frigateDestroyerSpeed = new MutableStat(1f);
-    public IntervalUtil intervalUtil = new IntervalUtil(1f, 2f);
+    public IntervalUtil intervalUtil = new IntervalUtil(9.5f, CampaignClock.SECONDS_PER_GAME_DAY);
 
     public MutableStat getCruiserCapitalSpeed() {
         if (cruiserCapitalSpeed == null) {
@@ -319,7 +321,9 @@ public class GPManager {
                 AoTDMisc.putCommoditiesIntoMap(resourcesFromMega, entry.getKey(), entry.getValue());
             }
         }
-        resourcesFromMega.putAll(totalResources);
+        for (Map.Entry<String, Integer> entry : totalResources.entrySet()) {
+            AoTDMisc.putCommoditiesIntoMap(resourcesFromMega, entry.getKey(), entry.getValue());
+        }
         HashMap<String, Float> map = getPenaltyMap(getProductionOrders(), resourcesFromMega);
         for (GPBaseMegastructure megastructure : GPManager.getInstance().getMegastructures()) {
             HashMap<String, Integer> megaMap = megastructure.getProduction(map);
@@ -795,7 +799,7 @@ public class GPManager {
 
     public void mainAdvance(float amount) {
         if (intervalUtil == null) {
-            intervalUtil = new IntervalUtil(1f, 2f);
+            intervalUtil = new IntervalUtil(9.5f, CampaignClock.SECONDS_PER_GAME_DAY); //
         }
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {

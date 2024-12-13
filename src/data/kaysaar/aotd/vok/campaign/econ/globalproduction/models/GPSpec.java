@@ -83,7 +83,7 @@ public class GPSpec {
         if(price==0){
             price =1;
         }
-        commodityCost.put(Commodities.SHIPS,price);
+        commodityCost.put(Commodities.SHIPS,Math.max(price,400));
         if(GPManager.getInstance().getManData(specAPI.getManufacturer())!=null){
             int advanced_Components = basePrice/advancedComponentsScaling;
             commodityCost.put("advanced_components",Math.min(advanced_Components,GPManager.getInstance().getManData(specAPI.getManufacturer()).getMaxACCostForShip()));
@@ -113,7 +113,7 @@ public class GPSpec {
             int advanced_Components = GPManager.getInstance().getManData(specAPI.getManufacturer()).getMaxAcCostForWeapon(specAPI);
             commodityCost.put("advanced_components",advanced_Components);
         }
-        commodityCost.put(Commodities.HAND_WEAPONS,price);
+        commodityCost.put(Commodities.HAND_WEAPONS,Math.max(price,100));
         float days = 1;
         if(specAPI.getSize().equals(WeaponAPI.WeaponSize.SMALL)){
             days = Math.min(basePrice/dayScaling,30);

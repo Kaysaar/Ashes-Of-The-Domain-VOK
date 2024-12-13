@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class OpticCommandNexus extends GPMegaStructureSection {
-    public int currentMagnitude = 1;
+    public int currentMagnitude = 0;
     public static int maxMagnitude = 10;
     public static int upkeepMulter = 70000;
     public boolean connectedToHypershunt = false;
@@ -86,9 +86,6 @@ public class OpticCommandNexus extends GPMegaStructureSection {
 
     public int getAvailableOresAmount(String idOfOre) {
         float amount = currentMagnitude * supplyUnitsPerMagnitude;
-        if (!connectedToHypershunt) {
-            amount *= getPenaltyFromManager(AoTDCommodities.PURIFIED_TRANSPLUTONICS);
-        }
         if (!isRestored) {
             amount = 0;
         }
