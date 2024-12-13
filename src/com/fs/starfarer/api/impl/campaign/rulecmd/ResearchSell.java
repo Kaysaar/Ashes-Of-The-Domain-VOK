@@ -64,6 +64,9 @@ public class ResearchSell extends BaseCommandPlugin {
 
         person = dialog.getInteractionTarget().getActivePerson();
         faction = person.getFaction();
+        if (command.equals("personCanAcceptDbs")) {
+            return personCanAcceptDbs();
+        }
         try {
             attitudeData = AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).getAttitudeData();
         } catch (Exception e) {
@@ -83,8 +86,6 @@ public class ResearchSell extends BaseCommandPlugin {
         } else if (command.equals("generateAfterResponse")) {
             return generateAfterResponse(attitudeData);
 
-        } else if (command.equals("personCanAcceptDbs")) {
-            return personCanAcceptDbs();
         }
 
         return true;
@@ -107,6 +108,7 @@ public class ResearchSell extends BaseCommandPlugin {
         if (person == null || !buysDatabanks) return false;
         if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction)==null)return false;
         if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).getAttitudeData()==null)return false;
+
         return Ranks.POST_BASE_COMMANDER.equals(person.getPostId()) ||
                 Ranks.POST_STATION_COMMANDER.equals(person.getPostId()) ||
                 Ranks.POST_ADMINISTRATOR.equals(person.getPostId()) ||
