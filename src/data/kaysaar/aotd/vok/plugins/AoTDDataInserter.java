@@ -212,7 +212,6 @@ public class AoTDDataInserter {
             planet.getMarket().addCondition(Conditions.RUINS_VAST);
         }
 
-        planet.getStarSystem().setBaseName("Yggdrasil");
 
 
     }
@@ -250,7 +249,6 @@ public class AoTDDataInserter {
                 planet.getMarket().removeCondition(entry.getKey());
             }
         }
-        planet.getStarSystem().setBaseName("Pluto");
         planet.getMarket().addCondition(Conditions.RARE_ORE_ULTRARICH);
         planet.getMarket().addCondition(Conditions.ORE_ULTRARICH);
         String t = planet.getMarket().addCondition("aotd_pluto_station");
