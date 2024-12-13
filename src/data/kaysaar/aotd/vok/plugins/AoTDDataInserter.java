@@ -8,6 +8,7 @@ import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
 import com.fs.starfarer.api.characters.FullName;
 import com.fs.starfarer.api.characters.ImportantPeopleAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
+import com.fs.starfarer.api.impl.MusicPlayerPluginImpl;
 import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
 import com.fs.starfarer.api.impl.campaign.econ.impl.Mining;
 import com.fs.starfarer.api.impl.campaign.ids.*;
@@ -258,6 +259,7 @@ public class AoTDDataInserter {
         float angle = planet.getCircularOrbitAngle();
         float period = planet.getCircularOrbitPeriod(); // 270 : height
         token.setCircularOrbitPointingDown(planet,angle, planet.getRadius()+270+70,period);
+        token.getMemoryWithoutUpdate().set(MusicPlayerPluginImpl.MUSIC_SET_MEM_KEY,"aotd_mega");
         MiscellaneousThemeGenerator.makeDiscoverable(token,40000,3000f);
     }
 

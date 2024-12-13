@@ -335,8 +335,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         if (!Misc.getPlayerMarkets(true).isEmpty()) {
             CustomPanelAPI panelHolder = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 - 5f, 82, renderer);
             TooltipMakerAPI tooltipHolder = panelHolder.createUIElement(UIData.WIDTH_OF_ORDERS / 2 - 5f, 80, false);
-            CustomPanelAPI panelHolder2 = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 - 5f, 82, renderer);
-            TooltipMakerAPI tooltipHolder2 = panelHolder2.createUIElement(UIData.WIDTH_OF_ORDERS / 2 - 5f, 20, false);
+            CustomPanelAPI panelHolder2 = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 , 82, renderer);
+            TooltipMakerAPI tooltipHolder2 = panelHolder2.createUIElement(UIData.WIDTH_OF_ORDERS / 2 , 20, false);
             TooltipMakerAPI tooltipHolder3 = panelHolder2.createUIElement(UIData.WIDTH_OF_ORDERS / 2, 60, true);
             tooltipHolder2.addSectionHeading("Choose point", Alignment.MID, 0f);
             float opad = 0f;

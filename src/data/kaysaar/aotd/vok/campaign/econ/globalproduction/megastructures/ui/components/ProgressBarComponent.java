@@ -122,7 +122,7 @@ public class ProgressBarComponent implements CustomUIPanelPlugin {
                     detectedOnceInPerimiters = false;
                 }
                 if(pressingMouse){
-                    float prevX = renderingPanel.getPosition().getX()+sectionWidth+10;
+                    float prevX = renderingPanel.getPosition().getX()+sectionWidth/2+10;
                     if(detectedOnceInPerimiters){
                         topY = Global.getSettings().getScreenHeight();
                         bottomY = 0;

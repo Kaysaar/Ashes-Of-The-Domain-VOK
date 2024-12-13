@@ -31,7 +31,7 @@ public class GPModifiers extends BaseMarketConditionPlugin {
         }
     }
     public static void applyRessourceCond(MarketAPI marketAPI) {
-        if (marketAPI.isInEconomy() && !marketAPI.hasCondition(" aotd_gp_mod")){
+        if (marketAPI.isInEconomy() && !marketAPI.hasCondition("aotd_gp_mod")){
             if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(marketAPI.getFaction())!=null){
                 marketAPI.addCondition("aotd_gp_mod");
             }

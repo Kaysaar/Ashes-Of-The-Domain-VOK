@@ -18,11 +18,20 @@ public class GpMegaStructureSectionsSpec {
     public HashMap<String,Integer>gpAfterRestorationCost;
     public float daysForRenovation;
     public float runningCost;
+    public float runningCostBeforeRepair;
     public float renovationCost;
     public String icon;
     public String description;
     public String name;
     public String script;
+
+    public float getRunningCostBeforeRepair() {
+        return runningCostBeforeRepair;
+    }
+
+    public void setRunningCostBeforeRepair(float runningCostBeforeRepair) {
+        this.runningCostBeforeRepair = runningCostBeforeRepair;
+    }
 
     public float getRenovationCost() {
         return renovationCost;
@@ -126,7 +135,8 @@ public class GpMegaStructureSectionsSpec {
                 if(!AoTDMisc.isStringValid(id))continue;
                 String name = jsonObject.getString("name");
                 String script = jsonObject.getString("script");
-                int baseUpkeepCredits = jsonObject.getInt("baseUpkeep");
+                int baseUpkeepCredits = jsonObject.getInt("baseUpkeepAfterRestoration");
+                int baseUpkeepCreditsBefore = jsonObject.getInt("baseUpkeepBeforeRestoration");
                 int renovationCost= jsonObject.getInt("renovationCost");
                 HashMap<String, Integer> baseGPCost = new HashMap<>();
                 baseGPCost = AoTDMisc.loadCostMap(jsonObject.getString("baseGPUpkeep"));
@@ -142,6 +152,7 @@ public class GpMegaStructureSectionsSpec {
                 spec.setName(name);
                 spec.setScript(script);
                 spec.setRunningCost(baseUpkeepCredits);
+                spec.setRunningCostBeforeRepair(baseUpkeepCreditsBefore);
                 spec.setRenovationCost(renovationCost);
                 spec.setGpRestorationCost(gpResorationCost);
                 spec.setGpUpkeepOfSection(baseGPCost);

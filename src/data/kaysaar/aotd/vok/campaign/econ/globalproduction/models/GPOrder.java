@@ -90,15 +90,10 @@ public float getBonus(){
     public boolean canProceed() {
         if(isAboutToBeRemoved())return false;
         // Check if the obtained resources meet or exceed the required resources
-        for (Map.Entry<String, Integer> entry : assignedResources.entrySet()) {
-            String resourceKey = entry.getKey();
-            Integer requiredAmount = entry.getValue()*getAmountOfItemsProduced();
-
-            // Get the amount of the resource obtained, handling cases where the key might not be present
-            Integer obtainedAmount = GPManager.getInstance().getTotalResources().containsKey(resourceKey) ?GPManager.getInstance().getTotalResources().get(resourceKey) : 0;
-
-            // If the required amount is greater than the obtained amount, return false
-            if(requiredAmount!=0&&obtainedAmount==0)return false;
+        for (String s : getSpecFromClass().getSupplyCost().keySet()) {
+            if(GPManager.getInstance().getTotalResources().get(s)<=0){
+                return false;
+            }
         }
         // If all required resources meet or exceed the required amounts, return true
         return true;
@@ -130,6 +125,7 @@ public float getBonus(){
             if(spec.getProjectId().equals(this.specId)){
                 return spec;
             }
+
         }
         return null;
     }

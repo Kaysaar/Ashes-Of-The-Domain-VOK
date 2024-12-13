@@ -33,7 +33,7 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
         if (!isFunctional()) {
             unapply();
         }
-
+        float accessMult = (float) Math.round(this.market.getAccessibilityMod().computeEffective(0.0F) * 100.0F) /150.0F;
         if(Global.getSettings().getModManager().isModEnabled("alcoholism")){
             demand("alcoholism_stout_c",4);
             demand("alcoholism_sunshine_c",4);
@@ -44,11 +44,10 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
             demand("alcoholism_absynth_c",4);
         }
         market.getStability().modifyFlat(getModId(1), STAB_BONUS, "Tourism");
-
+        this.getIncome().modifyMult("tourism_access", accessMult, "Accessibility");
     }
     @Override
     public void applyAICoreToIncomeAndUpkeep() {
-        float accessMult = (float) Math.round(this.market.getAccessibilityMod().computeEffective(0.0F) * 100.0F) /150.0F;
         String access = "Accessibility";
         String alkoholism = "Alcohol Supply";
         if(Global.getSettings().getModManager().isModEnabled("alcoholism")){
@@ -68,7 +67,7 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
 
         }
 
-        this.getIncome().modifyMult("tourism_access", accessMult, access);
+
 
         if (this.aiCoreId != null) {
             String name = "AI Core assigned";
