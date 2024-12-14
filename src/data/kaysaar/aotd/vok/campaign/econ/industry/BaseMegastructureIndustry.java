@@ -35,6 +35,9 @@ public class BaseMegastructureIndustry extends BaseIndustry {
         BaseMegastructureIndustry ind = (BaseMegastructureIndustry) market.getIndustry(id);
         ind.setMegastructure(megastructure);
     }
+    public void applyInMega(){
+
+    }
     @Override
     public void apply() {
 
@@ -55,7 +58,7 @@ public class BaseMegastructureIndustry extends BaseIndustry {
 
                 }
                 megastructure.applySupplyToIndustryLast(this);
-
+                applyInMega();
             }
 
         }
