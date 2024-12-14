@@ -7,8 +7,7 @@ import com.fs.starfarer.api.util.Misc;
 
 public class NidavelirMegastructureInd extends BaseMegastructureIndustry{
     @Override
-    public void apply() {
-        super.apply();
+    public void applyInMega() {
         if(megastructure.isFullyRestored()){
             this.getMarket().getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT)
                     .modifyFlat(spec.getId(), 4f, Misc.ucFirst(spec.getName().toLowerCase()));

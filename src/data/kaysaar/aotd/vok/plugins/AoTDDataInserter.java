@@ -216,7 +216,7 @@ public class AoTDDataInserter {
 
     }
 
-    private  SectorEntityToken getEntityWithCriteria(String planetType) {
+    private  SectorEntityToken getEntityWithCriteria(String ... criteria) {
         List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
         Collections.shuffle(starSystems);
         for (StarSystemAPI starSystem : starSystems) {
@@ -232,8 +232,11 @@ public class AoTDDataInserter {
                     if(planet.getRadius()<=70)continue;
                     if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
                     if(planet.getMemory().contains(GPBaseMegastructure.memKey))continue;
-                    if(planetType!=null){
-                        if(!planet.getTypeId().equals(planetType))continue;
+                    if(criteria!=null){
+                        for (String criterion : criteria) {
+                            if(planet.getTypeId().equals(criterion))return planet;
+
+                        }
                     }
                     return planet;
                 }
@@ -243,14 +246,22 @@ public class AoTDDataInserter {
     }
 
     public  void spawnPluto() {
-        PlanetAPI planet = (PlanetAPI) getEntityWithCriteria(Planets.PLANET_LAVA);
+        PlanetAPI planet = (PlanetAPI) getEntityWithCriteria(Planets.PLANET_LAVA,Planets.PLANET_LAVA_MINOR);
+        if(planet==null){
+            planet = (PlanetAPI) getEntityWithCriteria();
+            StarSystemAPI starSystem = planet.getStarSystem();
+            planet  = starSystem.addPlanet(null, starSystem.getStar(), "Pluto", Planets.PLANET_LAVA, 0, 120, 1200, 360);
+
+        }
         for (Map.Entry<String, String> entry : ResourceDepositsCondition.COMMODITY.entrySet()) {
             if(entry.getValue().equals(Commodities.RARE_ORE)||entry.getValue().equals(Commodities.ORE)){
                 planet.getMarket().removeCondition(entry.getKey());
             }
         }
+        planet.getMarket().addCondition(Conditions.VERY_HOT);
         planet.getMarket().addCondition(Conditions.RARE_ORE_ULTRARICH);
         planet.getMarket().addCondition(Conditions.ORE_ULTRARICH);
+
         String t = planet.getMarket().addCondition("aotd_pluto_station");
         planet.getMarket().getSpecificCondition(t).setSurveyed(false);
         SectorEntityToken token = planet.getMarket().getStarSystem().addCustomEntity("aotd_pluto_station","Pluto Mining Station","aotd_pluto_station",Factions.NEUTRAL);
