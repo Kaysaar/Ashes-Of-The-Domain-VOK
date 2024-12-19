@@ -9,10 +9,12 @@ import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
+import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.impl.campaign.rulecmd.AoTDMegastructureRules;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureProductionListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureUpkeepListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDSupertencileListener;
@@ -22,6 +24,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.CoreCorrectStateE
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
@@ -31,11 +34,13 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
+import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.ui.FontException;
 import org.magiclib.achievements.MagicAchievement;
 import org.magiclib.achievements.MagicAchievementManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -89,9 +94,9 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.removeListenerOfClass(GpProductionButtonRenderer.class);
         l.addListener(new AoTDMegastructureProductionListener(), true);
         l.addListener(new AoTDMegastructureUpkeepListener(), true);
-        l.addListener(new NidavelirClaimMegastructure(),true);
-        l.addListener(new AoTDSupertencileListener(),true);
-        l.addListener(new BifrostReesarchListener(),true);
+        l.addListener(new NidavelirClaimMegastructure(), true);
+        l.addListener(new AoTDSupertencileListener(), true);
+        l.addListener(new BifrostReesarchListener(), true);
     }
 
 
@@ -194,6 +199,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             if (option.Tier.ordinal() <= highestTierUnlock) {
                 option.setResearched(true);
                 option.havePaidForResearch = true;
+                AoTDListenerUtilis.finishedResearch(option.getSpec().getId(),Global.getSector().getPlayerFaction());
             }
         }
         Global.getSettings().getCommoditySpec(Commodities.GAMMA_CORE).getTags().add("aotd_ai_core");

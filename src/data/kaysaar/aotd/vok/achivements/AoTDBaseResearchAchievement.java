@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 public class AoTDBaseResearchAchievement extends MagicAchievement {
     ArrayList<String>technologies = new ArrayList<>();
+    boolean needsToResearchOnce = false;
     @Override
     public void onSaveGameLoaded(boolean isComplete) {
         super.onSaveGameLoaded(isComplete);
@@ -29,9 +30,13 @@ public class AoTDBaseResearchAchievement extends MagicAchievement {
     public void advanceAfterInterval(float amount) {
         boolean researchedAll = true;
         for (String technology : technologies) {
-            if(!AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(technology)){
+            if(!AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(technology)&&!needsToResearchOnce){
                 researchedAll = false;
                 break;
+            }
+            else{
+                completeAchievement();
+                return;
             }
         }
         if(technologies.isEmpty()){
