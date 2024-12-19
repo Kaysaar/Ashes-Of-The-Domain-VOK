@@ -194,6 +194,9 @@ public float getBonus(){
             if(getSpecFromClass().type== GPSpec.ProductionType.WEAPON){
                 local.addWeapons(getSpecFromClass().getIdOfItemProduced(), produced);
             }
+            if(getSpecFromClass().type== GPSpec.ProductionType.AICORE){
+                local.addCommodity(getSpecFromClass().getAiCoreSpecAPI().getId(), produced);
+            }
             if(getSpecFromClass().type== GPSpec.ProductionType.ITEM){
                 local.addSpecial(new SpecialItemData(getSpecFromClass().getItemSpecAPI().getId(),null),produced);
             }

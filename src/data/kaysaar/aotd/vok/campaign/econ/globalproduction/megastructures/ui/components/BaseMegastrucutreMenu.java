@@ -64,7 +64,7 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
         for (CustomPanelAPI value : panelsOfSections.values()) {
             tooltipOfSections.removeComponent(value);
         }
-        mainPanel.removeComponent(tooltipOfSections);
+        mainPanel.removeComponent(toolTipPanel);
     }
     public void addUI(){
         width = parentPanel.getPosition().getWidth();
