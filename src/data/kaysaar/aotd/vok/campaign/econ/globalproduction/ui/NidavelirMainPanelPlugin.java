@@ -104,7 +104,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         this.panel = panel;
         tooltipMakerAPI = panel.createUIElement(30, 30, false);
          helpButton =  tooltipMakerAPI.addAreaCheckbox("",null,Global.getSettings().getBasePlayerColor(), Global.getSettings().getBasePlayerColor(),Global.getSettings().getBrightPlayerColor(),29,30,0f);
-    helpButton.getPosition().inTL(0,0);
+        helpButton.getPosition().inTL(0,0);
         tooltipMakerAPI.addImage(Global.getSettings().getSpriteName("ui_campaign_components", "question"), 30, 30, 0f);
         tooltipMakerAPI.getPrev().getPosition().inTL(0,0);
         //tooltipMakerAPI.addCustom(AoTDGatehringPointPlugin.getMarketEntitySpriteWithName(200,60,55,Misc.getPlayerMarkets(true).get(1)),5f);
