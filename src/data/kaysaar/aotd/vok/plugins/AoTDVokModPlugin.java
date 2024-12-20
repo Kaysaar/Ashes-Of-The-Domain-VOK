@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.plugins;
 
 
 import com.fs.starfarer.api.BaseModPlugin;
+import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
@@ -9,8 +10,12 @@ import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
+import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivity;
+import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityEventIntel;
+import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityManager;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.impl.campaign.rulecmd.AoTDMegastructureRules;
+import com.fs.starfarer.api.util.IntervalUtil;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
@@ -32,6 +37,7 @@ import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchProgressionScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
+import exerelin.campaign.intel.hostileactivity.NexHostileActivityManager;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.lazywizard.lazylib.MathUtils;
@@ -150,6 +156,39 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         if (!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)) {
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
+
+//        Global.getSector().addTransientScript(new EveryFrameScript() {
+//            protected IntervalUtil util = new IntervalUtil(1f,1.5f);
+//            @Override
+//            public boolean isDone() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean runWhilePaused() {
+//                return false;
+//            }
+//
+//            @Override
+//            public void advance(float amount) {
+//                util.advance(amount);
+//                Global.getSector().removeTransientScriptsOfClass(HostileActivityManager.class);
+//                Global.getSector().removeScriptsOfClass(HostileActivityManager.class);
+//                Global.getSector().removeTransientScriptsOfClass(NexHostileActivityManager.class);
+//                Global.getSector().removeScriptsOfClass(NexHostileActivityManager.class);
+//                if(util.intervalElapsed()){
+//
+//                    if(HostileActivityEventIntel.get()!=null) {
+//                        HostileActivityEventIntel.get().endImmediately();
+//                        Global.getSector().getMemoryWithoutUpdate().unset(HostileActivityEventIntel.KEY);
+//                        Global.getSector().getListenerManager().removeListenerOfClass(HostileActivityEventIntel.class);
+//                        Global.getSector().removeTransientScript(this);
+//                    }
+//                }
+//
+//
+//            }
+//        });
         Global.getSector().addTransientScript(new CoreCorrectStateEnforcer());
         Global.getSector().addTransientScript(new CoreUITracker());
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");

@@ -228,12 +228,14 @@ public class AoTDFactionResearchManager {
             }
         }
 
-
-        if (hadMetreq) {
-            Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
-        } else {
-            Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
+        if(getFaction().isPlayerFaction()){
+            if (hadMetreq) {
+                Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
+            } else {
+                Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
+            }
         }
+
 
 
         if (this.getFaction().isPlayerFaction()) {
