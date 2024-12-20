@@ -161,11 +161,11 @@ public class CoreUITracker implements EveryFrameScript {
             boolean found = false;
             if (!insertedOnce) {
                 UIComponentAPI componentToReplace = (UIComponentAPI) panelMap.get(button);
-                UIData.WIDTH = Global.getSettings().getScreenWidth() - mainParent.getPosition().getX();
+                UIData.WIDTH = Global.getSettings().getScreenWidth() - tryToGetButtonProd("colonies").getPosition().getX();
                 UIData.HEIGHT = componentToReplace.getPosition().getHeight();
                 UIData.recompute();
                 AoTDResearchUI.HEIGHT = componentToReplace.getPosition().getHeight();
-                AoTDResearchUI.WIDTH = Global.getSettings().getScreenWidth() - mainParent.getPosition().getX();
+                AoTDResearchUI.WIDTH = Global.getSettings().getScreenWidth() - tryToGetButtonProd("colonies").getPosition().getX();
                 AoTDResearchUI.recompute();
 
             }
