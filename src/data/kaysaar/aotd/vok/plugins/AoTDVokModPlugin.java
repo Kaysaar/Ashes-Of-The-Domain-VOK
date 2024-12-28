@@ -31,6 +31,7 @@ import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
+import data.kaysaar.aotd.vok.scripts.CoreUITracker2;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
@@ -191,6 +192,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //        });
         Global.getSector().addTransientScript(new CoreCorrectStateEnforcer());
         Global.getSector().addTransientScript(new CoreUITracker());
+        Global.getSector().addTransientScript(new CoreUITracker2());
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");
         AoTDMainResearchManager.getInstance().updateModIdRepo();
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
