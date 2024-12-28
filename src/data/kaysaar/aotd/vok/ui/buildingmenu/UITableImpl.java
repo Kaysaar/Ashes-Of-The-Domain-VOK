@@ -12,7 +12,6 @@ import java.util.List;
 
 public class UITableImpl implements CustomUIPanelPlugin {
     ArrayList<DropDownButton> dropDownButtons;
-    ArrayList<CustomButton> buttonsToCheck;
     TooltipMakerAPI tooltipOfImpl;
     CustomPanelAPI panelToWorkWith;
     CustomPanelAPI mainPanel;
@@ -25,7 +24,6 @@ public class UITableImpl implements CustomUIPanelPlugin {
         this.xCord = xCord;
         this.yCord = yCord;
         dropDownButtons = new ArrayList<>();
-        buttonsToCheck = new ArrayList<>();
         mainPanel = panelToPlace;
         panelToWorkWith = mainPanel.createCustomPanel(width,height,null);
 
@@ -53,12 +51,7 @@ public class UITableImpl implements CustomUIPanelPlugin {
         for (DropDownButton dropDownButton : dropDownButtons) {
             dropDownButton.advance(amount);
         }
-        for (CustomButton buttonAPI : buttonsToCheck) {
-            if(buttonAPI.isChecked()){
-                buttonAPI.setChecked(false);
-                reportButtonPressed(buttonAPI.mainButton);
-            }
-        }
+
     }
 
     @Override
@@ -73,8 +66,7 @@ public class UITableImpl implements CustomUIPanelPlugin {
 
     public void createTable() {
 
-        panelToWorkWith.addUIElement(tooltipOfImpl).inTL(0,0);
-        mainPanel.addComponent(panelToWorkWith).inTL(0,0);
+
     }
 
     public void recreateTable() {

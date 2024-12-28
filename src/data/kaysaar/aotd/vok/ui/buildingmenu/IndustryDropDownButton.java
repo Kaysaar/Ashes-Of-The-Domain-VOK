@@ -10,7 +10,7 @@ public class IndustryDropDownButton extends DropDownButton{
     ArrayList<IndustrySpecAPI>subSpecs;
     MarketAPI market;
     public IndustryDropDownButton(UITableImpl tableOfReference, float width, float height, float maxWidth, float maxHeight, IndustrySpecAPI mainspec, ArrayList<IndustrySpecAPI> subSpecs, MarketAPI market) {
-        super(tableOfReference, width, height, maxWidth, maxHeight);
+        super(tableOfReference, width, height, maxWidth, maxHeight,subSpecs!=null&&!subSpecs.isEmpty());
         this.mainSpec = mainspec;
         this.subSpecs  = subSpecs;
         this.market = market;
@@ -21,11 +21,14 @@ public class IndustryDropDownButton extends DropDownButton{
     public void createUIContent() {
         if (buttons == null) {
             buttons = new ArrayList<>();
-            for (IndustrySpecAPI subSpec : subSpecs) {
-                IndustryButton button = new IndustryButton(width-30,height,subSpec,10f,market);
-                button.initializeUI();
-                buttons.add(button);
+            if(droppableMode){
+                for (IndustrySpecAPI subSpec : subSpecs) {
+                    IndustryButton button = new IndustryButton(width-30,height,subSpec,10f,market);
+                    button.initializeUI();
+                    buttons.add(button);
+                }
             }
+
             mainButton = new IndustryButton(width-20,height,mainSpec,0f,market);
             mainButton.initializeUI();
         }
