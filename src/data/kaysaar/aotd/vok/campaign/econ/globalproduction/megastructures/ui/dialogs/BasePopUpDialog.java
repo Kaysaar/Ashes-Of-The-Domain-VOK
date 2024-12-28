@@ -10,7 +10,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 public class BasePopUpDialog extends PopUpUI {
     TooltipMakerAPI headerTooltip;
     String title;
-    float x,y;
+    public float x,y;
     public BasePopUpDialog(String headerTitle) {
         this.title = headerTitle;
         x=15;

@@ -20,12 +20,12 @@ public class DropDownButton implements CustomUIPanelPlugin {
     CustomPanelAPI mainPanel;
     TooltipMakerAPI tooltipOfImpl;
     float width,height,maxWidth,maxHeight;
-
+    public boolean droppableMode;
     public CustomPanelAPI getPanelOfImpl() {
         return mainPanel;
     }
 
-    public DropDownButton(UITableImpl tableOfReference, float width, float height, float maxWidth, float maxHeight){
+    public DropDownButton(UITableImpl tableOfReference, float width, float height, float maxWidth, float maxHeight,boolean droppableMode){
         this.tableOfReference = tableOfReference;
         this.width = width;
         this.height = height;
@@ -33,6 +33,7 @@ public class DropDownButton implements CustomUIPanelPlugin {
         this.maxWidth = maxWidth;
         mainPanel = Global.getSettings().createCustom(width,height,this);
         panelOfImpl = mainPanel.createCustomPanel(width,height,null);
+        this.droppableMode = droppableMode;
     }
 
     @Override
@@ -77,8 +78,15 @@ public class DropDownButton implements CustomUIPanelPlugin {
         }
         if(mainButton.isChecked()){
             mainButton.setChecked(false);
-            isDropped = !isDropped;
-            tableOfReference.recreateTable();
+            if(droppableMode){
+                isDropped = !isDropped;
+                tableOfReference.recreateTable();
+            }
+            else{
+                tableOfReference.buttonPressed(mainButton);
+            }
+
+
         }
     }
 

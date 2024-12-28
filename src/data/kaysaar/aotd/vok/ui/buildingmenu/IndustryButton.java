@@ -68,7 +68,7 @@ public class IndustryButton extends CustomButton {
         } else if (industry.isIndustry()) {
             type.one = "Industry";
             type.two = Color.ORANGE;
-            if (market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).getFlatBonus() >getAmountOfIndustriesFromMarket()){
+            if (market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).getFlatBonus()-getAmountOfIndustriesFromMarket()<=0){
                 type.two = Misc.getNegativeHighlightColor();
             }
         } else if (industry.isStructure()) {

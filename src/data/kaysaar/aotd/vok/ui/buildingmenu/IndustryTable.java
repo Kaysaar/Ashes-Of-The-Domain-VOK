@@ -17,6 +17,7 @@ import java.util.Map;
 public class IndustryTable extends UITableImpl {
     ArrayList<IndustrySpecAPI>specs;
     MarketAPI market;
+    float currYPos = 0;
     public IndustryTable(float width, float height, CustomPanelAPI panelToPlace, boolean doesHaveScroller, float xCord, float yCord,MarketAPI market) {
         super(width, height, panelToPlace, doesHaveScroller, xCord, yCord);
         specs = new ArrayList<>();
@@ -25,14 +26,14 @@ public class IndustryTable extends UITableImpl {
         specs.add(Global.getSettings().getIndustrySpec("orbitalstation_mid"));
         specs.add(Global.getSettings().getIndustrySpec("orbitalstation_high"));
         if(dropDownButtons.isEmpty()){
-            for (Map.Entry<IndustrySpecAPI, ArrayList<IndustrySpecAPI>> entry : BuildingMenuMisc.getSpecMapParentChild().entrySet()) {
-                IndustryDropDownButton button  = new IndustryDropDownButton(this,width,40,0,0,entry.getKey(),entry.getValue(),market);
+
+            ArrayList<IndustrySpecAPI>specs = BuildingMenuMisc.getAllSpecsWithoutDowngrade();
+            BuildingMenuMisc.sortIndustrySpecsByName(specs);
+            for (IndustrySpecAPI industrySpecAPI :specs ) {
+
+                IndustryDropDownButton button  = new IndustryDropDownButton(this,width,40,0,0,industrySpecAPI,BuildingMenuMisc.getSpecsOfParent(industrySpecAPI.getData()),market);
                 dropDownButtons.add(button);
-            }
-            for (IndustrySpecAPI industrySpecAPI : BuildingMenuMisc.getAllSpecsWithoutDowngrade()) {
-                IndustryButton button = new IndustryButton(width-20,40,industrySpecAPI,0f,market);
-                button.initializeUI();
-                buttonsToCheck.add(button);
+
             }
 
 
@@ -47,26 +48,33 @@ public class IndustryTable extends UITableImpl {
             IndustryDropDownButton button = (IndustryDropDownButton) dropDownButton;
             if(BuildingMenuMisc.isIndustryFromTreePresent(button.mainSpec,market))continue;
             boolean found = false;
-            for (IndustrySpecAPI subSpec : button.subSpecs) {
-                if(shouldShowIndustry(subSpec.getNewPluginInstance(market))){
-                    found = true;
-                    break;
+            if(dropDownButton.droppableMode){
+                for (IndustrySpecAPI subSpec : button.subSpecs) {
+                    if(shouldShowIndustry(subSpec.getNewPluginInstance(market))){
+                        found = true;
+                        break;
+                    }
                 }
+                if(!found)continue;
             }
-            if(!found)continue;
+            else{
+                Industry ind = button.mainSpec.getNewPluginInstance(market);
+                if(!showIndustry(ind, button.mainSpec))continue;
+            }
+
             button.resetUI();
             button.createUI();
             tooltipOfImpl.addCustom(dropDownButton.getPanelOfImpl(),2f);
         }
-        for (CustomButton customButton : buttonsToCheck) {
-            IndustryButton button = (IndustryButton) customButton;
-            Industry ind = button.spec.getNewPluginInstance(market);
-            if(showIndustry(ind, button.spec)){
-                tooltipOfImpl.addCustom(customButton.getPanel(),2f);
 
+        panelToWorkWith.addUIElement(tooltipOfImpl).inTL(0,0);
+        if(tooltipOfImpl.getExternalScroller()!=null){
+            if(currYPos+panelToWorkWith.getPosition().getHeight()>= tooltipOfImpl.getHeightSoFar()){
+                currYPos = tooltipOfImpl.getHeightSoFar()-panelToWorkWith.getPosition().getHeight();
             }
+            tooltipOfImpl.getExternalScroller().setYOffset(currYPos);
         }
-        super.createTable();
+        mainPanel.addComponent(panelToWorkWith).inTL(0,0);
 
     }
 
@@ -83,4 +91,11 @@ public class IndustryTable extends UITableImpl {
         }
     }
 
+    @Override
+    public void advance(float amount) {
+        super.advance(amount);
+        if(tooltipOfImpl!=null&&tooltipOfImpl.getExternalScroller()!=null){
+            currYPos = tooltipOfImpl.getExternalScroller().getYOffset();
+        }
+    }
 }
