@@ -44,8 +44,7 @@ public class LightProduction extends BaseIndustry {
     @Override
     public boolean isAvailableToBuild() {
 
-        return !AoDUtilis.checkForFamilyIndustryInstance(market,Industries.LIGHTINDUSTRY,Industries.LIGHTINDUSTRY,this.id,this.currTooltipMode) &&super.isAvailableToBuild();
-
+return true;
     }
 
     @Override

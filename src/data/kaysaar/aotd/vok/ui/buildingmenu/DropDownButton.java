@@ -73,7 +73,7 @@ public class DropDownButton implements CustomUIPanelPlugin {
         for (CustomButton button : buttons) {
             if(button.isChecked()){
                 button.setChecked(false);
-                tableOfReference.buttonPressed(button);
+                tableOfReference.reportButtonPressed(button);
             }
         }
         if(mainButton.isChecked()){
@@ -83,10 +83,13 @@ public class DropDownButton implements CustomUIPanelPlugin {
                 tableOfReference.recreateTable();
             }
             else{
-                tableOfReference.buttonPressed(mainButton);
+                tableOfReference.reportButtonPressed(mainButton);
             }
 
 
+        }
+        if(droppableMode){
+            mainButton.mainButton.highlight();
         }
     }
 

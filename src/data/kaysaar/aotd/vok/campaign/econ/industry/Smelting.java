@@ -36,8 +36,7 @@ public class Smelting extends BaseIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        return !AoDUtilis.checkForFamilyIndustryInstance(market, Industries.REFINING, Industries.REFINING, this.id, this.currTooltipMode) && super.isAvailableToBuild();
-
+        return true;
     }
 
     @Override

@@ -18,6 +18,8 @@ class ReflectionUtilis {
         private val methodClass = Class.forName("java.lang.reflect.Method", false, Class::class.java.classLoader)
         private val getMethodNameHandle = MethodHandles.lookup().findVirtual(methodClass, "getName", MethodType.methodType(String::class.java))
         private val invokeMethodHandle = MethodHandles.lookup().findVirtual(methodClass, "invoke", MethodType.methodType(Any::class.java, Any::class.java, Array<Any>::class.java))
+            private val setMethodAccessable = MethodHandles.lookup()
+                .findVirtual(methodClass, "setAccessible", MethodType.methodType(Void.TYPE, Boolean::class.javaPrimitiveType))
 
 
 
@@ -40,7 +42,8 @@ class ReflectionUtilis {
                 setAcessMethod.invoke(obj, true)
                 val name = getNameMethod.invoke(obj)
                 if (name.toString() == fieldName) {
-                    setMethod.invoke(obj, instanceToModify, newValue)
+                    setFieldAccessibleHandle.invoke(obj, true)
+                    setFieldHandle.invoke(obj, instanceToModify, newValue)
                 }
             }
         }
@@ -56,23 +59,27 @@ class ReflectionUtilis {
                 "setAccessible",
                 MethodType.methodType(Void.TYPE, Boolean::class.javaPrimitiveType)
             )
+            var instances = instanceToGetFrom.javaClass;
+            while (instances!=null){
+                val instancesOfFields: Array<out Any> = instances.declaredFields
+                for (obj in instancesOfFields) {
+                    setAcessMethod.invoke(obj, true)
+                    val name = getNameMethod.invoke(obj)
+                    if (name.toString() == fieldName) {
+                        return getFieldHandle.invoke(obj, instances)
+                    }
+                }
+                val instancesOfFields2: Array<out Any> = instances.fields
+                for (obj in instancesOfFields2) {
+                    setAcessMethod.invoke(obj, true)
+                    val name = getNameMethod.invoke(obj)
+                    if (name.toString() == fieldName) {
+                        return getFieldHandle.invoke(obj, instances)
+                    }
+                }
+                instances = instances.superclass;
+            }
 
-            val instancesOfFields: Array<out Any> = instanceToGetFrom.javaClass.declaredFields
-            for (obj in instancesOfFields) {
-                setAcessMethod.invoke(obj, true)
-                val name = getNameMethod.invoke(obj)
-                if (name.toString() == fieldName) {
-                    return getMethod.invoke(obj, instanceToGetFrom)
-                }
-            }
-            val instancesOfFields2: Array<out Any> = instanceToGetFrom.javaClass.fields
-            for (obj in instancesOfFields2) {
-                setAcessMethod.invoke(obj, true)
-                val name = getNameMethod.invoke(obj)
-                if (name.toString() == fieldName) {
-                    return getMethod.invoke(obj, instanceToGetFrom)
-                }
-            }
             return null
         }        @JvmStatic
         fun getPrivateVariableFromSuperClass(fieldName: String, instanceToGetFrom: Any): Any? {
@@ -86,17 +93,66 @@ class ReflectionUtilis {
                 "setAccessible",
                 MethodType.methodType(Void.TYPE, Boolean::class.javaPrimitiveType)
             )
-
-            val instancesOfFields: Array<out Any> = instanceToGetFrom.javaClass.superclass.declaredFields
-            for (obj in instancesOfFields) {
-                setAcessMethod.invoke(obj, true)
-                val name = getNameMethod.invoke(obj)
-                if (name.toString() == fieldName) {
-                    return getMethod.invoke(obj, instanceToGetFrom)
+                var instances = instanceToGetFrom.javaClass;
+                while (instances!=null){
+                    val instancesOfFields: Array<out Any> = instances.declaredFields
+                    for (obj in instancesOfFields) {
+                        setAcessMethod.invoke(obj, true)
+                        val name = getNameMethod.invoke(obj)
+                        if (name.toString() == fieldName) {
+                            return getFieldHandle.invoke(obj, instanceToGetFrom)
+                        }
+                    }
+                    val instancesOfFields2: Array<out Any> = instances.fields
+                    for (obj in instancesOfFields2) {
+                        setAcessMethod.invoke(obj, true)
+                        val name = getNameMethod.invoke(obj)
+                        if (name.toString() == fieldName) {
+                            return getFieldHandle.invoke(obj, instanceToGetFrom)
+                        }
+                    }
+                    instances = instances.superclass;
                 }
-            }
+
+
+
             return null
         }
+            @JvmStatic
+            fun setPrivateVariableFromSuperclass(fieldName: String, instanceToModify: Any, newValue: Any?) {
+                val fieldClass = Class.forName("java.lang.reflect.Field", false, Class::class.java.classLoader)
+                val getNameMethod =
+                    MethodHandles.lookup().findVirtual(fieldClass, "getName", MethodType.methodType(String::class.java))
+                val setAcessMethod = MethodHandles.lookup().findVirtual(
+                    fieldClass,
+                    "setAccessible",
+                    MethodType.methodType(Void.TYPE, Boolean::class.javaPrimitiveType)
+                )
+                var instances = instanceToModify.javaClass;
+                while (instances!=null){
+                    val instancesOfFields: Array<out Any> = instances.declaredFields
+                    for (obj in instancesOfFields) {
+                        setAcessMethod.invoke(obj, true)
+                        val name = getFieldNameHandle.invoke(obj)
+                        if (name.toString() == fieldName) {
+                            setFieldAccessibleHandle.invoke(obj, true)
+                            setFieldHandle.invoke(obj, instanceToModify, newValue)
+                            return
+                        }
+                    }
+                    val instancesOfFields2: Array<out Any> = instances.fields
+                    for (obj in instancesOfFields2) {
+                        setAcessMethod.invoke(obj, true)
+                        val name = getNameMethod.invoke(obj)
+                        if (name.toString() == fieldName) {
+                            setFieldAccessibleHandle.invoke(obj, true)
+                            setFieldHandle.invoke(obj, instanceToModify, newValue)
+                            return
+                        }
+                    }
+                    instances = instances.superclass;
+                }
+            }
         @JvmStatic
         fun set(fieldName: String, instanceToModify: Any, newValue: Any?)
         {
@@ -221,7 +277,7 @@ class ReflectionUtilis {
                         }
                     }
                 }
-
+                setMethodAccessable.invoke(method,true)
                 // Invoke the method with the projected arguments
                 return invokeMethodHandle.invoke(method, instance, projectedArgs)
             }
