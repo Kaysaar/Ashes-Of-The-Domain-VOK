@@ -38,6 +38,7 @@ import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchProgressionScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
+import data.kaysaar.aotd.vok.ui.buildingmenu.industrytags.IndustryTagManager;
 import exerelin.campaign.intel.hostileactivity.NexHostileActivityManager;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -61,6 +62,9 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     @Override
     public void onApplicationLoad() throws Exception {
         Global.getSettings().loadFont(fontInsigniaMedium);
+        IndustryTagManager.loadDefaultTags();
+        IndustryTagManager.loadModdedTags();
+
     }
 
     private void setListenersIfNeeded() {

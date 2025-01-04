@@ -15,6 +15,7 @@ public class UITableImpl implements CustomUIPanelPlugin {
     TooltipMakerAPI tooltipOfImpl;
     CustomPanelAPI panelToWorkWith;
     CustomPanelAPI mainPanel;
+    TooltipMakerAPI tooltipOfButtons;
     float width,height,xCord,yCord;
     boolean doesHaveScroller;
     public UITableImpl(float width, float height, CustomPanelAPI panelToPlace, boolean doesHaveScroller, float xCord, float yCord) {
@@ -27,8 +28,8 @@ public class UITableImpl implements CustomUIPanelPlugin {
         mainPanel = panelToPlace;
         panelToWorkWith = mainPanel.createCustomPanel(width,height,null);
 
-        tooltipOfImpl = panelToWorkWith.createUIElement(width, height, doesHaveScroller);
-
+        tooltipOfImpl = panelToWorkWith.createUIElement(width, height-22, doesHaveScroller);
+        tooltipOfButtons = mainPanel.createUIElement(width, 22, false);
     }
 
     @Override
@@ -45,7 +46,9 @@ public class UITableImpl implements CustomUIPanelPlugin {
     public void render(float alphaMult) {
 
     }
+    public void createSections(){
 
+    }
     @Override
     public void advance(float amount) {
         for (DropDownButton dropDownButton : dropDownButtons) {
@@ -81,7 +84,7 @@ public class UITableImpl implements CustomUIPanelPlugin {
         tooltipOfImpl = panelToWorkWith.createUIElement(width,height,doesHaveScroller);
     }
 
-    public void reportButtonPressed(ButtonAPI buttonPressed) {
+    public void reportButtonPressed(CustomButton buttonPressed) {
 
     }
 }

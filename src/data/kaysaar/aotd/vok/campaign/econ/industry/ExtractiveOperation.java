@@ -56,17 +56,13 @@ public class ExtractiveOperation extends BaseIndustry {
     public boolean isAvailableToBuild() {
 
             return (AoDUtilis.getNormalOreAmount(market)>=-1 || AoDUtilis.getOrganicsAmount(market) >=-1
-                    ||AoDUtilis.getVolatilesAmount(market)>=-1 ||AoDUtilis.getRareOreAmount(market)>=-1)&&
-                    !AoDUtilis.checkForFamilyIndustryInstance(market, Industries.MINING,Industries.MINING,this.id,this.currTooltipMode)
+                    ||AoDUtilis.getVolatilesAmount(market)>=-1 ||AoDUtilis.getRareOreAmount(market)>=-1)
                     &&super.isAvailableToBuild();
 
     }
 
     @Override
     public String getUnavailableReason() {
-        if(AoDUtilis.checkForFamilyIndustryInstance(market, Industries.MINING, Industries.MINING,this.id,this.currTooltipMode)){
-            return AoDUtilis.reason;
-        }
         return super.getUnavailableReason();
     }
 

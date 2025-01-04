@@ -29,7 +29,7 @@ public class PopUpUI implements CustomUIPanelPlugin {
     SpriteAPI bottomLeft= Global.getSettings().getSprite("ui","panel00_bot_left");
     SpriteAPI bottomRight= Global.getSettings().getSprite("ui","panel00_bot_right");
     public static float buttonConfirmWidth = 160;
-    float frames;
+    public float frames;
     public CustomPanelAPI panelToInfluence;
     public UILinesRenderer rendererBorder = new UILinesRenderer(0f);
    public ButtonAPI confirmButton;
@@ -101,7 +101,7 @@ public class PopUpUI implements CustomUIPanelPlugin {
 
     @Override
     public void advance(float amount) {
-        if(frames<15){
+        if(frames<=15){
             frames++;
         }
         if(confirmButton!=null){
@@ -109,12 +109,14 @@ public class PopUpUI implements CustomUIPanelPlugin {
                 confirmButton.setChecked(false);
                 applyConfirmScript();
                 ProductionUtil.getCoreUI().removeComponent(panelToInfluence);
+                onExit();
             }
         }
         if(cancelButton!=null){
             if(cancelButton.isChecked()){
                 cancelButton.setChecked(false);
                 ProductionUtil.getCoreUI().removeComponent(panelToInfluence);
+                onExit();
             }
 
         }
@@ -136,22 +138,25 @@ public class PopUpUI implements CustomUIPanelPlugin {
                     if(!hovers){
                         ProductionUtil.getCoreUI().removeComponent(panelToInfluence);
                         event.consume();
+                        onExit();
                     }
                 }
                 if(!event.isConsumed()){
                     if(event.getEventValue()== Keyboard.KEY_ESCAPE){
                         ProductionUtil.getCoreUI().removeComponent(panelToInfluence);
                         event.consume();
+                        onExit();
                         break;
                     }
                 }
             }
-
-
             event.consume();
         }
-    }
 
+    }
+    public void onExit(){
+
+    }
     @Override
     public void buttonPressed(Object buttonId) {
 
@@ -187,13 +192,13 @@ public class PopUpUI implements CustomUIPanelPlugin {
     }
     public ButtonAPI generateConfirmButton(TooltipMakerAPI tooltip){
         ButtonAPI button = tooltip.addButton("Confirm","confirm", NidavelirMainPanelPlugin.base,NidavelirMainPanelPlugin.bg,Alignment.MID,CutStyle.TL_BR,160,25,0f);
-        button.setShortcut(Keyboard.KEY_G,false);
+        button.setShortcut(Keyboard.KEY_G,true);
         confirmButton = button;
         return button;
     }
     public ButtonAPI generateCancelButton(TooltipMakerAPI tooltip){
         ButtonAPI button = tooltip.addButton("Cancel","cancel", NidavelirMainPanelPlugin.base,NidavelirMainPanelPlugin.bg,Alignment.MID,CutStyle.TL_BR,buttonConfirmWidth,25,0f);
-        button.setShortcut(Keyboard.KEY_ESCAPE,false);
+        button.setShortcut(Keyboard.KEY_ESCAPE,true);
         cancelButton = button;
         return button;
     }

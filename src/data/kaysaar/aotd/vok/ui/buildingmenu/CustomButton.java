@@ -9,6 +9,7 @@ import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
+import java.awt.*;
 import java.util.List;
 
 public class CustomButton implements CustomUIPanelPlugin {
@@ -17,16 +18,20 @@ public class CustomButton implements CustomUIPanelPlugin {
     Object buttonData;
     float width,height;
     public float indent;
+    Color base,bg,bright;
     public CustomPanelAPI getPanel() {
         return panel;
     }
 
-    public CustomButton(float width, float height, Object buttonData,float indent){
+    public CustomButton(float width, float height, Object buttonData,float indent,Color base,Color bg,Color bright ) {
         panel = Global.getSettings().createCustom(width,height,this);
         this.width = width;
         this.height = height;
         this.buttonData = buttonData;
         this.indent = indent;
+        this.base = base;
+        this.bg = bg;
+        this.bright = bright;
 
     }
     public void initializeUI(){
@@ -42,7 +47,7 @@ public class CustomButton implements CustomUIPanelPlugin {
 
     }
     public ButtonAPI createButton(TooltipMakerAPI tooltip){
-        return tooltip.addAreaCheckbox("",null, Misc.getDarkPlayerColor(),Misc.getDarkPlayerColor(),Misc.getDarkPlayerColor(),panel.getPosition().getWidth(),panel.getPosition().getHeight(),0f,true);
+        return tooltip.addAreaCheckbox("",null,base,bg,bright,panel.getPosition().getWidth(),panel.getPosition().getHeight(),0f,true);
     }
     @Override
     public void positionChanged(PositionAPI position) {
