@@ -43,7 +43,7 @@ public class Monoculture extends BaseIndustry {
             return false;
         }
 
-        return !AoDUtilis.checkForFamilyIndustryInstance(market, Industries.FARMING, Industries.FARMING,this.id,this.currTooltipMode) &&super.isAvailableToBuild();
+        return super.isAvailableToBuild();
     }
 
 
@@ -58,7 +58,7 @@ public class Monoculture extends BaseIndustry {
             return false;
         }
 
-        return !AoDUtilis.checkForFamilyIndustryInstance(market, Industries.FARMING, Industries.FARMING,this.id,this.currTooltipMode) &&super.isAvailableToBuild();
+        return super.isAvailableToBuild();
 
     }
 
@@ -67,9 +67,6 @@ public class Monoculture extends BaseIndustry {
     public String getUnavailableReason() {
         if  (AoDUtilis.getFoodQuantityBonus(market)<=-5) {
             return "Requires farmland.";
-        }
-        if(AoDUtilis.checkForFamilyIndustryInstance(market, Industries.FARMING, Industries.FARMING,this.id,this.currTooltipMode)){
-            return AoDUtilis.reason;
         }
         return null;
 

@@ -5,7 +5,9 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.Farming;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 
 import java.util.HashSet;
@@ -16,7 +18,7 @@ public class Fishery extends BaseIndustry {
     @Override
     public void apply() {
         super.apply(true);
-        supply(Commodities.FOOD, 2);
+        supply(Commodities.FOOD, market.getSize()+3);
         demand(Commodities.HEAVY_MACHINERY, 3);
 
     }
@@ -30,10 +32,7 @@ public class Fishery extends BaseIndustry {
     public boolean isAvailableToBuild() {
         boolean canAquaculture = market.getPlanetEntity() != null &&
                 AQUA_PLANETS.contains(market.getPlanetEntity().getTypeId());
-        if(AoDUtilis.checkForFamilyIndustryInstance(market, Industries.AQUACULTURE,Industries.AQUACULTURE,this.id,this.currTooltipMode)){
-            return false;
-        }
-        return canAquaculture   &&super.isAvailableToBuild();
+        return canAquaculture   &&super.isAvailableToBuild()&& AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.AQUATIC_BIOSPHERE_HARVEST,market);
     }
 
 

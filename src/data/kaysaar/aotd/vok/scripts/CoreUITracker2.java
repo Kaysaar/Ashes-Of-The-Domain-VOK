@@ -28,7 +28,7 @@ public class CoreUITracker2 extends CoreUITracker{
 
                 dialog.dismiss(1);
                 didIt = true;
-                BasePopUpDialog dialog2 = new MarketDialog(null, (MarketAPI) ReflectionUtilis.get("market",ReflectionUtilis.invokeMethod("getDelegate",dialog)),ReflectionUtilis.invokeMethod("getOverview",ReflectionUtilis.invokeMethod("getDelegate",dialog)));
+                BasePopUpDialog dialog2 = new MarketDialog(null, (MarketAPI) ReflectionUtilis.getPrivateVariable("market",ReflectionUtilis.invokeMethod("getDelegate",dialog)),ReflectionUtilis.invokeMethod("getOverview",ReflectionUtilis.invokeMethod("getDelegate",dialog)));
                 CustomPanelAPI panelAPI = Global.getSettings().createCustom(1100,700,dialog2);
                 UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
                 dialog2.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);

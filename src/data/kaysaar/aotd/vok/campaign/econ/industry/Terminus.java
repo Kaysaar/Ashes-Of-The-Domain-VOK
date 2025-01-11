@@ -203,6 +203,11 @@ public class Terminus extends Waystation {
     }
 
     @Override
+    public String getCurrentName() {
+        return "Terminus";
+    }
+
+    @Override
     public boolean showWhenUnavailable() {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.INTERSTELLAR_LOGISTICS,market);
     }

@@ -63,7 +63,7 @@ public class IndustryButton extends CustomButton {
         spec = (IndustrySpecAPI) buttonData;
         BaseIndustry industry = (BaseIndustry) spec.getNewPluginInstance(market);
 
-        tooltip.addImage(spec.getImageName(), 70, 35, 0f);
+        tooltip.addImage(industry.getCurrentImage(), 70, 35, 0f);
         tooltip.getPrev().getPosition().inTL(8, 2.5f);
         LabelAPI label;
 

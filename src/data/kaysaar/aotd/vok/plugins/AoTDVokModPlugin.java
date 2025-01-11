@@ -62,8 +62,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     @Override
     public void onApplicationLoad() throws Exception {
         Global.getSettings().loadFont(fontInsigniaMedium);
-        IndustryTagManager.loadDefaultTags();
-        IndustryTagManager.loadModdedTags();
 
     }
 
@@ -196,7 +194,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //        });
         Global.getSector().addTransientScript(new CoreCorrectStateEnforcer());
         Global.getSector().addTransientScript(new CoreUITracker());
-        Global.getSector().addTransientScript(new CoreUITracker2());
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");
         AoTDMainResearchManager.getInstance().updateModIdRepo();
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");

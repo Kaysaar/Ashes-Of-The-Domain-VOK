@@ -20,6 +20,7 @@ public class IndustryShowcaseUI implements CustomUIPanelPlugin {
     CustomPanelAPI mainPanel;
     CustomPanelAPI holderPanel;
     TooltipMakerAPI mainTooltip;
+    TooltipMakerAPI subTooltip;
     IndustrySpecAPI currentSpec;
     MarketAPI market;
     public CustomPanelAPI getMainPanel() {
