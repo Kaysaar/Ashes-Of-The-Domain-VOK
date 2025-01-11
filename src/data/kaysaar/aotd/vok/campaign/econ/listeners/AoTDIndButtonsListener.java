@@ -40,7 +40,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
     public static Object PROGRAMMING = new Object();
     static ArrayList<Pair<String,String>> industries = new ArrayList<>();
     static {
-        industries.add(new Pair<>(Industries.AQUACULTURE,"aotd_tech_aquatic_agriculture"));
+        industries.add(new Pair<>(Industries.AQUACULTURE,"aotd_tech_rudimentary_eq"));
         industries.add(new Pair<>(Industries.FARMING,"aotd_tech_agriculture"));
         industries.add(new Pair<>(Industries.MINING,"aotd_tech_exosceletons"));
         industries.add(new Pair<>(Industries.REFINING,"aotd_tech_nanometal"));
@@ -191,7 +191,6 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
     }
     public void updateIndustryRepo(){
         for (IndustrySpecAPI indsSpec : Global.getSettings().getAllIndustrySpecs()) {
-            if(indsSpec.hasTag("starter"))continue;
             ArrayList<String>upgrades = new ArrayList<>();
             if(indsSpec.getUpgrade()!=null)continue;
             for (IndustrySpecAPI subIndSpec : Global.getSettings().getAllIndustrySpecs()) {

@@ -108,12 +108,12 @@ public class AoTDDataInserter {
                 allIndustrySpec.addTag(AOTD+Industries.FARMING);
             }
             if (allIndustrySpec.getId().equals(Industries.AQUACULTURE)) {
-                allIndustrySpec.setDowngrade(AoTDIndustries.FISHING);
                 List<String> str = new ArrayList<>();
                 for (String tag : allIndustrySpec.getTags()) {
                     if (tag.equals("farming")) continue;
                     str.add(tag);
                 }
+                allIndustrySpec.addTag("starter");
                 allIndustrySpec.getTags().clear();
                 str.add(AOTD+Industries.AQUACULTURE);
                 for (String s : str) {
@@ -150,22 +150,7 @@ public class AoTDDataInserter {
     }
     public void setStarterIndustriesUpgrades() {
         AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayer();
-        if(manager.haveResearched(AoTDTechIds.AGRICULTURE_INDUSTRIALIZATION)){
-            Global.getSettings().getIndustrySpec(AoTDIndustries.MONOCULTURE).setUpgrade(Industries.FARMING);
-        }
-        if(manager.haveResearched(AoTDTechIds.EXO_SKELETONS)){
-            Global.getSettings().getIndustrySpec(AoTDIndustries.EXTRACTIVE_OPERATION).setUpgrade(Industries.MINING);
-        }
-        if(manager.haveResearched(AoTDTechIds.NANOMETAL_FUSION_SYNTHESIS)){
-            Global.getSettings().getIndustrySpec(AoTDIndustries.SMELTING).setUpgrade(Industries.REFINING);
-            Global.getSettings().getIndustrySpec(AoTDIndustries.LIGHT_PRODUCTION).setUpgrade(Industries.LIGHTINDUSTRY);
-        }
-        if(manager.haveResearched(AoTDTechIds.BASE_SHIP_HULL_ASSEMBLY)){
-            Global.getSettings().getIndustrySpec(AoTDIndustries.HEAVY_PRODUCTION).setUpgrade(Industries.HEAVYINDUSTRY);
-        }
-        if(manager.haveResearched(AoTDTechIds.AQUATIC_BIOSPHERE_HARVEST)){
-            Global.getSettings().getIndustrySpec(AoTDIndustries.FISHING).setUpgrade(Industries.AQUACULTURE);
-        }
+
     }
     public  void spawnVeilPlanet() {
         if (!Global.getSector().getPersistentData().containsKey("$aotd_v_planet")) {

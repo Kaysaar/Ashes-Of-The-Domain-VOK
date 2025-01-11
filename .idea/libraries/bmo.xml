@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="ashlib">
+  <library name="bmo">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../Ashlib_/jars/ashlib.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Building Menu Overhaul/jars/bmo.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
