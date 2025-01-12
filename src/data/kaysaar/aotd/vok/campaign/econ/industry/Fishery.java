@@ -40,18 +40,12 @@ public class Fishery extends BaseIndustry {
     public boolean showWhenUnavailable() {
         boolean canAquaculture = market.getPlanetEntity() != null &&
                 AQUA_PLANETS.contains(market.getPlanetEntity().getTypeId());
-        if(AoDUtilis.checkForFamilyIndustryInstance(market, Industries.AQUACULTURE,Industries.AQUACULTURE,this.id,this.currTooltipMode)){
-            return  false;
-        }
         return canAquaculture;
     }
 
 
     @Override
     public String getUnavailableReason() {
-        if(AoDUtilis.checkForFamilyIndustryInstance(market, Industries.AQUACULTURE,Industries.AQUACULTURE,this.id,this.currTooltipMode)){
-            return AoDUtilis.reason;
-        }
         return "Requires a world with water-covered surface.";
     }
 

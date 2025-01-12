@@ -2,22 +2,17 @@ package data.kaysaar.aotd.vok.ui;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
-import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
+
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.econ.MutableCommodityQuantity;
-import com.fs.starfarer.api.combat.MutableStat;
-import com.fs.starfarer.api.graphics.SpriteAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
+
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
-import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
-import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.plugins.AoDUtilis;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import com.fs.starfarer.api.util.Misc;;
+import kaysaar.bmo.buildingmenu.BuildingMenuMisc;
 
 
 import java.awt.*;
@@ -30,9 +25,9 @@ import java.util.List;
 public class UpgradeListUI implements CustomDialogDelegate {
 
 
-    public static final float WIDTH = 600f;
-    public static final float HEIGHT = Global.getSettings().getScreenHeight() - 300f;
-    public static final float ENTRY_HEIGHT = 500; //MUST be even
+    public static final float WIDTH = 800f;
+    public static final float HEIGHT = Global.getSettings().getScreenHeight() - 120f;
+    public static final float ENTRY_HEIGHT = 700; //MUST be even
     public static final float ENTRY_WIDTH = WIDTH - 5f; //MUST be even
     public static final float CONTENT_HEIGHT = 80;
 
@@ -55,7 +50,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
         if (isIndustry(id)) {
             return " - Industry";
         }
-        return "- Structure";
+        return " - Structure";
     }
 
 
@@ -109,13 +104,52 @@ public class UpgradeListUI implements CustomDialogDelegate {
         float spad = 2f;
 
         buttons.clear();
+        MarketAPI market = industry.getMarket();
+        market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).modifyFlat("test",1,"");
+
 
         for (String industryId : upgrades) {
-            CustomPanelAPI helper1 = panel.createCustomPanel(ENTRY_WIDTH, ENTRY_HEIGHT + 2f, new ButtonReportingCustomPanel(this));
-
+            CustomPanelAPI mainPanel = Global.getSettings().createCustom(ENTRY_WIDTH, ENTRY_HEIGHT + 2f, new ButtonReportingCustomPanel(this));
+            TooltipMakerAPI tooltipImage = mainPanel.createUIElement(190,95,false);
+            float widthSub = ENTRY_WIDTH - 215;
+            CustomPanelAPI indPanel = Global.getSettings().createCustom(widthSub+10,1,null);
+            TooltipMakerAPI indTooltipTest = indPanel.createUIElement(indPanel.getPosition().getWidth(),20,false);
+            Industry ind = Global.getSettings().getIndustrySpec(industryId).getNewPluginInstance(industry.getMarket());
+            BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.UPGRADE,indTooltipTest,true,false,indPanel.getPosition().getWidth(),true,false);
+            TooltipMakerAPI indTooltip = indPanel.createUIElement(indPanel.getPosition().getWidth(), indTooltipTest.getHeightSoFar(), false);
+            BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.UPGRADE,indTooltip,true,false,indPanel.getPosition().getWidth(),true,false);
+            indPanel.addUIElement(indTooltip).inTL(0,0);
+            indPanel.getPosition().setSize(indPanel.getPosition().getWidth(),indTooltipTest.getHeightSoFar());
+            Color color = ind.getMarket().getFaction().getDarkUIColor();
+            Color textcl = Misc.getTextColor();
+            if(!canAfford(ind)||!ind.isAvailableToBuild()){
+                color = Misc.getGrayColor();
+                textcl = Misc.getTextColor();
+            }
+            String str = ind.getCurrentName() + helperIndustryStructureOrIndustry(industryId);
+            tooltipImage.addImage(ind.getCurrentImage(),190,95,0f);
+            tooltipImage.getPrev().getPosition().inTL(0,0);
+            LabelAPI label = tooltipImage.addSectionHeading(str,textcl,color,Alignment.LMID, widthSub,0f);
+            label.getPosition().inTL(195,0);
+            tooltipImage.addCustom(indPanel,0f).getPosition().inTL(label.getPosition().getX(),-label.getPosition().getY()+5);
+            mainPanel.getPosition().setSize(ENTRY_WIDTH, indTooltip.getHeightSoFar()+30);
+            TooltipMakerAPI tooltipButton = mainPanel.createUIElement(ENTRY_WIDTH,mainPanel.getPosition().getHeight(), false);
+            ButtonAPI button = tooltipButton.addAreaCheckbox("",industryId,industry.getMarket().getFaction().getBaseUIColor(),industry.getMarket().getFaction().getDarkUIColor(),industry.getMarket().getFaction().getBrightUIColor(),ENTRY_WIDTH,mainPanel.getPosition().getHeight(),0f);
+            button.getPosition().inTL(0,0);
+            if(!canAfford(ind)||!ind.isAvailableToBuild()){
+                button.setClickable(false);
+            }
+            buttons.add(button);
+            mainPanel.addUIElement(tooltipButton).inTL(-5,0);
+            mainPanel.addUIElement(tooltipImage).inTL(0,5);
+            panelTooltip.addCustom(mainPanel,opad);
         }
+        market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).unmodifyFlat("test");
 
         panel.addUIElement(panelTooltip).inTL(0.0F, 0.0F);
+    }
+    public boolean canAfford(Industry ind){
+        return Global.getSector().getPlayerFleet().getCargo().getCredits().get()>=ind.getBuildCost();
     }
 
     private String getDayOrDays(int buildTime) {
