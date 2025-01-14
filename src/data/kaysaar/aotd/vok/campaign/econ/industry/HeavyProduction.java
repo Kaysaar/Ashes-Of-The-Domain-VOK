@@ -47,8 +47,9 @@ public class HeavyProduction extends BaseIndustry {
     }
     @Override
     public boolean showWhenUnavailable() {
-        return !AoDUtilis.checkForFamilyIndustryInstance(market,Industries.HEAVYINDUSTRY,Industries.HEAVYINDUSTRY,this.id,this.currTooltipMode);
+        return true;
     }
+
 
     @Override
     public boolean isAvailableToBuild() {

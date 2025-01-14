@@ -16,6 +16,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,7 +49,7 @@ public class SubsidizedFarming extends BaseIndustry {
 
             }
         }
-        demand(Commodities.HEAVY_MACHINERY, market.getSize()-3);
+        demand(Commodities.HEAVY_MACHINERY, market.getSize()+2);
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY);
         //applyDeficitToProduction(0, deficit, Commodities.FOOD, Commodities.ORGANICS);
@@ -97,7 +98,24 @@ public class SubsidizedFarming extends BaseIndustry {
     @Override
     public String getUnavailableReason() {
         if (!super.isAvailableToBuild()) return super.getUnavailableReason();
-        return "Requires farmland.";
+        ArrayList<String> reasons = new ArrayList<>();
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.IMPROVED_FERTILIZERS,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.IMPROVED_FERTILIZERS));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
+
     }
 
 

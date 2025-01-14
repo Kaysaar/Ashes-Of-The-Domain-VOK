@@ -14,6 +14,7 @@ import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MiningMegaplex extends BaseIndustry {
     @Override
@@ -24,16 +25,16 @@ public class MiningMegaplex extends BaseIndustry {
         }
         int size = market.getSize();
         if(AoDUtilis.getOrganicsAmount(market)>=-1){
-            supply(Commodities.ORGANICS,AoDUtilis.getOrganicsAmount(market)+(market.getSize()+2)+bonus);
+            supply(Commodities.ORGANICS,AoDUtilis.getOrganicsAmount(market)+(market.getSize()+3)+bonus);
         }
         if(AoDUtilis.getNormalOreAmount(market)>=-1){
-            supply(Commodities.ORE,AoDUtilis.getNormalOreAmount(market)+(market.getSize()+2)+bonus);
+            supply(Commodities.ORE,AoDUtilis.getNormalOreAmount(market)+(market.getSize()+3)+bonus);
         }
         if(AoDUtilis.getRareOreAmount(market)>=-1){
-            supply(Commodities.RARE_ORE,AoDUtilis.getRareOreAmount(market)+(market.getSize())+bonus);
+            supply(Commodities.RARE_ORE,AoDUtilis.getRareOreAmount(market)+(market.getSize()+2)+bonus);
         }
         if(AoDUtilis.getVolatilesAmount(market)>=-1){
-            supply(Commodities.VOLATILES,AoDUtilis.getVolatilesAmount(market)+(market.getSize()+2)+bonus);
+            supply(Commodities.VOLATILES,AoDUtilis.getVolatilesAmount(market)+(market.getSize()+3)+bonus);
         }
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.DRUGS, Commodities.HEAVY_MACHINERY);
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
@@ -56,14 +57,28 @@ public class MiningMegaplex extends BaseIndustry {
 
     @Override
     public String getUnavailableReason() {
-        String reason = "";
+        ArrayList<String> reasons = new ArrayList<>();
         if(market.getSize()<6){
-           reason+="Market size must be at least size 6 or greater.\n";
+            reasons.add("Market must be size 6 or greater");
         }
-        if(!AoDUtilis.isMiningAvailable(market)){
-            reason+="There are no resources present on this market!";
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.DEEP_MINING_METHODS));
+
         }
-        return reason;
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
+
+
     }
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {

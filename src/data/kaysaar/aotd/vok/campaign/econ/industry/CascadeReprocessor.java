@@ -11,6 +11,8 @@ import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
+import java.util.ArrayList;
+
 public class CascadeReprocessor extends BaseIndustry {
     public void apply() {
         super.apply(true);
@@ -20,7 +22,7 @@ public class CascadeReprocessor extends BaseIndustry {
         demand(Commodities.RARE_ORE, 10 + size); // have to keep it low since it can be circular
 
         supply(AoTDCommodities.PURIFIED_TRANSPLUTONICS, market.getSize()+1);
-        supply(Commodities.RARE_METALS, market.getSize());
+        supply(Commodities.RARE_METALS, market.getSize()+2);
         supply(Commodities.METALS, market.getSize()-2);
 
 
@@ -51,6 +53,28 @@ public class CascadeReprocessor extends BaseIndustry {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PURIFICATION,market);
 
     }
+
+    @Override
+    public String getUnavailableReason() {
+        ArrayList<String> reasons = new ArrayList<>();
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PURIFICATION,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.ALLOY_PURIFICATION));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
+    }
+
     @Override
     public boolean showWhenUnavailable() {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PURIFICATION,market);

@@ -94,7 +94,8 @@ public class ArtisanalFarming extends BaseIndustry {
     @Override
     public String getUnavailableReason() {
         if (!super.isAvailableToBuild()) return super.getUnavailableReason();
-        return "Requires farmland";
+        return AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.IMPROVED_FERTILIZERS);
+
     }
 
 

@@ -11,6 +11,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BioChem extends LightIndustry {
@@ -23,6 +24,7 @@ public class BioChem extends LightIndustry {
         super.apply(true);
         int size = market.getSize();
         demand(Commodities.ORGANICS, size+2);
+        demand(Commodities.HEAVY_MACHINERY, size+2);
         //supply(Commodities.SUPPLIES, size - 3);
 
         //if (!market.getFaction().isIllegal(Commodities.LUXURY_GOODS)) {
@@ -33,7 +35,7 @@ public class BioChem extends LightIndustry {
         }
         //if (!market.getFaction().isIllegal(Commodities.DRUGS)) {
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS,Commodities.HEAVY_MACHINERY);
         applyDeficitToProduction(2, deficit,
                 Commodities.DRUGS);
 
@@ -60,10 +62,26 @@ public class BioChem extends LightIndustry {
 
     @Override
     public String getUnavailableReason() {
-        if( !AoDUtilis.checkForItemBeingInstalled(market, Industries.LIGHTINDUSTRY, Items.BIOFACTORY_EMBRYO)){
-            return "Biofactory Embryo must be installed in the Light Industry.";
+        ArrayList<String>reasons = new ArrayList<>();
+        if(!market.isFreePort()){
+            reasons.add("Market must have free port status.");
         }
-        return "Market must have free port status.";
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DRUGS_AMPLIFICATION,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.DRUGS_AMPLIFICATION));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
     }
 
     @Override

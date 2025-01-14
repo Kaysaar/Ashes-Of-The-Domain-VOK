@@ -12,6 +12,8 @@ import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.plugins.AoTDSpecialItemRepo;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
+import java.util.ArrayList;
+
 import static data.kaysaar.aotd.vok.plugins.AoDUtilis.checkForItemBeingInstalled;
 
 public class BlastProcessingUnit extends FuelProduction {
@@ -37,7 +39,23 @@ public class BlastProcessingUnit extends FuelProduction {
     }
     @Override
     public String getUnavailableReason() {
-        return null;
+        ArrayList<String> reasons = new ArrayList<>();
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ANTIMATTER_SYNTHESIS,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.ANTIMATTER_SYNTHESIS));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
     }
 
     @Override

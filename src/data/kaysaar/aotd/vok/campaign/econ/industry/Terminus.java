@@ -14,6 +14,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Terminus extends Waystation {
 
@@ -202,10 +203,7 @@ public class Terminus extends Waystation {
 
     }
 
-    @Override
-    public String getCurrentName() {
-        return "Terminus";
-    }
+
 
     @Override
     public boolean showWhenUnavailable() {
@@ -217,7 +215,23 @@ public class Terminus extends Waystation {
     }
 
     public String getUnavailableReason() {
-        return "Requires a functional spaceport.";
+        ArrayList<String> reasons = new ArrayList<>();
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.INTERSTELLAR_LOGISTICS,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.INTERSTELLAR_LOGISTICS));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
     }
 
 
