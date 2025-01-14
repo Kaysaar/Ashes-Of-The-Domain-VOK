@@ -15,7 +15,7 @@ public class Smelting extends BaseIndustry {
 
         demand(Commodities.HEAVY_MACHINERY, size - 2); // have to keep it low since it can be circular
         demand(Commodities.ORE, size + 2);
-        supply(Commodities.METALS, size - 1);
+        supply(Commodities.METALS, size - 2);
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY, Commodities.ORE);
         int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
@@ -31,7 +31,7 @@ public class Smelting extends BaseIndustry {
 
     @Override
     public boolean showWhenUnavailable() {
-        return !AoDUtilis.checkForFamilyIndustryInstance(market, Industries.REFINING, Industries.REFINING, this.id, this.currTooltipMode);
+        return true;
     }
 
     @Override
@@ -41,9 +41,6 @@ public class Smelting extends BaseIndustry {
 
     @Override
     public String getUnavailableReason() {
-        if (AoDUtilis.checkForFamilyIndustryInstance(market, Industries.REFINING, Industries.REFINING, this.id, this.currTooltipMode)) {
-            return AoDUtilis.reason;
-        }
         return super.getUnavailableReason();
 
     }

@@ -16,6 +16,7 @@ import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityManager;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.impl.campaign.rulecmd.AoTDMegastructureRules;
 import com.fs.starfarer.api.util.IntervalUtil;
+import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
@@ -30,6 +31,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButto
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker2;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
@@ -40,6 +42,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
 import data.kaysaar.aotd.vok.ui.buildingmenu.industrytags.IndustryTagManager;
 import exerelin.campaign.intel.hostileactivity.NexHostileActivityManager;
+import kaysaar.bmo.buildingmenu.additionalreq.AdditionalReqManager;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.lazywizard.lazylib.MathUtils;
@@ -62,7 +65,10 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     @Override
     public void onApplicationLoad() throws Exception {
         Global.getSettings().loadFont(fontInsigniaMedium);
-
+        for (Pair<String, String> industry : AoTDIndButtonsListener.industries) {
+            VanillaTechReq req = new VanillaTechReq(industry.two);
+            AdditionalReqManager.getInstance().addReq(industry.one, req);
+        }
     }
 
     private void setListenersIfNeeded() {

@@ -13,6 +13,8 @@ import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorRepo;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
+import java.util.ArrayList;
+
 import static data.kaysaar.aotd.vok.plugins.AoDUtilis.checkForItemBeingInstalled;
 
 
@@ -57,6 +59,28 @@ public class IsotopeSeparator extends BaseIndustry {
     @Override
     public boolean showWhenUnavailable() {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PRODUCTION_MATRIX, market);
+    }
+
+    @Override
+    public String getUnavailableReason() {
+        ArrayList<String> reasons = new ArrayList<>();
+
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PRODUCTION_MATRIX,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.ALLOY_PRODUCTION_MATRIX));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
     }
 
     @Override

@@ -16,14 +16,14 @@ public class LightProduction extends BaseIndustry {
 
         demand(Commodities.ORGANICS, size);
 
-        supply(Commodities.DOMESTIC_GOODS, size-1);
+        supply(Commodities.DOMESTIC_GOODS, size - 1);
         //supply(Commodities.SUPPLIES, size - 3);
 
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS);
 
         applyDeficitToProduction(2, deficit,
-                Commodities.DOMESTIC_GOODS );
+                Commodities.DOMESTIC_GOODS);
 
         if (!isFunctional()) {
             supply.clear();
@@ -38,20 +38,18 @@ public class LightProduction extends BaseIndustry {
 
     @Override
     public boolean showWhenUnavailable() {
-      return !AoDUtilis.checkForFamilyIndustryInstance(market,Industries.LIGHTINDUSTRY,Industries.LIGHTINDUSTRY,this.id,this.currTooltipMode) &&super.isAvailableToBuild();
+        return super.isAvailableToBuild();
     }
 
     @Override
     public boolean isAvailableToBuild() {
 
-return true;
+        return true;
     }
 
     @Override
     public String getUnavailableReason() {
-        if(AoDUtilis.checkForFamilyIndustryInstance(market,Industries.LIGHTINDUSTRY,Industries.LIGHTINDUSTRY,this.id,this.currTooltipMode)){
-            return AoDUtilis.reason;
-        }
+
         return super.getUnavailableReason();
     }
 

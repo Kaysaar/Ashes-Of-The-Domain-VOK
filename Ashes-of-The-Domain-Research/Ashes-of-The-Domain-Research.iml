@@ -16,5 +16,7 @@
     <orderEntry type="library" name="Qol" level="project" />
     <orderEntry type="library" name="Goc" level="project" />
     <orderEntry type="library" name="ashlib" level="project" />
+    <orderEntry type="library" name="ExerelinCore" level="project" />
+    <orderEntry type="library" name="bmo" level="project" />
   </component>
 </module>

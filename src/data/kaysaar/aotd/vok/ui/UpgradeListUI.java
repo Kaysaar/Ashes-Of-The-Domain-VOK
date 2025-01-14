@@ -115,9 +115,9 @@ public class UpgradeListUI implements CustomDialogDelegate {
             CustomPanelAPI indPanel = Global.getSettings().createCustom(widthSub+10,1,null);
             TooltipMakerAPI indTooltipTest = indPanel.createUIElement(indPanel.getPosition().getWidth(),20,false);
             Industry ind = Global.getSettings().getIndustrySpec(industryId).getNewPluginInstance(industry.getMarket());
-            BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.UPGRADE,indTooltipTest,true,false,indPanel.getPosition().getWidth(),true,false);
+            BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.UPGRADE,indTooltipTest,true,false,indPanel.getPosition().getWidth(),true,false,false);
             TooltipMakerAPI indTooltip = indPanel.createUIElement(indPanel.getPosition().getWidth(), indTooltipTest.getHeightSoFar(), false);
-            BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.UPGRADE,indTooltip,true,false,indPanel.getPosition().getWidth(),true,false);
+            BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.UPGRADE,indTooltip,true,false,indPanel.getPosition().getWidth(),true,false,false);
             indPanel.addUIElement(indTooltip).inTL(0,0);
             indPanel.getPosition().setSize(indPanel.getPosition().getWidth(),indTooltipTest.getHeightSoFar());
             Color color = ind.getMarket().getFaction().getDarkUIColor();
@@ -132,7 +132,7 @@ public class UpgradeListUI implements CustomDialogDelegate {
             LabelAPI label = tooltipImage.addSectionHeading(str,textcl,color,Alignment.LMID, widthSub,0f);
             label.getPosition().inTL(195,0);
             tooltipImage.addCustom(indPanel,0f).getPosition().inTL(label.getPosition().getX(),-label.getPosition().getY()+5);
-            mainPanel.getPosition().setSize(ENTRY_WIDTH, indTooltip.getHeightSoFar()+30);
+            mainPanel.getPosition().setSize(ENTRY_WIDTH, indTooltip.getHeightSoFar()+35);
             TooltipMakerAPI tooltipButton = mainPanel.createUIElement(ENTRY_WIDTH,mainPanel.getPosition().getHeight(), false);
             ButtonAPI button = tooltipButton.addAreaCheckbox("",industryId,industry.getMarket().getFaction().getBaseUIColor(),industry.getMarket().getFaction().getDarkUIColor(),industry.getMarket().getFaction().getBrightUIColor(),ENTRY_WIDTH,mainPanel.getPosition().getHeight(),0f);
             button.getPosition().inTL(0,0);

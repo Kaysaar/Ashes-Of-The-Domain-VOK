@@ -38,7 +38,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
     public static Object CORONAL = new Object();
     public static Object RESEARCH_CENTER = new Object();
     public static Object PROGRAMMING = new Object();
-    static ArrayList<Pair<String,String>> industries = new ArrayList<>();
+    public static ArrayList<Pair<String,String>> industries = new ArrayList<>();
     static {
         industries.add(new Pair<>(Industries.AQUACULTURE,"aotd_tech_rudimentary_eq"));
         industries.add(new Pair<>(Industries.FARMING,"aotd_tech_agriculture"));

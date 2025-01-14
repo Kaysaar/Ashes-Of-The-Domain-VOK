@@ -7,6 +7,8 @@ import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
+import java.util.ArrayList;
+
 
 public class ConsumerIndustry extends BaseIndustry {
     public void apply() {
@@ -54,6 +56,27 @@ public class ConsumerIndustry extends BaseIndustry {
     @Override
     public boolean showWhenUnavailable() {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.CONSUMER_GOODS_PRODUCTION,market);
+    }
+
+    @Override
+    public String getUnavailableReason() {
+        ArrayList<String> reasons = new ArrayList<>();
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.CONSUMER_GOODS_PRODUCTION,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.CONSUMER_GOODS_PRODUCTION));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
     }
 
     @Override

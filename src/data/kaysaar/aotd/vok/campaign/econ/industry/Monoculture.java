@@ -68,7 +68,7 @@ public class Monoculture extends BaseIndustry {
         if  (AoDUtilis.getFoodQuantityBonus(market)<=-5) {
             return "Requires farmland.";
         }
-        return null;
+        return "";
 
     }
 

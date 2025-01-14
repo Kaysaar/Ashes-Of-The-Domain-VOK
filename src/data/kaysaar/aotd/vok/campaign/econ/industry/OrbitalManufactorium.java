@@ -14,6 +14,8 @@ import data.kaysaar.aotd.vok.campaign.econ.items.ModularConstructorRepo;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
+import java.util.ArrayList;
+
 import static data.kaysaar.aotd.vok.plugins.AoDUtilis.checkForItemBeingInstalled;
 
 public class OrbitalManufactorium extends HeavyIndustry {
@@ -76,5 +78,25 @@ public class OrbitalManufactorium extends HeavyIndustry {
         return  AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market);
     }
 
+    @Override
+    public String getUnavailableReason() {
+        ArrayList<String> reasons = new ArrayList<>();
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.STREAMLINED_PRODUCTION));
 
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
+
+    }
 }

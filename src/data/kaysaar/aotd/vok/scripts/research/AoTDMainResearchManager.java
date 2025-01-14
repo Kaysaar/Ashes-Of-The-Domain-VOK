@@ -300,7 +300,9 @@ public class AoTDMainResearchManager {
         return manager;
 
     }
-
+    public String getNameForResearchBd(String id){
+        return "Required Technology : "+AoTDMainResearchManager.getInstance().getSpecForSpecificResearch(id).getName();
+    }
     public ResearchProject getCurrentProject() {
         return currentProject;
     }

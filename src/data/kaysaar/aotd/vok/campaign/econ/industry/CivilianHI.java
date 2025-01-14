@@ -9,6 +9,8 @@ import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
+import java.util.ArrayList;
+
 public class CivilianHI extends HeavyIndustry {
 
     @Override
@@ -70,6 +72,27 @@ public class CivilianHI extends HeavyIndustry {
     @Override
     public boolean showWhenUnavailable() {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market);
+    }
+
+    @Override
+    public String getUnavailableReason() {
+        ArrayList<String> reasons = new ArrayList<>();
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.STREAMLINED_PRODUCTION));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
     }
 
     @Override

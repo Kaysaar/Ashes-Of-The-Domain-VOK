@@ -17,6 +17,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,14 +68,29 @@ public class StellaManufactorium extends HeavyIndustry {
     }
 
 
+    @Override
+    public String getUnavailableReason() {
+        ArrayList<String> reasons = new ArrayList<>();
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STELLA_MANUFACTORIUM,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.STELLA_MANUFACTORIUM));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
 
 
 
-
-
-
-
-
+}
 
     @Override
     public boolean canInstallAICores() {

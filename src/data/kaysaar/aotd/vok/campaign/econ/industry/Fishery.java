@@ -10,6 +10,7 @@ import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,7 +47,23 @@ public class Fishery extends BaseIndustry {
 
     @Override
     public String getUnavailableReason() {
-        return "Requires a world with water-covered surface.";
+        ArrayList<String> reasons = new ArrayList<>();
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.AQUATIC_BIOSPHERE_HARVEST,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.AQUATIC_BIOSPHERE_HARVEST));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
     }
 
 

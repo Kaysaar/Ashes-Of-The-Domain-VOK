@@ -13,6 +13,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class TriTachyonHeavy extends HeavyIndustry {
     public static float QUALITY_BONUS = 0.8f;
@@ -98,7 +99,27 @@ public class TriTachyonHeavy extends HeavyIndustry {
 
     @Override
     public String getUnavailableReason() {
-        return "Market must be size 6 or greater";
+        ArrayList<String> reasons = new ArrayList<>();
+        if(market.getSize()<6){
+            reasons.add("Market must be size 6 or greater");
+        }
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ORBITAL_SKUNKWORK_FACILITIES,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.ORBITAL_SKUNKWORK_FACILITIES));
+
+        }
+        StringBuilder bd = new StringBuilder();
+        boolean insert = false;
+        for (String reason : reasons) {
+            if(insert){
+                bd.append("\n");
+            }
+            bd.append(reason);
+
+            insert = true;
+        }
+
+        return bd.toString();
+
     }
 
     @Override
