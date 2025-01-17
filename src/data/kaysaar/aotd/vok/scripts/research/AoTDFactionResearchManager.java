@@ -252,14 +252,12 @@ public class AoTDFactionResearchManager {
             if (this.haveResearched(AoTDTechIds.BASE_SHIP_HULL_ASSEMBLY)) {
                 Global.getSettings().getIndustrySpec(AoTDIndustries.HEAVY_PRODUCTION).setUpgrade(Industries.HEAVYINDUSTRY);
             }
-            if (this.haveResearched(AoTDTechIds.AQUATIC_BIOSPHERE_HARVEST)) {
-                Global.getSettings().getIndustrySpec(AoTDIndustries.FISHING).setUpgrade(Industries.AQUACULTURE);
-            }
             if (this.haveResearched(AoTDTechIds.INTERSTELLAR_LOGISTICS)) {
                 Global.getSettings().getIndustrySpec(Industries.WAYSTATION).setUpgrade(AoTDIndustries.TERMINUS);
             }
             if (this.haveResearched(AoTDTechIds.ANTIMATTER_SYNTHESIS)) {
                 Global.getSettings().getIndustrySpec(Industries.FUELPROD).setUpgrade(AoTDIndustries.BLAST_PROCESSING);
+
             }
         }
 
