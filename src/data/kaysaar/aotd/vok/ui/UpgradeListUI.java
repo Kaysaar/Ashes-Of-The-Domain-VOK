@@ -115,9 +115,9 @@ public class UpgradeListUI implements CustomDialogDelegate {
             CustomPanelAPI indPanel = Global.getSettings().createCustom(widthSub+10,1,null);
             TooltipMakerAPI indTooltipTest = indPanel.createUIElement(indPanel.getPosition().getWidth(),20,false);
             Industry ind = Global.getSettings().getIndustrySpec(industryId).getNewPluginInstance(industry.getMarket());
-            BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.UPGRADE,indTooltipTest,true,false,indPanel.getPosition().getWidth(),true,false,false);
+            BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.UPGRADE,indTooltipTest,true,false,widthSub+10,true,false,false);
             TooltipMakerAPI indTooltip = indPanel.createUIElement(indPanel.getPosition().getWidth(), indTooltipTest.getHeightSoFar(), false);
-            BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.UPGRADE,indTooltip,true,false,indPanel.getPosition().getWidth(),true,false,false);
+            BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.UPGRADE,indTooltip,true,false,widthSub+10,true,false,false);
             indPanel.addUIElement(indTooltip).inTL(0,0);
             indPanel.getPosition().setSize(indPanel.getPosition().getWidth(),indTooltipTest.getHeightSoFar());
             Color color = ind.getMarket().getFaction().getDarkUIColor();

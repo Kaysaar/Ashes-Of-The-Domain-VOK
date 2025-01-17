@@ -160,7 +160,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
                 Vector2f var4 = this.entity.getLightSource().getLocation();
                 float distance = Misc.getDistance(this.entity.getLocation(),var4);
                 float zDimBrightness = 1.0F;
-                Fader lightHeight = (Fader)  ReflectionUtilis.getPrivateVariable("lightHeight",entity.getContainingLocation());
+                Fader lightHeight = (Fader)  ReflectionUtilis.getPrivateVariableFromSuperClass("lightHeight",entity.getContainingLocation());
                 if (this.entity.getContainingLocation() != null && lightHeight != null) {
                     float brightness = lightHeight.getBrightness();
                     zDimBrightness = 1.5F * brightness - 0.5F;
