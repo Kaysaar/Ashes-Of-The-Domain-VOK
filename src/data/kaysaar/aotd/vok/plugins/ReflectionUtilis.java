@@ -4,6 +4,7 @@ import ashlib.data.plugins.reflection.ReflectionBetterUtilis;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import com.fs.starfarer.api.util.Pair;
+import com.fs.starfarer.ui.impl.CargoTooltipFactory;
 import kaysaar.bmo.buildingmenu.BuildingMenuMisc;
 
 import java.lang.invoke.MethodHandle;
@@ -23,6 +24,8 @@ public class ReflectionUtilis {
     private static final MethodHandle getMethodNameHandle;
     private static final MethodHandle invokeMethodHandle;
     private static final MethodHandle setMethodAccessable;
+    private static final MethodHandle getModifiersHandle;
+    private static final MethodHandle  getParameterTypesHandle;
 
     static {
         try {
@@ -36,6 +39,9 @@ public class ReflectionUtilis {
             getMethodNameHandle = lookup.findVirtual(methodClass, "getName", MethodType.methodType(String.class));
             invokeMethodHandle = lookup.findVirtual(methodClass, "invoke", MethodType.methodType(Object.class, Object.class, Object[].class));
             setMethodAccessable = lookup.findVirtual(methodClass, "setAccessible", MethodType.methodType(Void.TYPE, boolean.class));
+            getModifiersHandle = lookup.findVirtual(methodClass, "getModifiers", MethodType.methodType(int.class));
+            getParameterTypesHandle = lookup.findVirtual(methodClass, "getParameterTypes", MethodType.methodType(Class[].class));
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -141,7 +147,14 @@ public class ReflectionUtilis {
             throw new RuntimeException(e);
         }
     }
+    public static Object invokeMethodDirectly(Object method,Object instance, Object... arguments) {
+        try {
 
+            return invokeMethodHandle.invoke(method,instance, arguments);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
     public static List<UIComponentAPI> getChildrenCopy(UIPanelAPI panel) {
         try {
             return (List<UIComponentAPI>) invokeMethod("getChildrenCopy", panel);
@@ -261,6 +274,64 @@ public class ReflectionUtilis {
             // For reference types, perform a cast if possible
             return targetType.cast(arg);
         }
+    }
+
+    public static Object findStaticMethodByParameterTypes(Class<?> targetClass, Class<?>... parameterTypes) {
+        try {
+            Class<?> currentClass = targetClass;
+
+            while (currentClass != null) {
+                // Retrieve all declared methods dynamically
+                Object[] methods = currentClass.getDeclaredMethods();
+
+                for (Object method : methods) {
+                    try {
+                        // Retrieve method modifiers dynamically
+                        int modifiers = (int) getModifiersHandle.invoke(method);
+
+                        // Check if the method is static
+                        if ((modifiers & 0x0008) != 0) { // 0x0008 is the `static` modifier bit
+                            // Retrieve parameter types dynamically
+                            Class<?>[] methodParamTypes = (Class<?>[]) getParameterTypesHandle.invoke(method);
+
+                            // Compare parameter types
+                            if (areParameterTypesMatching(methodParamTypes, parameterTypes)) {
+                                return method; // Return the matching method
+                            }
+                        }
+                    } catch (Throwable e) {
+                        // Handle exceptions gracefully during method inspection
+                        e.printStackTrace();
+                    }
+                }
+
+                // Move to the superclass dynamically
+                currentClass = (Class<?>) invokeMethodHandle.invoke(currentClass, "getSuperclass");
+            }
+
+            // Return null if no matching method is found
+            return null;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
+    // Helper function to compare parameter types
+    private static boolean areParameterTypesMatching(Class<?>[] methodParamTypes, Class<?>[] targetParamTypes) {
+        if (methodParamTypes.length != targetParamTypes.length) {
+            return false;
+        }
+
+        for (int i = 0; i < methodParamTypes.length; i++) {
+            if (!methodParamTypes[i].isAssignableFrom(targetParamTypes[i])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

@@ -87,7 +87,7 @@ public class CoreUITracker implements EveryFrameScript {
             panelMap = null;
             currentTab = null;
             if(coreUiTech!=null){
-                coreUiTech.clearUI();
+                coreUiTech.clearUI(tunedMusicOnce);
                 coreUiTech = null;
 
             }
@@ -197,6 +197,9 @@ public class CoreUITracker implements EveryFrameScript {
                     coreUiTech.playSound(coreUiTech.getCurrentlyChosen());
                 }
             }
+        }
+        else{
+            tunedMusicOnce = false;
         }
         if (!hasComponentPresent((UIComponentAPI) panelMap.get(currentTab))) {
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);

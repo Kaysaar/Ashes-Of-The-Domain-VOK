@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components;
 import ashlib.data.plugins.info.FighterInfoGenerator;
 import ashlib.data.plugins.info.ShipInfoGenerator;
 import ashlib.data.plugins.info.WeaponInfoGenerator;
+import ashlib.data.plugins.misc.AshMisc;
 import ashlib.data.plugins.rendering.FighterIconRenderer;
 import ashlib.data.plugins.rendering.ShipRenderer;
 import ashlib.data.plugins.rendering.WeaponSpriteRenderer;
@@ -17,7 +18,15 @@ import com.fs.starfarer.api.loading.FormationType;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import com.fs.starfarer.campaign.CharacterStats;
+import com.fs.starfarer.campaign.fleet.FleetMember;
 import com.fs.starfarer.combat.entities.Ship;
+import com.fs.starfarer.loading.specs.BaseWeaponSpec;
+import com.fs.starfarer.loading.specs.FighterWingSpec;
+import com.fs.starfarer.ui.impl.CargoTooltipFactory;
+import com.fs.starfarer.ui.impl.StandardTooltipV2;
+import com.fs.starfarer.ui.impl.StandardTooltipV2Expandable;
+import com.fs.starfarer.ui.v;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
@@ -25,6 +34,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhover.ProducitonHoverInfo;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 
 
 import java.awt.*;
@@ -114,7 +124,12 @@ public class UIData {
         CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP, HEIGHT_OF_BUTTONS, option.getSpec());
         mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
         mainTooltip.addCustom(panelImage.one, 5f).getPosition().inTL(0, 4);
-        mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,false);
+        FleetMemberAPI fleetMemberAPI = Global.getFactory().createFleetMember(FleetMemberType.SHIP, AshMisc.getVaraint(option.getSpec().getShipHullSpecAPI()));
+        fleetMemberAPI.getRepairTracker().setCR(0.7f);
+        fleetMemberAPI.getCrewComposition().addCrew(fleetMemberAPI.getMinCrew());
+        fleetMemberAPI.updateStats();
+        StandardTooltipV2 var10 = StandardTooltipV2.createFleetMemberExpandedTooltip((FleetMember) fleetMemberAPI,null);
+        StandardTooltipV2Expandable.addTooltipBelow((v) mainTooltip.getPrev(), var10);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
         return new UiPackage(panel, panelImage.two, option, button);
 
@@ -157,7 +172,8 @@ public class UIData {
         CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP, HEIGHT_OF_BUTTONS, option.getSpec());
         mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
         mainTooltip.addCustom(panelImage.one, 5f).getPosition().inTL(0, 8);
-        mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,false);
+        StandardTooltipV2 var10 = StandardTooltipV2.createWeaponTooltip((BaseWeaponSpec) option.getSpec().getWeaponSpec(), (CharacterStats)null,null);
+        StandardTooltipV2Expandable.addTooltipBelow((v) mainTooltip.getPrev(), var10);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
         return new UiPackage(panel, panelImage.two, option, button);
 
@@ -263,7 +279,11 @@ public class UIData {
         CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP, HEIGHT_OF_BUTTONS, option.getSpec());
         mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
         mainTooltip.addCustom(panelImage.one, 5f).getPosition().inTL(5, 4);
-        mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,true);
+//        mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,true);
+        FleetMemberAPI fleetMember = Global.getFactory().createFleetMember(FleetMemberType.FIGHTER_WING,option.getSpec().getWingSpecAPI().getId());
+        StandardTooltipV2 var9 = (StandardTooltipV2) ReflectionUtilis.invokeMethodDirectly(ReflectionUtilis.findStaticMethodByParameterTypes(CargoTooltipFactory.class, FleetMember.class,FighterWingSpec.class,int.class, CharacterStats.class,boolean.class),new CargoTooltipFactory(),(FleetMember) fleetMember, (FighterWingSpec) option.getSpec().getWingSpecAPI(), 0, (CharacterStats)null, false);
+
+        StandardTooltipV2Expandable.addTooltipBelow((v) mainTooltip.getPrev(), var9);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
         return new UiPackage(panel, panelImage.two, option, button);
 
@@ -280,33 +300,50 @@ public class UIData {
         LabelAPI days;
         ButtonAPI button = tooltip.addAreaCheckbox("", order, NidavelirMainPanelPlugin.base, NidavelirMainPanelPlugin.bg, NidavelirMainPanelPlugin.bright, panel.getPosition().getWidth(), HEIGHT_OF_BUTTONS + 45, 0f);
         button.getPosition().inTL(0, 0);
+        final GPSpec spec = order.getSpecFromClass();
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.SHIP) {
             imagePanel = ShipInfoGenerator.getShipImage(order.getSpecFromClass().getShipHullSpecAPI(), 30, null).one;
             name = tooltip.addPara(order.getSpecFromClass().getShipHullSpecAPI().getHullName(), 0f);
             tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(2, 4);
+
+            FleetMemberAPI fleetMemberAPI = Global.getFactory().createFleetMember(FleetMemberType.SHIP, AshMisc.getVaraint(spec.getShipHullSpecAPI()));
+            fleetMemberAPI.getRepairTracker().setCR(0.7f);
+            fleetMemberAPI.getCrewComposition().addCrew(fleetMemberAPI.getMinCrew());
+            fleetMemberAPI.updateStats();
+            StandardTooltipV2 var10 = StandardTooltipV2.createFleetMemberExpandedTooltip((FleetMember) fleetMemberAPI,null);
+            StandardTooltipV2Expandable.addTooltipBelow((v) tooltip.getPrev(), var10);
         }
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.WEAPON) {
             imagePanel = WeaponInfoGenerator.getImageOfWeapon(order.getSpecFromClass().getWeaponSpec(), 30).one;
             name = tooltip.addPara(order.getSpecFromClass().getWeaponSpec().getWeaponName(), 0f);
             tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(2, 8);
+            StandardTooltipV2 var10 = StandardTooltipV2.createWeaponTooltip((BaseWeaponSpec) spec.getWeaponSpec(), (CharacterStats)null,null);
+            StandardTooltipV2Expandable.addTooltipBelow((v) tooltip.getPrev(), var10);
         }
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.FIGHTER) {
             name = tooltip.addPara(order.getSpecFromClass().getWingSpecAPI().getWingName(), 0f);
             imagePanel = FighterInfoGenerator.createFormationPanel(order.getSpecFromClass().getWingSpecAPI(), FormationType.BOX, 24, order.getSpecFromClass().getWingSpecAPI().getNumFighters()).one;
             tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
+            FleetMemberAPI fleetMember = Global.getFactory().createFleetMember(FleetMemberType.FIGHTER_WING,spec.getWingSpecAPI().getId());
+            StandardTooltipV2 var9 = (StandardTooltipV2) ReflectionUtilis.invokeMethodDirectly(ReflectionUtilis.findStaticMethodByParameterTypes(CargoTooltipFactory.class, FleetMember.class,FighterWingSpec.class,int.class, CharacterStats.class,boolean.class),new CargoTooltipFactory(),(FleetMember) fleetMember, (FighterWingSpec) spec.getWingSpecAPI(), 0, (CharacterStats)null, false);
+
+            StandardTooltipV2Expandable.addTooltipBelow((v) tooltip.getPrev(), var9);
+
         }
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.ITEM) {
             name = tooltip.addPara(order.getSpecFromClass().getItemSpecAPI().getName(), 0f);
             imagePanel = UIData.getItemRender(order.getSpecFromClass().getItemSpecAPI().getId(), 24);
             tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
+            tooltip.addTooltipToPrevious(new ProducitonHoverInfo(spec), TooltipMakerAPI.TooltipLocation.BELOW, spec.getWingSpecAPI()!=null);
+
         }
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.AICORE) {
             name = tooltip.addPara(order.getSpecFromClass().getAiCoreSpecAPI().getName(), 0f);
             imagePanel = UIData.getAiCoreRenderer(order.getSpecFromClass().getAiCoreSpecAPI().getId(), 24);
             tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
+            tooltip.addTooltipToPrevious(new ProducitonHoverInfo(spec), TooltipMakerAPI.TooltipLocation.BELOW, spec.getWingSpecAPI()!=null);
         }
-        final GPSpec spec = order.getSpecFromClass();
-        tooltip.addTooltipToPrevious(new ProducitonHoverInfo(spec), TooltipMakerAPI.TooltipLocation.BELOW, spec.getWingSpecAPI()!=null);
+
 
         creditCost = tooltip.addPara(Misc.getDGSCredits(order.getSpecFromClass().getCredistCost()), Color.ORANGE, 0f);
         name.computeTextHeight(name.getText());
