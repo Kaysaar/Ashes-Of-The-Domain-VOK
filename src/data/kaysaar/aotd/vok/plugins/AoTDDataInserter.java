@@ -22,6 +22,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.json.JSONArray;
@@ -186,7 +187,8 @@ public class AoTDDataInserter {
     }
     public  void spawnNidavleir() {
         SectorEntityToken planet = getEntityWithCriteria(null);
-        AoTDMegastructureRules.putMegastructure(planet,"aotd_nidavelir");
+        GPBaseMegastructure mega = AoTDMegastructureRules.putMegastructure(planet,"aotd_nidavelir");
+        planet.getStarSystem().setBaseName("Nidavelir");
         planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
         String token = planet.getMarket().addCondition("aotd_nidavelir_complex");
         planet.getMarket().getSpecificCondition(token).setSurveyed(false);
@@ -205,7 +207,7 @@ public class AoTDDataInserter {
         List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
         Collections.shuffle(starSystems);
         for (StarSystemAPI starSystem : starSystems) {
-            if (starSystem.getTags().contains(Tags.THEME_DERELICT)) {
+            if (!starSystem.getTags().contains(Tags.THEME_CORE)&&!starSystem.getTags().contains(Tags.THEME_CORE_POPULATED)&&!starSystem.getTags().contains(Tags.THEME_CORE_UNPOPULATED)) {
                 for (PlanetAPI planet : starSystem.getPlanets()) {
                     if (planet.isStar()) continue;
                     if (planet.isMoon()) continue;

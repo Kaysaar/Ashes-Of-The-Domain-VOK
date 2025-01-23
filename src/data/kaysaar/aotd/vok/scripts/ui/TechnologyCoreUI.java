@@ -71,7 +71,6 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
     }
 
     public void resetCurrentPlugin(ButtonAPI newButton) {
-        pauseSound();
         if (currentlyChosen != null) {
             this.panelForPlugins.removeComponent(panelMap.get(currentlyChosen));
         }
@@ -80,12 +79,15 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         playSound(currentlyChosen);
     }
 
-    public void clearUI() {
+    public void clearUI(boolean clearMusic) {
         customProdPlugin.clearUI(false);
         pluginResearch.clearUI();
         pluginMega.clearUI();
         panelMap.clear();
-        pauseSound();
+        if(clearMusic){
+            pauseSound();
+        }
+
     }
 
     public void createButtonsAndMainPanels() {
