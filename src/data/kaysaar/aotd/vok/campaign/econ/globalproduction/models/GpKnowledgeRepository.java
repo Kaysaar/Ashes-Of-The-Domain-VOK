@@ -1,9 +1,10 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.impl.campaign.intel.AoTDCommIntelPlugin;
+import kaysaar.aotd_question_of_loyalty.data.intel.AoTDCommIntelPlugin;
 import com.fs.starfarer.api.util.Misc;
 import kaysaar.aotd_question_of_loyalty.data.tags.AoTDRankTags;
+
 
 public class GpKnowledgeRepository {
     public static boolean isKnownByPlayer(GPOption option) {

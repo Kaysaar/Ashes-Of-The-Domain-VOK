@@ -1,6 +1,7 @@
 package org.shmo.lib.aotd.campaign.impl;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import org.shmo.lib.aotd.campaign.api.ShmoCustomLaserSpec;
 

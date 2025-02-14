@@ -307,7 +307,9 @@ public class AoTDMisc {
     public static boolean isPLayerHavingHeavyIndustry(){
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
             for (Industry industry : playerMarket.getIndustries()) {
-                if(industry instanceof HeavyIndustry)return true;
+                if(industry instanceof HeavyIndustry ||industry.getSpec().hasTag("heavyindustry")){
+                    return true;
+                }
             }
         }
         return false;

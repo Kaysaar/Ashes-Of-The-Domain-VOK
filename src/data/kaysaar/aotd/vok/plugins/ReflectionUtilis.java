@@ -1,15 +1,16 @@
 package data.kaysaar.aotd.vok.plugins;
 
-import ashlib.data.plugins.reflection.ReflectionBetterUtilis;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import com.fs.starfarer.api.util.Pair;
+import com.fs.starfarer.campaign.CampaignEngine;
 import com.fs.starfarer.ui.impl.CargoTooltipFactory;
 import kaysaar.bmo.buildingmenu.BuildingMenuMisc;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class ReflectionUtilis {
@@ -41,7 +42,6 @@ public class ReflectionUtilis {
             setMethodAccessable = lookup.findVirtual(methodClass, "setAccessible", MethodType.methodType(Void.TYPE, boolean.class));
             getModifiersHandle = lookup.findVirtual(methodClass, "getModifiers", MethodType.methodType(int.class));
             getParameterTypesHandle = lookup.findVirtual(methodClass, "getParameterTypes", MethodType.methodType(Class[].class));
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -150,7 +150,7 @@ public class ReflectionUtilis {
     public static Object invokeMethodDirectly(Object method,Object instance, Object... arguments) {
         try {
 
-            return invokeMethodHandle.invoke(method,instance, arguments);
+            return invokeMethodHandle.invoke(method,null, arguments);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -183,6 +183,7 @@ public class ReflectionUtilis {
                         return new Pair<>(method, parameterTypes);
                     }
                 } catch (Throwable e) {
+
                     e.printStackTrace();  // Handle any reflection errors
                 }
             }
@@ -192,6 +193,66 @@ public class ReflectionUtilis {
 
         // Return null if the method was not found in the class hierarchy
         return null;
+    }
+    public static Object invokeStaticMethodWithAutoProjection(Class<?> targetClass, String methodName, Object... arguments) {
+        try {
+            // Find the method by its name and parameter types
+            Object[] methods = targetClass.getDeclaredMethods();
+
+            Object matchingMethod = null;
+            Class<?>[] parameterTypes = null;
+
+            for (Object method : methods) {
+                // Get the method name dynamically
+                String currentName = (String) getMethodNameHandle.invoke(method);
+
+                // Check if names match and method is static
+                int modifiers = (int) getModifiersHandle.invoke(method);
+                if (currentName.equals(methodName) && (modifiers & 0x0008) != 0) { // Static check
+                    // Retrieve parameter types
+                    parameterTypes = (Class<?>[]) getParameterTypesHandle.invoke(method);
+                    if(parameterTypes.length== arguments.length){
+                        matchingMethod = method;
+                        break;
+                    }
+
+                }
+            }
+
+            if (matchingMethod == null) {
+                throw new NoSuchMethodException("Static method " + methodName + " not found in class " + targetClass.getName());
+            }
+
+            // Project arguments to the correct types
+            Object[] projectedArgs = new Object[parameterTypes.length];
+            for (int i = 0; i < parameterTypes.length; i++) {
+                Object arg = (arguments.length > i) ? arguments[i] : null;
+
+                if (arg == null) {
+                    if (parameterTypes[i].isPrimitive()) {
+                        throw new IllegalArgumentException("Null cannot be used for primitive type: " + parameterTypes[i].getName());
+                    }
+                    projectedArgs[i] = null;
+                } else {
+                    projectedArgs[i] = convertArgument(arg, parameterTypes[i]);
+                }
+            }
+
+            // Ensure the method is accessible
+            setMethodAccessable.invoke(matchingMethod, true);
+
+            // Invoke the static method (pass null as the instance for static methods)
+            return invokeMethodHandle.invoke(matchingMethod, null, projectedArgs);
+        } catch (Throwable e) {
+            if (e instanceof InvocationTargetException) {
+                Throwable cause = ((InvocationTargetException) e).getTargetException();
+                System.err.println("Root cause of InvocationTargetException: " + cause.getClass().getName());
+                cause.printStackTrace(); // Print root cause
+            } else {
+                e.printStackTrace();
+            }
+            throw new RuntimeException(e);
+        }
     }
 
     public static Object invokeMethodWithAutoProjection(String methodName, Object instance, Object... arguments) {
@@ -273,6 +334,26 @@ public class ReflectionUtilis {
         } else {
             // For reference types, perform a cast if possible
             return targetType.cast(arg);
+        }
+    }
+    public static Object invokeStaticMethod(Class<?> targetClass, String methodName, Object... arguments) {
+        try {
+            // Retrieve the parameter types of the arguments
+            Class<?>[] parameterTypes = new Class[arguments.length];
+            for (int i = 0; i < arguments.length; i++) {
+                parameterTypes[i] = arguments[i].getClass();
+            }
+
+            // Find the method by its name and parameter types
+            Object method = findStaticMethodByParameterTypes(targetClass, parameterTypes);
+            if (method == null) {
+                throw new NoSuchMethodException("Static method " + methodName + " not found in class " + targetClass.getName());
+            }
+
+            // Invoke the method (static methods do not need an instance)
+            return invokeMethodHandle.invoke(method, null, arguments);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
         }
     }
 
