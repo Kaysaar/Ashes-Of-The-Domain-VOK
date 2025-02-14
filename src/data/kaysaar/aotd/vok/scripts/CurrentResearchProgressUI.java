@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.scripts;
 
+import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
@@ -21,6 +22,8 @@ import org.lazywizard.lazylib.ui.FontException;
 import org.lazywizard.lazylib.ui.LazyFont;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
+import sidebarLib.UI.sidebarWidget;
+import sidebarLib.sidebarLib_modPlugin;
 ;
 
 import java.awt.*;
@@ -87,12 +90,19 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             return;
         if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities() <= 0)
             return;
-
+        if(Global.getSettings().getModManager().isModEnabled("sidebar")){
+            sidebarWidget widget = sidebarWidget.getSidebar();
+            if(AshMisc.isStringValid(widget.getCurrentButtonSelected())){
+                if(!widget.getCurrentButtonSelected().equals("aotd_vok_research_widget")){
+                    return;
+                }
+            }
+        }
         int x1 = 0;
         if (!isHidden) {
-            sprite.render(x1, Global.getSettings().getScreenHeight() - 200);
+            sprite.render(x1, getYForRender());
             float x = sprite.getWidth()-2;
-            float y = (Global.getSettings().getScreenHeight() - 200) + sprite.getHeight();
+            float y = (getYForRender()) + sprite.getHeight();
             if (techString == null) {
                 techString = loader.createText();
             }
@@ -105,29 +115,29 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
 
             if (detector.determineIfHoversOverButton(x, y, x + buttonHide.getWidth(), y - 11, x, y - sprite.getHeight(), x + buttonHide.getWidth(), y - sprite.getHeight() + 11, Global.getSettings().getMouseX(), (float) (Global.getSettings().getMouseY()))) {
                 buttonHideHighlighted.setHeight(sprite.getHeight());
-                buttonHideHighlighted.render(sprite.getWidth()-2, Global.getSettings().getScreenHeight() - 200);
+                buttonHideHighlighted.render(sprite.getWidth()-2, getYForRender());
             } else {
                 buttonHide.setHeight(sprite.getHeight());
-                buttonHide.render(sprite.getWidth()-2, Global.getSettings().getScreenHeight() - 200);
+                buttonHide.render(sprite.getWidth()-2, getYForRender());
             }
             if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus() != null) {
                 spriteOfCurrentlyResearched = Global.getSettings().getSprite("ui_icons_tech_tree", AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getIconId());
                 spriteOfCurrentlyResearched.setWidth(80);
                 spriteOfCurrentlyResearched.setHeight(80);
-                spriteOfCurrentlyResearched.render(8, Global.getSettings().getScreenHeight() - 197);
+                spriteOfCurrentlyResearched.render(8, getYForRender() +3);
 
                 techString.setText("Researching : " + AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getName());
                 techString.setMaxWidth(sprite.getWidth() - 98);
                 techString.setFontSize(12);
                 techString.setBaseColor(Misc.getTextColor());
-                techString.draw(95, Global.getSettings().getScreenHeight() - 125);
+                techString.draw(95, getYForRender() + 75);
                 progressionBarChanged.setWidth(progressionBarFull.getWidth() * AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()));
                 progressionBarChanged.render(7, y - sprite.getHeight() + 2);
             } else {
                 techString.setText("Currently nothing is being\nresearched!");
                 techString.setFontSize(12);
                 techString.setBaseColor(Misc.getTextColor());
-                techString.draw(95, Global.getSettings().getScreenHeight() - 125);
+                techString.draw(95, getYForRender() + 75);
             }
 
             buttonTech.setWidth(170);
@@ -135,19 +145,19 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             buttonTechHighlighted.setWidth(170);
             buttonTechHighlighted.setHeight(20);
             float buttonXBeginning = 95;
-            float buttonYBeginning = Global.getSettings().getScreenHeight() - 186 + buttonTech.getHeight();
+            float buttonYBeginning = getYForRender() + 14 + buttonTech.getHeight();
             if (detector.determineIfHoversOverButton(buttonXBeginning, buttonYBeginning, buttonXBeginning + 170, buttonYBeginning, buttonXBeginning, buttonYBeginning - 20, buttonXBeginning + 170, buttonYBeginning - 20, Global.getSettings().getMouseX(), Global.getSettings().getMouseY())) {
-                buttonTechHighlighted.render(95, Global.getSettings().getScreenHeight() - 186);
+                buttonTechHighlighted.render(95, getSecondY());
 
             } else {
-                buttonTech.render(95, Global.getSettings().getScreenHeight() - 186);
+                buttonTech.render(95, getSecondY());
 
             }
 
             buttonString.setText("Access Tech Tree");
             buttonString.setFontSize(12);
             buttonString.setBaseColor(Misc.getTextColor());
-            buttonString.draw(130, Global.getSettings().getScreenHeight() - 170);
+            buttonString.draw(130, getYForRender() +30);
             if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()!=null){
                 progressionString.setText((int) (AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()) * 100) + "%");
                 progressionString.setFontSize(10);
@@ -158,23 +168,35 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                     progressionString.setBaseColor(Misc.getTooltipTitleAndLightHighlightColor());
 
                 }
-                progressionString.draw(125, Global.getSettings().getScreenHeight() - 189);
+                progressionString.draw(125, getYForRender() +11);
             }
             
 
         } else {
             float x = x1;
-            float y = (Global.getSettings().getScreenHeight() - 200) + sprite.getHeight();
+            float y = (getYForRender()) + sprite.getHeight();
             if (detector.determineIfHoversOverButton(x, y, x + buttonHide.getWidth(), y - 11, x, y - sprite.getHeight(), x + buttonHide.getWidth(), y - sprite.getHeight() + 11, Global.getSettings().getMouseX(), (float) (Global.getSettings().getMouseY()))) {
                 buttonHideHighlighted.setHeight(sprite.getHeight());
-                buttonHideHighlighted.render(x1, Global.getSettings().getScreenHeight() - 200);
+                buttonHideHighlighted.render(x1, getYForRender());
             } else {
                 buttonHide.setHeight(sprite.getHeight());
-                buttonHide.render(x1, Global.getSettings().getScreenHeight() - 200);
+                buttonHide.render(x1, getYForRender());
             }
         }
 
     }
+
+    private  float getSecondY() {
+        return getYForRender()+ 14;
+    }
+
+    private  float getYForRender() {
+        if(Global.getSettings().getModManager().isModEnabled("sidebar")){
+            return sidebarWidget.getSidebar().yyLoc()-sidebarWidget.getSidebar().getSidebarHeight()-sidebarWidget.headerHeight()-sprite.getHeight()-5;
+        }
+        return Global.getSettings().getScreenHeight() - 200;
+    }
+
     @Override
     public int getListenerInputPriority() {
         return 1200;
@@ -192,7 +214,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
         if (buttonTechHighlighted == null) return;
         for (InputEventAPI event : events) {
             float x = sprite.getWidth()-2;
-            float y = (Global.getSettings().getScreenHeight() - 200) + sprite.getHeight();
+            float y = (getYForRender()) + sprite.getHeight();
             if (isHidden) {
                 x = 1;
             }
@@ -204,7 +226,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                     break;
                 }
                 float buttonXBeginning = 95;
-                float buttonYBeginning = Global.getSettings().getScreenHeight() - 166;
+                float buttonYBeginning = getYForRender() + 14 + buttonTech.getHeight();
                 if (!isHidden&&detector.determineIfHoversOverButton(buttonXBeginning, buttonYBeginning, buttonXBeginning + 170, buttonYBeginning, buttonXBeginning, buttonYBeginning - 20, buttonXBeginning + 170, buttonYBeginning - 20, Global.getSettings().getMouseX(), Global.getSettings().getMouseY())) {
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
                     CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTab());

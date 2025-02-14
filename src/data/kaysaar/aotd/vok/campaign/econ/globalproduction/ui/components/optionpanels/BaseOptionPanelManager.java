@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BaseOptionPanelManager implements OptionPanelInterface {
     CustomPanelAPI mainPanel;
@@ -57,7 +59,7 @@ public class BaseOptionPanelManager implements OptionPanelInterface {
             float x = 0;
             tooltipButDesigners.setButtonFontDefault();
             for (Map.Entry<String, Integer> entry : calculateAmountOfRow.stringsInRow.entrySet()) {
-                String manu = entry.getKey().split("\\(")[0];
+                String manu = extractManufacturer(entry.getKey());
                 ButtonAPI button = tooltipButDesigners.addAreaCheckbox("", manu, base, bg, bright, entry.getValue(), 30, 0f);
                 button.getPosition().inTL(x, currY);
                 buttons.add(button);
@@ -71,6 +73,32 @@ public class BaseOptionPanelManager implements OptionPanelInterface {
         panel.addComponent(buttonDesignPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, YHeight + 130);
 
     }
+    public static String extractManufacturer(String input) {
+        String[] parts = input.split("\\(");
+        StringBuilder result = new StringBuilder(parts[0].trim());
+
+        // List to store extracted sections
+        ArrayList<String> extractedParts = new ArrayList<>();
+
+        // Process all sections inside parentheses
+        for (int i = 1; i < parts.length; i++) {
+            String section = parts[i].replace(")", "").trim();
+            extractedParts.add(section);
+        }
+
+        // Check the last section; remove it if it's purely numeric
+        if (!extractedParts.isEmpty() && extractedParts.get(extractedParts.size() - 1).matches("\\d+")) {
+            extractedParts.remove(extractedParts.size() - 1);
+        }
+
+        // Rebuild the string with valid sections
+        for (String part : extractedParts) {
+            result.append(" (").append(part).append(")");
+        }
+
+        return result.toString();
+    }
+
     public void createSizeOptions(LinkedHashMap<String, Integer> sizeInfo) {
         buttonSize = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 30, null);
         TooltipMakerAPI tooltip = buttonSize.createUIElement(UIData.WIDTH_OF_OPTIONS, 30, false);

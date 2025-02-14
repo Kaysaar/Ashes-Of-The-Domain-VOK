@@ -18,5 +18,6 @@
     <orderEntry type="library" name="ashlib" level="project" />
     <orderEntry type="library" name="ExerelinCore" level="project" />
     <orderEntry type="library" name="bmo" level="project" />
+    <orderEntry type="library" name="sidebarLib" level="project" />
   </component>
 </module>

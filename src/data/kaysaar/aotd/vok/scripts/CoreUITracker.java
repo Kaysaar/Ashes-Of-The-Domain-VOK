@@ -111,7 +111,7 @@ public class CoreUITracker implements EveryFrameScript {
             mainParent.removeComponent(toRemove);
         }
         if (tryToGetButtonProd(getStringForCoreTab()) == null) {
-            insertButton(button, mainParent, "Research & Development", new TooltipMakerAPI.TooltipCreator() {
+            insertButton(button, mainParent, "Research & Production", new TooltipMakerAPI.TooltipCreator() {
                 @Override
                 public boolean isTooltipExpandable(Object tooltipParam) {
                     return false;
@@ -216,7 +216,7 @@ public class CoreUITracker implements EveryFrameScript {
     }
 
     public static @NotNull String getStringForCoreTab() {
-        return "research & development";
+        return "research & production";
     }
 
     private static void removePanels(ArrayList<UIComponentAPI> componentAPIS, UIPanelAPI mainParent, UIComponentAPI panelToIgnore) {

@@ -6,6 +6,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
+import data.kaysaar.aotd.vok.ui.TestPlugin;
 
 import java.awt.*;
 
@@ -25,6 +26,7 @@ public class PauseRestoration extends BasePopUpDialog{
         tooltip.setParaFont(Fonts.INSIGNIA_LARGE);
         tooltip.addPara(content,2f);
         tooltip.addSectionHeading("Currently consumed", Alignment.MID,10f);
+        tooltip.addCustom(new TestPlugin(400,200).getMainPanel(),5f);
         tooltip.addCustom(MegastructureUIMisc.createResourcePanel(width,40,40,sectionToRestore.getSpec().getGpRestorationCost(),Color.ORANGE),10f);
     }
 
