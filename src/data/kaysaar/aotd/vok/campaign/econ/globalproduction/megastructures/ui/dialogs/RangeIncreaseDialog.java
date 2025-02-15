@@ -22,6 +22,7 @@ public class RangeIncreaseDialog extends BaseSliderDialog{
         super(menu,headerTitle,section.mult,section.sections,section.range,1);
         this.sectionToRestore = section;
         this.menu = menu;
+
     }
 
     @Override
