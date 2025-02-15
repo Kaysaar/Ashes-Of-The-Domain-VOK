@@ -26,7 +26,6 @@ public class PauseRestoration extends BasePopUpDialog{
         tooltip.setParaFont(Fonts.INSIGNIA_LARGE);
         tooltip.addPara(content,2f);
         tooltip.addSectionHeading("Currently consumed", Alignment.MID,10f);
-        tooltip.addCustom(new TestPlugin(400,200).getMainPanel(),5f);
         tooltip.addCustom(MegastructureUIMisc.createResourcePanel(width,40,40,sectionToRestore.getSpec().getGpRestorationCost(),Color.ORANGE),10f);
     }
 

@@ -9,14 +9,15 @@ import com.fs.starfarer.api.impl.campaign.CoreReputationPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Ranks;
 import com.fs.starfarer.api.impl.campaign.ids.Strings;
-import com.fs.starfarer.api.impl.campaign.intel.AoTDCommIntelPlugin;
-import com.fs.starfarer.api.impl.campaign.intel.eventfactors.onetime.DatabankSellFactor;
+
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
+import kaysaar.aotd_question_of_loyalty.data.intel.AoTDCommIntelPlugin;
+import kaysaar.aotd_question_of_loyalty.data.intel.eventfactors.onetime.DatabankSellFactor;
 import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 
 import java.awt.*;

@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.scripts;
 
+
 import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
@@ -90,6 +91,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             return;
         if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities() <= 0)
             return;
+
         if(Global.getSettings().getModManager().isModEnabled("sidebar")){
             sidebarWidget widget = sidebarWidget.getSidebar();
             if(AshMisc.isStringValid(widget.getCurrentButtonSelected())){

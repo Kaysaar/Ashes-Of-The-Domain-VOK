@@ -44,7 +44,7 @@ public class BasePopUpDialog extends PopUpUI {
             LabelAPI label = headerTooltip.addPara(title,Misc.getTooltipTitleAndLightHighlightColor(),5f);
             panelAPI.addUIElement(headerTooltip).inTL(15,10);
             float width = label.computeTextWidth(label.getText());
-            label.getPosition().setLocation(0,0).inTL(headerTooltip.getPosition().getCenterX()-(width/2),3);
+            label.getPosition().setLocation(0,0).inTL((panelAPI.getPosition().getWidth()/2)-(width/2),3);
         }
         else {
             y = 10;
