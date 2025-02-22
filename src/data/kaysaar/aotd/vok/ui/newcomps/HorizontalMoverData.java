@@ -35,11 +35,12 @@ public class HorizontalMoverData {
     }
 
     public void setCurrentOffsetX(float currentOffsetX) {
-        this.currentOffsetX = currentOffsetX;
+        this.currentOffsetX = Math.max(-getMaxOffsetX(), Math.min(currentOffsetX,0));
     }
 
     public void setCurrentOffsetY(float currentOffsetY) {
-        this.currentOffsetY = currentOffsetY;
+        this.currentOffsetY = Math.max(0, Math.min(currentOffsetY,getMaxOffsetY()));
+
     }
 
     public void setScale(float scale) {
@@ -119,7 +120,7 @@ public class HorizontalMoverData {
 
             // Update offsets with bounds checking
             currentOffsetX = Math.max(-getMaxOffsetX(), Math.min(currentOffsetX + diffX,0));
-            currentOffsetY = Math.max(-getMaxOffsetY(), Math.min(currentOffsetY + diffY,0));
+            currentOffsetY = Math.max(0, Math.min(currentOffsetY + diffY,getMaxOffsetY()));
         }
     }
 
