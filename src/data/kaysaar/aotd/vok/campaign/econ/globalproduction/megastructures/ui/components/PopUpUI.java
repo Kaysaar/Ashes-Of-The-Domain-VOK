@@ -157,7 +157,7 @@ public class PopUpUI implements CustomUIPanelPlugin {
         for (InputEventAPI event : events) {
             if(frames>=limit-1&&reachedMaxHeight){
                 if(event.isMouseDownEvent()&&!isDialog){
-                    ashlib.data.plugins.ui.models.TrapezoidButtonDetector detector = new TrapezoidButtonDetector();
+                     TrapezoidButtonDetector detector = new TrapezoidButtonDetector();
                     float xLeft = panelToInfluence.getPosition().getX();
                     float xRight = panelToInfluence.getPosition().getX()+panelToInfluence.getPosition().getWidth();
                     float yBot = panelToInfluence.getPosition().getY();

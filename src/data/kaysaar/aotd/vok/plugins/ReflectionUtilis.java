@@ -27,6 +27,7 @@ public class ReflectionUtilis {
     private static final MethodHandle setMethodAccessable;
     private static final MethodHandle getModifiersHandle;
     private static final MethodHandle  getParameterTypesHandle;
+    private static final MethodHandle  getFieldTypeHandle;
 
     static {
         try {
@@ -34,6 +35,7 @@ public class ReflectionUtilis {
             setFieldHandle = lookup.findVirtual(fieldClass, "set", MethodType.methodType(Void.TYPE, Object.class, Object.class));
             getFieldHandle = lookup.findVirtual(fieldClass, "get", MethodType.methodType(Object.class, Object.class));
             getFieldNameHandle = lookup.findVirtual(fieldClass, "getName", MethodType.methodType(String.class));
+            getFieldTypeHandle = lookup.findVirtual(fieldClass, "getType", MethodType.methodType(Class.class));
             setFieldAccessibleHandle = lookup.findVirtual(fieldClass, "setAccessible", MethodType.methodType(Void.TYPE, boolean.class));
 
             methodClass = Class.forName("java.lang.reflect.Method", false, Class.class.getClassLoader());
@@ -356,7 +358,41 @@ public class ReflectionUtilis {
             throw new RuntimeException(e);
         }
     }
+    public static Object findFieldByType(Object targetObject, Class<?> fieldType) {
+        try {
+            Class<?> currentClass = targetObject.getClass();
 
+            while (currentClass != null) {
+                // Retrieve all declared fields dynamically
+                Object[] fields = currentClass.getDeclaredFields();
+
+                for (Object field : fields) {
+                    try {
+                        // Retrieve field type dynamically
+                        Class<?> fieldClass = (Class<?>) getFieldTypeHandle.invoke(field);
+
+                        // Check if the field type matches or is assignable
+                        if (fieldType.isAssignableFrom(fieldClass)) {
+                            setFieldAccessibleHandle.invoke(field, true);
+                            String name = (String) getFieldNameHandle.invoke(field);
+                            return  getFieldHandle.invoke(field, targetObject);
+                        }
+                    } catch (Throwable e) {
+                        // Handle exceptions gracefully during field inspection
+                        e.printStackTrace();
+                    }
+                }
+
+                // Move to the superclass dynamically
+                currentClass = (Class<?>) invokeMethodHandle.invoke(currentClass, "getSuperclass");
+            }
+
+            // Return null if no matching field is found
+            return null;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
     public static Object findStaticMethodByParameterTypes(Class<?> targetClass, Class<?>... parameterTypes) {
         try {
             Class<?> currentClass = targetClass;

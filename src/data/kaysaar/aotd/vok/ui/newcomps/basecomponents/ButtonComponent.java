@@ -1,18 +1,14 @@
-package data.kaysaar.aotd.vok.ui.newcomps;
+package data.kaysaar.aotd.vok.ui.newcomps.basecomponents;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
-import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
-import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
+import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.TiledTextureRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
-import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
-import org.lazywizard.lazylib.ui.LazyFont;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
@@ -22,33 +18,43 @@ public class ButtonComponent extends ResizableComponent {
 
     float currHighlight = 0f;
     float maxHighlight = 0.15f;
-    Color highlightColor = Color.RED;
+    Color highlightColor = Misc.getButtonTextColor();
+    Color backgroundColor = Misc.getStoryDarkColor();
     CustomPanelAPI absolutePanel;
+    public boolean isClickable = true;
+    public float alphaBG = 0.95f;
+
+    public void setClickable(boolean clickable) {
+        isClickable = clickable;
+    }
+
     boolean decreasedMode = true;
     transient SpriteAPI spriteToRender = Global.getSettings().getSprite("rendering", "GlitchSquare");
     SpriteAPI panelBackground = Global.getSettings().getSprite("ui", "panel00_center");
     TiledTextureRenderer renderers = new TiledTextureRenderer(panelBackground.getTextureId());
-    UILinesRenderer renderer;
+    public UILinesRenderer renderer;
     IntervalUtil breakBetweenButtons = null;
     boolean overrideHighlight = false;
     LabelComponent component;
-
+    public void setColorOfBorder(Color color){
+        this.renderer.setBoxColor(color);
+    }
     public ButtonComponent(float width, float height) {
         currHighlight = 0f;
+        originalWidth = width;
+        originalHeight = height;
         componentPanel = Global.getSettings().createCustom(width, height, this);
         renderer = new UILinesRenderer(0f);
         renderer.setPanel(componentPanel);
     }
 
     public void setText(String text) {
-        if(component==null){
+        if (component == null) {
 
             component = new LabelComponent("graphics/fonts/orbitron12condensed.fnt", 16, text, Color.ORANGE, componentPanel.getPosition().getWidth() - 20, componentPanel.getPosition().getHeight() / 3);
-            Vector2f vec=new Vector2f(componentPanel.getPosition().getWidth()/2 - component.getTextWidth()/2, (componentPanel.getPosition().getHeight() /2) - (component.draw.getHeight()/2) );
-            component.setOriginalCoords(vec);
-            componentPanel.addComponent(component.getReferencePanel()).setLocation(0,0).inTL(vec.x, vec.y);
-        }
-        else{
+            Vector2f vec = new Vector2f(componentPanel.getPosition().getWidth() / 2 - component.getTextWidth() / 2, (componentPanel.getPosition().getHeight() / 2) - (component.draw.getHeight() / 2));
+            addComponent(component, vec.x, vec.y);
+        } else {
 
             component.setText(text);
         }
@@ -56,10 +62,9 @@ public class ButtonComponent extends ResizableComponent {
     }
 
 
-
     public boolean shouldHighlight() {
 
-        return doesHover() || overrideHighlight;
+        return (doesHover() || overrideHighlight)&&isClickable;
     }
 
     public CustomPanelAPI getPanelOfButton() {
@@ -73,20 +78,26 @@ public class ButtonComponent extends ResizableComponent {
 
     @Override
     public void renderBelow(float alphaMult) {
-        renderers.renderTiledTexture(componentPanel.getPosition().getX(), componentPanel.getPosition().getY(), componentPanel.getPosition().getWidth(), componentPanel.getPosition().getHeight(), panelBackground.getTextureWidth(), panelBackground.getTextureHeight(), 0.9f * alphaMult, highlightColor);
+        renderers.renderTiledTexture(componentPanel.getPosition().getX(), componentPanel.getPosition().getY(), componentPanel.getPosition().getWidth(), componentPanel.getPosition().getHeight(), panelBackground.getTextureWidth(), panelBackground.getTextureHeight(), alphaBG * alphaMult, backgroundColor);
         if (currHighlight >= maxHighlight) {
             currHighlight = maxHighlight;
         }
-        spriteToRender.setColor(highlightColor);
-        spriteToRender.setAlphaMult(alphaMult * currHighlight);
-        spriteToRender.setSize(componentPanel.getPosition().getWidth(), componentPanel.getPosition().getHeight());
-        spriteToRender.renderAtCenter(componentPanel.getPosition().getCenterX(), componentPanel.getPosition().getCenterY());
-        renderer.render(alphaMult);
+
+
     }
 
     @Override
     public void render(float alphaMult) {
+        spriteToRender.setColor(highlightColor);
+        spriteToRender.setAlphaMult(alphaMult * currHighlight);
+        spriteToRender.setSize(componentPanel.getPosition().getWidth(), componentPanel.getPosition().getHeight());
+        if(currHighlight!=0){
+            spriteToRender.renderAtCenter(componentPanel.getPosition().getCenterX(), componentPanel.getPosition().getCenterY());
 
+        }
+        renderer.render(alphaMult);
+        renderer.render(alphaMult);
+        renderer.render(alphaMult);
 
     }
 
@@ -126,13 +137,18 @@ public class ButtonComponent extends ResizableComponent {
         for (InputEventAPI event : events) {
             if (event.isConsumed()) continue;
             if (event.isLMBDownEvent()) {
-                if (doesHover() && !isBreakBetweenClicks()) {
+                if (doesHover() && !isBreakBetweenClicks()&&isClickable) {
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1, 1);
                     initBreak();
+                    performActionOnClick();
                     event.consume();
                 }
             }
         }
+    }
+
+    public void performActionOnClick() {
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
+import com.fs.starfarer.api.campaign.econ.InstallableIndustryItemPlugin;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.econ.impl.Mining;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
@@ -15,8 +16,15 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MiningMegaplex extends BaseIndustry {
+    public boolean isFromEvent = false;
+
+    public void setFromEvent(boolean fromEvent) {
+        isFromEvent = fromEvent;
+    }
+
     @Override
     public void apply() {
         int bonus  = -4;
@@ -53,6 +61,21 @@ public class MiningMegaplex extends BaseIndustry {
     @Override
     public boolean isAvailableToBuild() {
         return  AoDUtilis.isMiningAvailable(market) && AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&market.getSize()>=6;
+    }
+
+    @Override
+    public boolean canInstallAICores() {
+        return !isFromEvent;
+    }
+
+    @Override
+    public List<InstallableIndustryItemPlugin> getInstallableItems() {
+        if(isFromEvent){
+            return new ArrayList<>();
+        }
+        else {
+            return super.getInstallableItems();
+        }
     }
 
     @Override

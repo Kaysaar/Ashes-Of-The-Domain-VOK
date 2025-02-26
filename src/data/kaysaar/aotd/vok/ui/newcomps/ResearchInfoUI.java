@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.ui.components;
+package data.kaysaar.aotd.vok.ui.newcomps;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
@@ -7,11 +7,11 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
+import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
@@ -20,30 +20,25 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchRewardType;
-import data.kaysaar.aotd.vok.ui.AoTDResearchUI;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ResearchInfoUI extends PopUpUI {
-    AoTDResearchUI menu;
-    ButtonAPI button;
     ResearchOption option;
     CustomPanelAPI mainPanel;
     ButtonAPI currButton;
-    TechTreeResearchOptionPanel panelResearch;
     String currentCommand;
     float lastYPos;
     double multiplier = AoTDSettingsManager.getFloatValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
-
+    ResearchZoomPanel zoomPanel;
     float iconsize = 120;
 
-    public ResearchInfoUI(AoTDResearchUI menu, ButtonAPI button, ResearchOption option, TechTreeResearchOptionPanel panel) {
-        this.menu = menu;
-        this.button = button;
+    public ResearchInfoUI(ResearchOption option,ResearchZoomPanel zoomPanel) {
         this.option = option;
-        this.panelResearch = panel;
+        this.zoomPanel = zoomPanel;
     }
 
 
@@ -111,46 +106,45 @@ public class ResearchInfoUI extends PopUpUI {
         getPanelToInfluence().removeComponent(mainPanel);
         mainPanel = null;
         createUI(getPanelToInfluence());
-
+        if(zoomPanel!=null){
+            zoomPanel.refresh();
+        }
     }
 
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        if (currButton != null) {
-            if (currButton.isChecked()) {
-                currButton.setChecked(false);
-                String data = (String) currButton.getCustomData();
-                String[] splitted = data.split(":");
-                if (splitted[0].equals("research")) {
-                    AoTDMainResearchManager.getInstance().getManagerForPlayer().pickResearchFocus(option.Id);
-                    menu.setResearching(option);
-                    Global.getSoundPlayer().playUISound("aotd_research_started", 1f, 1f);
-                    panelResearch.reset();
-                    menu.reset(true, false, null);
-                    resetUI();
-                    return;
+        if (currButton.isChecked()) {
+            currButton.setChecked(false);
+            String data = (String) currButton.getCustomData();
+            String[] splitted = data.split(":");
+            if (splitted[0].equals("research")) {
+                AoTDMainResearchManager.getInstance().getManagerForPlayer().pickResearchFocus(option.Id);
+                Global.getSoundPlayer().playUISound("aotd_research_started", 1f, 1f);
+                resetUI();
+                this.zoomPanel.plugin.resetCurrentResearch();
+                return;
+            }
+            if (splitted[0].equals("queue_add")) {
+                AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().addToQueue(option.Id);
+                Global.getSoundPlayer().playUISound("aotd_research_started", 1f, 1f);
+                resetUI();
+                return;
+            }
+            if (splitted[0].equals("queue_remove")) {
+                AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().removeFromQueue(option.Id);
+                resetUI();
+                return;
+            }
+            if (splitted[0].equals("stop")) {
+                AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayer();
+                manager.setCurrentFocus(null);
+                if (!manager.getQueueManager().getQueuedResearchOptions().isEmpty()) {
+                    manager.setCurrentFocus(AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().removeFromTop().Id);
                 }
-                if (splitted[0].equals("queue")) {
-                    AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().addToQueue(option.Id);
-                    Global.getSoundPlayer().playUISound("aotd_research_started", 1f, 1f);
-                    panelResearch.reset();
-                    menu.reset(true, false, null);
-                    resetUI();
-                    return;
-                }
-                if (splitted[0].equals("stop")) {
-                    menu.setResearching(null);
-                    menu.manager.setCurrentFocus(null);
-                    if (!menu.manager.getQueueManager().getQueuedResearchOptions().isEmpty()) {
-                        menu.setResearching(AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().removeFromTop());
-                        menu.manager.setCurrentFocus(menu.getResearching().Id);
-                    }
-                    panelResearch.reset();
-                    menu.reset(true, false, null);
-                    resetUI();
-                    return;
-                }
+                this.zoomPanel.plugin.resetCurrentResearch();
+                resetUI();
+                return;
             }
         }
     }
@@ -158,25 +152,28 @@ public class ResearchInfoUI extends PopUpUI {
     public CustomPanelAPI createButtonForResearchOrQueue(CustomPanelAPI originPanel) {
         CustomPanelAPI other = originPanel.createCustomPanel(originPanel.getPosition().getWidth(), 30, null);
         TooltipMakerAPI tooltip = other.createUIElement(originPanel.getPosition().getWidth(), 30, false);
-        button = panelResearch.getCurrentButton();
-        String data = (String) button.getCustomData();
-        String[] splitted = data.split(":");
-        String command = splitted[0];
-        String text = "";
-        if (splitted[0].equals("stop")) {
-            text = "Stop";
+        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()==null){
+            currButton = tooltip.addButton("Start Research", "research:"+option.getSpec().getId(), 200, 30, 0f);
         }
-        if (splitted[0].equals("queue")) {
-            text = "Queue";
+        else{
+            if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getId().equals(option.getSpec().getId())){
+                currButton = tooltip.addButton("Stop Research", "stop:"+option.getSpec().getId(), 200, 30, 0f);
+
+            }
+            else{
+                if(!AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().isInQueue(option.getSpec().getId())){
+                    currButton = tooltip.addButton("Queue Research", "queue_add:"+option.getSpec().getId(), 200, 30, 0f);
+
+                }
+                else{
+                    currButton = tooltip.addButton("Remove from Queue", "queue_remove:"+option.getSpec().getId(), 200, 30, 0f);
+
+                }
+
+
+            }
         }
-        if (splitted[0].equals("research")) {
-            text = "Start Research";
-        }
-        currButton = tooltip.addButton(text, data, 200, 30, 0f);
-        currButton.setEnabled(AoTDMainResearchManager.getInstance().getManagerForPlayer().canResearch(option.Id, false) && !AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().isInQueue(option.Id));
-        if (splitted[0].equals("stop")) {
-            currButton.setEnabled(true);
-        }
+        currButton.setEnabled(AoTDMainResearchManager.getInstance().getManagerForPlayer().canResearch(option.Id, false));
         currButton.getPosition().inTL(originPanel.getPosition().getWidth() - 205, 0);
         other.addUIElement(tooltip).inTL(0, 0);
         return other;
@@ -448,6 +445,11 @@ public class ResearchInfoUI extends PopUpUI {
         }
         return null;
 
+    }
+
+    @Override
+    public void processInput(List<InputEventAPI> events) {
+        super.processInput(events);
     }
 
     public CustomPanelAPI createSectionForOtherReq(CustomPanelAPI originPanel) {

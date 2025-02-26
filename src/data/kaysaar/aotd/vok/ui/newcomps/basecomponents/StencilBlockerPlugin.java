@@ -1,15 +1,18 @@
-package data.kaysaar.aotd.vok.ui;
+package data.kaysaar.aotd.vok.ui.newcomps.basecomponents;
 
-import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.util.List;
 
-public class StencilBlockerEndPlugin implements CustomUIPanelPlugin {
-
+public class StencilBlockerPlugin implements CustomUIPanelPlugin {
+    CustomPanelAPI panelToStencil;
+    public StencilBlockerPlugin(CustomPanelAPI panelToStencil) {
+        this.panelToStencil = panelToStencil;
+    }
     @Override
     public void positionChanged(PositionAPI position) {
 
@@ -22,7 +25,7 @@ public class StencilBlockerEndPlugin implements CustomUIPanelPlugin {
 
     @Override
     public void render(float alphaMult) {
-        AshMisc.endStencil();
+        AoTDMisc.startStencil(panelToStencil,1f);
     }
 
     @Override

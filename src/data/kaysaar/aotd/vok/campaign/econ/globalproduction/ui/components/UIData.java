@@ -47,7 +47,7 @@ import java.util.Map;
 
 public class UIData {
     public static float WIDTH = Global.getSettings().getScreenWidth();
-    public static float HEIGHT = Global.getSettings().getScreenHeight();
+    public static float HEIGHT = Global.getSettings().getScreenHeight()-10;
     public static float HEIGHT_OF_OPTIONS = HEIGHT * 0.6f;
     public static float WIDTH_OF_OPTIONS = WIDTH * 0.65f;
     public static float WIDTH_OF_ORDERS = WIDTH * 0.35f - 30f;

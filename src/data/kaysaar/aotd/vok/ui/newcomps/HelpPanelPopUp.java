@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.ui.components;
+package data.kaysaar.aotd.vok.ui.newcomps;
 
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.CustomPanelAPI;

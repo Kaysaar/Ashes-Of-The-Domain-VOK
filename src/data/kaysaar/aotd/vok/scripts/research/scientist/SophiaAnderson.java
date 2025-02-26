@@ -52,11 +52,8 @@ public class SophiaAnderson extends ScientistAPI {
 
     @Override
     public void createSkillDescription(TooltipMakerAPI tooltip) {
-       tooltip.addPara("Skill - Resourceful", Misc.getPositiveHighlightColor(),10f);
-       tooltip.addPara("Decrease cost of items by:",Misc.getTooltipTitleAndLightHighlightColor(),2f);
-       tooltip.addPara("Research Databanks:1",Misc.getPositiveHighlightColor(),1f);
-       tooltip.addPara("Normal resources:100",Misc.getPositiveHighlightColor(),1f);
-       tooltip.addPara("Does not include colony items!",Misc.getNegativeHighlightColor(),1f);
+       tooltip.addPara("Skill - Resourceful", Misc.getHighlightColor(),5f);
+       tooltip.addPara("Decrease cost of %s by: %s",2f,Misc.getTooltipTitleAndLightHighlightColor(),Misc.getHighlightColor(),"Research Databanks","1");
     }
 
 }
