@@ -23,6 +23,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.json.JSONArray;
@@ -257,6 +258,7 @@ public class AoTDDataInserter {
         token.setCircularOrbitPointingDown(planet,angle, planet.getRadius()+270+70,period);
         token.getMemoryWithoutUpdate().set(MusicPlayerPluginImpl.MUSIC_SET_MEM_KEY,"aotd_mega");
         MiscellaneousThemeGenerator.makeDiscoverable(token,40000,3000f);
+        AoTDMisc.getStarSystemWithMegastructure("aotd_pluto_station");
     }
 
     public  HashMap<String,Integer>getItemCost(String reqItems){

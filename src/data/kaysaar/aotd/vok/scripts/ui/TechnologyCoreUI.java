@@ -7,12 +7,11 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.SoundUIManager;
-import data.kaysaar.aotd.vok.ui.AoTDResearchUI;
+import data.kaysaar.aotd.vok.ui.AoTDResearchNewPlugin;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -22,7 +21,7 @@ import java.util.Map;
 
 public class TechnologyCoreUI implements CustomUIPanelPlugin {
     NidavelirMainPanelPlugin customProdPlugin = null;
-    AoTDResearchUI pluginResearch = null;
+    AoTDResearchNewPlugin pluginResearch = null;
     GPMegasturcutreMenu pluginMega = null;
     CustomPanelAPI mainPanel;
     CustomPanelAPI panelForPlugins = null;
@@ -42,7 +41,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
 
     public void init(CustomPanelAPI mainPanel, String panelToShowcase, Object data) {
         this.mainPanel = mainPanel;
-        this.panelForPlugins = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - 35, null);
+        this.panelForPlugins = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - 45, null);
         if (panelToShowcase == null) {
             panelToShowcase = "production";
         }
@@ -51,9 +50,6 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         UIData.WIDTH = panelForPlugins.getPosition().getWidth();
         UIData.HEIGHT = panelForPlugins.getPosition().getHeight();
         UIData.recompute();
-        AoTDResearchUI.HEIGHT = panelForPlugins.getPosition().getHeight();
-        AoTDResearchUI.WIDTH = panelForPlugins.getPosition().getWidth();
-        AoTDResearchUI.recompute();
         createButtonsAndMainPanels();
 
         for (Map.Entry<ButtonAPI, CustomPanelAPI> buttons : panelMap.entrySet()) {
@@ -81,7 +77,6 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
 
     public void clearUI(boolean clearMusic) {
         customProdPlugin.clearUI(false);
-        pluginResearch.clearUI();
         pluginMega.clearUI();
         panelMap.clear();
         if(clearMusic){
@@ -180,11 +175,10 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
 
     private void insertNewResearchPanel(ButtonAPI tiedButton) {
         if (pluginResearch == null) {
-            pluginResearch = new AoTDResearchUI();
-            pluginResearch.init(Global.getSettings().createCustom(AoTDResearchUI.WIDTH + 6, AoTDResearchUI.HEIGHT, pluginResearch), null, null);
+            pluginResearch = new AoTDResearchNewPlugin(UIData.WIDTH-10, UIData.HEIGHT);
         }
 
-        panelMap.put(tiedButton, pluginResearch.getPanel());
+        panelMap.put(tiedButton,pluginResearch.getMainPanel());
     }
 
     private void insertNewMegastructuresPanel(ButtonAPI tiedButton) {
@@ -206,9 +200,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         if (button.getText().toLowerCase().contains("production")) {
             customProdPlugin.playSound();
         }
-        if (button.getText().toLowerCase().contains("research")) {
-            pluginResearch.playSound();
-        }
+
         if (button.getText().toLowerCase().contains("megastructures")) {
             pluginMega.playSound();
         }

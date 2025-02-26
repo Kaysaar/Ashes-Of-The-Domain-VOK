@@ -61,6 +61,7 @@ public class AoTDMisc {
         return variantId;
 
     }
+
     public static List<MarketAPI> retrieveFactionMarkets(FactionAPI faction) {
         ArrayList<MarketAPI> marketsToReturn = new ArrayList<>();
         if (faction.isPlayerFaction()) {
@@ -75,14 +76,16 @@ public class AoTDMisc {
 
         return marketsToReturn;
     }
-    public static boolean doesMarketBelongToFaction(FactionAPI faction,MarketAPI marketAPI){
-        if(marketAPI.getFaction()==null)return false;
-        if(checkForQolEnabled()&&faction.isPlayerFaction()){
-            return marketAPI.getFaction().getId().equals(faction.getId())||marketAPI.isPlayerOwned();
+
+    public static boolean doesMarketBelongToFaction(FactionAPI faction, MarketAPI marketAPI) {
+        if (marketAPI.getFaction() == null) return false;
+        if (checkForQolEnabled() && faction.isPlayerFaction()) {
+            return marketAPI.getFaction().getId().equals(faction.getId()) || marketAPI.isPlayerOwned();
         }
         return marketAPI.getFaction().getId().equals(faction.getId());
     }
-    public static  boolean checkForQolEnabled() {
+
+    public static boolean checkForQolEnabled() {
         if (Global.getSettings().getModManager().isModEnabled("aotd_qol")) {
             if (QoLMisc.isCommissioned()) {
                 return true;
@@ -90,7 +93,8 @@ public class AoTDMisc {
         }
         return false;
     }
-    public static CustomPanelAPI createTooltipOfResorucesForDialog(float width, float height, float iconSize, HashMap<String,Integer> costs, boolean isForSalvage) {
+
+    public static CustomPanelAPI createTooltipOfResorucesForDialog(float width, float height, float iconSize, HashMap<String, Integer> costs, boolean isForSalvage) {
         CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
         float totalSize = width;
@@ -107,83 +111,83 @@ public class AoTDMisc {
             int number = entry.getValue();
             int owned = (int) AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey());
             String icon = null;
-            if(Global.getSettings().getSpecialItemSpec(entry.getKey())!=null){
-                icon =Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName();
-            }
-            else{
+            if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
+                icon = Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName();
+            } else {
                 icon = Global.getSettings().getCommoditySpec(entry.getKey()).getIconName();
             }
 
-            String text = "" +number;
-            String text2 = "("+owned+")";
-            if(isForSalvage){
-                text2="";
+            String text = "" + number;
+            String text2 = "(" + owned + ")";
+            if (isForSalvage) {
+                text2 = "";
             }
-            widthTempPanel+=test.computeTextWidth(text+text2);
-            CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel+iconSize+5,iconSize,null);
-            TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel+iconSize+5,iconSize,false);
+            widthTempPanel += test.computeTextWidth(text + text2);
+            CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel + iconSize + 5, iconSize, null);
+            TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel + iconSize + 5, iconSize, false);
             tooltipMakerAPI.addImage(icon, iconsize, iconsize, 0f);
             UIComponentAPI image = tooltipMakerAPI.getPrev();
             image.getPosition().inTL(x, topYImage);
 
             Color col = Misc.getTooltipTitleAndLightHighlightColor();
-            if(number>owned&&!isForSalvage){
+            if (number > owned && !isForSalvage) {
                 col = Misc.getNegativeHighlightColor();
             }
 
-            tooltipMakerAPI.addPara("%s %s", 0f, col, col, text,text2).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
+            tooltipMakerAPI.addPara("%s %s", 0f, col, col, text, text2).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
             panelTemp.addUIElement(tooltipMakerAPI).inTL(0, 0);
             panelsWithImage.add(panelTemp);
         }
 
 
-        float totalWidth =0f;
+        float totalWidth = 0f;
         float secondRowWidth = 0f;
         float left;
         for (CustomPanelAPI panelAPI : panelsWithImage) {
-            totalWidth+=panelAPI.getPosition().getWidth()+15;
+            totalWidth += panelAPI.getPosition().getWidth() + 15;
         }
         left = totalWidth;
         ArrayList<CustomPanelAPI> panelsSecondRow = new ArrayList<>();
-        if(totalWidth>=width){
-            for (int i = panelsWithImage.size()-1; i >=0 ; i--) {
-                left-=panelsWithImage.get(i).getPosition().getWidth()-15;
+        if (totalWidth >= width) {
+            for (int i = panelsWithImage.size() - 1; i >= 0; i--) {
+                left -= panelsWithImage.get(i).getPosition().getWidth() - 15;
                 panelsSecondRow.add(panelsWithImage.get(i));
-                if(left<width){
+                if (left < width) {
                     break;
                 }
                 panelsWithImage.remove(i);
             }
         }
         for (CustomPanelAPI panelAPI : panelsSecondRow) {
-            secondRowWidth+=panelAPI.getPosition().getWidth()+15;
+            secondRowWidth += panelAPI.getPosition().getWidth() + 15;
         }
         float startingXFirstRow = 0;
         float startingXSecondRow = 0;
-        if(!panelsSecondRow.isEmpty()){
-            tooltip.getPosition().setSize(width,height*2+5);
-            customPanel.getPosition().setSize(width,height*2+5);
+        if (!panelsSecondRow.isEmpty()) {
+            tooltip.getPosition().setSize(width, height * 2 + 5);
+            customPanel.getPosition().setSize(width, height * 2 + 5);
         }
         for (CustomPanelAPI panelAPI : panelsWithImage) {
-            tooltip.addCustom(panelAPI,0f).getPosition().inTL(startingXFirstRow,0);
-            startingXFirstRow+=panelAPI.getPosition().getWidth()+5;
+            tooltip.addCustom(panelAPI, 0f).getPosition().inTL(startingXFirstRow, 0);
+            startingXFirstRow += panelAPI.getPosition().getWidth() + 5;
         }
         for (CustomPanelAPI panelAPI : panelsSecondRow) {
-            tooltip.addCustom(panelAPI,0f).getPosition().inTL(startingXSecondRow,iconSize+5);
-            startingXSecondRow+=panelAPI.getPosition().getWidth()+5;
+            tooltip.addCustom(panelAPI, 0f).getPosition().inTL(startingXSecondRow, iconSize + 5);
+            startingXSecondRow += panelAPI.getPosition().getWidth() + 5;
         }
 
         customPanel.addUIElement(tooltip).inTL(0, 0);
         return customPanel;
     }
 
-    public static  Object getOrDefault(Map map, Object key,Object defaultValue){
-        if(map.get(key)==null){
+    public static Object getOrDefault(Map map, Object key, Object defaultValue) {
+        if (map.get(key) == null) {
             return defaultValue;
         }
         return map.get(key);
     }
-    public static void putCommoditiesIntoMap(HashMap<String,Integer> map, String commodity, int val) {
+
+    public static void putCommoditiesIntoMap(HashMap<String, Integer> map, String commodity, int val) {
         if (map.get(commodity) == null) {
             map.put(commodity, val);
         } else {
@@ -191,17 +195,19 @@ public class AoTDMisc {
             map.put(commodity, val + prev);
         }
     }
-    public static boolean hasRewardOfType(ResearchRewardType type, ResearchOption option){
-        for (Map.Entry<String,ResearchRewardType> o :  option.Rewards.entrySet()) {
-            if(o.getValue().equals(type))return true;
+
+    public static boolean hasRewardOfType(ResearchRewardType type, ResearchOption option) {
+        for (Map.Entry<String, ResearchRewardType> o : option.Rewards.entrySet()) {
+            if (o.getValue().equals(type)) return true;
         }
         return false;
     }
-    public static boolean doesPlayerHaveTuringEngine(){
+
+    public static boolean doesPlayerHaveTuringEngine() {
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
             for (Industry industry : playerMarket.getIndustries()) {
-                if(industry.getSpecialItem()!=null){
-                    if(industry.getSpecialItem().getId().equals("turing_engine")){
+                if (industry.getSpecialItem() != null) {
+                    if (industry.getSpecialItem().getId().equals("turing_engine")) {
                         return true;
                     }
                 }
@@ -209,36 +215,41 @@ public class AoTDMisc {
         }
         return false;
     }
-    public static String ensureManBeingNotNull(String man){
-        if(man ==null)return "Unknown";
+
+    public static String ensureManBeingNotNull(String man) {
+        if (man == null) return "Unknown";
         return man;
     }
-    public String getNumberStringShort(int number){
-        if(number<1000){
-            return ""+number;
+
+    public String getNumberStringShort(int number) {
+        if (number < 1000) {
+            return "" + number;
         }
-        if(number<1000000){
-            return ""+(number/1000)+"k";
+        if (number < 1000000) {
+            return "" + (number / 1000) + "k";
         }
-        return ""+(number/1000000)+"m";
+        return "" + (number / 1000000) + "m";
     }
-    public static ArrayList<String> loadEntries(String rawMap,String seperator) {
-        if(!AoTDMisc.isStringValid(rawMap)){
-            return  new ArrayList<>();
+
+    public static ArrayList<String> loadEntries(String rawMap, String seperator) {
+        if (!AoTDMisc.isStringValid(rawMap)) {
+            return new ArrayList<>();
         }
-        String[]splitted = rawMap.split(seperator);
+        String[] splitted = rawMap.split(seperator);
         ArrayList<String> map = new ArrayList<>(Arrays.asList(splitted));
 
         return map;
     }
-    public static HashMap<String,Integer> loadCostMap(String rawMap) {
-        HashMap<String,Integer>map = new HashMap<>();
-        for (String s : loadEntries(rawMap,",")) {
+
+    public static HashMap<String, Integer> loadCostMap(String rawMap) {
+        HashMap<String, Integer> map = new HashMap<>();
+        for (String s : loadEntries(rawMap, ",")) {
             String[] extracted = s.split(":");
-            map.put(extracted[0],Integer.valueOf(extracted[1]));
+            map.put(extracted[0], Integer.valueOf(extracted[1]));
         }
         return map;
     }
+
     public static AoTDAIStance getStanceFromString(String stance) {
         if (stance == null || stance.isEmpty()) {
             return AoTDAIStance.DEFAULT;
@@ -251,12 +262,14 @@ public class AoTDMisc {
             return AoTDAIStance.DEFAULT;
         }
     }
-    public static boolean arrayContains(ArrayList<String> array,String key){
+
+    public static boolean arrayContains(ArrayList<String> array, String key) {
         for (String s : array) {
-            if(s.equals(key))return true;
+            if (s.equals(key)) return true;
         }
         return false;
     }
+
     public static void placePopUpUI(PopUpUI ui, ButtonAPI button, float initWidth, float initHeight) {
 
         float width1 = initWidth;
@@ -279,50 +292,98 @@ public class AoTDMisc {
 
         ui.init(panelAPI, x, y, false);
     }
-    public static  ButtonAPI tryToGetButtonProd(String name) {
+
+    public static void placePopUpUI(PopUpUI ui, UIComponentAPI button, float initWidth, float initHeight) {
+
+        float width1 = initWidth;
+        float height1 = ui.createUIMockup(Global.getSettings().createCustom(initWidth, initHeight, null));
+        CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, ui);
+
+        float x = button.getPosition().getX() + button.getPosition().getWidth();
+        float y = button.getPosition().getY() + button.getPosition().getHeight();
+        if (x + width1 >= Global.getSettings().getScreenWidth()) {
+            float diff = x + width1 - Global.getSettings().getScreenWidth();
+            x = x - diff - 5;
+
+        }
+        if (y - height1 <= 0) {
+            y = height1;
+        }
+        if (y > Global.getSettings().getScreenHeight()) {
+            y = Global.getSettings().getScreenHeight() - 10;
+        }
+
+        ui.init(panelAPI, x, y, false);
+    }
+    public static void placePopUpUIUnder(PopUpUI ui, UIComponentAPI button, float initWidth, float initHeight) {
+
+        float width1 = initWidth;
+        float height1 = ui.createUIMockup(Global.getSettings().createCustom(initWidth, initHeight, null));
+        CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, ui);
+
+        float x = button.getPosition().getX();
+        float y = button.getPosition().getY();
+        if (x + width1 >= Global.getSettings().getScreenWidth()) {
+            float diff = x + width1 - Global.getSettings().getScreenWidth();
+            x = x - diff - 5;
+
+        }
+        if (y - height1 <= 0) {
+            y = height1;
+        }
+        if (y > Global.getSettings().getScreenHeight()) {
+            y = Global.getSettings().getScreenHeight() - 10;
+        }
+
+        ui.init(panelAPI, x, y, false);
+    }
+    public static ButtonAPI tryToGetButtonProd(String name) {
         ButtonAPI button = null;
         try {
             for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy((UIPanelAPI) ProductionUtil.getCurrentTab())) {
-                if(componentAPI instanceof  ButtonAPI){
-                    if(((ButtonAPI) componentAPI).getText().toLowerCase().contains(name)){
+                if (componentAPI instanceof ButtonAPI) {
+                    if (((ButtonAPI) componentAPI).getText().toLowerCase().contains(name)) {
                         button = (ButtonAPI) componentAPI;
                         break;
                     }
                 }
             }
             return button;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
         }
         return button;
 
     }
-    public static EngagementResultForFleetAPI getNonPlayerFleet(EngagementResultAPI resultAPI){
-        if(!resultAPI.getLoserResult().isPlayer()){
+
+    public static EngagementResultForFleetAPI getNonPlayerFleet(EngagementResultAPI resultAPI) {
+        if (!resultAPI.getLoserResult().isPlayer()) {
             return resultAPI.getLoserResult();
         }
         return resultAPI.getWinnerResult();
     }
-    public static boolean isPLayerHavingHeavyIndustry(){
+
+    public static boolean isPLayerHavingHeavyIndustry() {
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
             for (Industry industry : playerMarket.getIndustries()) {
-                if(industry instanceof HeavyIndustry ||industry.getSpec().hasTag("heavyindustry")){
+                if (industry instanceof HeavyIndustry || industry.getSpec().hasTag("heavyindustry")) {
                     return true;
                 }
             }
         }
         return false;
     }
-    public static boolean isHavingAdvancedHeavyIndustry(){
+
+    public static boolean isHavingAdvancedHeavyIndustry() {
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
             for (Industry industry : playerMarket.getIndustries()) {
-                if(industry.getSpec().hasTag("advanced_heavy_industry"))return true;
+                if (industry.getSpec().hasTag("advanced_heavy_industry")) return true;
             }
         }
         return false;
     }
-    public static float retrieveAmountOfItems(String id,String submarketID) {
+
+    public static float retrieveAmountOfItems(String id, String submarketID) {
         float numberRemaining = 0;
         for (MarketAPI marketAPI : Misc.getPlayerMarkets(true)) {
             SubmarketAPI subMarket = marketAPI.getSubmarket(submarketID);
@@ -342,11 +403,11 @@ public class AoTDMisc {
                 if (subMarket != null) {
                     int sameHull = 0;
                     for (FleetMemberAPI o : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
-                        if(o.getHullSpec().getHullId().equals(id)){
+                        if (o.getHullSpec().getHullId().equals(id)) {
                             sameHull++;
                         }
                     }
-                    numberRemaining+=sameHull;
+                    numberRemaining += sameHull;
                 }
             }
 
@@ -354,31 +415,34 @@ public class AoTDMisc {
 
         return numberRemaining;
     }
+
     public static float retrieveAmountOfItemsFromPlayer(String id) {
         float numberRemaining = 0;
-        if(Global.getSettings().getCommoditySpec(id) != null) {
+        if (Global.getSettings().getCommoditySpec(id) != null) {
             numberRemaining += Global.getSector().getPlayerFleet().getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);
         }
-        if(Global.getSettings().getSpecialItemSpec(id) != null) {
-            numberRemaining += Global.getSector().getPlayerFleet().getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id,null));
+        if (Global.getSettings().getSpecialItemSpec(id) != null) {
+            numberRemaining += Global.getSector().getPlayerFleet().getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id, null));
         }
 
 
         return numberRemaining;
     }
+
     public static float eatPlayerItems(String id, int amount) {
         float numberRemaining = 0;
-        if(Global.getSettings().getCommoditySpec(id) != null) {
-          Global.getSector().getPlayerFleet().getCargo().removeItems(CargoAPI.CargoItemType.RESOURCES, id,amount);
+        if (Global.getSettings().getCommoditySpec(id) != null) {
+            Global.getSector().getPlayerFleet().getCargo().removeItems(CargoAPI.CargoItemType.RESOURCES, id, amount);
         }
-        if(Global.getSettings().getSpecialItemSpec(id) != null) {
-            Global.getSector().getPlayerFleet().getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id,null),amount);
+        if (Global.getSettings().getSpecialItemSpec(id) != null) {
+            Global.getSector().getPlayerFleet().getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id, null), amount);
         }
 
 
         return numberRemaining;
     }
-    public static void eatItems(Map.Entry<String, Integer> entry,String submarketId,List<MarketAPI>affectedMarkets) {
+
+    public static void eatItems(Map.Entry<String, Integer> entry, String submarketId, List<MarketAPI> affectedMarkets) {
         float numberRemaining = entry.getValue();
         for (MarketAPI marketAPI : affectedMarkets) {
 
@@ -407,21 +471,20 @@ public class AoTDMisc {
                 }
                 try {
                     if (Global.getSettings().getHullSpec(entry.getKey()) != null) {
-                        ArrayList<FleetMemberAPI>toRemove = new ArrayList<>();
+                        ArrayList<FleetMemberAPI> toRemove = new ArrayList<>();
                         for (FleetMemberAPI fleetMemberAPI : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
-                            if(fleetMemberAPI.getHullSpec().getHullId().equals(entry.getKey())){
+                            if (fleetMemberAPI.getHullSpec().getHullId().equals(entry.getKey())) {
                                 toRemove.add(fleetMemberAPI);
                             }
                         }
                         for (FleetMemberAPI fleetMemberAPI : toRemove) {
                             subMarket.getCargo().getMothballedShips().removeFleetMember(fleetMemberAPI);
                             numberRemaining--;
-                            if(numberRemaining==0)break;
+                            if (numberRemaining == 0) break;
                         }
 
                     }
-                }
-                catch (Exception e){
+                } catch (Exception e) {
 
                 }
 
@@ -431,30 +494,34 @@ public class AoTDMisc {
             }
         }
     }
-    public static boolean isHoveringOverButton(UIComponentAPI button){
+
+    public static boolean isHoveringOverButton(UIComponentAPI button) {
         float x = Global.getSettings().getMouseX();
         float y = Global.getSettings().getMouseY();
         float xBut = button.getPosition().getX();
         float yBut = button.getPosition().getY();
-        float width  = button.getPosition().getWidth();
+        float width = button.getPosition().getWidth();
         float height = button.getPosition().getHeight();
 
         return !(x < xBut) && !(x > xBut + width) && !(y < yBut) && !(y > yBut + height);
     }
-    public static boolean isHoveringOverButton(UIComponentAPI button,float tooltipCorrection){
+
+    public static boolean isHoveringOverButton(UIComponentAPI button, float tooltipCorrection) {
         float x = Global.getSettings().getMouseX();
         float y = Global.getSettings().getMouseY();
         float xBut = button.getPosition().getX();
-        float yBut = button.getPosition().getY()+tooltipCorrection;
-        float width  = button.getPosition().getWidth();
+        float yBut = button.getPosition().getY() + tooltipCorrection;
+        float width = button.getPosition().getWidth();
         float height = button.getPosition().getHeight();
 
         return !(x < xBut) && !(x > xBut + width) && !(y < yBut) && !(y > yBut + height);
     }
-    public static boolean isStringValid(String str){
-        return str!=null&&!str.isEmpty();
+
+    public static boolean isStringValid(String str) {
+        return str != null && !str.isEmpty();
     }
-    public static void startStencil(CustomPanelAPI panel,float scale) {
+
+    public static void startStencil(CustomPanelAPI panel, float scale) {
         GL11.glClearStencil(0);
         GL11.glStencilMask(0xff);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
@@ -474,10 +541,10 @@ public class AoTDMisc {
         float height = position.getHeight();
 
         // Define the rectangle
-        GL11.glVertex2f(x, y);
-        GL11.glVertex2f(x + width, y);
-        GL11.glVertex2f(x + width, y + height*scale);
-        GL11.glVertex2f(x, y + height*scale);
+        GL11.glVertex2f(x + 1, y + 1);
+        GL11.glVertex2f(x + width - 1, y + 1);
+        GL11.glVertex2f(x + width - 1, y + height * scale - 1);
+        GL11.glVertex2f(x + 1, y + height * scale - 1);
         GL11.glEnd();
 
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
@@ -485,7 +552,8 @@ public class AoTDMisc {
 
         GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
     }
-    public static void startStencilWithYPad(CustomPanelAPI panel,float yPad) {
+
+    public static void startStencilWithYPad(CustomPanelAPI panel, float yPad) {
         GL11.glClearStencil(0);
         GL11.glStencilMask(0xff);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
@@ -499,16 +567,16 @@ public class AoTDMisc {
 
         GL11.glBegin(GL11.GL_POLYGON);
         PositionAPI position = panel.getPosition();
-        float x = position.getX()-5;
+        float x = position.getX() - 5;
         float y = position.getY();
-        float width = position.getWidth()+10;
+        float width = position.getWidth() + 10;
         float height = position.getHeight();
 
         // Define the rectangle
         GL11.glVertex2f(x, y);
         GL11.glVertex2f(x + width, y);
-        GL11.glVertex2f(x + width, y + height-yPad);
-        GL11.glVertex2f(x, y + height-yPad);
+        GL11.glVertex2f(x + width, y + height - yPad);
+        GL11.glVertex2f(x, y + height - yPad);
         GL11.glEnd();
 
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
@@ -516,7 +584,8 @@ public class AoTDMisc {
 
         GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
     }
-    public static void startStencilWithXPad(CustomPanelAPI panel,float xPad) {
+
+    public static void startStencilWithXPad(CustomPanelAPI panel, float xPad) {
         GL11.glClearStencil(0);
         GL11.glStencilMask(0xff);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
@@ -530,15 +599,15 @@ public class AoTDMisc {
 
         GL11.glBegin(GL11.GL_POLYGON);
         PositionAPI position = panel.getPosition();
-        float x = position.getX()-5;
-        float y = position.getY()-10;
-        float width = position.getWidth()+10;
-        float height = position.getHeight()+20;
+        float x = position.getX() - 5;
+        float y = position.getY() - 10;
+        float width = position.getWidth() + 10;
+        float height = position.getHeight() + 20;
 
         // Define the rectangle
         GL11.glVertex2f(x, y);
-        GL11.glVertex2f(x + width-xPad, y);
-        GL11.glVertex2f(x + width-xPad, y + height);
+        GL11.glVertex2f(x + width - xPad, y);
+        GL11.glVertex2f(x + width - xPad, y + height);
         GL11.glVertex2f(x, y + height);
         GL11.glEnd();
 
@@ -547,7 +616,8 @@ public class AoTDMisc {
 
         GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
     }
-    public static void startStencil(float x ,float y , float width , float height) {
+
+    public static void startStencil(float x, float y, float width, float height) {
         GL11.glClearStencil(0);
         GL11.glStencilMask(0xff);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
@@ -573,9 +643,11 @@ public class AoTDMisc {
 
         GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
     }
+
     public static void endStencil() {
         GL11.glDisable(GL11.GL_STENCIL_TEST);
     }
+
     public static String[] splitAndClean(String input) {
         // Convert to lowercase to make the search case-insensitive
         String lowerCaseInput = input.toLowerCase();
@@ -658,8 +730,9 @@ public class AoTDMisc {
         }
         return "Warship";
     }
-    public static boolean knowsItem(String id, FactionAPI faction){
-        return faction.getMemory().is("$aotd"+id,true)||AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).haveResearched(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION);
+
+    public static boolean knowsItem(String id, FactionAPI faction) {
+        return faction.getMemory().is("$aotd" + id, true) || AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).haveResearched(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION);
     }
 
     public static int levenshteinDistance(String a, String b) {
@@ -758,7 +831,8 @@ public class AoTDMisc {
         }
         return spriteName;
     }
-    public static ArrayList<JSONObject>getObjectListFromArray(JSONArray array) throws JSONException {
+
+    public static ArrayList<JSONObject> getObjectListFromArray(JSONArray array) throws JSONException {
         ArrayList<JSONObject> list = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {
             list.add(array.getJSONObject(i));
@@ -766,5 +840,44 @@ public class AoTDMisc {
         return list;
     }
 
+    public static StarSystemAPI getStarSystemWithMegastructure(String id) {
+        for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
+            if (starSystem.getEntityById(id) != null) {
+                return starSystem;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isSubImageExisting(String imageName) {
+        try {
+            Global.getSettings().getSpriteName("ui_icons_tech_tree", imageName + "_sub");
+        } catch (RuntimeException exception) {
+            return false;
+        }
+        return true;
+
+    }
+
+    public static String getTechImage(String imageName) {
+        try {
+
+            return Global.getSettings().getSpriteName("ui_icons_tech_tree", imageName);
+        } catch (RuntimeException exception) {
+            Global.getSettings().getSpriteName("ui_icons_tech_tree", "generic");
+
+        }
+        return Global.getSettings().getSpriteName("ui_icons_tech_tree", "generic");
+    }
+
+    public static String getImagePathForTechIcon(String id) {
+        String imagename;
+        if (isSubImageExisting(id)) {
+            imagename = Global.getSettings().getSpriteName("ui_icons_tech_tree", id + "_sub");
+        } else {
+            imagename = Global.getSettings().getSpriteName("ui_icons_tech_tree", "special");
+        }
+        return imagename;
+    }
 
 }

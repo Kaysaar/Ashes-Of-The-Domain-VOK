@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.ui.newcomps;
+package data.kaysaar.aotd.vok.ui.newcomps.basecomponents;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector2f;
 import java.util.List;
 
 public class ResizableComponent implements CustomUIPanelPlugin {
-    CustomPanelAPI componentPanel;
+    public CustomPanelAPI componentPanel;
     public float originalWidth,originalHeight;
     public float scale = 1f;
     public Vector2f originalCoords;
@@ -23,11 +23,27 @@ public class ResizableComponent implements CustomUIPanelPlugin {
     public void setOriginalCoords(Vector2f originalCoords) {
         this.originalCoords = originalCoords;
     }
-    public void setAbsoluteBoundry(CustomPanelAPI panel, float cordX, float cordY) {
-        this.absolutePanel = panel;
+    public void setCoords(CustomPanelAPI panel, float cordX, float cordY) {
         this.originalCoords = new Vector2f(cordX, cordY);
         this.originalHeight = componentPanel.getPosition().getHeight();
         this.originalWidth = componentPanel.getPosition().getWidth();
+    }
+    public void setAbsolutePanel(CustomPanelAPI panel) {
+        this.absolutePanel = panel;
+    }
+
+    public CustomPanelAPI getComponentPanel() {
+        return componentPanel;
+    }
+
+    public void addComponent(ResizableComponent resizableComponent, float x, float y) {
+        resizableComponent.setCoords(componentPanel, x, y);
+        componentPanel.addComponent(resizableComponent.componentPanel).setLocation(0,0).inTL(x, y);
+    }
+
+    public void removeComponent(ResizableComponent resizableComponent) {
+        resizableComponent.clearUI();
+        componentPanel.removeComponent(resizableComponent.getComponentPanel());
     }
 
     public boolean doesHover() {
@@ -84,6 +100,14 @@ public class ResizableComponent implements CustomUIPanelPlugin {
     @Override
     public void advance(float amount) {
 
+    }
+    public void clearUI(){
+        for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(componentPanel)) {
+            CustomUIPanelPlugin plugin = (CustomUIPanelPlugin) ReflectionUtilis.findFieldByType(componentAPI,CustomUIPanelPlugin.class);
+            if(plugin instanceof ResizableComponent){
+                ((ResizableComponent) plugin).clearUI();
+            }
+        }
     }
 
     @Override

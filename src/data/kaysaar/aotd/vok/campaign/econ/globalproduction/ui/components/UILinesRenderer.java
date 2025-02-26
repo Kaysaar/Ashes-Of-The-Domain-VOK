@@ -29,6 +29,7 @@ public class UILinesRenderer implements CustomUIPanelPlugin {
     }
     boolean renderProgress = false;
     float progress = 0f;
+    public float alphaMultiplier = 1f;
     public void enableProgressMode(float currProgress){
         renderProgress = true;
         progress = currProgress;
@@ -53,27 +54,31 @@ public class UILinesRenderer implements CustomUIPanelPlugin {
 
     @Override
     public void render(float alphaMult) {
-        if(renderProgress){
+        box.setAlphaMult(alphaMult*this.alphaMultiplier);
+        if(alphaMultiplier!=0){
+            if(renderProgress){
+                for (CustomPanelAPI panel : panels) {
+                    if (panel != null) {
+                        box.setSize((panel.getPosition().getWidth()+widthPadding)*progress,panel.getPosition().getHeight());
+                        box.setColor(progression);
+                        box.render(panel.getPosition().getX(),panel.getPosition().getY());
+                    }
+                }
+            }
             for (CustomPanelAPI panel : panels) {
                 if (panel != null) {
-                    box.setSize((panel.getPosition().getWidth()+widthPadding)*progress,panel.getPosition().getHeight());
-                    box.setColor(progression);
+                    box.setSize(panel.getPosition().getWidth()+widthPadding,1);
+                    box.setColor(boxColor);
+                    box.setAlphaMult(alphaMult*this.alphaMultiplier);
                     box.render(panel.getPosition().getX(),panel.getPosition().getY());
+                    box.render(panel.getPosition().getX(),panel.getPosition().getY()+panel.getPosition().getHeight());
+                    box.setSize(1,panel.getPosition().getHeight());
+                    box.render(panel.getPosition().getX(),panel.getPosition().getY());
+                    box.render(panel.getPosition().getX()+panel.getPosition().getWidth()+widthPadding,panel.getPosition().getY());
                 }
             }
         }
-        for (CustomPanelAPI panel : panels) {
-            if (panel != null) {
-                box.setSize(panel.getPosition().getWidth()+widthPadding,1);
-                box.setColor(boxColor);
-                box.setAlphaMult(alphaMult);
-                box.render(panel.getPosition().getX(),panel.getPosition().getY());
-                box.render(panel.getPosition().getX(),panel.getPosition().getY()+panel.getPosition().getHeight());
-                box.setSize(1,panel.getPosition().getHeight());
-                box.render(panel.getPosition().getX(),panel.getPosition().getY());
-                box.render(panel.getPosition().getX()+panel.getPosition().getWidth()+widthPadding,panel.getPosition().getY());
-            }
-        }
+
     }
 
     @Override

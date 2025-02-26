@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.ui.newcomps;
+package data.kaysaar.aotd.vok.ui.newcomps.basecomponents;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.input.InputEventAPI;
@@ -15,22 +15,22 @@ public class HorizontalMoverData {
     public static final Logger log = Global.getLogger(HorizontalMoverData.class);
     public float maxOffsetX, maxOffsetY;
     public boolean isDraggingRightMouse = false;
-    float scale = 0f;
+    public float scale = 0f;
 
     public Vector2f mouseCordsBeforeDrag = new Vector2f(-1, -1);
-    TrapezoidButtonDetector detector = new TrapezoidButtonDetector();
-    CustomPanelAPI mainPanel;
+    public TrapezoidButtonDetector detector = new TrapezoidButtonDetector();
+    public CustomPanelAPI mainPanel;
 
     public HorizontalMoverData(CustomPanelAPI mainPanel) {
         this.mainPanel = mainPanel;
     }
 
     public float getCurrentOffsetX() {
-        return currentOffsetX * scale;
+        return currentOffsetX ;
     }
 
     public float getCurrentOffsetY() {
-        return currentOffsetY * scale;
+        return currentOffsetY;
 
     }
 
@@ -48,11 +48,12 @@ public class HorizontalMoverData {
     }
 
     public float getMaxOffsetX() {
-        return maxOffsetX * scale;
+
+        return maxOffsetX-(mainPanel.getPosition().getWidth()/scale);
     }
 
     public float getMaxOffsetY() {
-        return maxOffsetY * scale;
+        return maxOffsetY-(mainPanel.getPosition().getHeight()/scale);
     }
 
     public void processEvents(List<InputEventAPI> eventList) {

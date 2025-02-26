@@ -1,12 +1,12 @@
-package data.kaysaar.aotd.vok.ui.newcomps;
+package data.kaysaar.aotd.vok.ui.newcomps.basecomponents;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
 import org.lazywizard.lazylib.ui.FontException;
 import org.lazywizard.lazylib.ui.LazyFont;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.List;
@@ -14,15 +14,18 @@ import java.util.List;
 public class LabelComponent extends ResizableComponent {
 
     public float fontSize;
-    LazyFont.DrawableString draw;
+    public LazyFont.DrawableString draw;
+    public LazyFont font;
     float width;
     float pWidth,pHeight;
+    public Color color ;
     public LabelComponent(String font, float fontSize, String text, Color color,float width,float height) {
         this.originalWidth =width;
         this.fontSize = fontSize;
+        this.color = color;
         try {
-            LazyFont drawableString = LazyFont.FontLoader.loadFont(font);
-            draw = drawableString.createText(text, color, fontSize);
+            this.font = LazyFont.FontLoader.loadFont(font);
+            draw = this.font.createText(text, color, fontSize);
             draw.setMaxWidth(width);
         } catch (FontException e) {
             throw new RuntimeException(e);
@@ -33,7 +36,8 @@ public class LabelComponent extends ResizableComponent {
         componentPanel = Global.getSettings().createCustom(width,height,this);
     }
     public void setText(String text) {
-        draw.setText(text);
+        draw = this.font.createText(text, color, fontSize);
+        draw.setMaxWidth(pWidth);
     }
     public float getTextWidth(){
         return draw.getWidth();
@@ -64,6 +68,10 @@ public class LabelComponent extends ResizableComponent {
         if(componentPanel!=null){
             draw.setMaxWidth(pWidth*this.scale);
             draw.setFontSize(scale*fontSize);
+            Color newO = new Color(color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, (color.getAlpha()*alphaMult)/255f);
+            draw.setBaseColor(newO);
+            draw.setBlendSrc(GL11.GL_SRC_ALPHA);
+            draw.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
             draw.draw(componentPanel.getPosition().getX(),(componentPanel.getPosition().getY()+componentPanel.getPosition().getHeight()));
         }
     }
