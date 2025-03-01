@@ -7,8 +7,8 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
+import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
+import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 import data.kaysaar.aotd.vok.ui.AoTDResearchNewPlugin;
@@ -86,7 +86,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
     }
 
     public void createButtonsAndMainPanels() {
-        ButtonAPI research, megastructures, customProd;
+        ButtonAPI research, megastructures, customProd,sp;
         this.buttonPanel = this.mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), 25, null);
         UILinesRenderer renderer = new UILinesRenderer(0f);
         CustomPanelAPI panelHelper = this.buttonPanel.createCustomPanel(490, 0.5f, renderer);
@@ -98,12 +98,15 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         customProd = buttonTooltip.addButton("Production", customProdPlugin, base, bg, Alignment.MID, CutStyle.TOP, 140, 20, 0f);
         research = buttonTooltip.addButton("Research", pluginResearch, base, bg, Alignment.MID, CutStyle.TOP, 140, 20, 0f);
         megastructures = buttonTooltip.addButton("Megastructures", pluginMega, base, bg, Alignment.MID, CutStyle.TOP, 170, 20, 0f);
+        sp = buttonTooltip.addButton("Special Projects", pluginMega, base, bg, Alignment.MID, CutStyle.TOP, 170, 20, 0f);
         customProd.setShortcut(Keyboard.KEY_Q, false);
         research.setShortcut(Keyboard.KEY_R, false);
         megastructures.setShortcut(Keyboard.KEY_T, false);
+        sp.setShortcut(Keyboard.KEY_S,false);
         customProd.getPosition().inTL(0, 0);
         research.getPosition().inTL(141, 0);
         megastructures.getPosition().inTL(282, 0);
+        sp.getPosition().inTL(453, 0);
         insertCustomProdPanel(customProd);
         insertNewResearchPanel(research);
         insertNewMegastructuresPanel(megastructures);
@@ -200,7 +203,9 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         if (button.getText().toLowerCase().contains("production")) {
             customProdPlugin.playSound();
         }
-
+        if (button.getText().toLowerCase().contains("research")) {
+            pluginResearch.playSound();
+        }
         if (button.getText().toLowerCase().contains("megastructures")) {
             pluginMega.playSound();
         }

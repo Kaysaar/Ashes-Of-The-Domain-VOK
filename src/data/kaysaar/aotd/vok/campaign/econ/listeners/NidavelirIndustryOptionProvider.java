@@ -1,25 +1,11 @@
 package data.kaysaar.aotd.vok.campaign.econ.listeners;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.campaign.econ.MutableCommodityQuantity;
 import com.fs.starfarer.api.campaign.listeners.DialogCreatorUI;
 import com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider;
-import com.fs.starfarer.api.combat.MutableStat;
-import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.ui.Alignment;
-import com.fs.starfarer.api.ui.IconRenderMode;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelDP;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class NidavelirIndustryOptionProvider implements IndustryOptionProvider {
     public static Object NIDAVELIR = new Object();
@@ -35,9 +21,7 @@ public class NidavelirIndustryOptionProvider implements IndustryOptionProvider {
 
     @Override
     public void optionSelected(IndustryOptionData opt, DialogCreatorUI ui) {
-        if(opt.id.equals(NIDAVELIR)){
-            ui.showDialog(null,new NidavelirMainPanelDP());
-        }
+
 
     }
 

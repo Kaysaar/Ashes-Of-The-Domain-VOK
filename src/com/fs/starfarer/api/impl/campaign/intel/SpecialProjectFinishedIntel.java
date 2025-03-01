@@ -7,7 +7,7 @@ import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelDPSpecialProj;
+import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelDPSpecialProj;
 
 import java.awt.*;
 

@@ -5,21 +5,16 @@ import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.ui.*;
-import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.campaign.command.CustomProductionPanel;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
+import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
+import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;
-import data.kaysaar.aotd.vok.ui.AoTDResearchUI;
+import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,9 +24,6 @@ public class CoreUITracker implements EveryFrameScript {
     boolean inserted = false;
     boolean insertedOnce = false;
     boolean removed = false;
-    NidavelirMainPanelPlugin plugin = null;
-    AoTDResearchUI pluginResearch = null;
-    GPMegasturcutreMenu pluginMenu = null;
     TechnologyCoreUI coreUiTech = null;
     boolean pausedMusic = true;
 
@@ -164,9 +156,6 @@ public class CoreUITracker implements EveryFrameScript {
                 UIData.WIDTH = Global.getSettings().getScreenWidth() - tryToGetButtonProd("colonies").getPosition().getX();
                 UIData.HEIGHT = componentToReplace.getPosition().getHeight();
                 UIData.recompute();
-                AoTDResearchUI.HEIGHT = componentToReplace.getPosition().getHeight();
-                AoTDResearchUI.WIDTH = Global.getSettings().getScreenWidth() - tryToGetButtonProd("colonies").getPosition().getX();
-                AoTDResearchUI.recompute();
 
             }
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);

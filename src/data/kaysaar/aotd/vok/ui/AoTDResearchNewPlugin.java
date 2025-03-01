@@ -4,14 +4,15 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UILinesRenderer;
+import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
+import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
-import data.kaysaar.aotd.vok.ui.newcomps.*;
+import data.kaysaar.aotd.vok.ui.research.*;
 
 import java.util.List;
 
-public class AoTDResearchNewPlugin implements CustomUIPanelPlugin {
+public class AoTDResearchNewPlugin implements CustomUIPanelPlugin, SoundUIManager {
 
     CustomPanelAPI mainPanel;
     float pos = 0;
@@ -39,7 +40,10 @@ public class AoTDResearchNewPlugin implements CustomUIPanelPlugin {
          modButton = new TechTreeModButton(500, 40, "aotd_vok", this,true,null);
         component.startStencil();
         component.endStencil();
+
         component.createTechTree("aotd_vok");
+//        component.addGrid();
+//        component.sentToBottomComponentsOfClass(GridRenderer.class);
         UILinesRenderer renderer = new UILinesRenderer(0f);
         mainPanel = Global.getSettings().createCustom(width, height, this);
          showcase1 = new CurrentResearchShowcase(400, 130, this);
@@ -105,5 +109,16 @@ public class AoTDResearchNewPlugin implements CustomUIPanelPlugin {
     @Override
     public void buttonPressed(Object buttonId) {
 
+    }
+    @Override
+    public void playSound() {
+        Global.getSoundPlayer().playCustomMusic(1, 1, "aotd_research", true);
+
+    }
+
+    @Override
+    public void pauseSound() {
+        Global.getSoundPlayer().pauseCustomMusic();
+        Global.getSoundPlayer().restartCurrentMusic();
     }
 }

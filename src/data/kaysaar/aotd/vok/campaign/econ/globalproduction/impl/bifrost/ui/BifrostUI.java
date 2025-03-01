@@ -20,7 +20,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.di
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
+import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

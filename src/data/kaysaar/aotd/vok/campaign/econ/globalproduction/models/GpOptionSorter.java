@@ -1,7 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
+import data.kaysaar.aotd.vok.ui.customprod.components.SortingState;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.util.ArrayList;

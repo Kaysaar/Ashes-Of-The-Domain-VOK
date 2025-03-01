@@ -5,7 +5,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.SortingState;
+import data.kaysaar.aotd.vok.ui.customprod.components.SortingState;
 import data.kaysaar.aotd.vok.ui.buildingmenu.industrytags.IndustryTagManager;
 import data.kaysaar.aotd.vok.ui.buildingmenu.industrytags.IndustryTagSpec;
 import data.kaysaar.aotd.vok.ui.buildingmenu.industrytags.IndustryTagType;
@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin.*;
+import static data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin.*;
 
 public class IndustryTable extends UITableImpl {
     ArrayList<IndustrySpecAPI> specs;
