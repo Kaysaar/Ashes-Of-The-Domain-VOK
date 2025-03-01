@@ -6,13 +6,12 @@ import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.NidavelirMainPanelPlugin;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.HelpPopUpUINid;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.UIData;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.components.onhover.CommodityInfo;
+import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
+import data.kaysaar.aotd.vok.ui.customprod.components.HelpPopUpUINid;
+import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
+import data.kaysaar.aotd.vok.ui.customprod.components.onhover.CommodityInfo;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 

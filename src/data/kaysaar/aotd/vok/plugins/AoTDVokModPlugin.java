@@ -2,7 +2,6 @@ package data.kaysaar.aotd.vok.plugins;
 
 
 import com.fs.starfarer.api.BaseModPlugin;
-import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
@@ -10,15 +9,8 @@ import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
-import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivity;
-import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityEventIntel;
-import com.fs.starfarer.api.impl.campaign.intel.events.HostileActivityManager;
-import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
-import com.fs.starfarer.api.impl.campaign.rulecmd.AoTDMegastructureRules;
-import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureProductionListener;
@@ -26,33 +18,24 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegast
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDSupertencileListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.CoreCorrectStateEnforcer;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.ui.GpProductionButtonRenderer;
+import data.kaysaar.aotd.vok.ui.customprod.CoreCorrectStateEnforcer;
+import data.kaysaar.aotd.vok.ui.customprod.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
-import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
-import data.kaysaar.aotd.vok.scripts.CoreUITracker2;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchProgressionScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
-import data.kaysaar.aotd.vok.ui.buildingmenu.industrytags.IndustryTagManager;
-import exerelin.campaign.intel.hostileactivity.NexHostileActivityManager;
 import kaysaar.bmo.buildingmenu.additionalreq.AdditionalReqManager;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
-import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.ui.FontException;
-import org.magiclib.achievements.MagicAchievement;
-import org.magiclib.achievements.MagicAchievementManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
 
 
 public class AoTDVokModPlugin extends BaseModPlugin {

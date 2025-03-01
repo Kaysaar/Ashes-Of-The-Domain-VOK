@@ -21,7 +21,6 @@ import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.CoronalSegment;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import data.kaysaar.aotd.vok.ui.AoTDResearchUIDP;
 import data.kaysaar.aotd.vok.ui.UpgradeListUI;
 import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 
@@ -115,9 +114,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
             ui.showDialog(UpgradeListUI.WIDTH, UpgradeListUI.HEIGHT, delegate);
 
         }
-        if (opt.id == RESEARCH_CENTER) {
-            ui.showDialog(null, (new AoTDResearchUIDP()));
-        }
+
 
         if (opt.id == AOTD_VOK_CANCEL_UPGRADE) {
             final BaseIndustry industry= (BaseIndustry) opt.ind;
