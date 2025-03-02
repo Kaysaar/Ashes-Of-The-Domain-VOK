@@ -17,7 +17,7 @@ aotd_tier_4_unlock,Tier 4 Unlock,Boolean,false,,"Unlock tier 4 of industries (Sk
 aotd_tier_experimental_unlock,Experimental Tier Unlock,Boolean,false,,Unlock experimental tier of tech tree and all bellow this tier.,,,Research Mechanics
 ,,,,,,,,
 aotd_vok_header4,Titans of Industry,Header,Settings,,,,,Titans of Industry
-aotd_titans_of_industry,Enable Titans of Industry content ,Boolean,true,,Disables/enables total rework of custom production mechanic for colonies,,,Titans of Industry
+aotd_titans_of_industry,Enable Titans of Industry content ,Boolean,true,,NOTE! DEPRECEATED SETTING : DONT SET IT TO FALSE,,,Titans of Industry
 aotd_scale,Scale Setting,Int,10,,Increase/Decrease multiplier of Global Production commodities ( x amount of supply times scale),1,100,Titans of Industry
 aotd_shipyard_pag_per_page,Paggination,Int,60,,ncrease/Decrease amount of items displayed per page ( WARNING : INCREASING THIS NUMBER MIGHT RESULT IN PRODUCTION UI LAGGING),1,5000,Titans of Industry
 ,,,,,,,,

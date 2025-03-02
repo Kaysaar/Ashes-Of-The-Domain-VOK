@@ -32,7 +32,7 @@
 		"nameInText":"bifrost gate",
 		"aOrAn":"an",
 		"defaultRadius":60, # used if radius<0 in addCustomEntity()
-		"interactionImage":"graphics/illustrations/dead_gate.jpg",
+		"interactionImage":"graphics/illustrations/sensor_array.jpg",
 		"icon":"graphics/icons/gate0.png",
 		"iconWidth":20,
 		"iconHeight":20,
@@ -55,9 +55,41 @@
 		"renderCircleIndicator":true,
 		"renderCircleIndicatorSelectionFlash":true,
 		"customDescriptionId":"bifrost_gate",
-		"tags":["bifrost", "neutrino"],
+		"tags":["bifrost", "neutrino","has_interaction_dialog"],
 		"layers":[STATIONS, BELOW_STATIONS], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
-		"pluginClass":"com.fs.starfarer.api.impl.campaign.GateEntityPlugin",
+		"pluginClass":"com.fs.starfarer.api.impl.campaign.aotd_entities.BiFrostGateEntity",
+	},
+	"aotd_pluto_station":{
+		"defaultName":"Pluto Mining Station", # used if name=null in addCustomEntity()
+		"nameInText":"pluto station",
+		"aOrAn":"the",
+		"defaultRadius":140, # used if radius<0 in addCustomEntity()
+		"interactionImage":"graphics/illustrations/orbital.jpg",
+		"icon":"graphics/icons/aotd_pluto_mining_station.png",
+		"iconWidth":40,
+		"iconHeight":40,
+		"sprite":"graphics/stations/aotd_pluto.png",
+		"spriteWidth":170,
+		"spriteHeight":270,
+		#"sprite":"graphics/ships/com_relay.png",
+		#"spriteWidth":178,
+		#"spriteHeight":96,
+		"renderShadow":true,
+		"useLightColor":true,
+		"showInCampaign":true,
+		"showIconOnMap":true,
+		"showNameOnMap":true,
+		"scaleNameWithZoom":false,
+		"scaleIconWithZoom":true,
+		"nameColor":[70,200,255,255],
+		"nameShadowColor":[0,0,0,255],
+		#"renderCircleIndicator":false,
+		"renderCircleIndicator":true,
+		"renderCircleIndicatorSelectionFlash":true,
+		"customDescriptionId":"pluto_station",
+		"tags":["aotd_pluto_station","neutrino","has_interaction_dialog"],
+		"layers":[STATIONS, BELOW_STATIONS], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
+		"pluginClass":"com.fs.starfarer.api.impl.campaign.aotd_entities.PlutoMiningStation",
 	},
 	"aotd_hypershunt_reciver":{
 		"baseId":"base_campaign_objective",
@@ -67,14 +99,14 @@
 		"icon":"graphics/icons/sensor_array.png",
 		"iconWidth":24,
 		"iconHeight":24,
-		"sprite":"graphics/ships/sensor_array.png",
+		"sprite":"graphics/stations/aotd_coronal_receiver.png",
 		"spriteWidth":86,
 		"spriteHeight":86,
 		"customDescriptionId":"aotd_hypershunt_reciver",
 		"interactionImage":"graphics/illustrations/sensor_array.jpg",
 		"tags":["aotd_hypershunt_reciver", "neutrino_high", "objective"],
 		"layers":[STATIONS], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
-		"pluginClass":"com.fs.starfarer.api.impl.campaign.HypershuntReciverEntityPlugin",
+		"pluginClass":"com.fs.starfarer.api.impl.campaign.aotd_entities.HypershuntReciverEntityPlugin",
 	},
 	"nid_shipyards":{
 		"defaultName":"Nid Shipyards", # used if name=null in addCustomEntity()
@@ -102,7 +134,7 @@
 		"customDescriptionId":"inactive_gate",
 		"tags":["non_clickable", "neutrino"],
 		"layers":[TERRAIN_3], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
-		"pluginClass":"com.fs.starfarer.api.impl.campaign.NidavelirShipyard",
+		"pluginClass":"com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyard",
 	},
 	"nid_shipyards_damaged":{
 		"defaultName":"Nid Shipyards", # used if name=null in addCustomEntity()
@@ -130,7 +162,7 @@
 		"customDescriptionId":"inactive_gate",
 		"tags":["non_clickable", "neutrino"],
 		"layers":[TERRAIN_3], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
-		"pluginClass":"com.fs.starfarer.api.impl.campaign.NidavelirDestroyedShipyard",
+		"pluginClass":"com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirDestroyedShipyard",
 	},
 
 }
