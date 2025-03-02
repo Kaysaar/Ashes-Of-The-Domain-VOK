@@ -18,8 +18,6 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegast
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDSupertencileListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
-import data.kaysaar.aotd.vok.ui.customprod.CoreCorrectStateEnforcer;
-import data.kaysaar.aotd.vok.ui.customprod.GpProductionButtonRenderer;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
@@ -89,7 +87,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             }
         }
         l.addListener(new CoreUiInterceptor(), true);
-        l.removeListenerOfClass(GpProductionButtonRenderer.class);
         l.addListener(new AoTDMegastructureProductionListener(), true);
         l.addListener(new AoTDMegastructureUpkeepListener(), true);
         l.addListener(new NidavelirClaimMegastructure(), true);
@@ -181,7 +178,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //
 //            }
 //        });
-        Global.getSector().addTransientScript(new CoreCorrectStateEnforcer());
         Global.getSector().addTransientScript(new CoreUITracker());
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");
         AoTDMainResearchManager.getInstance().updateModIdRepo();

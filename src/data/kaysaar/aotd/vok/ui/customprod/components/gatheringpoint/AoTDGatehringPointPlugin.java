@@ -98,7 +98,7 @@ public class AoTDGatehringPointPlugin implements CustomUIPanelPlugin {
         ButtonAPI button = tooltip.addAreaCheckbox("", market, NidavelirMainPanelPlugin.base, NidavelirMainPanelPlugin.bg, NidavelirMainPanelPlugin.bright, width-1, height, 0f);
         float y = -button.getPosition().getY() -button.getPosition().getHeight();
         button.getPosition().inTL(-2,0);
-        tooltip.addCustom(getMarketEntitySpriteWithName(width, height, iconSize, market), 0f).getPosition().inTL(5f,y-10);
+        tooltip.addCustom(getMarketEntitySpriteWithName(width, height, iconSize, market), 0f).getPosition().inTL(5f,y);
         panelAPI1.addUIElement(tooltip).inTL(0, 0);
 
         return new Pair<>(panelAPI1, button);

@@ -4,7 +4,6 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import data.kaysaar.aotd.vok.ui.AoTDResearchNewPlugin;
 
 public class ModDropDown extends PopUpUI {
     AoTDResearchNewPlugin researchUI;

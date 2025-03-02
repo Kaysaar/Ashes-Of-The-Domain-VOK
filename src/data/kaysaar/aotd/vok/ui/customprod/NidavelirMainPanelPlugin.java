@@ -1,18 +1,16 @@
 package data.kaysaar.aotd.vok.ui.customprod;
 
-import ashlib.data.plugins.info.ShipInfoGenerator;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.ui.customprod.components.*;
 import data.kaysaar.aotd.vok.ui.customprod.components.gatheringpoint.AoTDGatehringPointPlugin;
@@ -42,6 +40,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
     public static int maxItemsPerPage = 70;
     public static int maxItemsPerPageWEP = 45;
     boolean showProjectList;
+    RightMouseInterceptor interceptor = new RightMouseInterceptor();
     ArrayList<GPOrder> ordersQueued = new ArrayList<>();
     boolean isPressingShift = false;
     boolean isPressingCtrl = false;
@@ -71,7 +70,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
     ArrayList<ButtonAPI> orderSortingButtons = new ArrayList<>();
     ArrayList<ButtonAPI> orders = new ArrayList<>();
     ArrayList<ButtonAPI> coreUITabs = new ArrayList<>();
-    ArrayList<ButtonAPI> gatheringPoints = new ArrayList<>();
+    ButtonAPI gatheringPoint;
     // 30 for top buttons , 60 for bottom ones rest is padding
     float leftHeight = UIData.HEIGHT - 30 - 145 - 20;
     float offset = 0f;
@@ -266,40 +265,11 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         TooltipMakerAPI tooltip = panelOfGatheringPoint.createUIElement(UIData.WIDTH_OF_ORDERS, 100, false);
         tooltip.addSectionHeading("Production gathering point", Alignment.MID, 0f);
         if (!Misc.getPlayerMarkets(true).isEmpty()) {
-            CustomPanelAPI panelHolder = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 - 5f, 82, renderer);
-            TooltipMakerAPI tooltipHolder = panelHolder.createUIElement(UIData.WIDTH_OF_ORDERS / 2 - 5f, 80, false);
-            CustomPanelAPI panelHolder2 = panelOfGatheringPoint.createCustomPanel(UIData.WIDTH_OF_ORDERS / 2 , 82, renderer);
-            TooltipMakerAPI tooltipHolder2 = panelHolder2.createUIElement(UIData.WIDTH_OF_ORDERS / 2 , 20, false);
-            TooltipMakerAPI tooltipHolder3 = panelHolder2.createUIElement(UIData.WIDTH_OF_ORDERS / 2, 60, true);
-            tooltipHolder2.addSectionHeading("Choose point", Alignment.MID, 0f);
-            float opad = 0f;
-            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
-                if(Global.getSector().getPlayerFaction().getProduction().getGatheringPoint()!=null){
-                    if (playerMarket.getId().equals(Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getId()))
-                        continue;
-                }
-
-                Pair<CustomPanelAPI, ButtonAPI> pair = AoTDGatehringPointPlugin.getMarketEntitySpriteButton(UIData.WIDTH_OF_ORDERS / 2 - 5f, 60, 75, playerMarket);
-                tooltipHolder3.addCustom(pair.one, opad);
-                gatheringPoints.add(pair.two);
-                opad = 5f;
-
-            }
-
-            float y = -tooltip.getPrev().getPosition().getY();
-            tooltipHolder.addSectionHeading("Current point", Alignment.MID, 0f);
             if(Global.getSector().getPlayerFaction().getProduction().getGatheringPoint()!=null){
-                tooltipHolder.addCustom(AoTDGatehringPointPlugin.getMarketEntitySpriteWithName(200, 55, 80, Global.getSector().getPlayerFaction().getProduction().getGatheringPoint()), -12f);
-
+                Pair<CustomPanelAPI, ButtonAPI> pair = AoTDGatehringPointPlugin.getMarketEntitySpriteButton(UIData.WIDTH_OF_ORDERS  - 25f, 75, 75, Global.getSector().getPlayerFaction().getProduction().getGatheringPoint());
+                tooltip.addCustom(pair.one, 5f);
+                gatheringPoint = pair.two;
             }
-            renderer.setPanel(panelOfGatheringPoint);
-            renderer.setPanel(panelHolder);
-            renderer.setPanel(panelHolder2);
-            panelHolder.addUIElement(tooltipHolder).inTL(0, 0);
-            panelHolder2.addUIElement(tooltipHolder2).inTL(0, 0);
-            panelHolder2.addUIElement(tooltipHolder3).inTL(0, 20);
-            tooltip.addCustom(panelHolder, 0).getPosition().inTL(0, y);
-            tooltip.addCustom(panelHolder2, 0).getPosition().inTL(UIData.WIDTH_OF_ORDERS / 2, y);
         }
 
 
@@ -307,7 +277,10 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         panel.addComponent(panelOfGatheringPoint).inTL(spacerX, 51);
     }
 
-
+    public void refreshGatheringPointBar(){
+        panel.removeComponent(panelOfGatheringPoint);
+        createGatheringPointBar();
+    }
 
 
     public void createTopBar(float padding) {
@@ -371,10 +344,12 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
 
     public void createOrders() {
         UILinesRenderer renderer = new UILinesRenderer(0f);
-        float yPad = 251;
+        float yPad = 161;
         float height = panel.getPosition().getHeight() - 20 - yPad - 150;
         sortingButtonsPanel = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 50, renderer);
         panelOfOrders = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, height - 50, renderer);
+        CustomPanelAPI panelInterceptor = panelOfOrders.createCustomPanel(UIData.WIDTH_OF_ORDERS, height - 50, interceptor);
+        interceptor.setPanelPos(panelInterceptor);
         TooltipMakerAPI tooltip = sortingButtonsPanel.createUIElement(UIData.WIDTH_OF_ORDERS, 50, false);
         TooltipMakerAPI tooltip2 = panelOfOrders.createUIElement(UIData.WIDTH_OF_ORDERS + 5, height - 50, true);
         LabelAPI label = tooltip.addSectionHeading("On-going production orders", Alignment.MID, 0f);
@@ -382,8 +357,9 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         ArrayList<ButtonAPI> butt = new ArrayList<>();
         butt.add(tooltip.addAreaCheckbox("Name", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_NAMES_ORDER, 20, 0f));
         ;
-        butt.add(tooltip.addAreaCheckbox("Cost(Credits)", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_NAMES_COST, 20, 0f));
-        butt.add(tooltip.addAreaCheckbox("Cost(GP)", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_NAMES_GP + 1, 20, 0f));
+        butt.add(tooltip.addAreaCheckbox("Cost per unit", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_NAMES_COST, 20, 0f));
+        butt.add(tooltip.addAreaCheckbox("To produce", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_QT, 20, 0f));
+        butt.add(tooltip.addAreaCheckbox("Producing", SortingState.NON_INITIALIZED, base, bg, bright, UIData.WIDTH_OF_AT_ONCE, 20, 0f));
         float x = 0;
         for (ButtonAPI buttonAPI : butt) {
             buttonAPI.getPosition().inTL(x, y);
@@ -400,18 +376,21 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
 
         tooltipOfOrders = tooltip2;
         panelOfOrders.addUIElement(tooltip2).inTL(0, 0);
+        panelOfOrders.addComponent(panelInterceptor).inTL(0,0);
         sortingButtonsPanel.addUIElement(tooltip).inTL(0, 0);
         costConfirmOrders = createPaymentConfirm(UIData.WIDTH_OF_ORDERS, 80);
         tooltip2.getExternalScroller().setYOffset(offset);
         panel.addComponent(sortingButtonsPanel).inTL(spacerX, yPad);
         panel.addComponent(panelOfOrders).inTL(spacerX, yPad + 50);
         panel.addComponent(costConfirmOrders).inTL(spacerX, yPad + height + 35);
+
     }
 
     public void resetPanelOfOrders() {
         GPManager.getInstance().advance(ordersQueued);
         orderSortingButtons.clear();
         orders.clear();
+        interceptor.setPanelPos(null);
         panel.removeComponent(panelOfOrders);
         panel.removeComponent(sortingButtonsPanel);
         panel.removeComponent(costConfirmOrders);
@@ -495,16 +474,11 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         if (tooltipOfOrders != null) {
             offset = tooltipOfOrders.getExternalScroller().getYOffset();
         }
-        if (!gatheringPoints.isEmpty()) {
-            for (ButtonAPI point : gatheringPoints) {
-                if (point.isChecked()) {
-                    point.setChecked(false);
-                    Global.getSector().getPlayerFaction().getProduction().setGatheringPoint((MarketAPI) point.getCustomData());
-                    gatheringPoints.clear();
-                    panel.removeComponent(panelOfGatheringPoint);
-                    createGatheringPointBar();
-                    break;
-                }
+        if (gatheringPoint!=null) {
+            if(gatheringPoint.isChecked()){
+                gatheringPoint.setChecked(false);
+                GatheringPointDialog dialogGather = new GatheringPointDialog("Choose gathering point",this);
+                BasePopUpDialog.popUpDialog(dialogGather,400,400);
             }
         }
 //        for (ButtonAPI coreUITab : coreUITabs) {
@@ -652,41 +626,6 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         boolean pressedCtrl = false;
         for (InputEventAPI event : events) {
             if (event.isConsumed()) continue;
-            if (event.isRMBDownEvent() && !event.isLMBEvent()) {
-                for (ButtonAPI buttonAPI : orders) {
-                    if (AoTDMisc.isHoveringOverButton(buttonAPI, 0f)) {
-                        int amountClick = 1;
-                        if (isPressingCtrl) {
-                            amountClick = 10;
-                        }
-                        if (isPressingShift) {
-
-                            buttonAPI.setChecked(false);
-                            Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                            GPOrder order = (GPOrder) buttonAPI.getCustomData();
-                            order.setAtOnce(order.getAtOnce() - amountClick);
-                            resetDaysIfMoreAtOnce();
-                            resetPanelOfOrders();
-                            resetPanelOfMarketData();
-                            break;
-                        } else {
-                            buttonAPI.setChecked(false);
-                            Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                            GPOrder order = (GPOrder) buttonAPI.getCustomData();
-                            GPManager.getInstance().removeOrderFromDummy(order.getSpecFromClass().getProjectId(), amountClick, ordersQueued);
-                            ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemovedFromDummy(ordersQueued);
-                            if (!offsetOfOrdersToBeRemoved.isEmpty()) {
-                                GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
-                            }
-                            resetDaysIfMoreAtOnce();
-                            resetPanelOfOrders();
-                            resetPanelOfMarketData();
-                            break;
-                        }
-
-                    }
-                }
-            }
             if (event.isShiftDown()) {
                 pressedShift = true;
             }
@@ -710,6 +649,43 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         }
         isPressingShift = pressedShift;
         isPressingCtrl = pressedCtrl;
+
+        if(interceptor.isInterceptingRightMouseEvent){
+            for (ButtonAPI buttonAPI : orders) {
+                if (AoTDMisc.isHoveringOverButton(buttonAPI, 0f)) {
+                    int amountClick = 1;
+                    if (isPressingCtrl) {
+                        amountClick = 10;
+                    }
+                    if (isPressingShift) {
+
+                        buttonAPI.setChecked(false);
+                        Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+                        GPOrder order = (GPOrder) buttonAPI.getCustomData();
+                        order.setAtOnce(order.getAtOnce() - amountClick);
+                        resetDaysIfMoreAtOnce();
+                        resetPanelOfOrders();
+                        resetPanelOfMarketData();
+                        break;
+                    } else {
+                        buttonAPI.setChecked(false);
+                        Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
+                        GPOrder order = (GPOrder) buttonAPI.getCustomData();
+                        GPManager.getInstance().removeOrderFromDummy(order.getSpecFromClass().getProjectId(), amountClick, ordersQueued);
+                        ArrayList<Integer> offsetOfOrdersToBeRemoved = GPManager.getInstance().retrieveOrdersToBeRemovedFromDummy(ordersQueued);
+                        if (!offsetOfOrdersToBeRemoved.isEmpty()) {
+                            GPManager.getInstance().removeDoneOrdersDummy(offsetOfOrdersToBeRemoved, ordersQueued);
+                        }
+                        resetDaysIfMoreAtOnce();
+                        resetPanelOfOrders();
+                        resetPanelOfMarketData();
+                        break;
+                    }
+
+                }
+
+            }
+        }
     }
 
     private void resetDaysIfMoreAtOnce() {
@@ -736,12 +712,12 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         weaponPanelManager.clear();
         switchingButtons.clear();
         ordersQueued.clear();
+        interceptor.setPanelPos(null);
         panel.removeComponent(panelOfOrders);
         panel.removeComponent(sortingButtonsPanel);
         panel.removeComponent(costConfirmOrders);
         panel.removeComponent(topPanel);
-        panel.removeComponent(panelOfGatheringPoint);
-        gatheringPoints.clear();
+        panel.removeComponent(panelOfGatheringPoint);;
         coreUITabs.clear();
         orders.clear();
         orderSortingButtons.clear();

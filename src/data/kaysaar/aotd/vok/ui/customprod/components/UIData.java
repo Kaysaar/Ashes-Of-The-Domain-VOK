@@ -47,8 +47,9 @@ public class UIData {
     public static float WIDTH_OF_ORDERS = WIDTH * 0.35f - 30f;
     public static float WIDTH_OF_ORDERS_PANELS = WIDTH_OF_ORDERS + 1;
     public static float WIDTH_OF_NAMES_ORDER = WIDTH_OF_ORDERS_PANELS * 0.3f;
-    public static float WIDTH_OF_NAMES_COST = WIDTH_OF_ORDERS_PANELS * 0.3f;
-    public static float WIDTH_OF_NAMES_GP = WIDTH_OF_ORDERS_PANELS * 0.4f - 5f;
+    public static float WIDTH_OF_NAMES_COST = WIDTH_OF_ORDERS_PANELS * 0.4f;
+    public static float WIDTH_OF_QT = WIDTH_OF_ORDERS_PANELS * 0.4f - 5f;
+    public static float WIDTH_OF_AT_ONCE = WIDTH_OF_ORDERS_PANELS * 0.4f - 5f;
     public static float HEIGHT_OF_BUTTONS = 50;
     public static float WIDTH_OF_NAME = WIDTH_OF_OPTIONS * 0.26f;
     public static float WIDTH_OF_BUILD_TIME = WIDTH_OF_OPTIONS * 0.08f;
@@ -64,8 +65,9 @@ public class UIData {
         WIDTH_OF_ORDERS = WIDTH * 0.35f - 30f;
         WIDTH_OF_ORDERS_PANELS = WIDTH_OF_ORDERS + 1;
         WIDTH_OF_NAMES_ORDER = WIDTH_OF_ORDERS_PANELS * 0.3f;
-        WIDTH_OF_NAMES_COST = WIDTH_OF_ORDERS_PANELS * 0.3f;
-        WIDTH_OF_NAMES_GP = WIDTH_OF_ORDERS_PANELS * 0.4f - 5f;
+        WIDTH_OF_NAMES_COST = WIDTH_OF_ORDERS_PANELS * 0.35f;
+        WIDTH_OF_QT = WIDTH_OF_ORDERS_PANELS * 0.18f;
+        WIDTH_OF_AT_ONCE = WIDTH_OF_ORDERS_PANELS * 0.17f-5f;
         HEIGHT_OF_BUTTONS = 55;
         WIDTH_OF_NAME = WIDTH_OF_OPTIONS * 0.30f;
         WIDTH_OF_BUILD_TIME = WIDTH_OF_OPTIONS * 0.08f;
@@ -294,20 +296,20 @@ public class UIData {
 
     public static Pair<CustomPanelAPI, ButtonAPI> getOrderPanel(GPOrder order) {
 
-        CustomPanelAPI panel = Global.getSettings().createCustom(WIDTH_OF_ORDERS_PANELS, HEIGHT_OF_BUTTONS + 45, null);
-        TooltipMakerAPI tooltip = panel.createUIElement(WIDTH_OF_ORDERS_PANELS, HEIGHT_OF_BUTTONS + 45, false);
+        CustomPanelAPI panel = Global.getSettings().createCustom(WIDTH_OF_ORDERS_PANELS, HEIGHT_OF_BUTTONS + 25, null);
+        TooltipMakerAPI tooltip = panel.createUIElement(WIDTH_OF_ORDERS_PANELS, HEIGHT_OF_BUTTONS +25, false);
         CustomPanelAPI imagePanel = null;
         LabelAPI name = null;
         LabelAPI qty;
         LabelAPI creditCost;
         LabelAPI days;
-        ButtonAPI button = tooltip.addAreaCheckbox("", order, NidavelirMainPanelPlugin.base, NidavelirMainPanelPlugin.bg, NidavelirMainPanelPlugin.bright, panel.getPosition().getWidth(), HEIGHT_OF_BUTTONS + 45, 0f);
+        ButtonAPI button = tooltip.addAreaCheckbox("", order, NidavelirMainPanelPlugin.base, NidavelirMainPanelPlugin.bg, NidavelirMainPanelPlugin.bright, panel.getPosition().getWidth(), HEIGHT_OF_BUTTONS + 25, 0f);
         button.getPosition().inTL(0, 0);
         final GPSpec spec = order.getSpecFromClass();
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.SHIP) {
             imagePanel = ShipInfoGenerator.getShipImage(order.getSpecFromClass().getShipHullSpecAPI(), 30, null).one;
             name = tooltip.addPara(order.getSpecFromClass().getShipHullSpecAPI().getHullName(), 0f);
-            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(2, 4);
+            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(2, 12);
 
             FleetMemberAPI fleetMemberAPI = Global.getFactory().createFleetMember(FleetMemberType.SHIP, AshMisc.getVaraint(spec.getShipHullSpecAPI()));
             fleetMemberAPI.getRepairTracker().setCR(0.7f);
@@ -319,13 +321,13 @@ public class UIData {
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.WEAPON) {
             imagePanel = WeaponInfoGenerator.getImageOfWeapon(order.getSpecFromClass().getWeaponSpec(), 30).one;
             name = tooltip.addPara(order.getSpecFromClass().getWeaponSpec().getWeaponName(), 0f);
-            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(2, 8);
+            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(2, 14);
             createWeaponTooltip(spec.getWeaponSpec(), tooltip);
         }
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.FIGHTER) {
             name = tooltip.addPara(order.getSpecFromClass().getWingSpecAPI().getWingName(), 0f);
             imagePanel = FighterInfoGenerator.createFormationPanel(order.getSpecFromClass().getWingSpecAPI(), FormationType.BOX, 24, order.getSpecFromClass().getWingSpecAPI().getNumFighters()).one;
-            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
+            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 12);
             FleetMemberAPI fleetMember = Global.getFactory().createFleetMember(FleetMemberType.FIGHTER_WING,spec.getWingSpecAPI().getId());
             createFighterTooltip(fleetMember, spec.getWingSpecAPI(), tooltip);
 
@@ -333,14 +335,14 @@ public class UIData {
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.ITEM) {
             name = tooltip.addPara(order.getSpecFromClass().getItemSpecAPI().getName(), 0f);
             imagePanel = UIData.getItemRender(order.getSpecFromClass().getItemSpecAPI().getId(), 24);
-            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
+            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 12);
             tooltip.addTooltipToPrevious(new ProducitonHoverInfo(spec), TooltipMakerAPI.TooltipLocation.BELOW, spec.getWingSpecAPI()!=null);
 
         }
         if (order.getSpecFromClass().getType() == GPSpec.ProductionType.AICORE) {
             name = tooltip.addPara(order.getSpecFromClass().getAiCoreSpecAPI().getName(), 0f);
             imagePanel = UIData.getAiCoreRenderer(order.getSpecFromClass().getAiCoreSpecAPI().getId(), 24);
-            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 6);
+            tooltip.addCustom(imagePanel, 5f).getPosition().setLocation(0, 0).inTL(3, 12);
             tooltip.addTooltipToPrevious(new ProducitonHoverInfo(spec), TooltipMakerAPI.TooltipLocation.BELOW, spec.getWingSpecAPI()!=null);
         }
 
@@ -351,19 +353,25 @@ public class UIData {
         name.computeTextHeight(name.getText());
         name.getPosition().inTL(35, HEIGHT_OF_BUTTONS / 2 - pos.getHeight() / 2);
         float beingX = WIDTH_OF_NAMES_ORDER;
-        creditCost.getPosition().inTL(getxPad(creditCost, getCenter(beingX, WIDTH_OF_NAMES_COST)), getyPad(creditCost));
-        beingX += WIDTH_OF_NAMES_COST;
-        CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_NAMES_GP, HEIGHT_OF_BUTTONS, order.getSpecFromClass());
-        tooltip.addCustom(panelImg, 5f).getPosition().setLocation(0, 0).inTL(beingX, 0);
-        qty = tooltip.addPara("Quantity: " + order.getAmountToProduce() + " %s", 0f, Color.ORANGE, "(Produced at once : " + order.getAtOnce() + ")");
-        qty.getPosition().inTL(10, -qty.getPosition().getY() - 14);
-        if(order.canProceed()){
-            tooltip.addPara("Order will be completed in : %s", 5f, Color.ORANGE, AoTDMisc.convertDaysToString((int) order.getDaysForLabel()));
+
+
+        creditCost.getPosition().inTL(getxPad(creditCost, getCenter(beingX, WIDTH_OF_NAMES_COST)), getyPad(creditCost)+15);
+
+        CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_NAMES_COST, HEIGHT_OF_BUTTONS-15, order.getSpecFromClass());
+        tooltip.addCustom(panelImg, 5f).getPosition().setLocation(0, 0).inTL( WIDTH_OF_NAMES_ORDER, 0);
+        LabelAPI toProduce = tooltip.addPara(""+order.getAmountToProduce(),Color.ORANGE,0f);
+        LabelAPI toProduceAT = tooltip.addPara(""+order.getAtOnce(),Color.ORANGE,0f);
+        beingX+=WIDTH_OF_NAMES_COST;
+        toProduce.getPosition().inTL(getxPad(toProduce, getCenter(beingX, WIDTH_OF_QT)), getyPad(toProduce));
+        beingX+=WIDTH_OF_QT;
+        toProduceAT.getPosition().inTL(getxPad(toProduceAT, getCenter(beingX, WIDTH_OF_AT_ONCE)), getyPad(toProduceAT));
+        if(!order.canProceed()){
+            tooltip.addPara("Order will be %s", 5f, Misc.getNegativeHighlightColor(),"never completed! Lack of necessary resources.").getPosition().inTL(5,getyPad(toProduceAT)+35);;
+
         }
         else{
-            tooltip.addPara("Order will be %s", 5f, Misc.getNegativeHighlightColor(),"never completed! Lack of necessary resources.");
+            tooltip.addPara("Days until %s batch out of %s ordered is complete: %s ",5f,Color.ORANGE,order.getAtOnce()+"-unit",""+order.getAmountToProduce(),""+(int)order.getDaysForLabel()).getPosition().inTL(5,getyPad(toProduceAT)+35);
         }
-
         panel.addUIElement(tooltip).inTL(-5, 0);
         return new Pair<>(panel, button);
 
