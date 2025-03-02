@@ -1,0 +1,2 @@
+id,name,plugin,order
+aotd_vok_research_widget,Access Research Tree,data.kaysaar.aotd.vok.scripts.SideBarImpl,1

@@ -44,10 +44,10 @@ $global.aotd_can_sophia=false",,,
 ,,,,,,
 ,,,,,,
 #BIFROST SECTION,,,,,,
-,,,,,,
+bifrostPrintReciver,bifrostCanBeUsed,$connected==true,,"Due to connecton with Hypershunt, this gate is charged with energy of star, allowing cooldown to be lowered to levels, that it basically becomes non-existing.",,
 bifrostAccess,OpenInteractionDialog,$customType == bifrost_gate score:1000,"SetShortcut defaultLeave ESCAPE  
 SetEnabled bifrostUse false
-FireBest bifrostCanBeUsed","A dull hum begins to sound in your ear, emanating from the gate as space-time begins to rumble and roil. The dull interior of the gigantic ring slowly lightens, unnatural purple light drifting inwards even as the humming begins to rise in tempo, rising a roar. Waves and distortions, barely visible from a distance echo from the structure, sensor reports streaming in about conflicting celestial objects, before it reaches a crescendo, in a tide, space normalizes and a tunnel in reality itself completes forming, giving a complete glimpse to the other side.
+FireAll bifrostCanBeUsed","A dull hum begins to sound in your ear, emanating from the gate as space-time begins to rumble and roil. The dull interior of the gigantic ring slowly lightens, unnatural purple light drifting inwards even as the humming begins to rise in tempo, rising a roar. Waves and distortions, barely visible from a distance echo from the structure, sensor reports streaming in about conflicting celestial objects, before it reaches a crescendo, in a tide, space normalizes and a tunnel in reality itself completes forming, giving a complete glimpse to the other side.
 
 The Bifrost bridge has opened…","0:bifrostUse:Use Bifrost Network
 1:defaultLeave:Leave",
@@ -166,3 +166,25 @@ ResearchSell generateAfterResponse",,,
 ,,,,,,
 aotd_salvage_confirm,DialogOptionSelected,$option == AoTD_Mega_Salvage,AoTDStableHandler salvageExplain:aotd_hypershunt_reciver,,,
 aotd_salvage_confirm2,DialogOptionSelected,$option == SL_aotd_hypershunt_deconstruct,AoTDStableHandler salvageComplete:aotd_hypershunt_reciver,,,
+#Geting stable point from Janus Device Analysis tech,,,,,,
+aotd_stable_point_gen_start,PopulateOptions,"$hasMarket
+$menuState == main
+AoTDAddStablePointScript checkIfValid",,,30:aotd_stable_point_add:Create stable location,
+aotd_stable_point_req,DialogOptionSelected,$option == aotd_stable_point_add,AoTDAddStablePointScript printReq,"Our recent analysis of the Janus Device reveals that constructing a component similar to it, but with reversed polarization, can create a stable point within a star system.","10:aotd_stable_point_create:Proceed
+20:aotd_stable_point_cancel:On second thought...",
+aotd_stable_point_proceed,DialogOptionSelected,$option == aotd_stable_point_create,"AoTDAddStablePointScript addStable
+DismissDialog",,,
+aotd_stable_point_cancel,DialogOptionSelected,$option == aotd_stable_point_cancel,FireAll PopulateOptions,,,
+#Pluto mining station,,,,,,
+aotd_pluto_interact,OpenInteractionDialog,"$customType == aotd_pluto_station
+!$aotd_claimed","SetShortcut defaultLeave ESCAPE 
+ShowDefaultVisual
+AoTDPlutoEncounter start
+FireAll AoTDMegaCheck",,"0:aotd_claim_megastructure:Claim megastructure
+1:defaultLeave:Leave",
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,

@@ -1,0 +1,3 @@
+id,group,rank,order,hazard,reqSurvey,xpMult,requiresAll,requiresAny,requiresNotAny,cat_giant,cat_barren,rocky_unstable,rocky_ice,cat_hab1,cat_lava,lava_minor,cat_frozen,cat_cryovolcanic,cat_irradiated,cat_toxic,toxic_cold,cat_hab5,cat_hab4,cat_hab3,terran-eccentric,jungle,water,arid,tundra,cat_hab2,multipliers >>>,tectonic_activity,extreme_tectonic_activity,low_gravity,high_gravity,hot,very_hot,cold,very_cold,dense_atmosphere,water_surface,mild_climate,extreme_weather,poor_light,inimical_biosphere,pollution
+aotd_nidavelir_complex,,1,50,,TRUE,600,aotd_nidavelir_complex,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_pluto_station,,1,50,,TRUE,200,aotd_pluto_station,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

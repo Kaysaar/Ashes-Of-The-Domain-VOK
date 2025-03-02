@@ -11,7 +11,7 @@
 	"aotd_pcf_amount":50, # Increase/Decrease amount of Pre Collapse Facilities spawning per sector.
 	"aotd_expedition_threshold":240, # Increase/Decrease frequency of research expeditions, conducted by faction. (Days)
 	"aotd_expedition_begin":210, # Increase/Decrease year, where research expeditions are beginning.
-	"aotd_titans_of_industry":true, # Disables/enables total rework of custom production mechanic for colonies
+	"aotd_titans_of_industry":true, # Disables/enables total rework of custom production mechanic for colonies NOTE! DEPRECEATED SETTING : DONT SET IT TO FALSE
 	"aotd_scale":10, # Increase/Decrease multiplier of Global Production commodities ( x amount of supply times scale)
 	"aotd_shipyard_pag_per_page":70, # Increase/Decrease amount of items displayed per page ( WARNING : INCREASING THIS NUMBER MIGHT RESULT IN PRODUCTION UI LAGGING )
 	"graphics":{
@@ -44,6 +44,13 @@
 			"mining1":"graphics/icons/tech/mining1.png",
 			"mining2":"graphics/icons/tech/mining2.png",
 			"mining3":"graphics/icons/tech/mining3.png",
+			"military1":"graphics/icons/tech/military1.png",
+			"military2":"graphics/icons/tech/military2.png",
+			"military3":"graphics/icons/tech/military3.png",
+			"station1":"graphics/icons/tech/station1.png",
+			"station2":"graphics/icons/tech/station2.png",
+			"station3":"graphics/icons/tech/station3.png",
+			"lobsters_farming":"graphics/icons/tech/lobsters_farming.png",
 			"minorindustry1":"graphics/icons/tech/minorindustry1.png",
 			"minorindustry2":"graphics/icons/tech/minorindustry2.png",
 			"minorindustry3":"graphics/icons/tech/minorindustry3.png",
@@ -116,15 +123,32 @@
 		},
 		"ui":{
 			"aotd_text_glow":"graphics/ui/buttons/text_glow.png",
-			"aotd_holder":"graphics/ui/holder.png"
+			"aotd_holder":"graphics/ui/holder.png",
+			"sidebar_icon_research":"graphics/ui/atomic-64.png"
 		},
 		"rendering":{
             "GlitchSquare":"graphics/fx/solid_square.png",
+			"aotd_pluto_general_glow":"graphics/fx/aotd_pluto_general_glow.png",
+			"aotd_pluto_laser_glow_white":"graphics/fx/aotd_pluto_laser_glow_white.png",
+			"aotd_pluto_laser_glow":"graphics/fx/aotd_pluto_laser_glow.png",
+			"aotd_pluto_laserfire_glow":"graphics/fx/aotd_pluto_laserfire_glow.png",
+			"aotd_pluto_laserflare_glow":"graphics/fx/aotd_pluto_laserflare_glow.png",
+			"aotd_beam0":"graphics/fx/aotd_beam0.png",
+			"aotd_beam1":"graphics/fx/aotd_beam1.png",
+			"aotd_beam2":"graphics/fx/aotd_beam2.png",
+			"aotd_beam3":"graphics/fx/aotd_beam3.png",
+			"aotd_beam4":"graphics/fx/aotd_beam4.png",
+			"aotd_planet_glow0":"graphics/fx/aotd_planet_glow0.png",
+			"aotd_planet_glow1":"graphics/fx/aotd_planet_glow1.png",
+			"aotd_planet_glow2":"graphics/fx/aotd_planet_glow2.png",
+
 
 		},
 		"megastructures":{
             "hypershunt":"graphics/icons/coronal_shunt.png",
 			"nidavelir":"graphics/icons/nidavelir.png",
+			"bifrost":"graphics/icons/bifrost.png",
+			"pluto":"graphics/icons/aotd_pluto_mining_station.png",
 			
 		},
 		"sectionImage":{
@@ -135,13 +159,26 @@
 			"VanguardForge":"graphics/icons/megastructures/nid_2.png",
 			"BulwarkFoundry":"graphics/icons/megastructures/nid_4.png",
 			"EterniumCore":"graphics/icons/megastructures/nid_1.png",
-			"SentinelCore":"graphics/icons/megastructures/nid_5.png"
-
+			"SentinelCore":"graphics/icons/megastructures/nid_5.png",
+			"BifrostGate":"graphics/icons/megastructures/bifrost.png",
+			"OpticCommandNexus":"graphics/icons/megastructures/optic_comand_nexus.png",
+			"PurificationCore":"graphics/icons/megastructures/purification_core.png",
+			"FusionForge":"graphics/icons/megastructures/fusion_forge.png",
 		}
 		,
 		"megastructureImage":{
             "hypershunt":"graphics/illustrations/coronal_tap.jpg",
 			"nidavelir":"graphics/illustrations/nidavelir.png",
+			"bifrost":"graphics/illustrations/active_gate.jpg",
+			"pluto":"graphics/illustrations/pluto.png",
+
+
+		},
+		"illustrations":{
+            "industrial_megafacility":"graphics/illustrations/industrial_megafacility.jpg"
+		},
+		"signalis_ui":{
+            "keypad_bg":"graphics/ui/keypad.png"
 		}
 
 	}

@@ -19,6 +19,15 @@
 				],
 				"randomStart":true,
 			}
+		],"aotd_mega":[
+			{
+				"source":"sounds/sfx_interface/megastructures",
+				"volume":0.4,
+				"files":[
+					"mega.ogg",
+				],
+				"randomStart":true,
+			}
 		]
 	
 	},
