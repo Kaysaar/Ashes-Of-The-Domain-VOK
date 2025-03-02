@@ -3,7 +3,6 @@ package data.kaysaar.aotd.vok.ui.research;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.Fonts;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
-import data.kaysaar.aotd.vok.ui.AoTDResearchNewPlugin;
 import data.kaysaar.aotd.vok.ui.basecomps.ButtonComponent;
 import data.kaysaar.aotd.vok.ui.basecomps.LabelComponent;
 

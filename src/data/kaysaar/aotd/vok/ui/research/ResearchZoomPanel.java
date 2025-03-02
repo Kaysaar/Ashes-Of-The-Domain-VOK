@@ -4,7 +4,6 @@ import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOptionEra;
-import data.kaysaar.aotd.vok.ui.AoTDResearchNewPlugin;
 import data.kaysaar.aotd.vok.ui.basecomps.ZoomPanelComponent;
 
 import java.awt.*;

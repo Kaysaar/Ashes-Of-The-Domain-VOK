@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.ui;
+package data.kaysaar.aotd.vok.ui.research;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
@@ -8,7 +8,6 @@ import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
-import data.kaysaar.aotd.vok.ui.research.*;
 
 import java.util.List;
 

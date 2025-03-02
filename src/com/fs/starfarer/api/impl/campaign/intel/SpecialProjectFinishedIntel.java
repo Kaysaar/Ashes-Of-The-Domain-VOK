@@ -7,7 +7,6 @@ import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
-import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelDPSpecialProj;
 
 import java.awt.*;
 
@@ -60,7 +59,7 @@ public class SpecialProjectFinishedIntel extends BaseIntelPlugin{
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if(buttonId==Button_SHIP){
-            ui.showDialog(null,new NidavelirMainPanelDPSpecialProj());
+
         }
 
     }
