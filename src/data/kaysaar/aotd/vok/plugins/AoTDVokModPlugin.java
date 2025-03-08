@@ -22,6 +22,7 @@ import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
+import data.kaysaar.aotd.vok.scripts.CoreUITracker2;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
@@ -145,7 +146,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         if (!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)) {
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
-
+        Global.getSector().addTransientScript(new CoreUITracker2());
 //        Global.getSector().addTransientScript(new EveryFrameScript() {
 //            protected IntervalUtil util = new IntervalUtil(1f,1.5f);
 //            @Override
@@ -233,7 +234,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSettings().getCommoditySpec(Commodities.BETA_CORE).getTags().add("aotd_ai_core");
         Global.getSettings().getCommoditySpec(Commodities.ALPHA_CORE).getTags().add("aotd_ai_core");
         GPManager.getInstance().reInitalize();
-        CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTab());
+        CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
 
 //        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
 //            if(planet.isStar())continue;

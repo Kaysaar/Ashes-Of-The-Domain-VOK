@@ -12,6 +12,7 @@ import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;;
+import data.kaysaar.aotd.vok.ui.patrolfleet.PatrolFleetDataManager;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
@@ -25,6 +26,7 @@ public class CoreUITracker implements EveryFrameScript {
     boolean insertedOnce = false;
     boolean removed = false;
     TechnologyCoreUI coreUiTech = null;
+    PatrolFleetDataManager fleetManager = null;
     boolean pausedMusic = true;
 
     @Override
@@ -93,17 +95,40 @@ public class CoreUITracker implements EveryFrameScript {
         }
         UIPanelAPI mainParent = ProductionUtil.getCurrentTab();
         if (mainParent == null) return;
-        ButtonAPI button = tryToGetButtonProd("doctrine & blueprints");
+        ButtonAPI button = tryToGetButtonProd("income");
+        ButtonAPI toRemove2 = tryToGetButtonProd("doctrine & blueprints");
         ButtonAPI toRemove = tryToGetButtonProd("custom production");
-
         if (button == null){
             return;
         }
         if(toRemove!=null) {
             mainParent.removeComponent(toRemove);
         }
-        if (tryToGetButtonProd(getStringForCoreTab()) == null) {
-            insertButton(button, mainParent, "Research & Production", new TooltipMakerAPI.TooltipCreator() {
+        if(toRemove2!=null) {
+            mainParent.removeComponent(toRemove2);
+        }
+
+        if (tryToGetButtonProd(getStringForCoreTabResearch()) == null) {
+
+            insertButton(button, mainParent, "Faction Fleets", new TooltipMakerAPI.TooltipCreator() {
+                @Override
+                public boolean isTooltipExpandable(Object tooltipParam) {
+                    return false;
+                }
+
+                @Override
+                public float getTooltipWidth(Object tooltipParam) {
+                    return 500;
+                }
+
+                @Override
+                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                    tooltip.addSectionHeading("Ashes of the Domain : Vaults of Knowledge",Alignment.MID,0f);
+                    tooltip.addPara("In this tab you will be able to create fleet templates for your patrol fleets.",5f);
+                }
+            }, tryToGetButtonProd("colonies"), 180, Keyboard.KEY_4, false);
+
+            insertButton(tryToGetButtonProd("faction fleets"), mainParent, "Research & Production", new TooltipMakerAPI.TooltipCreator() {
                 @Override
                 public boolean isTooltipExpandable(Object tooltipParam) {
                     return false;
@@ -119,7 +144,7 @@ public class CoreUITracker implements EveryFrameScript {
                     tooltip.addSectionHeading("Ashes of the Domain : Vaults of Knowledge",Alignment.MID,0f);
                     tooltip.addPara("In this tab, you can find the research tab to manage your technological advancement and special technology projects, the custom order tab to build new ships and weapons as well as launch special military projects, and the megastructure tab to manage the Domain-era marvels you've seized or built.",5f);
                 }
-            }, tryToGetButtonProd("colonies"), 250, Keyboard.KEY_5, false);
+            }, tryToGetButtonProd("colonies"), 240, Keyboard.KEY_5, false);
         }
 
         if (shouldHandleReset()) {
@@ -159,7 +184,8 @@ public class CoreUITracker implements EveryFrameScript {
 
             }
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);
-            insertNewPanel(tryToGetButtonProd(getStringForCoreTab()));
+            insertNewPanel(tryToGetButtonProd(getStringForCoreTabResearch()));
+            insertNewPanelPatrol(tryToGetButtonProd(getStringForPatrolTemplate()));
 
 
         }
@@ -179,7 +205,7 @@ public class CoreUITracker implements EveryFrameScript {
                 }
             }
         }
-        if(currentTab.getText().toLowerCase().contains(getStringForCoreTab())){
+        if(currentTab.getText().toLowerCase().contains(getStringForCoreTabResearch())){
             if(!tunedMusicOnce){
                 tunedMusicOnce = true;
                 if(coreUiTech.getCurrentlyChosen()!=null){
@@ -204,10 +230,12 @@ public class CoreUITracker implements EveryFrameScript {
 
     }
 
-    public static @NotNull String getStringForCoreTab() {
+    public static @NotNull String getStringForCoreTabResearch() {
         return "research & production";
     }
-
+    public static @NotNull String getStringForPatrolTemplate() {
+        return "faction fleets";
+    }
     private static void removePanels(ArrayList<UIComponentAPI> componentAPIS, UIPanelAPI mainParent, UIComponentAPI panelToIgnore) {
         for (UIComponentAPI componentAPI : componentAPIS) {
             if (componentAPI instanceof ButtonAPI) continue;
@@ -252,11 +280,11 @@ public class CoreUITracker implements EveryFrameScript {
                 buttonAPI.setChecked(false);
                 if (!currentTab.equals(buttonAPI)) {
                     ProductionUtil.getCurrentTab().removeComponent((UIComponentAPI) panelMap.get(currentTab));
-                    if(buttonAPI.getText().toLowerCase().contains(getStringForCoreTab())){
+                    if(buttonAPI.getText().toLowerCase().contains(getStringForCoreTabResearch())){
                         if(coreUiTech.getCurrentlyChosen()!=null){
                             coreUiTech.playSound(coreUiTech.getCurrentlyChosen());
                         }
-                    } else if (currentTab.getText().toLowerCase().contains(getStringForCoreTab())) {
+                    } else if (currentTab.getText().toLowerCase().contains(getStringForCoreTabResearch())) {
                         coreUiTech.pauseSound();
                     }
                     currentTab = buttonAPI;
@@ -288,7 +316,13 @@ public class CoreUITracker implements EveryFrameScript {
 
         panelMap.put(tiedButton, coreUiTech.getMainPanel());
     }
+    private void insertNewPanelPatrol(ButtonAPI tiedButton) {
+        if (fleetManager == null) {
+            fleetManager = new PatrolFleetDataManager(UIData.WIDTH, UIData.HEIGHT);
+        }
 
+        panelMap.put(tiedButton, fleetManager.getMainPanel());
+    }
     private Pair<CustomPanelAPI, ButtonAPI> createPanelButton(String buttonName, float width, float height, int bindingValue, boolean dissabled, TooltipMakerAPI.TooltipCreator onHoverTooltip) {
         CustomPanelAPI panel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(width, height, false);

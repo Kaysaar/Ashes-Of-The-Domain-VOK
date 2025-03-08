@@ -62,7 +62,7 @@ public class BaseMegastuctureIntelPlugin extends BaseIntelPlugin {
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if (buttonId == Button_Megastructure) {
-            CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTab());
+            CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
             CoreUITracker.setMemFlagForTechTab("megastructures");
 
             Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);

@@ -11,7 +11,7 @@ public class SideBarImpl extends sidebarButton {
 
     @Override
     public void executePrimary() {
-        CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTab());
+        CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
         CoreUITracker.setMemFlagForTechTab("research");
         Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
     }

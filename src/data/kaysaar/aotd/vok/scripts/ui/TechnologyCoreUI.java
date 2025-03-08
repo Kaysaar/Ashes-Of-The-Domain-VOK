@@ -11,6 +11,7 @@ import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.SoundUIManager;
+import data.kaysaar.aotd.vok.ui.patrolfleet.PatrolFleetDataManager;
 import data.kaysaar.aotd.vok.ui.research.AoTDResearchNewPlugin;
 import org.lwjgl.input.Keyboard;
 

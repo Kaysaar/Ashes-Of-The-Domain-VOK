@@ -75,6 +75,11 @@ public class ButtonComponent extends ResizableComponent {
     public void positionChanged(PositionAPI position) {
 
     }
+public boolean shouldRenderBorders = true;
+
+    public void setShouldRenderBorders(boolean shouldRenderBorders) {
+        this.shouldRenderBorders = shouldRenderBorders;
+    }
 
     @Override
     public void renderBelow(float alphaMult) {
@@ -95,9 +100,12 @@ public class ButtonComponent extends ResizableComponent {
             spriteToRender.renderAtCenter(componentPanel.getPosition().getCenterX(), componentPanel.getPosition().getCenterY());
 
         }
-        renderer.render(alphaMult);
-        renderer.render(alphaMult);
-        renderer.render(alphaMult);
+        if(shouldRenderBorders){
+            renderer.render(alphaMult);
+            renderer.render(alphaMult);
+            renderer.render(alphaMult);
+        }
+
 
     }
 
