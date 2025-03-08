@@ -8,27 +8,20 @@ import com.fs.starfarer.api.campaign.CampaignUIAPI;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.listeners.CampaignInputListener;
 import com.fs.starfarer.api.campaign.listeners.CampaignUIRenderingListener;
-import com.fs.starfarer.api.combat.CombatEngineLayers;
 import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
-import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.ui.FontException;
 import org.lazywizard.lazylib.ui.LazyFont;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector2f;
 import sidebarLib.UI.sidebarWidget;
-import sidebarLib.sidebarLib_modPlugin;
 ;
 
 import java.awt.*;
 import java.util.List;
-import java.util.Random;
 
 
 public class CurrentResearchProgressUI implements CampaignUIRenderingListener, EveryFrameScript, CampaignInputListener {
@@ -230,7 +223,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 float buttonYBeginning = getYForRender() + 14 + buttonTech.getHeight();
                 if (!isHidden&&detector.determineIfHoversOverButton(buttonXBeginning, buttonYBeginning, buttonXBeginning + 170, buttonYBeginning, buttonXBeginning, buttonYBeginning - 20, buttonXBeginning + 170, buttonYBeginning - 20, Global.getSettings().getMouseX(), Global.getSettings().getMouseY())) {
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
-                    CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTab());
+                    CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
                     CoreUITracker.setMemFlagForTechTab("research");
                    Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
                     event.consume();

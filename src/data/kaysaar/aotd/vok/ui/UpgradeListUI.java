@@ -190,7 +190,6 @@ public class UpgradeListUI implements CustomDialogDelegate {
         Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(cost);
         Global.getSoundPlayer().playUISound("ui_upgrade_industry", 1, 1);
 
-
     }
 
     public void customDialogCancel() {

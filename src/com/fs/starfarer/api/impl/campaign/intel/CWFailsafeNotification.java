@@ -6,7 +6,6 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 
@@ -63,7 +62,7 @@ public class CWFailsafeNotification extends BaseMegastuctureIntelPlugin {
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if (buttonId == Button_Megastructure) {
-            CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTab());
+            CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
             CoreUITracker.setMemFlagForTechTab("megastructures");
             Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }
