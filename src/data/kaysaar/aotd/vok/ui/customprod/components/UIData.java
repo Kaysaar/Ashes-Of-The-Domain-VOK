@@ -60,8 +60,27 @@ public class UIData {
     public static float WIDTH_OF_GP = WIDTH_OF_OPTIONS * 0.15f - 5f;
 
     public static void recompute() {
-        HEIGHT_OF_OPTIONS = HEIGHT * 0.6f;
+        HEIGHT_OF_OPTIONS = UIData.HEIGHT - (UIData.HEIGHT * 0.45f) - 270;
         WIDTH_OF_OPTIONS = WIDTH * 0.65f;
+        WIDTH_OF_ORDERS = WIDTH * 0.35f - 30f;
+        WIDTH_OF_ORDERS_PANELS = WIDTH_OF_ORDERS + 1;
+        WIDTH_OF_NAMES_ORDER = WIDTH_OF_ORDERS_PANELS * 0.3f;
+        WIDTH_OF_NAMES_COST = WIDTH_OF_ORDERS_PANELS * 0.35f;
+        WIDTH_OF_QT = WIDTH_OF_ORDERS_PANELS * 0.18f;
+        WIDTH_OF_AT_ONCE = WIDTH_OF_ORDERS_PANELS * 0.17f-5f;
+        HEIGHT_OF_BUTTONS = 55;
+        WIDTH_OF_NAME = WIDTH_OF_OPTIONS * 0.30f;
+        WIDTH_OF_BUILD_TIME = WIDTH_OF_OPTIONS * 0.08f;
+        WIDTH_OF_SIZE = WIDTH_OF_OPTIONS * 0.08f;
+        WIDTH_OF_TYPE = WIDTH_OF_OPTIONS * 0.12f;
+        WIDTH_OF_DESIGN_TYPE = WIDTH_OF_OPTIONS * 0.25f;
+        WIDTH_OF_CREDIT_COST = WIDTH_OF_OPTIONS * 0.15f;
+        WIDTH_OF_GP = WIDTH_OF_OPTIONS * 0.02f - 5f;
+    }
+    public static void recomputeForFleetTab(float optionWidth,float optionHeight) {
+
+        HEIGHT_OF_OPTIONS = optionHeight - 270;
+        WIDTH_OF_OPTIONS = optionWidth;
         WIDTH_OF_ORDERS = WIDTH * 0.35f - 30f;
         WIDTH_OF_ORDERS_PANELS = WIDTH_OF_ORDERS + 1;
         WIDTH_OF_NAMES_ORDER = WIDTH_OF_ORDERS_PANELS * 0.3f;

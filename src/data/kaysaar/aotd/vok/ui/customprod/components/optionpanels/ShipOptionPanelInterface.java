@@ -18,7 +18,7 @@ import static data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin.maxIt
 public class ShipOptionPanelInterface extends BaseOptionPanelManager {
 
 
-    public ShipOptionPanelInterface(CustomPanelAPI panel,float padding) {
+    public ShipOptionPanelInterface(CustomPanelAPI panel,float padding,boolean isForProd) {
         GPManager.getInstance().getUIData().populateShipInfo();
         GPManager.getInstance().getUIData().populateShipSizeInfo();
         GPManager.getInstance().getUIData().populateShipTypeInfo();
@@ -26,7 +26,12 @@ public class ShipOptionPanelInterface extends BaseOptionPanelManager {
         mapOfButtonStates = new HashMap<>();
         this.mainPanel = panel;
         this.panel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight()-padding, null);
-        YHeight = panel.getPosition().getHeight() * 0.45f-padding;
+        if(isForProd){
+            YHeight = panel.getPosition().getHeight() * 0.45f-padding;
+        }
+        else {
+            YHeight = panel.getPosition().getHeight() * 0.35f-padding;
+        }
 
     }
 
@@ -40,7 +45,15 @@ public class ShipOptionPanelInterface extends BaseOptionPanelManager {
         createSerachBarPanel();
         this.mainPanel.addComponent(panel).inTL(0, padding);
     }
-
+    public void initForFleet() {
+        createShipOptions(panel);
+        createDesignButtons(GPManager.getInstance().getUIData().getShipManInfo());
+        createSizeOptions(GPManager.getInstance().getUIData().getShipSizeInfo());
+        createTypeOptions(GPManager.getInstance().getUIData().getShipTypeInfo());
+        createSortingButtons(false, false);
+        createSerachBarPanel();
+        this.mainPanel.addComponent(panel).inTL(0, padding);
+    }
     @Override
     public void clear() {
         buttonsPage.clear();

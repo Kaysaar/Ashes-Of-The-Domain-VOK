@@ -111,7 +111,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         maxItemsPerPage = AoTDSettingsManager.getIntValue("aotd_shipyard_pag_per_page");
         maxItemsPerPageWEP = maxItemsPerPage;
         float padding = 20f;
-        shipPanelManager = new ShipOptionPanelInterface(this.panel, padding);
+        shipPanelManager = new ShipOptionPanelInterface(this.panel, padding,true);
         weaponPanelManager = new WeaponOptionPanelInterface(this.panel, padding);
         fighterPanelInterface = new FighterOptionPanelInterface(this.panel, padding);
         itemOptionPanelManager = new ItemOptionPanelManager(this.panel, padding);

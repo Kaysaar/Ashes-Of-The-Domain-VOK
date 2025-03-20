@@ -3,12 +3,14 @@ package data.kaysaar.aotd.vok.plugins;
 
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
+import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
@@ -179,6 +181,19 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //
 //            }
 //        });
+//        LinkedHashMap<String,Integer> expectedShips = new LinkedHashMap<>();
+//        expectedShips.put("uaf_supercap_slv_core",1);
+//        expectedShips.put("onslaught",3);
+//        expectedShips.put("apogee",5);
+//        expectedShips.put("hermes",3);
+//        getTestingGroundSystem();
+//
+//        AoTDPatrolFleetData data = new AoTDPatrolFleetData("Test Name 1" );
+//        data.setExpectedVesselsInFleet(expectedShips);
+//        data.init(Global.getSettings().createPerson());
+//        FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().removeFleetMember( FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().getMembersListCopy().get(2));
+//        FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().removeFleetMember( FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().getMembersListCopy().get(2));
+
         Global.getSector().addTransientScript(new CoreUITracker());
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");
         AoTDMainResearchManager.getInstance().updateModIdRepo();
@@ -242,6 +257,16 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //            shipyard.trueInit("aotd_nidavelir","aotd_nidavelir_shadow",planet);
 //
 //        }
+    }
+
+    public static StarSystemAPI  getTestingGroundSystem() {
+        if(Global.getSector().getStarSystem("testing_ground")==null){
+            StarSystemAPI system = Global.getSector().createStarSystem("testing_ground");
+            system.initNonStarCenter();
+            system.addTag(Tags.THEME_HIDDEN);
+        }
+
+        return Global.getSector().getStarSystem("testing_ground");
     }
 }
 

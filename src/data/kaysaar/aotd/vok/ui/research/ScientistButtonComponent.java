@@ -28,8 +28,4 @@ public class ScientistButtonComponent extends ButtonComponent {
         this.setClickable(false);
     }
 
-    @Override
-    public void performActionOnClick() {
-        super.performActionOnClick();
-    }
 }
