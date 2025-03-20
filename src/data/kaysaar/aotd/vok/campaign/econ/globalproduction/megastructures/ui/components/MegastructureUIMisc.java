@@ -308,7 +308,6 @@ public class MegastructureUIMisc {
         CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
         float totalSize = width;
-        float sections = totalSize /commodities.size();
         float positions = totalSize / (commodities.size() * 4);
         float iconsize = iconSize;
         float topYImage = 0;
@@ -362,7 +361,7 @@ public class MegastructureUIMisc {
         ArrayList<CustomPanelAPI> panelsSecondRow = new ArrayList<>();
         if(totalWidth>=width){
             for (int i = panelsWithImage.size()-1; i >=0 ; i--) {
-                left-=panelsWithImage.get(i).getPosition().getWidth()-15;
+                left-=panelsWithImage.get(i).getPosition().getWidth()+15;
                 panelsSecondRow.add(panelsWithImage.get(i));
                 if(left<width){
                     break;
@@ -389,6 +388,13 @@ public class MegastructureUIMisc {
         }
 
         customPanel.addUIElement(tooltip).inTL(-15, 0);
+        if(panelsSecondRow.isEmpty()){
+            customPanel.getPosition().setSize(width,iconSize+5);
+        }
+        else{
+            customPanel.getPosition().setSize(width,(iconSize+5)*2);
+
+        }
         return customPanel;
     }
     public static CustomPanelAPI createResourcePanelForSmallTooltipNotCondensed(float width, float height, float iconSize, HashMap<String,Integer> costs,HashMap<String,Integer>production) {

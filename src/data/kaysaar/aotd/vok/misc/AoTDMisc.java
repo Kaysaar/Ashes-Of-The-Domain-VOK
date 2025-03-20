@@ -16,6 +16,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
@@ -202,7 +203,11 @@ public class AoTDMisc {
         }
         return false;
     }
-
+    public static void initPopUpDialog(BasePopUpDialog dialog, float width, float height){
+        CustomPanelAPI panelAPI = Global.getSettings().createCustom(width, height, dialog);
+        UIPanelAPI panelAPI1 = ProductionUtil.getCoreUI();
+        dialog.init(panelAPI, panelAPI1.getPosition().getCenterX() - (panelAPI.getPosition().getWidth() / 2), panelAPI1.getPosition().getCenterY() + (panelAPI.getPosition().getHeight() / 2), true);
+    }
     public static boolean doesPlayerHaveTuringEngine() {
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
             for (Industry industry : playerMarket.getIndustries()) {

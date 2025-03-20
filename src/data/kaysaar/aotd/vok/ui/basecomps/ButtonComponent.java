@@ -27,8 +27,13 @@ public class ButtonComponent extends ResizableComponent {
     public void setClickable(boolean clickable) {
         isClickable = clickable;
     }
-
+    boolean enableRightClick = false;
     boolean decreasedMode = true;
+
+    public void setEnableRightClick(boolean enableRightClick) {
+        this.enableRightClick = enableRightClick;
+    }
+
     transient SpriteAPI spriteToRender = Global.getSettings().getSprite("rendering", "GlitchSquare");
     SpriteAPI panelBackground = Global.getSettings().getSprite("ui", "panel00_center");
     TiledTextureRenderer renderers = new TiledTextureRenderer(panelBackground.getTextureId());
@@ -111,26 +116,30 @@ public boolean shouldRenderBorders = true;
 
     @Override
     public void advance(float amount) {
-        float scale = this.scale;
-        if (shouldHighlight()) {
-            currHighlight += 0.02f;
-            if (currHighlight >= maxHighlight) {
-                currHighlight = maxHighlight;
-            }
+        if(!blockButtonInstance){
+            float scale = this.scale;
+            if (shouldHighlight()) {
+                currHighlight += 0.02f;
+                if (currHighlight >= maxHighlight) {
+                    currHighlight = maxHighlight;
+                }
 
-        } else {
-            currHighlight -= 0.02f;
-            if (currHighlight <= 0) {
-                currHighlight = 0f;
+            } else {
+                currHighlight -= 0.02f;
+                if (currHighlight <= 0) {
+                    currHighlight = 0f;
+                }
+            }
+            if (breakBetweenButtons != null) {
+                breakBetweenButtons.advance(amount);
+                if (breakBetweenButtons.intervalElapsed()) {
+                    breakBetweenButtons = null;
+                }
             }
         }
-        if (breakBetweenButtons != null) {
-            breakBetweenButtons.advance(amount);
-            if (breakBetweenButtons.intervalElapsed()) {
-                breakBetweenButtons = null;
-            }
-        }
+
     }
+public  boolean blockButtonInstance = false;
 
     public boolean isBreakBetweenClicks() {
         return breakBetweenButtons != null;
@@ -142,20 +151,31 @@ public boolean shouldRenderBorders = true;
 
     @Override
     public void processInput(List<InputEventAPI> events) {
-        for (InputEventAPI event : events) {
-            if (event.isConsumed()) continue;
-            if (event.isLMBDownEvent()) {
-                if (doesHover() && !isBreakBetweenClicks()&&isClickable) {
-                    Global.getSoundPlayer().playUISound("ui_button_pressed", 1, 1);
-                    initBreak();
-                    performActionOnClick();
-                    event.consume();
+        if(!blockButtonInstance){
+            for (InputEventAPI event : events) {
+                if (event.isConsumed()) continue;
+                if (event.isLMBDownEvent()) {
+                    if (doesHover() && !isBreakBetweenClicks()&&isClickable) {
+                        Global.getSoundPlayer().playUISound("ui_button_pressed", 1, 1);
+                        initBreak();
+                        performActionOnClick(false);
+                        event.consume();
+                    }
+                }
+                if (event.isRMBDownEvent()) {
+                    if (doesHover() && !isBreakBetweenClicks()&&isClickable&&enableRightClick) {
+                        Global.getSoundPlayer().playUISound("ui_button_pressed", 1, 1);
+                        initBreak();
+                        performActionOnClick(true);
+                        event.consume();
+                    }
                 }
             }
         }
+
     }
 
-    public void performActionOnClick() {
+    public void performActionOnClick(boolean isRightClick) {
 
     }
 

@@ -42,7 +42,7 @@ public class BaseOptionPanelManager implements OptionPanelInterface {
     float YHeight;
     int currOffset = 0;
     int currPage = 0;
-    float bottomHeight = UIData.HEIGHT - (UIData.HEIGHT * 0.45f) - 270;
+    float bottomHeight = UIData.HEIGHT_OF_OPTIONS;
     ArrayList<ButtonAPI> buttons = new ArrayList<>();
     ArrayList<String> chosenManu = new ArrayList<>();
     ArrayList<String> chosenType = new ArrayList<>();
@@ -50,28 +50,6 @@ public class BaseOptionPanelManager implements OptionPanelInterface {
     ArrayList<ButtonAPI> sortingButtons = new ArrayList<>();
     boolean wantsAll = false;
     boolean canClose = true;
-    public void createDesignButtons( LinkedHashMap<String,Integer> designs) {
-        buttonDesignPanel = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 120, null);
-        TooltipMakerAPI tooltipButDesigners = buttonDesignPanel.createUIElement(panel.getPosition().getWidth() * 0.70f, bottomHeight, true);
-        float currY = 1;
-        for (RowData calculateAmountOfRow : UIData.calculateAmountOfRows(UIData.WIDTH_OF_OPTIONS,designs, 5)) {
-            float x = 0;
-            tooltipButDesigners.setButtonFontDefault();
-            for (Map.Entry<String, Integer> entry : calculateAmountOfRow.stringsInRow.entrySet()) {
-                String manu = extractManufacturer(entry.getKey());
-                ButtonAPI button = tooltipButDesigners.addAreaCheckbox("", manu, base, bg, bright, entry.getValue(), 30, 0f);
-                button.getPosition().inTL(x, currY);
-                buttons.add(button);
-                tooltipButDesigners.addPara(entry.getKey(), Misc.getDesignTypeColor(manu), 0f).getPosition().inTL((x + 15), currY + 8);
-                x += entry.getValue() + 5f;
-            }
-            currY += 35;
-        }
-        tooltipButDesigners.setHeightSoFar(currY);
-        buttonDesignPanel.addUIElement(tooltipButDesigners).inTL(0, 0);
-        panel.addComponent(buttonDesignPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, YHeight + 130);
-
-    }
     public static String extractManufacturer(String input) {
         String[] parts = input.split("\\(");
         StringBuilder result = new StringBuilder(parts[0].trim());
@@ -97,6 +75,29 @@ public class BaseOptionPanelManager implements OptionPanelInterface {
 
         return result.toString();
     }
+    public void createDesignButtons( LinkedHashMap<String,Integer> designs) {
+        buttonDesignPanel = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 120, null);
+        TooltipMakerAPI tooltipButDesigners = buttonDesignPanel.createUIElement(panel.getPosition().getWidth() * 0.70f, bottomHeight, true);
+        float currY = 1;
+        for (RowData calculateAmountOfRow : UIData.calculateAmountOfRows(UIData.WIDTH_OF_OPTIONS,designs, 5)) {
+            float x = 0;
+            tooltipButDesigners.setButtonFontDefault();
+            for (Map.Entry<String, Integer> entry : calculateAmountOfRow.stringsInRow.entrySet()) {
+                String manu = extractManufacturer(entry.getKey());
+                ButtonAPI button = tooltipButDesigners.addAreaCheckbox("", manu, base, bg, bright, entry.getValue(), 30, 0f);
+                button.getPosition().inTL(x, currY);
+                buttons.add(button);
+                tooltipButDesigners.addPara(entry.getKey(), Misc.getDesignTypeColor(manu), 0f).getPosition().inTL((x + 15), currY + 8);
+                x += entry.getValue() + 5f;
+            }
+            currY += 35;
+        }
+        tooltipButDesigners.setHeightSoFar(currY);
+        buttonDesignPanel.addUIElement(tooltipButDesigners).inTL(0, 0);
+        panel.addComponent(buttonDesignPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, YHeight + 130);
+
+    }
+
 
     public void createSizeOptions(LinkedHashMap<String, Integer> sizeInfo) {
         buttonSize = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 30, null);
@@ -116,6 +117,65 @@ public class BaseOptionPanelManager implements OptionPanelInterface {
 
     }
     public void createTypeOptions(LinkedHashMap<String, Integer> typeInfo) {
+        buttonType = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 80, null);
+        TooltipMakerAPI tooltip = buttonType.createUIElement(UIData.WIDTH_OF_OPTIONS, 30, false);
+        float padding = 5f;
+        float currentX = 0;
+        float widthOfButton = 150;
+        for (Map.Entry<String, Integer> category : typeInfo.entrySet()) {
+            ButtonAPI button = tooltip.addAreaCheckbox(category.getKey() + "(" + category.getValue() + ")", category.getKey(), base, bg, bright, widthOfButton, 30, 0f);
+            button.getPosition().inTL(currentX, 0);
+            currentX += widthOfButton + padding;
+            types.add(button);
+        }
+        buttonType.addUIElement(tooltip).inTL(0, 0);
+        panel.addComponent(buttonType).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, panel.getPosition().getHeight() - 85);
+    }
+
+
+
+    public void createDesignButtonsForFleet( LinkedHashMap<String,Integer> designs) {
+        buttonDesignPanel = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 120, null);
+        TooltipMakerAPI tooltipButDesigners = buttonDesignPanel.createUIElement(panel.getPosition().getWidth() * 0.70f, bottomHeight, true);
+        float currY = 1;
+        for (RowData calculateAmountOfRow : UIData.calculateAmountOfRows(UIData.WIDTH_OF_OPTIONS,designs, 5)) {
+            float x = 0;
+            tooltipButDesigners.setButtonFontDefault();
+            for (Map.Entry<String, Integer> entry : calculateAmountOfRow.stringsInRow.entrySet()) {
+                String manu = extractManufacturer(entry.getKey());
+                ButtonAPI button = tooltipButDesigners.addAreaCheckbox("", manu, base, bg, bright, entry.getValue(), 30, 0f);
+                button.getPosition().inTL(x, currY);
+                buttons.add(button);
+                tooltipButDesigners.addPara(entry.getKey(), Misc.getDesignTypeColor(manu), 0f).getPosition().inTL((x + 15), currY + 8);
+                x += entry.getValue() + 5f;
+            }
+            currY += 35;
+        }
+        tooltipButDesigners.setHeightSoFar(currY);
+        buttonDesignPanel.addUIElement(tooltipButDesigners).inTL(0, 0);
+        panel.addComponent(buttonDesignPanel).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, YHeight + 130);
+
+    }
+
+
+    public void createSizeOptionsForFleet(LinkedHashMap<String, Integer> sizeInfo) {
+        buttonSize = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 30, null);
+        TooltipMakerAPI tooltip = buttonSize.createUIElement(UIData.WIDTH_OF_OPTIONS, 30, false);
+        float padding = 5f;
+        float currentX = 0;
+        float widthOfButton = 150;
+
+        for (Map.Entry<String, Integer> category : sizeInfo.entrySet()) {
+            ButtonAPI button = tooltip.addAreaCheckbox(category.getKey() + "(" + category.getValue() + ")", category.getKey(), base, bg, bright, widthOfButton, 30, 0f);
+            button.getPosition().inTL(currentX, 0);
+            currentX += widthOfButton + padding;
+            sizes.add(button);
+        }
+        buttonSize.addUIElement(tooltip).inTL(0, 0);
+        panel.addComponent(buttonSize).inTL(UIData.WIDTH - UIData.WIDTH_OF_OPTIONS - 10, panel.getPosition().getHeight() - 50);
+
+    }
+    public void createTypeOptionsForFleet(LinkedHashMap<String, Integer> typeInfo) {
         buttonType = panel.createCustomPanel(UIData.WIDTH_OF_OPTIONS, 80, null);
         TooltipMakerAPI tooltip = buttonType.createUIElement(UIData.WIDTH_OF_OPTIONS, 30, false);
         float padding = 5f;
@@ -156,7 +216,7 @@ public class BaseOptionPanelManager implements OptionPanelInterface {
         TooltipMakerAPI tooltip = buttonSortingPnael.createUIElement(UIData.WIDTH_OF_OPTIONS, 20, false);
         ArrayList<ButtonAPI> sortButtons = new ArrayList<>();
         sortButtons.add(tooltip.addAreaCheckbox(name, "Name", base, bg, bright, UIData.WIDTH_OF_NAME, 20, 0f));
-        sortButtons.add(tooltip.addAreaCheckbox("Build time", "Build time", base, bg, bright, UIData.WIDTH_OF_BUILD_TIME, 20, 0f));
+        sortButtons.add(tooltip.addAreaCheckbox("Time", "Build time", base, bg, bright, UIData.WIDTH_OF_BUILD_TIME, 20, 0f));
         if(!forFighter){
             sortButtons.add(tooltip.addAreaCheckbox("Size", "Size", base, bg, bright, UIData.WIDTH_OF_SIZE, 20, 0f));
             sortButtons.add(tooltip.addAreaCheckbox("Type", "Type", base, bg, bright, UIData.WIDTH_OF_TYPE, 20, 0f));

@@ -31,7 +31,7 @@ public class TechTreeModButton extends ButtonComponent {
     }
 
     @Override
-    public void performActionOnClick() {
+    public void performActionOnClick(boolean isRightClick) {
         if (isDropDown) {
             PopUpUI ui = new ModDropDown(modID, plugin);
             plugin.blockButtonsFromHover();

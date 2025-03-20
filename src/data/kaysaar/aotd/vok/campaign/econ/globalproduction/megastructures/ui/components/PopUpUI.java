@@ -29,12 +29,14 @@ public class PopUpUI implements CustomUIPanelPlugin {
     SpriteAPI bottomRight= Global.getSettings().getSprite("ui","panel00_bot_right");
     public static float buttonConfirmWidth = 160;
     public float limit =5;
+    public boolean borderlessMode = false;
     public float frames;
     public CustomPanelAPI panelToInfluence;
     public ashlib.data.plugins.ui.plugins.UILinesRenderer rendererBorder = new UILinesRenderer(0f);
     public ButtonAPI confirmButton;
     public ButtonAPI cancelButton;
     public boolean isDialog =true;
+    public boolean shouldHover = isDialog;
     public ButtonAPI getConfirmButton() {
         return confirmButton;
     }
@@ -62,6 +64,7 @@ public class PopUpUI implements CustomUIPanelPlugin {
 
         panelToInfluence.getPosition().setSize(16,16);
         this.isDialog = isDialog;
+        this.shouldHover = isDialog;
 
         mainPanel.addComponent(panelToInfluence).inTL(x, mainPanel.getPosition().getHeight()-y);
         mainPanel.bringComponentToTop(panelToInfluence);
@@ -97,7 +100,10 @@ public class PopUpUI implements CustomUIPanelPlugin {
                 renderBorders(panelToInfluence);
             }
             else{
-                rendererBorder.render(alphaMult);
+                if(!borderlessMode){
+                    rendererBorder.render(alphaMult);
+
+                }
             }
 
 
@@ -154,7 +160,7 @@ public class PopUpUI implements CustomUIPanelPlugin {
         for (InputEventAPI event : events) {
             if(frames>=limit-1&&reachedMaxHeight){
                 if(event.isMouseDownEvent()&&!isDialog){
-                     TrapezoidButtonDetector detector = new TrapezoidButtonDetector();
+                    TrapezoidButtonDetector detector = new TrapezoidButtonDetector();
                     float xLeft = panelToInfluence.getPosition().getX();
                     float xRight = panelToInfluence.getPosition().getX()+panelToInfluence.getPosition().getWidth();
                     float yBot = panelToInfluence.getPosition().getY();
@@ -167,7 +173,7 @@ public class PopUpUI implements CustomUIPanelPlugin {
                     }
                 }
                 if(!event.isConsumed()){
-                    if(event.getEventValue()== Keyboard.KEY_ESCAPE){
+                    if(event.getEventValue()== Keyboard.KEY_ESCAPE&&!event.isMouseEvent()){
                         ProductionUtil.getCoreUI().removeComponent(panelToInfluence);
                         event.consume();
                         onExit();

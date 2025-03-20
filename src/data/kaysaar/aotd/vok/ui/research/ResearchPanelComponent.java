@@ -88,7 +88,7 @@ public class ResearchPanelComponent extends ButtonComponent {
 
 
     @Override
-    public void performActionOnClick() {
+    public void performActionOnClick(boolean isRightClick) {
         PopUpUI ui = new ResearchInfoUI(AoTDMainResearchManager.getInstance().getManagerForPlayer().getResearchOptionFromRepo(spec.getId()),panel);
         panel.blockButtonsFromHover();
         placePopUpUI(ui, componentPanel,410,660);
