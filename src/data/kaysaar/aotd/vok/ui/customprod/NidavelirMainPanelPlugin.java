@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui.customprod;
 
+import ashlib.data.plugins.info.ShipInfoGenerator;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.input.InputEventAPI;
@@ -11,6 +12,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.di
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.ui.customprod.components.*;
 import data.kaysaar.aotd.vok.ui.customprod.components.gatheringpoint.AoTDGatehringPointPlugin;
@@ -61,6 +63,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
     WeaponOptionPanelInterface weaponPanelManager;
     FighterOptionPanelInterface fighterPanelInterface;
     ItemOptionPanelManager itemOptionPanelManager;
+    SpecialProjectManager specialProjectManager;
     OptionPanelInterface currentManager;
     CustomPanelAPI panelOfMarketData;
     CustomPanelAPI panelOfOrders;
@@ -81,7 +84,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
     TooltipMakerAPI tooltipMakerAPI;
     CustomPanelAPI panelOfGatheringPoint;
     UIPanelAPI mainPanel;
-
+    CustomPanelAPI currentProjectPanel;
     public void setMainPanel(UIPanelAPI mainPanel) {
         this.mainPanel = mainPanel;
     }
@@ -115,13 +118,14 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         weaponPanelManager = new WeaponOptionPanelInterface(this.panel, padding);
         fighterPanelInterface = new FighterOptionPanelInterface(this.panel, padding);
         itemOptionPanelManager = new ItemOptionPanelManager(this.panel, padding);
+        specialProjectManager = new SpecialProjectManager(this.panel,padding);
         currentManager = shipPanelManager;
         this.dialog = dialog;
         currentManager.init();
         createTopBar(padding);
         createMarketResourcesPanel();
         createGatheringPointBar();
-
+        createSpecialProjectBar();
         createOrders();
 
         isPressingShift = false;
@@ -135,7 +139,43 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         }
     }
 
+    public void createSpecialProjectBar() {
+        UILinesRenderer renderer = new UILinesRenderer(0f);
+        currentProjectPanel = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 70, renderer);
+        TooltipMakerAPI tooltip = currentProjectPanel.createUIElement(UIData.WIDTH_OF_ORDERS, 70, false);
+        tooltip.addSectionHeading("On-going special project", Alignment.MID, 0f);
+        if (GPManager.getInstance().getCurrProjOnGoing() == null) {
+            projectReference = null;
+            tooltip.addPara("None", 15f);
+        } else {
+            tooltip.addCustom(createCurrentSpecialProjectShowcase(UIData.WIDTH_OF_ORDERS - 10, 40), 5f);
+        }
+        renderer.setPanel(currentProjectPanel);
+        currentProjectPanel.addUIElement(tooltip).inTL(0, 0);
+        panel.addComponent(currentProjectPanel).inTL(spacerX, 161);
+    }
 
+    public void clearSpecProjBar() {
+        panel.removeComponent(currentProjectPanel);
+    }
+    public CustomPanelAPI createCurrentSpecialProjectShowcase(float width, float height) {
+        GpSpecialProjectData data = GPManager.getInstance().getCurrProjOnGoing();
+        UILinesRenderer progressionRenderer = new UILinesRenderer(0f);
+        CustomPanelAPI panel = Global.getSettings().createCustom(width, height, null);
+        TooltipMakerAPI tooltip = panel.createUIElement(width, height, false);
+        CustomPanelAPI progressionBar = panel.createCustomPanel(width / 2, 20, progressionRenderer);
+        progressionRenderer.setPanel(progressionBar);
+        progressionRenderer.enableProgressMode(GPManager.getInstance().getCurrProjOnGoing().getCurrentProgressOfStage());
+        projectReference = tooltip.addAreaCheckbox("", GPManager.getInstance().getCurrProjOnGoing(), base, bg, bright, width, height, 0f);
+        LabelAPI title = tooltip.addPara("Project :" + data.getSpec().getNameOverride(), Color.ORANGE, 0f);
+        CustomPanelAPI shipPanel = ShipInfoGenerator.getShipImage(Global.getSettings().getHullSpec(data.getSpec().getRewardId()), height - 10, null).one;
+        tooltip.addCustom(shipPanel, 5f).getPosition().inTL(5, 5);
+        title.getPosition().inTL(40, height / 2 - title.computeTextHeight(title.getText()) / 2);
+
+        panel.addUIElement(tooltip).inTL(-4, 0);
+        return panel;
+
+    }
 
     public CustomPanelAPI createResourceCostAfterTransaction(float width, float height) {
         CustomPanelAPI customPanel = panel.createCustomPanel(width, height, null);
@@ -298,6 +338,21 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         butt.add(tooltip.addButton("Fighters", "fighter", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Fighters") + 30, 20, 0f));
         tooltip.addTooltipToPrevious(new ButtonOnHoverInfo(400, false, null, "Here you can order fighters to be assembled in shipyards, and they will be delivered to gathering point when completed.", null, null, null, "Fighter assembly section"), TooltipMakerAPI.TooltipLocation.BELOW, false);
 
+        butt.add(tooltip.addButton("Special Projects", "sp", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Special Projects") + 30, 20, 0f));
+        tooltip.addTooltipToPrevious(
+                new ButtonOnHoverInfo(
+                        400,
+                        !GPManager.getInstance().hasAtLestOneProjectUnlocked(),
+                        "No special projects unlocked to access this tab!",
+                        "This section leads to our most challenging projects.",
+                        "These projects involve our most expensive ships and complex undertakings.",
+                        "Attempting these can drain all faction resources.",
+                        "With our industrial might, we can succeed.",
+                        "Special Projects Section"
+                ),
+                TooltipMakerAPI.TooltipLocation.BELOW,
+                false
+        );
         butt.add(tooltip.addButton("Items", "items", base, bg, Alignment.MID, CutStyle.TOP, text.computeTextWidth("Items") + 30, 20, 0f));
         tooltip.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
             @Override
@@ -332,8 +387,11 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
             buttonAPI.getPosition().inTL(currX, 0);
             currX += buttonAPI.getPosition().getWidth() + paddingX;
         }
-        if (GPManager.getInstance().getLearnedItems().isEmpty()&&!AoTDMisc.doesPlayerHaveTuringEngine()) {
+        if (!GPManager.getInstance().hasAtLestOneProjectUnlocked()) {
             butt.get(3).setEnabled(false);
+        }
+        if (GPManager.getInstance().getLearnedItems().isEmpty()&&!AoTDMisc.doesPlayerHaveTuringEngine()) {
+            butt.get(4).setEnabled(false);
         }
 
         switchingButtons.addAll(butt);
@@ -344,7 +402,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
 
     public void createOrders() {
         UILinesRenderer renderer = new UILinesRenderer(0f);
-        float yPad = 161;
+        float yPad = 251;
         float height = panel.getPosition().getHeight() - 20 - yPad - 150;
         sortingButtonsPanel = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 50, renderer);
         panelOfOrders = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, height - 50, renderer);
@@ -521,6 +579,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                 }
             }
             if (replace) {
+                clearSpecProjBar();
+                createSpecialProjectBar();
                 resetPanelOfMarketData();
             }
 
@@ -554,7 +614,12 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                         itemOptionPanelManager.reInit();
                         break;
                     }
-
+                    if (match.equals("sp") && !currentManager.getClass().isInstance(specialProjectManager)) {
+                        currentManager.clear();
+                        currentManager = specialProjectManager;
+                        specialProjectManager.reInit();
+                        break;
+                    }
                 }
             }
         }
@@ -583,6 +648,17 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                     break;
                 }
 
+            }
+        }
+        if (projectReference != null) {
+            if (projectReference.isChecked()) {
+                projectReference.setChecked(false);
+                if (!currentManager.getClass().isInstance(specialProjectManager)) {
+                    currentManager.clear();
+                    currentManager = specialProjectManager;
+                    specialProjectManager.reInit();
+                    specialProjectManager.createSpecialProjectShowcase((GpSpecialProjectData) projectReference.getCustomData());
+                }
             }
         }
         if (confirmButton != null) {

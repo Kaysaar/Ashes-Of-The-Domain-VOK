@@ -57,7 +57,6 @@ public class FleetMembersShowcase implements CustomUIPanelPlugin {
         LinkedHashMap<String,Integer> missingOnes = new LinkedHashMap();
         boolean mustCont = true;
         for (Map.Entry<String, Integer> entry : data.getExpectedVesselsInFleet().entrySet()) {
-
             if(!registeredShips.containsKey(entry.getKey())){
                 missingOnes.put(entry.getKey(),entry.getValue());
             }
