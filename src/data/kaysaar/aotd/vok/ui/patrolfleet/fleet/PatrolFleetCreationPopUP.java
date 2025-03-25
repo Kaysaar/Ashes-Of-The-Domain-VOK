@@ -28,7 +28,7 @@ public class PatrolFleetCreationPopUP extends BasePopUpDialog {
     @Override
     public void applyConfirmScript() {
         super.applyConfirmScript();
-        if(!tab.getData().getExpectedVesselsInFleet().isEmpty()){
+        if(!tab.getData().getExpectedVesselsInFleet() .isEmpty()){
             tab.getData().init(Global.getSettings().createPerson());
             main.data.refreshArmadaPanel();
         }

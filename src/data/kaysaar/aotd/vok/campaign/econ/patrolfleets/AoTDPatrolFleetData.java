@@ -7,14 +7,20 @@ import com.fs.starfarer.api.campaign.listeners.FleetEventListener;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.fleets.*;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
+import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.loading.FighterWingSpecAPI;
+import com.fs.starfarer.api.plugins.impl.CoreAutofitPlugin;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.patrolfleets.inflaters.AoTDFleetInflater;
 import data.kaysaar.aotd.vok.campaign.econ.patrolfleets.manager.FactionPatrolFleetManager;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +148,15 @@ public class AoTDPatrolFleetData implements FleetEventListener {
         for (Map.Entry<String, Integer> ship : expectedVesselsInFleet.entrySet()) {
             for (int i = 0; i < ship.getValue(); i++) {
                 String variantId = AoTDMisc.getVaraint(Global.getSettings().getHullSpec(ship.getKey()));
-                fleet.getFleetData().addFleetMember(variantId);
+                FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP,variantId);
+                int index = 0;
+                for (String fittedWing : member.getVariant().getFittedWings()) {
+                    member.getVariant().setWingId(index,null);
+                    index++;
+                }
+
+                fleet.getFleetData().addFleetMember(member);
+
             }
 
 
@@ -162,9 +176,11 @@ public class AoTDPatrolFleetData implements FleetEventListener {
         p.allWeapons = false;
         p.factionId = Factions.PLAYER;
 
-        FleetInflater inflater = Misc.getInflater(fleet, p);
+        AoTDFleetInflater inflater = new AoTDFleetInflater(p);
         fleet.setInflater(inflater);
-
+        inflater.inflate(fleet);
+        fleet.setInflated(true);
+        fleet.setNoAutoDespawn(true);
         fleet.getFleetData().setOnlySyncMemberLists(false);
         fleet.getFleetData().sort();
         fleet.setName(name);
@@ -178,7 +194,6 @@ public class AoTDPatrolFleetData implements FleetEventListener {
         float actualPoints = fleet.getFleetPoints();
 
         Misc.setSpawnFPMult(fleet, actualPoints / Math.max(1f, requestedPoints));
-
         return fleet;
     }
     public void performUpdate(){

@@ -104,31 +104,31 @@ public class CoreUITracker implements EveryFrameScript {
         if(toRemove!=null) {
             mainParent.removeComponent(toRemove);
         }
-        if(toRemove2!=null) {
-            mainParent.removeComponent(toRemove2);
-        }
+//        if(toRemove2!=null) {
+//            mainParent.removeComponent(toRemove2);
+//        }
 
         if (tryToGetButtonProd(getStringForCoreTabResearch()) == null) {
 
-            insertButton(button, mainParent, "Faction Fleets", new TooltipMakerAPI.TooltipCreator() {
-                @Override
-                public boolean isTooltipExpandable(Object tooltipParam) {
-                    return false;
-                }
+//            insertButton(button, mainParent, "Faction Fleets", new TooltipMakerAPI.TooltipCreator() {
+//                @Override
+//                public boolean isTooltipExpandable(Object tooltipParam) {
+//                    return false;
+//                }
+//
+//                @Override
+//                public float getTooltipWidth(Object tooltipParam) {
+//                    return 500;
+//                }
+//
+//                @Override
+//                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+//                    tooltip.addSectionHeading("Ashes of the Domain : Vaults of Knowledge",Alignment.MID,0f);
+//                    tooltip.addPara("In this tab you will be able to create fleet templates for your patrol fleets.",5f);
+//                }
+//            }, tryToGetButtonProd("colonies"), 180, Keyboard.KEY_4, false);
 
-                @Override
-                public float getTooltipWidth(Object tooltipParam) {
-                    return 500;
-                }
-
-                @Override
-                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                    tooltip.addSectionHeading("Ashes of the Domain : Vaults of Knowledge",Alignment.MID,0f);
-                    tooltip.addPara("In this tab you will be able to create fleet templates for your patrol fleets.",5f);
-                }
-            }, tryToGetButtonProd("colonies"), 180, Keyboard.KEY_4, false);
-
-            insertButton(tryToGetButtonProd("faction fleets"), mainParent, "Research & Production", new TooltipMakerAPI.TooltipCreator() {
+            insertButton(tryToGetButtonProd("doctrine & blueprints"), mainParent, "Research & Production", new TooltipMakerAPI.TooltipCreator() {
                 @Override
                 public boolean isTooltipExpandable(Object tooltipParam) {
                     return false;
@@ -185,7 +185,7 @@ public class CoreUITracker implements EveryFrameScript {
             }
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);
             insertNewPanel(tryToGetButtonProd(getStringForCoreTabResearch()));
-            insertNewPanelPatrol(tryToGetButtonProd(getStringForPatrolTemplate()));
+//            insertNewPanelPatrol(tryToGetButtonProd(getStringForPatrolTemplate()));
 
 
         }

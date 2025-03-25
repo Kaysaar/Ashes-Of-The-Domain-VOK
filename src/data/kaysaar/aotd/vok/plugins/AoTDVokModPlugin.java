@@ -148,7 +148,10 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         if (!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)) {
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
-        Global.getSector().addTransientScript(new CoreUITracker2());
+//        Global.getSector().addTransientScript(new CoreUITracker2());
+
+
+
 //        Global.getSector().addTransientScript(new EveryFrameScript() {
 //            protected IntervalUtil util = new IntervalUtil(1f,1.5f);
 //            @Override
