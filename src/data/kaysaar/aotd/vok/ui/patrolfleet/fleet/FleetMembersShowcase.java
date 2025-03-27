@@ -31,7 +31,16 @@ public class FleetMembersShowcase implements CustomUIPanelPlugin {
             tooltip.addSpacer(60);
             registeredShips.put(data.getFleet().getFlagship().getVariant().getHullSpec().getHullId(),1);
             for (FleetMemberAPI str : data.getFleet().getFleetData().getMembersInPriorityOrder()) {
-                if(str.isFlagship())continue;
+                if(str.isFlagship()){
+                    if(!registeredShips.containsKey(str.getVariant().getHullSpec().getHullId())){
+                        registeredShips.put(str.getVariant().getHullSpec().getHullId(), 1);
+                    }
+                    else{
+                        int curr = registeredShips.get(str.getVariant().getHullSpec().getHullId());
+                        registeredShips.put(str.getVariant().getHullSpec().getHullId(), curr+1);
+                    }
+                    continue;
+                }
                 ShipWithOfficerShowcase showcase = new ShipWithOfficerShowcase(50, false, str.getVariant().getHullSpec().getHullId(),creatorMode,data,tab,this);
                 showcase.setMemberOfFleet(str);
                 if (currX + showcase.originalWidth > width) {

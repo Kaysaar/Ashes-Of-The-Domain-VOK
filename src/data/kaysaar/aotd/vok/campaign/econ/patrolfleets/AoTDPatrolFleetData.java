@@ -13,6 +13,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
+import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.plugins.impl.CoreAutofitPlugin;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.patrolfleets.inflaters.AoTDFleetInflater;
@@ -154,7 +155,7 @@ public class AoTDPatrolFleetData implements FleetEventListener {
                     member.getVariant().setWingId(index,null);
                     index++;
                 }
-
+                member.getVariant().setSource(VariantSource.REFIT);
                 fleet.getFleetData().addFleetMember(member);
 
             }
