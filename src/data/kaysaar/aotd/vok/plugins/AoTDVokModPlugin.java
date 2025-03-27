@@ -6,12 +6,19 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
+import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
+import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.impl.codex.CodexDataV2;
+import com.fs.starfarer.api.impl.codex.CodexEntryPlugin;
+import com.fs.starfarer.api.impl.codex.CodexEntryV2;
+import com.fs.starfarer.api.ui.TagDisplayAPI;
 import com.fs.starfarer.api.util.Pair;
+import com.fs.starfarer.codex.CodexData;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
@@ -271,6 +278,37 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
         return Global.getSector().getStarSystem("testing_ground");
     }
+//    public static CodexEntryV2 createMegastructuresTab() {
+//        CodexEntryV2 cat = new CodexEntryV2("aotd_megastructures", "Planetary conditions", CodexDataV2.getIcon("aotd_megastructures")) {
+//            @Override
+//            public boolean hasTagDisplay() {
+//                return true;
+//            }
+//            @Override
+//            public void configureTagDisplay(TagDisplayAPI tags) {
+//                int resource = 0;
+//                int other = 0;
+//                int total = 0;
+//                for (CodexEntryPlugin curr : getChildren()) {
+//                    if (!curr.isVisible() || curr.isLocked() || curr.skipForTags()) continue;
+//                    if (!(curr.getParam() instanceof MarketConditionSpecAPI)) continue;
+//                    MarketConditionSpecAPI spec = (MarketConditionSpecAPI) curr.getParam();
+//                    if (ResourceDepositsCondition.COMMODITY.containsKey(spec.getId())) resource++;
+//                    else other++;
+//
+//                    total++;
+//                }
+//                tags.beginGroup(false, ALL_TYPES);
+//                tags.addTag(RESOURCES, resource);
+//                tags.addTag(OTHER, other);
+//                tags.setTotalOverrideForCurrentGroup(total);
+//                tags.addGroup(0f);
+//
+//                tags.checkAll();
+//            }
+//        };
+//        return cat;
+//    }
 }
 
 

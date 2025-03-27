@@ -116,7 +116,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
 //            layers.add(rendererOfShip2);
 //            layers.add(rendererOfShip3);
 //            layers.add(rendererOfShip4);
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 5; i++) {
                 Planet rendererText = new Planet(type,tiedToPlanet.getRadius()+35-0.5f*i,0.0f,new Vector2f());
                 rendererText.setAngle(angle);
                 rendererText.setTilt(tiedToPlanet.getSpec().getTilt());
@@ -124,7 +124,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
             }
         }
         else{
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 5; i++) {
                 Planet rendererText = new Planet(type,tiedToPlanet.getRadius()+35-0.5f*i,0.0f,new Vector2f());
                 rendererText.setAngle(angle);
                 rendererText.setTilt(tiedToPlanet.getSpec().getTilt());
