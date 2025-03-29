@@ -12,7 +12,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 import java.util.List;
 
-public class ResizableComponent implements CustomUIPanelPlugin {
+public class    ResizableComponent implements CustomUIPanelPlugin {
     public CustomPanelAPI componentPanel;
     public float originalWidth,originalHeight;
     public float scale = 1f;
@@ -69,10 +69,13 @@ public class ResizableComponent implements CustomUIPanelPlugin {
         componentPanel.getPosition().setSize(originalWidth * scale, originalHeight * scale);
         componentPanel.getPosition().setLocation(0,0).inTL(originalCoords.x*scale- (movingCords.x),originalCoords.y*scale+ (movingCords.y));
         for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(componentPanel)) {
-            CustomUIPanelPlugin plugin = (CustomUIPanelPlugin) ReflectionUtilis.findFieldByType(componentAPI,CustomUIPanelPlugin.class);
-            if(plugin instanceof ResizableComponent){
-                ((ResizableComponent) plugin).resize(scale);
+            if(componentAPI instanceof CustomPanelAPI){
+                CustomUIPanelPlugin plugin = ((CustomPanelAPI) componentAPI).getPlugin();
+                if(plugin instanceof ResizableComponent){
+                    ((ResizableComponent) plugin).resize(scale);
+                }
             }
+
         }
 
     }
