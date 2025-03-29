@@ -1,6 +1,5 @@
 package org.shmo.lib.aotd.campaign.impl;
 
-import com.fs.starfarer.C;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.util.Misc;
