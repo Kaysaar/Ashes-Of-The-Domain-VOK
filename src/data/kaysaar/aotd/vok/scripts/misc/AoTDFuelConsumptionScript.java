@@ -4,6 +4,7 @@ import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.characters.AbilityPlugin;
+import com.fs.starfarer.api.fleet.FleetMemberViewAPI;
 import com.fs.starfarer.api.impl.campaign.JumpPointAoTD;
 import com.fs.starfarer.api.impl.campaign.abilities.SustainedBurnAbility;
 import com.fs.starfarer.api.impl.campaign.ids.Abilities;
@@ -33,76 +34,42 @@ public class AoTDFuelConsumptionScript implements EveryFrameScript {
 
     @Override
     public boolean runWhilePaused() {
-        return true;
+        return false;
     }
-
-    public Vector2f preLocation;
-    public Vector2f currentLocation;
-
-
-    public float currentFuel;
-    public float accumulatedFuel;
-    public  transient boolean removed= false;
     public void trueAdvance(float amount) {
         CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();
-        if(!fleet.isInHyperspace())return;
-        if(!removed){
-            UIPanelAPI coreUI = ProductionUtil.getCoreUI();
-            UIPanelAPI leChildren = null;
-            UIPanelAPI leGrandChildren = null;
-            UIPanelAPI testing = null;
-            if(coreUI!=null){
-                for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(coreUI)) {
-                    if(ReflectionUtilis.hasMethodOfName("getDisplaySensorRange",componentAPI)){
-                        leChildren = (UIPanelAPI) componentAPI;
-                        break;
-                    }
-                }
-            }
-            if(leChildren!=null) { //14
-                ArrayList<UIComponentAPI> componentAPIS = (ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy((UIPanelAPI) leChildren);
-               testing = (UIPanelAPI) componentAPIS.get(12);
-                for (UIComponentAPI componentAPI : componentAPIS) {
-                    if(ReflectionUtilis.hasMethodOfName("getFuelPerDay",componentAPI)){
-                        leGrandChildren = (UIPanelAPI) componentAPI;
-                        break;
-                    }
-                }
-            }
 
-            if(leGrandChildren!=null) {
-                ArrayList<UIComponentAPI> grandChildrenComponents = (ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy((UIPanelAPI) leGrandChildren);
-                if(grandChildrenComponents.size()==4){
-                    UIComponentAPI grandGrandChild = grandChildrenComponents.get(2);
-                    Vector2f xy = new Vector2f(grandGrandChild.getPosition().getX(), grandGrandChild.getPosition().getY());
-                    UILinesRenderer renderer = new UILinesRenderer(0f);
-                    renderer.setBoxColor(Color.MAGENTA);
-
-                    CustomPanelAPI testings = Global.getSettings().createCustom(grandGrandChild.getPosition().getWidth(),grandGrandChild.getPosition().getHeight(),renderer);
-                    CustomPanelAPI insider = testings.createCustomPanel(testing.getPosition().getWidth(),testing.getPosition().getHeight(),null);
-                    testings.addComponent(insider).inTL(-5,0);
-                    insider.getPosition().setSuspendRecompute(false);
-                    insider.addComponent(new AoTDCompoundShowcase(insider.getPosition().getWidth(),insider.getPosition().getHeight()-5).getMainPanel());
-                    TooltipMakerAPI tooltip = testings.createUIElement(1,1,true);
-                    tooltip.addTooltipTo(new AoTDFuelTooltip(),grandChildrenComponents.get(2), TooltipMakerAPI.TooltipLocation.ABOVE);
-                    tooltip.addTooltipTo(new AoTDFuelTooltip(),grandChildrenComponents.get(3), TooltipMakerAPI.TooltipLocation.ABOVE);;
-                    leChildren.addComponent(testings).aboveLeft(testing,15);
-
-
-                    removed = true;
-                }
-
-
-            }
-
-
-        }
         if(fleet.getCargo().getCommodityQuantity("purified_rare_metal")>0){
             fleet.getStats().getFuelUseHyperMult().modifyMult("aotd_compound",0.1f,"Compound");
             float fuelConsumed = getComputedFuel(amount,fleet);
+            if(fuelConsumed>0){
+                Color c = new Color(140,0, 255,255);
+                Color cDim = new Color(102,0,255,50);
+                Color cDim2 = new Color(102,0,255,120);
+                for (FleetMemberViewAPI view : fleet.getViews()) {
+                    //view.getContrailColor().shift(getModId(), view.getEngineColor().getBase(), 1f, 1f, 0.25f);
+                    view.getContrailColor().shift("aotd_compound", cDim2, 1f, 1f, .75f);
+                    view.getEngineGlowColor().shift("aotd_compound", cDim, 1f, 1f, .5f);
+                    view.getEngineGlowSizeMult().shift("aotd_compound", 3f, 1f, 1f, 1f);
+                    //view.getEngineHeightMult().shift(getModId(), 5f, 1f, 1f, 1f);
+                    //view.getEngineWidthMult().shift(getModId(), 10f, 1f, 1f, 1f);
+                }
+                if(fleet.getStats().getFleetwideMaxBurnMod().getMultBonus("hyperspace_stat_mod_5")!=null){
+                    // 2 IS max while 1 is min
+                    fleet.getStats().getFleetwideMaxBurnMod().modifyMult("aotd_compound",closenessToOne(fleet.getStats().getFleetwideMaxBurnMod().getMultBonus("hyperspace_stat_mod_5").getValue()),"Compound infusion (Abyssal Hyperspace");
+
+                }
+                else{
+                    fleet.getStats().getFleetwideMaxBurnMod().unmodifyMult("aotd_compound");
+
+                }
+            }
             fleet.getCargo().removeCommodity("purified_rare_metal",fuelConsumed);
+
         }
         else{
+            fleet.getStats().getFleetwideMaxBurnMod().unmodifyMult("aotd_compound");
+
             fleet.getStats().getFuelUseHyperMult().unmodifyMult("aotd_compound");
 
         }
@@ -110,6 +77,14 @@ public class AoTDFuelConsumptionScript implements EveryFrameScript {
 
 
     }
+    public  float closenessToOne(double num) {
+        if (num < 0 || num > 1) {
+           return 1f;
+        }
+        if (num == 1) return 1;
+        return (float) (1f / num)*0.5f;
+    }
+
     public float getComputedFuel(float amount,CampaignFleetAPI fleet){
         float fuelPerLightYear = fleet.getLogistics().getBaseFuelCostPerLightYear();
         float computedFuel = fuelPerLightYear * fleet.getStats().getFuelUseHyperMult().getModifiedValue();
@@ -138,6 +113,16 @@ public class AoTDFuelConsumptionScript implements EveryFrameScript {
     public void advance(float amount) {
         trueAdvance(Global.getSector().getClock().convertToDays(amount));
     }
-
+    public static float getCalculatedCompound(float fuelHad,float compoundAmount){
+        int toReturn = (int) compoundAmount;
+        float effectiveFuel = fuelHad;
+        if(effectiveFuel<compoundAmount){
+            return (int)(effectiveFuel*5);
+        }
+        return toReturn*5;
+    }
+    public static float getCompound(CargoAPI cargo){
+       return cargo.getCommodityQuantity("purified_rare_metal");
+    }
 }
 
