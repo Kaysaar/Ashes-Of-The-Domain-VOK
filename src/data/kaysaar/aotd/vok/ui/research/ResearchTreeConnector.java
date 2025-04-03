@@ -24,6 +24,7 @@ public class ResearchTreeConnector extends ResizableComponent {
         super.renderBelow(alphaMult);
         spriteToRender.setColor(Color.WHITE);
         spriteToRender.setColor(color);
+        spriteToRender.setAlphaMult(alphaMult);
         if(children.originalCoords.y!=parent.originalCoords.getY()){
             float distanceX = children.getPanelOfButton().getPosition().getX()- (parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth());
             float centerXC = children.getPanelOfButton().getPosition().getY()+(children.getPanelOfButton().getPosition().getHeight()/2);

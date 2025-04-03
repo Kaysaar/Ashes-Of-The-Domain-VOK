@@ -13,6 +13,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;;
 import kaysaar.bmo.buildingmenu.BuildingMenuMisc;
+import org.lwjgl.util.vector.Vector2f;
 
 
 import java.awt.*;
