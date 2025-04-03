@@ -2,21 +2,27 @@ package data.kaysaar.aotd.vok.plugins;
 
 
 import com.fs.starfarer.api.BaseModPlugin;
+import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
+import com.fs.starfarer.api.impl.campaign.CoreScript;
 import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.impl.campaign.terrain.HyperspaceTerrainPlugin;
 import com.fs.starfarer.api.impl.codex.CodexDataV2;
 import com.fs.starfarer.api.impl.codex.CodexEntryPlugin;
 import com.fs.starfarer.api.impl.codex.CodexEntryV2;
 import com.fs.starfarer.api.ui.TagDisplayAPI;
+import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.codex.CodexData;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
@@ -32,6 +38,7 @@ import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker2;
+import data.kaysaar.aotd.vok.scripts.misc.AoTDFuelConsumptionScript;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
@@ -114,7 +121,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDDataInserter.spawnVeilPlanet();
         aoTDDataInserter.spawnNidavleir();
         aoTDDataInserter.spawnPluto();
-
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             MarketAPI lunarium = AoTDDataInserter.getMarketBasedOnName("Aoi", "Lunamun");
             if (lunarium != null) {
@@ -149,13 +155,14 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //        for (Map.Entry<String, MagicAchievement> stringMagicAchievementEntry : MagicAchievementManager.getInstance().getAchievements().entrySet()) {
 //            stringMagicAchievementEntry.getValue().uncompleteAchievement(true);
 //        }
+//        Global.getSector().addTransientScript(new TestScript());
         AoTDMainResearchManager.getInstance().updateResearchOptionsFromSpec();
         AoTDMainResearchManager.getInstance().updateManagerRepo();
         AoTDMainResearchManager.getInstance().setAttitudeDataForAllFactions();
         if (!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)) {
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
-//        Global.getSector().addTransientScript(new CoreUITracker2());
+        Global.getSector().addTransientScript(new CoreUITracker2());
 
 
 
@@ -255,6 +262,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
                 AoTDListenerUtilis.finishedResearch(option.getSpec().getId(),Global.getSector().getPlayerFaction());
             }
         }
+        Global.getSector().addTransientScript(new AoTDFuelConsumptionScript());
         Global.getSettings().getCommoditySpec(Commodities.GAMMA_CORE).getTags().add("aotd_ai_core");
         Global.getSettings().getCommoditySpec(Commodities.BETA_CORE).getTags().add("aotd_ai_core");
         Global.getSettings().getCommoditySpec(Commodities.ALPHA_CORE).getTags().add("aotd_ai_core");
