@@ -38,6 +38,7 @@ import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker2;
+import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDFuelConsumptionScript;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
@@ -162,7 +163,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         if (!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)) {
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
-        Global.getSector().addTransientScript(new CoreUITracker2());
 
 
 
@@ -212,6 +212,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //        FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().removeFleetMember( FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().getMembersListCopy().get(2));
 
         Global.getSector().addTransientScript(new CoreUITracker());
+        Global.getSector().addTransientScript(new AoTDCompoundUIScript());
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");
         AoTDMainResearchManager.getInstance().updateModIdRepo();
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
