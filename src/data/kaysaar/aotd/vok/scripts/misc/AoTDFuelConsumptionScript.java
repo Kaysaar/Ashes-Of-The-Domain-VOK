@@ -79,15 +79,15 @@ public class AoTDFuelConsumptionScript implements EveryFrameScript {
                     renderer.setBoxColor(Color.MAGENTA);
 
                     CustomPanelAPI testings = Global.getSettings().createCustom(grandGrandChild.getPosition().getWidth(),grandGrandChild.getPosition().getHeight(),renderer);
-                    CustomPanelAPI insider = testings.createCustomPanel(testing.getPosition().getWidth(),testing.getPosition().getHeight(),null);
-                    testings.addComponent(insider).inTL(-5,0);
+                    CustomPanelAPI insider = testings.createCustomPanel(grandGrandChild.getPosition().getWidth(),grandGrandChild.getPosition().getHeight()-1,null);
+                    testings.addComponent(insider).inTL(-5,5);
                     insider.getPosition().setSuspendRecompute(false);
-                    insider.addComponent(new AoTDCompoundShowcase(insider.getPosition().getWidth(),insider.getPosition().getHeight()-5).getMainPanel());
+                    insider.addComponent(new AoTDCompoundShowcase(insider.getPosition().getWidth(),insider.getPosition().getHeight()).getMainPanel());
                     TooltipMakerAPI tooltip = testings.createUIElement(1,1,true);
-                    tooltip.addTooltipTo(new AoTDFuelTooltip(),grandChildrenComponents.get(2), TooltipMakerAPI.TooltipLocation.ABOVE);
-                    tooltip.addTooltipTo(new AoTDFuelTooltip(),grandChildrenComponents.get(3), TooltipMakerAPI.TooltipLocation.ABOVE);;
-                    leChildren.addComponent(testings).aboveLeft(testing,15);
+                    leGrandChildren.removeComponent(grandChildrenComponents.get(3));
+                    leGrandChildren.removeComponent(grandGrandChild);
 
+                    leGrandChildren.addComponent(testings).inTL(0,0);
 
                     removed = true;
                 }
