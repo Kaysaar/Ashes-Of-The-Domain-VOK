@@ -21,12 +21,12 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
 
     public AoTDCompoundShowcase(float width, float height){
         mainPanel = Global.getSettings().createCustom(width,height,this);
-        ProgressBarComponent component = new ProgressBarComponent(width-30,height-5,0.4f,new Color(181, 119, 255));
+        ProgressBarComponent component = new ProgressBarComponent(width-27,height,0.4f,new Color(181, 119, 255));
         this.component = component;
-        ImageViewer viewer = new ImageViewer(20,20,Global.getSettings().getSpriteName("fleetScreen","icon_logistics_fuel"));
+        ImageViewer viewer = new ImageViewer(26,14,Global.getSettings().getSpriteName("fleetScreen","icon_logistics_fuel"));
         viewer.setColorOverlay(new Color(138, 41, 255, 255));
         mainPanel.addComponent(viewer.getComponentPanel()).inTL(2,-5);
-        mainPanel.addComponent(component.getRenderingPanel()).inTL(25,0);
+        mainPanel.addComponent(component.getRenderingPanel()).inTL(32,-5);
     }
     @Override
     public void positionChanged(PositionAPI position) {
