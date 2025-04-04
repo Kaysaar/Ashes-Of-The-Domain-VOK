@@ -25,9 +25,9 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
         mainPanel = Global.getSettings().createCustom(width, height, this);
         ProgressBarComponent component = new ProgressBarComponent(width-1, height, 0.4f, new Color(122, 36, 245));
         this.component = component;
-        ImageViewer viewer = new ImageViewer(24, 16, Global.getSettings().getSpriteName("fleetScreen", "icon_logistics_fuel"));
+        ImageViewer viewer = new ImageViewer(24, 24, Global.getSettings().getSpriteName("aotd_icons", "compound_info"));
         viewer.setColorOverlay(new Color(138, 41, 255, 255));
-        mainPanel.addComponent(viewer.getComponentPanel()).inTL(2, 4);
+        mainPanel.addComponent(viewer.getComponentPanel()).inTL(2, 0);
         mainPanel.addComponent(component.getRenderingPanel()).inTL(30, 0);
         createTooltipPanel();
 
