@@ -39,7 +39,7 @@ public class AoTDFuelConsumptionScript implements EveryFrameScript {
     public void trueAdvance(float amount) {
         CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();
 
-        if(fleet.getCargo().getCommodityQuantity("purified_rare_metal")>0){
+        if(getCompound(fleet.getCargo())>0){
             fleet.getStats().getFuelUseHyperMult().modifyMult("aotd_compound",0.1f,"Compound");
             float fuelConsumed = getComputedFuel(amount,fleet);
             if(fuelConsumed>0){
@@ -64,7 +64,7 @@ public class AoTDFuelConsumptionScript implements EveryFrameScript {
 
                 }
             }
-            fleet.getCargo().removeCommodity("purified_rare_metal",fuelConsumed);
+            fleet.getCargo().removeCommodity("compound",fuelConsumed);
 
         }
         else{
@@ -122,7 +122,7 @@ public class AoTDFuelConsumptionScript implements EveryFrameScript {
         return toReturn*5;
     }
     public static float getCompound(CargoAPI cargo){
-       return cargo.getCommodityQuantity("purified_rare_metal");
+       return cargo.getCommodityQuantity("compound");
     }
 }
 
