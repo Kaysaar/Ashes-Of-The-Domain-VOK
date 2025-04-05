@@ -33,7 +33,7 @@ public class ImageViewer extends ResizableComponent {
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glAlphaFunc(GL11.GL_GREATER, 0.01f); // Treat almost any alpha as solid
 
-        spriteOfImage.setAlphaMult(alphaMult*0.2f);
+        spriteOfImage.setAlphaMult(alphaMult*0.3f);
         if(colorOverlay!=null){
             spriteOfImage.setColor(colorOverlay);
         }
@@ -74,7 +74,7 @@ public class ImageViewer extends ResizableComponent {
 
             overlayTexture.bindTexture();
             overlayTexture.setColor(Color.cyan);
-            overlayTexture.setAlphaMult(alphaMult * 0.6f); // Adjust overlay alpha
+            overlayTexture.setAlphaMult(alphaMult * 0.7f); // Adjust overlay alpha
             overlayTexture.setSize(componentPanel.getPosition().getWidth(), componentPanel.getPosition().getHeight());
             overlayTexture.renderAtCenter(componentPanel.getPosition().getCenterX(), componentPanel.getPosition().getCenterY());
         }
