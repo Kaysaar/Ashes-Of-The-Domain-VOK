@@ -40,6 +40,7 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
         TooltipMakerAPI tooltip  = test.createUIElement(test.getPosition().getWidth()+15,test.getPosition().getHeight(),true);
         tooltip.addSpacer(height*3f);
         ImageViewer viewer = new ImageViewer(200,200,Global.getSettings().getCommoditySpec("compound").getIconName());
+       viewer.setColorOverlay(Color.cyan);
         mover.init(test,tooltip);
         float leftX = widthExpected-width;
         tooltip.addCustomDoNotSetPosition(viewer.getComponentPanel()).getPosition().inTL(width/2-(100),widthExpected/2-200);
