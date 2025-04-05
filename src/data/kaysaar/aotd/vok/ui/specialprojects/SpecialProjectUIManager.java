@@ -26,7 +26,7 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIMan
         listManager = new SpecialProjectListManager(width*0.30f,height);
         currProjectShowcase = new SpecialProjectShowcase(width*0.7f-10,height);
         mainPanel.addComponent(listManager.mainPanel).inTL(0,0);
-        mainPanel.addComponent(currProjectShowcase.mainPanel).inTL(width*0.30f+5f,0);
+        mainPanel.addComponent(currProjectShowcase.mainPanel).inTL(width*0.30f+10f,0);
         renderer = new UILinesRenderer(0f);
         renderer.setPanel(mainPanel);
 
