@@ -26,6 +26,15 @@ public class ZoomPanelComponent implements CustomUIPanelPlugin {
     public CustomPanelAPI mainPanelBlockerPlugin;
     public float maxScale = 1f;
     public float minScale = 0.1f;
+    float trueWidth, trueHeight;
+
+    public float getTrueHeight() {
+        return trueHeight;
+    }
+
+    public float getTrueWidth() {
+        return trueWidth;
+    }
 
     // --- Zoom inertia fields ---
     // This variable accumulates velocity from scroll events.
@@ -37,7 +46,11 @@ public class ZoomPanelComponent implements CustomUIPanelPlugin {
         return mainPanel;
     }
 
-    public ZoomPanelComponent(float width, float height, float trueWidth, float trueHeight,float startingZoom) {
+    public HorizontalMoverData getData() {
+        return data;
+    }
+
+    public ZoomPanelComponent(float width, float height, float trueWidth, float trueHeight, float startingZoom) {
         mainPanel = Global.getSettings().createCustom(width, height, this);
         this.width = width;
         this.height = height;
@@ -48,6 +61,8 @@ public class ZoomPanelComponent implements CustomUIPanelPlugin {
         this.currScale = startingZoom;
         posX = data.getCurrentOffsetX();
         poxY = data.getCurrentOffsetY();
+        this.trueWidth = trueWidth;
+        this.trueHeight = trueHeight;
         setMaxOffsets((int) trueWidth, (int) trueHeight, startingZoom);
     }
 

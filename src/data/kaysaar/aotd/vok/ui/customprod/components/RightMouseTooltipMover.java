@@ -32,6 +32,7 @@ public class RightMouseTooltipMover implements CustomUIPanelPlugin {
     public void setBorders(float left, float right){
         leftBorderX = left;
         rightBorderX =right;
+        currOffset = leftBorderX;
     }
     @Override
     public void positionChanged(PositionAPI position) {
@@ -47,7 +48,9 @@ public class RightMouseTooltipMover implements CustomUIPanelPlugin {
 
     }
 
-
+    public void setCurrOffset(float offset) {
+        currOffset = offset;
+    }
 
 
     @Override
@@ -65,7 +68,7 @@ public class RightMouseTooltipMover implements CustomUIPanelPlugin {
 
     @Override
     public void advance(float amount) {
-        if (panelOfTooltip != null) {
+        if (panelOfTooltip != null&&boundTooltip.getExternalScroller()!=null) {
             detectIfRightMouse();
             handleMouseDragging();
             boundTooltip.getExternalScroller().setXOffset(currOffset);

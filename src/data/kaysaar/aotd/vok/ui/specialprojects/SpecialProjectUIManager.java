@@ -14,7 +14,8 @@ import java.util.List;
 public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIManager {
     UILinesRenderer renderer;
     CustomPanelAPI mainPanel;
-
+    SpecialProjectListManager listManager;
+    SpecialProjectShowcase currProjectShowcase;
     public CustomPanelAPI getMainPanel() {
         return mainPanel;
 
@@ -22,6 +23,10 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIMan
 
     public SpecialProjectUIManager(float width, float height) {
         mainPanel = Global.getSettings().createCustom(width,height,this);
+        listManager = new SpecialProjectListManager(width*0.30f,height);
+        currProjectShowcase = new SpecialProjectShowcase(width*0.7f-10,height);
+        mainPanel.addComponent(listManager.mainPanel).inTL(0,0);
+        mainPanel.addComponent(currProjectShowcase.mainPanel).inTL(width*0.30f+5f,0);
         renderer = new UILinesRenderer(0f);
         renderer.setPanel(mainPanel);
 
@@ -38,7 +43,7 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIMan
 
     @Override
     public void render(float alphaMult) {
-
+        renderer.render(alphaMult);
     }
 
     @Override
