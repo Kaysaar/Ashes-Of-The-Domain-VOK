@@ -8,10 +8,10 @@ import java.awt.*;
 
 public class ResearchTreeConnector extends ResizableComponent {
     transient SpriteAPI spriteToRender = Global.getSettings().getSprite("rendering","GlitchSquare");
-    transient ResearchPanelComponent parent;
-    transient ResearchPanelComponent children;
+    transient ResizableComponent parent;
+    transient ResizableComponent children;
     Color color;
-    public ResearchTreeConnector( float height,ResearchPanelComponent parent, ResearchPanelComponent children,Color color) {
+    public ResearchTreeConnector( float height,ResizableComponent parent, ResizableComponent children,Color color) {
         componentPanel = Global.getSettings().createCustom(1, height, this);
         this.parent = parent;
         this.children = children;
@@ -26,27 +26,27 @@ public class ResearchTreeConnector extends ResizableComponent {
         spriteToRender.setColor(color);
         spriteToRender.setAlphaMult(alphaMult);
         if(children.originalCoords.y!=parent.originalCoords.getY()){
-            float distanceX = children.getPanelOfButton().getPosition().getX()- (parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth());
-            float centerXC = children.getPanelOfButton().getPosition().getY()+(children.getPanelOfButton().getPosition().getHeight()/2);
-            float centerXP = parent.getPanelOfButton().getPosition().getY()+(parent.getPanelOfButton().getPosition().getHeight()/2);
+            float distanceX = children.getComponentPanel().getPosition().getX()- (parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth());
+            float centerXC = children.getComponentPanel().getPosition().getY()+(children.getComponentPanel().getPosition().getHeight()/2);
+            float centerXP = parent.getComponentPanel().getPosition().getY()+(parent.getComponentPanel().getPosition().getHeight()/2);
             float diff = centerXP - centerXC;
             float defaultDistance = AoTDUiComp.SEPERATOR_OF_PANELS*scale;
             float reDistanced = distanceX - defaultDistance;
             spriteToRender.setSize(defaultDistance,1);
-            spriteToRender.render(parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth(),parent.getPanelOfButton().getPosition().getCenterY());
-            spriteToRender.render(parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth(),parent.getPanelOfButton().getPosition().getCenterY());
+            spriteToRender.render(parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth(),parent.getComponentPanel().getPosition().getCenterY());
+            spriteToRender.render(parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth(),parent.getComponentPanel().getPosition().getCenterY());
 
             if(diff>0){
                 spriteToRender.setSize(1,Math.abs(diff));
-                spriteToRender.render(parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth()+defaultDistance,children.getPanelOfButton().getPosition().getCenterY());
-                spriteToRender.render(parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth()+defaultDistance,children.getPanelOfButton().getPosition().getCenterY());
+                spriteToRender.render(parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth()+defaultDistance,children.getComponentPanel().getPosition().getCenterY());
+                spriteToRender.render(parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth()+defaultDistance,children.getComponentPanel().getPosition().getCenterY());
 
 
             }
             else{
                 spriteToRender.setSize(1,Math.abs(diff));
-                spriteToRender.render(parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth()+defaultDistance,parent.getPanelOfButton().getPosition().getCenterY());
-                spriteToRender.render(parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth()+defaultDistance,parent.getPanelOfButton().getPosition().getCenterY());
+                spriteToRender.render(parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth()+defaultDistance,parent.getComponentPanel().getPosition().getCenterY());
+                spriteToRender.render(parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth()+defaultDistance,parent.getComponentPanel().getPosition().getCenterY());
 
             }
 
@@ -54,15 +54,15 @@ public class ResearchTreeConnector extends ResizableComponent {
             spriteToRender.setSize(reDistanced,1);
 
 
-            spriteToRender.render(children.getPanelOfButton().getPosition().getX()-reDistanced,children.getPanelOfButton().getPosition().getCenterY());
-            spriteToRender.render(children.getPanelOfButton().getPosition().getX()-reDistanced,children.getPanelOfButton().getPosition().getCenterY());
+            spriteToRender.render(children.getComponentPanel().getPosition().getX()-reDistanced,children.getComponentPanel().getPosition().getCenterY());
+            spriteToRender.render(children.getComponentPanel().getPosition().getX()-reDistanced,children.getComponentPanel().getPosition().getCenterY());
 
         }
         else{
-            float distance = children.getPanelOfButton().getPosition().getX()- (parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth());
+            float distance = children.getComponentPanel().getPosition().getX()- (parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth());
             spriteToRender.setSize(distance,1);
-            spriteToRender.render(parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth(),parent.getPanelOfButton().getPosition().getCenterY());
-            spriteToRender.render(parent.getPanelOfButton().getPosition().getX()+parent.getPanelOfButton().getPosition().getWidth(),parent.getPanelOfButton().getPosition().getCenterY());
+            spriteToRender.render(parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth(),parent.getComponentPanel().getPosition().getCenterY());
+            spriteToRender.render(parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth(),parent.getComponentPanel().getPosition().getCenterY());
 
         }
 

@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
+import com.fs.starfarer.api.impl.campaign.intel.deciv.DecivTracker;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -36,7 +37,7 @@ public class ResearchInfoUI extends PopUpUI {
     ResearchZoomPanel zoomPanel;
     float iconsize = 120;
 
-    public ResearchInfoUI(ResearchOption option,ResearchZoomPanel zoomPanel) {
+    public ResearchInfoUI(ResearchOption option, ResearchZoomPanel zoomPanel) {
         this.option = option;
         this.zoomPanel = zoomPanel;
     }
@@ -47,7 +48,8 @@ public class ResearchInfoUI extends PopUpUI {
         createUIMockup(panelAPI);
         panelAPI.addComponent(mainPanel).inTL(0, 0);
     }
-@Override
+
+    @Override
     public float createUIMockup(CustomPanelAPI panelAPI) {
         mainPanel = panelAPI.createCustomPanel(panelAPI.getPosition().getWidth(), panelAPI.getPosition().getHeight(), null);
 
@@ -106,7 +108,7 @@ public class ResearchInfoUI extends PopUpUI {
         getPanelToInfluence().removeComponent(mainPanel);
         mainPanel = null;
         createUI(getPanelToInfluence());
-        if(zoomPanel!=null){
+        if (zoomPanel != null) {
             zoomPanel.refresh();
         }
     }
@@ -152,21 +154,18 @@ public class ResearchInfoUI extends PopUpUI {
     public CustomPanelAPI createButtonForResearchOrQueue(CustomPanelAPI originPanel) {
         CustomPanelAPI other = originPanel.createCustomPanel(originPanel.getPosition().getWidth(), 30, null);
         TooltipMakerAPI tooltip = other.createUIElement(originPanel.getPosition().getWidth(), 30, false);
-        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()==null){
-            currButton = tooltip.addButton("Start Research", "research:"+option.getSpec().getId(), 200, 30, 0f);
-        }
-        else{
-            if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getId().equals(option.getSpec().getId())){
-                currButton = tooltip.addButton("Stop Research", "stop:"+option.getSpec().getId(), 200, 30, 0f);
+        if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus() == null) {
+            currButton = tooltip.addButton("Start Research", "research:" + option.getSpec().getId(), 200, 30, 0f);
+        } else {
+            if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getId().equals(option.getSpec().getId())) {
+                currButton = tooltip.addButton("Stop Research", "stop:" + option.getSpec().getId(), 200, 30, 0f);
 
-            }
-            else{
-                if(!AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().isInQueue(option.getSpec().getId())){
-                    currButton = tooltip.addButton("Queue Research", "queue_add:"+option.getSpec().getId(), 200, 30, 0f);
+            } else {
+                if (!AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().isInQueue(option.getSpec().getId())) {
+                    currButton = tooltip.addButton("Queue Research", "queue_add:" + option.getSpec().getId(), 200, 30, 0f);
 
-                }
-                else{
-                    currButton = tooltip.addButton("Remove from Queue", "queue_remove:"+option.getSpec().getId(), 200, 30, 0f);
+                } else {
+                    currButton = tooltip.addButton("Remove from Queue", "queue_remove:" + option.getSpec().getId(), 200, 30, 0f);
 
                 }
 
@@ -306,9 +305,9 @@ public class ResearchInfoUI extends PopUpUI {
                             tooltip.addPara("This industry upgrades from : %s ", 10f, Color.ORANGE, "" + Global.getSettings().getIndustrySpec(ind.getSpec().getDowngrade()).getName());
 
                         }
-                        Global.getSector().getEconomy().removeMarket(marketAPI);
+
                     }
-                }, panel2, TooltipMakerAPI.TooltipLocation.RIGHT);
+                }, panel2, TooltipMakerAPI.TooltipLocation.RIGHT,false);
                 lastX += 210;
                 tooltip.setHeightSoFar(lastY + heightOfComponent);
                 if (lastX >= originPanel.getPosition().getWidth()) {
@@ -360,9 +359,9 @@ public class ResearchInfoUI extends PopUpUI {
                         tooltip.addPara("This industry upgrades from : %s ", 10f, Color.ORANGE, "" + Global.getSettings().getIndustrySpec(ind.getSpec().getDowngrade()).getName());
 
                     }
-                    Global.getSector().getEconomy().removeMarket(marketAPI);
+
                 }
-            }, panel2, TooltipMakerAPI.TooltipLocation.RIGHT);
+            }, panel2, TooltipMakerAPI.TooltipLocation.RIGHT,false);
         } else {
             float lastY = 20;
             float lastX = 5;
@@ -409,9 +408,9 @@ public class ResearchInfoUI extends PopUpUI {
                             tooltip.addPara("This industry upgrades from : %s ", 10f, Color.ORANGE, "" + Global.getSettings().getIndustrySpec(ind.getSpec().getDowngrade()).getName());
 
                         }
-                        Global.getSector().getEconomy().removeMarket(marketAPI);
+
                     }
-                }, panel2, TooltipMakerAPI.TooltipLocation.RIGHT);
+                }, panel2, TooltipMakerAPI.TooltipLocation.RIGHT,false);
                 lastX += 210;
                 tooltip.setHeightSoFar(lastY + heightOfComponent);
                 if (lastX >= originPanel.getPosition().getWidth()) {
@@ -472,10 +471,10 @@ public class ResearchInfoUI extends PopUpUI {
         CustomPanelAPI other = originPanel.createCustomPanel(originPanel.getPosition().getWidth(), 120, null);
         TooltipMakerAPI tooltip = other.createUIElement(originPanel.getPosition().getWidth(), 120, true);
         float pad = 0f;
-        float height =0;
+        float height = 0;
         for (String s : option.ReqTechsToResearchFirst) {
             tooltip.addCustom(populateReqResearch(AoTDMainResearchManager.getInstance().getManagerForPlayerFaction(), s), pad);
-            height+=tooltip.getPrev().getPosition().getHeight()+pad;
+            height += tooltip.getPrev().getPosition().getHeight() + pad;
             pad = 5f;
         }
         if (tooltip.getHeightSoFar() <= 120) {
@@ -561,31 +560,37 @@ public class ResearchInfoUI extends PopUpUI {
         }
 
         labelAPI1.autoSizeToWidth(320);
-        panel.addUIElement(tooltipMakerAPI).inTL(-12,0);
+        panel.addUIElement(tooltipMakerAPI).inTL(-12, 0);
         panel.addUIElement(labelTooltip).inTL(70, 7);
         return panel;
     }
 
     public MarketAPI initalizeMarket() {
-        MarketAPI marketToShowTooltip = Global.getFactory().createMarket("to_delete", "TEst", 6);
-        marketToShowTooltip.addCondition(Conditions.FARMLAND_ADEQUATE);
-        marketToShowTooltip.addCondition(Conditions.ORE_MODERATE);
-        marketToShowTooltip.addCondition(Conditions.RARE_ORE_MODERATE);
-        marketToShowTooltip.addCondition(Conditions.ORGANICS_COMMON);
-        marketToShowTooltip.addCondition(Conditions.VOLATILES_DIFFUSE);
+        if (Global.getSector().getMemory().get("$aotd_checkout_market")!=null) {
+            return (MarketAPI) Global.getSector().getMemory().get("$aotd_checkout_market");
+        } else {
+            MarketAPI marketToShowTooltip = Global.getFactory().createMarket("to_delete", "TEst", 6);
+            marketToShowTooltip.addCondition(Conditions.FARMLAND_ADEQUATE);
+            marketToShowTooltip.addCondition(Conditions.ORE_MODERATE);
+            marketToShowTooltip.addCondition(Conditions.RARE_ORE_MODERATE);
+            marketToShowTooltip.addCondition(Conditions.ORGANICS_COMMON);
+            marketToShowTooltip.addCondition(Conditions.VOLATILES_DIFFUSE);
 
-        marketToShowTooltip.addCondition("AoDFoodDemand");
-        marketToShowTooltip.addCondition(Conditions.VOLATILES_DIFFUSE);
-        marketToShowTooltip.addIndustry("dummy_industry");
-        marketToShowTooltip.setFactionId(Global.getSector().getPlayerFaction().getId());
-        marketToShowTooltip.reapplyConditions();
-        marketToShowTooltip.setFreePort(true);
-        for (CommodityOnMarketAPI allCommodity : marketToShowTooltip.getAllCommodities()) {
-            allCommodity.getAvailableStat().addTemporaryModFlat(10000, "src", 30);
+            marketToShowTooltip.addCondition("AoDFoodDemand");
+            marketToShowTooltip.addCondition(Conditions.VOLATILES_DIFFUSE);
+            marketToShowTooltip.addIndustry("dummy_industry");
+            marketToShowTooltip.setFactionId(Global.getSector().getPlayerFaction().getId());
+            marketToShowTooltip.reapplyConditions();
+            marketToShowTooltip.setFreePort(true);
+            for (CommodityOnMarketAPI allCommodity : marketToShowTooltip.getAllCommodities()) {
+                allCommodity.getAvailableStat().addTemporaryModFlat(10000, "src", 30);
+            }
+            marketToShowTooltip.setUseStockpilesForShortages(true);
+            Global.getSector().getMemory().set("$aotd_checkout_market", marketToShowTooltip);
+            return marketToShowTooltip;
         }
-        marketToShowTooltip.setUseStockpilesForShortages(true);
-        return marketToShowTooltip;
     }
+
 
     @Override
     public void onExit() {

@@ -13,6 +13,7 @@ import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 import data.kaysaar.aotd.vok.ui.patrolfleet.PatrolFleetDataManager;
 import data.kaysaar.aotd.vok.ui.research.AoTDResearchNewPlugin;
+import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectUIManager;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -24,6 +25,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
     NidavelirMainPanelPlugin customProdPlugin = null;
     AoTDResearchNewPlugin pluginResearch = null;
     GPMegasturcutreMenu pluginMega = null;
+    SpecialProjectUIManager projectUIManager = null;
     CustomPanelAPI mainPanel;
     CustomPanelAPI panelForPlugins = null;
     CustomPanelAPI buttonPanel = null;
@@ -111,6 +113,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         insertCustomProdPanel(customProd);
         insertNewResearchPanel(research);
         insertNewMegastructuresPanel(megastructures);
+        insertSpecialProjectPanel(sp);
         megastructures.setEnabled(!GPManager.getInstance().getMegastructures().isEmpty());
         buttonPanel.addUIElement(buttonTooltip).inTL(0, 0);
         buttonPanel.addComponent(panelHelper).inTL(0, 20);
@@ -193,7 +196,13 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
 
         panelMap.put(tiedButton, pluginMega.getMainPanel());
     }
+    private void insertSpecialProjectPanel(ButtonAPI tiedButton) {
+        if (projectUIManager == null) {
+            projectUIManager = new SpecialProjectUIManager(UIData.WIDTH, UIData.HEIGHT);
+        }
 
+        panelMap.put(tiedButton, projectUIManager.getMainPanel());
+    }
     public void pauseSound() {
         Global.getSoundPlayer().pauseCustomMusic();
         Global.getSoundPlayer().restartCurrentMusic();

@@ -1,11 +1,13 @@
 package data.kaysaar.aotd.vok.listeners;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.CoreUITabListener;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker2;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
+import data.kaysaar.aotd.vok.scripts.misc.purplestuff.InsertTalkToOfficerButton;
 
 public class CoreUiInterceptor implements CoreUITabListener {
     @Override
@@ -13,6 +15,9 @@ public class CoreUiInterceptor implements CoreUITabListener {
         if(tab.equals(CoreUITabId.CARGO)){
             CoreUITracker2.didIt = false;
             AoTDCompoundUIInMarketScript.didIt = false;
+        }
+        if(tab.equals(CoreUITabId.FLEET)){
+            Global.getSector().addTransientScript(new InsertTalkToOfficerButton());
         }
         if(param instanceof  String){
             String s = (String) param;

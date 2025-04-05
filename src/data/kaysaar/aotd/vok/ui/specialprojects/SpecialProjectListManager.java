@@ -5,31 +5,17 @@ import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
-import com.fs.starfarer.campaign.fleet.NoFuelDriftScript;
-import data.kaysaar.aotd.vok.scripts.SoundUIManager;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 
 import java.util.List;
 
-public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIManager {
-    UILinesRenderer renderer;
+public class SpecialProjectListManager implements CustomUIPanelPlugin {
     CustomPanelAPI mainPanel;
-    SpecialProjectListManager listManager;
-    SpecialProjectShowcase currProjectShowcase;
-    public CustomPanelAPI getMainPanel() {
-        return mainPanel;
-
-    }
-
-    public SpecialProjectUIManager(float width, float height) {
+    UILinesRenderer renderer;
+    public SpecialProjectListManager(float width, float height){
         mainPanel = Global.getSettings().createCustom(width,height,this);
-        listManager = new SpecialProjectListManager(width*0.30f,height);
-        currProjectShowcase = new SpecialProjectShowcase(width*0.7f-10,height);
-        mainPanel.addComponent(listManager.mainPanel).inTL(0,0);
-        mainPanel.addComponent(currProjectShowcase.mainPanel).inTL(width*0.30f+5f,0);
-        renderer = new UILinesRenderer(0f);
+        renderer= new UILinesRenderer(0f);
         renderer.setPanel(mainPanel);
-
     }
     @Override
     public void positionChanged(PositionAPI position) {
@@ -58,16 +44,6 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIMan
 
     @Override
     public void buttonPressed(Object buttonId) {
-
-    }
-
-    @Override
-    public void playSound() {
-
-    }
-
-    @Override
-    public void pauseSound() {
 
     }
 }
