@@ -7,6 +7,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import data.kaysaar.aotd.vok.ui.basecomps.HologramViewer;
 import data.kaysaar.aotd.vok.ui.basecomps.ImageViewer;
 import data.kaysaar.aotd.vok.ui.basecomps.StencilBlockerEndPlugin;
 import data.kaysaar.aotd.vok.ui.basecomps.StencilBlockerPlugin;
@@ -21,6 +22,8 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
     CustomPanelAPI mainPanel;
     UILinesRenderer renderer;
     CustomPanelAPI objectOfInterest;
+    HologramViewer mainObject ;
+    RightMouseTooltipMover mover;
     public static float widthExpected = 1750;
 
     //effective range must be 1120;
@@ -36,15 +39,15 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
         CustomPanelAPI initalizer = mainPanel.createCustomPanel(width,height,plugin);
         CustomPanelAPI ender = mainPanel.createCustomPanel(width,height,plugin1);
 
-        RightMouseTooltipMover mover = new RightMouseTooltipMover();
-        CustomPanelAPI test = mainPanel.createCustomPanel(width,height-30,mover);
+         mover = new RightMouseTooltipMover();
+        CustomPanelAPI test = mainPanel.createCustomPanel(width,height-30,null);
         TooltipMakerAPI tooltip  = test.createUIElement(test.getPosition().getWidth()+15,test.getPosition().getHeight(),true);
         tooltip.addSpacer(height*3f);
-        ImageViewer viewer = new ImageViewer(200,200,Global.getSettings().getCommoditySpec("compound").getIconName());
-       viewer.setColorOverlay(Color.cyan);
+        mainObject = new HologramViewer(200,200,Global.getSettings().getCommoditySpec("compound").getIconName());
+        mainObject.setColorOverlay(Color.cyan);
         mover.init(test,tooltip);
         float leftX = widthExpected-width;
-        tooltip.addCustomDoNotSetPosition(viewer.getComponentPanel()).getPosition().inTL(width/2-(100),widthExpected/2-200);
+        tooltip.addCustomDoNotSetPosition(mainObject.getComponentPanel()).getPosition().inTL(width/2-(100),widthExpected/2-200);
 
         if(leftX<=0){
             mover.setBorders(0,0);
@@ -92,7 +95,10 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
 
     @Override
     public void advance(float amount) {
-
+        mover.advance(amount);
+        if(mainObject!=null){
+            mainObject.render(mainObject.curAlpha);
+        }
     }
 
     @Override
