@@ -1,9 +1,10 @@
-package data.kaysaar.aotd.vok.scripts;
+package data.kaysaar.aotd.vok.scripts.misc;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import sidebarLib.buttons.sidebarButton;
 
 public class SideBarImpl extends sidebarButton {

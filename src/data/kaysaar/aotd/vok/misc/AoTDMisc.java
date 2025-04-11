@@ -23,6 +23,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchRewardType;
+import data.kaysaar.aotd.vok.scripts.specialprojects.OtherCostData;
 import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
@@ -246,8 +247,8 @@ public class AoTDMisc {
         return map;
     }
 
-    public static HashMap<String, Integer> loadCostMap(String rawMap) {
-        HashMap<String, Integer> map = new HashMap<>();
+    public static LinkedHashMap<String, Integer> loadCostMap(String rawMap) {
+        LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
         for (String s : loadEntries(rawMap, ",")) {
             String[] extracted = s.split(":");
             map.put(extracted[0], Integer.valueOf(extracted[1]));
@@ -420,6 +421,64 @@ public class AoTDMisc {
 
         return numberRemaining;
     }
+    public static float retrieveAmountOfItems(String id, String submarketID, OtherCostData.CostType costType) {
+        float numberRemaining = 0;
+        for (MarketAPI marketAPI : Misc.getPlayerMarkets(true)) {
+            SubmarketAPI subMarket = marketAPI.getSubmarket(submarketID);
+            if(costType.equals(OtherCostData.CostType.COMMODITY)){
+                if (Global.getSettings().getCommoditySpec(id) != null) {
+                    if (subMarket != null) {
+                        numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);
+                        continue;
+                    }
+                }
+            }
+            if(costType.equals(OtherCostData.CostType.ITEM)){
+                if (Global.getSettings().getSpecialItemSpec(id) != null) {
+                    if (subMarket != null) {
+                        numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(id, null));
+                        continue;
+                    }
+                }
+            }
+            if(costType.equals(OtherCostData.CostType.SHIP)){
+                if (Global.getSettings().getHullSpec(id) != null) {
+                    if (subMarket != null) {
+                        int sameHull = 0;
+                        for (FleetMemberAPI o : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
+                            if (o.getHullSpec().getHullId().equals(id)) {
+                                sameHull++;
+                            }
+                        }
+                        numberRemaining += sameHull;
+                    }
+                }
+            }
+            if(costType.equals(OtherCostData.CostType.WEAPON)){
+                if (Global.getSettings().getWeaponSpec(id) != null) {
+                    if (subMarket != null) {
+                        numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.WEAPONS, id);
+                        continue;
+                    }
+                }
+            }
+            if(costType.equals(OtherCostData.CostType.FIGHTER)){
+                if (Global.getSettings().getFighterWingSpec(id) != null) {
+                    if (subMarket != null) {
+                        numberRemaining += subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.FIGHTER_CHIP, id);
+                        continue;
+                    }
+                }
+            }
+
+
+
+
+
+        }
+
+        return numberRemaining;
+    }
 
     public static float retrieveAmountOfItemsFromPlayer(String id) {
         float numberRemaining = 0;
@@ -496,6 +555,73 @@ public class AoTDMisc {
             }
             if (numberRemaining <= 0) {
                 break;
+            }
+        }
+    }
+    public static void eatItems(Map.Entry<String, Integer> entry, String submarketId, List<MarketAPI> affectedMarkets, OtherCostData.CostType costType) {
+        float numberRemaining = entry.getValue();
+
+        for (MarketAPI marketAPI : affectedMarkets) {
+            if (numberRemaining <= 0) break;
+
+            SubmarketAPI subMarket = marketAPI.getSubmarket(submarketId);
+            if (subMarket == null) continue;
+
+            String id = entry.getKey();
+
+            switch (costType) {
+                case COMMODITY:
+                    if (Global.getSettings().getCommoditySpec(id) != null) {
+                        float onMarket = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);
+                        float toRemove = Math.min(numberRemaining, onMarket);
+                        subMarket.getCargo().removeItems(CargoAPI.CargoItemType.RESOURCES, id, toRemove);
+                        numberRemaining -= toRemove;
+                    }
+                    break;
+
+                case ITEM:
+                    if (Global.getSettings().getSpecialItemSpec(id) != null) {
+                        SpecialItemData data = new SpecialItemData(id, null);
+                        float onMarket = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, data);
+                        float toRemove = Math.min(numberRemaining, onMarket);
+                        subMarket.getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL, data, toRemove);
+                        numberRemaining -= toRemove;
+                    }
+                    break;
+
+                case SHIP:
+                    if (Global.getSettings().getHullSpec(id) != null) {
+                        List<FleetMemberAPI> toRemove = new ArrayList<>();
+                        for (FleetMemberAPI member : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
+                            if (member.getHullSpec().getHullId().equals(id)) {
+                                toRemove.add(member);
+                            }
+                        }
+                        for (FleetMemberAPI member : toRemove) {
+                            subMarket.getCargo().getMothballedShips().removeFleetMember(member);
+                            numberRemaining--;
+                            if (numberRemaining <= 0) break;
+                        }
+                    }
+                    break;
+
+                case WEAPON:
+                    if (Global.getSettings().getWeaponSpec(id) != null) {
+                        float onMarket = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.WEAPONS, id);
+                        float toRemove = Math.min(numberRemaining, onMarket);
+                        subMarket.getCargo().removeItems(CargoAPI.CargoItemType.WEAPONS, id, toRemove);
+                        numberRemaining -= toRemove;
+                    }
+                    break;
+
+                case FIGHTER:
+                    if (Global.getSettings().getFighterWingSpec(id) != null) {
+                        float onMarket = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.FIGHTER_CHIP, id);
+                        float toRemove = Math.min(numberRemaining, onMarket);
+                        subMarket.getCargo().removeItems(CargoAPI.CargoItemType.FIGHTER_CHIP, id, toRemove);
+                        numberRemaining -= toRemove;
+                    }
+                    break;
             }
         }
     }

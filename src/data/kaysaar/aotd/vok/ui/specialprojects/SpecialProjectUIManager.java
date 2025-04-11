@@ -3,19 +3,31 @@ package data.kaysaar.aotd.vok.ui.specialprojects;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
-import com.fs.starfarer.api.ui.CustomPanelAPI;
-import com.fs.starfarer.api.ui.PositionAPI;
-import com.fs.starfarer.campaign.fleet.NoFuelDriftScript;
-import data.kaysaar.aotd.vok.scripts.SoundUIManager;
+import com.fs.starfarer.api.ui.*;
+import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.ui.SoundUIManager;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
+import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
+import data.kaysaar.aotd.vok.ui.customprod.components.onhover.CommodityInfo;
+import data.kaysaar.aotd.vok.ui.research.CurrentResearchShowcase;
+import data.kaysaar.aotd.vok.ui.research.HeadOfResearchShowcase;
+import data.kaysaar.aotd.vok.ui.research.ScientistButtonComponent;
 
+import java.awt.*;
 import java.util.List;
+import java.util.Map;
+
+import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
 public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIManager {
     UILinesRenderer renderer;
     CustomPanelAPI mainPanel;
     SpecialProjectListManager listManager;
     SpecialProjectShowcase currProjectShowcase;
+    CustomPanelAPI panelOfMarketData;
     public CustomPanelAPI getMainPanel() {
         return mainPanel;
 
@@ -23,12 +35,19 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIMan
 
     public SpecialProjectUIManager(float width, float height) {
         mainPanel = Global.getSettings().createCustom(width,height,this);
-        listManager = new SpecialProjectListManager(width*0.30f,height);
-        currProjectShowcase = new SpecialProjectShowcase(width*0.7f-10,height);
-        mainPanel.addComponent(listManager.mainPanel).inTL(0,0);
-        mainPanel.addComponent(currProjectShowcase.mainPanel).inTL(width*0.30f+10f,0);
+        listManager = new SpecialProjectListManager(400,height-210);
+        currProjectShowcase = new SpecialProjectShowcase(width-400-15,height-210);
+        ScientistAPI scientistAPI = AoTDMainResearchManager.getInstance().getManagerForPlayer().currentHeadOfCouncil;
+        createMarketResourcesPanel();
+        HeadOfResearchShowcase showcase  = new HeadOfResearchShowcase(400, 130, scientistAPI);
+        CurrentResearchShowcase showcase1= new CurrentResearchShowcase(400, 130, null);
+        mainPanel.addComponent(new ScientistButtonComponent(130, 130, scientistAPI).getPanelOfButton()).inTL(((width-10) / 2) - 65, height - 130);
+        mainPanel.addComponent(showcase1.getMainPanel()).inTL(((width-10) / 2) - 65 - 405, height - 130);
+        mainPanel.addComponent(showcase.getMainPanel()).inTL(((width-10) / 2) + 70, height - 130);
+        mainPanel.addComponent(listManager.mainPanel).inTL(0,50);
+        mainPanel.addComponent(currProjectShowcase.mainPanel).inTL(listManager.mainPanel.getPosition().getWidth()+10f,50);
+        mainPanel.addComponent(panelOfMarketData).inTL(5 + (width / 4),0);
         renderer = new UILinesRenderer(0f);
-        renderer.setPanel(mainPanel);
 
     }
     @Override
@@ -69,5 +88,29 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIMan
     @Override
     public void pauseSound() {
 
+    }
+    public void createMarketResourcesPanel() {
+        float width = UIData.WIDTH / 2;
+        panelOfMarketData = Global.getSettings().createCustom(width, 50, null);
+        TooltipMakerAPI tooltip = panelOfMarketData.createUIElement(width, 50, false);
+        GPManager manager = GPManager.getInstance();
+        float totalSize = width;
+        float sections = totalSize / commodities.size();
+        float positions = totalSize / (commodities.size() * 4);
+        float iconsize = 35;
+        float topYImage = 0;
+        LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
+        float x = positions;
+        for (Map.Entry<String, Integer> entry : GPManager.getInstance().getTotalResources().entrySet()) {
+            tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconsize, iconsize, 0f);
+            tooltip.addTooltipToPrevious(new CommodityInfo(entry.getKey(), 700, true, false, manager.getProductionOrders()), TooltipMakerAPI.TooltipLocation.BELOW);
+            UIComponentAPI image = tooltip.getPrev();
+            image.getPosition().inTL(x, topYImage);
+            String text = "" + entry.getValue();
+            String text2 = text + "(" + GPManager.getInstance().getReqResources(GPManager.getInstance().getProductionOrders()).get(entry.getKey()) + ")";
+            tooltip.addPara("" + entry.getValue() + " %s", 0f, Misc.getTooltipTitleAndLightHighlightColor(), Color.ORANGE, "(" + manager.getExpectedCostsFromManager().get(entry.getKey()) + ")").getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
+            x += sections;
+        }
+        panelOfMarketData.addUIElement(tooltip).inTL(0, 0);
     }
 }

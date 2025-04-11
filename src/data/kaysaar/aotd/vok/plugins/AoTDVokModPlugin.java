@@ -27,13 +27,13 @@ import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDFuelConsumptionScript;
-import data.kaysaar.aotd.vok.scripts.misc.purplestuff.InsertTalkToOfficerButton;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
-import data.kaysaar.aotd.vok.scripts.UiInitalizerScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchProgressionScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 import kaysaar.bmo.buildingmenu.additionalreq.AdditionalReqManager;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -56,13 +56,11 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             VanillaTechReq req = new VanillaTechReq(industry.two);
             AdditionalReqManager.getInstance().addReq(industry.one, req);
         }
+
     }
 
     private void setListenersIfNeeded() {
         ListenerManagerAPI l = Global.getSector().getListenerManager();
-        if (!l.hasListenerOfClass(UiInitalizerScript.class)) {
-            l.addListener(new UiInitalizerScript());
-        }
         l.removeListenerOfClass(AoTDIndButtonsListener.class);
         AoTDIndButtonsListener listener = new AoTDIndButtonsListener();
         listener.updateIndustryRepo();
@@ -132,6 +130,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     public void onGameLoad(boolean newGame) {
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
+        SpecialProjectSpecManager.reLoad();
         try {
             aoTDDataInserter.insertSpecItemsForManufactoriumData();
         } catch (JSONException e) {
@@ -258,6 +257,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSettings().getCommoditySpec(Commodities.ALPHA_CORE).getTags().add("aotd_ai_core");
         GPManager.getInstance().reInitalize();
         CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
+        SpecialProjectManager.getInstance();
 
 //        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
 //            if(planet.isStar())continue;

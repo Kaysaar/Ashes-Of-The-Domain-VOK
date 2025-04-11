@@ -354,12 +354,14 @@ public class MegastructureUIMisc {
         float totalWidth =0f;
         float secondRowWidth = 0f;
         float left;
+        float opad = 0f;
         for (CustomPanelAPI panelAPI : panelsWithImage) {
-            totalWidth+=panelAPI.getPosition().getWidth()+15;
+            totalWidth+=panelAPI.getPosition().getWidth()+opad;
+            opad = 15f;
         }
         left = totalWidth;
         ArrayList<CustomPanelAPI> panelsSecondRow = new ArrayList<>();
-        if(totalWidth>=width){
+        if(totalWidth>width){
             for (int i = panelsWithImage.size()-1; i >=0 ; i--) {
                 left-=panelsWithImage.get(i).getPosition().getWidth()+15;
                 panelsSecondRow.add(panelsWithImage.get(i));

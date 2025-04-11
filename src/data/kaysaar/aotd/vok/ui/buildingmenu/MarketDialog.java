@@ -15,7 +15,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUt
 import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker2;
-import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
+import data.kaysaar.aotd.vok.scripts.misc.TrapezoidButtonDetector;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
