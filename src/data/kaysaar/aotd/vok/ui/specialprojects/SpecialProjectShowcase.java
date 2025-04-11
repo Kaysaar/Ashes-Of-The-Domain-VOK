@@ -37,14 +37,10 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
         objectOfInterest = Global.getSettings().createCustom(widthExpected, heightExpected, null);
         AoTDSpecialProject project = SpecialProjectManager.getInstance().getProject("uaf_supercap_slv_project");
         mover = new RightMouseTooltipMover();
-        float subWidth = (width - 20);
-        float subWidthMain = 600;
-        float subWidthSub = (width - 20)-600;
-        CustomPanelAPI test = mainPanel.createCustomPanel(width, height , null);
+        CustomPanelAPI test = mainPanel.createCustomPanel(width, height, null);
         TooltipMakerAPI tooltip = test.createUIElement(test.getPosition().getWidth(), test.getPosition().getHeight(), true);
         tooltip.addSpacer(heightExpected);
-        mainObject = new HologramViewer(500, 500, new ShipHologram("uaf_supercap_slv_core"));
-        mainObject.setColorOverlay(Color.red);
+        mainObject = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), false);
         mover.init(test, tooltip);
         float leftX = widthExpected - width;
         objectOfInterest.addComponent(mainObject.getComponentPanel()).inTL(objectOfInterest.getPosition().getWidth() / 2 - (mainObject.componentPanel.getPosition().getWidth() / 2), objectOfInterest.getPosition().getHeight() / 2 - (mainObject.componentPanel.getPosition().getHeight() / 2));

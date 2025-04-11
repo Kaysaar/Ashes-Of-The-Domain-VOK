@@ -257,7 +257,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSettings().getCommoditySpec(Commodities.ALPHA_CORE).getTags().add("aotd_ai_core");
         GPManager.getInstance().reInitalize();
         CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
-        SpecialProjectManager.getInstance();
+        SpecialProjectManager.getInstance().loadAdditionalData();
 
 //        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
 //            if(planet.isStar())continue;

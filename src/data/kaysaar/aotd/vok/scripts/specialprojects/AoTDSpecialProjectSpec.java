@@ -30,7 +30,14 @@ public class AoTDSpecialProjectSpec {
     public void removeTag(String tag) {
         tags.remove(tag);
     }
+    public ArrayList<AoTDSpecialProjectStageSpec>getStagesSpecs(){
+        ArrayList<AoTDSpecialProjectStageSpec> stages = new ArrayList<>();
+        for (String s : stageMap.keySet()) {
+            stages.add(SpecialProjectSpecManager.getStageSpec(s));
 
+        }
+        return stages;
+    }
     public void setPlugin(String pluginPath) {
         this.pluginName = pluginPath;
 
