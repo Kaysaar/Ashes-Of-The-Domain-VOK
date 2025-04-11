@@ -7,7 +7,7 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
+import data.kaysaar.aotd.vok.scripts.misc.TrapezoidButtonDetector;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.util.List;

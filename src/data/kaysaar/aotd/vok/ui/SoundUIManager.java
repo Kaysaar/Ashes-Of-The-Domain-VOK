@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.scripts;
+package data.kaysaar.aotd.vok.ui;
 
 public interface SoundUIManager {
     public void playSound();

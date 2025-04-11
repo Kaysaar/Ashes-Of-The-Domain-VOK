@@ -1,16 +1,13 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components;
 
-import com.fs.graphics.Sprite;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
+import data.kaysaar.aotd.vok.scripts.misc.TrapezoidButtonDetector;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.List;
@@ -68,16 +65,19 @@ public class ProgressBarComponent implements CustomUIPanelPlugin {
     public void renderBelow(float alphaMult) {
 
         float affectedWidth = renderingPanel.getPosition().getWidth()-7;
+        spriteForButtonGlow.setAlphaMult(alphaMult);
         spriteForButtonGlow.setSize(affectedWidth,renderingPanel.getPosition().getHeight());
         spriteForButtonGlow.setColor(progressionColor.darker());
         spriteForButtonGlow.renderAtCenter(renderingPanel.getPosition().getCenterX(),renderingPanel.getPosition().getCenterY());
         if(!isInteractiveBar){
+            spriteToRender.setAlphaMult(alphaMult);
             spriteToRender.setSize((affectedWidth)*progress,renderingPanel.getPosition().getHeight()-4);
             spriteToRender.setColor(progressionColor);
             spriteToRender.render(renderingPanel.getPosition().getX()+3,renderingPanel.getPosition().getY()+2);
         }
         else{
             float sectionWidth = affectedWidth/sections;
+            spriteToRender.setAlphaMult(alphaMult);
             spriteToRender.setSize((sectionWidth)*currentSection,renderingPanel.getPosition().getHeight());
             spriteToRender.setColor(progressionColor);
             float centerX = (sectionWidth)*currentSection+renderingPanel.getPosition().getX()+3;

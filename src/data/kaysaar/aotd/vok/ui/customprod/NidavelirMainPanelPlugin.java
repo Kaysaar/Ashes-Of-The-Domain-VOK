@@ -23,7 +23,7 @@ import data.kaysaar.aotd.vok.ui.customprod.components.optionpanels.*;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.SoundUIManager;
+import data.kaysaar.aotd.vok.ui.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lwjgl.input.Keyboard;
 import java.awt.*;

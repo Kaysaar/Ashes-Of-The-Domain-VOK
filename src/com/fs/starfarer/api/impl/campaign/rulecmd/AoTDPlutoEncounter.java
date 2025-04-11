@@ -9,7 +9,6 @@ import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.scripts.MusicEnforcerScript;
 
 import java.awt.*;
 import java.util.List;

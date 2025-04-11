@@ -9,8 +9,6 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.sections.WormholeGenerator;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
-import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
 
 import java.awt.*;
 import java.util.List;

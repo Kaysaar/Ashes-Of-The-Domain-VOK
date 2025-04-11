@@ -13,7 +13,7 @@ import data.kaysaar.aotd.vok.ui.customprod.components.HelpPopUpUINid;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.ui.customprod.components.onhover.CommodityInfo;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import data.kaysaar.aotd.vok.scripts.SoundUIManager;
+import data.kaysaar.aotd.vok.ui.SoundUIManager;
 
 import java.awt.*;
 import java.util.ArrayList;

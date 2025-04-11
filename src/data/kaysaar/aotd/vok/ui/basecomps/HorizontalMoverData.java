@@ -3,7 +3,7 @@ package data.kaysaar.aotd.vok.ui.basecomps;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
-import data.kaysaar.aotd.vok.scripts.TrapezoidButtonDetector;
+import data.kaysaar.aotd.vok.scripts.misc.TrapezoidButtonDetector;
 import org.apache.log4j.Logger;
 import org.lwjgl.util.vector.Vector2f;
 

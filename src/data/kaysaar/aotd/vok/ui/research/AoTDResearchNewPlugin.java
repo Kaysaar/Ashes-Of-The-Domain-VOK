@@ -5,7 +5,7 @@ import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
-import data.kaysaar.aotd.vok.scripts.SoundUIManager;
+import data.kaysaar.aotd.vok.ui.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
 

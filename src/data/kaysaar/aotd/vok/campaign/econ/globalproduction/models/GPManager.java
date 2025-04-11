@@ -26,6 +26,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructure
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.OtherCostData;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -582,7 +583,9 @@ public class GPManager {
     public boolean haveMetReqForItem(String id, float value) {
         return value <= AoTDMisc.retrieveAmountOfItems(id, Submarkets.SUBMARKET_STORAGE);
     }
-
+    public boolean haveMetReqForItem(String id, float value, OtherCostData.CostType tyoe) {
+        return value <= AoTDMisc.retrieveAmountOfItems(id, Submarkets.SUBMARKET_STORAGE,tyoe);
+    }
     public LinkedHashMap<String, Integer> getExpectedCosts(ArrayList<GPOrder> ordersQueued) {
         LinkedHashMap<String, Integer> reqResources = new LinkedHashMap<>();
         reqResources.clear();
