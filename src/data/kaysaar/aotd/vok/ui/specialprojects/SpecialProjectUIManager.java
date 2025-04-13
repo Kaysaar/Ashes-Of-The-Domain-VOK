@@ -6,6 +6,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.ui.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
@@ -33,10 +34,14 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIMan
 
     }
 
+    public SpecialProjectShowcase getCurrProjectShowcase() {
+        return currProjectShowcase;
+    }
+
     public SpecialProjectUIManager(float width, float height) {
         mainPanel = Global.getSettings().createCustom(width,height,this);
-        listManager = new SpecialProjectListManager(400,height-210);
-        currProjectShowcase = new SpecialProjectShowcase(width-400-15,height-210);
+        listManager = new SpecialProjectListManager(400,height-210,this);
+        currProjectShowcase = new SpecialProjectShowcase(width-400-15,height-210, SpecialProjectManager.getInstance().getCurrentlyOnGoingProject());
         ScientistAPI scientistAPI = AoTDMainResearchManager.getInstance().getManagerForPlayer().currentHeadOfCouncil;
         createMarketResourcesPanel();
         HeadOfResearchShowcase showcase  = new HeadOfResearchShowcase(400, 130, scientistAPI);

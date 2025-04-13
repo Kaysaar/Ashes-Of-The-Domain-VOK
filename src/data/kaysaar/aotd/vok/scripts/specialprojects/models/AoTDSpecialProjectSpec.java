@@ -1,18 +1,19 @@
-package data.kaysaar.aotd.vok.scripts.specialprojects;
+package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
 import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.Global;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.lwjgl.util.vector.Vector2f;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.loadEntries;
 
 public class AoTDSpecialProjectSpec {
+
+    ArrayList<ProjectReward>rewards = new ArrayList<>();
     String id;
     String name;
     String description;
@@ -106,9 +107,13 @@ public class AoTDSpecialProjectSpec {
     public void setIconData(SpecialProjectIconData iconData) {
         this.iconData = iconData;
     }
+    public void addReward(ProjectReward reward){
+        this.rewards.add(reward);
+    }
 
-
-
+    public ArrayList<ProjectReward> getRewards() {
+        return rewards;
+    }
 
     public static AoTDSpecialProjectSpec initSpecFromJson(JSONObject obj) throws JSONException {
         String id = obj.getString("id");
@@ -117,13 +122,15 @@ public class AoTDSpecialProjectSpec {
         String des = obj.getString("description");
         String plugin = obj.getString("plugin");
         if(!AshMisc.isStringValid(plugin)){
-            plugin = "data.kaysaar.aotd.vok.scripts.specialprojects.AoTDSpecialProject";
+            plugin = "data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject";
         }
         AoTDSpecialProjectSpec aoTDSpecialProjectSpec = new AoTDSpecialProjectSpec(id);
         aoTDSpecialProjectSpec.setName(name);
         aoTDSpecialProjectSpec.setDescription(des);
         aoTDSpecialProjectSpec.setIconData(getDataFromEntry(obj.getString("iconData")));
-
+        for (String rewards : loadEntries(obj.getString("rewards"), ",")) {
+            aoTDSpecialProjectSpec.addReward(getDataForReward(rewards));
+        }
         LinkedHashMap<String, Integer> stageMap = AoTDMisc.loadCostMap(obj.getString("stageWeight"));
         for (String s : stageMap.keySet()) {
             if(SpecialProjectSpecManager.getStageSpec(s)==null){
@@ -141,5 +148,9 @@ public class AoTDSpecialProjectSpec {
     public static SpecialProjectIconData getDataFromEntry(String rawMap) {
         String[] extracted = rawMap.split(":");
         return  new SpecialProjectIconData(extracted[0],SpecialProjectIconData.IconType.valueOf(extracted[1]),Integer.valueOf(extracted[2]));
+    }
+    public static ProjectReward getDataForReward(String rawMap) {
+        String[] extracted = rawMap.split(":");
+        return  new ProjectReward(extracted[0],ProjectReward.ProjectRewardType.valueOf(extracted[1]),Integer.valueOf(extracted[2]));
     }
 }

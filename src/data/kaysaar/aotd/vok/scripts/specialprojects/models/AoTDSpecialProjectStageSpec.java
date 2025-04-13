@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.scripts.specialprojects;
+package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
 import ashlib.data.plugins.misc.AshMisc;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;

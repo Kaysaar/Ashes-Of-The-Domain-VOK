@@ -1,6 +1,8 @@
 package data.kaysaar.aotd.vok.scripts.specialprojects;
 
 import com.fs.starfarer.api.Global;
+import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectSpec;
+import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStageSpec;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

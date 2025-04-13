@@ -101,6 +101,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
     @Override
     public void onNewGameAfterEconomyLoad() {
+        SpecialProjectSpecManager.reLoad();
+        SpecialProjectManager.getInstance().loadAdditionalData();
         GPManager.getInstance().reInitalize();
         super.onNewGameAfterEconomyLoad();
         Global.getSector().addListener(new AoTDxUafAfterCombatListener());
@@ -131,6 +133,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
         SpecialProjectSpecManager.reLoad();
+        SpecialProjectManager.getInstance().loadAdditionalData();
         try {
             aoTDDataInserter.insertSpecItemsForManufactoriumData();
         } catch (JSONException e) {
@@ -234,14 +237,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker", "subfarming,artifarming");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_garrison_transmitter", AoTDIndustries.TERMINUS);
         }
-        for (GPSpec specialProjectSpec : GPManager.getInstance().getSpecialProjectSpecs()) {
-            try {
-                Global.getSettings().getHullSpec(specialProjectSpec.getRewardId()).getHints().add(ShipHullSpecAPI.ShipTypeHints.UNBOARDABLE);
-            } catch (Exception e) {
-
-            }
-
-        }
         initalizeNecessarySPListeners();
         int highestTierUnlock = AoTDSettingsManager.getHighestTierEnabled();
         for (ResearchOption option : AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getResearchRepoOfFaction()) {
@@ -257,8 +252,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSettings().getCommoditySpec(Commodities.ALPHA_CORE).getTags().add("aotd_ai_core");
         GPManager.getInstance().reInitalize();
         CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
-        SpecialProjectManager.getInstance().loadAdditionalData();
 
+        SpecialProjectManager.getInstance().getProject("uaf_supercap_slv_project").getStage("uaf_slv_stage1").setProgress(30f);
 //        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
 //            if(planet.isStar())continue;
 //            NidavelirShipyard shipyard = (NidavelirShipyard)planet.getStarSystem().addCustomEntity(null,"Nid","nid_shipyards",null).getCustomPlugin();

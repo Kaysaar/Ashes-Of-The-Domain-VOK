@@ -19,6 +19,7 @@ public class BaseImageHologram implements HologramViewerObjectRendererAPI {
 
     @Override
     public void render(float alphaMult,float centerX,float centeryY) {
+        sprite.setAlphaMult(alphaMult);
         sprite.renderAtCenter(centerX,centeryY);
     }
 }

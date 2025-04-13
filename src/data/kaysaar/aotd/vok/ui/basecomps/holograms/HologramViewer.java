@@ -101,10 +101,10 @@ public class HologramViewer extends ResizableComponent {
         GL11.glStencilMask(0xFF);
 
         // Step 1: Set up stencil for writing the hologram mask (unique value 2)
-        GL11.glStencilFunc(GL11.GL_ALWAYS, 2, 0xFF);
+        GL11.glStencilFunc(GL11.GL_ALWAYS, 3, 0xFF);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
         GL11.glColorMask(false, false, false, false);
-        GL11.glAlphaFunc(GL11.GL_GREATER, 0.05f);
+        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
 
         // Bind the overlay texture
@@ -142,24 +142,24 @@ public class HologramViewer extends ResizableComponent {
 
         // Now set the stencil function to use only the hologram layer (value 2)
         GL11.glColorMask(true, true, true, true);
-        GL11.glStencilFunc(GL11.GL_EQUAL, 2, 0xFF);
+        GL11.glStencilFunc(GL11.GL_EQUAL, 3, 0xFF);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
 
         // Render the base image inside the hologram stencil
         renderer.render(alphaMult*0.9f,componentPanel.getPosition().getCenterX(),componentPanel.getPosition().getCenterY());
         if(renderLine){
             GL11.glStencilMask(0xFF);
-            GL11.glStencilFunc(GL11.GL_ALWAYS, 3, 0xFF);
+            GL11.glStencilFunc(GL11.GL_ALWAYS, 4, 0xFF);
             GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
             GL11.glColorMask(false, false, false, false);
             GL11.glEnable(GL11.GL_ALPHA_TEST);
-            GL11.glAlphaFunc(GL11.GL_GREATER, 0.01f);
+            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f);
 
             renderer.render(1,componentPanel.getPosition().getCenterX(),componentPanel.getPosition().getCenterY());
 
             // --- STEP 3: Draw scanline masked by stencil == 3 ---
             GL11.glColorMask(true, true, true, true);
-            GL11.glStencilFunc(GL11.GL_EQUAL, 3, 0xFF);
+            GL11.glStencilFunc(GL11.GL_EQUAL, 4, 0xFF);
             GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
 
             lineTexture.setAlphaMult(alphaMult);

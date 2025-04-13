@@ -5,10 +5,6 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.characters.AbilityPlugin;
 import com.fs.starfarer.api.fleet.FleetMemberViewAPI;
-import com.fs.starfarer.api.impl.campaign.JumpPointAoTD;
-import com.fs.starfarer.api.impl.campaign.abilities.SustainedBurnAbility;
-import com.fs.starfarer.api.impl.campaign.ids.Abilities;
-import com.fs.starfarer.api.impl.campaign.procgen.OrionSectorData;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
@@ -19,7 +15,6 @@ import com.fs.starfarer.campaign.CampaignUIPersistentData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
-import data.scripts.listeners.AoTDBlockMouseWhenStrangled;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;

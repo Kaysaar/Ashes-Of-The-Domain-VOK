@@ -6,22 +6,17 @@ import ashlib.data.plugins.info.WeaponInfoGenerator;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Items;
-import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.FormationType;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.scripts.specialprojects.AoTDSpecialProject;
-import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import data.kaysaar.aotd.vok.scripts.specialprojects.AoTDSpecialProjectStageSpec;
-import data.kaysaar.aotd.vok.scripts.specialprojects.OtherCostData;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.*;
+import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
+import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStage;
+import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStageSpec;
+import data.kaysaar.aotd.vok.scripts.specialprojects.models.OtherCostData;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
@@ -93,11 +88,11 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         this.originMode = mode;
     }
 
-    public SpecialProjectStageWindow(AoTDSpecialProject project, String stageId, CustomPanelAPI parentPanel, RenderingMode mode, OriginMode origin, Vector2f posToPlace, ArrayList<Vector2f> posToConnect) {
+    public SpecialProjectStageWindow(AoTDSpecialProject project, AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel, RenderingMode mode, OriginMode origin, Vector2f posToPlace, ArrayList<Vector2f> posToConnect) {
         this.parentPanel = parentPanel;
         panelInfoOfStage = Global.getSettings().createCustom(350, 300, this);
         this.project = project;
-        TooltipMakerAPI tooltip = createTooltip(stageId, parentPanel);
+        TooltipMakerAPI tooltip = createTooltip(stage, parentPanel);
         setRenderingMode(mode);
         setOriginMode(origin);
         panelInfoOfStage.addUIElement(tooltip).inTL(0, 0);
@@ -117,9 +112,9 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
     }
 
     @NotNull
-    private TooltipMakerAPI createTooltip(String stageSpecId, CustomPanelAPI parentPanel) {
+    private TooltipMakerAPI createTooltip(AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel) {
         TooltipMakerAPI tooltip = panelInfoOfStage.createUIElement(panelInfoOfStage.getPosition().getWidth(), parentPanel.getPosition().getHeight(), false);
-        AoTDSpecialProjectStageSpec spec = SpecialProjectSpecManager.getStageSpec(stageSpecId);
+        AoTDSpecialProjectStageSpec spec = stage.getSpec();
         tooltip.addTitle(spec.getName());
 
         tooltip.addSectionHeading("GP Resource cost", Alignment.MID, 5f);
@@ -129,14 +124,14 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         tooltip.addPara("Credits : " + Misc.getDGSCredits(spec.getCreditCosts()), Color.ORANGE, 5f);
 
         for (OtherCostData s : spec.getOtherCosts()) {
-            tooltip.addCustom(getItemLabel(s), 5f);
+            tooltip.addCustom(getItemLabel(s,stage), 5f);
         }
         tooltip.addSectionHeading("Progress", Alignment.MID, 5f);
-        ProgressBarComponent component = new ProgressBarComponent(panelInfoOfStage.getPosition().getWidth() - 15, 21, 0f, Misc.getBasePlayerColor().darker().darker());
+        ProgressBarComponent component = new ProgressBarComponent(panelInfoOfStage.getPosition().getWidth() - 15, 21, stage.getProgressComputed(), Misc.getBasePlayerColor().darker().darker());
         tooltip.addCustom(component.getRenderingPanel(), 5f);
-        LabelAPI label = tooltip.addPara("Current progress of stage : 0%", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
+        LabelAPI label = tooltip.addPara("Current progress of stage :"+(int)(stage.getProgressComputed()*100f)+"%", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
         buttonOfStage = tooltip.addButton("Start stage", null, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.ALL, panelInfoOfStage.getPosition().getWidth() - 10, 20, 5f);
-        buttonOfStage.setEnabled(false);
+        buttonOfStage.setEnabled(stage.haveMetCriteriaToStartOrResumeStage());
         label.getPosition().setXAlignOffset(panelInfoOfStage.getPosition().getWidth() / 2 - (label.computeTextWidth(label.getText()) / 2));
         buttonOfStage.getPosition().inTL(5, -buttonOfStage.getPosition().getY() - 20);
         return tooltip;
@@ -283,39 +278,40 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
     public void buttonPressed(Object buttonId) {
     }
 
-    private CustomPanelAPI getItemLabel(OtherCostData data) {
+    private CustomPanelAPI getItemLabel(OtherCostData data,AoTDSpecialProjectStage stage) {
         if (data.getAmount() == 0) return null;
         CustomPanelAPI panel = Global.getSettings().createCustom(panelInfoOfStage.getPosition().getWidth(), 40, null);
         TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(40, 40, false);
         TooltipMakerAPI labelTooltip = panel.createUIElement(panel.getPosition().getWidth() - 40, 40, false);
         LabelAPI labelAPI1 = null;
-        if (data.getCostType().equals(OtherCostData.CostType.COMMODITY)) {
+        String s = "Research Facility";
+        if (data.getCostType().equals(OtherCostData.ItemType.COMMODITY)) {
             tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(data.getId()).getIconName(), 40, 40, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getCommoditySpec(data.getId()).getName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in Local Storages", 5, Color.ORANGE, "" + (int) AoTDMisc.retrieveAmountOfItems(data.getId(), Submarkets.SUBMARKET_STORAGE,data.costType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId,data.itemType));
         }
-        if (data.getCostType().equals(OtherCostData.CostType.ITEM)) {
+        if (data.getCostType().equals(OtherCostData.ItemType.ITEM)) {
             tooltipMakerAPI.addImage(Global.getSettings().getSpecialItemSpec(data.getId()).getIconName(), 40, 40, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getSpecialItemSpec(data.getId()).getName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in Local Storages", 5, Color.ORANGE, "" + (int) AoTDMisc.retrieveAmountOfItems(data.getId(), Submarkets.SUBMARKET_STORAGE,data.costType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId,data.itemType));
         }
-        if (data.getCostType().equals(OtherCostData.CostType.SHIP)) {
+        if (data.getCostType().equals(OtherCostData.ItemType.SHIP)) {
             tooltipMakerAPI.addCustom(ShipInfoGenerator.getShipImage(Global.getSettings().getHullSpec(data.getId()), 40, null).one, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getHullSpec(data.getId()).getHullName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in Local Storages", 5, Color.ORANGE, "" + (int) AoTDMisc.retrieveAmountOfItems(data.getId(), Submarkets.SUBMARKET_STORAGE,data.costType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId,data.itemType));
         }
-        if (data.getCostType().equals(OtherCostData.CostType.WEAPON)) {
+        if (data.getCostType().equals(OtherCostData.ItemType.WEAPON)) {
             tooltipMakerAPI.addCustom(WeaponInfoGenerator.getImageOfWeapon(Global.getSettings().getWeaponSpec(data.getId()), 40).one, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getWeaponSpec(data.getId()).getWeaponName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in Local Storages", 5, Color.ORANGE, "" + (int) AoTDMisc.retrieveAmountOfItems(data.getId(), Submarkets.SUBMARKET_STORAGE,data.costType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId,data.itemType));
         }
-        if (data.getCostType().equals(OtherCostData.CostType.FIGHTER)) {
+        if (data.getCostType().equals(OtherCostData.ItemType.FIGHTER)) {
             tooltipMakerAPI.addCustom(FighterInfoGenerator.createFormationPanel(Global.getSettings().getFighterWingSpec(data.getId()), FormationType.BOX, 40, Global.getSettings().getFighterWingSpec(data.getId()).getNumFighters()).one, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getFighterWingSpec(data.getId()).getWingName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in Local Storages", 5, Color.ORANGE, "" + (int) AoTDMisc.retrieveAmountOfItems(data.getId(), Submarkets.SUBMARKET_STORAGE,data.costType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId,data.itemType));
         }
 
-        if (GPManager.getInstance().haveMetReqForItem(data.getId(), data.getAmount(),data.costType)) {
+        if (stage.haveMetCriteriaToStartOrResumeStage()||SpecialProjectManager.haveMetReqForItem(data.getId(),data.getAmount(),data.getCostType())) {
             labelAPI1.setColor(Misc.getPositiveHighlightColor());
 
         } else {

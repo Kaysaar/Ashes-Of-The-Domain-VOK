@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.scripts.specialprojects;
+package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
 public class SpecialProjectIconData {
     public enum IconType {
