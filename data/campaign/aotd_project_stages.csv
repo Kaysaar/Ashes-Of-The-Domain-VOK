@@ -1,0 +1,14 @@
+id,name,stageDays,stageCostGP,stageCostCredits,stageCostOther,lineRenderMode,lineOriginMode,uiCordOfStageComponent,uiCordsOfPointsOnHologram
+uaf_slv_stage1,Dual XL-Grade Artillery Mounts,20,"ships:400,advanced_components:240",1000000,"pristine_nanoforge:ITEM:1,mjolnir:WEAPON:20",STEPPED,HORIZONTAL,"100,350","650,735;750,685"
+uaf_slv_stage2,Twin Super-Capital Hulls,20,"ships:400,advanced_components:240",1000000,,STRAIGHT,VERTICAL,"525,100","760,540;640,540"
+uaf_slv_stage3,Super-Capital Command Center,20,"ships:400,advanced_components:240",1000000,,STEPPED,HORIZONTAL,"920,600","700,780"
+uaf_slv_stage4,XL-Grade Melody Power Plant,20,"ships:400,advanced_components:240",1000000,,STEPPED,HORIZONTAL,"100,710","700,835"
+uaf_slv_stage5,Twin Super-Capital Melody Engines,20,"ships:400,advanced_components:240",1000000,,STRAIGHT,VERTICAL,"525,1100","615,890;785,890"
+,,,,,,,,,
+compound_stage1,Contaiment Design,20,"domain_heavy_machinery:100,advanced_components:200",2000000,,STEPPED,HORIZONTAL,"850,650","730,740"
+compound_stage2,Exotic State Stabilizer,20,"domain_heavy_machinery:300,advanced_components:50",500000,,STEPPED,HORIZONTAL,"150,650","610,690"
+compound_stage3,Particle Infuser,20,"ships:400,advanced_components:240",3000000,synchrotron:ITEM:1,STEPPED,VERTICAL,"600,200","700,610"
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,

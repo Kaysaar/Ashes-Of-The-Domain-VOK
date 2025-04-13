@@ -15,7 +15,7 @@
 		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
 		"showIconOnMap":false,
 		"showNameOnMap":false,
-		"tags":["radar_nodraw","non_clickable"],
+		"tags":["radar_nodraw","non_clickable","hide_in_codex"],
 	},	
 	"aotd_nidavelir_shadow":{
 		"name":"Nidavelir",	
@@ -33,7 +33,7 @@
 		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
 		"showIconOnMap":false,
 		"showNameOnMap":false,
-		"tags":["radar_nodraw","non_clickable"],
+		"tags":["radar_nodraw","non_clickable","hide_in_codex"],
 	},
 	"aotd_nidavelir_inner_bottom":{
 		"name":"Nidavelir",	
@@ -51,7 +51,7 @@
 		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
 		"showIconOnMap":false,
 		"showNameOnMap":false,
-		"tags":["radar_nodraw","non_clickable"],
+		"tags":["radar_nodraw","non_clickable","hide_in_codex"],
 	},	
 	"aotd_nidavelir_inner_top":{
 		"name":"Nidavelir",	
@@ -69,7 +69,7 @@
 		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
 		"showIconOnMap":false,
 		"showNameOnMap":false,
-		"tags":["radar_nodraw","non_clickable"],
+		"tags":["radar_nodraw","non_clickable","hide_in_codex"],
 	},
 	"aotd_nidavelir_outer_bottom":{
 		"name":"Nidavelir",	
@@ -87,7 +87,7 @@
 		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
 		"showIconOnMap":false,
 		"showNameOnMap":false,
-		"tags":["radar_nodraw","non_clickable"],
+		"tags":["radar_nodraw","non_clickable","hide_in_codex"],
 	},
 	"aotd_nidavelir_outer_top":{
 		"name":"Nidavelir",	
@@ -105,7 +105,7 @@
 		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
 		"showIconOnMap":false,
 		"showNameOnMap":false,
-		"tags":["radar_nodraw","non_clickable"],
+		"tags":["radar_nodraw","non_clickable","hide_in_codex"],
 	},		
 	"aotd_nidavelir_destroyed":{
 		"name":"Nidavelir",	
@@ -123,7 +123,7 @@
 		"lightPosition":[-2,-8,10], # in planet radii.  Not used for stars.  z > 0 is above the playing field.
 		"showIconOnMap":false,
 		"showNameOnMap":false,
-		"tags":["radar_nodraw","non_clickable"],
+		"tags":["radar_nodraw","non_clickable","hide_in_codex"],
 	},		
 }
 

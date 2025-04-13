@@ -1,0 +1,4 @@
+id,name,description,stageWeight,iconData,tags,rewards,plugin,,,,,
+uaf_supercap_slv_project,Rebirth of Solvernia,No description... yet,"uaf_slv_stage1:20,uaf_slv_stage2:20,uaf_slv_stage3:20,uaf_slv_stage4:20,uaf_slv_stage5:20",uaf_supercap_slv_core:SHIP:500,ship,uaf_supercap_slv_core:CUSTOM:1,data.kaysaar.aotd.vok.scripts.specialprojects.projects.SolviSpecialProject,,,,,
+aotd_compound_project,Exotic-Mass Repolarisation,No description... yet,"compound_stage1:20,compound_stage2:20,compound_stage3:20",compound:COMMODITY:300,ship,uaf_supercap_slv_core:CUSTOM:1,data.kaysaar.aotd.vok.scripts.specialprojects.projects.CompoundSpecialProject,,,,,
+aotd_nanoforge_restoration,Nanoforge Corruption Analysis,No description... yet,"uaf_slv_stage1:20,uaf_slv_stage2:20,uaf_slv_stage3:20,uaf_slv_stage4:20,uaf_slv_stage5:20",corrupted_nanoforge:ITEM:300,ship,uaf_supercap_slv_core:CUSTOM:1,data.kaysaar.aotd.vok.scripts.specialprojects.projects.NanoforgeAnalysisProject,,,,,

@@ -124,7 +124,10 @@
 		"ui":{
 			"aotd_text_glow":"graphics/ui/buttons/text_glow.png",
 			"aotd_holder":"graphics/ui/holder.png",
-			"sidebar_icon_research":"graphics/ui/atomic-64.png"
+			"sidebar_icon_research":"graphics/ui/atomic-64.png",
+			"hud_circle":"graphics/fx/circ.png",
+				"shimmer":"graphics/fx/shimmer.png"
+			
 		},
 		"rendering":{
             "GlitchSquare":"graphics/fx/solid_square.png",
@@ -151,12 +154,17 @@
 			"pluto":"graphics/icons/aotd_pluto_mining_station.png",
 			
 		},
+		"aotd_icons":{
+            "fleet_ai":"graphics/icons/fleet_ai.png",
+			"fleet_merc":"graphics/icons/fleet_merc.png",
+			"compound_info":"graphics/icons/smoll_icon/comp_smol.png"
+		},
 		"sectionImage":{
             "WormholeGenerator":"graphics/icons/megastructures/coronal_reciver.png",
 			"CoronalCollector":"graphics/icons/megastructures/plasma_shield_generator.png",
 			"AegisSystem":"graphics/icons/megastructures/coronal_port.png",
-			"NexusCore":"graphics/icons/megastructures/nid_3.png",
-			"VanguardForge":"graphics/icons/megastructures/nid_2.png",
+			"NexusCore":"graphics/icons/megastructures/nexus_core_merged.png",
+			"VanguardForge":"graphics/icons/megastructures/vanguard_forge.png",
 			"BulwarkFoundry":"graphics/icons/megastructures/nid_4.png",
 			"EterniumCore":"graphics/icons/megastructures/nid_1.png",
 			"SentinelCore":"graphics/icons/megastructures/nid_5.png",
@@ -174,6 +182,7 @@
 
 
 		},
+		
 		"illustrations":{
             "industrial_megafacility":"graphics/illustrations/industrial_megafacility.jpg"
 		},
