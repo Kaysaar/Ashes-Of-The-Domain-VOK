@@ -19,7 +19,7 @@ public class ResearchFacilityMarket extends BaseSubmarketPlugin {
     }
 
     public boolean showInFleetScreen() {
-        return false;
+        return true;
     }
 
     public boolean showInCargoScreen() {

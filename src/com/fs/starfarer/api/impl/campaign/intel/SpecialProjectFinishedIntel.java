@@ -6,15 +6,13 @@ import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
 
 import java.awt.*;
 
 public class SpecialProjectFinishedIntel extends BaseIntelPlugin{
-    public GpSpecialProjectData data;
     public static Object Button_SHIP = new Object();
-    public SpecialProjectFinishedIntel(GpSpecialProjectData unlockedProj){
-        this.data=unlockedProj;
+    public SpecialProjectFinishedIntel(){
+
     }
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
@@ -28,15 +26,15 @@ public class SpecialProjectFinishedIntel extends BaseIntelPlugin{
 
         // Title of the intel
         info.addPara(getName(), title,0f);
-        info.addPara("Project : %s is finished",5f,Color.ORANGE,data.getSpec().getNameOverride());
+//        info.addPara("Project : %s is finished",5f,Color.ORANGE,data.getSpec().getNameOverride());
 
     }
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
         info.addPara("After investing huge amount of resources we have finally managed to finish this project",5f);
-        info.addPara("Project result : 1x %s",5f, Misc.getTooltipTitleAndLightHighlightColor(),Global.getSettings().getHullSpec(data.getSpec().getRewardId()).getHullName());
-        info.addPara("Vessel is located in %s on %s",5f,Color.ORANGE,"Local storage",Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getName());
+//        info.addPara("Project result : 1x %s",5f, Misc.getTooltipTitleAndLightHighlightColor(),Global.getSettings().getHullSpec(data.getSpec().getRewardId()).getHullName());
+//        info.addPara("Vessel is located in %s on %s",5f,Color.ORANGE,"Local storage",Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getName());
     }
 
 
@@ -48,7 +46,7 @@ public class SpecialProjectFinishedIntel extends BaseIntelPlugin{
 
     @Override
     protected String getName() {
-        return "Project : "+data.getSpec().getNameOverride();
+        return "Project : ";
     }
 
     @Override

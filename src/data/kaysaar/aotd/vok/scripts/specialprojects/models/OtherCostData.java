@@ -1,18 +1,18 @@
-package data.kaysaar.aotd.vok.scripts.specialprojects;
+package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
 public class OtherCostData {
-    public enum CostType{
+    public enum ItemType {
         WEAPON,
         SHIP,
         ITEM,
         COMMODITY,
         FIGHTER
     }
-    public CostType costType;
+    public ItemType itemType;
     public String id;
     public int amount;
     public OtherCostData(String id, String costType, int amount){
-        this.costType = CostType.valueOf(costType);
+        this.itemType = ItemType.valueOf(costType);
         this.id = id;
         this.amount = amount;
     }
@@ -31,8 +31,8 @@ public class OtherCostData {
         return id;
     }
 
-    public CostType getCostType() {
-        return costType;
+    public ItemType getCostType() {
+        return itemType;
     }
 
     public int getAmount() {

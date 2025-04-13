@@ -28,7 +28,6 @@ import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.ResearchFleetRouteManager;
-import lunalib.lunaSettings.LunaSettings;
 import org.lazywizard.lazylib.MathUtils;
 
 import java.util.Collections;

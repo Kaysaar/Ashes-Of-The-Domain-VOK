@@ -6,17 +6,14 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpSpecialProjectData;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 
 import java.awt.*;
 
 public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
 
-    public GpSpecialProjectData data;
     public static Object Button_SHIP = new Object();
-    public SpecialProjectUnlockingIntel(GpSpecialProjectData unlockedProj){
-        this.data=unlockedProj;
+    public SpecialProjectUnlockingIntel(Object unlockedProj){
     }
     @Override
     public SectorEntityToken getMapLocation(SectorMapAPI map) {
@@ -45,7 +42,7 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
         info.addPara("Due to recent actions a new project has been unlocked, to be undertaken by our shipyards",5f);
-        info.addPara("New Project unlocked : %s",5f,Color.ORANGE,"Project "+data.getSpec().getNameOverride());
+//        info.addPara("New Project unlocked : %s",5f,Color.ORANGE,"Project "+data.getSpec().getNameOverride());
         addGenericButton(info,width,"Access Shipyards",Button_SHIP);
     }
 
@@ -58,7 +55,7 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
 
     @Override
     protected String getName() {
-        return "Project : "+data.getSpec().getNameOverride();
+        return "Project : ";
     }
 
     @Override

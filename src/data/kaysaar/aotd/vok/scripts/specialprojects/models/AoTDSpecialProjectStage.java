@@ -1,6 +1,9 @@
-package data.kaysaar.aotd.vok.scripts.specialprojects;
+package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 
 public class AoTDSpecialProjectStage {
     public String specId;
@@ -28,6 +31,9 @@ public class AoTDSpecialProjectStage {
         return progress;
     }
     public boolean isCompleted() {
+        if(getProgressComputed()==1){
+            setCompleted(true);
+        }
         return isCompleted;
     }
 
@@ -43,6 +49,20 @@ public class AoTDSpecialProjectStage {
         progress+=days;
         if(getProgressComputed()==1){
             setCompleted(true);
+        }
+    }
+    public boolean canPayForStage(){
+        boolean credits = Global.getSector().getPlayerFleet().getCargo().getCredits().get()>= getSpec().getCreditCosts();
+        return credits && getSpec().getOtherCosts().stream().allMatch(x-> SpecialProjectManager.haveMetReqForItem(x.getId(),x.getAmount(),x.getCostType()));
+    }
+    public boolean haveMetCriteriaToStartOrResumeStage(){
+        return isPaidForStage()||canPayForStage();
+    }
+    public void payForStage(){
+        if(!paidForStage){
+            setPaidForStage(true);
+            Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(getSpec().getCreditCosts());
+            getSpec().getOtherCosts().stream().forEach(x->SpecialProjectManager.eatItems(x,SpecialProjectManager.marketId, Misc.getPlayerMarkets(false)));
         }
     }
 }

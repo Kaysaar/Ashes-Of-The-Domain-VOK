@@ -12,31 +12,27 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
-import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.campaign.CampaignClock;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GpMegaStructureSectionsSpec;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
-import data.kaysaar.aotd.vok.scripts.specialprojects.OtherCostData;
+import data.kaysaar.aotd.vok.scripts.specialprojects.models.ProjectReward;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.*;
 
 public class GPManager {
     public static final Logger log = Global.getLogger(GPManager.class);
     transient ArrayList<GPSpec> specs = new ArrayList<GPSpec>();
-    transient ArrayList<GPSpec> specialProjectSpecs = new ArrayList<GPSpec>();
     transient ArrayList<GPMegaStructureSpec> megaStructureSpecs = new ArrayList<>();
     transient ArrayList<GpMegaStructureSectionsSpec> megaStructureSectionsSpecs = new ArrayList<>();
     public static boolean isEnabled = true;
@@ -80,12 +76,7 @@ public class GPManager {
         return gpuiData;
     }
 
-    public ArrayList<GPSpec> getSpecialProjectSpecs() {
-        if (specialProjectSpecs == null) {
-            specialProjectSpecs = new ArrayList<>();
-        }
-        return specialProjectSpecs;
-    }
+
 
     public int getAmountForOrder(GPOrder order) {
         return order.getAtOnce();
@@ -97,9 +88,7 @@ public class GPManager {
     ArrayList<GPOption> weaponProductionOption = new ArrayList<>();
     ArrayList<GPOption> fighterProductionOption = new ArrayList<>();
     ArrayList<GPOption> specialProjectsOption = new ArrayList<>();
-    ArrayList<GPOption> itemProductionOption = new ArrayList<>();
-    ArrayList<GpSpecialProjectData> specialProjData = new ArrayList<>();
-    ArrayList<GPOrder> productionOrders = new ArrayList<>();
+    ArrayList<GPOption> itemProductionOption = new ArrayList<>();ArrayList<GPOrder> productionOrders = new ArrayList<>();
 
     public MutableStat getProductionSpeedBonus() {
         return productionSpeedBonus;
@@ -117,37 +106,6 @@ public class GPManager {
         return specs;
     }
 
-    public GpSpecialProjectData currentFocus;
-
-    public GpSpecialProjectData getCurrProjOnGoing() {
-        return currentFocus;
-    }
-
-    public void setCurrentFocus(GpSpecialProjectData currentFocus) {
-        if (currentFocus != null) {
-            currentFocus.hasStarted = true;
-            if (!currentFocus.havePaidInitalCost) {
-                currentFocus.havePaidInitalCost = true;
-                for (Map.Entry<String, Integer> entry : currentFocus.getSpec().getItemInitCostMap().entrySet()) {
-                    AoTDMisc.eatItems(entry, Submarkets.SUBMARKET_STORAGE, Misc.getPlayerMarkets(true));
-                }
-                if (currentFocus.getSpec().getCredistCost() > 0) {
-                    Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(currentFocus.getSpec().getCredistCost());
-                }
-            }
-            if (currentFocus.getCurrentStage() == -1) {
-                currentFocus.currentStage = 0;
-            }
-            if (currentFocus.isFinished()) {
-                currentFocus.totalDaysSpent = 0f;
-                currentFocus.currentStage = -1;
-                currentFocus.haveRecivedAward = false;
-                currentFocus.havePaidInitalCost = false;
-                new Color(58, 63, 58);
-            }
-        }
-        this.currentFocus = currentFocus;
-    }
 
     public LinkedHashMap<String, Integer> totalResources = new LinkedHashMap<>();
     public HashMap<String, Integer> reqResources = new HashMap<>();
@@ -165,16 +123,6 @@ public class GPManager {
 
     public static String memkey = "aotd_gp_plugin";
 
-    public ArrayList<GpSpecialProjectData> getSpecialProjects() {
-        return specialProjData;
-    }
-
-    public boolean hasAtLestOneProjectUnlocked() {
-        for (GpSpecialProjectData specialProjDatum : specialProjData) {
-            if (specialProjDatum.canShow) return true;
-        }
-        return false;
-    }
 
     public static GPManager getInstance() {
         if (Global.getSector().getPersistentData().get(memkey) == null) {
@@ -365,8 +313,8 @@ public class GPManager {
         for (String s : commodities) {
             reqResources.put(s, 0);
         }
-        if (currentFocus != null) {
-            for (Map.Entry<String, Integer> entry : currentFocus.getSpec().getStageSupplyCost().get(currentFocus.currentStage).entrySet()) {
+        if (SpecialProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
+            for (Map.Entry<String, Integer> entry : SpecialProjectManager.getInstance().getCurrentlyOnGoingProject().getGpCostFromStages().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue());
                 } else {
@@ -463,13 +411,8 @@ public class GPManager {
         }
     }
 
-    public boolean hasSpecialProject(String rewardId) {
-        for (GPSpec projectSpec : specialProjectSpecs) {
-            if (projectSpec.getRewardId().equals(rewardId)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean hasSpecialProject(ProjectReward.ProjectRewardType type, String rewardId) {
+        return !SpecialProjectManager.getInstance().getProjectMatchingReward(type,rewardId).isEmpty();
     }
 
     public void loadProductionSpecs() {
@@ -478,12 +421,7 @@ public class GPManager {
         } else {
             specs = new ArrayList<>();
         }
-        if (specialProjectSpecs != null) {
-            specialProjectSpecs.clear();
-        } else {
-            specialProjectSpecs = new ArrayList<>();
-        }
-        specialProjectSpecs.addAll(GPSpec.loadSpecialProjects());
+
         for (ShipHullSpecAPI shipHullSpecAPI : Global.getSettings().getAllShipHullSpecs()) {
             if (shipHullSpecAPI.getHints().contains(ShipHullSpecAPI.ShipTypeHints.STATION)) continue;
             if (shipHullSpecAPI.getHullSize().equals(ShipAPI.HullSize.FIGHTER)) continue;
@@ -499,7 +437,7 @@ public class GPManager {
                 if (!found) continue;
             }
             GPSpec spec = GPSpec.getSpecFromShip(shipHullSpecAPI);
-            if (!hasSpecialProject(spec.getIdOfItemProduced())) {
+            if (!hasSpecialProject(ProjectReward.ProjectRewardType.SHIP,spec.getIdOfItemProduced())) {
                 specs.add(spec);
             }
             ;
@@ -508,24 +446,29 @@ public class GPManager {
         }
         for (WeaponSpecAPI shipHullSpecAPI : Global.getSettings().getAllWeaponSpecs()) {
             GPSpec spec = GPSpec.getSpecFromWeapon(shipHullSpecAPI);
-            if (!hasSpecialProject(spec.getIdOfItemProduced())) {
+            if (!hasSpecialProject(ProjectReward.ProjectRewardType.WEAPON,spec.getIdOfItemProduced())) {
                 specs.add(spec);
             }
         }
         for (FighterWingSpecAPI shipHullSpecAPI : Global.getSettings().getAllFighterWingSpecs()) {
             GPSpec spec = GPSpec.getSpecFromWing(shipHullSpecAPI);
-            if (!hasSpecialProject(spec.getIdOfItemProduced())) {
+            if (!hasSpecialProject(ProjectReward.ProjectRewardType.FIGHTER,spec.getIdOfItemProduced())) {
                 specs.add(spec);
             }
         }
         for (SpecialItemSpecAPI s : Global.getSettings().getAllSpecialItemSpecs()) {
             GPSpec spec = GPSpec.getSpecFromItem(s);
-            specs.add(spec);
+            if (!hasSpecialProject(ProjectReward.ProjectRewardType.ITEM,spec.getIdOfItemProduced())) {
+                specs.add(spec);
+            }
         }
         for (CommoditySpecAPI s : Global.getSettings().getAllCommoditySpecs()) {
             if (s.hasTag("ai_core") && !s.hasTag("no_drop") && !s.getId().equals("ai_cores") && s.hasTag("aotd_ai_core")) {
                 GPSpec spec = GPSpec.getSpecFromAICore(s);
-                specs.add(spec);
+                if (!hasSpecialProject(ProjectReward.ProjectRewardType.AICORE,spec.getIdOfItemProduced())) {
+                    specs.add(spec);
+                }
+
             }
 
         }
@@ -563,37 +506,21 @@ public class GPManager {
         return null;
     }
 
-    public GpSpecialProjectData getSpecialProject(String id) {
-        for (GpSpecialProjectData specialProjDatum : specialProjData) {
-            if (specialProjDatum.getSpec().getProjectId().equals(id)) {
-                return specialProjDatum;
-            }
-        }
-        return null;
-    }
 
-    public boolean haveMetReqForItems(String id) {
-        if (getSpecialProject(id).havePaidInitalCost) return true;
-        for (Map.Entry<String, Integer> entry : getSpecialProject(id).getSpec().getItemInitCostMap().entrySet()) {
-            if (!haveMetReqForItem(entry.getKey(), entry.getValue())) return false;
-        }
-        return true;
-    }
+
 
     public boolean haveMetReqForItem(String id, float value) {
         return value <= AoTDMisc.retrieveAmountOfItems(id, Submarkets.SUBMARKET_STORAGE);
     }
-    public boolean haveMetReqForItem(String id, float value, OtherCostData.CostType tyoe) {
-        return value <= AoTDMisc.retrieveAmountOfItems(id, Submarkets.SUBMARKET_STORAGE,tyoe);
-    }
+
     public LinkedHashMap<String, Integer> getExpectedCosts(ArrayList<GPOrder> ordersQueued) {
         LinkedHashMap<String, Integer> reqResources = new LinkedHashMap<>();
         reqResources.clear();
         for (String s : commodities) {
             reqResources.put(s, 0);
         }
-        if (GPManager.getInstance().getCurrProjOnGoing() != null && !GPManager.getInstance().getCurrProjOnGoing().isFinished()) {
-            for (Map.Entry<String, Integer> entry : GPManager.getInstance().getCurrProjOnGoing().retrieveCostForCurrStage().entrySet()) {
+        if (SpecialProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
+            for (Map.Entry<String, Integer> entry :SpecialProjectManager.getInstance().getCurrentlyOnGoingProject().getGpCostFromStages().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue());
                 } else {
@@ -663,26 +590,7 @@ public class GPManager {
             }
 
         }
-        for (GPSpec specialProjectSpec : specialProjectSpecs) {
-            try {
-                Global.getSettings().getHullSpec(specialProjectSpec.getRewardId());
-            } catch (Exception e) {
-                //we do this to filter out projects that should not be (as long as mod is not enabled in save)
-                continue;
-            }
-            boolean foundOne = false;
-            for (GpSpecialProjectData datum : specialProjData) {
-                if (datum.getSpec().getProjectId().equals(specialProjectSpec.getProjectId())) {
-                    foundOne = true;
-                    datum.setSpecID(specialProjectSpec.getProjectId());
-                    break;
-                }
-            }
-            if (!foundOne) {
-                GpSpecialProjectData data = new GpSpecialProjectData(specialProjectSpec.getProjectId());
-                specialProjData.add(data);
-            }
-        }
+
 
 
     }
@@ -821,20 +729,6 @@ public class GPManager {
         }
         advance(getProductionOrders());
         if (!AoTDMisc.isPLayerHavingHeavyIndustry()) return;
-        for (GpSpecialProjectData specialProjDatum : specialProjData) {
-            if (specialProjDatum.isDiscovered()) {
-                if (!specialProjDatum.isShowedInfoAboutUnlocking()) {
-                    specialProjDatum.setShowedInfoAboutUnlocking(true);
-                    SpecialProjectUnlockingIntel intel = new SpecialProjectUnlockingIntel(specialProjDatum);
-                    Global.getSector().getIntelManager().addIntel(intel, false);
-                }
-                specialProjDatum.canShow = true;
-
-            }
-        }
-        if (currentFocus != null) {
-            currentFocus.advance(amount);
-        }
         for (GPOrder productionOrder : getProductionOrders()) {
             if (!productionOrder.isCountingToContribution()) continue;
             if (productionOrder.canProceed()) {
@@ -858,12 +752,12 @@ public class GPManager {
             }
             order.setPenalty(totalPenalty);
         }
-        if (currentFocus != null) {
+        if (SpecialProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
             float totalPenalty = 1;
-            for (Map.Entry<String, Integer> stringIntegerEntry : currentFocus.retrieveCostForCurrStage().entrySet()) {
+            for (Map.Entry<String, Integer> stringIntegerEntry : SpecialProjectManager.getInstance().getCurrentlyOnGoingProject().getGpCostFromStages().entrySet()) {
                 totalPenalty *= penaltyMap.get(stringIntegerEntry.getKey());
             }
-            currentFocus.setPenalty(totalPenalty);
+            SpecialProjectManager.getInstance().getCurrentlyOnGoingProject().setPenalty(totalPenalty);
         }
 
 
