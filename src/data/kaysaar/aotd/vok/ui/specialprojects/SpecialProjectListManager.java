@@ -31,9 +31,9 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         tooltipPanel = Global.getSettings().createCustom(width, height, null);
         currentShowcasePanel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltip = tooltipPanel.createUIElement(width, height, true);
-        float opad = 0f;
+        float opad = 5f;
         for (AoTDSpecialProject value : SpecialProjectManager.getInstance().getProjects().values()) {
-            tooltip.addCustom(createSectionForProject(width - 10, height, value), opad);
+            tooltip.addCustom(createSectionForProject(width - 10, 80, value), opad);
             opad = 5f;
         }
 
@@ -93,6 +93,7 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
             backProject = null;
             startProject = null;
             cancelProject = null;
+            manager.getCurrProjectShowcase().getMainObject().setRenderLine(true);
             mainPanel.removeComponent(currentShowcasePanel);
             mainPanel.addComponent(tooltipPanel);
 
@@ -113,26 +114,6 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         }
     }
 
-    public void updateProjects() {
-        if(update){
-            update = false;
-            for (ButtonAPI buttonAPI : buttons.keySet()) {
-                String id = (String) buttonAPI.getCustomData();
-                if(id.equals("start_project")){
-                    if(!SpecialProjectManager.getInstance().isCurrentOnGoing(buttons.get(buttonAPI))){
-                        if(buttonAPI.isEnabled()){
-                            buttonAPI.setEnabled(false);
-                        }
-
-                    }
-                    else{
-                        buttonAPI.setEnabled(true);
-                    }
-                }
-            }
-        }
-
-    }
 
     @Override
     public void processInput(List<InputEventAPI> events) {
@@ -146,17 +127,16 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
 
     public CustomPanelAPI createSectionForProject(float width, float height, AoTDSpecialProject project) {
         CustomPanelAPI test = Global.getSettings().createCustom(width, height, new UILinesRenderer(0f));
-        ((UILinesRenderer) test.getPlugin()).setPanel(test);
         TooltipMakerAPI tooltip = test.createUIElement(width, height, false);
-        project.createTooltipForButton(tooltip, width);
-        ButtonAPI button = tooltip.addButton("Show additional info", "show_info", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, width-20, 30, 10f);
+        ButtonAPI button = tooltip.addAreaCheckbox(null,"show_info",Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Misc.getBrightPlayerColor(),width,height,0f);
+        button.getPosition().inTL(5,0);
+        project.createTooltipForButton(tooltip, width,true);
         button.getPosition().setXAlignOffset(width/2-(button.getPosition().getWidth()/2)-5);
         buttons.put(button,project);
-        HologramViewer viewer = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), true);
+        HologramViewer viewer = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), true,false);
         viewer.setRenderLine(false);
-        tooltip.addCustomDoNotSetPosition(viewer.getComponentPanel()).getPosition().inTL(width - viewer.getComponentPanel().getPosition().getWidth(), 20);
-        test.getPosition().setSize(width, tooltip.getHeightSoFar() + 5);
-        test.addUIElement(tooltip).inTL(0, 0);
+        tooltip.addCustomDoNotSetPosition(viewer.getComponentPanel()).getPosition().inTL(width - viewer.getComponentPanel().getPosition().getWidth()-15, 5);
+        test.addUIElement(tooltip).inTL(5, 0);
         return test;
     }
 
@@ -180,7 +160,7 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
 
 
         float heights = tooltip.getHeightSoFar();
-        HologramViewer viewer = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), true);
+        HologramViewer viewer = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), false,true);
         viewer.setRenderLine(false);
         tooltip.addCustomDoNotSetPosition(viewer.getComponentPanel()).getPosition().inTL(width - viewer.getComponentPanel().getPosition().getWidth(), 20);
         tooltip.setHeightSoFar(heights);

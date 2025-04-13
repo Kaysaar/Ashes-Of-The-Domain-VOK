@@ -182,7 +182,7 @@ public class AoTDSpecialProject {
     }
 
     public void createDetailedTooltipForButton(TooltipMakerAPI tooltip, float width) {
-        createTooltipForButton(tooltip, width);
+        createTooltipForButton(tooltip, width,false);
         for (AoTDSpecialProjectStage stagesSpec : this.getStages()) {
             tooltip.addCustom(createSubStageProgressMoved(width - 110, stagesSpec.getSpec().getId(), 10), 2f);
 
@@ -199,17 +199,21 @@ public class AoTDSpecialProject {
         tooltip.addPara("Gain " + Global.getSettings().getHullSpec("uaf_supercap_slv_core").getHullNameWithDashClass(), Misc.getPositiveHighlightColor(), 5f);
     }
 
-    public void createTooltipForButton(TooltipMakerAPI tooltip, float width) {
+    public void createTooltipForButton(TooltipMakerAPI tooltip, float width,boolean smallButton) {
         tooltip.setTitleFont(Fonts.ORBITRON_16);
 
         tooltip.addTitle(this.getProjectSpec().getName());
-        tooltip.addSectionHeading("Upkeep", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, width - 110, 5f);
+        if(!smallButton){
+            tooltip.addSectionHeading("Upkeep", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, width - 110, 5f);
 
-        tooltip.addCustom(createResourcePanelForSmallTooltipCondensed(width - 110, 20, 20, new HashMap<>(), new HashMap<>()), 5f);
+            tooltip.addCustom(createResourcePanelForSmallTooltipCondensed(width - 110, 20, 20, new HashMap<>(), new HashMap<>()), 5f);
+        }
 
-        LabelAPI labelAPI = tooltip.addSectionHeading("Project Progress", Misc.getBasePlayerColor(), null, Alignment.MID, width - 110, 3f);
-        ProgressBarComponent component = new ProgressBarComponent(width - 110, 21, getTotalProgress(), Misc.getBasePlayerColor().darker().darker());
-        tooltip.addCustom(component.getRenderingPanel(), 5f);
+        ProgressBarComponent component = new ProgressBarComponent(width - 110, 18, getTotalProgress(), Misc.getBasePlayerColor().darker().darker());
+        tooltip.addCustom(component.getRenderingPanel(), 28);
+
+        LabelAPI labelAPI = tooltip.addSectionHeading("Project Progress : "+(int)(this.getTotalProgress()*100)+"%", Misc.getDarkHighlightColor(), null, Alignment.MID, width - 110, -18f);
+
     }
 
     public CustomPanelAPI createSubStageProgressMoved(float width, String stageID, float opadX) {
@@ -225,7 +229,7 @@ public class AoTDSpecialProject {
         CustomPanelAPI test = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltip = test.createUIElement(width, height, false);
         tooltip.addSectionHeading(getStage(stageID).getSpec().getName(), Misc.getBasePlayerColor(), null, Alignment.MID, width, 0f);
-        ProgressBarComponent component = new ProgressBarComponent(width - 5, 15, getProgressForStage(stageID), Misc.getBasePlayerColor().darker().darker());
+        ProgressBarComponent component = new ProgressBarComponent(width - 5, 11, getProgressForStage(stageID), Misc.getBasePlayerColor().darker().darker());
         tooltip.addCustom(component.getRenderingPanel(), 2f);
         test.getPosition().setSize(width, tooltip.getHeightSoFar());
         test.addUIElement(tooltip).inTL(0, 0);

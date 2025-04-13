@@ -21,7 +21,7 @@ public class HologramViewer extends ResizableComponent {
     private float cachedHeight = -1;
     private boolean requiresUpdate = true;
     private float scanlineY = 0f;
-    private float scanSpeed = 130; // Pixels per second (adjust as needed)
+    private float scanSpeed = 110; // Pixels per second (adjust as needed)
 
     public SpriteAPI lineTexture  = Global.getSettings().getSprite("ui","scanline_large");
     // Scaling factor for texture coordinates to increase line distance
