@@ -369,10 +369,10 @@ public class ReflectionUtilis {
                 for (Object field : fields) {
                     try {
                         // Retrieve field type dynamically
-                        Class<?> fieldClass = (Class<?>) getFieldTypeHandle.invoke(field);
+                        Class<?> fieldClass = (Class<?>) invokeMethodWithAutoProjection("getType",field);
 
                         // Check if the field type matches or is assignable
-                        if (fieldType.isAssignableFrom(fieldClass)) {
+                        if (fieldClass.isAssignableFrom(fieldType)) {
                             setFieldAccessibleHandle.invoke(field, true);
                             String name = (String) getFieldNameHandle.invoke(field);
                             return  getFieldHandle.invoke(field, targetObject);

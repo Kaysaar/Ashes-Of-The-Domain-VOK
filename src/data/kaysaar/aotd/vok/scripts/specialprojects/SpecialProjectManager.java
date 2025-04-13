@@ -79,10 +79,13 @@ public class SpecialProjectManager {
 
     }
 
-    public static HologramViewer createHologramViewer(AoTDSpecialProjectSpec spec, boolean isForButton) {
-        float iconSize = 100;
+    public static HologramViewer createHologramViewer(AoTDSpecialProjectSpec spec, boolean isForButton,boolean isForBigButton) {
+        float iconSize = 70;
         if (!isForButton) {
             iconSize = spec.getIconData().getSize();
+        }
+        if(isForBigButton){
+            iconSize =100;
         }
         SpecialProjectIconData data = spec.getIconData();
         HologramViewer viewer = null;
@@ -103,6 +106,28 @@ public class SpecialProjectManager {
         }
         return viewer;
     }
+    public static HologramViewer createHologramViewer(AoTDSpecialProjectSpec spec, float overrideSize) {
+        float iconSize = overrideSize;
+        SpecialProjectIconData data = spec.getIconData();
+        HologramViewer viewer = null;
+        if (data.getType().equals(SpecialProjectIconData.IconType.COMMODITY)) {
+            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getCommoditySpec(data.getIconId()).getIconName())));
+
+        }
+        if (data.getType().equals(SpecialProjectIconData.IconType.SHIP)) {
+            viewer = new HologramViewer(iconSize, iconSize, new ShipHologram(data.getIconId()));
+        }
+        if (data.getType().equals(SpecialProjectIconData.IconType.ITEM)) {
+            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getSpecialItemSpec(data.getIconId()).getIconName())));
+
+        }
+        if (data.getType().equals(SpecialProjectIconData.IconType.WEAPON)) {
+            viewer = new HologramViewer(iconSize, iconSize, new WeaponHologram(data.getIconId()));
+
+        }
+        return viewer;
+    }
+
 
     public static void eatItems(OtherCostData entry, String submarketId, List<MarketAPI> affectedMarkets) {
         float numberRemaining = entry.getAmount();

@@ -20,11 +20,15 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
 
     CustomPanelAPI objectOfInterest;
     CustomPanelAPI subMainPanel;
-    HologramViewer mainObject;
+    public HologramViewer mainObject;
     RightMouseTooltipMover mover;
     AoTDSpecialProject project;
     public static float widthExpected = 1400; //1750
     public static float heightExpected = 1400;
+
+    public HologramViewer getMainObject() {
+        return mainObject;
+    }
 
     public void setProject(AoTDSpecialProject project) {
         this.project = project;
@@ -55,7 +59,13 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
              subMainPanel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
             TooltipMakerAPI tooltip = subMainPanel.createUIElement(subMainPanel.getPosition().getWidth(), subMainPanel.getPosition().getHeight(), true);
             tooltip.addSpacer(heightExpected);
-            mainObject = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), false);
+            mainObject = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), false,false);
+            if(!SpecialProjectManager.getInstance().isCurrentOnGoing(project)){
+                mainObject.setRenderLine(false);
+            }
+            else{
+                mainObject.setRenderLine(true);
+            }
             mover.init(subMainPanel, tooltip);
             float leftX = widthExpected - mainPanel.getPosition().getWidth();
             objectOfInterest.addComponent(mainObject.getComponentPanel()).inTL(objectOfInterest.getPosition().getWidth() / 2 - (mainObject.componentPanel.getPosition().getWidth() / 2), objectOfInterest.getPosition().getHeight() / 2 - (mainObject.componentPanel.getPosition().getHeight() / 2));
