@@ -21,7 +21,6 @@ public class AoTDSpecialProjectSpec {
     String pluginName;
     SpecialProjectIconData iconData;
     Set<String> tags = new HashSet<>();
-
     public Set<String> getTags() {
         return tags;
     }
@@ -57,6 +56,9 @@ public class AoTDSpecialProjectSpec {
         } catch (InstantiationException | ClassNotFoundException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+    public boolean hasTag(String tag){
+        return tags.contains(tag);
     }
 
     public String getName() {
@@ -137,7 +139,10 @@ public class AoTDSpecialProjectSpec {
                 throw new RuntimeException("Stage spec of "+s+" not found, check "+ SpecialProjectSpecManager.specFileNameStages);
             }
         }
-
+        for (String tags : loadEntries(obj.getString("tags"), ",")) {
+            aoTDSpecialProjectSpec.addTag(tags.trim());
+        }
+        
         aoTDSpecialProjectSpec.setStageMap(stageMap);
         aoTDSpecialProjectSpec.setPlugin(plugin);
         aoTDSpecialProjectSpec.getPlugin();

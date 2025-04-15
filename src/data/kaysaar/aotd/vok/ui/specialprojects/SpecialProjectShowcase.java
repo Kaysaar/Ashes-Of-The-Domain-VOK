@@ -18,6 +18,10 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
     CustomPanelAPI mainPanel;
     UILinesRenderer renderer;
 
+    public AoTDSpecialProject getProject() {
+        return project;
+    }
+
     CustomPanelAPI objectOfInterest;
     CustomPanelAPI subMainPanel;
     public HologramViewer mainObject;
@@ -44,7 +48,6 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
         createUI();
 
         renderer = new UILinesRenderer(0f);
-        renderer.setBoxColor(Color.ORANGE);
         renderer.setPanel(mainPanel);
     }
 

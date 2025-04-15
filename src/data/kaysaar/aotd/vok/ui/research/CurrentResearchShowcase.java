@@ -74,8 +74,8 @@ public class CurrentResearchShowcase implements CustomUIPanelPlugin {
             tooltip.addCustom(component.getRenderingPanel(),0f).getPosition().inTL(10,currY+45);
             LabelAPI labelAPI = tooltip.addPara("Current progress : %s ( %s left till researched)",5f,Color.ORANGE,((int)(progress*100))+"%",""+AoTDMisc.convertDaysToString((int) (defaultDays-days)));
             labelAPI.getPosition().inTL(width/2-(labelAPI.computeTextWidth(labelAPI.getText())/2),currY+50);
-             buttonAPI = tooltip.addButton("Cancel research",null,Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.NONE,((width-20)/2)-7,20,0f);
-             buttonAPI2 = tooltip.addButton("Show on tree",null,Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.NONE,((width-20)/2)-7,20,0f);
+            buttonAPI = tooltip.addButton("Cancel research",null,Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.NONE,((width-20)/2)-7,20,0f);
+            buttonAPI2 = tooltip.addButton("Show on tree",null,Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.NONE,((width-20)/2)-7,20,0f);
 
             buttonAPI2.getPosition().inTL(12,currY+75);
             buttonAPI.getPosition().inTL(((width-20)/2)+20,currY+75);

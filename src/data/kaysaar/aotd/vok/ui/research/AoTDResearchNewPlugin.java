@@ -45,12 +45,12 @@ public class AoTDResearchNewPlugin implements CustomUIPanelPlugin, SoundUIManage
 //        component.sentToBottomComponentsOfClass(GridRenderer.class);
         UILinesRenderer renderer = new UILinesRenderer(0f);
         mainPanel = Global.getSettings().createCustom(width, height, this);
-         showcase1 = new CurrentResearchShowcase(400, 130, this);
+         showcase1 = new CurrentResearchShowcase(450, 130, this);
         ScientistAPI scientistAPI = AoTDMainResearchManager.getInstance().getManagerForPlayer().currentHeadOfCouncil;
-         showcase2 = new HeadOfResearchShowcase(400, 130, scientistAPI);
+         showcase2 = new HeadOfResearchShowcase(450, 130, scientistAPI);
         mainPanel.addComponent(new ScientistButtonComponent(130, 130, scientistAPI).getPanelOfButton()).inTL((width / 2) - 65, height - 130);
         mainPanel.addComponent(modButton.getPanelOfButton()).inTL((width / 2) - 250, 0);
-        mainPanel.addComponent(showcase1.getMainPanel()).inTL((width / 2) - 65 - 405, height - 130);
+        mainPanel.addComponent(showcase1.getMainPanel()).inTL((width / 2) - 65 - 455, height - 130);
         mainPanel.addComponent(showcase2.getMainPanel()).inTL((width / 2) + 70, height - 130);
         mainPanel.addComponent(component.getPluginPanel()).inTL(0, 45);
 
