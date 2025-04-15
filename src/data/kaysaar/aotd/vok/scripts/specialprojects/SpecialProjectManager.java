@@ -28,7 +28,7 @@ public class SpecialProjectManager {
 
     public static SpecialProjectManager getInstance() {
         if (Global.getSector().getPersistentData().get(memflag) == null) {
-             setInstance();
+            setInstance();
         }
         return (SpecialProjectManager) Global.getSector().getPersistentData().get(memflag);
     }
@@ -40,8 +40,11 @@ public class SpecialProjectManager {
     public AoTDSpecialProject getCurrentlyOnGoingProject() {
         return currentlyOnGoingProject;
     }
-    public boolean isCurrentOnGoing(AoTDSpecialProject project){
-        return getCurrentlyOnGoingProject()!=null&& getCurrentlyOnGoingProject().getProjectSpec().getId().equals(project.getProjectSpec().getId()
+
+    public boolean isCurrentOnGoing(AoTDSpecialProject project) {
+
+        return project!=null && getCurrentlyOnGoingProject() != null &&
+                getCurrentlyOnGoingProject().getProjectSpec().getId().equals(project.getProjectSpec().getId()
         );
     }
 
@@ -79,13 +82,13 @@ public class SpecialProjectManager {
 
     }
 
-    public static HologramViewer createHologramViewer(AoTDSpecialProjectSpec spec, boolean isForButton,boolean isForBigButton) {
+    public static HologramViewer createHologramViewer(AoTDSpecialProjectSpec spec, boolean isForButton, boolean isForBigButton) {
         float iconSize = 70;
         if (!isForButton) {
             iconSize = spec.getIconData().getSize();
         }
-        if(isForBigButton){
-            iconSize =100;
+        if (isForBigButton) {
+            iconSize = 100;
         }
         SpecialProjectIconData data = spec.getIconData();
         HologramViewer viewer = null;
@@ -106,6 +109,7 @@ public class SpecialProjectManager {
         }
         return viewer;
     }
+
     public static HologramViewer createHologramViewer(AoTDSpecialProjectSpec spec, float overrideSize) {
         float iconSize = overrideSize;
         SpecialProjectIconData data = spec.getIconData();

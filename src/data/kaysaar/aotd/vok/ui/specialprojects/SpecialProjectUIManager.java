@@ -30,6 +30,10 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIMan
     SpecialProjectShowcase currProjectShowcase;
     CurrentSpecialProjectShowcase showcaseProj;
 
+
+    public SpecialProjectListManager getListManager() {
+        return listManager;
+    }
     CustomPanelAPI panelOfMarketData;
     public CustomPanelAPI getMainPanel() {
         return mainPanel;
@@ -46,10 +50,10 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin , SoundUIMan
         currProjectShowcase = new SpecialProjectShowcase(width-400-15,height-210, SpecialProjectManager.getInstance().getCurrentlyOnGoingProject());
         ScientistAPI scientistAPI = AoTDMainResearchManager.getInstance().getManagerForPlayer().currentHeadOfCouncil;
         createMarketResourcesPanel();
-        HeadOfResearchShowcase showcase  = new HeadOfResearchShowcase(400, 130, scientistAPI);
-         showcaseProj= new CurrentSpecialProjectShowcase(400, 130, this);
+        HeadOfResearchShowcase showcase  = new HeadOfResearchShowcase(450, 130, scientistAPI);
+         showcaseProj= new CurrentSpecialProjectShowcase(450, 130, this);
         mainPanel.addComponent(new ScientistButtonComponent(130, 130, scientistAPI).getPanelOfButton()).inTL(((width-10) / 2) - 65, height - 130);
-        mainPanel.addComponent(showcaseProj.getMainPanel()).inTL(((width-10) / 2) - 65 - 405, height - 130);
+        mainPanel.addComponent(showcaseProj.getMainPanel()).inTL(((width-10) / 2) - 65 - 455, height - 130);
         mainPanel.addComponent(showcase.getMainPanel()).inTL(((width-10) / 2) + 70, height - 130);
         mainPanel.addComponent(listManager.mainPanel).inTL(0,50);
         mainPanel.addComponent(currProjectShowcase.mainPanel).inTL(listManager.mainPanel.getPosition().getWidth()+10f,50);

@@ -9,6 +9,7 @@ import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectStageWindow;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +22,10 @@ public class AoTDSpecialProject {
     public float penalty;
     ArrayList<AoTDSpecialProjectStage> stages = new ArrayList<>();
 
+    public ArrayList<String> getCurrentlyAttemptedStages() {
+        return currentlyAttemptedStages;
+    }
+
     public void setPenalty(float penalty) {
         this.penalty = penalty;
     }
@@ -32,7 +37,9 @@ public class AoTDSpecialProject {
     public AoTDSpecialProjectSpec getProjectSpec() {
         return SpecialProjectSpecManager.getSpec(specID);
     }
-
+    public String getNameOverride(){
+        return getProjectSpec().getName();
+    }
     public ArrayList<String> currentlyAttemptedStages = new ArrayList<>();
 
     public float getCombinedWeight() {
@@ -182,9 +189,9 @@ public class AoTDSpecialProject {
     }
 
     public void createDetailedTooltipForButton(TooltipMakerAPI tooltip, float width) {
-        createTooltipForButton(tooltip, width,false);
+        createTooltipForButton(tooltip, width+100,false);
         for (AoTDSpecialProjectStage stagesSpec : this.getStages()) {
-            tooltip.addCustom(createSubStageProgressMoved(width - 110, stagesSpec.getSpec().getId(), 10), 2f);
+            tooltip.addCustom(createSubStageProgressMoved(width-10 , stagesSpec.getSpec().getId(), 10), 2f);
 
         }
         tooltip.addPara(this.getProjectSpec().getDescription(), 5f);
@@ -198,21 +205,39 @@ public class AoTDSpecialProject {
     public void createRewardSection(TooltipMakerAPI tooltip, float width) {
         tooltip.addPara("Gain " + Global.getSettings().getHullSpec("uaf_supercap_slv_core").getHullNameWithDashClass(), Misc.getPositiveHighlightColor(), 5f);
     }
+    public void printSpecialization(TooltipMakerAPI tooltip){
+        tooltip.addPara("Project type : %s",5f, Color.ORANGE,getSpecialization());
+    }
+    public String getSpecialization(){
+        if(getProjectSpec().hasTag("ship_enginnering")){
+            return "Ship Engineering";
+        }
+        if(getProjectSpec().hasTag("physics")){
+            return "Physics";
+        }
+        if(getProjectSpec().hasTag("computers")){
+            return "Computers";
+        }
+        return "";
+    }
 
     public void createTooltipForButton(TooltipMakerAPI tooltip, float width,boolean smallButton) {
         tooltip.setTitleFont(Fonts.ORBITRON_16);
 
-        tooltip.addTitle(this.getProjectSpec().getName());
+        tooltip.addTitle(this.getNameOverride());
         if(!smallButton){
             tooltip.addSectionHeading("Upkeep", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, width - 110, 5f);
 
             tooltip.addCustom(createResourcePanelForSmallTooltipCondensed(width - 110, 20, 20, new HashMap<>(), new HashMap<>()), 5f);
         }
+        else{
+            printSpecialization(tooltip);
+        }
 
         ProgressBarComponent component = new ProgressBarComponent(width - 110, 18, getTotalProgress(), Misc.getBasePlayerColor().darker().darker());
-        tooltip.addCustom(component.getRenderingPanel(), 28);
+        tooltip.addCustom(component.getRenderingPanel(), 5);
 
-        LabelAPI labelAPI = tooltip.addSectionHeading("Project Progress : "+(int)(this.getTotalProgress()*100)+"%", Misc.getDarkHighlightColor(), null, Alignment.MID, width - 110, -18f);
+        LabelAPI labelAPI = tooltip.addSectionHeading(""+(int)(this.getTotalProgress()*100)+"%", Misc.getTextColor(), null, Alignment.MID, width - 110, -18f);
 
     }
 

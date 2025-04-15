@@ -56,7 +56,7 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
     }
 
     public AoTDSpecialProject project;
-
+    public AoTDSpecialProjectStage stage;
     public float sppedOfSpin = 35;
     ButtonAPI buttonOfStage;
     CustomPanelAPI parentPanel;
@@ -66,7 +66,7 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
 
     ArrayList<SpecialProjectPointOfInterest> panelsConnect = new ArrayList<>();
     CustomPanelAPI panelInfoOfStage;
-
+    CustomPanelAPI tooltipPanel;
 
     // Rendering modes
     public enum RenderingMode {
@@ -90,13 +90,15 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
 
     public SpecialProjectStageWindow(AoTDSpecialProject project, AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel, RenderingMode mode, OriginMode origin, Vector2f posToPlace, ArrayList<Vector2f> posToConnect) {
         this.parentPanel = parentPanel;
-        panelInfoOfStage = Global.getSettings().createCustom(350, 300, this);
-        this.project = project;
-        TooltipMakerAPI tooltip = createTooltip(stage, parentPanel);
+        this.stage = stage;
         setRenderingMode(mode);
         setOriginMode(origin);
-        panelInfoOfStage.addUIElement(tooltip).inTL(0, 0);
+        this.project = project;
+        panelInfoOfStage = Global.getSettings().createCustom(350, 300, this);
+        TooltipMakerAPI tooltip = initalizeTooltip(stage, parentPanel);
+        panelInfoOfStage.addComponent(tooltipPanel).inTL(0,0);
         panelInfoOfStage.getPosition().setSize(350, tooltip.getHeightSoFar() + 5)
+
         ;
         renderer = new UILinesRenderer(0f);
         renderer.setPanel(panelInfoOfStage);
@@ -112,7 +114,16 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
     }
 
     @NotNull
-    private TooltipMakerAPI createTooltip(AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel) {
+    private TooltipMakerAPI initalizeTooltip(AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel) {
+        tooltipPanel = Global.getSettings().createCustom(350,300,null);
+
+        TooltipMakerAPI tooltip = createTooltip(stage, parentPanel,tooltipPanel);
+        tooltipPanel.addUIElement(tooltip).inTL(0, 0);
+        return tooltip;
+    }
+
+    @NotNull
+    private TooltipMakerAPI createTooltip(AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel,CustomPanelAPI panelInfoOfStage) {
         TooltipMakerAPI tooltip = panelInfoOfStage.createUIElement(panelInfoOfStage.getPosition().getWidth(), parentPanel.getPosition().getHeight(), false);
         AoTDSpecialProjectStageSpec spec = stage.getSpec();
         tooltip.addTitle(spec.getName());
@@ -255,6 +266,12 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         float speed = sppedOfSpin * amount;
         for (SpecialProjectPointOfInterest interest : panelsConnect) {
             interest.setAngle(interest.getAngle() + speed);
+        }
+        if(buttonOfStage!=null&&buttonOfStage.isChecked()){
+            buttonOfStage.setChecked(false);
+            project.getCurrentlyAttemptedStages().add(this.stage.getSpec().getId());
+            panelInfoOfStage.removeComponent(tooltipPanel);
+            initalizeTooltip(stage,parentPanel);
         }
     }
 

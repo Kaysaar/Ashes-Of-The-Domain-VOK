@@ -18,29 +18,41 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
     UILinesRenderer renderer;
     CustomPanelAPI tooltipPanel;
     CustomPanelAPI currentShowcasePanel;
+    CustomPanelAPI majorPanel;
     ButtonAPI backProject;
     ButtonAPI cancelProject;
     ButtonAPI startProject;
+    ButtonAPI filterButton;
     SpecialProjectUIManager manager;
-    HashMap<ButtonAPI,AoTDSpecialProject> buttons = new HashMap<>();
-    public boolean update= false;
+    TextFieldAPI field;
+    HashMap<ButtonAPI, AoTDSpecialProject> buttons = new HashMap<>();
+    public boolean update = false;
+    int opads = 30;
 
     public SpecialProjectListManager(float width, float height, SpecialProjectUIManager manager) {
         this.manager = manager;
         mainPanel = Global.getSettings().createCustom(width, height, this);
-        tooltipPanel = Global.getSettings().createCustom(width, height, null);
-        currentShowcasePanel = Global.getSettings().createCustom(width, height, null);
-        TooltipMakerAPI tooltip = tooltipPanel.createUIElement(width, height, true);
+        tooltipPanel = Global.getSettings().createCustom(width, height - opads, null);
+        currentShowcasePanel = Global.getSettings().createCustom(width, height - opads, null);
+        TooltipMakerAPI tooltip = tooltipPanel.createUIElement(width, height - opads, true);
+        majorPanel = Global.getSettings().createCustom(width, opads, null);
+        TooltipMakerAPI tooltip2 = majorPanel.createUIElement(width, opads, false);
+        field = tooltip2.addTextField((width / 2) - 10, 20, Fonts.DEFAULT_SMALL, 5);
+        filterButton = tooltip2.addButton("Change filters", null, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.NONE, (width / 2) - 10, 20, 0f);
+        filterButton.getPosition().inTL((width / 2) + 5, 5);
         float opad = 5f;
         for (AoTDSpecialProject value : SpecialProjectManager.getInstance().getProjects().values()) {
             tooltip.addCustom(createSectionForProject(width - 10, 80, value), opad);
+
             opad = 5f;
         }
 
 
         tooltipPanel.addUIElement(tooltip).inTL(0, 0);
+        majorPanel.addUIElement(tooltip2).inTL(0, 0);
 
-        mainPanel.addComponent(tooltipPanel).inTL(0, 0);
+        mainPanel.addComponent(tooltipPanel).inTL(0, opads);
+        mainPanel.addComponent(majorPanel).inTL(0, 0);
         renderer = new UILinesRenderer(0f);
         renderer.setPanel(mainPanel);
     }
@@ -66,13 +78,9 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
             if (button.isChecked()) {
                 button.setChecked(false);
                 String data = (String) button.getCustomData();
-                if(data.equals("show_info")){
-                    mainPanel.removeComponent(tooltipPanel);
-                    currentShowcasePanel = Global.getSettings().createCustom(currentShowcasePanel.getPosition().getWidth(), currentShowcasePanel.getPosition().getHeight(), null);
-                    manager.getCurrProjectShowcase().setProject(buttons.get(button));
-                    manager.getCurrProjectShowcase().createUI();
-                    currentShowcasePanel.addComponent(createDetailedSectionOfProject(currentShowcasePanel.getPosition().getWidth(), currentShowcasePanel.getPosition().getHeight(), buttons.get(button)));
-                    mainPanel.addComponent(currentShowcasePanel);
+                if (data.equals("show_info")) {
+                    AoTDSpecialProject project = buttons.get(button);
+                    createDetailedProjectMenu(project);
                 }
             }
         }
@@ -81,10 +89,15 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
             backProject = null;
             startProject = null;
             cancelProject = null;
-            manager.getCurrProjectShowcase().setProject(SpecialProjectManager.getInstance().getCurrentlyOnGoingProject());
-            manager.getCurrProjectShowcase().createUI();
+            AoTDSpecialProject project = SpecialProjectManager.getInstance().getCurrentlyOnGoingProject();
+            if (project != null && manager.getCurrProjectShowcase().getProject() != null && !manager.getCurrProjectShowcase().getProject().getProjectSpec().getId().equals(project.getProjectSpec().getId())) {
+                manager.getCurrProjectShowcase().setProject(project);
+                manager.getCurrProjectShowcase().createUI();
+            }
             mainPanel.removeComponent(currentShowcasePanel);
-            mainPanel.addComponent(tooltipPanel);
+            mainPanel.addComponent(majorPanel).inTL(0, 0);
+            mainPanel.addComponent(tooltipPanel).inTL(0, opads);
+            ;
 
         }
         if (startProject != null && startProject.isChecked()) {
@@ -95,7 +108,9 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
             cancelProject = null;
             manager.getCurrProjectShowcase().getMainObject().setRenderLine(true);
             mainPanel.removeComponent(currentShowcasePanel);
-            mainPanel.addComponent(tooltipPanel);
+            mainPanel.addComponent(majorPanel).inTL(0, 0);
+            mainPanel.addComponent(tooltipPanel).inTL(0, opads);
+            ;
 
 
         }
@@ -108,12 +123,27 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
             manager.getCurrProjectShowcase().setProject(SpecialProjectManager.getInstance().getCurrentlyOnGoingProject());
             manager.getCurrProjectShowcase().createUI();
             mainPanel.removeComponent(currentShowcasePanel);
-            mainPanel.addComponent(tooltipPanel);
+            mainPanel.addComponent(majorPanel).inTL(0, 0);
+            mainPanel.addComponent(tooltipPanel).inTL(0, opads);
 
 
         }
     }
 
+    public void createDetailedProjectMenu(AoTDSpecialProject project) {
+
+        mainPanel.removeComponent(tooltipPanel);
+        mainPanel.removeComponent(majorPanel);
+        mainPanel.removeComponent(currentShowcasePanel);
+        currentShowcasePanel = Global.getSettings().createCustom(currentShowcasePanel.getPosition().getWidth(), currentShowcasePanel.getPosition().getHeight(), null);
+        if (manager.getCurrProjectShowcase().getProject() != null && !manager.getCurrProjectShowcase().getProject().getProjectSpec().getId().equals(project.getProjectSpec().getId())) {
+            manager.getCurrProjectShowcase().setProject(project);
+            manager.getCurrProjectShowcase().createUI();
+        }
+        currentShowcasePanel.addComponent(createDetailedSectionOfProject(currentShowcasePanel.getPosition().getWidth(), currentShowcasePanel.getPosition().getHeight(), project));
+        mainPanel.addComponent(currentShowcasePanel).inTL(0, 0);
+        ;
+    }
 
     @Override
     public void processInput(List<InputEventAPI> events) {
@@ -128,29 +158,33 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
     public CustomPanelAPI createSectionForProject(float width, float height, AoTDSpecialProject project) {
         CustomPanelAPI test = Global.getSettings().createCustom(width, height, new UILinesRenderer(0f));
         TooltipMakerAPI tooltip = test.createUIElement(width, height, false);
-        ButtonAPI button = tooltip.addAreaCheckbox(null,"show_info",Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Misc.getBrightPlayerColor(),width,height,0f);
-        button.getPosition().inTL(5,0);
-        project.createTooltipForButton(tooltip, width,true);
-        button.getPosition().setXAlignOffset(width/2-(button.getPosition().getWidth()/2)-5);
-        buttons.put(button,project);
-        HologramViewer viewer = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), true,false);
+        HologramViewer viewer = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), true, false);
+
+        TooltipMakerAPI tooltip2 = test.createUIElement(width - viewer.getComponentPanel().getPosition().getWidth() - 5, height, false);
+
+        ButtonAPI button = tooltip.addAreaCheckbox(null, "show_info", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Misc.getBrightPlayerColor(), width, height, 0f);
+        button.getPosition().inTL(5, 0);
+        project.createTooltipForButton(tooltip2, width, true);
+        button.getPosition().setXAlignOffset(width / 2 - (button.getPosition().getWidth() / 2) - 5);
+        buttons.put(button, project);
         viewer.setRenderLine(false);
-        tooltip.addCustomDoNotSetPosition(viewer.getComponentPanel()).getPosition().inTL(width - viewer.getComponentPanel().getPosition().getWidth()-15, 5);
+
         test.addUIElement(tooltip).inTL(5, 0);
+        test.addUIElement(tooltip2).inTL(viewer.getComponentPanel().getPosition().getWidth() + 10, 5);
+        test.addComponent(viewer.getComponentPanel()).inTL(0, 5);
         return test;
     }
 
     public CustomPanelAPI createDetailedSectionOfProject(float width, float height, AoTDSpecialProject project) {
         CustomPanelAPI test = Global.getSettings().createCustom(width, height, new UILinesRenderer(0f));
-        TooltipMakerAPI tooltip = test.createUIElement(width, height-35, true);
-        TooltipMakerAPI tooltipButtons = test.createUIElement(width,30,false);
+        TooltipMakerAPI tooltip = test.createUIElement(width, height - 40, true);
+        TooltipMakerAPI tooltipButtons = test.createUIElement(width, 30, false);
         project.createDetailedTooltipForButton(tooltip, width);
         backProject = tooltipButtons.addButton("Show other projects", "show_projects", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, 180, 30, 0);
-        if(SpecialProjectManager.getInstance().isCurrentOnGoing(project)){
+        if (SpecialProjectManager.getInstance().isCurrentOnGoing(project)) {
             cancelProject = tooltipButtons.addButton("Pause Project", project, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, 180, 30, -30f);
             cancelProject.getPosition().setXAlignOffset(width - cancelProject.getPosition().getWidth() - 10);
-        }
-        else{
+        } else {
             startProject = tooltipButtons.addButton("Start Project", project, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, 180, 30, -30f);
             if (SpecialProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
                 startProject.setEnabled(false);
@@ -160,12 +194,9 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
 
 
         float heights = tooltip.getHeightSoFar();
-        HologramViewer viewer = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), false,true);
-        viewer.setRenderLine(false);
-        tooltip.addCustomDoNotSetPosition(viewer.getComponentPanel()).getPosition().inTL(width - viewer.getComponentPanel().getPosition().getWidth(), 20);
         tooltip.setHeightSoFar(heights);
-        test.addUIElement(tooltip).inTL(0, 0);
-        test.addUIElement(tooltipButtons).inTL(0,height-35);
+        test.addUIElement(tooltip).inTL(0, 5);
+        test.addUIElement(tooltipButtons).inTL(0, height - 35);
         return test;
     }
 
