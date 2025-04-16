@@ -615,6 +615,10 @@ public class GPManager {
             if (option.getSpec().getType().equals(GPSpec.ProductionType.AICORE)) {
                 if (AoTDMisc.doesPlayerHaveTuringEngine()) {
                     options.add(option);
+                } else if (Global.getSector().getMemory().is("$finished_basic_ai",true)) {
+                    if(option.getSpec().getAiCoreSpecAPI().getId().equals(Commodities.GAMMA_CORE)||option.getSpec().getAiCoreSpecAPI().getId().equals(Commodities.BETA_CORE)){
+                        options.add(option);
+                    }
                 }
                 continue;
             }

@@ -32,36 +32,45 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
     public SpecialProjectListManager(float width, float height, SpecialProjectUIManager manager) {
         this.manager = manager;
         mainPanel = Global.getSettings().createCustom(width, height, this);
-        tooltipPanel = Global.getSettings().createCustom(width, height - opads, null);
+        ;
         currentShowcasePanel = Global.getSettings().createCustom(width, height, null);
-        TooltipMakerAPI tooltip = tooltipPanel.createUIElement(width, height - opads, true);
         majorPanel = Global.getSettings().createCustom(width, opads, null);
         TooltipMakerAPI tooltip2 = majorPanel.createUIElement(width, opads, false);
+
 //        filterButton = tooltip2.addButton("Change filters", null, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.NONE, (width / 2) - 10, 20, 0f);
 //        filterButton.getPosition().inTL((width / 2) + 5, 5);
-        float opad = 5f;
-        boolean haveAtLeastOne = false;
-        for (AoTDSpecialProject value : SpecialProjectManager.getInstance().getProjects().values()) {
-            if(!value.wasEverDiscovered())continue;
-            tooltip.addCustom(createSectionForProject(width - 10, 80, value), opad);
-            haveAtLeastOne = true;
-            opad = 5f;
-        }
-        if(!haveAtLeastOne){
-            LabelAPI labelAPI = tooltip.addSectionHeading("No Project Available",Misc.getTooltipTitleAndLightHighlightColor(),null,Alignment.MID,0f);
-            labelAPI.getPosition().inTL(0,height/2-(labelAPI.getPosition().getHeight()/2));
-//            field = tooltip2.addTextField((width / 2) - 10, 20, Fonts.DEFAULT_SMALL, 5);
 
-        }
-
-
-        tooltipPanel.addUIElement(tooltip).inTL(0, 0);
         majorPanel.addUIElement(tooltip2).inTL(0, 0);
+        createTooltipListPanel();
 
-        mainPanel.addComponent(tooltipPanel).inTL(0, opads);
         mainPanel.addComponent(majorPanel).inTL(0, 0);
         renderer = new UILinesRenderer(0f);
         renderer.setPanel(mainPanel);
+    }
+
+    private void createTooltipListPanel() {
+        if (tooltipPanel != null) {
+            mainPanel.removeComponent(tooltipPanel);
+        }
+        tooltipPanel = Global.getSettings().createCustom(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - opads, null);
+        TooltipMakerAPI tooltip = tooltipPanel.createUIElement(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - opads, true);
+        float opad = 5f;
+        boolean haveAtLeastOne = false;
+        for (AoTDSpecialProject value : SpecialProjectManager.getInstance().getProjects().values()) {
+            if (!value.wasEverDiscovered()) continue;
+            tooltip.addCustom(createSectionForProject(mainPanel.getPosition().getWidth() - 10, 80, value), opad);
+            haveAtLeastOne = true;
+            opad = 5f;
+        }
+        if (!haveAtLeastOne) {
+            LabelAPI labelAPI = tooltip.addSectionHeading("No Project Available", Misc.getTooltipTitleAndLightHighlightColor(), null, Alignment.MID, 0f);
+            labelAPI.getPosition().inTL(0, mainPanel.getPosition().getHeight() / 2 - (labelAPI.getPosition().getHeight() / 2));
+//            field = tooltip2.addTextField((width / 2) - 10, 20, Fonts.DEFAULT_SMALL, 5);
+
+        }
+        tooltipPanel.addUIElement(tooltip).inTL(0, 0);
+        majorPanel = Global.getSettings().createCustom(mainPanel.getPosition().getWidth(), opads, null);
+        mainPanel.addComponent(tooltipPanel).inTL(0, opads);
     }
 
     @Override
@@ -107,11 +116,14 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         }
         if (startProject != null && startProject.isChecked()) {
             backProject.setChecked(false);
+            AoTDSpecialProject project = (AoTDSpecialProject) startProject.getCustomData();
+            project.restartProject();
             SpecialProjectManager.getInstance().setCurrentlyOnGoingProject((AoTDSpecialProject) startProject.getCustomData());
             backProject = null;
             startProject = null;
             cancelProject = null;
             manager.getCurrProjectShowcase().getMainObject().setRenderLine(true);
+            manager.getCurrProjectShowcase().setNeedsToUpdate(true);
             createListUI();
             ;
 
@@ -135,8 +147,8 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         mainPanel.removeComponent(currentShowcasePanel);
         mainPanel.removeComponent(majorPanel);
         mainPanel.removeComponent(tooltipPanel);
+        createTooltipListPanel();
         mainPanel.addComponent(majorPanel).inTL(0, 0);
-        mainPanel.addComponent(tooltipPanel).inTL(0, opads);
     }
 
     public void createDetailedProjectMenu(AoTDSpecialProject project) {
@@ -149,7 +161,7 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
             manager.getCurrProjectShowcase().setProject(project);
             manager.getCurrProjectShowcase().createUI();
         }
-        if(manager.getCurrProjectShowcase().getProject()==null){
+        if (manager.getCurrProjectShowcase().getProject() == null) {
             manager.getCurrProjectShowcase().setProject(project);
             manager.getCurrProjectShowcase().createUI();
         }
@@ -197,11 +209,15 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         if (SpecialProjectManager.getInstance().isCurrentOnGoing(project)) {
             cancelProject = tooltipButtons.addButton("Pause Project", project, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, 180, 30, -30f);
             cancelProject.getPosition().setXAlignOffset(width - cancelProject.getPosition().getWidth() - 10);
-        } else {
+        } else if (project.canDoProject()) {
             startProject = tooltipButtons.addButton("Start Project", project, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, 180, 30, -30f);
-            if (SpecialProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
+            if (SpecialProjectManager.getInstance().getCurrentlyOnGoingProject() != null || !project.canDoProject()) {
                 startProject.setEnabled(false);
             }
+            if (project.getCountOfCompletion() > 0 && project.canDoProject()) {
+                startProject.setText("Restart Project");
+            }
+
             startProject.getPosition().setXAlignOffset(width - startProject.getPosition().getWidth() - 10);
         }
 

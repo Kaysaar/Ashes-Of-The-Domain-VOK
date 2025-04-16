@@ -64,6 +64,7 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
     public void createUI() {
         if(subMainPanel!=null){
             mainPanel.removeComponent(subMainPanel);
+            windows.clear();
             mover = null;
         }
         if(project !=null){

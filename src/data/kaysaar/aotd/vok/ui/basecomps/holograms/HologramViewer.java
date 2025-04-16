@@ -153,7 +153,7 @@ public class HologramViewer extends ResizableComponent {
             GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
             GL11.glColorMask(false, false, false, false);
             GL11.glEnable(GL11.GL_ALPHA_TEST);
-            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f);
+            GL11.glAlphaFunc(GL11.GL_GREATER, 0.2f);
 
             renderer.render(1,componentPanel.getPosition().getCenterX(),componentPanel.getPosition().getCenterY());
 

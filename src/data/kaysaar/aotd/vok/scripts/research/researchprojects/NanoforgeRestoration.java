@@ -20,22 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class NanoforgeRestoration extends ResearchProject {
-    public static final ArrayList<String> items = new ArrayList<String>(Arrays.asList(
-            "corrupted_nanoforge",
-            "pristine_nanoforge",
-            "synchrotron",
-            "orbital_fusion_lamp",
-            "mantle_bore",
-            "catalytic_core",
-            "soil_nanites",
-            "biofactory_embryo",
-            "fullerene_spool",
-            "plasma_dynamo",
-            "cryoarithmetic_engine",
-            "drone_replicator",
-            "dealmaker_holosuite",
-            "coronal_portal"
-    ));
+
     @Override
     public boolean haveMetReqForProjectToAppear() {
         return  AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched("aotd_tech_streamlined_production");
@@ -141,14 +126,7 @@ public class NanoforgeRestoration extends ResearchProject {
             }
         }
         else{
-            int random = MathUtils.getRandomNumberInRange(0,items.size()-1);
-            String id = items.get(random);
-            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
-                if(playerMarket.hasSubmarket(AoTDSubmarkets.RESEARCH_FACILITY_MARKET)){
-                    playerMarket.getSubmarket(AoTDSubmarkets.RESEARCH_FACILITY_MARKET).getCargo().addSpecial(new SpecialItemData(id,null),1);
-                    break;
-                }
-            }
+
         }
         super.applyProjectOutcomeWhenCompleted();
     }

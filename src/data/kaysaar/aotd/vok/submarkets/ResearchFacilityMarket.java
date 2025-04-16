@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoStackAPI;
 import com.fs.starfarer.api.campaign.CoreUIAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
+import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.submarkets.BaseSubmarketPlugin;
 import com.fs.starfarer.api.util.Highlights;
 
@@ -29,6 +30,16 @@ public class ResearchFacilityMarket extends BaseSubmarketPlugin {
 
     public boolean isIllegalOnSubmarket(CargoStackAPI stack, TransferAction action) {
 
+        return false;
+    }
+
+    @Override
+    public boolean isIllegalOnSubmarket(String commodityId, TransferAction action) {
+        return false;
+    }
+
+    @Override
+    public boolean isIllegalOnSubmarket(FleetMemberAPI member, TransferAction action) {
         return false;
     }
 

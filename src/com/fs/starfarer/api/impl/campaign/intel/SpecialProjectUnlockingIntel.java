@@ -52,7 +52,7 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
 
     @Override
     public String getIcon() {
-        return Global.getSettings().getSpriteName("intel", "respite40");
+        return Global.getSettings().getSpriteName("intel", "sp_unlock_finish");
     }
 
     @Override
