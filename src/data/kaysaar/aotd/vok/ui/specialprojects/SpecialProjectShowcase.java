@@ -12,6 +12,7 @@ import data.kaysaar.aotd.vok.ui.customprod.components.RightMouseTooltipMover;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpecialProjectShowcase implements CustomUIPanelPlugin {
@@ -27,8 +28,15 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
     public HologramViewer mainObject;
     RightMouseTooltipMover mover;
     AoTDSpecialProject project;
+    SpecialProjectUIManager manager;
+    public boolean needsToUpdate = false;
+    ArrayList<SpecialProjectStageWindow>windows = new ArrayList<>();
     public static float widthExpected = 1400; //1750
     public static float heightExpected = 1400;
+
+    public void setNeedsToUpdate(boolean needsToUpdate) {
+        this.needsToUpdate = needsToUpdate;
+    }
 
     public HologramViewer getMainObject() {
         return mainObject;
@@ -39,12 +47,14 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
     }
 
     //effective range must be 1120;
-    public SpecialProjectShowcase(float width, float height,AoTDSpecialProject project) {
+    public SpecialProjectShowcase(float width, float height,AoTDSpecialProject project,SpecialProjectUIManager manager) {
         if (width > widthExpected) {
             width = widthExpected;
         }
+        this.manager = manager;
         this.project = project;
         mainPanel = Global.getSettings().createCustom(width, height, this);
+        windows = new ArrayList<>();
         createUI();
 
         renderer = new UILinesRenderer(0f);
@@ -57,6 +67,8 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
             mover = null;
         }
         if(project !=null){
+            windows.clear();
+            needsToUpdate = false;
             objectOfInterest = Global.getSettings().createCustom(widthExpected, heightExpected, null);
             mover = new RightMouseTooltipMover();
              subMainPanel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
@@ -72,7 +84,7 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
             mover.init(subMainPanel, tooltip);
             float leftX = widthExpected - mainPanel.getPosition().getWidth();
             objectOfInterest.addComponent(mainObject.getComponentPanel()).inTL(objectOfInterest.getPosition().getWidth() / 2 - (mainObject.componentPanel.getPosition().getWidth() / 2), objectOfInterest.getPosition().getHeight() / 2 - (mainObject.componentPanel.getPosition().getHeight() / 2));
-            project.getStagesForUI(objectOfInterest);
+           windows.addAll( project.getStagesForUI(objectOfInterest,manager));
 
             tooltip.addCustomDoNotSetPosition(objectOfInterest).getPosition().inTL(-leftX / 2, 0);
             float border = -leftX / 2 - 5;
@@ -127,6 +139,13 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
     public void advance(float amount) {
         if(mover!=null){
             mover.advance(amount);
+        }
+        if(needsToUpdate){
+            needsToUpdate = false;
+            for (SpecialProjectStageWindow window : windows) {
+                window.createUI();
+            }
+
         }
 
     }
