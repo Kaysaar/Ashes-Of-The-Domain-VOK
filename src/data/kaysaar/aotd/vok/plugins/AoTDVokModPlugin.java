@@ -252,8 +252,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSettings().getCommoditySpec(Commodities.ALPHA_CORE).getTags().add("aotd_ai_core");
         GPManager.getInstance().reInitalize();
         CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
-
-        SpecialProjectManager.getInstance().getProject("uaf_supercap_slv_project").getStage("uaf_slv_stage1").setProgress(30f);
+        SpecialProjectManager.getInstance().addScriptInstance();
 //        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
 //            if(planet.isStar())continue;
 //            NidavelirShipyard shipyard = (NidavelirShipyard)planet.getStarSystem().addCustomEntity(null,"Nid","nid_shipyards",null).getCustomPlugin();

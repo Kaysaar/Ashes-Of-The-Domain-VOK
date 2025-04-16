@@ -710,7 +710,7 @@ public class GPManager {
 
     public void mainAdvance(float amount) {
         if (intervalUtil == null) {
-            intervalUtil = new IntervalUtil(9.5f, CampaignClock.SECONDS_PER_GAME_DAY); //
+            intervalUtil = new IntervalUtil(2.5f, 2.5f); //
         }
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {

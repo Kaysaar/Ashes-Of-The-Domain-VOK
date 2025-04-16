@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
@@ -8,6 +9,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectStageWindow;
+import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectUIManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -144,8 +146,37 @@ public class AoTDSpecialProject {
 
     }
 
-    public void advance(float amount) {
+    public void doCheckForProjectUnlock() {
+        if(!wasEverDiscovered()){
+            if( checkIfProjectShouldUnlock()){
+                setWasEverDiscovered(true);
+                createIntelForUnlocking();
+            }
 
+        }
+    }
+    public void createIntelForUnlocking() {
+        SpecialProjectUnlockingIntel intel = new SpecialProjectUnlockingIntel(this);
+        Global.getSector().getIntelManager().addIntel(intel);
+    }
+    public boolean checkIfProjectShouldUnlock(){
+        return false;
+    }
+    public void advance(float amount) {
+        for (String currentlyAttemptedStage : currentlyAttemptedStages) {
+            getStage(currentlyAttemptedStage).advance(amount*penalty);
+        }
+        if(getTotalProgress()==1f){
+            wasCompleted = true;
+            grantReward();
+            sentFinishNotification();
+            SpecialProjectManager.getInstance().setCurrentlyOnGoingProject(null);
+        }
+    }
+    public void sentFinishNotification(){
+
+    }
+    public void grantReward(){
 
     }
 
@@ -171,11 +202,11 @@ public class AoTDSpecialProject {
         return getStage(stageId).getSpec().getGpCost();
     }
 
-    public ArrayList<SpecialProjectStageWindow> getStagesForUI(CustomPanelAPI mainPanel) {
+    public ArrayList<SpecialProjectStageWindow> getStagesForUI(CustomPanelAPI mainPanel, SpecialProjectUIManager manager ) {
         ArrayList<SpecialProjectStageWindow> windows = new ArrayList<>();
         for (AoTDSpecialProjectStage spec : stages) {
 
-            SpecialProjectStageWindow window = new SpecialProjectStageWindow(this, spec, mainPanel, spec.getSpec().getMode(), spec.getSpec().getOriginMode(), spec.getSpec().getUiCordsOfBox(), spec.getSpec().getUiCordsOnHologram());
+            SpecialProjectStageWindow window = new SpecialProjectStageWindow(this, spec, mainPanel, spec.getSpec().getMode(), spec.getSpec().getOriginMode(), spec.getSpec().getUiCordsOfBox(), spec.getSpec().getUiCordsOnHologram(),manager);
             windows.add(window);
 
         }

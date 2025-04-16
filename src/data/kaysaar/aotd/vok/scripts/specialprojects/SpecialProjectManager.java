@@ -1,11 +1,13 @@
 package data.kaysaar.aotd.vok.scripts.specialprojects;
 
+import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
@@ -21,10 +23,31 @@ import java.util.List;
 import java.util.Map;
 
 public class SpecialProjectManager {
+
+    private IntervalUtil intervalUtil;
+
+    public class SpecialProjectAdvancer implements EveryFrameScript{
+
+        @Override
+        public boolean isDone() {
+            return false;
+        }
+
+        @Override
+        public boolean runWhilePaused() {
+            return false;
+        }
+
+        @Override
+        public void advance(float amount) {
+            SpecialProjectManager.getInstance().advance(amount);
+        }
+    }
     public LinkedHashMap<String, AoTDSpecialProject> projects = new LinkedHashMap<>();
     public AoTDSpecialProject currentlyOnGoingProject;
     public static String memflag = "$aotd_special_proj_manager";
     public static String marketId = AoTDSubmarkets.RESEARCH_FACILITY_MARKET;
+
 
     public static SpecialProjectManager getInstance() {
         if (Global.getSector().getPersistentData().get(memflag) == null) {
@@ -35,6 +58,9 @@ public class SpecialProjectManager {
 
     public void setCurrentlyOnGoingProject(AoTDSpecialProject currentlyOnGoingProject) {
         this.currentlyOnGoingProject = currentlyOnGoingProject;
+    }
+    public void addScriptInstance(){
+        Global.getSector().addTransientScript(new SpecialProjectAdvancer());
     }
 
     public AoTDSpecialProject getCurrentlyOnGoingProject() {
@@ -79,7 +105,18 @@ public class SpecialProjectManager {
     }
 
     public void advance(float amount) {
+        if (intervalUtil == null) {
+            intervalUtil = new IntervalUtil(2.5f, 2.5f); //
+        }
+        intervalUtil.advance(amount);
+        if (intervalUtil.intervalElapsed()) {
+            projects.values().forEach(AoTDSpecialProject::doCheckForProjectUnlock);
+            GPManager.getInstance().advance(GPManager.getInstance().getProductionOrders());
+            if(currentlyOnGoingProject!=null){
+                currentlyOnGoingProject.advance(intervalUtil.getElapsed());
 
+            }
+        }
     }
 
     public static HologramViewer createHologramViewer(AoTDSpecialProjectSpec spec, boolean isForButton, boolean isForBigButton) {

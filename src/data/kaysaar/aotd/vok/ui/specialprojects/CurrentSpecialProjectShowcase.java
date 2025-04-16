@@ -7,11 +7,14 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import data.kaysaar.aotd.vok.ui.basecomps.LabelComponent;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.HologramViewer;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
+import data.kaysaar.aotd.vok.ui.specialprojects.dialogs.PauseProjectDialog;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -40,13 +43,14 @@ public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
     }
 
     public void createUI() {
+        clearUI();
         if (currProjectShowing != null) {
             float width = mainPanel.getPosition().getWidth();
             insiderPanel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
             TooltipMakerAPI tooltip = insiderPanel.createUIElement(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), false);
             tooltip.setTitleFont(Fonts.ORBITRON_20AA);
             tooltip.addTitle(currProjectShowing.getNameOverride());
-            tooltip.addCustom(createResourcePanelForSmallTooltipCondensed(mainPanel.getPosition().getWidth() - 95, 24, 24, new HashMap<>(), new HashMap<>()), 2f);
+            tooltip.addCustom(createResourcePanelForSmallTooltipCondensed(mainPanel.getPosition().getWidth() - 95, 24, 24, currProjectShowing.getGpCostFromStages(), new HashMap<>()), 2f);
 
             ProgressBarComponent component = new ProgressBarComponent(mainPanel.getPosition().getWidth() - 110, 18, currProjectShowing.getTotalProgress(), Misc.getBasePlayerColor().darker().darker());
             tooltip.addCustom(component.getRenderingPanel(), 3f);
@@ -111,17 +115,25 @@ public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
 
         if (!SpecialProjectManager.getInstance().isCurrentOnGoing(currProjectShowing)) {
             currProjectShowing = SpecialProjectManager.getInstance().getCurrentlyOnGoingProject();
-            label = null;
-            buttonAPI = null;
-            buttonAPI2 = null;
-            mainPanel.removeComponent(insiderPanel);
+
             createUI();
         }
         if (buttonAPI2 != null && buttonAPI2.isChecked()&&currProjectShowing!=null) {
             buttonAPI2.setChecked(false);
             uiManager.getListManager().createDetailedProjectMenu(currProjectShowing);
         }
+        if (buttonAPI != null && buttonAPI.isChecked()&&currProjectShowing!=null) {
+            buttonAPI.setChecked(false);
+            BasePopUpDialog dialog = new PauseProjectDialog("Pause Special Project",uiManager,currProjectShowing);
+            AoTDMisc.initPopUpDialog(dialog,750,160);
+        }
+    }
 
+    private void clearUI() {
+        label = null;
+        buttonAPI = null;
+        buttonAPI2 = null;
+        mainPanel.removeComponent(insiderPanel);
     }
 
     @Override

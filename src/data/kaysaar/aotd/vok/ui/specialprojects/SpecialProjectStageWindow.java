@@ -63,7 +63,7 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
     UILinesRenderer renderer;
     transient SpriteAPI spriteToRender = Global.getSettings().getSprite("rendering", "GlitchSquare");
     transient SpriteAPI spriteToRender2 = Global.getSettings().getSprite("ui", "hud_circle");
-
+    SpecialProjectUIManager manager;
     ArrayList<SpecialProjectPointOfInterest> panelsConnect = new ArrayList<>();
     CustomPanelAPI panelInfoOfStage;
     CustomPanelAPI tooltipPanel;
@@ -88,19 +88,21 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         this.originMode = mode;
     }
 
-    public SpecialProjectStageWindow(AoTDSpecialProject project, AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel, RenderingMode mode, OriginMode origin, Vector2f posToPlace, ArrayList<Vector2f> posToConnect) {
+    public SpecialProjectStageWindow(AoTDSpecialProject project, AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel, RenderingMode mode, OriginMode origin, Vector2f posToPlace, ArrayList<Vector2f> posToConnect, SpecialProjectUIManager manager) {
+        this.manager = manager;
         this.parentPanel = parentPanel;
         this.stage = stage;
         setRenderingMode(mode);
         setOriginMode(origin);
+        renderer = new UILinesRenderer(0f);
         this.project = project;
         panelInfoOfStage = Global.getSettings().createCustom(350, 300, this);
         TooltipMakerAPI tooltip = initalizeTooltip(stage, parentPanel);
-        panelInfoOfStage.addComponent(tooltipPanel).inTL(0,0);
+        panelInfoOfStage.addComponent(tooltipPanel).inTL(0, 0);
         panelInfoOfStage.getPosition().setSize(350, tooltip.getHeightSoFar() + 5)
 
         ;
-        renderer = new UILinesRenderer(0f);
+
         renderer.setPanel(panelInfoOfStage);
         parentPanel.addComponent(panelInfoOfStage).inTL(posToPlace.x, posToPlace.y);
         for (Vector2f vector2f : posToConnect) {
@@ -115,15 +117,15 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
 
     @NotNull
     private TooltipMakerAPI initalizeTooltip(AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel) {
-        tooltipPanel = Global.getSettings().createCustom(350,300,null);
+        tooltipPanel = Global.getSettings().createCustom(350, 300, null);
 
-        TooltipMakerAPI tooltip = createTooltip(stage, parentPanel,tooltipPanel);
+        TooltipMakerAPI tooltip = createTooltip(stage, parentPanel, tooltipPanel);
         tooltipPanel.addUIElement(tooltip).inTL(0, 0);
         return tooltip;
     }
 
     @NotNull
-    private TooltipMakerAPI createTooltip(AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel,CustomPanelAPI panelInfoOfStage) {
+    private TooltipMakerAPI createTooltip(AoTDSpecialProjectStage stage, CustomPanelAPI parentPanel, CustomPanelAPI panelInfoOfStage) {
         TooltipMakerAPI tooltip = panelInfoOfStage.createUIElement(panelInfoOfStage.getPosition().getWidth(), parentPanel.getPosition().getHeight(), false);
         AoTDSpecialProjectStageSpec spec = stage.getSpec();
         tooltip.addTitle(spec.getName());
@@ -135,14 +137,26 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         tooltip.addPara("Credits : " + Misc.getDGSCredits(spec.getCreditCosts()), Color.ORANGE, 5f);
 
         for (OtherCostData s : spec.getOtherCosts()) {
-            tooltip.addCustom(getItemLabel(s,stage), 5f);
+            tooltip.addCustom(getItemLabel(s, stage), 5f);
         }
         tooltip.addSectionHeading("Progress", Alignment.MID, 5f);
         ProgressBarComponent component = new ProgressBarComponent(panelInfoOfStage.getPosition().getWidth() - 15, 21, stage.getProgressComputed(), Misc.getBasePlayerColor().darker().darker());
         tooltip.addCustom(component.getRenderingPanel(), 5f);
-        LabelAPI label = tooltip.addPara("Current progress of stage :"+(int)(stage.getProgressComputed()*100f)+"%", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
-        buttonOfStage = tooltip.addButton("Start stage", null, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.ALL, panelInfoOfStage.getPosition().getWidth() - 10, 20, 5f);
+        LabelAPI label = tooltip.addPara("Current progress of stage :" + (int) (stage.getProgressComputed() * 100f) + "%", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
+        buttonOfStage = tooltip.addButton("Start stage", "start_stage", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.ALL, panelInfoOfStage.getPosition().getWidth() - 10, 20, 5f);
+        if (project.getCurrentlyAttemptedStages().contains(stage.getSpec().getId())) {
+            buttonOfStage.setText("Pause stage");
+            buttonOfStage.setCustomData("pause_stage");
+
+        }
+        else if (project.getStage(stage.getSpec().getId()).isPaidForStage()){
+            buttonOfStage.setText("Resume stage");
+
+        }
         buttonOfStage.setEnabled(stage.haveMetCriteriaToStartOrResumeStage());
+        if(stage.isCompleted()){
+            buttonOfStage.setEnabled(false);
+        }
         label.getPosition().setXAlignOffset(panelInfoOfStage.getPosition().getWidth() / 2 - (label.computeTextWidth(label.getText()) / 2));
         buttonOfStage.getPosition().inTL(5, -buttonOfStage.getPosition().getY() - 20);
         return tooltip;
@@ -169,8 +183,17 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
 
         spriteToRender2.setSize(50, 50);
         spriteToRender2.setAlphaMult(alphaMult); // Fully opaque for mask write
-//        spriteToRender2.setColor(new Color(255, 166, 0));
-        spriteToRender2.setColor(Misc.getDarkHighlightColor());
+        spriteToRender2.setColor(new Color(191, 253, 245));
+        if(stage.isCompleted()){
+            spriteToRender2.setColor(Misc.getPositiveHighlightColor());
+        }
+        else{
+            if(project.getCurrentlyAttemptedStages().contains(stage.getSpec().getId())){
+                spriteToRender2.setColor(Misc.getDarkHighlightColor());
+            }
+        }
+
+
         for (SpecialProjectPointOfInterest childPanel : panelsConnect) {
             float cx = childPanel.panel.getPosition().getCenterX();
             float cy = childPanel.panel.getPosition().getCenterY();
@@ -267,12 +290,25 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         for (SpecialProjectPointOfInterest interest : panelsConnect) {
             interest.setAngle(interest.getAngle() + speed);
         }
-        if(buttonOfStage!=null&&buttonOfStage.isChecked()){
+        if (buttonOfStage != null && buttonOfStage.isChecked()) {
             buttonOfStage.setChecked(false);
-            project.getCurrentlyAttemptedStages().add(this.stage.getSpec().getId());
-            panelInfoOfStage.removeComponent(tooltipPanel);
-            initalizeTooltip(stage,parentPanel);
+            String data = (String) buttonOfStage.getCustomData();
+            if (data.equals("start_stage")) {
+                project.getStage(this.stage.getSpec().getId()).payForStage();
+                project.getCurrentlyAttemptedStages().add(this.stage.getSpec().getId());
+            } else {
+                project.getCurrentlyAttemptedStages().remove(this.stage.getSpec().getId());
+            }
+            manager.refreshMarketPanel();
+            manager.getCurrProjectShowcase().setNeedsToUpdate(true);
         }
+    }
+
+    public void createUI() {
+        panelInfoOfStage.removeComponent(tooltipPanel);
+        initalizeTooltip(stage, parentPanel);
+        panelInfoOfStage.addComponent(tooltipPanel).inTL(0, 0);
+        manager.getShowcaseProj().createUI();
     }
 
     @Override
@@ -295,7 +331,7 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
     public void buttonPressed(Object buttonId) {
     }
 
-    private CustomPanelAPI getItemLabel(OtherCostData data,AoTDSpecialProjectStage stage) {
+    private CustomPanelAPI getItemLabel(OtherCostData data, AoTDSpecialProjectStage stage) {
         if (data.getAmount() == 0) return null;
         CustomPanelAPI panel = Global.getSettings().createCustom(panelInfoOfStage.getPosition().getWidth(), 40, null);
         TooltipMakerAPI tooltipMakerAPI = panel.createUIElement(40, 40, false);
@@ -305,30 +341,30 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         if (data.getCostType().equals(OtherCostData.ItemType.COMMODITY)) {
             tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(data.getId()).getIconName(), 40, 40, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getCommoditySpec(data.getId()).getName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId,data.itemType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId, data.itemType));
         }
         if (data.getCostType().equals(OtherCostData.ItemType.ITEM)) {
             tooltipMakerAPI.addImage(Global.getSettings().getSpecialItemSpec(data.getId()).getIconName(), 40, 40, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getSpecialItemSpec(data.getId()).getName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId,data.itemType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId, data.itemType));
         }
         if (data.getCostType().equals(OtherCostData.ItemType.SHIP)) {
             tooltipMakerAPI.addCustom(ShipInfoGenerator.getShipImage(Global.getSettings().getHullSpec(data.getId()), 40, null).one, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getHullSpec(data.getId()).getHullName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId,data.itemType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId, data.itemType));
         }
         if (data.getCostType().equals(OtherCostData.ItemType.WEAPON)) {
             tooltipMakerAPI.addCustom(WeaponInfoGenerator.getImageOfWeapon(Global.getSettings().getWeaponSpec(data.getId()), 40).one, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getWeaponSpec(data.getId()).getWeaponName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId,data.itemType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId, data.itemType));
         }
         if (data.getCostType().equals(OtherCostData.ItemType.FIGHTER)) {
             tooltipMakerAPI.addCustom(FighterInfoGenerator.createFormationPanel(Global.getSettings().getFighterWingSpec(data.getId()), FormationType.BOX, 40, Global.getSettings().getFighterWingSpec(data.getId()).getNumFighters()).one, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getFighterWingSpec(data.getId()).getWingName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId,data.itemType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId, data.itemType));
         }
 
-        if (stage.haveMetCriteriaToStartOrResumeStage()||SpecialProjectManager.haveMetReqForItem(data.getId(),data.getAmount(),data.getCostType())) {
+        if (stage.haveMetCriteriaToStartOrResumeStage() || SpecialProjectManager.haveMetReqForItem(data.getId(), data.getAmount(), data.getCostType())) {
             labelAPI1.setColor(Misc.getPositiveHighlightColor());
 
         } else {
