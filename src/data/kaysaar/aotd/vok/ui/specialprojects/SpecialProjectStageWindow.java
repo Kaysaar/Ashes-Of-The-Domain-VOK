@@ -154,7 +154,7 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
 
         }
         buttonOfStage.setEnabled(stage.haveMetCriteriaToStartOrResumeStage());
-        if(stage.isCompleted()){
+        if(stage.isCompleted()||!SpecialProjectManager.getInstance().isCurrentOnGoing(project)||!project.canAttemptStage(stage.getSpec().getId())){
             buttonOfStage.setEnabled(false);
         }
         label.getPosition().setXAlignOffset(panelInfoOfStage.getPosition().getWidth() / 2 - (label.computeTextWidth(label.getText()) / 2));

@@ -19,6 +19,7 @@ public class AoTDSpecialProjectSpec {
     String description;
     LinkedHashMap<String, Integer> stageMap = new LinkedHashMap<>();
     String pluginName;
+    String modId;
     SpecialProjectIconData iconData;
     Set<String> tags = new HashSet<>();
     public Set<String> getTags() {
@@ -41,6 +42,14 @@ public class AoTDSpecialProjectSpec {
     public void setPlugin(String pluginPath) {
         this.pluginName = pluginPath;
 
+    }
+
+    public String getModId() {
+        return modId;
+    }
+
+    public void setModId(String modId) {
+        this.modId = modId;
     }
 
     public AoTDSpecialProjectSpec(String id) {
@@ -130,6 +139,7 @@ public class AoTDSpecialProjectSpec {
         aoTDSpecialProjectSpec.setName(name);
         aoTDSpecialProjectSpec.setDescription(des);
         aoTDSpecialProjectSpec.setIconData(getDataFromEntry(obj.getString("iconData")));
+        aoTDSpecialProjectSpec.setModId(obj.getString("modID"));
         for (String rewards : loadEntries(obj.getString("rewards"), ",")) {
             aoTDSpecialProjectSpec.addReward(getDataForReward(rewards));
         }

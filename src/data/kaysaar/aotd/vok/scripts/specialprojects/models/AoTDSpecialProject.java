@@ -1,6 +1,8 @@
 package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.impl.campaign.intel.ProjectStageCompletionIntel;
+import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectFinishedIntel;
 import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -23,11 +25,25 @@ public class AoTDSpecialProject {
     public String specID;
     public float penalty;
     ArrayList<AoTDSpecialProjectStage> stages = new ArrayList<>();
-
+    public int countOfCompletion = 0;
     public ArrayList<String> getCurrentlyAttemptedStages() {
         return currentlyAttemptedStages;
     }
 
+    public int getCountOfCompletion() {
+        return countOfCompletion;
+    }
+    public void restartProject(){
+        currentlyAttemptedStages.clear();
+        for (AoTDSpecialProjectStage stage : stages) {
+            stage.setCompleted(false);
+            stage.setProgress(0f);
+            stage.setPaidForStage(false);
+        }
+    }
+    public boolean canAttemptStage(String stageID){
+        return true;
+    }
     public void setPenalty(float penalty) {
         this.penalty = penalty;
     }
@@ -52,17 +68,12 @@ public class AoTDSpecialProject {
         return weight;
     }
     public boolean wasEverDiscovered = false;
-    public void sentProjectUnlockNotification(){
-
-    }
-
     public boolean wasEverDiscovered() {
         return wasEverDiscovered;
     }
 
     public void setWasEverDiscovered(boolean wasEverDiscovered) {
         if(wasEverDiscovered &&!this.wasEverDiscovered){
-            sentProjectUnlockNotification();
         }
         this.wasEverDiscovered = wasEverDiscovered;
     }
@@ -122,6 +133,7 @@ public class AoTDSpecialProject {
     public void applyBonusesFromSkills(HashMap<String,Integer>gpCost){
 
     }
+
     public void update() {
         for (String s : getProjectSpec().getStageMap().keySet()) {
             if (stages.stream().noneMatch(x -> x.specId.equals(s))) {
@@ -148,7 +160,7 @@ public class AoTDSpecialProject {
 
     public void doCheckForProjectUnlock() {
         if(!wasEverDiscovered()){
-            if( checkIfProjectShouldUnlock()){
+            if( checkIfProjectShouldUnlock()||Global.getSettings().isDevMode()){
                 setWasEverDiscovered(true);
                 createIntelForUnlocking();
             }
@@ -166,15 +178,33 @@ public class AoTDSpecialProject {
         for (String currentlyAttemptedStage : currentlyAttemptedStages) {
             getStage(currentlyAttemptedStage).advance(amount*penalty);
         }
-        if(getTotalProgress()==1f){
+        ArrayList<String>forNotifitcations = new ArrayList<>();
+        for (AoTDSpecialProjectStage stage : stages) {
+            if(stage.isCompleted()){
+                if(currentlyAttemptedStages.contains(stage.getSpec().getId())){
+                    forNotifitcations.add(stage.getSpec().getId());
+                }
+                currentlyAttemptedStages.remove(stage.getSpec().getId());
+
+            }
+        }
+        if(getTotalProgress()==1f&&!wasCompleted){
             wasCompleted = true;
+            countOfCompletion++;
             grantReward();
             sentFinishNotification();
+            forNotifitcations.clear();
             SpecialProjectManager.getInstance().setCurrentlyOnGoingProject(null);
         }
+        forNotifitcations.forEach(x->Global.getSector().getIntelManager().addIntel(new ProjectStageCompletionIntel(this,getStage(x))));
+        forNotifitcations.clear();
+    }
+    public boolean canDoProject(){
+        return countOfCompletion==0||getProjectSpec().hasTag("repeatable");
     }
     public void sentFinishNotification(){
-
+        SpecialProjectFinishedIntel intel = new SpecialProjectFinishedIntel(this);
+        Global.getSector().getIntelManager().addIntel(intel);
     }
     public void grantReward(){
 
@@ -230,26 +260,21 @@ public class AoTDSpecialProject {
         tooltip.addSectionHeading("Effects upon project completion", Misc.getDarkHighlightColor(), null, Alignment.MID, width, 3f);
         createRewardSection(tooltip, width);
     }
-    public void shouldAppearOnUI(){
-
-    }
     public void createRewardSection(TooltipMakerAPI tooltip, float width) {
-        tooltip.addPara("Gain " + Global.getSettings().getHullSpec("uaf_supercap_slv_core").getHullNameWithDashClass(), Misc.getPositiveHighlightColor(), 5f);
+    }
+    public void createRewardSectionForInfo(TooltipMakerAPI tooltip, float width) {
+        createRewardSection(tooltip,width);
     }
     public void printSpecialization(TooltipMakerAPI tooltip){
-        tooltip.addPara("Project type : %s",5f, Color.ORANGE,getSpecialization());
+        AoTDSpecializationSpec spec = getSpecialization();
+        if(spec!=null){
+            tooltip.addPara("Project type : %s",5f, spec.getColorOfString(),spec.getName());
+        }
+
     }
-    public String getSpecialization(){
-        if(getProjectSpec().hasTag("ship_enginnering")){
-            return "Ship Engineering";
-        }
-        if(getProjectSpec().hasTag("physics")){
-            return "Physics";
-        }
-        if(getProjectSpec().hasTag("computers")){
-            return "Computers";
-        }
-        return "";
+    public AoTDSpecializationSpec getSpecialization(){
+        return SpecialProjectSpecManager.getSpecializations().stream().filter(s -> getProjectSpec().hasTag(s.getId())).findFirst().orElse(null);
+
     }
 
     public void createTooltipForButton(TooltipMakerAPI tooltip, float width,boolean smallButton) {

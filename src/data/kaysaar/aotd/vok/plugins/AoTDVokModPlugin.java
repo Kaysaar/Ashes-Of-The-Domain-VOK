@@ -202,8 +202,11 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //        FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().removeFleetMember( FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().getMembersListCopy().get(2));
 
         Global.getSector().addTransientScript(new CoreUITracker());
-        Global.getSector().addTransientScript(new AoTDCompoundUIScript());
-        Global.getSector().addTransientScript(new AoTDCompoundUIInMarketScript());
+        if( Global.getSector().getMemory().is("$aotd_compound_unlocked",true)){
+            Global.getSector().addTransientScript(new AoTDCompoundUIScript());
+            Global.getSector().addTransientScript(new AoTDCompoundUIInMarketScript());
+        }
+
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");
         AoTDMainResearchManager.getInstance().updateModIdRepo();
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");

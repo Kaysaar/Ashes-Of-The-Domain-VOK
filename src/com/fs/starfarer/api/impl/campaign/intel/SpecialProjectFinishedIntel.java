@@ -1,11 +1,13 @@
 package com.fs.starfarer.api.impl.campaign.intel;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 
 import java.awt.*;
@@ -37,14 +39,14 @@ public class SpecialProjectFinishedIntel extends BaseIntelPlugin {
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
         info.addPara("After investing huge amount of resources we have finally managed to finish this project", 5f);
-        specialProject.createRewardSection(info,width);
-        info.addPara("Vessel is located in %s on %s",5f,Color.ORANGE,"Local storage",Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getName());
+        specialProject.createRewardSectionForInfo(info,width);
+        addGenericButton(info,width,"Access Special Projects",Button_SHIP);
     }
 
 
     @Override
     public String getIcon() {
-        return Global.getSettings().getSpriteName("intel", "respite40");
+        return Global.getSettings().getSpriteName("intel", "sp_unlock_finish");
     }
 
     @Override
@@ -59,8 +61,10 @@ public class SpecialProjectFinishedIntel extends BaseIntelPlugin {
 
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
-        if (buttonId == Button_SHIP) {
-
+        if(buttonId==Button_SHIP){
+            CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
+            CoreUITracker.setMemFlagForTechTab("special projects");
+            Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }
 
     }

@@ -43,5 +43,6 @@ public class PauseProjectDialog extends BasePopUpDialog {
         manager.getCurrProjectShowcase().createUI();
         manager.getListManager().createListUI();
         manager.getShowcaseProj().createUI();
+        project.getCurrentlyAttemptedStages().clear();
     }
 }

@@ -46,6 +46,9 @@ public class AoTDSpecialProjectStage {
     }
     public void advance(float amount){
         float days = Global.getSector().getClock().convertToDays(amount);
+        if(Global.getSettings().isDevMode()){
+            days*=10;
+        }
         progress+=days;
         if(getProgressComputed()==1){
             setCompleted(true);

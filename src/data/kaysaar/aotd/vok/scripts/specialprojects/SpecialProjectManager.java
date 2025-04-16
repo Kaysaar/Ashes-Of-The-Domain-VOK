@@ -17,10 +17,7 @@ import data.kaysaar.aotd.vok.ui.basecomps.holograms.HologramViewer;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.ShipHologram;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.WeaponHologram;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SpecialProjectManager {
 
@@ -47,7 +44,7 @@ public class SpecialProjectManager {
     public AoTDSpecialProject currentlyOnGoingProject;
     public static String memflag = "$aotd_special_proj_manager";
     public static String marketId = AoTDSubmarkets.RESEARCH_FACILITY_MARKET;
-
+    public transient ArrayList<AoTDSpecializationSpec>specializationSpecs = new ArrayList<>();
 
     public static SpecialProjectManager getInstance() {
         if (Global.getSector().getPersistentData().get(memflag) == null) {
@@ -102,6 +99,7 @@ public class SpecialProjectManager {
                 projects.get(entry.getKey()).update();
             }
         }
+        projects.entrySet().removeIf(entry -> entry.getValue().getProjectSpec()==null||!Global.getSettings().getModManager().isModEnabled(entry.getValue().getProjectSpec().getModId()));
     }
 
     public void advance(float amount) {
@@ -114,7 +112,6 @@ public class SpecialProjectManager {
             GPManager.getInstance().advance(GPManager.getInstance().getProductionOrders());
             if(currentlyOnGoingProject!=null){
                 currentlyOnGoingProject.advance(intervalUtil.getElapsed());
-
             }
         }
     }

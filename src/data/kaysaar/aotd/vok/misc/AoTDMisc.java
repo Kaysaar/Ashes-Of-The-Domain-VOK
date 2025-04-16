@@ -378,6 +378,16 @@ public class AoTDMisc {
         }
         return false;
     }
+    public static boolean isPLayerHavingIndustry(String id) {
+        for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+            for (Industry industry : playerMarket.getIndustries()) {
+                if(industry.getSpec().getId().equals(id)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public static boolean isHavingAdvancedHeavyIndustry() {
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
