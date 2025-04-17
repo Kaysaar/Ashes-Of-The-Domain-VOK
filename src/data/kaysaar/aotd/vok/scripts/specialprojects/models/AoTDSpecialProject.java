@@ -164,7 +164,7 @@ public class AoTDSpecialProject {
 
     public void doCheckForProjectUnlock() {
         if(!wasEverDiscovered()){
-            if( checkIfProjectShouldUnlock()||Global.getSettings().isDevMode()){
+            if( checkIfProjectShouldUnlock()){
                 setWasEverDiscovered(true);
                 createIntelForUnlocking();
             }
