@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static data.kaysaar.aotd.vok.plugins.AoTDVokModPlugin.clearListenersFromTemporaryMarket;
+
 public class ResearchInfoUI extends PopUpUI {
     ResearchOption option;
     CustomPanelAPI mainPanel;
@@ -122,6 +124,7 @@ public class ResearchInfoUI extends PopUpUI {
             String[] splitted = data.split(":");
             if (splitted[0].equals("research")) {
                 AoTDMainResearchManager.getInstance().getManagerForPlayer().pickResearchFocus(option.Id);
+                AoTDMainResearchManager.getInstance().getManagerForPlayer().notifyFactionBeginResearch(option);
                 Global.getSoundPlayer().playUISound("aotd_research_started", 1f, 1f);
                 resetUI();
                 this.zoomPanel.plugin.resetCurrentResearch();
@@ -214,10 +217,9 @@ public class ResearchInfoUI extends PopUpUI {
 
     public CustomPanelAPI getProgressionBarTooltip(CustomPanelAPI originPanel) {
         CustomPanelAPI progression = originPanel.createCustomPanel(originPanel.getPosition().getWidth(), 50, null);
-        ProgressBarComponent component = new ProgressBarComponent(progression.getPosition().getWidth() - 10, 21, AoDUtilis.calculatePercentOfProgression(option), Misc.getDarkPlayerColor().brighter().brighter());
+        ProgressBarComponent component = new ProgressBarComponent(progression.getPosition().getWidth() - 10, 21, option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
         TooltipMakerAPI tooltip = progression.createUIElement(originPanel.getPosition().getWidth(), 50, false);
         int defaultDays = (int) (option.TimeToResearch * (float) multiplier);
-        float days = defaultDays - option.daysSpentOnResearching - (defaultDays * (AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC * (AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getAmountOfResearchFacilities() - 1)));
 
         tooltip.addPara("This technology takes %s to research", 5f, Color.ORANGE, AoTDMisc.convertDaysToString(defaultDays));
         if (option.isResearched) {
@@ -225,7 +227,7 @@ public class ResearchInfoUI extends PopUpUI {
         } else {
             AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction();
             if (manager.getCurrentFocus() != null && manager.getCurrentFocus().getSpec().getId().equals(option.getSpec().getId())) {
-                tooltip.addPara("Current research progress : %s ( %s left )", 5f, Color.ORANGE, option.getPercentageProgress() + "%", AoTDMisc.convertDaysToString((int) days));
+                tooltip.addPara("Current research progress : %s ( %s left )", 5f, Color.ORANGE, option.getPercentageProgress() + "%", AoTDMisc.convertDaysToString((int) AoDUtilis.getDaysFromResearch(option)));
 
             } else {
                 tooltip.addPara("Current research progress : %s", 5f, Color.ORANGE, option.getPercentageProgress() + "%");
@@ -305,7 +307,8 @@ public class ResearchInfoUI extends PopUpUI {
                             tooltip.addPara("This industry upgrades from : %s ", 10f, Color.ORANGE, "" + Global.getSettings().getIndustrySpec(ind.getSpec().getDowngrade()).getName());
 
                         }
-
+                        marketAPI.removeIndustry(ind.getSpec().getId(), MarketAPI.MarketInteractionMode.REMOTE,false);
+                        clearListenersFromTemporaryMarket();
                     }
                 }, panel2, TooltipMakerAPI.TooltipLocation.RIGHT,false);
                 lastX += 210;
@@ -359,8 +362,10 @@ public class ResearchInfoUI extends PopUpUI {
                         tooltip.addPara("This industry upgrades from : %s ", 10f, Color.ORANGE, "" + Global.getSettings().getIndustrySpec(ind.getSpec().getDowngrade()).getName());
 
                     }
-
+                    marketAPI.removeIndustry(ind.getSpec().getId(), MarketAPI.MarketInteractionMode.REMOTE,false);
+                    clearListenersFromTemporaryMarket();
                 }
+
             }, panel2, TooltipMakerAPI.TooltipLocation.RIGHT,false);
         } else {
             float lastY = 20;
@@ -408,6 +413,8 @@ public class ResearchInfoUI extends PopUpUI {
                             tooltip.addPara("This industry upgrades from : %s ", 10f, Color.ORANGE, "" + Global.getSettings().getIndustrySpec(ind.getSpec().getDowngrade()).getName());
 
                         }
+                        marketAPI.removeIndustry(ind.getSpec().getId(), MarketAPI.MarketInteractionMode.REMOTE,false);
+                        clearListenersFromTemporaryMarket();
 
                     }
                 }, panel2, TooltipMakerAPI.TooltipLocation.RIGHT,false);

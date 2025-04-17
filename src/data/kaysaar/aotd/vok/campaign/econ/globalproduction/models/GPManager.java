@@ -376,7 +376,7 @@ public class GPManager {
 
     public ArrayList<GPOption> getAICores() {
         ArrayList<GPOption> options = new ArrayList<>();
-        for (GPOption option : getItemProductionOption()) {
+        for (GPOption option : getLearnedItems()) {
             if (option.getSpec().getType().equals(GPSpec.ProductionType.AICORE)) {
                 options.add(option);
             }

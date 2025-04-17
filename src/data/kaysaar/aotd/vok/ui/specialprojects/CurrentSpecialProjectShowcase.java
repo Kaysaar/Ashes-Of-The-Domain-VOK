@@ -8,6 +8,7 @@ import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
+import data.kaysaar.aotd.vok.campaign.econ.industry.Commerce;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
@@ -115,7 +116,6 @@ public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
 
         if (!SpecialProjectManager.getInstance().isCurrentOnGoing(currProjectShowing)) {
             currProjectShowing = SpecialProjectManager.getInstance().getCurrentlyOnGoingProject();
-
             createUI();
         }
         if (buttonAPI2 != null && buttonAPI2.isChecked()&&currProjectShowing!=null) {

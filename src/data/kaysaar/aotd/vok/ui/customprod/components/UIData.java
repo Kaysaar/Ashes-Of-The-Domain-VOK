@@ -260,13 +260,15 @@ public class UIData {
         if (days <= 1) days = 1;
         LabelAPI buildTime = mainTooltip.addPara(AoTDMisc.convertDaysToString((int) days), 0f);
         LabelAPI designType = mainTooltip.addPara("AI core",Color.ORANGE, 0f);
-        LabelAPI credits = mainTooltip.addPara(Misc.getDGSCredits(option.getSpec().getCredistCost()), 0f, Color.ORANGE);
+        LabelAPI credits = mainTooltip.addPara(Misc.getDGSCredits(option.getSpec().getCredistCost()),  Color.ORANGE,0f);
         buildTime.getPosition().inTL(getxPad(buildTime, getCenter(WIDTH_OF_NAME + WIDTH_OF_TYPE, WIDTH_OF_BUILD_TIME)), getyPad(name));
         designType.getPosition().inTL(getxPad(designType, getCenter(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE, WIDTH_OF_DESIGN_TYPE)), getyPad(designType));
-        credits.getPosition().inTL(getxPad(credits, getCenter(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_DESIGN_TYPE, WIDTH_OF_CREDIT_COST + WIDTH_OF_SIZE)), getyPad(credits));
-        CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP, HEIGHT_OF_BUTTONS, option.getSpec());
-        mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE + WIDTH_OF_SIZE + WIDTH_OF_DESIGN_TYPE + WIDTH_OF_CREDIT_COST, 0);
-        mainTooltip.addCustom(panelImage, 5f).getPosition().inTL(0, 4);
+        float centerXTotalCost =  getCenter(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE+ WIDTH_OF_DESIGN_TYPE,UIData.WIDTH_OF_CREDIT_COST+UIData.WIDTH_OF_GP+UIData.WIDTH_OF_SIZE);
+        CustomPanelAPI panelImg = getGPCostPanel(WIDTH_OF_GP+WIDTH_OF_CREDIT_COST+UIData.WIDTH_OF_SIZE, HEIGHT_OF_BUTTONS-15, option.getSpec());
+
+        credits.getPosition().inTL(centerXTotalCost-(credits.computeTextWidth(credits.getText())/2),35);
+        mainTooltip.addCustomDoNotSetPosition(panelImg).getPosition().setLocation(0, 0).inTL(WIDTH_OF_NAME + WIDTH_OF_BUILD_TIME + WIDTH_OF_TYPE+ WIDTH_OF_DESIGN_TYPE, 0);
+        mainTooltip.addCustom(panelImage, 5f).getPosition().inTL(2, 10);
         mainTooltip.addTooltipToPrevious(new ProducitonHoverInfo(option.getSpec()), TooltipMakerAPI.TooltipLocation.BELOW,false);
         panel.addUIElement(mainTooltip).inTL(-5, 0);
         return new UiPackage(panel, option, button);

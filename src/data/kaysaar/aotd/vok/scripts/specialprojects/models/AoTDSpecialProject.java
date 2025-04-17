@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.intel.ProjectStageCompletionIntel;
 import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectFinishedIntel;
 import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
@@ -264,6 +265,9 @@ public class AoTDSpecialProject {
     }
     public void createRewardSectionForInfo(TooltipMakerAPI tooltip, float width) {
         createRewardSection(tooltip,width);
+        MarketAPI market  = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
+        if(market==null)market = Misc.getPlayerMarkets(true).get(0);
+        tooltip.addPara("Price is located in local storage of "+market.getName(),5f);
     }
     public void printSpecialization(TooltipMakerAPI tooltip){
         AoTDSpecializationSpec spec = getSpecialization();

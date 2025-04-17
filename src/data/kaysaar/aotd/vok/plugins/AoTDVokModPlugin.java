@@ -1,12 +1,14 @@
 package data.kaysaar.aotd.vok.plugins;
 
 
+import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
@@ -40,6 +42,8 @@ import org.json.JSONException;
 import org.lazywizard.lazylib.ui.FontException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AoTDVokModPlugin extends BaseModPlugin {
@@ -96,6 +100,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.addListener(new NidavelirClaimMegastructure(), true);
         l.addListener(new AoTDSupertencileListener(), true);
         l.addListener(new BifrostReesarchListener(), true);
+        l.addListener(new CompoundProducitonListener(), true);
     }
 
 
@@ -256,6 +261,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         GPManager.getInstance().reInitalize();
         CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
         SpecialProjectManager.getInstance().addScriptInstance();
+        clearListenersFromTemporaryMarket();
 //        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
 //            if(planet.isStar())continue;
 //            NidavelirShipyard shipyard = (NidavelirShipyard)planet.getStarSystem().addCustomEntity(null,"Nid","nid_shipyards",null).getCustomPlugin();
@@ -304,6 +310,16 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //        };
 //        return cat;
 //    }
+
+    public static void clearListenersFromTemporaryMarket(){
+        ArrayList<BaseIndustry> listeners = new ArrayList<>(Global.getSector().getListenerManager().getListeners(BaseIndustry.class));
+        for (BaseIndustry listener : listeners) {
+            if(AshMisc.isStringValid(listener.getMarket().getId())&&listener.getMarket().getId().equals("to_delete")){
+                Global.getSector().getListenerManager().removeListener(listener);
+            }
+        }
+        listeners.clear();
+    }
 }
 
 
