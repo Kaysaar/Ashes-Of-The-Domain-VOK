@@ -243,8 +243,8 @@ public class GPUIData {
                 itemManInffo.put(spec.getManufacturer(), amount + 1);
             }
         }
-        if(AoTDMisc.doesPlayerHaveTuringEngine()){
-            itemManInffo.put("AI Cores", GPManager.getInstance().getAICores().size());
+        if( !GPManager.getInstance().getAICores().isEmpty()){
+            itemManInffo.put("AI Cores",GPManager.getInstance().getAICores().size());
         }
 
         int val = 0;

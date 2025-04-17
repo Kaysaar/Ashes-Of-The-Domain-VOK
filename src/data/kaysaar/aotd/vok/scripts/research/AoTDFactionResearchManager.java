@@ -269,8 +269,7 @@ public class AoTDFactionResearchManager {
                     researchOption.daysSpentOnResearching += 100 * Global.getSector().getClock().convertToDays(amount);
                 }
                 researchOption.daysSpentOnResearching += Global.getSector().getClock().convertToDays(amount);
-                double multiplier = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
-                if (researchOption.daysSpentOnResearching >= researchOption.getSpec().getTimeToResearch() * multiplier - researchOption.getSpec().getTimeToResearch() * multiplier * (AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC * (getAmountOfResearchFacilities() - 1))) {
+                if (researchOption.getPercentageProgress()>=100) {
                     researchOption.daysSpentOnResearching = 0;
                     researchOption.setResearched(true);
                     AoTDListenerUtilis.finishedResearch(researchOption.Id, this.getFaction());
@@ -315,7 +314,7 @@ public class AoTDFactionResearchManager {
         Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
     }
 
-    private void notifyFactionBeginResearch(ResearchOption researchOption) {
+    public void notifyFactionBeginResearch(ResearchOption researchOption) {
         if (researchOption == null) return;
         if (!this.canResearch(researchOption.Id, false)) {
             MessageIntel intel = new MessageIntel("Could not research - " + researchOption.Name + ": Requirements not met ", Misc.getNegativeHighlightColor());

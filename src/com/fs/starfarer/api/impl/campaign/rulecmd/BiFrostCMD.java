@@ -60,6 +60,7 @@ public class BiFrostCMD extends BaseCommandPlugin {
         for (GPBaseMegastructure megastructure : megastructures) {
             BifrostMega mega = (BifrostMega) megastructure;
             for (BifrostSection section : mega.getSections()) {
+                if(section.getGateTiedTo()==null)continue;
                 toReturn.add(section.getGateTiedTo());
             }
         }

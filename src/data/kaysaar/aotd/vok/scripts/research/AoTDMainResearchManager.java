@@ -250,13 +250,16 @@ public class AoTDMainResearchManager {
             }
         }
     }
+
     public void setAttitudeDataForAllFactions() {
         for (AoTDFactionResearchManager factionResearchManager : getFactionResearchManagers()) {
-            factionResearchManager.setAttitudeData(new FactionResearchAttitudeData(factionResearchManager.getFaction().getId(),AoTDAIStance.DEFAULT,0.2f,0.5f,null,new ArrayList<String>()));
+            factionResearchManager.setAttitudeData(new FactionResearchAttitudeData(factionResearchManager.getFaction().getId(), AoTDAIStance.DEFAULT, 0.2f, 0.5f, null, new ArrayList<String>()));
         }
         try {
             for (FactionResearchAttitudeData factionResearchAttitudeData : FactionResearchAttitudeData.getDataFromCSV()) {
-                 getSpecificFactionManager(Global.getSector().getFaction(factionResearchAttitudeData.factionID)).setAttitudeData(factionResearchAttitudeData);
+                if (getSpecificFactionManager(Global.getSector().getFaction(factionResearchAttitudeData.factionID)) != null) {
+                    getSpecificFactionManager(Global.getSector().getFaction(factionResearchAttitudeData.factionID)).setAttitudeData(factionResearchAttitudeData);
+                }
             }
         } catch (JSONException e) {
         } catch (IOException e) {
@@ -300,9 +303,11 @@ public class AoTDMainResearchManager {
         return manager;
 
     }
-    public String getNameForResearchBd(String id){
-        return "Required Technology : "+AoTDMainResearchManager.getInstance().getSpecForSpecificResearch(id).getName();
+
+    public String getNameForResearchBd(String id) {
+        return "Required Technology : " + AoTDMainResearchManager.getInstance().getSpecForSpecificResearch(id).getName();
     }
+
     public ResearchProject getCurrentProject() {
         return currentProject;
     }
@@ -317,7 +322,7 @@ public class AoTDMainResearchManager {
         String faction = null;
 
         for (Map.Entry<String, Float> entry : weight.entrySet()) {
-            if (Misc.getFactionMarkets(entry.getKey()).isEmpty()||entry.getKey().equals(Factions.PIRATES)) {
+            if (Misc.getFactionMarkets(entry.getKey()).isEmpty() || entry.getKey().equals(Factions.PIRATES)) {
                 continue;
             }
             if (biggest == 0f) {

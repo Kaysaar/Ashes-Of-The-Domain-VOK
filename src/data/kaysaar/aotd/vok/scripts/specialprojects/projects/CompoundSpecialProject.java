@@ -15,6 +15,7 @@ public class CompoundSpecialProject extends AoTDSpecialProject {
     @Override
     public void createRewardSection(TooltipMakerAPI tooltip, float width) {
         tooltip.addPara("Gain access to produce new commodity : Compound, that can enhance efficiency of fuel.", Misc.getPositiveHighlightColor(),5f);
+        tooltip.addPara("Each Blast Processing Unit will produce monthly from 400 to 600 compound.", Misc.getPositiveHighlightColor(),5f);
     }
     @Override
     public boolean checkIfProjectShouldUnlock() {

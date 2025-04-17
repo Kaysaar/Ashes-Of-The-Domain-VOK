@@ -13,6 +13,7 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
+import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
@@ -66,13 +67,11 @@ public class CurrentResearchShowcase implements CustomUIPanelPlugin {
             }
             double multiplier = AoTDSettingsManager.getFloatValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
             float defaultDays = (option.TimeToResearch*(float) multiplier);
-
-            float days = option.daysSpentOnResearching-(defaultDays*(AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC*(AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getAmountOfResearchFacilities()-1)));
-            float progress = days/defaultDays;
-            ProgressBarComponent component = new ProgressBarComponent(width-15,25,progress, Misc.getDarkPlayerColor().brighter().brighter());
+            float days = AoDUtilis.getDaysFromResearch(option);
+            ProgressBarComponent component = new ProgressBarComponent(width-15,25,option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
 
             tooltip.addCustom(component.getRenderingPanel(),0f).getPosition().inTL(10,currY+45);
-            LabelAPI labelAPI = tooltip.addPara("Current progress : %s ( %s left till researched)",5f,Color.ORANGE,((int)(progress*100))+"%",""+AoTDMisc.convertDaysToString((int) (defaultDays-days)));
+            LabelAPI labelAPI = tooltip.addPara("Current progress : %s ( %s left till researched)",5f,Color.ORANGE,option.getPercentageProgress()+"%",""+AoTDMisc.convertDaysToString((int) (days)));
             labelAPI.getPosition().inTL(width/2-(labelAPI.computeTextWidth(labelAPI.getText())/2),currY+50);
             buttonAPI = tooltip.addButton("Cancel research",null,Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.NONE,((width-20)/2)-7,20,0f);
             buttonAPI2 = tooltip.addButton("Show on tree",null,Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.NONE,((width-20)/2)-7,20,0f);

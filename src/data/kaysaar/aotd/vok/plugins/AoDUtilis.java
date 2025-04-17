@@ -52,11 +52,21 @@ public class AoDUtilis {
 
     public static float calculatePercentOfProgression(ResearchOption option) {
         float multiplier = AoTDSettingsManager.getFloatValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
-        float bonusResearch = (float) (option.getSpec().getTimeToResearch() * multiplier * (AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC * (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities() - 1)));
-        if(option.isResearched)return 1f;
-        return (float) (option.daysSpentOnResearching / ((option.getSpec().getTimeToResearch() * multiplier) - bonusResearch));
-    }
+        float bonusMultiplier = (AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC * (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities() - 1));
 
+        float multiplierResearch = (float) (option.getSpec().getTimeToResearch() * multiplier);
+        float bonusDays = multiplierResearch*bonusMultiplier;
+        if(option.isResearched)return 1f;
+        return (float) (option.daysSpentOnResearching / (multiplierResearch - bonusDays));
+    }
+    public static float getDaysFromResearch(ResearchOption option){
+        float multiplier = AoTDSettingsManager.getFloatValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
+        float bonusMultiplier = (AoTDMainResearchManager.BONUS_PER_RESEARACH_FAC * (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities() - 1));
+
+        float multiplierResearch = (float) (option.getSpec().getTimeToResearch() * multiplier);
+        float bonusDays = multiplierResearch*bonusMultiplier;
+        return multiplierResearch - bonusDays;
+    }
     public static boolean checkForFamilyIndustryInstance(MarketAPI marketAPI, String industryIdToIgnoire, String category, String Base, Industry.IndustryTooltipMode mode) {
 
         for (Industry industry : marketAPI.getIndustries()) {
