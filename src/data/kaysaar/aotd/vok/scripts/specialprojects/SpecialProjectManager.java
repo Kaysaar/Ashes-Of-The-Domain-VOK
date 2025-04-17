@@ -11,6 +11,8 @@ import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.*;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.BaseImageHologram;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.HologramViewer;
@@ -108,11 +110,14 @@ public class SpecialProjectManager {
         }
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {
-            projects.values().forEach(AoTDSpecialProject::doCheckForProjectUnlock);
-            GPManager.getInstance().advance(GPManager.getInstance().getProductionOrders());
-            if(currentlyOnGoingProject!=null){
-                currentlyOnGoingProject.advance(intervalUtil.getElapsed());
+            if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities()>0){
+                projects.values().forEach(AoTDSpecialProject::doCheckForProjectUnlock);
+                GPManager.getInstance().advance(GPManager.getInstance().getProductionOrders());
+                if(currentlyOnGoingProject!=null){
+                    currentlyOnGoingProject.advance(intervalUtil.getElapsed());
+                }
             }
+
         }
     }
 
@@ -203,6 +208,12 @@ public class SpecialProjectManager {
                         List<FleetMemberAPI> toRemove = new ArrayList<>();
                         for (FleetMemberAPI member : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
                             if (member.getHullSpec().getHullId().equals(id)) {
+                                for (String fittedWeaponSlot : member.getVariant().getFittedWeaponSlots()) {
+                                    if(member.getVariant().getSlot(fittedWeaponSlot).isBuiltIn())continue;
+                                    if(member.getVariant().getSlot(fittedWeaponSlot).isWeaponSlot()){
+                                        subMarket.getCargo().addWeapons(member.getVariant().getWeaponSpec(fittedWeaponSlot).getWeaponId(),1);
+                                    }
+                                }
                                 toRemove.add(member);
                             }
                         }
@@ -298,6 +309,21 @@ public class SpecialProjectManager {
     public List<AoTDSpecialProject> getProjectMatchingReward(ProjectReward.ProjectRewardType type, String id) {
         ArrayList<AoTDSpecialProject> projects = new ArrayList<>();
         return getProjects().values().stream().filter(x -> x.getProjectSpec().getRewards().stream().anyMatch(y -> y.type == type && y.id.equals(id))).toList();
+
+    }
+    public List<AoTDSpecializationSpec>getSpecializationSpecsOrdered(){
+        return SpecialProjectSpecManager.getSpecializations().stream().sorted(Comparator.comparing(AoTDSpecializationSpec::getOrder)).toList();
+    }
+    public LinkedHashMap<String,List<AoTDSpecialProject>>getProjectsForUIListOrdered(){
+        LinkedHashMap<String,List<AoTDSpecialProject>> projects = new LinkedHashMap<>();
+        for (AoTDSpecializationSpec spec : getSpecializationSpecsOrdered()) {
+            projects.put(spec.getId(),getProjectMatchingType(spec.getId()));
+        }
+        return projects;
+    }
+    public List<AoTDSpecialProject> getProjectMatchingType( String type) {
+        ArrayList<AoTDSpecialProject> projects = new ArrayList<>();
+        return getProjects().values().stream().filter(x->x.getSpecialization().getId().equals(type)).toList();
 
     }
 }

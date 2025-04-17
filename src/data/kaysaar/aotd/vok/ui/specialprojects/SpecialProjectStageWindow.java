@@ -99,7 +99,7 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         panelInfoOfStage = Global.getSettings().createCustom(350, 300, this);
         TooltipMakerAPI tooltip = initalizeTooltip(stage, parentPanel);
         panelInfoOfStage.addComponent(tooltipPanel).inTL(0, 0);
-        panelInfoOfStage.getPosition().setSize(350, tooltip.getHeightSoFar() + 5)
+        panelInfoOfStage.getPosition().setSize(350, tooltip.getHeightSoFar() + 10)
 
         ;
 
@@ -120,7 +120,7 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         tooltipPanel = Global.getSettings().createCustom(350, 300, null);
 
         TooltipMakerAPI tooltip = createTooltip(stage, parentPanel, tooltipPanel);
-        tooltipPanel.addUIElement(tooltip).inTL(0, 0);
+        tooltipPanel.addUIElement(tooltip).inTL(0, 5);
         return tooltip;
     }
 
@@ -134,8 +134,12 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         CustomPanelAPI custom = MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed(panelInfoOfStage.getPosition().getWidth() + 40, 20, 20, spec.getGpCost(), new HashMap<>());
         tooltip.addCustom(custom, 5f);
         tooltip.addSectionHeading("Stage starting cost", Alignment.MID, 5f);
-        tooltip.addPara("Credits : " + Misc.getDGSCredits(spec.getCreditCosts()), Color.ORANGE, 5f);
-
+        if(Global.getSector().getPlayerFleet().getCargo().getCredits().get()>=spec.getCreditCosts()){
+            tooltip.addPara("Credits : %s" , 5f,Color.ORANGE, Misc.getDGSCredits(spec.getCreditCosts()));
+        }
+        else{
+            tooltip.addPara("Credits : %s" , 5f,Misc.getNegativeHighlightColor(), Misc.getDGSCredits(spec.getCreditCosts()));
+        }
         for (OtherCostData s : spec.getOtherCosts()) {
             tooltip.addCustom(getItemLabel(s, stage), 5f);
         }
@@ -156,6 +160,9 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         buttonOfStage.setEnabled(stage.haveMetCriteriaToStartOrResumeStage());
         if(stage.isCompleted()||!SpecialProjectManager.getInstance().isCurrentOnGoing(project)||!project.canAttemptStage(stage.getSpec().getId())){
             buttonOfStage.setEnabled(false);
+        }
+        if(!project.canAttemptStage(stage.getSpec().getId())){
+            project.printAdditionalReqForStage(tooltip,stage.getSpec().getId());
         }
         label.getPosition().setXAlignOffset(panelInfoOfStage.getPosition().getWidth() / 2 - (label.computeTextWidth(label.getText()) / 2));
         buttonOfStage.getPosition().inTL(5, -buttonOfStage.getPosition().getY() - 20);

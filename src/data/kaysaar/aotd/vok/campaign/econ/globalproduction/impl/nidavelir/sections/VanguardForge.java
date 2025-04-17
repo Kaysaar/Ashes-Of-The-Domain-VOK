@@ -4,6 +4,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class VanguardForge  extends NidavelirBaseSection {
     }
     @Override
     public void applyAdditionalGPChanges(HashMap<String, Integer> map) {
-        map.put(AoTDCommodities.REFINED_METAL,40*getCurrentManpowerAssigned());
+        AoTDMisc.putCommoditiesIntoMap(map,AoTDCommodities.REFINED_METAL,40*getCurrentManpowerAssigned());
     }
 
     @Override

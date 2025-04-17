@@ -130,7 +130,14 @@ public class GPManager {
         }
         return (GPManager) Global.getSector().getPersistentData().get(memkey);
     }
-
+    public GPBaseMegastructure getMegastructure(String id){
+        for (GPBaseMegastructure megastructure : megastructures) {
+            if(megastructure.getSpec().getMegastructureID().equals(id)){
+                return megastructure;
+            }
+        }
+        return null;
+    }
     public static ArrayList<String> getCommodities() {
         return commodities;
     }

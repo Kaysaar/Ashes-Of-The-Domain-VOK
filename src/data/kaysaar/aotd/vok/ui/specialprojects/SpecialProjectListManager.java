@@ -12,6 +12,7 @@ import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SpecialProjectListManager implements CustomUIPanelPlugin {
     CustomPanelAPI mainPanel;
@@ -56,11 +57,15 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         TooltipMakerAPI tooltip = tooltipPanel.createUIElement(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - opads, true);
         float opad = 5f;
         boolean haveAtLeastOne = false;
-        for (AoTDSpecialProject value : SpecialProjectManager.getInstance().getProjects().values()) {
-            if (!value.wasEverDiscovered()) continue;
-            tooltip.addCustom(createSectionForProject(mainPanel.getPosition().getWidth() - 10, 80, value), opad);
-            haveAtLeastOne = true;
-            opad = 5f;
+
+        for (Map.Entry<String, List<AoTDSpecialProject>> value : SpecialProjectManager.getInstance().getProjectsForUIListOrdered().entrySet()) {
+            for (AoTDSpecialProject project : value.getValue()) {
+                if (!project.wasEverDiscovered()) continue;
+                tooltip.addCustom(createSectionForProject(mainPanel.getPosition().getWidth() - 10, 80, project), opad);
+                haveAtLeastOne = true;
+                opad = 5f;
+            }
+
         }
         if (!haveAtLeastOne) {
             LabelAPI labelAPI = tooltip.addSectionHeading("No Project Available", Misc.getTooltipTitleAndLightHighlightColor(), null, Alignment.MID, 0f);

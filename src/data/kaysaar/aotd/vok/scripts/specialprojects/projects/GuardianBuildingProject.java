@@ -8,7 +8,9 @@ import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 
 public class GuardianBuildingProject extends AoTDSpecialProject {
@@ -20,7 +22,7 @@ public class GuardianBuildingProject extends AoTDSpecialProject {
 
     @Override
     public boolean checkIfProjectShouldUnlock() {
-        return Global.getSector().getPlayerFaction().getMemory().is("$aotd_aqq_guardian", true);
+        return Global.getSector().getPlayerFaction().getMemory().is("$aotd_aqq_guardian", true)&& AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.ORBITAL_ASSEMBLY);
     }
 
     @Override

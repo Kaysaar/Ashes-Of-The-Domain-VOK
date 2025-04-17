@@ -7,7 +7,9 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 
 public class ACSJunkHubShipProject extends AoTDSpecialProject {
@@ -18,7 +20,7 @@ public class ACSJunkHubShipProject extends AoTDSpecialProject {
 
     @Override
     public boolean checkIfProjectShouldUnlock() {
-        return Global.getSector().getPlayerFaction().getMemory().is("$acs_aqq_junkhubship", true);
+        return Global.getSector().getPlayerFaction().getMemory().is("$acs_aqq_junkhubship", true)&& AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.ORBITAL_ASSEMBLY);
     }
 
     @Override

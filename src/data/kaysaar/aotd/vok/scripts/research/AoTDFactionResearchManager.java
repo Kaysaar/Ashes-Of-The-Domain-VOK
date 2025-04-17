@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
 import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactory;
@@ -467,7 +468,11 @@ public class AoTDFactionResearchManager {
         if (getFaction().isPlayerFaction()) {
             for (MarketAPI marketAPI : Misc.getPlayerMarkets(Global.getSettings().getModManager().isModEnabled("aotd_qol"))) {
                 if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
-                    toReturn++;
+                    Industry ind = marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER);
+                    if(ind.isFunctional()){
+                        toReturn++;
+                    }
+
                 }
             }
         } else {

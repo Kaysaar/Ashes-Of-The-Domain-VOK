@@ -9,6 +9,15 @@ public class AoTDSpecializationSpec {
     public String name;
     public String id;
     public Color colorOfString;
+    public  int order;
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
 
     public String getId() {
         return id;
@@ -43,6 +52,7 @@ public class AoTDSpecializationSpec {
         spec.name = name;
         spec.id = id;
         spec.colorOfString = colorOfString;
+        spec.order = obj.getInt("order");
         return spec;
 
     }

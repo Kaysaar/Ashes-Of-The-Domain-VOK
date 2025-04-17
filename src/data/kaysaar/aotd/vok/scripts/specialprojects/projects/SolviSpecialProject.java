@@ -11,7 +11,9 @@ import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.campaign.econ.Submarket;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 
 public class SolviSpecialProject extends AoTDSpecialProject {
@@ -22,7 +24,7 @@ public class SolviSpecialProject extends AoTDSpecialProject {
 
     @Override
     public boolean checkIfProjectShouldUnlock() {
-        return Global.getSector().getPlayerFaction().getMemory().is("$uaf_defeated_slvv", true);
+        return Global.getSector().getPlayerFaction().getMemory().is("$uaf_defeated_slvv", true)&& AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.ORBITAL_ASSEMBLY);
     }
 
     @Override
