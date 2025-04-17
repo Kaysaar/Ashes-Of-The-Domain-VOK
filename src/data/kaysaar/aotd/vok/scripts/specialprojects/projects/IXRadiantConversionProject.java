@@ -5,10 +5,16 @@ import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
+import com.fs.starfarer.api.ui.Alignment;
+import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
+
+import java.awt.*;
 
 public class IXRadiantConversionProject extends AoTDSpecialProject {
     @Override
@@ -25,9 +31,16 @@ public class IXRadiantConversionProject extends AoTDSpecialProject {
     public boolean canAttemptStage(String stageID) {
         return stageID.equals("ix_radiant_conversion_stage_1")||getStage("ix_radiant_conversion_stage_1").isCompleted();
     }
+
+    @Override
+    public void printAdditionalReqForStage(TooltipMakerAPI tooltip,String stadeId) {
+        LabelAPI labelAPI = tooltip.addPara("Must first complete %s",5f, Color.ORANGE,getStage("ix_radiant_conversion_stage_1").getSpec().getName());
+        labelAPI.setAlignment(Alignment.MID);
+    }
+
     @Override
     public boolean checkIfProjectShouldUnlock() {
-        return Global.getSector().getPlayerFaction().getMemory().is("$ix_aqq_radiant", true);
+        return Global.getSector().getPlayerFaction().getMemory().is("$ix_aqq_radiant", true)&& AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.ORBITAL_ASSEMBLY);
     }
 
     @Override

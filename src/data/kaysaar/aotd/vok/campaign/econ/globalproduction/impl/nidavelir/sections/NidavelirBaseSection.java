@@ -136,7 +136,7 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
         if(isAutomated){
             manpower =12;
         }
-        map.put(AoTDCommodities.REFINED_METAL, (int) (NidavelirComplexMegastructure.commoditiesDemand.get(AoTDCommodities.REFINED_METAL)*manpower));
+        AoTDMisc.putCommoditiesIntoMap(map,AoTDCommodities.REFINED_METAL,(int) (NidavelirComplexMegastructure.commoditiesDemand.get(AoTDCommodities.REFINED_METAL)*manpower));
     }
 
 }

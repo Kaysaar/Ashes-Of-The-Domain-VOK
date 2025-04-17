@@ -64,7 +64,8 @@ public class BulwarkFoundry extends NidavelirBaseSection {
     }
     @Override
     public void applyAdditionalGPChanges(HashMap<String, Integer> map) {
-        map.put(AoTDCommodities.REFINED_METAL,40*getCurrentManpowerAssigned());
+        AoTDMisc.putCommoditiesIntoMap(map,AoTDCommodities.REFINED_METAL,40*getCurrentManpowerAssigned());
+
     }
 
 

@@ -5,10 +5,16 @@ import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
+import com.fs.starfarer.api.ui.Alignment;
+import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
+
+import java.awt.*;
 
 public class PMMMChampionMKTwoProject extends AoTDSpecialProject {
     @Override
@@ -21,9 +27,13 @@ public class PMMMChampionMKTwoProject extends AoTDSpecialProject {
     }
     @Override
     public boolean checkIfProjectShouldUnlock() {
-        return Global.getSector().getPlayerFaction().getMemory().is("$pmm_aqq_champ", true);
+        return Global.getSector().getPlayerFaction().getMemory().is("$pmm_aqq_champ", true)&& AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.ORBITAL_ASSEMBLY);
     }
-
+    @Override
+    public void printAdditionalReqForStage(TooltipMakerAPI tooltip,String stadeId) {
+        LabelAPI label = tooltip.addPara("Must first complete %s",5f, Color.ORANGE,getStage("pmm_champion_mk2_stage_4").getSpec().getName());
+        label.setAlignment(Alignment.MID);
+    }
     @Override
     public void grantReward() {
         MarketAPI gatheringPoint = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();

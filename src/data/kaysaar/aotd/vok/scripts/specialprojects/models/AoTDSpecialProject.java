@@ -42,6 +42,9 @@ public class AoTDSpecialProject {
             stage.setPaidForStage(false);
         }
     }
+    public void printAdditionalReqForStage(TooltipMakerAPI tooltip,String stageId){
+
+    }
     public boolean canAttemptStage(String stageID){
         return true;
     }

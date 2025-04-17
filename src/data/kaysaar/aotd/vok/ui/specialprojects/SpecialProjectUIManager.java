@@ -61,14 +61,14 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin, SoundUIMana
         mainPanel.addComponent(showcase.getMainPanel()).inTL(((width - 10) / 2) + 70, height - 130);
         mainPanel.addComponent(listManager.mainPanel).inTL(0, 50);
         mainPanel.addComponent(currProjectShowcase.mainPanel).inTL(listManager.mainPanel.getPosition().getWidth() + 10f, 50);
-        mainPanel.addComponent(panelOfMarketData).inTL(5 + (width / 4), 0);
+        mainPanel.addComponent(panelOfMarketData).inTL(5 + (width / 4), 5);
         renderer = new UILinesRenderer(0f);
 
     }
     public void refreshMarketPanel(){
         mainPanel.removeComponent(panelOfMarketData);
         createMarketResourcesPanel();
-        mainPanel.addComponent(panelOfMarketData).inTL(5 + (mainPanel.getPosition().getWidth() / 4), 0);
+        mainPanel.addComponent(panelOfMarketData).inTL(5 + (mainPanel.getPosition().getWidth() / 4), 5);
     }
     @Override
     public void positionChanged(PositionAPI position) {
@@ -102,7 +102,7 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin, SoundUIMana
 
     @Override
     public void playSound() {
-
+        Global.getSoundPlayer().playCustomMusic(1, 1, "aotd_special", true);
     }
 
     @Override
