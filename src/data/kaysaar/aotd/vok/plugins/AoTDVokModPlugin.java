@@ -206,6 +206,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //        FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().removeFleetMember( FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().getMembersListCopy().get(2));
 //        FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().removeFleetMember( FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().getMembersListCopy().get(2));
 
+        Global.getSector().removeTransientScriptsOfClass(AoTDCompoundUIScript.class);
+        Global.getSector().removeTransientScriptsOfClass(AoTDCompoundUIInMarketScript.class);
         Global.getSector().addTransientScript(new CoreUITracker());
         if( Global.getSector().getMemory().is("$aotd_compound_unlocked",true)){
             Global.getSector().addTransientScript(new AoTDCompoundUIScript());
