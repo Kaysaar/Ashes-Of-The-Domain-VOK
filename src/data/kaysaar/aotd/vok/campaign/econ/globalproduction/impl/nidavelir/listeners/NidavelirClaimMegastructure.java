@@ -18,16 +18,20 @@ public class NidavelirClaimMegastructure implements PlayerColonizationListener, 
     public void reportPlayerColonizedPlanet(PlanetAPI planet) {
         if(planet.getMemory().get(GPBaseMegastructure.memKey)!=null){
             GPBaseMegastructure megastructure = (GPBaseMegastructure) planet.getMemory().get(GPBaseMegastructure.memKey);
-            GPManager.getInstance().addMegastructureToList(megastructure);
-            MegastructureUnlockIntel intel = new MegastructureUnlockIntel(megastructure);
-            Global.getSector().getIntelManager().addIntel(intel, false);
-            if(!megastructure.haveRecivedStoryPoint){
-                Global.getSector().getPlayerFleet().getCommanderStats().addStoryPoints(1);
-                megastructure.setHaveRecivedStoryPoint(true);
+            if(!GPManager.getInstance().getMegastructures().contains(megastructure)){
+                GPManager.getInstance().addMegastructureToList(megastructure);
+                MegastructureUnlockIntel intel = new MegastructureUnlockIntel(megastructure);
+                Global.getSector().getIntelManager().addIntel(intel, false);
+                if(!megastructure.haveRecivedStoryPoint){
+                    Global.getSector().getPlayerFleet().getCommanderStats().addStoryPoints(1);
+                    megastructure.setHaveRecivedStoryPoint(true);
+                }
+                if(!planet.getMarket().hasIndustry("nidavelir_complex")){
+                    BaseMegastructureIndustry.addMegastructureIndustry("nidavelir_complex",planet.getMarket(),megastructure);
+                }
             }
-            if(!planet.getMarket().hasIndustry("nidavelir_complex")){
-                BaseMegastructureIndustry.addMegastructureIndustry("nidavelir_complex",planet.getMarket(),megastructure);
-            }
+
+
 
         }
     }
