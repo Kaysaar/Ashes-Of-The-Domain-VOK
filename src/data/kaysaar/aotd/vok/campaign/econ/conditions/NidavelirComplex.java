@@ -17,7 +17,7 @@ public class NidavelirComplex extends BaseMarketConditionPlugin {
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        if(!market.hasIndustry("nidavelir_complex")){
+        if(!market.hasIndustry("nidavelir_complex")&&market.getFaction()!=null&&market.getFaction().isPlayerFaction()){
             GPBaseMegastructure megastructure = (GPBaseMegastructure) this.market.getPlanetEntity().getMemory().get(GPBaseMegastructure.memKey);
             if(megastructure!=null){
                 if(!GPManager.getInstance().getMegastructures().contains(megastructure)){
@@ -38,6 +38,13 @@ public class NidavelirComplex extends BaseMarketConditionPlugin {
             }
 
 
+
+        }
+        if(!market.getMemory().is("$aotd_hotfix",true)){
+            market.getMemory().set("$aotd_hotfix",true);
+            GPBaseMegastructure megastructure = (GPBaseMegastructure) this.market.getPlanetEntity().getMemory().get(GPBaseMegastructure.memKey);
+
+            GPManager.getInstance().removeMegastructureFromList(megastructure);
         }
     }
 }

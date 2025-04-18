@@ -34,6 +34,11 @@ public class BlastProcessingUnit extends FuelProduction {
     }
 
     @Override
+    public String getCurrentImage() {
+        return getSpec().getImageName();
+    }
+
+    @Override
     public boolean isAvailableToBuild() {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ANTIMATTER_SYNTHESIS,market);
     }

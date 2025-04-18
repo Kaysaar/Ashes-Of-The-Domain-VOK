@@ -685,7 +685,14 @@ public class GPManager {
         int threshold = 2; // Adjust the threshold based on your tolerance for misspellings
         SearchBarStringComparator comparator = new SearchBarStringComparator(value, threshold);
         for (GPOption learnedShipPackage : getLearnedItems()) {
-            if (comparator.isValid(learnedShipPackage.getSpec().getItemSpecAPI().getName())) {
+            String name = null;
+            if(learnedShipPackage.getSpec().getItemSpecAPI()!=null){
+                name = learnedShipPackage.getSpec().getItemSpecAPI().getName();
+            }
+            else{
+                name = learnedShipPackage.getSpec().getAiCoreSpecAPI().getName();
+            }
+            if (comparator.isValid(name)) {
                 options.add(learnedShipPackage);
             }
         }
