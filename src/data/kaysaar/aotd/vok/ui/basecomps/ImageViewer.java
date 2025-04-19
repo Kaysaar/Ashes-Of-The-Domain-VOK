@@ -2,7 +2,6 @@ package data.kaysaar.aotd.vok.ui.basecomps;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.graphics.SpriteAPI;
-import com.fs.starfarer.ui.S;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
