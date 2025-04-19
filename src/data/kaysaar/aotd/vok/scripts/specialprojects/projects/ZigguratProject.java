@@ -37,7 +37,7 @@ public class ZigguratProject extends AoTDSpecialProject {
             gatheringPoint = Misc.getPlayerMarkets(true).get(0);
         }
         CargoAPI cargo = gatheringPoint.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo();
-        FleetMemberAPI fleet = cargo.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(Global.getSettings().getHullSpec("ZigguratProject")));
+        FleetMemberAPI fleet = cargo.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(Global.getSettings().getHullSpec("ziggurat")));
         fleet.getVariant().clear();
         fleet.getVariant().addPermaMod(HullMods.HIGH_FREQUENCY_ATTRACTOR);
 

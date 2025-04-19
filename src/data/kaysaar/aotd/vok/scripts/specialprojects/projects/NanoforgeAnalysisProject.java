@@ -7,8 +7,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.campaign.econ.Submarket;
-import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;

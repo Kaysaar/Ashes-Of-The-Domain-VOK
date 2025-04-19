@@ -36,6 +36,7 @@ public class AoTDSpecialProject {
     }
     public void restartProject(){
         currentlyAttemptedStages.clear();
+        wasCompleted = false;
         for (AoTDSpecialProjectStage stage : stages) {
             stage.setCompleted(false);
             stage.setProgress(0f);
