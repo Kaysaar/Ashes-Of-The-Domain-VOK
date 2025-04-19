@@ -23,77 +23,87 @@ import java.util.LinkedHashMap;
 
 public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     public NidavelirShipyard shipyard;
-    public static LinkedHashMap<String,Float> commoditiesProd = new LinkedHashMap<>();
-    public static LinkedHashMap<String,Float> commoditiesDemand = new LinkedHashMap<>();
+    public static LinkedHashMap<String, Float> commoditiesProd = new LinkedHashMap<>();
+    public static LinkedHashMap<String, Float> commoditiesDemand = new LinkedHashMap<>();
+
     static {
-        commoditiesProd.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,20f);
-        commoditiesProd.put(AoTDCommodities.ADVANCED_COMPONENTS,30f);
-        commoditiesProd.put(Commodities.SHIPS,50f);
-        commoditiesProd.put(Commodities.HAND_WEAPONS,50f);
-        commoditiesDemand.put(AoTDCommodities.REFINED_METAL,50f);
+        commoditiesProd.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY, 20f);
+        commoditiesProd.put(AoTDCommodities.ADVANCED_COMPONENTS, 30f);
+        commoditiesProd.put(Commodities.SHIPS, 50f);
+        commoditiesProd.put(Commodities.HAND_WEAPONS, 50f);
+        commoditiesDemand.put(AoTDCommodities.REFINED_METAL, 50f);
 
     }
 
     public int getManpowerPoints() {
-        return entityTiedTo.getMarket().getSize()*2;
+        return entityTiedTo.getMarket().getSize() * 2;
     }
 
     @Override
     public void createAdditionalInfoForMega(TooltipMakerAPI tooltip) {
-        tooltip.addSectionHeading("Current effects", Alignment.MID,5f);
+        tooltip.addSectionHeading("Current effects", Alignment.MID, 5f);
         for (NidavelirBaseSection section : getSections()) {
-            if(section.isRestored){
+            if (section.isRestored) {
                 section.createTooltipForMainSection(tooltip);
             }
 
         }
-        tooltip.addPara("Once fully restored : %s fleet size",5f,Color.ORANGE,"400%");
-        tooltip.addSectionHeading("Accessibility selling power",Alignment.MID,5f);
-        int access = (int) Math.floor((getEntityTiedTo().getMarket().getAccessibilityMod().getFlatBonus()*10));
-        tooltip.addPara("Maximum amount of %s units of supply can sold due to %s accessibility",5f,Color.ORANGE,access+"",(int)(getEntityTiedTo().getMarket().getAccessibilityMod().getFlatBonus()*100)+"%");
+        tooltip.addPara("Once fully restored : %s fleet size", 5f, Color.ORANGE, "400%");
+        tooltip.addSectionHeading("Accessibility selling power", Alignment.MID, 5f);
+        int access = (int) Math.floor((getEntityTiedTo().getMarket().getAccessibilityMod().getFlatBonus() * 10));
+        tooltip.addPara("Maximum amount of %s units of supply can sold due to %s accessibility", 5f, Color.ORANGE, access + "", (int) (getEntityTiedTo().getMarket().getAccessibilityMod().getFlatBonus() * 100) + "%");
 
 
     }
 
-
+    public void reInitGraphicsOfShipyard() {
+        boolean restored = getSectionById("nexus_core").isRestored;
+        if (!restored) {
+            shipyard.trueInit("aotd_nidavelir_destroyed", null, (PlanetAPI) entityTiedTo);
+        } else {
+            shipyard.trueInit("aotd_nidavelir", "aotd_nidavelir_shadow", (PlanetAPI) entityTiedTo);
+        }
+    }
 
     @Override
     public void createAdditionalInfoToButton(TooltipMakerAPI tooltipMakerAPI) {
 
-        TooltipMakerAPI tooltip =  tooltipMakerAPI.beginSubTooltip(tooltipMakerAPI.getWidthSoFar());
-        tooltip.addPara("Current manpower points : %s",5f, Color.ORANGE,""+getRemainingManpowerPoints()).getPosition().inTL(10,5);
-        tooltipMakerAPI.addCustom(tooltip,5f);
-        tooltipMakerAPI.setHeightSoFar(tooltipMakerAPI.getHeightSoFar()+20);
+        TooltipMakerAPI tooltip = tooltipMakerAPI.beginSubTooltip(tooltipMakerAPI.getWidthSoFar());
+        tooltip.addPara("Current manpower points : %s", 5f, Color.ORANGE, "" + getRemainingManpowerPoints()).getPosition().inTL(10, 5);
+        tooltipMakerAPI.addCustom(tooltip, 5f);
+        tooltipMakerAPI.setHeightSoFar(tooltipMakerAPI.getHeightSoFar() + 20);
     }
 
     @Override
     public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
-        return new NidavelirUI(this,parentPanel,menu);
+        return new NidavelirUI(this, parentPanel, menu);
     }
 
 
     @Override
     public void trueInit(String specId, SectorEntityToken entityTiedTo) {
         super.trueInit(specId, entityTiedTo);
-        shipyard = (NidavelirDestroyedShipyard)entityTiedTo.getStarSystem().addCustomEntity(null,"Nid","nid_shipyards_damaged",null).getCustomPlugin();
-        shipyard.trueInit("aotd_nidavelir_destroyed",null, (PlanetAPI) entityTiedTo);
+        shipyard = (NidavelirDestroyedShipyard) entityTiedTo.getStarSystem().addCustomEntity(null, "Nid", "nid_shipyards_damaged", null).getCustomPlugin();
+        shipyard.trueInit("aotd_nidavelir_destroyed", null, (PlanetAPI) entityTiedTo);
     }
-    public ArrayList<NidavelirBaseSection> getSections(){
-        ArrayList<NidavelirBaseSection>sections = new ArrayList<>();
+
+    public ArrayList<NidavelirBaseSection> getSections() {
+        ArrayList<NidavelirBaseSection> sections = new ArrayList<>();
         for (GPMegaStructureSection megaStructureSection : getMegaStructureSections()) {
-            if(megaStructureSection instanceof NidavelirBaseSection){
+            if (megaStructureSection instanceof NidavelirBaseSection) {
                 sections.add((NidavelirBaseSection) megaStructureSection);
 
             }
         }
         return sections;
     }
-    public int getRemainingManpowerPoints(){
+
+    public int getRemainingManpowerPoints() {
         int current = 0;
         for (NidavelirBaseSection section : getSections()) {
-            current+=section.getCurrentManpowerAssigned();
+            current += section.getCurrentManpowerAssigned();
         }
-        return getManpowerPoints()-current;
+        return getManpowerPoints() - current;
     }
 
 }
