@@ -11,6 +11,7 @@ import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;
 import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.ui.patrolfleet.PatrolFleetDataManager;
+import data.misc.UIDataSop;
 import data.ui.FactionPanel;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
@@ -204,6 +205,9 @@ public class CoreUITrackerSop extends CoreUITracker{
                 UIComponentAPI componentToReplace = (UIComponentAPI) panelMap.get(button);
                 UIData.WIDTH = Global.getSettings().getScreenWidth() - tryToGetButtonProd("colonies").getPosition().getX();
                 UIData.HEIGHT = componentToReplace.getPosition().getHeight();
+                    UIDataSop.WIDTH = UIData.WIDTH;
+                    UIDataSop.HEIGHT = UIData.HEIGHT;
+                
                 UIData.recompute();
 
             }
@@ -346,7 +350,9 @@ public class CoreUITrackerSop extends CoreUITracker{
     private void insertNewPanelFaction(ButtonAPI tiedButton) {
         if (factionPanel == null) {
             factionPanel = new FactionPanel();
-            factionPanel.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, coreUiTech), getMemFlagForTechTab(), null);
+            float width = UIDataSop.WIDTH;
+            float height = UIDataSop.HEIGHT;
+            factionPanel.init(Global.getSettings().createCustom(width, height, factionPanel), getMemFlagForTechTab(), null);
         }
 
         panelMap.put(tiedButton, factionPanel.getMainPanel());

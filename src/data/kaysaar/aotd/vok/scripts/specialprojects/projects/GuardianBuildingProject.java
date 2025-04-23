@@ -33,7 +33,7 @@ public class GuardianBuildingProject extends AoTDSpecialProject {
         }
         CargoAPI cargo = gatheringPoint.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo();
         FleetMemberAPI fleet = cargo.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(Global.getSettings().getHullSpec("guardian")));
-        fleet.getVariant().removePermaMod(HullMods.AUTOMATED);
+        fleet.getVariant().getHullMods().remove(HullMods.AUTOMATED);
 
         fleet.getVariant().clear();
 
