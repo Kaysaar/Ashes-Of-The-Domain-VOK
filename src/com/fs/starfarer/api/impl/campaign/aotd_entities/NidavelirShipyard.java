@@ -1,6 +1,6 @@
 package com.fs.starfarer.api.impl.campaign.aotd_entities;
 
-;
+import com.fs.graphics.util.Fader;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignEngineLayers;
 import com.fs.starfarer.api.campaign.PlanetAPI;
@@ -12,54 +12,30 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.combat.CombatViewport;
 import com.fs.starfarer.combat.entities.terrain.Planet;
 import com.fs.starfarer.loading.specs.PlanetSpec;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.awt.*;
 import java.util.LinkedHashMap;
 
 public class NidavelirShipyard extends BaseCustomEntityPlugin {
-    protected transient Planet graphics;
-    transient LinkedHashMap<Planet, String> layers = new LinkedHashMap<>();
+
+    protected Planet graphics;
+    protected LinkedHashMap<Planet,String>layers = new LinkedHashMap<>();
     public float elapsed;
     public float seconds;
     public boolean isVanising = false;
-    public boolean isAppearing = false;
+    public boolean isAppearing =false;
     float currAlpha = 1f;
     public float waitingTime = 0f;
 
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        if (layers == null || layers.isEmpty()) {
-            boolean found = false;
-            for (GPBaseMegastructure s : GPManager.getInstance().getMegastructuresBasedOnClass(NidavelirComplexMegastructure.class)) {
-                NidavelirComplexMegastructure sd = (NidavelirComplexMegastructure) s;
-                if (sd.shipyard.getEntity().getId().equals(this.getEntity().getId())) {
-                    if (sd.getSectionById("nexus_ring").isRestored) {
-                        found = true;
-                        sd.reInitGraphicsOfShipyard();
-                    }
-                }
-            }
-            if (!found) {
-                reinitRendering("aotd_nidavelir_destroyed", null, true);
-
-
-            }
-
-        }
-
-        if (tiedToPlanet != null) {
+        if(tiedToPlanet!=null){
 //            graphics.advance(amount);
 //            graphics.getLocation().set(tiedToPlanet.getLocation());
-            if (layers == null) layers = new LinkedHashMap<>();
-
             for (Planet layer : layers.keySet()) {
                 layer.setSpec(getSpec(layers.get(layer)));
                 layer.advance(amount);
@@ -67,18 +43,19 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
 
             }
         }
-        if (isVanising && !isAppearing) {
+        if(isVanising&&!isAppearing){
             elapsed += amount;
-            currAlpha = 1 - elapsed / seconds;
-        } else {
-            currAlpha = 1;
+            currAlpha = 1-elapsed/seconds;
         }
-        if (isAppearing) {
+        else{
+            currAlpha =1;
+        }
+        if(isAppearing){
             elapsed += amount;
-            currAlpha = 0f;
-            if (elapsed > waitingTime) {
-                currAlpha = (elapsed - waitingTime) / seconds;
-                if (currAlpha >= 1) {
+            currAlpha  = 0f;
+            if(elapsed>waitingTime){
+                currAlpha = (elapsed-waitingTime)/seconds;
+                if(currAlpha>=1){
                     currAlpha = 1;
                     isAppearing = false;
                 }
@@ -87,11 +64,11 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
         }
 
 
-    }
 
-    public PlanetSpec getSpec(String id) {
+    }
+    public PlanetSpec getSpec(String id ){
         for (PlanetSpecAPI allPlanetSpec : Global.getSettings().getAllPlanetSpecs()) {
-            if (allPlanetSpec.getPlanetType().equals(id)) {
+            if(allPlanetSpec.getPlanetType().equals(id)){
                 return (PlanetSpec) allPlanetSpec;
             }
         }
@@ -102,23 +79,19 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
     public void init(SectorEntityToken entity, Object pluginParams) {
         super.init(entity, pluginParams);
     }
-
-    public SectorEntityToken getEntity() {
+    public SectorEntityToken getEntity(){
         return this.entity;
     }
-
     PlanetAPI tiedToPlanet;
-
-    public void reinitRendering(String type, String shadowType, boolean isDestroyed) {
-        if (layers == null) layers = new LinkedHashMap<>();
+    public void reinitRendering(String type,String shadowType,boolean isDestroyed){
         layers.clear();
-        this.entity.setLocation(tiedToPlanet.getLocation().x, tiedToPlanet.getLocation().y);
-        float angle = (float) Math.random() * 360.0F;
-        if (!isDestroyed) {
-            Planet renderer = new Planet(shadowType, tiedToPlanet.getRadius(), 0.0f, new Vector2f());
+        this.entity.setLocation(tiedToPlanet.getLocation().x,tiedToPlanet.getLocation().y);
+        float angle = (float)Math.random() * 360.0F;
+        if(!isDestroyed){
+            Planet renderer = new Planet(shadowType,tiedToPlanet.getRadius(),0.0f,new Vector2f());
             renderer.setAngle(angle);
             renderer.setTilt(tiedToPlanet.getSpec().getTilt());
-            layers.put(renderer, shadowType);
+            layers.put(renderer,shadowType);
 
 //            Planet rendererOfShip1 = new Planet("aotd_nidavelir_inner_bottom",tiedToPlanet.getRadius()+34,0.0f,new Vector2f());
 //            Planet rendererOfShip2 = new Planet("aotd_nidavelir_inner_top",tiedToPlanet.getRadius()+34,0.0f,new Vector2f());
@@ -138,33 +111,35 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
 //            rendererOfShip4.setTilt(tiedToPlanet.getSpec().getTilt());
 
 
+
 //            layers.add(rendererOfShip1);
 //            layers.add(rendererOfShip2);
 //            layers.add(rendererOfShip3);
 //            layers.add(rendererOfShip4);
             for (int i = 0; i < 3; i++) {
-                Planet rendererText = new Planet(type, tiedToPlanet.getRadius() + 35 - 0.5f * i, 0.0f, new Vector2f());
+                Planet rendererText = new Planet(type,tiedToPlanet.getRadius()+35-0.5f*i,0.0f,new Vector2f());
                 rendererText.setAngle(angle);
                 rendererText.setTilt(tiedToPlanet.getSpec().getTilt());
-                layers.put(rendererText, type);
+                layers.put(rendererText,type);
             }
-        } else {
+        }
+        else{
             for (int i = 0; i < 3; i++) {
-                Planet rendererText = new Planet(type, tiedToPlanet.getRadius() + 35 - 0.5f * i, 0.0f, new Vector2f());
-                rendererText.setAngle(20);
+                Planet rendererText = new Planet(type,tiedToPlanet.getRadius()+35-0.5f*i,0.0f,new Vector2f());
+                rendererText.setAngle(angle);
                 rendererText.setTilt(tiedToPlanet.getSpec().getTilt());
-                layers.put(rendererText, type);
+                layers.put(rendererText,type);
             }
         }
 
 
-    }
 
-    public void trueInit(String type, String shadowType, PlanetAPI planetTied) {
+    }
+    public  void trueInit(String type,String shadowType, PlanetAPI planetTied){
         tiedToPlanet = planetTied;
-        reinitRendering(type, shadowType, false);
+        reinitRendering(type,shadowType,false);
         seconds = 1;
-        isAppearing = true;
+        isAppearing=true;
         elapsed = 0;
 //        graphics = new Planet(type,planetTied.getRadius()+25f,0.0f,new Vector2f());
 
@@ -173,21 +148,21 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
 
     @Override
     public float getRenderRange() {
-        return 1000000f;
+        return  1000000f;
     }
 
     @Override
     public void render(CampaignEngineLayers layer, ViewportAPI viewport) {
         float prevAlpha = viewport.getAlphaMult();
         viewport.setAlphaMult(currAlpha);
-        if (tiedToPlanet != null) {
+        if(tiedToPlanet!=null){
             if (this.entity.getLightSource() != null) {
                 Vector2f var4 = this.entity.getLightSource().getLocation();
-                float distance = Misc.getDistance(this.entity.getLocation(), var4);
+                float distance = Misc.getDistance(this.entity.getLocation(),var4);
                 float zDimBrightness = 1.0F;
-                Object lightHeight = ReflectionUtilis.getPrivateVariableFromSuperClass("lightHeight", entity.getContainingLocation());
+                Fader lightHeight = (Fader)  ReflectionUtilis.getPrivateVariableFromSuperClass("lightHeight",entity.getContainingLocation());
                 if (this.entity.getContainingLocation() != null && lightHeight != null) {
-                    float brightness = (float) ReflectionUtilis.invokeMethodWithAutoProjection("getBrightness", lightHeight);
+                    float brightness = lightHeight.getBrightness();
                     zDimBrightness = 1.5F * brightness - 0.5F;
                 }
 
@@ -211,14 +186,13 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
 
             } else {
                 for (Planet planet : layers.keySet()) {
-                    planet.resetLightLocation();
-                    ;
-                    planet.setLightColorOverride((Color) null);
+                    planet.resetLightLocation();;
+                    planet.setLightColorOverride((Color)null);
                 }
 //                    this.graphics.resetLightLocation();
 //                    this.graphics.setLightColorOverride((Color)null);
             }
-            startStencil(tiedToPlanet.getRadius() + 31f, tiedToPlanet.getLocation(), 360);
+            startStencil(tiedToPlanet.getRadius()+31f,tiedToPlanet.getLocation(),360);
             if (layer == CampaignEngineLayers.TERRAIN_3) {
                 for (Planet planet : layers.keySet()) {
                     planet.renderSphere((CombatViewport) viewport);
@@ -239,7 +213,6 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
         // Apply glitch effect
 
     }
-
     public static void startStencil(float radius, Vector2f location, int circlePoints) {
         GL11.glClearStencil(0);
         GL11.glStencilMask(0xff);
@@ -271,7 +244,6 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
 
         GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
     }
-
     public static void endStencil() {
         GL11.glDisable(GL11.GL_STENCIL_TEST);
     }

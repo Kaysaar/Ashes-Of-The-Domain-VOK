@@ -207,12 +207,16 @@ public class SpecialProjectManager {
                     if (Global.getSettings().getHullSpec(id) != null) {
                         List<FleetMemberAPI> toRemove = new ArrayList<>();
                         for (FleetMemberAPI member : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
-                            if (member.getHullSpec().getHullId().equals(id)) {
+                            if (member.getHullSpec().getBaseHullId().equals(id)) {
                                 for (String fittedWeaponSlot : member.getVariant().getFittedWeaponSlots()) {
                                     if(member.getVariant().getSlot(fittedWeaponSlot).isBuiltIn())continue;
                                     if(member.getVariant().getSlot(fittedWeaponSlot).isWeaponSlot()){
                                         subMarket.getCargo().addWeapons(member.getVariant().getWeaponSpec(fittedWeaponSlot).getWeaponId(),1);
                                     }
+                                }
+                                if(member.getVariant().getSMods()!=null){
+                                    Global.getSector().getPlayerStats().addStoryPoints(member.getVariant().getSMods().size());
+
                                 }
                                 toRemove.add(member);
                             }
@@ -271,7 +275,7 @@ public class SpecialProjectManager {
                     if (subMarket != null) {
                         int sameHull = 0;
                         for (FleetMemberAPI o : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
-                            if (o.getHullSpec().getHullId().equals(id)) {
+                            if (o.getHullSpec().getBaseHullId().equals(id)) {
                                 sameHull++;
                             }
                         }
