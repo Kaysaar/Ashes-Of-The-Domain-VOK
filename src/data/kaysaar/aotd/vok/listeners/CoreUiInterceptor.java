@@ -16,9 +16,6 @@ public class CoreUiInterceptor implements CoreUITabListener {
             CoreUITracker2.didIt = false;
             AoTDCompoundUIInMarketScript.didIt = false;
         }
-        if(tab.equals(CoreUITabId.FLEET)){
-            Global.getSector().addTransientScript(new InsertTalkToOfficerButton());
-        }
         if(param instanceof  String){
             String s = (String) param;
             if(s.equals("income_report")){

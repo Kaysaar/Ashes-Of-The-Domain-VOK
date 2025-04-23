@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirDestroyedShipyard;
@@ -43,6 +44,7 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     public void createAdditionalInfoForMega(TooltipMakerAPI tooltip) {
         tooltip.addSectionHeading("Current effects", Alignment.MID, 5f);
         for (NidavelirBaseSection section : getSections()) {
+
             if (section.isRestored) {
                 section.createTooltipForMainSection(tooltip);
             }
@@ -57,6 +59,7 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     }
 
     public void reInitGraphicsOfShipyard() {
+
         boolean restored = getSectionById("nexus_core").isRestored;
         if (!restored) {
             shipyard.trueInit("aotd_nidavelir_destroyed", null, (PlanetAPI) entityTiedTo);

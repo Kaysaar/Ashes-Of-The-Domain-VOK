@@ -11,6 +11,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
+import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStage;
 import org.jetbrains.annotations.NotNull;
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.CommonStrings;
@@ -26,7 +27,6 @@ public class FinishSpecialProject implements BaseCommand {
         if(args.isEmpty()){
             return CommandResult.BAD_SYNTAX;
         }
-        AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayer();
         AoTDSpecialProject option;
         try {
             option = SpecialProjectManager.getInstance().getProject(args);
@@ -36,6 +36,9 @@ public class FinishSpecialProject implements BaseCommand {
         }
         option.wasCompleted = true;
         option.countOfCompletion++;
+        for (AoTDSpecialProjectStage stage : option.getStages()) {
+            stage.setProgress(stage.getSpec().getDays());
+        }
         option.grantReward();
         option.sentFinishNotification();
         SpecialProjectManager.getInstance().setCurrentlyOnGoingProject(null);;

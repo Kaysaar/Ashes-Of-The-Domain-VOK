@@ -66,8 +66,8 @@ public class    ResizableComponent implements CustomUIPanelPlugin {
     }
     public void resize(float scale){
         this.scale = scale;
-        componentPanel.getPosition().setSize(originalWidth * scale, originalHeight * scale);
-        componentPanel.getPosition().setLocation(0,0).inTL(originalCoords.x*scale- (movingCords.x),originalCoords.y*scale+ (movingCords.y));
+        componentPanel.getPosition().setSize(Math.round(originalWidth * scale), Math.round(originalHeight * scale));
+        componentPanel.getPosition().setLocation(0,0).inTL(Math.round(originalCoords.x*scale- (movingCords.x)),Math.round(originalCoords.y*scale+ (movingCords.y)));
         for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(componentPanel)) {
             if(componentAPI instanceof CustomPanelAPI){
                 CustomUIPanelPlugin plugin = ((CustomPanelAPI) componentAPI).getPlugin();
