@@ -4,17 +4,23 @@ package data.kaysaar.aotd.vok.plugins;
 import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
+import com.fs.starfarer.api.combat.ViewportAPI;
+import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirDestroyedShipyard;
+import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyard;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.Pair;
+import com.thoughtworks.xstream.XStream;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureProductionListener;
@@ -22,10 +28,12 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegast
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDSupertencileListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
+import data.kaysaar.aotd.vok.scripts.CoreUITrackerSop;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDFuelConsumptionScript;
@@ -40,6 +48,7 @@ import kaysaar.bmo.buildingmenu.additionalreq.AdditionalReqManager;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.lazywizard.lazylib.ui.FontException;
+import org.magiclib.bounty.MagicBountyBarEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,6 +62,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     AoTDSpecialItemRepo aoTDSpecialItemRepo = new AoTDSpecialItemRepo();
     public static String fontInsigniaMedium = "graphics/fonts/insignia17LTaa.fnt";
 
+
     @Override
     public void onApplicationLoad() throws Exception {
         Global.getSettings().loadFont(fontInsigniaMedium);
@@ -60,7 +70,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             VanillaTechReq req = new VanillaTechReq(industry.two);
             AdditionalReqManager.getInstance().addReq(industry.one, req);
         }
-
     }
 
     private void setListenersIfNeeded() {
@@ -135,6 +144,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     }
 
     public void onGameLoad(boolean newGame) {
+
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
         SpecialProjectSpecManager.reLoad();
@@ -158,7 +168,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         if (!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)) {
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
-
 
 
 //        Global.getSector().addTransientScript(new EveryFrameScript() {
@@ -208,8 +217,14 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
         Global.getSector().removeTransientScriptsOfClass(AoTDCompoundUIScript.class);
         Global.getSector().removeTransientScriptsOfClass(AoTDCompoundUIInMarketScript.class);
-        Global.getSector().addTransientScript(new CoreUITracker());
-        if( Global.getSector().getMemory().is("$aotd_compound_unlocked",true)){
+        if(Global.getSettings().getModManager().isModEnabled("aotd_sop")){
+            Global.getSector().addTransientScript(new CoreUITrackerSop());
+        }
+        else{
+            Global.getSector().addTransientScript(new CoreUITracker());
+        }
+
+        if (Global.getSector().getMemory().is("$aotd_compound_unlocked", true)) {
             Global.getSector().addTransientScript(new AoTDCompoundUIScript());
             Global.getSector().addTransientScript(new AoTDCompoundUIInMarketScript());
         }
@@ -253,7 +268,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             if (option.Tier.ordinal() <= highestTierUnlock) {
                 option.setResearched(true);
                 option.havePaidForResearch = true;
-                AoTDListenerUtilis.finishedResearch(option.getSpec().getId(),Global.getSector().getPlayerFaction());
+                AoTDListenerUtilis.finishedResearch(option.getSpec().getId(), Global.getSector().getPlayerFaction());
             }
         }
         Global.getSector().addTransientScript(new AoTDFuelConsumptionScript());
@@ -272,8 +287,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //        }
     }
 
-    public static StarSystemAPI  getTestingGroundSystem() {
-        if(Global.getSector().getStarSystem("testing_ground")==null){
+    public static StarSystemAPI getTestingGroundSystem() {
+        if (Global.getSector().getStarSystem("testing_ground") == null) {
             StarSystemAPI system = Global.getSector().createStarSystem("testing_ground");
             system.initNonStarCenter();
             system.addTag(Tags.THEME_HIDDEN);
@@ -313,12 +328,13 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 //        return cat;
 //    }
 
-    public static void clearListenersFromTemporaryMarket(){
+    public static void clearListenersFromTemporaryMarket() {
         ArrayList<BaseIndustry> listeners = new ArrayList<>(Global.getSector().getListenerManager().getListeners(BaseIndustry.class));
         for (BaseIndustry listener : listeners) {
-            if(AshMisc.isStringValid(listener.getMarket().getId())&&listener.getMarket().getId().equals("to_delete")){
+            if (AshMisc.isStringValid(listener.getMarket().getId()) && listener.getMarket().getId().equals("to_delete")) {
                 Global.getSector().getListenerManager().removeListener(listener);
             }
+
         }
         listeners.clear();
     }

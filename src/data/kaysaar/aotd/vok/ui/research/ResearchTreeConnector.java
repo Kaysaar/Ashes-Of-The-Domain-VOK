@@ -27,9 +27,10 @@ public class ResearchTreeConnector extends ResizableComponent {
         spriteToRender.setAlphaMult(alphaMult);
         if(children.originalCoords.y!=parent.originalCoords.getY()){
             float distanceX = children.getComponentPanel().getPosition().getX()- (parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth());
-            float centerXC = children.getComponentPanel().getPosition().getY()+(children.getComponentPanel().getPosition().getHeight()/2);
-            float centerXP = parent.getComponentPanel().getPosition().getY()+(parent.getComponentPanel().getPosition().getHeight()/2);
+            float centerXC = children.getComponentPanel().getPosition().getCenterY();
+            float centerXP = parent.getComponentPanel().getPosition().getCenterY();
             float diff = centerXP - centerXC;
+            diff = (float) Math.floor(diff);
             float defaultDistance = AoTDUiComp.SEPERATOR_OF_PANELS*scale;
             float reDistanced = distanceX - defaultDistance;
             spriteToRender.setSize(defaultDistance,1);
