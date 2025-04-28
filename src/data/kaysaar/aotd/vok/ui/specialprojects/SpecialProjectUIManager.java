@@ -39,6 +39,10 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin, SoundUIMana
         return mainPanel;
 
     }
+    public void clear(){
+        listManager.buttons.clear();
+        currProjectShowcase.windows.clear();
+    }
 
     public SpecialProjectShowcase getCurrProjectShowcase() {
         return currProjectShowcase;

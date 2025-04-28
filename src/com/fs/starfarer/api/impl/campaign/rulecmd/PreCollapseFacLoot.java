@@ -107,7 +107,7 @@ public class PreCollapseFacLoot extends BaseCommandPlugin {
 
         if(rand<2){
             for (int i = 0; i < rand; i++) {
-                salvage.addSpecial(new SpecialItemData("aotd_item_bp",GPManager.getInstance().getItemProductionOptionFiltered().get(getRandomNumber(0,GPManager.getInstance().getItemProductionOptionFiltered().size()-1)).getSpec().getItemSpecAPI().getId()),1);
+                salvage.addSpecial(new SpecialItemData("aotd_item_bp",GPManager.getInstance().getItemsProductionWithoutAICores().get(getRandomNumber(0,GPManager.getInstance().getItemProductionOptionFiltered().size()-1)).getSpec().getItemSpecAPI().getId()),1);
             }
         }
         BaseSalvageSpecial.clearExtraSalvage(memoryMap);

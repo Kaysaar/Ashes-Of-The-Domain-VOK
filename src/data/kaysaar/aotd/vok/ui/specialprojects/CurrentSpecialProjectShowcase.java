@@ -53,7 +53,7 @@ public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
             tooltip.addTitle(currProjectShowing.getNameOverride());
             tooltip.addCustom(createResourcePanelForSmallTooltipCondensed(mainPanel.getPosition().getWidth() - 95, 24, 24, currProjectShowing.getGpCostFromStages(), new HashMap<>()), 2f);
 
-            ProgressBarComponent component = new ProgressBarComponent(mainPanel.getPosition().getWidth() - 110, 18, currProjectShowing.getTotalProgress(), Misc.getBasePlayerColor().darker().darker());
+            ProgressBarComponent component = new ProgressBarComponent(mainPanel.getPosition().getWidth() - 110, 18, currProjectShowing.getTotalProgress(), Misc.getBasePlayerColor().darker());
             tooltip.addCustom(component.getRenderingPanel(), 3f);
             LabelAPI labelAPI = tooltip.addSectionHeading("" + (int) (currProjectShowing.getTotalProgress() * 100) + "%", Misc.getTextColor(), null, Alignment.MID, mainPanel.getPosition().getWidth() - 110, -18f);
             HologramViewer viewer = SpecialProjectManager.createHologramViewer(currProjectShowing.getProjectSpec(), 95);

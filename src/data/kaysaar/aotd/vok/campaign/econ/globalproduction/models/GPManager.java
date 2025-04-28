@@ -380,7 +380,20 @@ public class GPManager {
         }
         return options;
     }
-
+    public ArrayList<GPOption> getItemsProductionWithoutAICores() {
+        ArrayList<GPOption> options = new ArrayList<>();
+        for (GPOption option : getItemProductionOption()) {
+            if (option.getSpec().getItemSpecAPI() == null){
+                continue;
+            }
+            if (option.getSpec().getItemSpecAPI().hasTag("aotd_ignore_gp")) continue;
+            if (option.getSpec().getItemSpecAPI().hasTag("mission_item")) continue;
+            if (ItemEffectsRepo.ITEM_EFFECTS.get(option.getSpec().getProjectId()) != null) {
+                options.add(option);
+            }
+        }
+        return options;
+    }
     public ArrayList<GPOption> getAICores() {
         ArrayList<GPOption> options = new ArrayList<>();
         for (GPOption option : getLearnedItems()) {
