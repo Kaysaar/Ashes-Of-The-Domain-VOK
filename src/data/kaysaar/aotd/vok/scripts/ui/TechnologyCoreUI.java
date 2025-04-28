@@ -82,6 +82,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         customProdPlugin.clearUI(false);
         pluginMega.clearUI();
         panelMap.clear();
+        projectUIManager.clear();
         if(clearMusic){
             pauseSound();
         }

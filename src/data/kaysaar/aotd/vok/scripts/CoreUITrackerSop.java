@@ -2,6 +2,8 @@ package data.kaysaar.aotd.vok.scripts;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
+import com.fs.starfarer.api.campaign.InteractionDialogAPI;
+import com.fs.starfarer.api.campaign.listeners.TestIndustryOptionProvider;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.campaign.command.CustomProductionPanel;
@@ -42,6 +44,7 @@ public class CoreUITrackerSop extends CoreUITracker{
     public static boolean sendSignalToOpenCore = false;
     public static final String memFlag = "$aotd_outpost_state";
     public static final String memFlag2 = "$aotd_technology_tab_state";
+    public static final String memFlag3 = "$aotd_faction_tab_state";
     public static void setMemFlag(String value) {
         Global.getSector().getMemory().set(memFlag, value);
     }
@@ -52,6 +55,16 @@ public class CoreUITrackerSop extends CoreUITracker{
         String s = null;
         try {
             s = Global.getSector().getMemory().getString(memFlag2);
+
+        } catch (Exception e) {
+
+        }
+        return s;
+    }
+    public static String getMemFlagForFactinTab(){
+        String s = null;
+        try {
+            s = Global.getSector().getMemory().getString(memFlag3);
 
         } catch (Exception e) {
 
@@ -85,6 +98,10 @@ public class CoreUITrackerSop extends CoreUITracker{
                 coreUiTech.clearUI(tunedMusicOnce);
                 coreUiTech = null;
 
+            }
+            if(factionPanel!=null){
+                factionPanel.clearUI(tunedMusicOnce);
+                factionPanel = null;
             }
             tunedMusicOnce = false;
             removed = false;
@@ -168,8 +185,9 @@ public class CoreUITrackerSop extends CoreUITracker{
                     tooltip.addPara("In this tab,your empire timeline and can govern your faction by changing policies.",5f);
                 }
             }, tryToGetButtonProd("colonies"), toRemove2.getPosition().getWidth(), Keyboard.KEY_2, false);
+
             mainParent.removeComponent(toRemove2);
-            tryToGetButtonProd("income").getPosition().inTL(tryToGetButtonProd("income").getPosition().getX()-10,0);
+            tryToGetButtonProd("income").getPosition().rightOfMid(tryToGetButtonProd("faction"),1f);
         }
 
         if (shouldHandleReset()) {
@@ -352,7 +370,7 @@ public class CoreUITrackerSop extends CoreUITracker{
             factionPanel = new FactionPanel();
             float width = UIDataSop.WIDTH;
             float height = UIDataSop.HEIGHT;
-            factionPanel.init(Global.getSettings().createCustom(width, height, factionPanel), getMemFlagForTechTab(), null);
+            factionPanel.init(Global.getSettings().createCustom(width, height, factionPanel), getMemFlagForFactinTab(), null);
         }
 
         panelMap.put(tiedButton, factionPanel.getMainPanel());
