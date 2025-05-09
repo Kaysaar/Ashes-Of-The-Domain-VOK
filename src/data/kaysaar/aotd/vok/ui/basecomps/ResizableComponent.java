@@ -19,6 +19,7 @@ public class    ResizableComponent implements CustomUIPanelPlugin {
     public Vector2f originalCoords;
     public Vector2f movingCords = new Vector2f(0,0);
     public CustomPanelAPI absolutePanel;
+    public CustomPanelAPI tooltipOnHoverPanel;
     TrapezoidButtonDetector detector = new TrapezoidButtonDetector();
     public void setOriginalCoords(Vector2f originalCoords) {
         this.originalCoords = originalCoords;
@@ -27,6 +28,7 @@ public class    ResizableComponent implements CustomUIPanelPlugin {
         this.originalCoords = new Vector2f(cordX, cordY);
         this.originalHeight = componentPanel.getPosition().getHeight();
         this.originalWidth = componentPanel.getPosition().getWidth();
+
     }
     public void setAbsolutePanel(CustomPanelAPI panel) {
         this.absolutePanel = panel;
@@ -60,14 +62,38 @@ public class    ResizableComponent implements CustomUIPanelPlugin {
             float xRightA = absolutePanel.getPosition().getX() + absolutePanel.getPosition().getWidth();
             float yBotA = absolutePanel.getPosition().getY();
             float yTopA = absolutePanel.getPosition().getY() + absolutePanel.getPosition().getHeight();
-            return detector.determineIfHoversOverButton(xLeftA, yTopA, xRightA, yTopA, xLeftA, yBotA, xRightA, yBotA, x, y) && hoversOverB;
+            boolean toReturn = detector.determineIfHoversOverButton(xLeftA, yTopA, xRightA, yTopA, xLeftA, yBotA, xRightA, yBotA, x, y) && hoversOverB;
+            if(toReturn&&getTooltipOnHoverPanel().getPosition().isSuspendRecompute()){
+                getTooltipOnHoverPanel().getPosition().inTL(0,0);
+                getTooltipOnHoverPanel().getPosition().setSuspendRecompute(false);
+            }
+            else if (!toReturn){
+                getTooltipOnHoverPanel().getPosition().inTL(-100000,-100000);
+                getTooltipOnHoverPanel().getPosition().setSuspendRecompute(true);
+
+            }
+            return toReturn;
         }
-        return detector.determineIfHoversOverButton(xLeft, yTop, xRight, yTop, xLeft, yBot, xRight, yBot, x, y);
+        boolean toReturn =detector.determineIfHoversOverButton(xLeft, yTop, xRight, yTop, xLeft, yBot, xRight, yBot, x, y);
+
+        return toReturn;
     }
+
+    public CustomPanelAPI getTooltipOnHoverPanel() {
+        if(tooltipOnHoverPanel == null) {
+            tooltipOnHoverPanel = Global.getSettings().createCustom(originalWidth*scale,originalHeight*scale,null);
+            componentPanel.addComponent(tooltipOnHoverPanel).inTL(0,0);
+        }
+
+        return tooltipOnHoverPanel;
+    }
+
     public void resize(float scale){
         this.scale = scale;
         componentPanel.getPosition().setSize(Math.round(originalWidth * scale), Math.round(originalHeight * scale));
+        getTooltipOnHoverPanel().getPosition().setSize(Math.round(originalWidth * scale), Math.round(originalHeight * scale));
         componentPanel.getPosition().setLocation(0,0).inTL(Math.round(originalCoords.x*scale- (movingCords.x)),Math.round(originalCoords.y*scale+ (movingCords.y)));
+
         for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(componentPanel)) {
             if(componentAPI instanceof CustomPanelAPI){
                 CustomUIPanelPlugin plugin = ((CustomPanelAPI) componentAPI).getPlugin();

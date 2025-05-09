@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.ui.research;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.Fonts;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -42,6 +43,23 @@ public class ResearchPanelComponent extends ButtonComponent {
             addComponent(viewer,currX,currY);
             currX += xSpacing+size;
         }
+        TooltipMakerAPI tooltip = componentPanel.createUIElement(1,1,false);
+        tooltip.addTooltipTo(new TooltipMakerAPI.TooltipCreator() {
+            @Override
+            public boolean isTooltipExpandable(Object tooltipParam) {
+                return false;
+            }
+
+            @Override
+            public float getTooltipWidth(Object tooltipParam) {
+                return 123f;
+            }
+
+            @Override
+            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                tooltip.addPara("test",5f);
+            }
+        }, getTooltipOnHoverPanel(),TooltipMakerAPI.TooltipLocation.BELOW,false);
 
 
 
