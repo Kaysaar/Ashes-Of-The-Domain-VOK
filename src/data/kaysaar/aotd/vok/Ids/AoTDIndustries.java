@@ -32,7 +32,7 @@ public class AoTDIndustries {
     public static final String FISHING = "fishery";
     public static final String LIGHT_PRODUCTION = "lightproduction";
     public static final String ORBITAL_SKUNKWORK = "triheavy";
-    public static final String HEGEMONY_HEAVY = "hegeheavy";
+    public static final String ORBITAL_FLEETWORK = "hegeheavy";
     public static final String HEAVY_PRODUCTION = "shityheavy";
     public static final String MILITARY_HEAVY = "weaponheavy";
     public static final String SUPPLY_HEAVY = "supplyheavy";

@@ -512,6 +512,10 @@ public class GPManager {
         return null;
     }
 
+    public ArrayList<GPMegaStructureSpec> getMegaStructureSpecs() {
+        return megaStructureSpecs;
+    }
+
     public GPMegaStructureSpec getMegaSpecFromListByEntityId(String id) {
         for (GPMegaStructureSpec spec : megaStructureSpecs) {
             if (spec.getSectorEntityTokenId().equals(id)) return spec;

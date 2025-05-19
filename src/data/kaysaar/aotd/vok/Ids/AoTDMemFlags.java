@@ -10,4 +10,9 @@ public class AoTDMemFlags {
     public static final String POP_FOOD_DEMAND_8_AND_9 = "pop_demand_8_and_9";
     public static final String POP_FOOD_DEMAND_10 = "pop_demand_10";
     public static final String RESEARCH_SAVED = "researchsaved";
+    public static final String MEGASTRUCUTRE_FLAG_DISCOVERY = "$aotd_megastructure_flag_discovery";
+    public static final String MEGASTRUCUTRE_FLAG_RESTORE = "$aotd_megastructure_flag_restore";
+    public static final String RESEARCH_TECH_EVENT = "$aotd_research_tech_event";
+    public static final String RESEARCH_PROJECT_EVENT = "$aotd_research_project_event";
+
 }

@@ -103,13 +103,13 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
             }
         }
 
-        if (hasTwoIndustriesForSynergy(AoTDIndustries.POLICRYSTALIZATOR, AoTDIndustries.HEGEMONY_HEAVY)) {
-            Industry hegeHeavy = market.getIndustry(AoTDIndustries.HEGEMONY_HEAVY);
+        if (hasTwoIndustriesForSynergy(AoTDIndustries.POLICRYSTALIZATOR, AoTDIndustries.ORBITAL_FLEETWORK)) {
+            Industry hegeHeavy = market.getIndustry(AoTDIndustries.ORBITAL_FLEETWORK);
             for (MutableCommodityQuantity mutableCommodityQuantity : hegeHeavy.getAllSupply()) {
                 hegeHeavy.getSupply(mutableCommodityQuantity.getCommodityId()).getQuantity().modifyFlat("IndSynergyHege", +1, "Industry Synergy");
             }
         } else {
-            Industry hegeHeavy = market.getIndustry(AoTDIndustries.HEGEMONY_HEAVY);
+            Industry hegeHeavy = market.getIndustry(AoTDIndustries.ORBITAL_FLEETWORK);
             if (hegeHeavy != null) {
                 for (MutableCommodityQuantity mutableCommodityQuantity : hegeHeavy.getAllSupply()) {
                     hegeHeavy.getSupply(mutableCommodityQuantity.getCommodityId()).getQuantity().unmodifyFlat("IndSynergyHege");
@@ -120,7 +120,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
             Industry resort = market.getIndustry(AoTDIndustries.RESORT);
             resort.getIncome().modifyMult("IndSynergyResortIncome",1.1f,"Industry Synergy");
         } else {
-            Industry resort = market.getIndustry(AoTDIndustries.HEGEMONY_HEAVY);
+            Industry resort = market.getIndustry(AoTDIndustries.ORBITAL_FLEETWORK);
             if (resort != null) {
                 resort.getIncome().unmodifyMult("IndSynergyResortIncome");
             }
@@ -206,7 +206,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
             );
 
         }
-        if (hasTwoIndustriesForSynergy(AoTDIndustries.POLICRYSTALIZATOR, AoTDIndustries.HEGEMONY_HEAVY)) {
+        if (hasTwoIndustriesForSynergy(AoTDIndustries.POLICRYSTALIZATOR, AoTDIndustries.ORBITAL_FLEETWORK)) {
             tooltip.addPara(
                     "Policrystalizator and Orbital Fleetwork Facility: %s ",
                     10f,
@@ -265,7 +265,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
                 hasTwoIndustriesForSynergy(AoTDIndustries.BENEFICATION, AoTDIndustries.POLICRYSTALIZATOR) ||
                 hasTwoIndustriesForSynergy(AoTDIndustries.SUBLIMATION, AoTDIndustries.CASCADE_REPROCESSOR)||
                 hasTwoIndustriesForSynergy(AoTDIndustries.CASCADE_REPROCESSOR, AoTDIndustries.ORBITAL_SKUNKWORK)||
-                hasTwoIndustriesForSynergy(AoTDIndustries.POLICRYSTALIZATOR, AoTDIndustries.HEGEMONY_HEAVY)||
+                hasTwoIndustriesForSynergy(AoTDIndustries.POLICRYSTALIZATOR, AoTDIndustries.ORBITAL_FLEETWORK)||
                 hasTwoIndustriesForSynergy(AoTDIndustries.CONSUMER_INDUSTRY, AoTDIndustries.RESORT)||
                 hasTwoIndustriesForSynergy(AoTDIndustries.ARTISANAL_FARMING, AoTDIndustries.RESORT)||
                 hasTwoIndustriesForSynergy(AoTDIndustries.UNDERWORLD, AoTDIndustries.RESORT)||
