@@ -104,4 +104,8 @@ public class AoTDSpecialItemRepo {
         if (prevParams.contains(listOfAdditionalIndustries)) return;
         spec.setParams(prevParams + "," + listOfAdditionalIndustries);
     }
+    public void absoluteSetItemParams(String specialItemID, String replacement) {
+        SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(specialItemID);
+        spec.setParams(replacement);
+    }
 }

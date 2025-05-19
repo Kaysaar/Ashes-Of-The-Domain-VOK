@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 public class GPMegaStructureSpec {
@@ -20,6 +21,7 @@ public class GPMegaStructureSpec {
     public ArrayList<String>sectionIds;
     public String description;
     public String imageForMegastructure;
+    public HashSet<String>tags;
 
 
     public String getImageForMegastructure() {
@@ -56,6 +58,15 @@ public class GPMegaStructureSpec {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    public boolean hasTag(String tag) {
+        return tags.contains(tag);
+    }
+    public void addTag(String tag) {
+        tags.add(tag);
+    }
+    public void removeTag(String tag) {
+        tags.remove(tag);
     }
 
     public void setScript(String script) {
@@ -106,6 +117,10 @@ public class GPMegaStructureSpec {
         return description;
     }
 
+    public void setTags(HashSet<String> tags) {
+        this.tags = tags;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -123,6 +138,8 @@ public class GPMegaStructureSpec {
                 String iconId = jsonObject.getString("icon");
                 String sectorEntityTokenId = jsonObject.getString("entityId");
                 ArrayList<String>sectionIds = AoTDMisc.loadEntries(jsonObject.getString("sections"),",");
+                ArrayList<String>tags = AoTDMisc.loadEntries(jsonObject.getString("tags"),",");
+                HashSet<String>te = new HashSet<>(tags);
                 String description = jsonObject.getString("description");
                 String image = jsonObject.getString("image");
                 for (String sectionId : sectionIds) {
@@ -133,6 +150,7 @@ public class GPMegaStructureSpec {
                 GPMegaStructureSpec spec = new GPMegaStructureSpec();
                 spec.setMegastructureID(id);
                 spec.setName(name);
+                spec.setTags(te);
                 spec.setScript(script);
                 spec.setBaseUpkeepCredits(baseUpkeepCredits);
                 spec.setBaseGPCost(baseGPCost);

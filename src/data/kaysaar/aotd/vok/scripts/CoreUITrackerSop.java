@@ -4,7 +4,9 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.listeners.TestIndustryOptionProvider;
+import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.ui.*;
+import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.campaign.command.CustomProductionPanel;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
@@ -13,6 +15,7 @@ import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;
 import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.ui.patrolfleet.PatrolFleetDataManager;
+import data.misc.AoTDSopMisc;
 import data.misc.UIDataSop;
 import data.ui.FactionPanel;
 import org.jetbrains.annotations.NotNull;
@@ -188,6 +191,8 @@ public class CoreUITrackerSop extends CoreUITracker{
 
             mainParent.removeComponent(toRemove2);
             tryToGetButtonProd("income").getPosition().rightOfMid(tryToGetButtonProd("faction"),1f);
+            AoTDSopMisc.tryToGetButtonProd("faction").setEnabled(!Misc.getFactionMarkets(Factions.PLAYER).isEmpty());
+
         }
 
         if (shouldHandleReset()) {

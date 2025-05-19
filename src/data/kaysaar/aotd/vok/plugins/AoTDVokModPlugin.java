@@ -4,55 +4,61 @@ package data.kaysaar.aotd.vok.plugins;
 import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
-import com.fs.starfarer.api.combat.ShipHullSpecAPI;
-import com.fs.starfarer.api.combat.ViewportAPI;
-import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirDestroyedShipyard;
-import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyard;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.Pair;
-import com.thoughtworks.xstream.XStream;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
+import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureProductionListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureUpkeepListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDSupertencileListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.CoreUITrackerSop;
+import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDFuelConsumptionScript;
-import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
-import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchProgressionScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
+import data.kaysaar.aotd.vok.timeline.military.LockheedDomainEvent;
+import data.kaysaar.aotd.vok.timeline.military.OrbitalFleetworkEvent;
+import data.kaysaar.aotd.vok.timeline.prosperity.MiningMegaplexEvent;
+import data.kaysaar.aotd.vok.timeline.prosperity.ResortCenterWorld;
+import data.kaysaar.aotd.vok.timeline.research.ResearchFacilityEvent;
+import data.kaysaar.aotd.vok.timeline.unique.BifrostNetworkEstablished;
+import data.kaysaar.aotd.vok.timeline.research.StellaManufactoriumResearch;
+import data.kaysaar.aotd.vok.timeline.research.StreamlinedProductionResearch;
+import data.kaysaar.aotd.vok.timeline.templates.MegastructureClaimEvent;
+import data.kaysaar.aotd.vok.timeline.templates.MegastructureRestoredEvent;
+import data.kaysaar.aotd.vok.timeline.templates.SpecialProjectCompletionEvent;
+import data.kaysaar.aotd.vok.timeline.unique.HyperdimensionalProcessorEvent;
+import data.listeners.timeline.MiscEventListener;
+import data.listeners.timeline.models.FirstIndustryListener;
+import data.memory.AoTDSopMemFlags;
+import data.scripts.managers.TimelineListenerManager;
 import kaysaar.bmo.buildingmenu.additionalreq.AdditionalReqManager;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.lazywizard.lazylib.ui.FontException;
-import org.magiclib.bounty.MagicBountyBarEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class AoTDVokModPlugin extends BaseModPlugin {
@@ -217,10 +223,9 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
         Global.getSector().removeTransientScriptsOfClass(AoTDCompoundUIScript.class);
         Global.getSector().removeTransientScriptsOfClass(AoTDCompoundUIInMarketScript.class);
-        if(Global.getSettings().getModManager().isModEnabled("aotd_sop")){
+        if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
             Global.getSector().addTransientScript(new CoreUITrackerSop());
-        }
-        else{
+        } else {
             Global.getSector().addTransientScript(new CoreUITracker());
         }
 
@@ -257,6 +262,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy,stella_manufactorium");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator,policrystalizator,cascade_reprocesor");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
+        aoTDSpecialItemRepo.absoluteSetItemParams(Items.CORONAL_PORTAL, null);
 
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker", "subfarming,artifarming");
@@ -279,6 +285,9 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
         SpecialProjectManager.getInstance().addScriptInstance();
         clearListenersFromTemporaryMarket();
+        if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
+            addEvents();
+        }
 //        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
 //            if(planet.isStar())continue;
 //            NidavelirShipyard shipyard = (NidavelirShipyard)planet.getStarSystem().addCustomEntity(null,"Nid","nid_shipyards",null).getCustomPlugin();
@@ -337,6 +346,33 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
         }
         listeners.clear();
+    }
+
+    public void addEvents() {
+        TimelineListenerManager manager = TimelineListenerManager.getInstance();
+        GPManager.getInstance().getMegaStructureSpecs().stream().filter(x -> !x.hasTag("ignore_timeline")).forEach(
+                x -> {
+                    manager.addNewListener(new MiscEventListener(AoTDMemFlags.MEGASTRUCUTRE_FLAG_DISCOVERY,
+                            new MegastructureClaimEvent(x.getMegastructureID(), x.getName(), Global.getSettings().getSpriteName("megastructureImage", x.getImageForMegastructure()))));
+                    manager.addNewListener(new MiscEventListener(AoTDMemFlags.MEGASTRUCUTRE_FLAG_RESTORE, new MegastructureRestoredEvent(x.getMegastructureID(), x.getName(), Global.getSettings().getSpriteName("megastructureImage", x.getImageForMegastructure()))));
+                    ;
+                }
+        );
+        SpecialProjectManager.getInstance().getProjects().values().forEach(x -> manager.addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_PROJECT_EVENT, new SpecialProjectCompletionEvent(x.getProjectSpec().getId()))));
+        TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.MEGASTRUCUTRE_FLAG_DISCOVERY, new BifrostNetworkEstablished()));
+        TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDSopMemFlags.FIRST_ITEM, new HyperdimensionalProcessorEvent()));
+        TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_TECH_EVENT, new StreamlinedProductionResearch()));
+        TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_TECH_EVENT, new StellaManufactoriumResearch()));
+
+        TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new LockheedDomainEvent(null)));
+        TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new OrbitalFleetworkEvent(null)));
+        TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new ResortCenterWorld(null)));
+        TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new MiningMegaplexEvent(null)));
+        TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new ResearchFacilityEvent(null)));
+
+
+
+
     }
 }
 

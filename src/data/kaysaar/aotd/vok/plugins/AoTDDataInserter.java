@@ -10,7 +10,6 @@ import com.fs.starfarer.api.characters.ImportantPeopleAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.MusicPlayerPluginImpl;
 import com.fs.starfarer.api.impl.campaign.econ.ResourceDepositsCondition;
-import com.fs.starfarer.api.impl.campaign.econ.impl.Mining;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.impl.campaign.procgen.themes.MiscellaneousThemeGenerator;
@@ -19,10 +18,8 @@ import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDConditions;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -413,7 +410,7 @@ public class AoTDDataInserter {
     public void initalizeEconomy(boolean random){
         if(!random){
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ORBITAL_SKUNKWORK, Industries.ORBITALWORKS, null, false, Commodities.ALPHA_CORE,null);
-            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.HEGEMONY_HEAVY, Industries.ORBITALWORKS, null, false, null,Items.PRISTINE_NANOFORGE);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.ORBITAL_FLEETWORK, Industries.ORBITALWORKS, null, false, null,Items.PRISTINE_NANOFORGE);
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, true, Commodities.ALPHA_CORE,null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, false, null,null);
             setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null,null);
