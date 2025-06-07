@@ -32,7 +32,7 @@ public class SpecialProjectCompletionEvent extends BaseFactionTimelineEvent {
 
     @Override
     public void createDetailedTooltipOnHover(TooltipMakerAPI tooltip) {
-        tooltip.addPara("%s was completed",0f, Color.ORANGE,SpecialProjectManager.getInstance().getProject(projectID).getProjectSpec().getName()).setAlignment(Alignment.MID);
+        tooltip.addPara("%s was completed",0f, Color.ORANGE,SpecialProjectManager.getInstance().getProject(projectID).getProjectSpec().getName());
 
     }
 

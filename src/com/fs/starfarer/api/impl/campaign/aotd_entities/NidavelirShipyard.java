@@ -34,6 +34,12 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
     public void advance(float amount) {
         super.advance(amount);
         if(tiedToPlanet!=null){
+            PlanetSpecAPI spec = tiedToPlanet.getSpec();
+            spec.setIconColor(new Color(246, 202, 125));
+            spec.getShieldColor();
+            ((PlanetSpec) spec).name = "Shipyard";
+            tiedToPlanet.applySpecChanges();
+            ((PlanetSpec) spec).iconTexture = "graphics/icons/nidavelir.png";
 //            graphics.advance(amount);
 //            graphics.getLocation().set(tiedToPlanet.getLocation());
             for (Planet layer : layers.keySet()) {
@@ -137,6 +143,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
     }
     public  void trueInit(String type,String shadowType, PlanetAPI planetTied){
         tiedToPlanet = planetTied;
+
         reinitRendering(type,shadowType,false);
         seconds = 1;
         isAppearing=true;
@@ -244,6 +251,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
 
         GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
     }
+
     public static void endStencil() {
         GL11.glDisable(GL11.GL_STENCIL_TEST);
     }

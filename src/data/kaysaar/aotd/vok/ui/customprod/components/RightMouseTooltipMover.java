@@ -145,7 +145,7 @@ public class RightMouseTooltipMover implements CustomUIPanelPlugin {
     }
 
     public boolean checkIfPanelIsGoingTooFar(float targetedOffset) {
-        return (targetedOffset >=rightBorderX  || targetedOffset <=leftBorderX )||(targetedOffset>=panelOfTooltip.getPosition().getWidth()-40||targetedOffset<=-panelOfTooltip.getPosition().getWidth()+40);
+        return (targetedOffset >=rightBorderX*Global.getSettings().getScreenScaleMult()  || targetedOffset <=leftBorderX*Global.getSettings().getScreenScaleMult() )||(targetedOffset>=panelOfTooltip.getPosition().getWidth()-40||targetedOffset<=-panelOfTooltip.getPosition().getWidth()+40);
     }
 
     public float pickNearest(float targetOffset) {

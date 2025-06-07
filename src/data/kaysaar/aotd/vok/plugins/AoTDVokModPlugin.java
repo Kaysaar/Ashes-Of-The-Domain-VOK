@@ -40,13 +40,14 @@ import data.kaysaar.aotd.vok.timeline.military.LockheedDomainEvent;
 import data.kaysaar.aotd.vok.timeline.military.OrbitalFleetworkEvent;
 import data.kaysaar.aotd.vok.timeline.prosperity.MiningMegaplexEvent;
 import data.kaysaar.aotd.vok.timeline.prosperity.ResortCenterWorld;
+import data.kaysaar.aotd.vok.timeline.research.JanusDeviceEvent;
 import data.kaysaar.aotd.vok.timeline.research.ResearchFacilityEvent;
-import data.kaysaar.aotd.vok.timeline.unique.BifrostNetworkEstablished;
 import data.kaysaar.aotd.vok.timeline.research.StellaManufactoriumResearch;
 import data.kaysaar.aotd.vok.timeline.research.StreamlinedProductionResearch;
 import data.kaysaar.aotd.vok.timeline.templates.MegastructureClaimEvent;
 import data.kaysaar.aotd.vok.timeline.templates.MegastructureRestoredEvent;
 import data.kaysaar.aotd.vok.timeline.templates.SpecialProjectCompletionEvent;
+import data.kaysaar.aotd.vok.timeline.unique.BifrostNetworkEstablished;
 import data.kaysaar.aotd.vok.timeline.unique.HyperdimensionalProcessorEvent;
 import data.listeners.timeline.MiscEventListener;
 import data.listeners.timeline.models.FirstIndustryListener;
@@ -262,7 +263,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy,stella_manufactorium");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator,policrystalizator,cascade_reprocesor");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
-        aoTDSpecialItemRepo.absoluteSetItemParams(Items.CORONAL_PORTAL, null);
+        aoTDSpecialItemRepo.absoluteSetItemParams(Items.CORONAL_PORTAL, "");
 
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker", "subfarming,artifarming");
@@ -363,6 +364,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDSopMemFlags.FIRST_ITEM, new HyperdimensionalProcessorEvent()));
         TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_TECH_EVENT, new StreamlinedProductionResearch()));
         TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_TECH_EVENT, new StellaManufactoriumResearch()));
+        TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_TECH_EVENT, new JanusDeviceEvent()));
 
         TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new LockheedDomainEvent(null)));
         TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new OrbitalFleetworkEvent(null)));
