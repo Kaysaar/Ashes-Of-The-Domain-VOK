@@ -3,9 +3,6 @@ package data.kaysaar.aotd.vok.plugins;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import com.fs.starfarer.api.util.Pair;
-import com.fs.starfarer.campaign.CampaignEngine;
-import com.fs.starfarer.ui.impl.CargoTooltipFactory;
-import kaysaar.bmo.buildingmenu.BuildingMenuMisc;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -372,9 +369,8 @@ public class ReflectionUtilis {
                         Class<?> fieldClass = (Class<?>) invokeMethodWithAutoProjection("getType",field);
 
                         // Check if the field type matches or is assignable
-                        if (fieldClass.isAssignableFrom(fieldType)) {
+                        if (fieldType.isAssignableFrom(fieldClass)) {
                             setFieldAccessibleHandle.invoke(field, true);
-                            String name = (String) getFieldNameHandle.invoke(field);
                             return  getFieldHandle.invoke(field, targetObject);
                         }
                     } catch (Throwable e) {
@@ -384,7 +380,7 @@ public class ReflectionUtilis {
                 }
 
                 // Move to the superclass dynamically
-                currentClass = (Class<?>) invokeMethodHandle.invoke(currentClass, "getSuperclass");
+                currentClass = currentClass.getSuperclass();
             }
 
             // Return null if no matching field is found

@@ -8,6 +8,7 @@ import data.kaysaar.aotd.vok.ui.basecomps.ZoomPanelComponent;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ResearchZoomPanel extends ZoomPanelComponent {
     public String currentModID;
@@ -65,9 +66,10 @@ public class ResearchZoomPanel extends ZoomPanelComponent {
             for (ResearchPanelComponent researchOptionPanel : era.getResearchOptionPanels()) {
                 if(!researchOptionPanel.spec.getReqTechsToResearchFirst().isEmpty()){
                     for (ResearchPanelComponent parentComponent : getParentComponents(researchOptionPanel)) {
+
                         Color color = Color.WHITE;
                         if(AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(parentComponent.spec.getId())){
-                            color = Color.ORANGE;
+                            color = new Color(210, 138, 7, 255);
                         }
                         ResearchTreeConnector drawer = new ResearchTreeConnector(3,parentComponent,researchOptionPanel,color);
                         addComponent(drawer,0,0);
@@ -165,6 +167,10 @@ public class ResearchZoomPanel extends ZoomPanelComponent {
                 }
             }
         }
+        parents.stream()
+                .sorted(Comparator.comparing(
+                        x -> !AoTDMainResearchManager.getInstance().isResearchedForPlayer(x.spec.getId())
+                ));
         return parents;
     }
 }

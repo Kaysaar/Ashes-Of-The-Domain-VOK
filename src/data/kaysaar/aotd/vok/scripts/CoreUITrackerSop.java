@@ -2,8 +2,6 @@ package data.kaysaar.aotd.vok.scripts;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
-import com.fs.starfarer.api.campaign.InteractionDialogAPI;
-import com.fs.starfarer.api.campaign.listeners.TestIndustryOptionProvider;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -375,7 +373,7 @@ public class CoreUITrackerSop extends CoreUITracker{
             factionPanel = new FactionPanel();
             float width = UIDataSop.WIDTH;
             float height = UIDataSop.HEIGHT;
-            factionPanel.init(Global.getSettings().createCustom(width, height, factionPanel), getMemFlagForFactinTab(), null);
+            factionPanel.init(Global.getSettings().createCustom(width, height, factionPanel), getMemFlagForFactinTab(), panelMap.get(tryToGetButtonProd("colonies")));
         }
 
         panelMap.put(tiedButton, factionPanel.getMainPanel());

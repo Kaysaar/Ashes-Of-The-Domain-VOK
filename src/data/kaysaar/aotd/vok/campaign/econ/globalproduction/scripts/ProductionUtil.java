@@ -7,9 +7,6 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 public class ProductionUtil {
     public static UIPanelAPI getCoreUI() {
         CampaignUIAPI campaignUI;
@@ -28,6 +25,9 @@ public class ProductionUtil {
 
     public static UIPanelAPI getCurrentTab() {
         UIPanelAPI coreUltimate = getCoreUI();
+        if(getCoreUI()==null) {
+            return null;
+        }
         UIPanelAPI core = (UIPanelAPI) ReflectionUtilis.invokeMethod("getCurrentTab",coreUltimate);
         return core == null ? null : (UIPanelAPI) core;
     }

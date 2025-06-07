@@ -41,7 +41,7 @@ public class ResearchedTechnologyEvent extends BaseFactionTimelineEvent {
                 10f,
                 Misc.getHighlightColor(),
                 Global.getSector().getPlayerFaction().getDisplayNameLong(),
-                AoTDMainResearchManager.getInstance().getNameForResearchBd(technologyId)
+                AoTDMainResearchManager.getInstance().getSpecForSpecificResearch(technologyId).getName()
         );
         tooltip.addPara(
                 "This advancement opens new paths for development, production, and strategic superiority across multiple domains. " +
@@ -56,7 +56,8 @@ public class ResearchedTechnologyEvent extends BaseFactionTimelineEvent {
                 0f,
                 Misc.getTextColor(),
                 Global.getSector().getPlayerFaction().getDisplayNameLong(),
-                AoTDMainResearchManager.getInstance().getNameForResearchBd(technologyId)
+                AoTDMainResearchManager.getInstance().getSpecForSpecificResearch(technologyId).getName()
+
         ).setAlignment(Alignment.MID);
     }
 
