@@ -41,7 +41,7 @@ public class ResearchTreeConnector extends ResizableComponent {
             float defaultDistance = AoTDUiComp.SEPERATOR_OF_PANELS*scale;
             float reDistanced = distanceX - defaultDistance;
             int line = 9;
-            spriteToRender.setSize(defaultDistance- line,1);
+            spriteToRender.setSize(defaultDistance- line+1,1);
             spriteToRender.render(parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth(),parent.getComponentPanel().getPosition().getCenterY());
             spriteToRender.render(parent.getComponentPanel().getPosition().getX()+parent.getComponentPanel().getPosition().getWidth(),parent.getComponentPanel().getPosition().getCenterY());
 

@@ -77,7 +77,7 @@ public class ZoomPanelComponent implements CustomUIPanelPlugin {
     }
     public void addGrid() {
         GridRenderer renderer1=new GridRenderer(data.maxOffsetX, data.maxOffsetY,500, Color.cyan,data);
-       addComponent(renderer1,0,0);
+        addComponent(renderer1,0,0);
     }
     public void addComponent(ResizableComponent resizableComponent, float x, float y) {
         resizableComponents.add(resizableComponent);
@@ -126,7 +126,7 @@ public class ZoomPanelComponent implements CustomUIPanelPlugin {
         data.maxOffsetY = y;
         data.maxOffsetX = x;
         this.minScale = width/x;
-        if(height/y<=minScale){
+        if(height/y>=minScale){
             this.minScale = height/y;
         }
         data.scale = scale;
