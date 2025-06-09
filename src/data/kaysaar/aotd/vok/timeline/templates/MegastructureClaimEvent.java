@@ -17,7 +17,7 @@ public class MegastructureClaimEvent extends BaseFactionTimelineEvent {
     
     @Override
     public String getID() {
-        return super.getID();
+        return super.getID()+megastrucutreID;
     }
 
     public MegastructureClaimEvent(String megastructureID, String title, String imageName){

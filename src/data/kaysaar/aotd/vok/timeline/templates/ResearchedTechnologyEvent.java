@@ -65,4 +65,9 @@ public class ResearchedTechnologyEvent extends BaseFactionTimelineEvent {
     public void updateDataUponEntryOfUI() {
         lastSavedName = AoTDMainResearchManager.getInstance().getNameForResearchBd(technologyId);
     }
+
+    @Override
+    public int getPointsForGoal() {
+        return 60;
+    }
 }

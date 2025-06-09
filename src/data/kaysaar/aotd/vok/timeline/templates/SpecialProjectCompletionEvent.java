@@ -21,6 +21,11 @@ public class SpecialProjectCompletionEvent extends BaseFactionTimelineEvent {
     }
 
     @Override
+    public String getID() {
+        return super.getID()+projectID;
+    }
+
+    @Override
     public boolean checkForCondition() {
         return SpecialProjectManager.getInstance().getProject(projectID) != null&&SpecialProjectManager.getInstance().getProject(projectID).checkIfProjectWasCompleted();
     }
@@ -32,7 +37,7 @@ public class SpecialProjectCompletionEvent extends BaseFactionTimelineEvent {
 
     @Override
     public void createDetailedTooltipOnHover(TooltipMakerAPI tooltip) {
-        tooltip.addPara("%s was completed",0f, Color.ORANGE,SpecialProjectManager.getInstance().getProject(projectID).getProjectSpec().getName());
+        tooltip.addPara("%s was completed, marking it a significant milestone.",5f, Color.ORANGE,SpecialProjectManager.getInstance().getProject(projectID).getProjectSpec().getName());
 
     }
 

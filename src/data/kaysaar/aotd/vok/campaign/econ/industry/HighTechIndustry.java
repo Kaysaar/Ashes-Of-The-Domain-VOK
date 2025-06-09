@@ -5,6 +5,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 public class HighTechIndustry extends BaseIndustry {
     public void apply() {
         super.apply(true);
-
+        AoDUtilis.ensureIndustryHasNoItem(this);
         int size = market.getSize();
         demand(Commodities.ORGANICS, size+2);
         demand(Commodities.HEAVY_MACHINERY,size);

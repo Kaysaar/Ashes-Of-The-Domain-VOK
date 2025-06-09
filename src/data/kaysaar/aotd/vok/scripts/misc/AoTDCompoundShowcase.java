@@ -2,7 +2,6 @@ package data.kaysaar.aotd.vok.scripts.misc;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
-import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
@@ -16,7 +15,8 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
     ProgressBarComponent component;
     LabelAPI updatingLabel;
     CustomPanelAPI tooltipPanel;
-
+    ButtonAPI button;
+    public static String memKey = "$aotd_compoun_on";
     public CustomPanelAPI getMainPanel() {
         return mainPanel;
     }
@@ -29,12 +29,12 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
         viewer.setColorOverlay(new Color(138, 41, 255, 255));
         mainPanel.addComponent(viewer.getComponentPanel()).inTL(2, 0);
         mainPanel.addComponent(component.getRenderingPanel()).inTL(30, 0);
-        createTooltipPanel();
+        createTooltipPanel(false);
 
 
     }
 
-    public void createTooltipPanel() {
+    public void createTooltipPanel(boolean updateButton) {
         if (tooltipPanel != null) {
             mainPanel.removeComponent(tooltipPanel);
         }
@@ -53,6 +53,13 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
         tooltip.setParaFont(Fonts.DEFAULT_SMALL);
         LabelAPI label = tooltip.addPara("%s / %s", 5f, colors, ""+AoTDFuelConsumptionScript.getCompound(Global.getSector().getPlayerFleet().getCargo()), "" + Global.getSector().getPlayerFleet().getCargo().getFuel());
         label.getPosition().inTL(component.getRenderingPanel().getPosition().getCenterX() - (label.computeTextWidth(label.getText()) / 2), height / 4 + 19);
+        if(button==null){
+            button = tooltip.addButton("Start Infustion",null,new Color(201, 156, 255, 255),new Color(90, 43, 148, 255),Alignment.MID,CutStyle.ALL,width/2+15,20,0f);
+            button.getPosition().inTL(15,height+25);
+        }
+        else{
+            tooltip.addCustom(button,5f).getPosition().inTL(15,height+25);
+        }
         tooltipPanel.addUIElement(tooltip).inTL(-5, 0);
         mainPanel.addComponent(tooltipPanel).inTL(0, -20);
 
@@ -77,10 +84,29 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
     public void advance(float amount) {
 
         if (component != null) {
-            createTooltipPanel();
+            createTooltipPanel(false);
             float progres = AoTDFuelConsumptionScript.getCompound(Global.getSector().getPlayerFleet().getCargo()) / Global.getSector().getPlayerFleet().getCargo().getFuel();
             if (progres >= 1) progres = 1;
             component.progress = progres;
+        }
+        if(button!=null&&button.isChecked()){
+            button.setChecked(false);
+            if(!Global.getSector().getPlayerMemoryWithoutUpdate().contains(memKey)){
+                Global.getSector().getPlayerMemoryWithoutUpdate().set(memKey,true);
+                button.setText("Stop Infusion");
+                createTooltipPanel(true);
+            }
+            else{
+                boolean current = Global.getSector().getPlayerMemoryWithoutUpdate().getBoolean(memKey);
+                Global.getSector().getPlayerMemoryWithoutUpdate().set(memKey,!current);
+                if(current){
+                    button.setText("Start Infusion");
+                }
+                else{
+                    button.setText("Stop Infusion");
+                }
+
+            }
         }
     }
 

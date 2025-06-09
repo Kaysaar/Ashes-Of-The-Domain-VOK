@@ -205,7 +205,7 @@ public class AoTDDataInserter {
         List<StarSystemAPI> starSystems = Global.getSector().getStarSystems();
         Collections.shuffle(starSystems);
         for (StarSystemAPI starSystem : starSystems) {
-            if (!starSystem.getTags().contains(Tags.THEME_CORE)&&!starSystem.getTags().contains(Tags.THEME_CORE_POPULATED)&&!starSystem.getTags().contains(Tags.THEME_CORE_UNPOPULATED)) {
+            if (!starSystem.getTags().contains(Tags.THEME_CORE)&&!starSystem.getTags().contains(Tags.THEME_CORE_POPULATED)&&!starSystem.getTags().contains(Tags.THEME_CORE_UNPOPULATED)&&!starSystem.getTags().contains(Tags.THEME_HIDDEN)) {
                 for (PlanetAPI planet : starSystem.getPlanets()) {
                     if (planet.isStar()) continue;
                     if (planet.isMoon()) continue;
@@ -214,7 +214,7 @@ public class AoTDDataInserter {
                     if (planet.hasTag(Tags.MISSION_ITEM)) continue;
                     if (planet.isStar()) continue;
                     if (planet.isGasGiant()) continue;
-                    if(planet.getRadius()<=70)continue;
+                    if(planet.getRadius()<=60)continue;
                     if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
                     if(planet.getMemory().contains(GPBaseMegastructure.memKey))continue;
                     if(criteria!=null){
