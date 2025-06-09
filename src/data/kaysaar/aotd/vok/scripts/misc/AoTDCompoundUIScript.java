@@ -13,10 +13,10 @@ import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class AoTDCompoundUIScript implements EveryFrameScript {
     public transient boolean removed = false;
+    public static
     float frames = 0f;
     @Override
     public boolean isDone() {
@@ -92,7 +92,7 @@ public class AoTDCompoundUIScript implements EveryFrameScript {
                     insider.addComponent(main);
                     TooltipMakerAPI tooltip = testings.createUIElement(1, 1, true);
                     tooltip.addTooltipTo(new AoTDFuelTooltip(), main, TooltipMakerAPI.TooltipLocation.ABOVE);
-                    leChildren.addComponent(testings).aboveLeft(testing, 20);
+                    leChildren.addComponent(testings).aboveLeft(testing, 45);
 
 
                     return;

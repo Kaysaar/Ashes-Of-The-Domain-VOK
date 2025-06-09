@@ -111,7 +111,7 @@ public class AoTDCompoundUIInMarketScript extends CoreUITracker {
                         insider.addComponent(main);
                         TooltipMakerAPI tooltip = testings.createUIElement(1,1,true);
                         tooltip.addTooltipTo(new AoTDFuelTooltip(),main, TooltipMakerAPI.TooltipLocation.ABOVE);
-                        leChildren.addComponent(testings).aboveLeft(testing,20);
+                        leChildren.addComponent(testings).aboveLeft(testing,45);
 
 
                         didIt = true;

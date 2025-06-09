@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.campaign.econ.conditions;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.BaseHazardCondition;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.industry.Aquaculture;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 public class HazmatCondition extends BaseHazardCondition {
@@ -12,6 +13,12 @@ public class HazmatCondition extends BaseHazardCondition {
         if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(market.getFaction())==null)return;
         if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(market.getFaction()).haveResearched(AoTDTechIds.HAZMAT_WORKING_EQUIPMENT)){
             market.getHazard().modifyFlat("tech_hazmmat",-0.1f,"Hazmat Working Equipment");
+        }
+        if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(market.getFaction()).haveResearched(AoTDTechIds.AQUATIC_BIOSPHERE_HARVEST)){
+            if(market.getPlanetEntity() != null&&Aquaculture.AQUA_PLANETS.contains(market.getPlanetEntity().getTypeId())){
+                market.getHazard().modifyFlat("tech_aquatic",-0.1f,"Aquatic Biosphere");
+
+            }
         }
     }
 

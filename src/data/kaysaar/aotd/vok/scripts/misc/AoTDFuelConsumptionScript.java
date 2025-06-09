@@ -2,24 +2,12 @@ package data.kaysaar.aotd.vok.scripts.misc;
 
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.*;
-import com.fs.starfarer.api.characters.AbilityPlugin;
+import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.fleet.FleetMemberViewAPI;
-import com.fs.starfarer.api.ui.CustomPanelAPI;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.ui.UIComponentAPI;
-import com.fs.starfarer.api.ui.UIPanelAPI;
-import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.campaign.CampaignUIPersistentData;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
-import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
-import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Vector;
 
 public class AoTDFuelConsumptionScript implements EveryFrameScript {
     @Override
@@ -34,7 +22,7 @@ public class AoTDFuelConsumptionScript implements EveryFrameScript {
     public void trueAdvance(float amount) {
         CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();
 
-        if(getCompound(fleet.getCargo())>0){
+        if(getCompound(fleet.getCargo())>0&&Global.getSector().getPlayerMemoryWithoutUpdate().is(AoTDCompoundShowcase.memKey,true)){
             fleet.getStats().getFuelUseHyperMult().modifyMult("aotd_compound",0.1f,"Compound");
             float fuelConsumed = getComputedFuel(amount,fleet);
             if(fuelConsumed>0){

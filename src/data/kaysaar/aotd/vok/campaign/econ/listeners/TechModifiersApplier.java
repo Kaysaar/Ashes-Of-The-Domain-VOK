@@ -9,7 +9,6 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.GPModifiers;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.HazmatCondition;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.ResearchedUpkeepModifier;
-import data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMinningCond;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 public class TechModifiersApplier implements PlayerColonizationListener, EconomyTickListener {
@@ -19,6 +18,9 @@ public class TechModifiersApplier implements PlayerColonizationListener, Economy
                 ResearchedUpkeepModifier.applyRessourceCond(m);
             }
             if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.HAZMAT_WORKING_EQUIPMENT,m)){
+                HazmatCondition.applyRessourceCond(m);
+            }
+            if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.AQUATIC_BIOSPHERE_HARVEST,m)){
                 HazmatCondition.applyRessourceCond(m);
             }
             if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.SOPHISTICATED_ELECTRONIC_SYSTEMS,m)){
@@ -39,6 +41,9 @@ public class TechModifiersApplier implements PlayerColonizationListener, Economy
         if (AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.SOPHISTICATED_ELECTRONIC_SYSTEMS, m)) {
             GPModifiers.applyRessourceCond(m);
 
+        }
+        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.AQUATIC_BIOSPHERE_HARVEST,m)){
+            HazmatCondition.applyRessourceCond(m);
         }
     }
 
