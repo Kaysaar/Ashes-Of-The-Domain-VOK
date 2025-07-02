@@ -62,7 +62,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
             if (dialogAPI.getInteractionTarget() instanceof PlanetAPI) {
                 if (!dialogAPI.getInteractionTarget().getMemory().contains("$aotd_precollapse_fleet")) {
                     FleetParamsV3 params = new FleetParamsV3(
-                            dialogAPI.getInteractionTarget().getLocation(),
+                            dialogAPI.getInteractionTarget().getLocationInHyperspace(),
                             Factions.REMNANTS,
                             1f,
                             FleetTypes.PATROL_LARGE,
@@ -178,10 +178,10 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
         if (defenders.getFaction().equals(Factions.INDEPENDENT)) {
             config.showCommLinkOption = true;
         }
-        config.withSalvage = false;
         config.showFleetAttitude = false;
         //config.alwaysAttackVsAttack = true;
         config.pullInStations = false;
+
         config.impactsAllyReputation = false;
         config.showWarningDialogWhenNotHostile = false;
         config.impactsEnemyReputation = false;
@@ -190,15 +190,15 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
         config.noSalvageLeaveOptionText = Misc.ucFirst("Continiue");
         config.dismissOnLeave = false;
         config.printXPToDialog = true;
+
         config.salvageRandom = new Random();
         if(defenders.getFaction().getId().equals(Factions.REMNANTS)){
             defenders.getMemoryWithoutUpdate().set("$knowsWhoPlayerIs",false);
 
         }
-        final FleetInteractionDialogPluginImpl plugin = new FleetInteractionDialogPluginImpl(config);
-
+        final AoTDNonSalvageInteract plugin = new AoTDNonSalvageInteract(config);
         final InteractionDialogPlugin originalPlugin = dialog.getPlugin();
-        config.delegate = new FleetInteractionDialogPluginImpl.BaseFIDDelegate() {
+        config.delegate = new AoTDNonSalvageInteract.BaseFIDDelegate() {
 
             @Override
             public void notifyLeave(InteractionDialogAPI dialog) {
