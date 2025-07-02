@@ -1,25 +1,26 @@
 package data.kaysaar.aotd.vok.ui;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.*;
-
+import com.fs.starfarer.api.campaign.BaseCustomUIPanelPlugin;
+import com.fs.starfarer.api.campaign.CustomDialogDelegate;
+import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
+import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
-
-import com.fs.starfarer.api.impl.campaign.ids.*;
+import com.fs.starfarer.api.impl.campaign.ids.Conditions;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
+import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
-import com.fs.starfarer.api.util.Misc;;
+import com.fs.starfarer.api.util.Misc;
 import kaysaar.bmo.buildingmenu.BuildingMenuMisc;
-import org.lwjgl.util.vector.Vector2f;
-
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+;
 
 
 
