@@ -1,6 +1,8 @@
 package data.kaysaar.aotd.vok.scripts.specialprojects.projects;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.impl.SharedUnlockData;
+import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
@@ -25,6 +27,8 @@ public class CompoundSpecialProject extends AoTDSpecialProject {
     @Override
     public void grantReward() {
         Global.getSector().getMemory().set("$aotd_compound_unlocked",true);
+        SharedUnlockData.get().reportPlayerAwareOfCommodity("compound", true);
+        Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addCommodity("compound",250);
         Global.getSector().addTransientScript(new AoTDCompoundUIScript());
         Global.getSector().addTransientScript(new AoTDCompoundUIInMarketScript());
     }

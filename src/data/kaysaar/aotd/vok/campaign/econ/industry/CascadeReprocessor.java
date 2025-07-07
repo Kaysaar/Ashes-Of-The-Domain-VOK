@@ -2,13 +2,9 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Items;
-import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
-import data.kaysaar.aotd.vok.plugins.AoDUtilis;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.util.ArrayList;
@@ -16,18 +12,23 @@ import java.util.ArrayList;
 public class CascadeReprocessor extends BaseIndustry {
     public void apply() {
         super.apply(true);
-        int size = market.getSize()-3;
+        int size = market.getSize() - 3;
 
         demand(Commodities.ORE, 7 + size);
         demand(Commodities.RARE_ORE, 10 + size); // have to keep it low since it can be circular
 
-        supply(AoTDCommodities.PURIFIED_TRANSPLUTONICS, market.getSize()+1);
-        supply(Commodities.RARE_METALS, market.getSize()+2);
-        supply(Commodities.METALS, market.getSize()-2);
+        if (AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PURIFICATION, this.getMarket())) {
+            supply(AoTDCommodities.PURIFIED_TRANSPLUTONICS, market.getSize() + 1);
+        } else {
+            supply(AoTDCommodities.PURIFIED_TRANSPLUTONICS, market.getSize() - 2);
+        }
+
+        supply(Commodities.RARE_METALS, market.getSize() + 2);
+        supply(Commodities.METALS, market.getSize() - 2);
 
 
-        Pair<String, Integer> deficit = getMaxDeficit( Commodities.ORE,Commodities.RARE_ORE);
-        applyDeficitToProduction(1,deficit,AoTDCommodities.PURIFIED_TRANSPLUTONICS,Commodities.RARE_METALS,Commodities.METALS);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORE, Commodities.RARE_ORE);
+        applyDeficitToProduction(1, deficit, AoTDCommodities.PURIFIED_TRANSPLUTONICS, Commodities.RARE_METALS, Commodities.METALS);
         if (!isFunctional()) {
             supply.clear();
         }
@@ -48,23 +49,24 @@ public class CascadeReprocessor extends BaseIndustry {
     protected boolean canImproveToIncreaseProduction() {
         return true;
     }
+
     @Override
     public boolean isAvailableToBuild() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PURIFICATION,market);
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PRODUCTION_MATRIX, market);
 
     }
 
     @Override
     public String getUnavailableReason() {
         ArrayList<String> reasons = new ArrayList<>();
-        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PURIFICATION,market)){
-            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.ALLOY_PURIFICATION));
+        if (!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PRODUCTION_MATRIX, market)) {
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.ALLOY_PRODUCTION_MATRIX));
 
         }
         StringBuilder bd = new StringBuilder();
         boolean insert = false;
         for (String reason : reasons) {
-            if(insert){
+            if (insert) {
                 bd.append("\n");
             }
             bd.append(reason);
@@ -77,6 +79,6 @@ public class CascadeReprocessor extends BaseIndustry {
 
     @Override
     public boolean showWhenUnavailable() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PURIFICATION,market);
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PRODUCTION_MATRIX, market);
     }
 }

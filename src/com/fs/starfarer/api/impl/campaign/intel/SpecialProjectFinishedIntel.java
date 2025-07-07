@@ -6,7 +6,6 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 
@@ -43,7 +42,10 @@ public class SpecialProjectFinishedIntel extends BaseIntelPlugin {
         addGenericButton(info,width,"Access Special Projects",Button_SHIP);
     }
 
-
+    @Override
+    public boolean shouldRemoveIntel() {
+        return getDaysSincePlayerVisible()>5;
+    }
     @Override
     public String getIcon() {
         return Global.getSettings().getSpriteName("intel", "sp_unlock_finish");

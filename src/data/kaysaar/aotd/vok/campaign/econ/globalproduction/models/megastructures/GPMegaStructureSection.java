@@ -7,12 +7,14 @@ import com.fs.starfarer.api.impl.campaign.intel.MegastructureSectionCompletedInt
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -275,12 +277,15 @@ public class GPMegaStructureSection {
 
     }
     public boolean isRestorationAllowed(){
-        return true;
+        return AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.MEGA_ANALYSIS);
     }
     public void createTooltipForButtons(TooltipMakerAPI tooltip, String buttonId) {
         createTooltipForButtonsBeforeRest(tooltip,buttonId);
         if (buttonId.equals("restore")) {
             tooltip.addPara("Currently this section is in ruins, but with enough effort and resources can be restored", 5f);
+            if(!AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.MEGA_ANALYSIS)){
+                tooltip.addPara("You need to research Megastructure Analysis to restore this section!",Misc.getNegativeHighlightColor(),3f);
+            }
             createTooltipForBenefits(tooltip);
         }
         if (buttonId.equals("pauseRestore")) {

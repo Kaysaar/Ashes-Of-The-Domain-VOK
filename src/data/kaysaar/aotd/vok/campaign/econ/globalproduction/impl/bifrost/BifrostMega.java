@@ -31,8 +31,8 @@ public class BifrostMega extends GPBaseMegastructure {
 
     @Override
     public void createAdditionalInfoForMega(TooltipMakerAPI tooltip) {
-        tooltip.addSectionHeading("Current effects", Alignment.MID,5f);
-        tooltip.addPara("Accessibility bonus to all colonies with Bifrost gate in system : %s",5f, Color.ORANGE,(getTotalAccessibility()*100)+"%");
+        tooltip.addSectionHeading("Current effects", Alignment.MID, 5f);
+        tooltip.addPara("Accessibility bonus to all colonies with Bifrost gate in system : %s", 5f, Color.ORANGE, Misc.getRoundedValue(getTotalAccessibility() * 100) + "%");
     }
 
     public static SectorEntityToken spawnGate(MarketAPI market) {
@@ -75,21 +75,33 @@ public class BifrostMega extends GPBaseMegastructure {
         return section;
     }
 
+    public ArrayList<BifrostSection> getWorkingSections() {
+        ArrayList<BifrostSection> section = new ArrayList<>();
+        for (GPMegaStructureSection megaStructureSection : megaStructureSections) {
+            if (megaStructureSection.isRestored) {
+                section.add((BifrostSection) megaStructureSection);
+            }
+        }
+        return section;
+    }
+
     @Override
     public void advance(float amount) {
         super.advance(amount);
 
         float totality = getTotalAccessibility();
 
-        if(getSections().size()>=2){
-            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
-                playerMarket.getAccessibilityMod().modifyFlat("aotd_bifrost", totality,"Bifrost Network");
+        if (getWorkingSections().size() >= 2) {
+            for (BifrostSection workingSection : getWorkingSections()) {
+                Global.getSector().getEconomy().getMarkets(workingSection.getStarSystemAPI().getCenter().getContainingLocation())
+                        .stream()
+                        .filter(MarketAPI::isInEconomy)
+                        .filter(x -> x.getFaction().isPlayerFaction() || x.isPlayerOwned())
+                        .forEach(x -> x.getAccessibilityMod().modifyFlat("aotd_bifrost", totality, "Bifrost Network"));
+
             }
-        }
-        else{
-            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
-                playerMarket.getAccessibilityMod().unmodifyFlat("aotd_bifrost");
-            }
+        } else {
+            Global.getSector().getEconomy().getMarketsCopy().stream().filter(MarketAPI::isInEconomy).filter(x -> x.isPlayerOwned() || x.getFaction().isPlayerFaction()).forEach(x -> x.getAccessibilityMod().unmodifyFlat("aotd_bifrost"));
         }
 
 
@@ -101,21 +113,18 @@ public class BifrostMega extends GPBaseMegastructure {
             float totalBonus = 0f;
 
             for (MarketAPI market : Global.getSector().getEconomy().getMarkets(section.getStarSystemAPI())) {
-                if(!market.getFaction().isPlayerFaction()||!market.isPlayerOwned())continue;
+                if (!market.getFaction().isPlayerFaction() || !market.isPlayerOwned()) continue;
+                market.getAccessibilityMod().unmodifyFlat("aotd_bifrost");
                 if (market.getAccessibilityMod().getFlatBonus() >= 0) {
                     totalBonus += market.getAccessibilityMod().getFlatBonus();
 
                 }
-                if (market.getAccessibilityMod().getFlatBonus("aotd_bifrost") != null) {
-                    totalBonus -= market.getAccessibilityMod().getFlatBonus("aotd_bifrost").getValue();
-
-                }
             }
-            totalBonus /= 10f;
+            totalBonus *= 10f;
             totality += totalBonus;
 
         }
-        totality*=getPenaltyFromManager();
+        totality *= getPenaltyFromManager();
         return totality;
     }
 

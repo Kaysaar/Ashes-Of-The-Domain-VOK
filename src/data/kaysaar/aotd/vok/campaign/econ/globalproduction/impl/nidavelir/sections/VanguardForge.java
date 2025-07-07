@@ -13,7 +13,7 @@ public class VanguardForge  extends NidavelirBaseSection {
     int effectivePercent = 5;
     @Override
     public boolean isRestorationAllowed() {
-        return  megastructureTiedTo.getSectionById("nidavelir_nexus").isRestored;
+        return  megastructureTiedTo.getSectionById("nidavelir_nexus").isRestored&&super.isRestorationAllowed();
     }
 
     @Override

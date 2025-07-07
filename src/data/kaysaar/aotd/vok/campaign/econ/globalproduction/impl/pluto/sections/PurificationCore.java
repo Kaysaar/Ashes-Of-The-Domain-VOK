@@ -5,7 +5,6 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 public class PurificationCore extends PlutoForgeSection {
     @Override
     public boolean isRestorationAllowed() {
-        return  megastructureTiedTo.getSectionById("pluto_ocn").isRestored;
+        return  megastructureTiedTo.getSectionById("pluto_ocn").isRestored&&super.isRestorationAllowed();
     }
     @Override
     public void createTooltipForButtonsBeforeRest(TooltipMakerAPI tooltip, String buttonId) {

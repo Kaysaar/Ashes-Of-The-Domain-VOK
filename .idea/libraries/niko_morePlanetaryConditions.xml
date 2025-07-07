@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="niko_morePlanetaryConditions">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../What we left behind/jars/niko_morePlanetaryConditions.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

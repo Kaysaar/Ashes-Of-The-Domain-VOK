@@ -1,18 +1,13 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections;
 
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.PlutoMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
-import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class PlutoForgeSection extends GPMegaStructureSection {
     public LinkedHashMap<String,Integer>resourcesDesignated = new LinkedHashMap<>();
@@ -51,7 +46,7 @@ public class PlutoForgeSection extends GPMegaStructureSection {
     }
     @Override
     public boolean isRestorationAllowed() {
-        return  megastructureTiedTo.getSectionById("pluto_ocn").isRestored;
+        return  megastructureTiedTo.getSectionById("pluto_ocn").isRestored&&super.isRestorationAllowed();
     }
 
     @Override

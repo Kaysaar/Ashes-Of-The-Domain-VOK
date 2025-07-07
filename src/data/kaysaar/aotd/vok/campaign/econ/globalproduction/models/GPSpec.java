@@ -26,29 +26,12 @@ import static data.kaysaar.aotd.vok.misc.AoTDMisc.loadEntries;
 
 public class GPSpec {
     public void  setObjectToBeProduced(String id,ProductionType type){
-        if (type.equals(ProductionType.FIGHTER)) {
-            this.wingSpecAPI = Global.getSettings().getFighterWingSpec(id);
-        }
-        if (type.equals(ProductionType.SHIP)) {
-            this.shipHullSpecAPI = Global.getSettings().getHullSpec(id);
-        }
-        if (type.equals(ProductionType.WEAPON)) {
-            this.weaponSpec = Global.getSettings().getWeaponSpec(id);
-        }
-        if(type.equals(ProductionType.ITEM)){
-            this.itemSpecAPI = Global.getSettings().getSpecialItemSpec(id);
-        }
-        if(type.equals(ProductionType.ITEM)){
-            this.itemSpecAPI = Global.getSettings().getSpecialItemSpec(id);
-        }
-        if(type.equals(ProductionType.AICORE)){
-            this.aiCoreSpecAPI = Global.getSettings().getCommoditySpec(id);
-        }
+
         this.type = type;
     }
 
     public CommoditySpecAPI getAiCoreSpecAPI() {
-        return aiCoreSpecAPI;
+        return Global.getSettings().getCommoditySpec(getProjectId());
     }
 
     public static GPSpec getSpecFromShip(ShipHullSpecAPI specAPI){
@@ -254,18 +237,13 @@ public class GPSpec {
     }
 
     boolean isSpecialProject;
-    FighterWingSpecAPI wingSpecAPI;
-    WeaponSpecAPI weaponSpec;
-    ShipHullSpecAPI shipHullSpecAPI;
-    SpecialItemSpecAPI itemSpecAPI;
-    CommoditySpecAPI aiCoreSpecAPI;
     boolean isRepeatable = true;
     public int  amountOfStages;
     public String progressString;
     public ArrayList<String> highlights;
     public String pluginForSpecialProj;
     public SpecialItemSpecAPI getItemSpecAPI() {
-        return itemSpecAPI;
+        return Global.getSettings().getSpecialItemSpec(projectId);
     }
 
     HashMap<String, Integer> commodityCost;
@@ -374,20 +352,8 @@ public class GPSpec {
     }
 
     public String getIdOfItemProduced() {
-        if (type.equals(ProductionType.FIGHTER)) {
-            return wingSpecAPI.getId();
-        }
-        if (type.equals(ProductionType.SHIP)) {
-            return shipHullSpecAPI.getHullId();
-        }
-        if (type.equals(ProductionType.WEAPON)) {
-            return weaponSpec.getWeaponId();
-        }
-        if(isSpecialProject){
-            return rewardId;
-        }
 
-        return "";
+        return projectId;
 
     }
 
@@ -397,11 +363,11 @@ public class GPSpec {
     }
 
     public FighterWingSpecAPI getWingSpecAPI() {
-        return wingSpecAPI;
+        return Global.getSettings().getFighterWingSpec(projectId);
     }
 
     public WeaponSpecAPI getWeaponSpec() {
-        return weaponSpec;
+        return Global.getSettings().getWeaponSpec(projectId);
     }
 
     public HashMap<String, Integer> getCommodityCost() {
@@ -409,7 +375,7 @@ public class GPSpec {
     }
 
     public ShipHullSpecAPI getShipHullSpecAPI() {
-        return shipHullSpecAPI;
+        return Global.getSettings().getHullSpec(projectId);
     }
 
     public void setDays(int days) {

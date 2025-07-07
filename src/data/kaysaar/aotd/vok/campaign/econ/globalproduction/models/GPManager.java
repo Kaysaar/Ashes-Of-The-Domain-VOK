@@ -36,10 +36,14 @@ public class GPManager {
     transient ArrayList<GPMegaStructureSpec> megaStructureSpecs = new ArrayList<>();
     transient ArrayList<GpMegaStructureSectionsSpec> megaStructureSectionsSpecs = new ArrayList<>();
     public static boolean isEnabled = true;
-    public int amountShipsPerOnce = 1;
-    public int amountWepPerOnce = 1;
-    public int amountFighterPerOnce = 1;
     GPUIData gpuiData;
+    GpHistory history;
+    public GpHistory getProductionHistory(){
+        if(history==null){
+            history = new GpHistory();
+        }
+        return history;
+    }
     public MutableStat specialProjSpeed = new MutableStat(1f);
     public MutableStat cruiserCapitalSpeed = new MutableStat(1f);
     public MutableStat frigateDestroyerSpeed = new MutableStat(1f);
@@ -199,6 +203,7 @@ public class GPManager {
     public static GPManager setInstance() {
         GPManager manager = new GPManager();
         Global.getSector().getPersistentData().put(memkey, manager);
+        manager.history = new GpHistory();
         Global.getSector().addScript(new GpManagerAdvance());
         return manager;
     }

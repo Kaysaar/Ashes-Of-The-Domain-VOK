@@ -167,7 +167,7 @@ public class GPUIData {
         this.shipTypeInfo.clear();
         LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();
         for (GPOption learnedShipPackage : GPManager.getInstance().getLearnedShipPackages()) {
-            String indicator = AoTDMisc.getType(learnedShipPackage.getSpec().shipHullSpecAPI);
+            String indicator = AoTDMisc.getType(learnedShipPackage.getSpec().getShipHullSpecAPI());
             if (shipManInfo.get(indicator) == null) {
                 shipManInfo.put(indicator, 1);
             } else {

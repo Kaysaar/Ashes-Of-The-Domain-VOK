@@ -8,7 +8,7 @@ Industrial Center,industrial_might,,TRUE,data.kaysaar.aotd.vok.campaign.econ.con
 GP mod,aotd_gp_mod,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.GPModifiers,,graphics/icons/markets/capital.png,610
 BiFrostGateRemoving,bifrost_removal,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.BiFrostGateRemovingCondtion,,graphics/icons/markets/light_industrial.png,603
 Pre Collapse Facility,pre_collapse_facility,,,data.kaysaar.aotd.vok.campaign.econ.conditions.PreCollapseFacility,"This planet harbors numerous ancient Domain-marked facilities, rich with potential valuable data.",graphics/icons/markets/light_industrial.png,604
-AodHazmat,aotd_tech_hazard,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.HazmatCondition,,graphics/icons/markets/light_industrial.png,606
+AodHazmat,aotd_tech_hazard,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.TechnologyBonusesApplier,,graphics/icons/markets/light_industrial.png,606
 AodUpkeep,aotd_tech_upkeep,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.ResearchedUpkeepModifier,,graphics/icons/markets/light_industrial.png,607
 Coronal Hypershunt,aotd_coronal_market_cond,,,data.kaysaar.aotd.vok.campaign.econ.conditions.CoronalHypershunt,"Former Domain gem, this megastructure is capable of harnessing power of the star.",graphics/icons/markets/coronal_hypershunt.png,608
 Nidavelir Complex,aotd_nidavelir_complex,,FALSE,data.kaysaar.aotd.vok.campaign.econ.conditions.NidavelirComplex,"Former Domain gem, this megastructure is capable of producing ships and weapons at scale, never seen in the Persean Sector.",graphics/icons/markets/nidavelir_complex.png,640

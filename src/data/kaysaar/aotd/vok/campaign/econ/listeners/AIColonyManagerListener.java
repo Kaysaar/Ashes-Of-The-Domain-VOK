@@ -10,7 +10,6 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -57,12 +56,7 @@ public class AIColonyManagerListener implements EconomyTickListener {
             }
         }
         for (MarketAPI factionMarket : Misc.getFactionMarkets(faction)) {
-            if(factionMarket.hasIndustry(Industries.ORBITALWORKS)){
-                factionMarket.removeIndustry(Industries.ORBITALWORKS,null,false);
-                factionMarket.addIndustry(AoTDIndustries.ORBITAL_MANUFACTORIUM);
-                factionMarket.getIndustry(AoTDIndustries.ORBITAL_MANUFACTORIUM).startBuilding();
-                break;
-            }
+
             if(factionMarket.hasIndustry(Industries.HEAVYINDUSTRY)){
                 factionMarket.removeIndustry(Industries.HEAVYINDUSTRY,null,false);
                 factionMarket.addIndustry(Industries.ORBITALWORKS);

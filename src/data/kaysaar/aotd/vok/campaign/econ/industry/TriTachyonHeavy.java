@@ -1,16 +1,18 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
+import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
-import com.fs.starfarer.api.impl.campaign.ids.*;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.impl.campaign.ids.Conditions;
+import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -98,6 +100,32 @@ public class TriTachyonHeavy extends HeavyIndustry {
     }
 
     @Override
+    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        float opad = 10f;
+        Color highlight = Misc.getHighlightColor();
+
+        String pre = "Alpha-level AI core currently assigned. ";
+        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+            pre = "Alpha-level AI core. ";
+        }
+        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. " +
+                            "Increases production by %s unit. Patrols have from %s to %s S-Mods.", 0f, highlight,
+                    "" + (int)((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION,
+                    "" + SUPPLY_BONUS,"2","4");
+            tooltip.addImageWithText(opad);
+            return;
+        }
+
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. " +
+                        "Increases production by %s unit. Patrols have from %s to %s S-Mods.", 0f, highlight,
+                "" + (int)((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION,
+                "" + SUPPLY_BONUS,"2","4");
+    }
+
+    @Override
     public String getUnavailableReason() {
         ArrayList<String> reasons = new ArrayList<>();
         if(market.getSize()<6){
@@ -131,7 +159,9 @@ public class TriTachyonHeavy extends HeavyIndustry {
             Color h = Misc.getHighlightColor();
             h = Misc.getPositiveHighlightColor();
             totalStr = "From 1 to 3 ";
-
+            if(this.getAICoreId()!=null&&this.getAICoreId().equals(Commodities.ALPHA_CORE)){
+                totalStr = "From 2 to 4";
+            }
             float opad = 10f;
 
             tooltip.addPara("Allowing Patrol fleets to have %s S-mods", opad, h, totalStr);

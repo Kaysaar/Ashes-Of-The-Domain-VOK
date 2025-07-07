@@ -1,29 +1,24 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections;
 
-import com.fs.starfarer.api.impl.campaign.aotd_entities.HypershuntReciverEntityPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastrcutre;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.PlutoMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
-import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class OpticCommandNexus extends GPMegaStructureSection {
     public int currentMagnitude = 0;
     public static int maxMagnitude = 10;
-    public static int upkeepMulter = 70000;
+    public static int upkeepMulter = 5000;
     public boolean connectedToHypershunt = false;
     public boolean wasConnectedToHypershunt = false;
     public static int minMagnitude = 0; //0  means turned off;

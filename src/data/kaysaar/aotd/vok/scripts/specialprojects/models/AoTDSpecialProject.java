@@ -14,7 +14,6 @@ import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectStageWindow;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectUIManager;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -164,6 +163,7 @@ public class AoTDSpecialProject {
     }
 
     public void doCheckForProjectUnlock() {
+        if(!Global.getSettings().getModManager().isModEnabled(getProjectSpec().getModId()))return;
         if(!wasEverDiscovered()){
             if( checkIfProjectShouldUnlock()){
                 setWasEverDiscovered(true);
