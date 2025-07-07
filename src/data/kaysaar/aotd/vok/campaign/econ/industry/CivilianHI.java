@@ -1,7 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
-import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Pair;
@@ -25,7 +24,7 @@ public class CivilianHI extends HeavyIndustry {
 
         supply(Commodities.HEAVY_MACHINERY, size);
         supply(Commodities.SUPPLIES, size+2);
-        supply(AoTDCommodities.DOMAIN_GRADE_MACHINERY, size  - 4);
+        supply(AoTDCommodities.DOMAIN_GRADE_MACHINERY, size  - 3);
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.METALS,Commodities.RARE_ORE);
 

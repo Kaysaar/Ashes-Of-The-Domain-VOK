@@ -1,17 +1,13 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs;
 
-import com.fs.starfarer.api.input.InputEventAPI;
-import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.OpticCommandNexus;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 
 import java.awt.*;
-import java.util.List;
 
 public class LaserStengthDialog extends BaseSliderDialog{
     public OpticCommandNexus section;
@@ -48,7 +44,7 @@ public class LaserStengthDialog extends BaseSliderDialog{
         }
         else{
             tooltip.addPara("Adjusting laser range can help maximize profits",Misc.getTooltipTitleAndLightHighlightColor(),5f);
-            tooltip.addPara("Note: Decreasing strength of laser might also require assigining ores again!",Misc.getTooltipTitleAndLightHighlightColor(),5f);
+            tooltip.addPara("Note: Decreasing strength of laser might also require assigning ores again!",Misc.getTooltipTitleAndLightHighlightColor(),5f);
         }
 
     }

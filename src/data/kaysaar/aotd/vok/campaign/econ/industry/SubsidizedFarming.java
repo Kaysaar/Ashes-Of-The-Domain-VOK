@@ -9,9 +9,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -49,8 +47,8 @@ public class SubsidizedFarming extends BaseIndustry {
 
             }
         }
-        demand(Commodities.HEAVY_MACHINERY, market.getSize()+2);
 
+        demand(Commodities.HEAVY_MACHINERY, market.getSize()+2);
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY);
         //applyDeficitToProduction(0, deficit, Commodities.FOOD, Commodities.ORGANICS);
 

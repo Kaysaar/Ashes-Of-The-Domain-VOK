@@ -1,11 +1,13 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.impl.campaign.econ.impl.LightIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import data.scripts.campaign.econ.conditions.terrain.hyperspace.niko_MPC_hyperspaceLinked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,14 @@ public class BioChem extends LightIndustry {
             supply(Commodities.DRUGS, size+5);
         } else {
             supply(Commodities.DRUGS, 0);
+        }
+        if(!market.isIllegal("wwlb_cerulean_vapors")&&  Global.getSector().getMemory().is("$aotd_vapors_unlocked", true)){
+            if(market.hasCondition("niko_MPC_hyperspaceBipartisan")){
+                niko_MPC_hyperspaceLinked linked = (niko_MPC_hyperspaceLinked) this.market.getCondition("niko_MPC_hyperspaceBipartisan").getPlugin();
+                if(linked.containedByHyperclouds()){
+                    supply("wwlb_cerulean_vapors",size);
+                }
+            }
         }
         //if (!market.getFaction().isIllegal(Commodities.DRUGS)) {
 

@@ -62,6 +62,11 @@ public class ProjectStageCompletionIntel extends BaseIntelPlugin {
     }
 
     @Override
+    public boolean shouldRemoveIntel() {
+        return getDaysSincePlayerVisible()>5;
+    }
+
+    @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if(buttonId==Button_SHIP){
             CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());

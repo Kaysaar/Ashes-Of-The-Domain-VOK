@@ -7,16 +7,9 @@ public class AoTDIndustries {
     public static final String UNDERWORLD = "underworld";
     public static final String TERMINUS = "logisitcbureau";
     public static final String ORBITAL_MANUFACTORIUM = "orbitalheavy";
-    public static final String CLEANROOM_MANUFACTORY = "cleanroom";
     public static final String PLANETARY_DEFENCE_FORCE = "militarygarrison";
-    public static final String SPACE_ELEVATOR = "kaysaarcapital_space_elevator";
-    public static final String GARDEN_OF_LUDD = "kaysaarcapital_garden_of_ludd";
-    public static final String PEOPLE_SQUARE = "kaysaarcapital_people_square";
     public static final String FORBIDDEN_CITY = "kaysaarcapital_forbidden_city";
-    public static final String EXPLORATORIA_CORPS = "kaysaarcapital_exploratoria";
-    public static final String SINDRIAN_FUEL_MANUFACTORY = "sindrianfuel";
     public static final String RESEARCH_CENTER = "researchfacility";
-    public static final String AGRI_SWITCH = "agri_switch";
     public static final String ARTISANAL_FARMING = "artifarming";
     public static final String SUBSIDISED_FARMING = "subfarming";
     public static final String MONOCULTURE = "monoculture";

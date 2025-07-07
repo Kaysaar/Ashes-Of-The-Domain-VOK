@@ -1,7 +1,11 @@
 package data.kaysaar.aotd.vok.ui.customprod;
 
+import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.CoreUITabId;
+import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
+import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate;
+import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -12,21 +16,24 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOrder;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
-import data.kaysaar.aotd.vok.ui.SoundUIManager;
-import data.kaysaar.aotd.vok.ui.customprod.components.*;
-import data.kaysaar.aotd.vok.ui.customprod.components.gatheringpoint.AoTDGatehringPointPlugin;
-import data.kaysaar.aotd.vok.ui.customprod.components.onhover.ButtonOnHoverInfo;
-import data.kaysaar.aotd.vok.ui.customprod.components.onhover.CommodityInfo;
-import data.kaysaar.aotd.vok.ui.customprod.components.onhover.GuideTootltip;
-import data.kaysaar.aotd.vok.ui.customprod.components.optionpanels.*;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import data.kaysaar.aotd.vok.ui.SoundUIManager;
+import data.kaysaar.aotd.vok.ui.customprod.components.*;
+import data.kaysaar.aotd.vok.ui.customprod.components.gatheringpoint.AoTDGatehringPointPlugin;
+import data.kaysaar.aotd.vok.ui.customprod.components.history.GPHistoryPopUp;
+import data.kaysaar.aotd.vok.ui.customprod.components.onhover.ButtonOnHoverInfo;
+import data.kaysaar.aotd.vok.ui.customprod.components.onhover.CommodityInfo;
+import data.kaysaar.aotd.vok.ui.customprod.components.onhover.GuideTootltip;
+import data.kaysaar.aotd.vok.ui.customprod.components.optionpanels.*;
 import org.lwjgl.input.Keyboard;
+
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
@@ -42,6 +49,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
     boolean showProjectList;
     RightMouseInterceptor interceptor = new RightMouseInterceptor();
     ArrayList<GPOrder> ordersQueued = new ArrayList<>();
+    ButtonAPI historyButton;
     boolean isPressingShift = false;
     boolean isPressingCtrl = false;
 
@@ -269,6 +277,9 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                 Pair<CustomPanelAPI, ButtonAPI> pair = AoTDGatehringPointPlugin.getMarketEntitySpriteButton(UIData.WIDTH_OF_ORDERS  - 25f, 75, 75, Global.getSector().getPlayerFaction().getProduction().getGatheringPoint());
                 tooltip.addCustom(pair.one, 5f);
                 gatheringPoint = pair.two;
+               ButtonAPI button =  tooltip.addButton("Show Production History",null,Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.NONE,UIData.WIDTH_OF_ORDERS-10f,30,5f);
+                button.getPosition().inTL(5,-button.getPosition().getY()-button.getPosition().getHeight());
+                historyButton = button;
             }
         }
 
@@ -344,8 +355,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
 
     public void createOrders() {
         UILinesRenderer renderer = new UILinesRenderer(0f);
-        float yPad = 161;
-        float height = panel.getPosition().getHeight() - 20 - yPad - 150;
+        float yPad = 191;
+        float height = panel.getPosition().getHeight() - 20 - yPad -150;
         sortingButtonsPanel = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, 50, renderer);
         panelOfOrders = panel.createCustomPanel(UIData.WIDTH_OF_ORDERS, height - 50, renderer);
         CustomPanelAPI panelInterceptor = panelOfOrders.createCustomPanel(UIData.WIDTH_OF_ORDERS, height - 50, interceptor);
@@ -469,6 +480,13 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
                 helpButton.setChecked(false);
                 HelpPopUpUINid nid = new HelpPopUpUINid(true);
                 AoTDMisc.placePopUpUI(nid,helpButton,700,400);
+            }
+        }
+        if(historyButton!=null){
+            if(historyButton.isChecked()){
+                historyButton.setChecked(false);
+                GPHistoryPopUp nid = new GPHistoryPopUp();
+                AshMisc.placePopUpUI(nid,historyButton,UIData.WIDTH_OF_ORDERS+250,400);
             }
         }
         if (tooltipOfOrders != null) {

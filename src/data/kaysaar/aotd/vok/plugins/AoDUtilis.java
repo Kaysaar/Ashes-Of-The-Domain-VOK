@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.util.Misc;
@@ -236,12 +237,12 @@ public class AoDUtilis {
         return (ArrayList<SMSpecialItem>) Global.getSector().getPersistentData().get("$stella_manufactorium_items");
     }
 
-    public static boolean isFactionPossesingTriTachyonShipyards(FactionAPI factionAPI) {
+    public static BaseIndustry getTTShipyard(FactionAPI factionAPI) {
         for (MarketAPI factionMarket : Misc.getFactionMarkets(factionAPI)) {
             if (factionMarket.hasIndustry(AoTDIndustries.ORBITAL_SKUNKWORK) && factionMarket.getIndustry(AoTDIndustries.ORBITAL_SKUNKWORK).isFunctional()) {
-                return true;
+               return (BaseIndustry) factionMarket.getIndustry(AoTDIndustries.ORBITAL_SKUNKWORK);
             }
         }
-        return false;
+        return null;
     }
 }

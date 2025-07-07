@@ -6,6 +6,7 @@ import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
@@ -21,6 +22,9 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegast
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureUpkeepListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDSupertencileListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.campaign.econ.growingdemand.SpaceDrugsDemand;
+import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandManager;
+import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMover;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
@@ -54,12 +58,16 @@ import data.listeners.timeline.models.FirstIndustryListener;
 import data.memory.AoTDSopMemFlags;
 import data.scripts.managers.TimelineListenerManager;
 import kaysaar.bmo.buildingmenu.additionalreq.AdditionalReqManager;
+import kaysaar.bmo.buildingmenu.upgradepaths.CustomUpgradePath;
+import kaysaar.bmo.buildingmenu.upgradepaths.UpgradePathManager;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.lazywizard.lazylib.ui.FontException;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 
 public class AoTDVokModPlugin extends BaseModPlugin {
@@ -117,6 +125,18 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.addListener(new AoTDSupertencileListener(), true);
         l.addListener(new BifrostReesarchListener(), true);
         l.addListener(new CompoundProducitonListener(), true);
+        l.addListener(new EconomyTickListener() {
+            @Override
+            public void reportEconomyTick(int iterIndex) {
+
+            }
+
+            @Override
+            public void reportEconomyMonthEnd() {
+                GPManager.getInstance().getProductionHistory().endOfMonth();
+            }
+        },true
+        );
     }
 
     @Override
@@ -125,21 +145,94 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SOIL_NANITES, "subfarming");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.MANTLE_BORE, "mining_megaplex");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.BIOFACTORY_EMBRYO, "lightproduction,consumerindustry");
-        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy,stella_manufactorium");
-        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy,stella_manufactorium");
-        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator,policrystalizator,cascade_reprocesor");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,stella_manufactorium");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,stella_manufactorium");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PLASMA_DYNAMO, "fracking");
         aoTDSpecialItemRepo.absoluteSetItemParams(Items.CORONAL_PORTAL, "");
 
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker", "subfarming");
-            aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_dimen_nanoforge", "supplyheavy,weaponheavy,triheavy,hegeheavy,orbitalheavy,stella_manufactorium");
-            aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_modular_purifier", "crystalizator,isotope_separator,policrystalizator,cascade_reprocesor");
+            aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_dimen_nanoforge", "supplyheavy,weaponheavy,triheavy,hegeheavy,stella_manufactorium");
+            aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_modular_purifier", "crystalizator,isotope_separator");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_servosync_pump", "blast_processing");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_garrison_transmitter", AoTDIndustries.TERMINUS);
         }
     }
 
+    public void populatePaths(){
+        CustomUpgradePath path = new CustomUpgradePath(3,3);
+        LinkedHashMap<String, Vector2f> map = new LinkedHashMap<>();
+        map.put("extractive", new Vector2f(1,0));
+        map.put("mining", new Vector2f(1,1));
+        map.put("fracking", new Vector2f(0,2));
+        map.put("mining_megaplex", new Vector2f(2,2));
+        path.setIndustryCoordinates(map);
+        UpgradePathManager.getInstance().addNewCustomPath(path,"extractive");
+
+        path = new CustomUpgradePath(3,4);
+        map = new LinkedHashMap<>();
+        map.put("smelting", new Vector2f(1,0));
+        map.put("refining", new Vector2f(1,1));
+        map.put("crystalizator", new Vector2f(0,2));
+        map.put("isotope_separator", new Vector2f(2,2));
+        path.setIndustryCoordinates(map);
+        UpgradePathManager.getInstance().addNewCustomPath(path,"smelting");
+
+        path = new CustomUpgradePath(3,3);
+        map = new LinkedHashMap<>();
+        map.put("lightproduction", new Vector2f(1,0));
+        map.put("lightindustry", new Vector2f(1,1));
+        map.put("hightech", new Vector2f(0,2));
+        map.put("druglight", new Vector2f(1,2));
+        map.put("consumerindustry", new Vector2f(2,2));
+        path.setIndustryCoordinates(map);
+        UpgradePathManager.getInstance().addNewCustomPath(path,"lightproduction");
+
+        path = new CustomUpgradePath(3,3);
+        map = new LinkedHashMap<>();
+        map.put("monoculture", new Vector2f(1,0));
+        map.put("farming", new Vector2f(1,1));
+        map.put("artifarming", new Vector2f(0,2));
+        map.put("subfarming", new Vector2f(2,2));
+        path.setIndustryCoordinates(map);
+        UpgradePathManager.getInstance().addNewCustomPath(path,"monoculture");
+
+        path = new CustomUpgradePath(1,2);
+        map = new LinkedHashMap<>();
+        map.put("fuelprod", new Vector2f(0,0));
+        map.put("blast_processing", new Vector2f(0,1));
+        path.setIndustryCoordinates(map);
+        UpgradePathManager.getInstance().addNewCustomPath(path,"fuelprod");
+
+        path = new CustomUpgradePath(1,2);
+        map = new LinkedHashMap<>();
+        map.put("waystation", new Vector2f(0,0));
+        map.put("logisitcbureau", new Vector2f(0,1));
+        path.setIndustryCoordinates(map);
+        UpgradePathManager.getInstance().addNewCustomPath(path,"waystation");
+
+        path = new CustomUpgradePath(1,2);
+        map = new LinkedHashMap<>();
+
+        map.put("aquaculture", new Vector2f(0,0));
+        map.put("fishery", new Vector2f(0,1));
+        path.setIndustryCoordinates(map);
+        UpgradePathManager.getInstance().addNewCustomPath(path,"aquaculture");
+
+        path = new CustomUpgradePath(4,5);
+        map = new LinkedHashMap<>();
+        map.put("shityheavy", new Vector2f(2,0));
+        map.put("heavyindustry", new Vector2f(2,1));
+        map.put("orbitalworks", new Vector2f(1,2));
+        map.put("supplyheavy", new Vector2f(3,2));
+        map.put("triheavy",new Vector2f(2,3));
+        map.put("hegeheavy",new Vector2f(0,3));
+        map.put("stella_manufactorium",new Vector2f(3,3));
+        path.setIndustryCoordinates(map);
+        UpgradePathManager.getInstance().addNewCustomPath(path,"shityheavy");
+    }
     @Override
     public void onNewGameAfterEconomyLoad() {
         SpecialProjectSpecManager.reLoad();
@@ -256,6 +349,11 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");
         AoTDMainResearchManager.getInstance().updateModIdRepo();
+        if(!  GrowingDemandManager.getInstance().hasDemand("wwlb_cerulean_vapors")){
+            LinkedHashMap<String,Integer> mapOfReplacement = new LinkedHashMap<>();
+            mapOfReplacement.put(Commodities.DRUGS, 1);
+            GrowingDemandManager.getInstance().addDemand("wwlb_cerulean_vapors", new SpaceDrugsDemand("wwlb_cerulean_vapors", mapOfReplacement));
+        }
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
         if (newGame) {
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
@@ -291,8 +389,10 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSettings().getCommoditySpec(Commodities.ALPHA_CORE).getTags().add("aotd_ai_core");
         GPManager.getInstance().reInitalize();
         CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
+        Global.getSector().addTransientScript(new GrowingDemandMover());
         SpecialProjectManager.getInstance().addScriptInstance();
         clearListenersFromTemporaryMarket();
+        populatePaths();
         if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
             addEvents();
         }

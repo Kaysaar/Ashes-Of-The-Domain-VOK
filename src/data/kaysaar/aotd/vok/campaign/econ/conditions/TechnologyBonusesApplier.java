@@ -6,7 +6,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.industry.Aquaculture;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
-public class HazmatCondition extends BaseHazardCondition {
+public class TechnologyBonusesApplier extends BaseHazardCondition {
     @Override
     public void apply(String id) {
         super.apply(id);
@@ -20,17 +20,22 @@ public class HazmatCondition extends BaseHazardCondition {
 
             }
         }
+        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market)){
+            market.getIndustries().forEach(x->x.getSupplyBonusFromOther().modifyFlat(AoTDTechIds.STREAMLINED_PRODUCTION,1,"Streamlined Production"));
+        }
     }
 
     @Override
     public void unapply(String id) {
         super.unapply(id);
         market.getHazard().unmodifyFlat("tech_hazmmat");
+        market.getHazard().unmodifyFlat("tech_aquatic");
+        market.getIndustries().forEach(x->x.getSupplyBonusFromOther().unmodifyFlat(AoTDTechIds.STREAMLINED_PRODUCTION));
     }
     public static void applyRessourceCond(MarketAPI marketAPI) {
-        if (marketAPI.isInEconomy() && !marketAPI.hasCondition("aotd_tech_hazard")){
+        if (marketAPI.isInEconomy() && !marketAPI.hasCondition("TechnologyBonusesApplier")){
             if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(marketAPI.getFaction())!=null){
-                marketAPI.addCondition("aotd_tech_hazard");
+                marketAPI.addCondition("TechnologyBonusesApplier");
             }
 
         }

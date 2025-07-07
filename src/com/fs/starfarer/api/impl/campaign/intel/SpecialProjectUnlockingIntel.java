@@ -30,7 +30,10 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
         return Global.getSector().getPlayerFleet();
     }
 
-
+    @Override
+    public boolean shouldRemoveIntel() {
+        return getDaysSincePlayerVisible()>5;
+    }
     @Override
     public void createIntelInfo(TooltipMakerAPI info, ListInfoMode mode) {
         Color title = getTitleColor(mode);

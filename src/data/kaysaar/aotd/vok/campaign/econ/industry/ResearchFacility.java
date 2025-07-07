@@ -2,10 +2,12 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
+import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -36,11 +38,23 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
                 Global.getSector().getEconomy().forceStockpileUpdate(market);
             }
         }
+        float reductionMult = 1;
+        if(getAICoreId()!=null){
+            if(getAICoreId().equals(Commodities.ALPHA_CORE)){
+                reductionMult = 0.5f;
+            }
+            if(getAICoreId().equals(Commodities.BETA_CORE)){
+                reductionMult = 0.75f;
+            }
+            if(getAICoreId().equals(Commodities.GAMMA_CORE)){
+                reductionMult = 0.9f;
+            }
+        }
         if(AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getCurrentFocus()!=null){
            int tier = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction().getCurrentFocus().getSpec().getTier().ordinal();
-           this.getUpkeep().modifyFlat("aotd_research",COST_PER_TIER*tier,"Research Cost");
+           this.getUpkeep().modifyFlat("aotd_research",COST_PER_TIER*tier*reductionMult,"Research Cost");
         }
-            this.getUpkeep().modifyFlat("aotd_research_2",10000,"Maintenance Cost");
+            this.getUpkeep().modifyFlat("aotd_research_2",10000*reductionMult,"Maintenance Cost");
 
         Global.getSector().getListenerManager().addListener(this);
 
@@ -94,7 +108,7 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
 
     @Override
     public boolean canInstallAICores() {
-        return false;
+        return true;
     }
 
     @Override
@@ -129,6 +143,78 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
     }
 
     @Override
+    protected void addGammaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        float opad = 10f;
+        Color highlight = Misc.getHighlightColor();
+
+        String pre = "Gamma-level AI core currently assigned. ";
+        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+            pre = "Gamma-level AI core. ";
+        }
+        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
+//			text.addPara(pre + "Reduces upkeep cost by %s.", opad, highlight,
+//					"" + (int)((1f - UPKEEP_MULT) * 100f) + "%");
+//			tooltip.addImageWithText(opad);
+            text.addPara(pre + "Reduces upkeep cost by %s", opad, highlight,
+                    "10%");
+            tooltip.addImageWithText(opad);
+            return;
+        }
+
+//		tooltip.addPara(pre + "Reduces upkeep cost by %s.", opad, highlight,
+//				"" + (int)((1f - UPKEEP_MULT) * 100f) + "%");
+        tooltip.addPara(pre + "Reduces upkeep by %s", opad, highlight,
+                "10%");
+    }
+
+    @Override
+    protected void addBetaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        float opad = 10f;
+        Color highlight = Misc.getHighlightColor();
+
+        String pre = "Beta-level AI core currently assigned. ";
+        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+            pre = "Beta-level AI core. ";
+        }
+        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
+            text.addPara(pre + "Reduces upkeep cost by %s", opad, highlight,
+                    "" + 30 + "%");
+            tooltip.addImageWithText(opad);
+            return;
+        }
+
+        tooltip.addPara(pre + "Reduces upkeep cost by %s", opad, highlight,
+                "" + 30 + "%");
+
+    }
+
+    @Override
+    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        float opad = 10f;
+        Color highlight = Misc.getHighlightColor();
+
+        String pre = "Alpha-level AI core currently assigned. ";
+        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+            pre = "Alpha-level AI core. ";
+        }
+        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
+            text.addPara(pre + "Reduces upkeep cost by %s. Increase amount of databanks being generated monthly by %s", opad, highlight,
+                    "" + 50 + "%","1");
+            tooltip.addImageWithText(opad);
+            return;
+        }
+
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Increase amount of databanks being generated monthly by %s", opad, highlight,
+                "" + 50 + "%","1");
+    }
+
+    @Override
     public void reportEconomyTick(int iterIndex) {
 
     }
@@ -139,6 +225,9 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
 
             SubmarketAPI open = market.getSubmarket(subMarketId);
             if (open != null) {
+                if(getAICoreId()!=null&&getAICoreId().equals(Commodities.ALPHA_CORE)){
+                    open.getCargo().addCommodity("research_databank", 1);
+                }
                 open.getCargo().addCommodity("research_databank", amountDatabanksMonthly);
             } else {
                 market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addCommodity("research_databank", amountDatabanksMonthly);

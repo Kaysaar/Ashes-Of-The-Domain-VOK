@@ -410,6 +410,7 @@ public class AoTDDataInserter {
     public void initalizeEconomy(boolean random){
         if(!random){
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ORBITAL_SKUNKWORK, Industries.ORBITALWORKS, null, false, Commodities.ALPHA_CORE,null);
+            setIndustryOnPlanet("Hybrasil", "Culann",Industries.MEGAPORT, Industries.MEGAPORT, null, true, null,null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.ORBITAL_FLEETWORK, Industries.ORBITALWORKS, null, false, null,Items.PRISTINE_NANOFORGE);
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, true, Commodities.ALPHA_CORE,null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, false, null,null);

@@ -3,7 +3,6 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sect
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.ui.P;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastrcutre;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
@@ -66,7 +65,7 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
         isAutomated = automated;
     }
     public boolean isRestorationAllowed() {
-        return  megastructureTiedTo.getSectionById("nidavelir_nexus").isRestored;
+        return  megastructureTiedTo.getSectionById("nidavelir_nexus").isRestored&&super.isRestorationAllowed();
     }
     @Override
     public void addButtonsToList(LinkedHashMap<String, ButtonData> currentButtons) {

@@ -1,19 +1,13 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections;
 
-import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class BulwarkFoundry extends NidavelirBaseSection {
     int effectivePercent = 5;
@@ -24,7 +18,7 @@ public class BulwarkFoundry extends NidavelirBaseSection {
     }
     @Override
     public boolean isRestorationAllowed() {
-        return  megastructureTiedTo.getSectionById("nidavelir_nexus").isRestored;
+        return  megastructureTiedTo.getSectionById("nidavelir_nexus").isRestored&&super.isRestorationAllowed();
     }
     @Override
     public void createTooltipForBenefits(TooltipMakerAPI tooltip) {

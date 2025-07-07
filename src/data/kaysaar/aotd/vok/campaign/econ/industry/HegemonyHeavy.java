@@ -2,17 +2,18 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
+import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
-import com.fs.starfarer.api.impl.campaign.ids.*;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.impl.campaign.ids.Conditions;
+import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
@@ -94,6 +95,31 @@ public class HegemonyHeavy extends HeavyIndustry {
     }
 
     @Override
+    protected void addAlphaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {
+        float opad = 10f;
+        Color highlight = Misc.getHighlightColor();
+
+        String pre = "Alpha-level AI core currently assigned. ";
+        if (mode == AICoreDescriptionMode.MANAGE_CORE_DIALOG_LIST || mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP) {
+            pre = "Alpha-level AI core. ";
+        }
+        if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
+            CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
+            TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
+            text.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. " +
+                            "Increases production by %s unit. Increase fleet size bonus by %s from this shipyard", 0f, highlight,
+                    "" + (int)((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION,
+                    "" + SUPPLY_BONUS,"5%");
+            tooltip.addImageWithText(opad);
+            return;
+        }
+
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Reduces demand by %s unit. " +
+                        "Increases production by %s unit. Increase fleet size bonus by %s from this shipyard", opad, highlight,
+                "" + (int)((1f - UPKEEP_MULT) * 100f) + "%", "" + DEMAND_REDUCTION,
+                "" + SUPPLY_BONUS,"5%");
+    }
+    @Override
     public void unapply() {
         super.unapply();
         market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodifyFlat(getModId(0));
@@ -112,6 +138,9 @@ public class HegemonyHeavy extends HeavyIndustry {
             for (MarketAPI factionMarket : Misc.getFactionMarkets(market.getFaction())) {
                 if(factionMarket.hasIndustry("hegeheavy")){
                     total+=WIDE_FACTION_PRODUCTION_BONUS;
+                    if(factionMarket.getIndustry("hegeheavy").getAICoreId()!=null&& factionMarket.getIndustry("hegeheavy").getAICoreId().equals(Commodities.ALPHA_CORE)) {
+                        total+=0.05f;
+                    }
                 }
             }
                 String totalStr = "+" + (int) Math.round(total * 100f) + "%";

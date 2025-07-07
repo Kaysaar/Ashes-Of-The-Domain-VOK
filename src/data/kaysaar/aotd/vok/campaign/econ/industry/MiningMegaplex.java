@@ -2,14 +2,13 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.campaign.econ.InstallableIndustryItemPlugin;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
-import com.fs.starfarer.api.impl.campaign.econ.impl.Mining;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
+import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -60,7 +59,8 @@ public class MiningMegaplex extends BaseIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        return  AoDUtilis.isMiningAvailable(market) && AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&market.getSize()>=6;
+        boolean gasGiant = this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().getTypeId().equals(Planets.GAS_GIANT);
+        return  AoDUtilis.isMiningAvailable(market) &&!gasGiant&& AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&market.getSize()>=6;
     }
 
     @Override
@@ -81,8 +81,12 @@ public class MiningMegaplex extends BaseIndustry {
     @Override
     public String getUnavailableReason() {
         ArrayList<String> reasons = new ArrayList<>();
+        boolean gasGiant = this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().getTypeId().equals(Planets.GAS_GIANT);
         if(market.getSize()<6){
             reasons.add("Market must be size 6 or greater");
+        }
+        if(gasGiant){
+            reasons.add("Can't build it on gas giants");
         }
         if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)){
             reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.DEEP_MINING_METHODS));

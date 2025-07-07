@@ -156,7 +156,9 @@ public class StarSystemSelector implements CustomUIPanelPlugin {
             markets = markets.substring(0,markets.length()-1);
         }
         LabelAPI label = labelTooltip.addPara(markets,0f);
-        label.getPosition().inTL(100-(label.computeTextWidth(label.getText())/2),iconsize/2-(label.computeTextHeight(label.getText())/2));
+        label.getPosition().inTL(0,iconsize/2-(label.computeTextHeight(label.getText())/2));
+        
+        label.setAlignment(Alignment.MID);
         panel.addUIElement(tooltip).inTL(0,0);
         panel.addUIElement(tooltipOfPlanet).inTL(iconsize/4,0);
         panel.addUIElement(labelTooltip).inTL(130,0);
