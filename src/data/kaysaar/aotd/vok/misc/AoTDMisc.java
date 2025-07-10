@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.misc;
 
+import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.Industry;
@@ -10,6 +11,7 @@ import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
+import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WingRole;
 import com.fs.starfarer.api.ui.*;
@@ -61,6 +63,9 @@ public class AoTDMisc {
 
         return variantId;
 
+    }
+    public static List<MarketAPI>getPlayerFactionMarkets(){
+        return Misc.getFactionMarkets(Factions.PLAYER).stream().filter(x -> !x.hasTag("nex_playerOutpost")).toList();
     }
 
     public static List<MarketAPI> retrieveFactionMarkets(FactionAPI faction) {
@@ -856,13 +861,14 @@ public class AoTDMisc {
         return list;
     }
 
-    public static StarSystemAPI getStarSystemWithMegastructure(String id) {
+    public static ArrayList<StarSystemAPI> getStarSystemWithMegastructure(String id) {
+        ArrayList<StarSystemAPI>starSystemAPIS = new ArrayList<>();
         for (StarSystemAPI starSystem : Global.getSector().getStarSystems()) {
-            if (starSystem.getEntityById(id) != null) {
-                return starSystem;
+            if(starSystem.getAllEntities().stream().filter(x-> AshMisc.isStringValid(x.getCustomEntityType())).anyMatch(x->x.getCustomEntityType().equals(id))){
+                starSystemAPIS.add(starSystem);
             }
         }
-        return null;
+        return starSystemAPIS;
     }
 
     public static boolean isSubImageExisting(String imageName) {

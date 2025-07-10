@@ -35,6 +35,20 @@ public class GPBaseMegastructure {
     public static String memKey = "$aotd_megastructure";
     //Note : Width will always be 400, height can be customized
     public boolean wasInitalized = false;
+    public boolean isPlanetaryMegastructure = false;
+    public boolean metCustomCriteria(){
+        return true;
+    }
+    public void printCustomCriteria(InteractionDialogAPI dialog){
+
+    }
+    public String getIndustryIfIfPresent(){
+        return null;
+    }
+    public void setPlanetaryMegastructure(boolean planetaryMegastructure) {
+        isPlanetaryMegastructure = planetaryMegastructure;
+    }
+
     public float getPenaltyFromManager(){
         return GPManager.getInstance().getTotalPenaltyFromResources(getDemand().keySet().toArray(new String[0]));
     }

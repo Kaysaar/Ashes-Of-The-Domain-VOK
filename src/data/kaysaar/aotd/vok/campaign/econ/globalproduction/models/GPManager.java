@@ -101,6 +101,9 @@ public class GPManager {
     public MutableStat productionSpeedBonus = new MutableStat(1f);
 
     public ArrayList<GPOrder> getProductionOrders() {
+        if(productionOrders!=null){
+            productionOrders.removeIf(GPOrder::isAboutToBeRemoved);
+        }
         return productionOrders;
     }
 
@@ -779,10 +782,7 @@ public class GPManager {
 
     public HashMap<String, Float> advance(ArrayList<GPOrder> orders) {
 
-        ArrayList<Integer> offsetOfOrdersToBeRemoved = retrieveOrdersToBeRemoved();
-        if (!offsetOfOrdersToBeRemoved.isEmpty()) {
-            removeDoneOrders(offsetOfOrdersToBeRemoved);
-        }
+
         HashMap<String, Float> penaltyMap = getPenaltyMap(orders);
 
         for (GPOrder order : orders) {

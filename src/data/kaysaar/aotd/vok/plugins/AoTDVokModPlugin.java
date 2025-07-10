@@ -26,7 +26,9 @@ import data.kaysaar.aotd.vok.campaign.econ.growingdemand.SpaceDrugsDemand;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandManager;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMover;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
+import data.kaysaar.aotd.vok.campaign.econ.listeners.buildingmenu.IndustryBlockerListener;
 import data.kaysaar.aotd.vok.listeners.*;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.CoreUITrackerSop;
@@ -77,7 +79,12 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     AoTDSpecialItemRepo aoTDSpecialItemRepo = new AoTDSpecialItemRepo();
     public static String fontInsigniaMedium = "graphics/fonts/insignia17LTaa.fnt";
 
-
+    public void spwanMegas(){
+        for (Object object : AoTDMisc.getStarSystemWithMegastructure("")) {
+            
+        }
+        
+    }
     @Override
     public void onApplicationLoad() throws Exception {
         Global.getSettings().loadFont(fontInsigniaMedium);
@@ -95,6 +102,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.addListener(listener);
         if (!l.hasListenerOfClass(ResourceConditionApplier.class))
             l.addListener(new ResourceConditionApplier(), true);
+        if (!l.hasListenerOfClass(IndustryBlockerListener.class))
+            l.addListener(new IndustryBlockerListener(), true);
         if (!l.hasListenerOfClass(AodAdvancedHeavyIndustryApplier.class))
             l.addListener(new AodAdvancedHeavyIndustryApplier(), true);
         if (!l.hasListenerOfClass(AoDIndustrialMightListener.class))
@@ -242,8 +251,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSector().addListener(new AoTDxUafAfterCombatListener());
         aoTDDataInserter.generatePreCollapseFacilities();
         aoTDDataInserter.spawnVeilPlanet();
-        aoTDDataInserter.spawnNidavleir();
-        aoTDDataInserter.spawnPluto();
+        aoTDDataInserter.spawnMegas();
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             MarketAPI lunarium = AoTDDataInserter.getMarketBasedOnName("Aoi", "Lunamun");
             if (lunarium != null) {

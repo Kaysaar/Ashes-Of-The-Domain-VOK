@@ -3,15 +3,11 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.econ.impl.Farming;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.impl.campaign.ids.Planets;
+import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 public class Fishery extends BaseIndustry {
@@ -21,6 +17,9 @@ public class Fishery extends BaseIndustry {
         super.apply(true);
         supply(Commodities.FOOD, market.getSize()+3);
         demand(Commodities.HEAVY_MACHINERY, 3);
+        if(market.hasIndustry(Conditions.VOLTURNIAN_LOBSTER_PENS)){
+            supply(Commodities.LOBSTER,market.getSize()-1);
+        }
 
     }
     @Override

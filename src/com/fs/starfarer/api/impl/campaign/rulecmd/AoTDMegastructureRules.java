@@ -11,6 +11,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSpec;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lwjgl.input.Keyboard;
 
@@ -38,11 +39,23 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
             dialog.getOptionPanel().setShortcut("defaultLeave", Keyboard.KEY_ESCAPE, false, false, false, true);
         }
         if (arg.equals("researchedTech")) {
-                if (token.getMemory().contains(GPBaseMegastructure.memKey)) {
-                    GPBaseMegastructure megastructure = (GPBaseMegastructure) token.getMemory().get(GPBaseMegastructure.memKey);
-                    megastructure.createTooltipInfoBeforeClaiming(dialog);
-                    return true;
+            if (token.getMemory().contains(GPBaseMegastructure.memKey)) {
+                GPBaseMegastructure megastructure = (GPBaseMegastructure) token.getMemory().get(GPBaseMegastructure.memKey);
+                megastructure.createTooltipInfoBeforeClaiming(dialog);
+
+                if(megastructure.metCustomCriteria()){
+                    if(AoTDMisc.getPlayerFactionMarkets().isEmpty()&&!megastructure.isPlanetaryMegastructure){
+                        dialog.getTextPanel().addPara("We must first establish faction, if we want to claim this megastrucutre");
+                        return false;
+                    }
                 }
+                else{
+                    megastructure.printCustomCriteria(dialog);
+                    return false;
+                }
+
+                return true;
+            }
 
 
         }

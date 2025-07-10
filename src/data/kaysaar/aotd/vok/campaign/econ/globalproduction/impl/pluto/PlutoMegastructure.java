@@ -1,5 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto;
 
+import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
@@ -8,7 +10,6 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.OpticCommandNexus;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.PlutoForgeSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.ui.PlutoUI;
@@ -20,12 +21,11 @@ import data.kaysaar.aotd.vok.campaign.econ.industry.BaseMegastructureIndustry;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PlutoMegastructure extends GPBaseMegastructure {
     public static String memKeyToPlanet = "$aotd_pluto_planet";
     public MarketAPI getMarketTiedTo() {
-        return entityTiedTo.getOrbitFocus().getMarket();
+        return entityTiedTo.getMarket();
     }
     public static ArrayList<String>resourcesProduced = new ArrayList<>();
     static {
@@ -36,6 +36,21 @@ public class PlutoMegastructure extends GPBaseMegastructure {
     @Override
     public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
         return new PlutoUI(this,parentPanel,menu);
+    }
+
+    @Override
+    public String getIndustryIfIfPresent() {
+        return "pluto_station";
+    }
+
+    @Override
+    public void trueInit(String specId, SectorEntityToken entityTiedTo) {
+        super.trueInit(specId, entityTiedTo);
+        isPlanetaryMegastructure = true;
+        if(Global.getSettings().isDevMode()){
+            entityTiedTo.getStarSystem().setBaseName("Pluto");
+        }
+
     }
 
     @Override
