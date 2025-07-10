@@ -6,9 +6,9 @@ import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 
 import java.awt.*;
 import java.util.List;
@@ -43,6 +43,16 @@ public class AoTDPlutoEncounter extends BaseCommandPlugin{
             dialog.getTextPanel().addPara("You fleet is approaching the %s", Color.ORANGE,"Pluto Mining Station");
             dialog.getTextPanel().addPara(Global.getSettings().getDescription(entity.getCustomDescriptionId(), Description.Type.CUSTOM).getText1());
 
+        }
+        if(entity.getOrbitFocus() != null){
+            GPBaseMegastructure megastructure;
+            SectorEntityToken token = entity.getOrbitFocus();
+            if (token.getMemory().contains(GPBaseMegastructure.memKey)) {
+                megastructure = (GPBaseMegastructure) token.getMemory().get(GPBaseMegastructure.memKey);
+                if(!megastructure.isClaimed()){
+                    dialog.getTextPanel().addPara("To claim this megastructure we need to colonize "+token.getName());
+                }
+            }
         }
         return true;
     }

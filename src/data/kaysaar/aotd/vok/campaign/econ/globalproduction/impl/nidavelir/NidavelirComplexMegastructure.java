@@ -19,7 +19,6 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructure
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class NidavelirComplexMegastructure extends GPBaseMegastructure {
@@ -82,12 +81,20 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
         return new NidavelirUI(this, parentPanel, menu);
     }
 
-
     @Override
     public void trueInit(String specId, SectorEntityToken entityTiedTo) {
         super.trueInit(specId, entityTiedTo);
+        isPlanetaryMegastructure = true;
+        if(Global.getSettings().isDevMode()){
+            entityTiedTo.getStarSystem().setBaseName("Nidavelir");
+        }
         shipyard = (NidavelirDestroyedShipyard) entityTiedTo.getStarSystem().addCustomEntity(null, "Nid", "nid_shipyards_damaged", null).getCustomPlugin();
         shipyard.trueInit("aotd_nidavelir_destroyed", null, (PlanetAPI) entityTiedTo);
+    }
+
+    @Override
+    public String getIndustryIfIfPresent() {
+        return "nidavelir_complex";
     }
 
     public ArrayList<NidavelirBaseSection> getSections() {

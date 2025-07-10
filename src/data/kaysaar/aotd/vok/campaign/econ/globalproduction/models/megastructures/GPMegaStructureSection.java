@@ -38,6 +38,9 @@ public class GPMegaStructureSection {
             progressOfRestoration = 1f;
         }
     }
+    public void clear(){
+
+    }
 
     public float progressOfRestoration;
     public boolean isRestored;

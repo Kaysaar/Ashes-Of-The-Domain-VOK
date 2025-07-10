@@ -155,7 +155,7 @@ public class PlutoMiningStation extends BaseCustomEntityPlugin {
 
     @Override
     public void advance(float amount) {
-        PlutoMegastructure megastructure = (PlutoMegastructure) entity.getMemory().get(GPBaseMegastructure.memKey);
+        PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(GPBaseMegastructure.memKey);
         if(megastructure!=null){
             if(megastructure.getLaserSection().isFiringLaser()&&!isActive()){
                 activate();
@@ -249,7 +249,7 @@ public class PlutoMiningStation extends BaseCustomEntityPlugin {
                     break;
                 }
                 case INACTIVE:
-                    PlutoMegastructure megastructure = (PlutoMegastructure) entity.getMemory().get(GPBaseMegastructure.memKey);
+                    PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(GPBaseMegastructure.memKey);
                     if(megastructure!=null&&megastructure.isClaimed()){
                         plutoGeneralGlow.setAlphaMult(1f);
                     }
@@ -257,7 +257,7 @@ public class PlutoMiningStation extends BaseCustomEntityPlugin {
                     renderAtCenter(plutoGeneralGlow);
                     return;
             }
-            PlutoMegastructure megastructure = (PlutoMegastructure) entity.getMemory().get(GPBaseMegastructure.memKey);
+            PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(GPBaseMegastructure.memKey);
             if(megastructure!=null&&megastructure.isClaimed()){
                 plutoGeneralGlow.setAlphaMult(1f);
             }
