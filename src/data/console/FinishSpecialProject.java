@@ -1,14 +1,7 @@
 package data.console;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
-import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
-import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
-import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
-import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectCompletionListener;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStage;
@@ -39,7 +32,8 @@ public class FinishSpecialProject implements BaseCommand {
         for (AoTDSpecialProjectStage stage : option.getStages()) {
             stage.setProgress(stage.getSpec().getDays());
         }
-        option.grantReward();
+        Object reward = option.grantReward();
+        Global.getSector().getListenerManager().getListeners(SpecialProjectCompletionListener.class).forEach(x->x.completedProject(option.specID,reward));
         option.sentFinishNotification();
         SpecialProjectManager.getInstance().setCurrentlyOnGoingProject(null);;
         Console.showMessage(" Finished  Project - " + option.getNameOverride());

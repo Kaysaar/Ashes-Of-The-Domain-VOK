@@ -35,6 +35,8 @@ public class VanguardForge  extends NidavelirBaseSection {
         int manpowerAssigned = getEffectiveManpowerForEffects();
         int points = (int) (manpowerAssigned * effectivePercent * getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));
         tooltip.addPara("Production speed of %s is increased by %s", 3f, Color.ORANGE, "frigates and destroyers", points + "%");
+        tooltip.addPara("All produced ships have increased amount of available S-mods by %S",3f,Color.ORANGE,"1");
+
     }
 
     @Override
@@ -57,5 +59,6 @@ public class VanguardForge  extends NidavelirBaseSection {
             tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerToBeAssigned));
         }
         tooltip.addPara("Increase speed of building frigates and destroyers by %s",3f,Color.ORANGE,(effectivePercent *manpowerToBeAssigned)+"%");
+        tooltip.addPara("All produced ships have increased amount of available S-mods by %S",3f,Color.ORANGE,"1");
     }
 }

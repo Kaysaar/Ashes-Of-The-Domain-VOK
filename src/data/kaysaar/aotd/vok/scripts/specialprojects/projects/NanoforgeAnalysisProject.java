@@ -42,7 +42,7 @@ public class NanoforgeAnalysisProject extends AoTDSpecialProject {
     }
 
     @Override
-    public void grantReward() {
+    public Object grantReward() {
         pristine = Misc.random.nextBoolean();
         MarketAPI playerMarket = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
         if (playerMarket == null) {
@@ -60,6 +60,7 @@ public class NanoforgeAnalysisProject extends AoTDSpecialProject {
             }
 
         }
+        return null;
 
     }
 

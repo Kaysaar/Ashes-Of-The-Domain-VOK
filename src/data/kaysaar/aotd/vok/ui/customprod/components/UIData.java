@@ -391,7 +391,11 @@ public class UIData {
 
         }
         else{
-            tooltip.addPara("Days until %s batch out of %s ordered is complete: %s ",5f,Color.ORANGE,order.getAtOnce()+"-unit",""+order.getAmountToProduce(),""+(int)order.getDaysForLabel()).getPosition().inTL(5,getyPad(toProduceAT)+35);
+            int daysz =(int)order.getDaysForLabel();
+            if(daysz <1){
+                daysz = 1;
+            }
+            tooltip.addPara("Days until %s batch out of %s ordered is complete: %s ",5f,Color.ORANGE,order.getAtOnce()+"-unit",""+order.getAmountToProduce(),""+daysz).getPosition().inTL(5,getyPad(toProduceAT)+35);
         }
         panel.addUIElement(tooltip).inTL(-5, 0);
         return new Pair<>(panel, button);

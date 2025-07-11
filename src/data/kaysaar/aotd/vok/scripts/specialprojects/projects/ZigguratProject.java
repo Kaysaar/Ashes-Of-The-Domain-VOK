@@ -35,7 +35,7 @@ public class ZigguratProject extends AoTDSpecialProject {
     }
 
     @Override
-    public void grantReward() {
+    public Object grantReward() {
         MarketAPI gatheringPoint = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
         if (gatheringPoint == null) {
             gatheringPoint = Misc.getPlayerMarkets(true).get(0);
@@ -48,7 +48,7 @@ public class ZigguratProject extends AoTDSpecialProject {
         member.addPermaMod(HullMods.HIGH_FREQUENCY_ATTRACTOR);
         FleetMemberAPI membesr = Global.getSettings().createFleetMember(FleetMemberType.SHIP,member);
         cargo.getMothballedShips().addFleetMember(membesr);
-
+        return membesr;
 
 
     }

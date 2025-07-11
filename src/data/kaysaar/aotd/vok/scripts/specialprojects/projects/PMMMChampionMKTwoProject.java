@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
+import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -35,14 +36,15 @@ public class PMMMChampionMKTwoProject extends AoTDSpecialProject {
         label.setAlignment(Alignment.MID);
     }
     @Override
-    public void grantReward() {
+    public Object grantReward() {
         MarketAPI gatheringPoint = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
         if(gatheringPoint==null){
             gatheringPoint = Misc.getPlayerMarkets(true).get(0);
         }
         CargoAPI cargo = gatheringPoint.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo();
         FleetMemberAPI fleet = cargo.getMothballedShips().addFleetMember(AoTDMisc.getVaraint(Global.getSettings().getHullSpec("pmm_champion2")));
+        fleet.getVariant().setSource(VariantSource.REFIT);
         fleet.getVariant().clear();
-
+        return fleet;
     }
 }

@@ -66,7 +66,6 @@ public class GpHistory {
 
     public LinkedHashMap<GPOrderData, Integer> currMonthProd = new LinkedHashMap<>();
     public ArrayList<GPFullHistoryData> data = new ArrayList<>();
-    public transient ArrayList<GPProductionListener> listeners = new ArrayList<>();
 
     public void addProduction(GPSpec spec, int amount) {
         if (spec == null || amount <= 0) return;

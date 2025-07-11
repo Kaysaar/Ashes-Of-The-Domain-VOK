@@ -31,7 +31,7 @@ public class GuardianBuildingProject extends AoTDSpecialProject {
     }
 
     @Override
-    public void grantReward() {
+    public Object grantReward() {
         MarketAPI gatheringPoint = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
         if(gatheringPoint==null){
             gatheringPoint = Misc.getPlayerMarkets(true).get(0);
@@ -50,5 +50,6 @@ public class GuardianBuildingProject extends AoTDSpecialProject {
         membesr.setVariant(member,true,true);
         membesr.updateStats();
         cargo.getMothballedShips().addFleetMember(membesr);
+        return membesr;
     }
 }
