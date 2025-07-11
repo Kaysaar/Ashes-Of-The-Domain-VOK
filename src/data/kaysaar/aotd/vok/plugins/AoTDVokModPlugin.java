@@ -42,6 +42,7 @@ import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.listeners.NidavelirSPListener;
 import data.kaysaar.aotd.vok.timeline.military.LockheedDomainEvent;
 import data.kaysaar.aotd.vok.timeline.military.OrbitalFleetworkEvent;
 import data.kaysaar.aotd.vok.timeline.prosperity.MiningMegaplexEvent;
@@ -110,6 +111,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             l.addListener(new AoDIndustrialMightListener(), true);
         if (!l.hasListenerOfClass(PCFPlanetListener.class))
             l.addListener(new PCFPlanetListener(), true);
+        if (!l.hasListenerOfClass(NidavelirSPListener.class))
+            l.addListener(new NidavelirSPListener(), true);
         if (!l.hasListenerOfClass(ScientistValidationListener.class) && !Global.getSector().getMemory().contains("$aotd_passed_validation" + ScientistValidationListener.class.getName()))
             l.addListener(new ScientistValidationListener(), false);
         if (!l.hasListenerOfClass(TechModifiersApplier.class))

@@ -8,6 +8,7 @@ import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.fleets.DefaultFleetInflaterParams;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
+import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
@@ -228,7 +229,7 @@ public class GPOrder implements Cloneable {
                 ships.setCommander(Global.getSector().getPlayerPerson());
                 for (int i = 0; i < produced; i++) {
                     FleetMemberAPI member = ships.getFleetData().addFleetMember(AoTDMisc.getVaraint(getSpecFromClass().getShipHullSpecAPI()));
-
+                    member.getVariant().setSource(VariantSource.REFIT);
                     member.getVariant().clear();
                 }
                 DefaultFleetInflaterParams p = new DefaultFleetInflaterParams();
@@ -240,12 +241,17 @@ public class GPOrder implements Cloneable {
                 FleetInflater inflater = Misc.getInflater(ships, p);
                 ships.setInflater(inflater);
                 inflater.inflate(ships);
-                GpHistory.reportPlayerProducedStuff(this.getSpecFromClass(),ships,produced);
+
+                ships.setInflated(true);
+                ships.setInflater(null);
+
                 for (FleetMemberAPI fleetMemberAPI : ships.getFleetData().getMembersListCopy()) {
                     fleetMemberAPI.getVariant().clear();
                     local.getMothballedShips().addFleetMember(fleetMemberAPI);
+                    GpHistory.reportPlayerProducedStuff(this.getSpecFromClass(),fleetMemberAPI,1);
                 }
-
+                ships.getFleetData().clear();
+                ships.getMembersWithFightersCopy().clear();
                 ships.despawn();
 
             }

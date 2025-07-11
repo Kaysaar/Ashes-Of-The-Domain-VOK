@@ -9,6 +9,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectCompletionListener;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectStageWindow;
@@ -196,7 +197,9 @@ public class AoTDSpecialProject {
         if(getTotalProgress()==1f&&!wasCompleted){
             wasCompleted = true;
             countOfCompletion++;
-            grantReward();
+
+            Object reward = grantReward();
+            Global.getSector().getListenerManager().getListeners(SpecialProjectCompletionListener.class).forEach(x->x.completedProject(this.specID,reward));
             sentFinishNotification();
             forNotifitcations.clear();
             SpecialProjectManager.getInstance().setCurrentlyOnGoingProject(null);
@@ -211,8 +214,8 @@ public class AoTDSpecialProject {
         SpecialProjectFinishedIntel intel = new SpecialProjectFinishedIntel(this);
         Global.getSector().getIntelManager().addIntel(intel);
     }
-    public void grantReward(){
-
+    public Object grantReward(){
+        return null;
     }
 
 

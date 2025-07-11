@@ -25,11 +25,12 @@ public class CompoundSpecialProject extends AoTDSpecialProject {
     }
 
     @Override
-    public void grantReward() {
+    public Object grantReward() {
         Global.getSector().getMemory().set("$aotd_compound_unlocked",true);
         SharedUnlockData.get().reportPlayerAwareOfCommodity("compound", true);
         Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addCommodity("compound",250);
         Global.getSector().addTransientScript(new AoTDCompoundUIScript());
         Global.getSector().addTransientScript(new AoTDCompoundUIInMarketScript());
+        return null;
     }
 }

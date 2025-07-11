@@ -27,10 +27,10 @@ public class HyperspaceDrugs extends AoTDSpecialProject {
     }
 
     @Override
-    public void grantReward() {
+    public Object grantReward() {
         Global.getSector().getMemory().set("$aotd_vapors_unlocked", true);
         SharedUnlockData.get().reportPlayerAwareOfCommodity("wwlb_cerulean_vapors", true);
         Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addCommodity("wwlb_cerulean_vapors",250);
-
+        return null;
     }
 }
