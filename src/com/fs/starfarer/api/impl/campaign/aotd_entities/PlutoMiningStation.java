@@ -246,25 +246,31 @@ public class PlutoMiningStation extends BaseCustomEntityPlugin {
                     final float t = ShmoEase.outBounce(1f - this.outTimer);
                     plutoLaserGlow.setAlphaMult(t);
                     plutoLaserFlareGlow.setAlphaMult(t);
+
                     break;
                 }
                 case INACTIVE:
                     PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(GPBaseMegastructure.memKey);
                     if(megastructure!=null&&megastructure.isClaimed()){
+                        renderAtCenter(plutoGeneralGlow);
                         plutoGeneralGlow.setAlphaMult(1f);
                     }
-
-                    renderAtCenter(plutoGeneralGlow);
                     return;
             }
             PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(GPBaseMegastructure.memKey);
             if(megastructure!=null&&megastructure.isClaimed()){
                 plutoGeneralGlow.setAlphaMult(1f);
+                renderAtCenter(plutoGeneralGlow);
             }
-
-            renderAtCenter(plutoGeneralGlow);
+            else{
+                plutoGeneralGlow.setAlphaMult(0f);
+                plutoLaserGlow.setAlphaMult(0f);
+                plutoLaserFlareGlow.setAlphaMult(0f);
+            }
             renderAtCenter(plutoLaserGlow);
             renderAtCenter(plutoLaserFlareGlow);
+
+
         }
 
         if (layer.equals(CampaignEngineLayers.BELOW_STATIONS)) {

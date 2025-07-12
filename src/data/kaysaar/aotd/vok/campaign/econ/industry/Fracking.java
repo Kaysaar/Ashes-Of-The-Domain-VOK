@@ -61,7 +61,7 @@ public class Fracking extends BaseIndustry {
     public boolean isAvailableToBuild() {
         boolean gasGiant = this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().getTypeId().equals(Planets.GAS_GIANT);
             return  (AoDUtilis.getVolatilesAmount(market)>=-1)
-                    && AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.GEOTHERMAL_FRACKING,market)&&gasGiant;
+                    && AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&gasGiant;
 
     }
 
@@ -70,8 +70,8 @@ public class Fracking extends BaseIndustry {
         ArrayList<String> reasons = new ArrayList<>();
         boolean gasGiant = this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().getTypeId().equals(Planets.GAS_GIANT);
 
-        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.GEOTHERMAL_FRACKING,market)){
-            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.GEOTHERMAL_FRACKING));
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.DEEP_MINING_METHODS));
 
         }
         if(gasGiant){
@@ -94,7 +94,7 @@ public class Fracking extends BaseIndustry {
 
     @Override
     public boolean showWhenUnavailable() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.GEOTHERMAL_FRACKING,market)&&(AoDUtilis.getOrganicsAmount(market)>=-1 || AoDUtilis.getNormalOreAmount(market) >=-1 || AoDUtilis.getRareOreAmount(market) >= -1);
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&(AoDUtilis.getOrganicsAmount(market)>=-1 || AoDUtilis.getNormalOreAmount(market) >=-1 || AoDUtilis.getRareOreAmount(market) >= -1);
     }
 
 
