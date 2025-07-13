@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.ui.research;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.graphics.SpriteAPI;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.ui.basecomps.ResizableComponent;
 
 import java.awt.*;
@@ -10,20 +11,29 @@ public class ResearchTreeConnector extends ResizableComponent {
     transient SpriteAPI spriteToRender = Global.getSettings().getSprite("rendering","GlitchSquare");
     transient SpriteAPI spriteDiagonal = Global.getSettings().getSprite("ui","diagonal");
 
-    transient ResizableComponent parent;
-    transient ResizableComponent children;
+    transient ResearchPanelComponent parent;
+    transient ResearchPanelComponent children;
     Color color;
-    public ResearchTreeConnector( float height,ResizableComponent parent, ResizableComponent children,Color color) {
+    public ResearchTreeConnector( float height,ResearchPanelComponent parent, ResearchPanelComponent children) {
         componentPanel = Global.getSettings().createCustom(1, height, this);
         this.parent = parent;
         this.children = children;
-        this.color = color;
 
     }
 
     @Override
     public void renderBelow(float alphaMult) {
         super.renderBelow(alphaMult);
+        color = Color.white;
+        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(parent.spec.getId())){
+            color = new Color(210, 138, 7, 255);
+        }
+        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()!=null&&AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getId().equals(parent.spec.getId())){
+            color = Color.cyan;
+        }
+        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getQueueManager().isInQueue(parent.spec.getId())){
+            color = Color.cyan.darker();
+        }
         spriteToRender.setColor(Color.WHITE);
         spriteToRender.setColor(color);
         spriteToRender.setAlphaMult(alphaMult);

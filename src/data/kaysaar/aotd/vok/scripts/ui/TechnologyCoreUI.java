@@ -10,7 +10,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GP
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.ui.SoundUIManager;
 import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
@@ -22,6 +22,8 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager.memflagBlacksite;
 
 public class TechnologyCoreUI implements CustomUIPanelPlugin {
     NidavelirMainPanelPlugin customProdPlugin = null;
@@ -105,7 +107,10 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         research = buttonTooltip.addButton("Research", pluginResearch, base, bg, Alignment.MID, CutStyle.TOP, 140, 20, 0f);
         megastructures = buttonTooltip.addButton("Megastructures", pluginMega, base, bg, Alignment.MID, CutStyle.TOP, 170, 20, 0f);
         sp = null;
-        if(SpecialProjectManager.getInstance().canEngageInBlackSite()){
+        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites()>0){
+            Global.getSector().getPlayerMemoryWithoutUpdate().set(memflagBlacksite,true);
+        }
+        if(BlackSiteProjectManager.getInstance().canEngageInBlackSite()){
             sp = buttonTooltip.addButton("Black Site Projects", projectUIManager, Global.getSector().getFaction(Factions.PIRATES).getBaseUIColor(), Global.getSector().getFaction(Factions.PIRATES).getDarkUIColor(), Alignment.MID, CutStyle.TOP, 210, 20, 0f);
             sp.setEnabled(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites()>0);
             if(!sp.isEnabled()){

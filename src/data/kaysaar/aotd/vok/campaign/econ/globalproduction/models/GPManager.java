@@ -24,7 +24,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.ProjectReward;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -328,8 +328,8 @@ public class GPManager {
         for (String s : commodities) {
             reqResources.put(s, 0);
         }
-        if (SpecialProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
-            for (Map.Entry<String, Integer> entry : SpecialProjectManager.getInstance().getCurrentlyOnGoingProject().getGpCostFromStages().entrySet()) {
+        if (BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
+            for (Map.Entry<String, Integer> entry : BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject().getGpCostFromStages().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue());
                 } else {
@@ -440,7 +440,7 @@ public class GPManager {
     }
 
     public boolean hasSpecialProject(ProjectReward.ProjectRewardType type, String rewardId) {
-        return !SpecialProjectManager.getInstance().getProjectMatchingReward(type,rewardId).isEmpty();
+        return !BlackSiteProjectManager.getInstance().getProjectMatchingReward(type,rewardId).isEmpty();
     }
 
     public void loadProductionSpecs() {
@@ -551,8 +551,8 @@ public class GPManager {
         for (String s : commodities) {
             reqResources.put(s, 0);
         }
-        if (SpecialProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
-            for (Map.Entry<String, Integer> entry :SpecialProjectManager.getInstance().getCurrentlyOnGoingProject().getGpCostFromStages().entrySet()) {
+        if (BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
+            for (Map.Entry<String, Integer> entry : BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject().getGpCostFromStages().entrySet()) {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue());
                 } else {
@@ -792,12 +792,12 @@ public class GPManager {
             }
             order.setPenalty(totalPenalty);
         }
-        if (SpecialProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
+        if (BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
             float totalPenalty = 1;
-            for (Map.Entry<String, Integer> stringIntegerEntry : SpecialProjectManager.getInstance().getCurrentlyOnGoingProject().getGpCostFromStages().entrySet()) {
+            for (Map.Entry<String, Integer> stringIntegerEntry : BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject().getGpCostFromStages().entrySet()) {
                 totalPenalty *= penaltyMap.get(stringIntegerEntry.getKey());
             }
-            SpecialProjectManager.getInstance().getCurrentlyOnGoingProject().setPenalty(totalPenalty);
+            BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject().setPenalty(totalPenalty);
         }
 
 

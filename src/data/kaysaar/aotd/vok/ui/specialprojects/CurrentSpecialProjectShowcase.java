@@ -8,16 +8,13 @@ import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
-import data.kaysaar.aotd.vok.campaign.econ.industry.Commerce;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
-import data.kaysaar.aotd.vok.ui.basecomps.LabelComponent;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.HologramViewer;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.ui.specialprojects.dialogs.PauseProjectDialog;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,7 +36,7 @@ public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
         this.uiManager = manager;
         renderer = new UILinesRenderer(0f);
         renderer.setPanel(mainPanel);
-        currProjectShowing = SpecialProjectManager.getInstance().getCurrentlyOnGoingProject();
+        currProjectShowing = BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject();
         createUI();
     }
 
@@ -56,7 +53,7 @@ public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
             ProgressBarComponent component = new ProgressBarComponent(mainPanel.getPosition().getWidth() - 110, 18, currProjectShowing.getTotalProgress(), Misc.getBasePlayerColor().darker());
             tooltip.addCustom(component.getRenderingPanel(), 3f);
             LabelAPI labelAPI = tooltip.addSectionHeading("" + (int) (currProjectShowing.getTotalProgress() * 100) + "%", Misc.getTextColor(), null, Alignment.MID, mainPanel.getPosition().getWidth() - 110, -18f);
-            HologramViewer viewer = SpecialProjectManager.createHologramViewer(currProjectShowing.getProjectSpec(), 95);
+            HologramViewer viewer = BlackSiteProjectManager.createHologramViewer(currProjectShowing.getProjectSpec(), 95);
             viewer.setRenderLine(false);
             addCurrentStagesWork(tooltip);
             float y = tooltip.getHeightSoFar() + 7;
@@ -114,8 +111,8 @@ public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
             }
         }
 
-        if (!SpecialProjectManager.getInstance().isCurrentOnGoing(currProjectShowing)) {
-            currProjectShowing = SpecialProjectManager.getInstance().getCurrentlyOnGoingProject();
+        if (!BlackSiteProjectManager.getInstance().isCurrentOnGoing(currProjectShowing)) {
+            currProjectShowing = BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject();
             createUI();
         }
         if (buttonAPI2 != null && buttonAPI2.isChecked()&&currProjectShowing!=null) {

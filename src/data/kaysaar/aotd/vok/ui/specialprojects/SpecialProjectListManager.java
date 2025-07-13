@@ -58,7 +58,7 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         float opad = 5f;
         boolean haveAtLeastOne = false;
 
-        for (Map.Entry<String, List<AoTDSpecialProject>> value : SpecialProjectManager.getInstance().getProjectsForUIListOrdered().entrySet()) {
+        for (Map.Entry<String, List<AoTDSpecialProject>> value : BlackSiteProjectManager.getInstance().getProjectsForUIListOrdered().entrySet()) {
             for (AoTDSpecialProject project : value.getValue()) {
                 if (!project.wasEverDiscovered()) continue;
                 tooltip.addCustom(createSectionForProject(mainPanel.getPosition().getWidth() - 10, 80, project), opad);
@@ -110,7 +110,7 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
             backProject = null;
             startProject = null;
             cancelProject = null;
-            AoTDSpecialProject project = SpecialProjectManager.getInstance().getCurrentlyOnGoingProject();
+            AoTDSpecialProject project = BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject();
             if (project != null && manager.getCurrProjectShowcase().getProject() != null && !manager.getCurrProjectShowcase().getProject().getProjectSpec().getId().equals(project.getProjectSpec().getId())) {
                 manager.getCurrProjectShowcase().setProject(project);
                 manager.getCurrProjectShowcase().createUI();
@@ -123,7 +123,7 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
             backProject.setChecked(false);
             AoTDSpecialProject project = (AoTDSpecialProject) startProject.getCustomData();
             project.restartProject();
-            SpecialProjectManager.getInstance().setCurrentlyOnGoingProject((AoTDSpecialProject) startProject.getCustomData());
+            BlackSiteProjectManager.getInstance().setCurrentlyOnGoingProject((AoTDSpecialProject) startProject.getCustomData());
             backProject = null;
             startProject = null;
             cancelProject = null;
@@ -136,11 +136,11 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         }
         if (cancelProject != null && cancelProject.isChecked()) {
             cancelProject.setChecked(false);
-            SpecialProjectManager.getInstance().setCurrentlyOnGoingProject(null);
+            BlackSiteProjectManager.getInstance().setCurrentlyOnGoingProject(null);
             backProject = null;
             startProject = null;
             cancelProject = null;
-            manager.getCurrProjectShowcase().setProject(SpecialProjectManager.getInstance().getCurrentlyOnGoingProject());
+            manager.getCurrProjectShowcase().setProject(BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject());
             manager.getCurrProjectShowcase().createUI();
             createListUI();
 
@@ -188,7 +188,7 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
     public CustomPanelAPI createSectionForProject(float width, float height, AoTDSpecialProject project) {
         CustomPanelAPI test = Global.getSettings().createCustom(width, height, new UILinesRenderer(0f));
         TooltipMakerAPI tooltip = test.createUIElement(width, height, false);
-        HologramViewer viewer = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), true, false);
+        HologramViewer viewer = BlackSiteProjectManager.createHologramViewer(project.getProjectSpec(), true, false);
 
         TooltipMakerAPI tooltip2 = test.createUIElement(width - viewer.getComponentPanel().getPosition().getWidth() - 5, height, false);
 
@@ -211,12 +211,12 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         TooltipMakerAPI tooltipButtons = test.createUIElement(width, 30, false);
         project.createDetailedTooltipForButton(tooltip, width);
         backProject = tooltipButtons.addButton("Show other projects", "show_projects", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, 180, 30, 0);
-        if (SpecialProjectManager.getInstance().isCurrentOnGoing(project)) {
+        if (BlackSiteProjectManager.getInstance().isCurrentOnGoing(project)) {
             cancelProject = tooltipButtons.addButton("Pause Project", project, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, 180, 30, -30f);
             cancelProject.getPosition().setXAlignOffset(width - cancelProject.getPosition().getWidth() - 10);
         } else if (project.canDoProject()) {
             startProject = tooltipButtons.addButton("Start Project", project, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, 180, 30, -30f);
-            if (SpecialProjectManager.getInstance().getCurrentlyOnGoingProject() != null || !project.canDoProject()) {
+            if (BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject() != null || !project.canDoProject()) {
                 startProject.setEnabled(false);
             }
             if (project.getCountOfCompletion() > 0 && project.canDoProject()) {

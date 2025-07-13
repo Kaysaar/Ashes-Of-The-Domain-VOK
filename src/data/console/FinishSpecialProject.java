@@ -2,7 +2,7 @@ package data.console;
 
 import com.fs.starfarer.api.Global;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectCompletionListener;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStage;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public class FinishSpecialProject implements BaseCommand {
         }
         AoTDSpecialProject option;
         try {
-            option = SpecialProjectManager.getInstance().getProject(args);
+            option = BlackSiteProjectManager.getInstance().getProject(args);
         }
         catch (NullPointerException exception){
             return CommandResult.ERROR;
@@ -35,7 +35,7 @@ public class FinishSpecialProject implements BaseCommand {
         Object reward = option.grantReward();
         Global.getSector().getListenerManager().getListeners(SpecialProjectCompletionListener.class).forEach(x->x.completedProject(option.specID,reward));
         option.sentFinishNotification();
-        SpecialProjectManager.getInstance().setCurrentlyOnGoingProject(null);;
+        BlackSiteProjectManager.getInstance().setCurrentlyOnGoingProject(null);;
         Console.showMessage(" Finished  Project - " + option.getNameOverride());
 
         return CommandResult.SUCCESS;

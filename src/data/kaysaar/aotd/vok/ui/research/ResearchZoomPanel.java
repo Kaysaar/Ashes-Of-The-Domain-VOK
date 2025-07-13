@@ -6,7 +6,6 @@ import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOptionEra;
 import data.kaysaar.aotd.vok.ui.basecomps.ZoomPanelComponent;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -66,12 +65,7 @@ public class ResearchZoomPanel extends ZoomPanelComponent {
             for (ResearchPanelComponent researchOptionPanel : era.getResearchOptionPanels()) {
                 if(!researchOptionPanel.spec.getReqTechsToResearchFirst().isEmpty()){
                     for (ResearchPanelComponent parentComponent : getParentComponents(researchOptionPanel)) {
-
-                        Color color = Color.WHITE;
-                        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(parentComponent.spec.getId())){
-                            color = new Color(210, 138, 7, 255);
-                        }
-                        ResearchTreeConnector drawer = new ResearchTreeConnector(3,parentComponent,researchOptionPanel,color);
+                        ResearchTreeConnector drawer = new ResearchTreeConnector(3,parentComponent,researchOptionPanel);
                         addComponent(drawer,0,0);
                     }
                 }

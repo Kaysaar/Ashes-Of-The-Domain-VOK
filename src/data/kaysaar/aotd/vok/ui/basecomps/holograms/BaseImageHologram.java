@@ -7,9 +7,14 @@ import java.awt.*;
 
 public class BaseImageHologram implements HologramViewerObjectRendererAPI {
     SpriteAPI sprite;
-    public BaseImageHologram(SpriteAPI sprite) {
+    public BaseImageHologram(SpriteAPI sprite,Color color) {
         this.sprite = sprite;
-        sprite.setColor(Color.CYAN);
+        sprite.setColor(color);
+    }
+    Color color;
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @Override

@@ -1,28 +1,24 @@
 package data.kaysaar.aotd.vok.scripts.research;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.CargoAPI;
+import com.fs.starfarer.api.campaign.CoreUITabId;
+import com.fs.starfarer.api.campaign.FactionAPI;
+import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
-import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
-import com.fs.starfarer.api.impl.campaign.fleets.FleetFactory;
-import com.fs.starfarer.api.impl.campaign.fleets.RouteManager;
-import com.fs.starfarer.api.impl.campaign.ids.Abilities;
+import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
-import com.fs.starfarer.api.impl.campaign.intel.ResearchExpeditionIntel;
+import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
-import data.kaysaar.aotd.vok.campaign.econ.listeners.ResearchFleetDefeatListener;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
@@ -30,13 +26,28 @@ import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.checkForQolEnabled;
 
 public class AoTDFactionResearchManager {
     private static final Logger logger = Global.getLogger(AoTDMainResearchManager.class);
     private float AIChrages = 0f;
+    public MutableStat researchSpeedBonus = new MutableStat(0f);
+    public MutableStat blackSiteSpecialProjBonus = new MutableStat(0f);
+
+    public MutableStat getResearchSpeedBonus() {
+        return researchSpeedBonus;
+    }
+
+    public MutableStat getBlackSiteSpecialProjBonus() {
+        return blackSiteSpecialProjBonus;
+    }
+    IntervalUtil util = new IntervalUtil(1f,1f);
+
 
     public ArrayList<ResearchOption> getResearchRepoOfFaction() {
         return researchRepoOfFaction;
@@ -123,70 +134,7 @@ public class AoTDFactionResearchManager {
     }
 
     public void sentFleet() {
-        pointTowardsExpedition -= 380;
-        FactionAPI faction = getFaction();
-        if (Misc.getFactionMarkets(getFaction()).isEmpty()) {
-            for (IntelInfoPlugin intelInfoPlugin : Global.getSector().getIntelManager().getIntel(ResearchExpeditionIntel.class)) {
-                ResearchExpeditionIntel intel = (ResearchExpeditionIntel) intelInfoPlugin;
-                if (intel.idOfIntel.split("_")[1].equals(getFaction().getId())) {
-                    Global.getSector().getIntelManager().removeIntel(intelInfoPlugin);
-                    break;
-                }
-            }
-            AoTDMainResearchManager.getInstance().expeditionCounter = AoTDMainResearchManager.getInstance().expeditionThreshold / 3;
-            return;
-        }
-        CampaignFleetAPI fleet = FleetFactory.createGenericFleet(faction.getId(), "Expedition Fleet", faction.getDoctrine().getShipQuality(), 150);
-        PlanetAPI targetPlanet = null;
-        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList);
-        if (preCollapsePlanets == null) return;
-        Collections.shuffle(preCollapsePlanets);
-        for (PlanetAPI preCollapsePlanet : preCollapsePlanets) {
-            if (!preCollapsePlanet.hasCondition("pre_collapse_facility")) continue;
-            if (!preCollapsePlanet.getMarket().getFaction().getId().equals(Factions.NEUTRAL)) continue;
-            if (preCollapsePlanet.getMarket().getMemory().is("$aotd_fac_explored", true)) continue;
-            if (preCollapsePlanet.getMarket().getMemory().is("$aotd_chosen_by_faction", true)) continue;
-            targetPlanet = preCollapsePlanet;
-            break;
-        }
-        if (targetPlanet == null) {
-            return;
-        }
-        Long seed = new Random().nextLong();
-        fleet.addTag("aotd_expedition");
-        fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_FLEET_TYPE, "aotd_expedition");
 
-        MarketAPI from = Misc.getFactionMarkets(getFaction()).get(0);
-        from.getContainingLocation().addEntity(fleet);
-        fleet.setFacing((float) Math.random() * 360f);
-        for (IntelInfoPlugin intelInfoPlugin : Global.getSector().getIntelManager().getIntel(ResearchExpeditionIntel.class)) {
-            ResearchExpeditionIntel intel = (ResearchExpeditionIntel) intelInfoPlugin;
-            if (intel.idOfIntel.split("_")[1].equals(getFaction().getId())) {
-                intel.setLaunchMarket(from);
-                break;
-            }
-
-        }
-
-        // this will get overridden by the patrol assignment AI, depending on route-time elapsed etc
-        fleet.setLocation(from.getPrimaryEntity().getLocation().x, from.getPrimaryEntity().getLocation().y);
-        RouteManager.RouteData data = new RouteManager.RouteData("research_" + faction.getId(), from, seed, new RouteManager.OptionalFleetData(from));
-        data.addSegment(new RouteManager.RouteSegment(30000f, from.getPrimaryEntity()));
-        fleet.removeAbility(Abilities.GO_DARK);
-        fleet.setTransponderOn(true);
-        assert targetPlanet != null;
-        if (targetPlanet.getMarket() == null) return;
-        targetPlanet.getMarket().getMemory().set("$aotd_chosen_by_faction", true, 300);
-        fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_ALLOW_LONG_PURSUIT, false);
-        fleet.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_HOLD_VS_STRONGER, true);
-        fleet.getMemoryWithoutUpdate().set(MemFlags.FLEET_IGNORES_OTHER_FLEETS, true);
-        MessageIntel intel = new MessageIntel("Faction Expedition imminent from  " + from.getName() + " by " + getFaction().getDisplayName(), Misc.getBasePlayerColor());
-        intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
-        intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
-        Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO);
-        assert targetPlanet != null;
-        fleet.addEventListener(new ResearchFleetDefeatListener());
-        fleet.addScript(new ResearchFleetRouteManager(fleet, data, targetPlanet));
     }
 
     public void setAICounter(float counter) {
@@ -194,9 +142,31 @@ public class AoTDFactionResearchManager {
     }
 
     public void advance(float amount) {
+        util.advance(amount);
+        if(util.intervalElapsed()){
+            executeAdvance(util.getElapsed());
+
+        }
+
+
+    }
+
+    private void executeAdvance(float amount) {
         if (currentHeadOfCouncil != null) {
             currentHeadOfCouncil.advance(amount);
         }
+        int amountB = getAmountOfBlackSites()-1;
+        int amountR = getAmountOfResearchFacilities()-1;
+        if(amountR>0){
+            getResearchSpeedBonus().modifyFlat("aotd_def_bonus",amountR*0.1f);
+        }
+        if(amountB>0){
+            getBlackSiteSpecialProjBonus().modifyFlat("aotd_def_bonus",amountB*0.1f);
+        }
+        if(haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
+            getBlackSiteSpecialProjBonus().modifyFlat("aotd_def_bonus2",0.2f);
+        }
+
         if (getCurrentFocus() == null) {
             notifyFactionBeginResearch(getQueueManager().removeFromTop());
         }
@@ -233,32 +203,6 @@ public class AoTDFactionResearchManager {
                 Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
             }
         }
-
-
-
-        if (this.getFaction().isPlayerFaction()) {
-            if (this.haveResearched(AoTDTechIds.AGRICULTURE_INDUSTRIALIZATION)) {
-                Global.getSettings().getIndustrySpec(AoTDIndustries.MONOCULTURE).setUpgrade(Industries.FARMING);
-            }
-            if (this.haveResearched(AoTDTechIds.EXO_SKELETONS)) {
-                Global.getSettings().getIndustrySpec(AoTDIndustries.EXTRACTIVE_OPERATION).setUpgrade(Industries.MINING);
-            }
-            if (this.haveResearched(AoTDTechIds.NANOMETAL_FUSION_SYNTHESIS)) {
-                Global.getSettings().getIndustrySpec(AoTDIndustries.SMELTING).setUpgrade(Industries.REFINING);
-                Global.getSettings().getIndustrySpec(AoTDIndustries.LIGHT_PRODUCTION).setUpgrade(Industries.LIGHTINDUSTRY);
-            }
-            if (this.haveResearched(AoTDTechIds.BASE_SHIP_HULL_ASSEMBLY)) {
-                Global.getSettings().getIndustrySpec(AoTDIndustries.HEAVY_PRODUCTION).setUpgrade(Industries.HEAVYINDUSTRY);
-            }
-            if (this.haveResearched(AoTDTechIds.INTERSTELLAR_LOGISTICS)) {
-                Global.getSettings().getIndustrySpec(Industries.WAYSTATION).setUpgrade(AoTDIndustries.TERMINUS);
-            }
-            if (this.haveResearched(AoTDTechIds.ANTIMATTER_SYNTHESIS)) {
-                Global.getSettings().getIndustrySpec(Industries.FUELPROD).setUpgrade(AoTDIndustries.BLAST_PROCESSING);
-
-            }
-        }
-
         if (currentFocusId != null && getAmountOfResearchFacilities() != 0) {
 
             ResearchOption researchOption = getResearchOptionFromRepo(currentFocusId);
@@ -286,8 +230,6 @@ public class AoTDFactionResearchManager {
 
             }
         }
-
-
     }
 
     private void notifyResearchCompletion(ResearchOption researchOption) {

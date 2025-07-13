@@ -9,8 +9,9 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectCompletionListener;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectStageWindow;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectUIManager;
@@ -191,8 +192,10 @@ public class AoTDSpecialProject {
         return false;
     }
     public void advance(float amount) {
+        float days = amount*penalty;
+        float additionalDays = days* AoTDMainResearchManager.getInstance().getManagerForPlayer().getBlackSiteSpecialProjBonus().getModifiedValue();
         for (String currentlyAttemptedStage : currentlyAttemptedStages) {
-            getStage(currentlyAttemptedStage).advance(amount*penalty);
+            getStage(currentlyAttemptedStage).advance(days+additionalDays);
         }
         ArrayList<String>forNotifitcations = new ArrayList<>();
         for (AoTDSpecialProjectStage stage : stages) {
@@ -212,7 +215,7 @@ public class AoTDSpecialProject {
             Global.getSector().getListenerManager().getListeners(SpecialProjectCompletionListener.class).forEach(x->x.completedProject(this.specID,reward));
             sentFinishNotification();
             forNotifitcations.clear();
-            SpecialProjectManager.getInstance().setCurrentlyOnGoingProject(null);
+            BlackSiteProjectManager.getInstance().setCurrentlyOnGoingProject(null);
         }
         forNotifitcations.forEach(x->Global.getSector().getIntelManager().addIntel(new ProjectStageCompletionIntel(this,getStage(x))));
         forNotifitcations.clear();
@@ -342,6 +345,6 @@ public class AoTDSpecialProject {
         return true;
     }
     public boolean isProjectEnabled(){
-        return !SpecialProjectManager.getInstance().isCurrentOnGoing(this);
+        return !BlackSiteProjectManager.getInstance().isCurrentOnGoing(this);
     }
 }

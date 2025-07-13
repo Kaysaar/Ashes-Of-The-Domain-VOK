@@ -11,8 +11,14 @@ import java.awt.*;
 public class ShipHologram implements HologramViewerObjectRendererAPI {
     ShipRenderer renderer;
     String shipSpec;
+    Color color;
 
-    public ShipHologram(String spec){
+    @Override
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public ShipHologram(String spec,Color color){
         this.shipSpec = spec;
     }
     @Override

@@ -40,7 +40,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchProgressionScri
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.listeners.NidavelirSPListener;
 import data.kaysaar.aotd.vok.timeline.military.LockheedDomainEvent;
@@ -111,6 +111,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             l.addListener(new AoDIndustrialMightListener(), true);
         if (!l.hasListenerOfClass(PCFPlanetListener.class))
             l.addListener(new PCFPlanetListener(), true);
+        if (!l.hasListenerOfClass(ResearchDatabankExtractionListener.class))
+            l.addListener(new ResearchDatabankExtractionListener(), true);
         if (!l.hasListenerOfClass(NidavelirSPListener.class))
             l.addListener(new NidavelirSPListener(), true);
         if (!l.hasListenerOfClass(ScientistValidationListener.class) && !Global.getSector().getMemory().contains("$aotd_passed_validation" + ScientistValidationListener.class.getName()))
@@ -248,7 +250,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     @Override
     public void onNewGameAfterEconomyLoad() {
         SpecialProjectSpecManager.reLoad();
-        SpecialProjectManager.getInstance().loadAdditionalData();
+        BlackSiteProjectManager.getInstance().loadAdditionalData();
         GPManager.getInstance().reInitalize();
         super.onNewGameAfterEconomyLoad();
         Global.getSector().addListener(new AoTDxUafAfterCombatListener());
@@ -279,7 +281,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
         SpecialProjectSpecManager.reLoad();
-        SpecialProjectManager.getInstance().loadAdditionalData();
+        BlackSiteProjectManager.getInstance().loadAdditionalData();
         try {
             aoTDDataInserter.insertSpecItemsForManufactoriumData();
         } catch (JSONException e) {
@@ -401,7 +403,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         GPManager.getInstance().reInitalize();
         CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
         Global.getSector().addTransientScript(new GrowingDemandMover());
-        SpecialProjectManager.getInstance().addScriptInstance();
+        BlackSiteProjectManager.getInstance().addScriptInstance();
         clearListenersFromTemporaryMarket();
         populatePaths();
         if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
@@ -477,7 +479,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
                     ;
                 }
         );
-        SpecialProjectManager.getInstance().getProjects().values().forEach(x -> manager.addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_PROJECT_EVENT, new SpecialProjectCompletionEvent(x.getProjectSpec().getId()))));
+        BlackSiteProjectManager.getInstance().getProjects().values().forEach(x -> manager.addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_PROJECT_EVENT, new SpecialProjectCompletionEvent(x.getProjectSpec().getId()))));
         TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.MEGASTRUCUTRE_FLAG_DISCOVERY, new BifrostNetworkEstablished()));
         TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDSopMemFlags.FIRST_ITEM, new HyperdimensionalProcessorEvent()));
         TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_TECH_EVENT, new StreamlinedProductionResearch()));
