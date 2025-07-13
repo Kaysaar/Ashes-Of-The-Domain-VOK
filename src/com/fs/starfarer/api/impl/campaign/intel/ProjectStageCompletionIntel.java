@@ -42,7 +42,7 @@ public class ProjectStageCompletionIntel extends BaseIntelPlugin {
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
         info.addPara("We have managed to complete %s stage of %s", 5f,Color.ORANGE,stage.getSpec().getName(),specialProject.getNameOverride());
-        addGenericButton(info,width,"Access Special Projects",Button_SHIP);
+        addGenericButton(info,width,"Access Black Site Projects",Button_SHIP);
     }
 
 
@@ -70,7 +70,7 @@ public class ProjectStageCompletionIntel extends BaseIntelPlugin {
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if(buttonId==Button_SHIP){
             CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
-            CoreUITracker.setMemFlagForTechTab("special projects");
+            CoreUITracker.setMemFlagForTechTab("black site projects");
             Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }
 

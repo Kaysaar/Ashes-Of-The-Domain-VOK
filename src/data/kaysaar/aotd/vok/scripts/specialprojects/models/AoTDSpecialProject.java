@@ -173,6 +173,16 @@ public class AoTDSpecialProject {
 
         }
     }
+    public boolean doCheckForBlacksiteUnlock() {
+        if(!Global.getSettings().getModManager().isModEnabled(getProjectSpec().getModId()))return false;
+        if(!wasEverDiscovered()){
+            if( checkIfProjectShouldUnlock()){
+                return true;
+            }
+
+        }
+        return false;
+    }
     public void createIntelForUnlocking() {
         SpecialProjectUnlockingIntel intel = new SpecialProjectUnlockingIntel(this);
         Global.getSector().getIntelManager().addIntel(intel);

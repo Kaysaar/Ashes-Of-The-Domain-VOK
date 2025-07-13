@@ -27,10 +27,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
-import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
-
-import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -460,26 +457,41 @@ public class AoTDFactionResearchManager {
 
         return marketsToReturn;
     }
+    public int getAmountOfBlackSites() {
+        int toReturn = 0;
+        if (getFaction().isPlayerFaction()) {
+            for (MarketAPI marketAPI : Misc.getPlayerMarkets(Global.getSettings().getModManager().isModEnabled("aotd_qol"))) {
+                if(isIndustryFunctional(marketAPI,"blacksite"))toReturn++;
+            }
+        } else {
+            for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
+                if(isIndustryFunctional(marketAPI,"blacksite"))toReturn++;
+            }
+        }
+        return toReturn;
+    }
 
+    public  boolean isIndustryFunctional(MarketAPI market, String industryId) {
+        if (market == null || industryId == null) {
+            return false;
+        }
 
+        if (market.hasIndustry(industryId)) {
+            Industry industry = market.getIndustry(industryId);
+            return industry != null && industry.isFunctional();
+        }
 
+        return false;
+    }
     public int getAmountOfResearchFacilities() {
         int toReturn = 0;
         if (getFaction().isPlayerFaction()) {
             for (MarketAPI marketAPI : Misc.getPlayerMarkets(Global.getSettings().getModManager().isModEnabled("aotd_qol"))) {
-                if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
-                    Industry ind = marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER);
-                    if(ind.isFunctional()){
-                        toReturn++;
-                    }
-
-                }
+                if(isIndustryFunctional(marketAPI,AoTDIndustries.RESEARCH_CENTER)||isIndustryFunctional(marketAPI,"blacksite"))toReturn++;
             }
         } else {
             for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
-                if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
-                    toReturn++;
-                }
+                if(isIndustryFunctional(marketAPI,AoTDIndustries.RESEARCH_CENTER)||isIndustryFunctional(marketAPI,"blacksite"))toReturn++;
             }
         }
 

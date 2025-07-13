@@ -65,7 +65,7 @@ public class SpecialProjectFinishedIntel extends BaseIntelPlugin {
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if(buttonId==Button_SHIP){
             CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
-            CoreUITracker.setMemFlagForTechTab("special projects");
+            CoreUITracker.setMemFlagForTechTab("black site projects");
             Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }
 

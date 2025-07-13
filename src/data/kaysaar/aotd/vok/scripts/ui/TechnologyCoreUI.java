@@ -3,15 +3,17 @@ package data.kaysaar.aotd.vok.scripts.ui;
 import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
+import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.ui.SoundUIManager;
 import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
-import data.kaysaar.aotd.vok.scripts.CoreUITracker;
-import data.kaysaar.aotd.vok.ui.SoundUIManager;
 import data.kaysaar.aotd.vok.ui.research.AoTDResearchNewPlugin;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectUIManager;
 import org.lwjgl.input.Keyboard;
@@ -102,34 +104,44 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         customProd = buttonTooltip.addButton("Production", customProdPlugin, base, bg, Alignment.MID, CutStyle.TOP, 140, 20, 0f);
         research = buttonTooltip.addButton("Research", pluginResearch, base, bg, Alignment.MID, CutStyle.TOP, 140, 20, 0f);
         megastructures = buttonTooltip.addButton("Megastructures", pluginMega, base, bg, Alignment.MID, CutStyle.TOP, 170, 20, 0f);
-        sp = buttonTooltip.addButton("Special Projects", pluginMega, base, bg, Alignment.MID, CutStyle.TOP, 170, 20, 0f);
+        sp = null;
+        if(SpecialProjectManager.getInstance().canEngageInBlackSite()){
+            sp = buttonTooltip.addButton("Black Site Projects", projectUIManager, Global.getSector().getFaction(Factions.PIRATES).getBaseUIColor(), Global.getSector().getFaction(Factions.PIRATES).getDarkUIColor(), Alignment.MID, CutStyle.TOP, 210, 20, 0f);
+            sp.setEnabled(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites()>0);
+            if(!sp.isEnabled()){
+                buttonTooltip.addTooltipTo(new TooltipMakerAPI.TooltipCreator() {
+                    @Override
+                    public boolean isTooltipExpandable(Object tooltipParam) {
+                        return false;
+                    }
+
+                    @Override
+                    public float getTooltipWidth(Object tooltipParam) {
+                        return 300;
+                    }
+
+                    @Override
+                    public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                        tooltip.addPara("To access this section you need to have at least one functional %s",2f,Color.ORANGE,"Black Site");
+                    }
+                },sp, TooltipMakerAPI.TooltipLocation.BELOW,false);
+            }
+            sp.setShortcut(Keyboard.KEY_S,false);
+        }
+        else{
+            sp = buttonTooltip.addButton("?????", projectUIManager, base, bg, Alignment.MID, CutStyle.TOP, 210, 20, 0f);
+            sp.setEnabled(false);
+
+        }
         customProd.setShortcut(Keyboard.KEY_Q, false);
         research.setShortcut(Keyboard.KEY_R, false);
         megastructures.setShortcut(Keyboard.KEY_T, false);
-        sp.setShortcut(Keyboard.KEY_S,false);
+
         customProd.getPosition().inTL(0, 0);
         research.getPosition().inTL(141, 0);
-        sp.getPosition().inTL(282, 0);
-        megastructures.getPosition().inTL(453, 0);
-        sp.setEnabled(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities()>0);
-        if(!sp.isEnabled()){
-            buttonTooltip.addTooltipTo(new TooltipMakerAPI.TooltipCreator() {
-                @Override
-                public boolean isTooltipExpandable(Object tooltipParam) {
-                    return false;
-                }
+        sp.getPosition().inTL(453, 0);
+        megastructures.getPosition().inTL(282, 0);
 
-                @Override
-                public float getTooltipWidth(Object tooltipParam) {
-                    return 300;
-                }
-
-                @Override
-                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                    tooltip.addPara("To access this section you need to have at least one functional %s",2f,Color.ORANGE,"Research facility");
-                }
-            },sp, TooltipMakerAPI.TooltipLocation.BELOW,false);
-        }
         insertCustomProdPanel(customProd);
         insertNewResearchPanel(research);
         insertNewMegastructuresPanel(megastructures);
@@ -239,7 +251,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         if (button.getText().toLowerCase().contains("megastructures")) {
             pluginMega.playSound();
         }
-        if (button.getText().toLowerCase().contains("special projects")) {
+        if (button.getText().toLowerCase().contains("black site projects")) {
             projectUIManager.playSound();
         }
     }

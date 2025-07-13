@@ -40,15 +40,15 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
 
         // Title of the intel
         info.addPara(getName(), title,0f);
-        info.addPara("Due to recent actions a new project has been unlocked, to be undertaken by R&D department",5f);
+        info.addPara("Due to recent actions a new project has been unlocked, to be undertaken by our specialist at Black Site",5f);
 
     }
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara("Due to recent actions a new project has been unlocked, to be undertaken by R&D department",5f);
+        info.addPara("Due to recent actions a new project has been unlocked, to be undertaken by our specialist at Black Site",5f);
         info.addPara("New Project unlocked : %s",5f,Color.ORANGE,"Project:  "+project.getNameOverride());
-        addGenericButton(info,width,"Access Special Projects",Button_SHIP);
+        addGenericButton(info,width,"Access Black Site Projects",Button_SHIP);
     }
 
 
@@ -72,7 +72,7 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if(buttonId==Button_SHIP){
             CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
-            CoreUITracker.setMemFlagForTechTab("special projects");
+            CoreUITracker.setMemFlagForTechTab("black site projects");
             Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }
 
