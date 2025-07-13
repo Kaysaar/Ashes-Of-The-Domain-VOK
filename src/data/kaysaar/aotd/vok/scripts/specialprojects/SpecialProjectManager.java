@@ -7,11 +7,11 @@ import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.impl.campaign.intel.BlackSiteIntel;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.*;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.BaseImageHologram;
@@ -45,6 +45,7 @@ public class SpecialProjectManager {
     public LinkedHashMap<String, AoTDSpecialProject> projects = new LinkedHashMap<>();
     public AoTDSpecialProject currentlyOnGoingProject;
     public static String memflag = "$aotd_special_proj_manager";
+    public static String memflagBlacksite = "$aotd_black_site";
     public static String marketId = AoTDSubmarkets.RESEARCH_FACILITY_MARKET;
     public transient ArrayList<AoTDSpecializationSpec>specializationSpecs = new ArrayList<>();
 
@@ -110,15 +111,30 @@ public class SpecialProjectManager {
         }
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {
-            if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities()>0){
+            if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites()>0){
+                Global.getSector().getPlayerMemoryWithoutUpdate().set(memflagBlacksite,true);
                 projects.values().forEach(AoTDSpecialProject::doCheckForProjectUnlock);
                 GPManager.getInstance().advance(GPManager.getInstance().getProductionOrders());
                 if(currentlyOnGoingProject!=null){
                     currentlyOnGoingProject.advance(intervalUtil.getElapsed());
                 }
             }
+            else{
+                for (AoTDSpecialProject value : projects.values()) {
+                    if(value.doCheckForBlacksiteUnlock()){
+                        if(!canEngageInBlackSite()){
+                            Global.getSector().getPlayerMemoryWithoutUpdate().set(memflagBlacksite,true);
+                            Global.getSector().getIntelManager().addIntel(new BlackSiteIntel());
+                        }
+
+                    }
+                }
+            }
 
         }
+    }
+    public boolean canEngageInBlackSite(){
+        return Global.getSector().getPlayerMemoryWithoutUpdate().is(memflagBlacksite,true);
     }
 
     public static HologramViewer createHologramViewer(AoTDSpecialProjectSpec spec, boolean isForButton, boolean isForBigButton) {

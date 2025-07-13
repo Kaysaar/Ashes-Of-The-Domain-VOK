@@ -1,16 +1,14 @@
 package data.console;
 
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
-import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
+import com.fs.starfarer.api.Global;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
-import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStage;
 import org.jetbrains.annotations.NotNull;
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.CommonStrings;
 import org.lazywizard.console.Console;
+
+import static data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager.memflagBlacksite;
 
 public class UnlockAllProjects implements BaseCommand {
     @Override
@@ -19,13 +17,14 @@ public class UnlockAllProjects implements BaseCommand {
             Console.showMessage(CommonStrings.ERROR_CAMPAIGN_ONLY);
             return org.lazywizard.console.BaseCommand.CommandResult.WRONG_CONTEXT;
         }
+        Global.getSector().getPlayerMemoryWithoutUpdate().set(memflagBlacksite,true);
         SpecialProjectManager manager = SpecialProjectManager.getInstance();
         for (AoTDSpecialProject option : manager.getProjects().values()) {
             option.setWasEverDiscovered(true);
             option.createIntelForUnlocking();
         }
 
-        Console.showMessage("Unlocked All Special Projects");
+        Console.showMessage("Unlocked All Black Site Projects");
 
         return org.lazywizard.console.BaseCommand.CommandResult.SUCCESS;
 

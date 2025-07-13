@@ -90,6 +90,7 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
                 glowAlpha *= beingUsedFader.getBrightness();
 
                 starfield.setAlphaMult(alphaMult * glowAlpha);
+                starfield.setColor(new Color(141, 102, 255));
                 starfield.setAdditiveBlend();
                 //starfield.renderAtCenter(loc.x + 1.5f, loc.y);
 

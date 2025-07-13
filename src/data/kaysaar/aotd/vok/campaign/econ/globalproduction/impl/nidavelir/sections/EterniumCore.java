@@ -33,7 +33,7 @@ public class EterniumCore extends NidavelirBaseSection {
 
         int manpowerAssigned = getEffectiveManpowerForEffects();
         int points = (int) (manpowerAssigned * effectivePercent * getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));
-        tooltip.addPara("Production speed of %s is increased by %s", 3f, Color.ORANGE, "special projects", points + "%");
+        tooltip.addPara("Production speed of %s is increased by %s", 3f, Color.ORANGE, "black site projects", points + "%");
     }
         @Override
     public void applyEffectOfSection() {
@@ -56,7 +56,7 @@ public class EterniumCore extends NidavelirBaseSection {
         if (!wantToAutomate) {
             tooltip.addPara("Currently assigned manpower to this structure %s", 10f, Color.ORANGE, "" + (manpowerToBeAssigned));
         }
-        tooltip.addPara("Increase speed of special projects completion by %s", 3f, Color.ORANGE, effective + "%");
+        tooltip.addPara("Increase speed of black site projects completion by %s", 3f, Color.ORANGE, effective + "%");
 
 
     }
