@@ -4,7 +4,7 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectUIManager;
 
@@ -38,7 +38,7 @@ public class PauseProjectDialog extends BasePopUpDialog {
                 project.getStage(currentlyAttemptedStage).setProgress(0);
             }
         }
-        SpecialProjectManager.getInstance().setCurrentlyOnGoingProject(null);
+        BlackSiteProjectManager.getInstance().setCurrentlyOnGoingProject(null);
         manager.getCurrProjectShowcase().setProject(null);
         manager.getCurrProjectShowcase().createUI();
         manager.getListManager().createListUI();

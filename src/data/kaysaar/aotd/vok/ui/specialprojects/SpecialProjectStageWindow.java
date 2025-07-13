@@ -158,7 +158,7 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
 
         }
         buttonOfStage.setEnabled(stage.haveMetCriteriaToStartOrResumeStage());
-        if(stage.isCompleted()||!SpecialProjectManager.getInstance().isCurrentOnGoing(project)||!project.canAttemptStage(stage.getSpec().getId())){
+        if(stage.isCompleted()||!BlackSiteProjectManager.getInstance().isCurrentOnGoing(project)||!project.canAttemptStage(stage.getSpec().getId())){
             buttonOfStage.setEnabled(false);
         }
         if(!project.canAttemptStage(stage.getSpec().getId())){
@@ -348,30 +348,30 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         if (data.getCostType().equals(OtherCostData.ItemType.COMMODITY)) {
             tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(data.getId()).getIconName(), 40, 40, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getCommoditySpec(data.getId()).getName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId, data.itemType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) BlackSiteProjectManager.retrieveAmountOfItems(data.getId(), BlackSiteProjectManager.marketId, data.itemType));
         }
         if (data.getCostType().equals(OtherCostData.ItemType.ITEM)) {
             tooltipMakerAPI.addImage(Global.getSettings().getSpecialItemSpec(data.getId()).getIconName(), 40, 40, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getSpecialItemSpec(data.getId()).getName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId, data.itemType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) BlackSiteProjectManager.retrieveAmountOfItems(data.getId(), BlackSiteProjectManager.marketId, data.itemType));
         }
         if (data.getCostType().equals(OtherCostData.ItemType.SHIP)) {
             tooltipMakerAPI.addCustom(ShipInfoGenerator.getShipImage(Global.getSettings().getHullSpec(data.getId()), 40, null).one, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getHullSpec(data.getId()).getHullName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId, data.itemType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) BlackSiteProjectManager.retrieveAmountOfItems(data.getId(), BlackSiteProjectManager.marketId, data.itemType));
         }
         if (data.getCostType().equals(OtherCostData.ItemType.WEAPON)) {
             tooltipMakerAPI.addCustom(WeaponInfoGenerator.getImageOfWeapon(Global.getSettings().getWeaponSpec(data.getId()), 40).one, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getWeaponSpec(data.getId()).getWeaponName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId, data.itemType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) BlackSiteProjectManager.retrieveAmountOfItems(data.getId(), BlackSiteProjectManager.marketId, data.itemType));
         }
         if (data.getCostType().equals(OtherCostData.ItemType.FIGHTER)) {
             tooltipMakerAPI.addCustom(FighterInfoGenerator.createFormationPanel(Global.getSettings().getFighterWingSpec(data.getId()), FormationType.BOX, 40, Global.getSettings().getFighterWingSpec(data.getId()).getNumFighters()).one, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getFighterWingSpec(data.getId()).getWingName() + " : " + data.getAmount(), 10f);
-            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) SpecialProjectManager.retrieveAmountOfItems(data.getId(), SpecialProjectManager.marketId, data.itemType));
+            labelTooltip.addPara("You have %s located in " + s, 5, Color.ORANGE, "" + (int) BlackSiteProjectManager.retrieveAmountOfItems(data.getId(), BlackSiteProjectManager.marketId, data.itemType));
         }
 
-        if (stage.haveMetCriteriaToStartOrResumeStage() || SpecialProjectManager.haveMetReqForItem(data.getId(), data.getAmount(), data.getCostType())) {
+        if (stage.haveMetCriteriaToStartOrResumeStage() || BlackSiteProjectManager.haveMetReqForItem(data.getId(), data.getAmount(), data.getCostType())) {
             labelAPI1.setColor(Misc.getPositiveHighlightColor());
 
         } else {

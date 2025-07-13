@@ -1,7 +1,6 @@
 package data.kaysaar.aotd.vok.ui.basecomps.holograms;
 
 import ashlib.data.plugins.info.WeaponInfoGenerator;
-import ashlib.data.plugins.rendering.ShipRenderer;
 import ashlib.data.plugins.rendering.WeaponSpriteRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
@@ -13,9 +12,19 @@ public class WeaponHologram implements HologramViewerObjectRendererAPI {
 
     WeaponSpriteRenderer renderer;
     String weaponSpec;
+    Color color;
 
-    public WeaponHologram(String spec){
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public WeaponHologram(String spec, Color color){
         this.weaponSpec = spec;
+        this.color = color;
     }
     @Override
     public void init(CustomPanelAPI panelOfRendering) {

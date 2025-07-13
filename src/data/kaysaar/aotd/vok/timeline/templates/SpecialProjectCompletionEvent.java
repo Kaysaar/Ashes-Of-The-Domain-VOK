@@ -3,7 +3,7 @@ package data.kaysaar.aotd.vok.timeline.templates;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.scripts.models.BaseFactionTimelineEvent;
 import data.scripts.models.TimelineEventType;
 
@@ -17,7 +17,7 @@ public class SpecialProjectCompletionEvent extends BaseFactionTimelineEvent {
 
     @Override
     public String getTitleOfEvent() {
-        return SpecialProjectManager.getInstance().getProject(projectID).getProjectSpec().getName();
+        return BlackSiteProjectManager.getInstance().getProject(projectID).getProjectSpec().getName();
     }
 
     @Override
@@ -27,17 +27,17 @@ public class SpecialProjectCompletionEvent extends BaseFactionTimelineEvent {
 
     @Override
     public boolean checkForCondition() {
-        return SpecialProjectManager.getInstance().getProject(projectID) != null&&SpecialProjectManager.getInstance().getProject(projectID).checkIfProjectWasCompleted();
+        return BlackSiteProjectManager.getInstance().getProject(projectID) != null&& BlackSiteProjectManager.getInstance().getProject(projectID).checkIfProjectWasCompleted();
     }
 
     @Override
     public void createSmallNoteForEvent(TooltipMakerAPI tooltip) {
-        tooltip.addPara("%s was completed",0f, Color.ORANGE,SpecialProjectManager.getInstance().getProject(projectID).getProjectSpec().getName()).setAlignment(Alignment.MID);
+        tooltip.addPara("%s was completed",0f, Color.ORANGE, BlackSiteProjectManager.getInstance().getProject(projectID).getProjectSpec().getName()).setAlignment(Alignment.MID);
     }
 
     @Override
     public void createDetailedTooltipOnHover(TooltipMakerAPI tooltip) {
-        tooltip.addPara("%s was completed, marking it a significant milestone.",5f, Color.ORANGE,SpecialProjectManager.getInstance().getProject(projectID).getProjectSpec().getName());
+        tooltip.addPara("%s was completed, marking it a significant milestone.",5f, Color.ORANGE, BlackSiteProjectManager.getInstance().getProject(projectID).getProjectSpec().getName());
 
     }
 

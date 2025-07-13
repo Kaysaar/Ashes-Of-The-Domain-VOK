@@ -7,13 +7,11 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.impl.campaign.intel.deciv.DecivTracker;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
@@ -21,6 +19,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchRewardType;
+import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -219,7 +218,7 @@ public class ResearchInfoUI extends PopUpUI {
         CustomPanelAPI progression = originPanel.createCustomPanel(originPanel.getPosition().getWidth(), 50, null);
         ProgressBarComponent component = new ProgressBarComponent(progression.getPosition().getWidth() - 10, 21, option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
         TooltipMakerAPI tooltip = progression.createUIElement(originPanel.getPosition().getWidth(), 50, false);
-        int defaultDays = (int) (option.TimeToResearch * (float) multiplier);
+        int defaultDays = (int) AoDUtilis.getDaysFromResearch(option);
 
         tooltip.addPara("This technology takes %s to research", 5f, Color.ORANGE, AoTDMisc.convertDaysToString(defaultDays));
         if (option.isResearched) {

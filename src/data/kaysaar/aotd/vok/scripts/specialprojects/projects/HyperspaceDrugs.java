@@ -13,7 +13,7 @@ import data.scripts.campaign.econ.conditions.terrain.hyperspace.niko_MPC_hypersp
 public class HyperspaceDrugs extends AoTDSpecialProject {
     @Override
     public void createRewardSection(TooltipMakerAPI tooltip, float width) {
-        tooltip.addPara("Gain access to new commodity : Cerulean Vapors, that can be produced only in BioSynth Laboratory", Misc.getPositiveHighlightColor(), 5f);
+        tooltip.addPara("Gain access to new commodity : Cerulean Vapors", Misc.getPositiveHighlightColor(), 5f);
         tooltip.addPara("This drug can only be produced by BioSynth Laboratory on hyperspace bipartisan worlds enveloped by hyperspace clouds. Planetary shields also block the effect.", Misc.getPositiveHighlightColor(), 5f);
         tooltip.addPara("Note : Demand for this drug will grow with time, as it needs time to spread through market.", Misc.getPositiveHighlightColor(), 5f);
     }

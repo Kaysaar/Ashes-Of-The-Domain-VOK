@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.intel.BlackSiteIntel;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
@@ -19,13 +20,15 @@ import data.kaysaar.aotd.vok.ui.basecomps.holograms.HologramViewer;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.ShipHologram;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.WeaponHologram;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
-public class SpecialProjectManager {
+public class BlackSiteProjectManager {
 
     private IntervalUtil intervalUtil;
 
-    public class SpecialProjectAdvancer implements EveryFrameScript{
+    public class BlackSiteProjectAdvancer implements EveryFrameScript{
 
         @Override
         public boolean isDone() {
@@ -39,7 +42,7 @@ public class SpecialProjectManager {
 
         @Override
         public void advance(float amount) {
-            SpecialProjectManager.getInstance().advance(amount);
+            BlackSiteProjectManager.getInstance().advance(amount);
         }
     }
     public LinkedHashMap<String, AoTDSpecialProject> projects = new LinkedHashMap<>();
@@ -49,18 +52,18 @@ public class SpecialProjectManager {
     public static String marketId = AoTDSubmarkets.RESEARCH_FACILITY_MARKET;
     public transient ArrayList<AoTDSpecializationSpec>specializationSpecs = new ArrayList<>();
 
-    public static SpecialProjectManager getInstance() {
+    public static BlackSiteProjectManager getInstance() {
         if (Global.getSector().getPersistentData().get(memflag) == null) {
             setInstance();
         }
-        return (SpecialProjectManager) Global.getSector().getPersistentData().get(memflag);
+        return (BlackSiteProjectManager) Global.getSector().getPersistentData().get(memflag);
     }
 
     public void setCurrentlyOnGoingProject(AoTDSpecialProject currentlyOnGoingProject) {
         this.currentlyOnGoingProject = currentlyOnGoingProject;
     }
     public void addScriptInstance(){
-        Global.getSector().addTransientScript(new SpecialProjectAdvancer());
+        Global.getSector().addTransientScript(new BlackSiteProjectAdvancer());
     }
 
     public AoTDSpecialProject getCurrentlyOnGoingProject() {
@@ -76,10 +79,10 @@ public class SpecialProjectManager {
 
     public static void setInstance() {
 
-        Global.getSector().getPersistentData().put(memflag, new SpecialProjectManager());
+        Global.getSector().getPersistentData().put(memflag, new BlackSiteProjectManager());
     }
 
-    public SpecialProjectManager() {
+    public BlackSiteProjectManager() {
         projects = new LinkedHashMap<>();
         loadAdditionalData();
     }
@@ -134,6 +137,7 @@ public class SpecialProjectManager {
         }
     }
     public boolean canEngageInBlackSite(){
+
         return Global.getSector().getPlayerMemoryWithoutUpdate().is(memflagBlacksite,true);
     }
 
@@ -147,21 +151,26 @@ public class SpecialProjectManager {
         }
         SpecialProjectIconData data = spec.getIconData();
         HologramViewer viewer = null;
+        Color color = Color.cyan;
+        if(spec.hasTag("dangerous")){
+           color = (Global.getSector().getFaction(Factions.DWELLER).getBrightUIColor());
+        }
         if (data.getType().equals(SpecialProjectIconData.IconType.COMMODITY)) {
-            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getCommoditySpec(data.getIconId()).getIconName())));
+            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getCommoditySpec(data.getIconId()).getIconName()),color));
 
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.SHIP)) {
-            viewer = new HologramViewer(iconSize, iconSize, new ShipHologram(data.getIconId()));
+            viewer = new HologramViewer(iconSize, iconSize, new ShipHologram(data.getIconId(),color));
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.ITEM)) {
-            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getSpecialItemSpec(data.getIconId()).getIconName())));
+            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getSpecialItemSpec(data.getIconId()).getIconName()),color));
 
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.WEAPON)) {
-            viewer = new HologramViewer(iconSize, iconSize, new WeaponHologram(data.getIconId()));
+            viewer = new HologramViewer(iconSize, iconSize, new WeaponHologram(data.getIconId(),color));
 
         }
+
         return viewer;
     }
 
@@ -169,19 +178,23 @@ public class SpecialProjectManager {
         float iconSize = overrideSize;
         SpecialProjectIconData data = spec.getIconData();
         HologramViewer viewer = null;
+        Color color = Color.cyan;
+        if(spec.hasTag("dangerous")){
+            color = (Global.getSector().getFaction(Factions.DWELLER).getBrightUIColor());
+        }
         if (data.getType().equals(SpecialProjectIconData.IconType.COMMODITY)) {
-            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getCommoditySpec(data.getIconId()).getIconName())));
+            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getCommoditySpec(data.getIconId()).getIconName()),color));
 
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.SHIP)) {
-            viewer = new HologramViewer(iconSize, iconSize, new ShipHologram(data.getIconId()));
+            viewer = new HologramViewer(iconSize, iconSize, new ShipHologram(data.getIconId(),color));
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.ITEM)) {
-            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getSpecialItemSpec(data.getIconId()).getIconName())));
+            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getSpecialItemSpec(data.getIconId()).getIconName()),color));
 
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.WEAPON)) {
-            viewer = new HologramViewer(iconSize, iconSize, new WeaponHologram(data.getIconId()));
+            viewer = new HologramViewer(iconSize, iconSize, new WeaponHologram(data.getIconId(),color));
 
         }
         return viewer;

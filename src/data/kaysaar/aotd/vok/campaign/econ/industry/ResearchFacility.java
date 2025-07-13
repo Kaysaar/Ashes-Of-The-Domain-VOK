@@ -4,8 +4,6 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
-import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
@@ -18,25 +16,16 @@ import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 import java.awt.*;
 
 
-public class ResearchFacility extends BaseIndustry implements EconomyTickListener {
+public class ResearchFacility extends BaseIndustry  {
     public static String subMarketId = "researchfacil";
     public static Float COST_PER_TIER = 10000F;
-    protected transient SubmarketAPI saved = null;
     public static int amountDatabanksMonthly = 1;
 
     @Override
     public void apply() {
         super.apply(true);
-        SubmarketAPI open = market.getSubmarket(subMarketId);
-        if (open == null) {
-            if (saved != null) {
-                market.addSubmarket(saved);
-            } else {
-                market.addSubmarket(subMarketId);
-                SubmarketAPI sub = market.getSubmarket(subMarketId);
-                sub.setFaction(Global.getSector().getFaction(subMarketId));
-                Global.getSector().getEconomy().forceStockpileUpdate(market);
-            }
+        if(!market.hasSubmarket(subMarketId)) {
+            market.addSubmarket(subMarketId);
         }
         float reductionMult = 1;
         if(getAICoreId()!=null){
@@ -56,34 +45,27 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
         }
             this.getUpkeep().modifyFlat("aotd_research_2",10000*reductionMult,"Maintenance Cost");
 
-        Global.getSector().getListenerManager().addListener(this);
-
     }
 
     @Override
     public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
-        if(saved!=null){
-            CargoAPI cargoAPI = saved.getCargo();
-            market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addAll(cargoAPI);
+        if(!forUpgrade){
+                if(market.hasSubmarket(subMarketId)){
+                    CargoAPI cargoAPI = market.getSubmarket(subMarketId).getCargo();
+                    market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addAll(cargoAPI);
+                    market.removeSubmarket(subMarketId);
+                }
+
 
         }
-        Global.getSector().getListenerManager().removeListener(this);
         super.notifyBeingRemoved(mode, forUpgrade);
     }
 
     @Override
     public void unapply() {
         super.unapply();
-        if (market.isPlayerOwned()) {
-            SubmarketAPI open = market.getSubmarket(subMarketId);
-            saved = open;
-            market.removeSubmarket(subMarketId);
-
-        }
         this.getUpkeep().unmodifyFlat("aotd_research");
-        this.getUpkeep().unmodifyFlat("aotd_research_2");
-        Global.getSector().getListenerManager().removeListener(this);
-    }
+        this.getUpkeep().unmodifyFlat("aotd_research_2");}
 
 
     public boolean isAvailableToBuild() {
@@ -125,7 +107,8 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
             tooltip.addPara("Building that structure will enable your faction to research new technologies.", Misc.getHighlightColor(), 10f);
         }
         tooltip.addSectionHeading("Research costs", Alignment.MID, 10f);
-        tooltip.addPara("Upkeep costs of the research facility are dependent on what is being currently researched.", 10f);
+        tooltip.addPara("Upkeep costs of the research facility are dependent on what is being currently researched.", 3f);
+        tooltip.addPara("Each additional research facility (up to 8) provides +10% research speed bonus",Misc.getTooltipTitleAndLightHighlightColor(),3f );
 
         if (this.market.hasCondition("pre_collapse_facility")) {
             tooltip.addPara("By building this facility here, our scientists will be able to analyze local pre-collapse ruins.", Misc.getPositiveHighlightColor(), 10f);
@@ -140,6 +123,12 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
                 tooltip.addPara("%s",10, Color.ORANGE,"Nothing is being researched.");
             }
         }
+    }
+
+
+    @Override
+    protected void applyAICoreToIncomeAndUpkeep() {
+
     }
 
     @Override
@@ -214,24 +203,4 @@ public class ResearchFacility extends BaseIndustry implements EconomyTickListene
                 "" + 50 + "%","1");
     }
 
-    @Override
-    public void reportEconomyTick(int iterIndex) {
-
-    }
-
-    @Override
-    public void reportEconomyMonthEnd() {
-        if (this.market.hasCondition("pre_collapse_facility")) {
-
-            SubmarketAPI open = market.getSubmarket(subMarketId);
-            if (open != null) {
-                if(getAICoreId()!=null&&getAICoreId().equals(Commodities.ALPHA_CORE)){
-                    open.getCargo().addCommodity("research_databank", 1);
-                }
-                open.getCargo().addCommodity("research_databank", amountDatabanksMonthly);
-            } else {
-                market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addCommodity("research_databank", amountDatabanksMonthly);
-            }
-        }
-    }
 }

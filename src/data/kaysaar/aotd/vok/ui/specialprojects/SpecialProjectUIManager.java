@@ -6,7 +6,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.ui.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
@@ -55,7 +55,7 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin, SoundUIMana
     public SpecialProjectUIManager(float width, float height) {
         mainPanel = Global.getSettings().createCustom(width, height, this);
         listManager = new SpecialProjectListManager(400, height - 210, this);
-        currProjectShowcase = new SpecialProjectShowcase(width - 400 - 15, height - 210, SpecialProjectManager.getInstance().getCurrentlyOnGoingProject(), this);
+        currProjectShowcase = new SpecialProjectShowcase(width - 400 - 15, height - 210, BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject(), this);
         ScientistAPI scientistAPI = AoTDMainResearchManager.getInstance().getManagerForPlayer().currentHeadOfCouncil;
         createMarketResourcesPanel();
         HeadOfResearchShowcase showcase = new HeadOfResearchShowcase(450, 130, scientistAPI);
@@ -106,7 +106,7 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin, SoundUIMana
 
     @Override
     public void playSound() {
-        Global.getSoundPlayer().playCustomMusic(1, 1, "aotd_special", true);
+        Global.getSoundPlayer().playCustomMusic(1, 1, "music_dweller_encounter_hostile", true);
     }
 
     @Override

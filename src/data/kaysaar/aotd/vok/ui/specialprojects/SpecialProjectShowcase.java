@@ -11,7 +11,6 @@ import data.kaysaar.aotd.vok.ui.basecomps.holograms.HologramViewer;
 import data.kaysaar.aotd.vok.ui.customprod.components.RightMouseTooltipMover;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,8 +74,8 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
              subMainPanel = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), null);
             TooltipMakerAPI tooltip = subMainPanel.createUIElement(subMainPanel.getPosition().getWidth(), subMainPanel.getPosition().getHeight(), true);
             tooltip.addSpacer(heightExpected);
-            mainObject = SpecialProjectManager.createHologramViewer(project.getProjectSpec(), false,false);
-            if(!SpecialProjectManager.getInstance().isCurrentOnGoing(project)){
+            mainObject = BlackSiteProjectManager.createHologramViewer(project.getProjectSpec(), false,false);
+            if(!BlackSiteProjectManager.getInstance().isCurrentOnGoing(project)){
                 mainObject.setRenderLine(false);
             }
             else{

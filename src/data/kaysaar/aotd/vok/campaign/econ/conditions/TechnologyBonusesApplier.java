@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.conditions;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.BaseHazardCondition;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.industry.Aquaculture;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -23,6 +24,9 @@ public class TechnologyBonusesApplier extends BaseHazardCondition {
         if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market)){
             market.getIndustries().forEach(x->x.getSupplyBonusFromOther().modifyFlat(AoTDTechIds.STREAMLINED_PRODUCTION,1,"Streamlined Production"));
         }
+        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.GEOTHERMAL_FRACKING,market)){
+            market.getIndustries().stream().filter(x->x.getSpec().hasTag(Industries.MINING)).forEach(x->x.getSupplyBonusFromOther().modifyFlat(AoTDTechIds.GEOTHERMAL_FRACKING,1,"Advanced Mining Equipment"));
+        }
     }
 
     @Override
@@ -31,6 +35,7 @@ public class TechnologyBonusesApplier extends BaseHazardCondition {
         market.getHazard().unmodifyFlat("tech_hazmmat");
         market.getHazard().unmodifyFlat("tech_aquatic");
         market.getIndustries().forEach(x->x.getSupplyBonusFromOther().unmodifyFlat(AoTDTechIds.STREAMLINED_PRODUCTION));
+        market.getIndustries().forEach(x->x.getSupplyBonusFromOther().unmodifyFlat(AoTDTechIds.GEOTHERMAL_FRACKING));
     }
     public static void applyRessourceCond(MarketAPI marketAPI) {
         if (marketAPI.isInEconomy() && !marketAPI.hasCondition("TechnologyBonusesApplier")){
