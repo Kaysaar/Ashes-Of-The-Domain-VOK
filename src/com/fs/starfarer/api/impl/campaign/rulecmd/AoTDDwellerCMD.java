@@ -2,22 +2,131 @@ package com.fs.starfarer.api.impl.campaign.rulecmd;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.rules.MemKeys;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.BattleCreationContext;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.AbyssalLightEntityPlugin;
 import com.fs.starfarer.api.impl.campaign.FleetEncounterContext;
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl;
-import com.fs.starfarer.api.impl.campaign.ids.Items;
-import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.scripts.specialprojects.projects.shroud.ShroudProjectMisc;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 public class AoTDDwellerCMD extends DwellerCMD{
+    public boolean execute(String ruleId, InteractionDialogAPI dialog, List<Misc.Token> params, Map<String, MemoryAPI> memoryMap) {
+        if (dialog == null) return false;
+
+        OptionPanelAPI options = dialog.getOptionPanel();
+        TextPanelAPI text = dialog.getTextPanel();
+        CampaignFleetAPI pf = Global.getSector().getPlayerFleet();
+        CargoAPI cargo = pf.getCargo();
+
+        final SectorEntityToken entity = dialog.getInteractionTarget();
+        long seed = Misc.getSalvageSeed(entity);
+        Random random = Misc.getRandom(seed, 11);
+        //random = new Random();
+
+        String action = params.get(0).getString(memoryMap);
+
+        MemoryAPI memory = memoryMap.get(MemKeys.LOCAL);
+        if (memory == null) return false; // should not be possible unless there are other big problems already
+
+        if ("smallFleet".equals(action)) {
+            return engageFleet(dialog, memoryMap, memory, DwellerStrength.LOW, random);
+        } else if ("mediumFleet".equals(action)) {
+            return engageFleet(dialog, memoryMap, memory, DwellerStrength.MEDIUM, random);
+        } else if ("largeFleet".equals(action)) {
+            return engageFleet(dialog, memoryMap, memory, DwellerStrength.HIGH, random);
+        } else if ("hugeFleet".equals(action)) {
+            return engageFleet(dialog, memoryMap, memory, DwellerStrength.EXTREME, random);
+        } else if ("showWeaponPicker".equals(action)) {
+            showWeaponPicker(dialog, memoryMap);
+            return true;
+        } else if ("unlockHullmod".equals(action)) {
+            unlockHullmod(dialog, memoryMap);
+            return true;
+        } else if ("checkForBetterSurvey".equals(action)) {
+            checkForBetterSurvey(dialog,memoryMap,memory);
+            return true;
+        }
+        return false;
+    }
+    public void checkForBetterSurvey(InteractionDialogAPI dialog, Map<String, MemoryAPI> memoryMap, MemoryAPI memory){
+        if(ShroudProjectMisc.getBoolean(ShroudProjectMisc.hasAbilityToSummonGreatFleet)){
+            dialog.getOptionPanel().addOption("Full-spectrum sweep, maximum amplification! Prioritize anomalous drive-bubble traces—no signal escapes us","abyssalLight_ultrasensors", Color.ORANGE,null);
+            dialog.getOptionPanel().addOptionConfirmation("abyssalLight_ultrasensors","Are you sure about this?","Proceed","Abort");
+        }
+    }
+    public static CampaignFleetAPI createDwellerFleet(DwellerStrength str, Random random) {
+        CampaignFleetAPI f = Global.getFactory().createEmptyFleet(Factions.DWELLER, "Manifestation", true);
+
+        FactionAPI faction = Global.getSector().getFaction(Factions.DWELLER);
+        String typeKey = FleetTypes.PATROL_SMALL;
+        if (str == DwellerStrength.MEDIUM) typeKey = FleetTypes.PATROL_MEDIUM;
+        if (str == DwellerStrength.HIGH) typeKey = FleetTypes.PATROL_LARGE;
+        if (str == DwellerStrength.EXTREME) typeKey = FleetTypes.PATROL_LARGE;
+        f.setName(faction.getFleetTypeName(typeKey));
+        if(str == DwellerStrength.EXTREME){
+            f.setName("Abyssal Incursion");
+        }
+        f.setInflater(null);
+
+        if (str == DwellerStrength.LOW) {
+            addShips(f, 6, 8, random, ShipRoles.DWELLER_TENDRIL);
+            addShips(f, 1, 1, random, ShipRoles.DWELLER_EYE);
+            addShips(f, 1, 2, random, ShipRoles.DWELLER_MAELSTROM);
+        } else if (str == DwellerStrength.MEDIUM) {
+            addShips(f, 9, 12, random, ShipRoles.DWELLER_TENDRIL);
+            int eyes = addShips(f, 1, 1, random, ShipRoles.DWELLER_EYE);
+            addShips(f, 2 - eyes, 3 - eyes, random, ShipRoles.DWELLER_MAELSTROM);
+            addShips(f, 1, 1, random, ShipRoles.DWELLER_MAW);
+        } else if (str == DwellerStrength.HIGH) {
+            addShips(f, 11, 14, random, ShipRoles.DWELLER_TENDRIL);
+            int eyes = addShips(f, 2, 3, random, ShipRoles.DWELLER_EYE);
+            addShips(f, 3 - eyes, 5 - eyes, random, ShipRoles.DWELLER_MAELSTROM);
+            addShips(f, 1, 1, random, ShipRoles.DWELLER_MAW);
+        } else if (str == DwellerStrength.EXTREME) {
+            addShips(f, 14, 18, random, ShipRoles.DWELLER_TENDRIL);
+            int eyes = addShips(f, 3, 5, random, ShipRoles.DWELLER_EYE);
+            addShips(f, 3 - eyes, 9 - eyes, random, ShipRoles.DWELLER_MAELSTROM);
+            addShips(f, 2, 4, random, ShipRoles.DWELLER_MAW);
+        }
+
+        f.getFleetData().setSyncNeeded();
+        f.getFleetData().syncIfNeeded();
+        f.getFleetData().sort();
+
+        for (FleetMemberAPI curr : f.getFleetData().getMembersListCopy()) {
+            curr.getRepairTracker().setCR(curr.getRepairTracker().getMaxCR());
+
+            // tag is added to ships now
+//			ShipVariantAPI v = curr.getVariant().clone();
+//			v.addTag(Tags.LIMITED_TOOLTIP_IF_LOCKED);
+//			curr.setVariant(v, false, false);
+        }
+
+
+//		f.getMemoryWithoutUpdate().set(MemFlags.FLEET_INTERACTION_DIALOG_CONFIG_OVERRIDE_GEN,
+//				   			new DwellerFIDConfig());
+//		f.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_AGGRESSIVE, true);
+
+        // required for proper music track to play, see: DwellerCMD
+        f.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_HOSTILE, true);
+
+//		//f.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_MAKE_ALWAYS_PURSUE, true);
+//		f.getMemoryWithoutUpdate().set(MemFlags.MEMORY_KEY_ALLOW_LONG_PURSUIT, true);
+        f.getMemoryWithoutUpdate().set(MemFlags.MAY_GO_INTO_ABYSS, true);
+
+        return f;
+    }
+
     @Override
     protected boolean engageFleet(InteractionDialogAPI dialog, Map<String, MemoryAPI> memoryMap, MemoryAPI memory, DwellerStrength str, Random random) {
         CampaignFleetAPI fleet = createDwellerFleet(str, random);
@@ -48,53 +157,38 @@ public class AoTDDwellerCMD extends DwellerCMD{
                     losses.add(fmd.getMember());
                 }
 
-                float min = 0f;
-                float max = 0f;
-                boolean gotGuaranteed = false;
-                for (FleetMemberAPI member : losses) {
-                    if (member.getHullSpec().hasTag(Tags.DWELLER)) {
-                        String key = "substrate_";
-                        float [] sDrops = Misc.getFloatArray(key + member.getHullSpec().getHullId());
-                        if (sDrops == null) {
-                            sDrops = Misc.getFloatArray(key + member.getHullSpec().getHullSize().name());
-                        }
-                        if (sDrops == null) continue;
-
-                        min += sDrops[0];
-                        max += sDrops[1];
-
-                        String hullId = member.getHullSpec().getRestoredToHullId();
-                        String defeatedKey = "$defeatedDweller_" + hullId;
-                        boolean firstTime = !Global.getSector().getPlayerMemoryWithoutUpdate().getBoolean(defeatedKey);
-                        Global.getSector().getPlayerMemoryWithoutUpdate().set(defeatedKey, true);
-                        if (firstTime && !gotGuaranteed) {
-                            List<String> drops = GUARANTEED_FIRST_TIME_ITEMS.get(hullId);
-                            for (String itemId : drops) {
-                                SpecialItemData sid = new SpecialItemData(itemId, null);
-                                boolean add = firstTime && salvage.getQuantity(CargoAPI.CargoItemType.SPECIAL, sid) <= 0;
-                                if (add) {
-                                    salvage.addItems(CargoAPI.CargoItemType.SPECIAL, sid, 1);
-                                    gotGuaranteed = true;
-                                }
-                            }
-                        }
-                    }
+                float chanceToFail = 0.8f;
+                if(ShroudProjectMisc.getBoolean(ShroudProjectMisc.hasBetterContaimentMethods)){
+                    chanceToFail = 0.4f;
                 }
-
+                int substrate = 0;
                 long seed = Misc.getSalvageSeed(entity);
                 Random random = Misc.getRandom(seed, 50);
-                int substrate = 0;
-                if (min + max < 1f) {
-                    if (random.nextFloat() < (min + max) / 2f) {
-                        substrate = 1;
+                for (FleetMemberAPI member : losses) {
+                    if (member.getHullSpec().hasTag(Tags.DWELLER)) {
+                        int amount = member.getHullSpec().getHullSize().ordinal()-2;
+                        if(ShroudProjectMisc.getBoolean(ShroudProjectMisc.hasBetterContaimentMethods)){
+                            amount++;
+                        }
+                        float ch = random.nextFloat();
+                        if(ch>=chanceToFail){
+                            substrate+=amount;
+                        }
+
                     }
-                } else {
-                    substrate = (int) Math.round(min + (max - min) * random.nextFloat());
                 }
 
+
                 if (substrate > 0) {
-                    salvage.addItems(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(Items.SHROUDED_SUBSTRATE, null), substrate);
+                    salvage.addItems(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData("aotd_"+Items.SHROUDED_SUBSTRATE, null), substrate);
                 }
+                salvage.removeItems(CargoAPI.CargoItemType.SPECIAL,new SpecialItemData(Items.SHROUDED_SUBSTRATE,null),10000);
+                salvage.removeItems(CargoAPI.CargoItemType.SPECIAL,new SpecialItemData(Items.SHROUDED_LENS,null),10000);
+
+                salvage.removeItems(CargoAPI.CargoItemType.SPECIAL,new SpecialItemData(Items.SHROUDED_MANTLE,null),10000);
+
+                salvage.removeItems(CargoAPI.CargoItemType.SPECIAL,new SpecialItemData(Items.SHROUDED_THUNDERHEAD,null),10000);
+
             }
 
             public void battleContextCreated(InteractionDialogAPI dialog, BattleCreationContext bcc) {

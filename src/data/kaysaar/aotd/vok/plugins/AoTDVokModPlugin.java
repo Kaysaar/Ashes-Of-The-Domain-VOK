@@ -9,10 +9,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Items;
-import com.fs.starfarer.api.impl.campaign.ids.Planets;
-import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
@@ -27,6 +24,9 @@ import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMan
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMover;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.buildingmenu.IndustryBlockerListener;
+import data.kaysaar.aotd.vok.hullmods.AoTDShroudedLensHullmod;
+import data.kaysaar.aotd.vok.hullmods.AoTDShroudedMantleHullmod;
+import data.kaysaar.aotd.vok.hullmods.AoTDShroudedThunderHeadHullmod;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
@@ -43,6 +43,8 @@ import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValid
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.listeners.NidavelirSPListener;
+import data.kaysaar.aotd.vok.scripts.specialprojects.projects.shroud.ShroudProjectMisc;
+import data.kaysaar.aotd.vok.scripts.specialprojects.projects.shroud.listeners.ShroudCommodityUpdater;
 import data.kaysaar.aotd.vok.timeline.military.LockheedDomainEvent;
 import data.kaysaar.aotd.vok.timeline.military.OrbitalFleetworkEvent;
 import data.kaysaar.aotd.vok.timeline.prosperity.MiningMegaplexEvent;
@@ -103,6 +105,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.addListener(listener);
         if (!l.hasListenerOfClass(ResourceConditionApplier.class))
             l.addListener(new ResourceConditionApplier(), true);
+        if (!l.hasListenerOfClass(ShroudCommodityUpdater.class))
+            l.addListener(new ShroudCommodityUpdater(), true);
         if (!l.hasListenerOfClass(IndustryBlockerListener.class))
             l.addListener(new IndustryBlockerListener(), true);
         if (!l.hasListenerOfClass(AodAdvancedHeavyIndustryApplier.class))
@@ -165,7 +169,9 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PLASMA_DYNAMO, "fracking");
         aoTDSpecialItemRepo.absoluteSetItemParams(Items.CORONAL_PORTAL, "");
-
+        Global.getSettings().getHullModSpec("shrouded_thunderhead").setEffectClass(AoTDShroudedThunderHeadHullmod.class.getName());
+        Global.getSettings().getHullModSpec("shrouded_mantle").setEffectClass(AoTDShroudedMantleHullmod.class.getName());
+        Global.getSettings().getHullModSpec("shrouded_lens").setEffectClass(AoTDShroudedLensHullmod.class.getName());
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker", "subfarming");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_dimen_nanoforge", "supplyheavy,weaponheavy,triheavy,hegeheavy,stella_manufactorium");
@@ -301,6 +307,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         if (!Global.getSector().hasScript(AoTDFactionResearchProgressionScript.class)) {
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
+        ShroudProjectMisc.updateCommodityInfo();
 
 //        Global.getSector().addTransientScript(new EveryFrameScript() {
 //            protected IntervalUtil util = new IntervalUtil(1f,1.5f);

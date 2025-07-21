@@ -189,10 +189,9 @@ public class AoTDFactionResearchManager {
 
         boolean hadMetreq = false;
         for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
-            if (marketAPI.hasIndustry(AoTDIndustries.RESEARCH_CENTER)) {
-                if (marketAPI.getIndustry(AoTDIndustries.RESEARCH_CENTER).getSpecialItem() != null) {
-                    hadMetreq = true;
-                }
+            if(marketAPI.getIndustries().stream().filter(x->x.getSpecialItem()!=null).anyMatch(x->x.getSpecialItem().getId().equals("omega_processor"))){
+                hadMetreq = true;
+                break;
             }
         }
 

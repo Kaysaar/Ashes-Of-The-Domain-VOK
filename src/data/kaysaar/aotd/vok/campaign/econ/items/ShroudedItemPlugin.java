@@ -5,20 +5,12 @@ import com.fs.starfarer.api.campaign.CargoTransferHandlerAPI;
 import com.fs.starfarer.api.campaign.impl.items.BaseSpecialItemPlugin;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.specialprojects.projects.shroud.ShroudProjectMisc;
 
 import java.awt.*;
 
 public class ShroudedItemPlugin extends BaseSpecialItemPlugin {
-
-    public static String PLAYER_CAN_MAKE_WEAPONS = "$canMakeDwellerWeapons"; // in player memory
-    public static String SHROUDED_SUBSTRATE_AVAILABLE = "$shroudedSubstrateAvailable"; // in player memory
-
-    public static boolean isPlayerCanMakeWeapons() {
-        return Global.getSector().getPlayerMemoryWithoutUpdate().getBoolean(PLAYER_CAN_MAKE_WEAPONS);
-    }
-    public static void setPlayerCanMakeWeapons() {
-        Global.getSector().getPlayerMemoryWithoutUpdate().set(PLAYER_CAN_MAKE_WEAPONS, true);
-    }
 
 
     @Override
@@ -50,28 +42,17 @@ public class ShroudedItemPlugin extends BaseSpecialItemPlugin {
         }
 
         addCostLabel(tooltip, opad, transferHandler, stackSource);
-        String [] params = spec.getParams().split(",");
-        int param = Integer.parseInt(params[0]);
         if (!Global.CODEX_TOOLTIP_MODE) {
-            if(Global.getSector().getPlayerMemoryWithoutUpdate().is("$aotd_shroud_r&d",true)){
-                if(param==100){
+            if (!AoTDMisc.getPlayerFactionMarkets().isEmpty()) {
+                tooltip.addPara("We currently have little understanding of those \"things\". We need to bring those to our R&D team first!", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
 
-                }
-                if(param==400){
-
-                }
-                if(param==800){
-
-                }
-                if(param==1200){
-
-                }
-            }
-            else{
-                tooltip.addPara("We currently have little understanding of those \"things\". We need to bring those to our R&D team first!",Misc.getTooltipTitleAndLightHighlightColor(),3f);
+            } else {
+                tooltip.addPara("We currently have little understanding of those \"things\". We need to establish our own R&D team, together with our faction and resources to further study it.", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
 
             }
 
+        } else {
+            ShroudProjectMisc.updateCommodityInfo();
         }
     }
 

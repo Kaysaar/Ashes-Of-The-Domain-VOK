@@ -214,6 +214,7 @@ public class AoTDSpecialProject {
             Object reward = grantReward();
             Global.getSector().getListenerManager().getListeners(SpecialProjectCompletionListener.class).forEach(x->x.completedProject(this.specID,reward));
             sentFinishNotification();
+            projectCompleted();
             forNotifitcations.clear();
             BlackSiteProjectManager.getInstance().setCurrentlyOnGoingProject(null);
         }
