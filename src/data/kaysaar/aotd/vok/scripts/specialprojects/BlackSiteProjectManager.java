@@ -21,14 +21,14 @@ import data.kaysaar.aotd.vok.ui.basecomps.holograms.ShipHologram;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.WeaponHologram;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class BlackSiteProjectManager {
 
     private IntervalUtil intervalUtil;
 
-    public class BlackSiteProjectAdvancer implements EveryFrameScript{
+    public class BlackSiteProjectAdvancer implements EveryFrameScript {
 
         @Override
         public boolean isDone() {
@@ -45,12 +45,14 @@ public class BlackSiteProjectManager {
             BlackSiteProjectManager.getInstance().advance(amount);
         }
     }
+
     public LinkedHashMap<String, AoTDSpecialProject> projects = new LinkedHashMap<>();
     public AoTDSpecialProject currentlyOnGoingProject;
     public static String memflag = "$aotd_special_proj_manager";
     public static String memflagBlacksite = "$aotd_black_site";
     public static String marketId = AoTDSubmarkets.RESEARCH_FACILITY_MARKET;
-    public transient ArrayList<AoTDSpecializationSpec>specializationSpecs = new ArrayList<>();
+    public transient ArrayList<AoTDSpecializationSpec> specializationSpecs = new ArrayList<>();
+    float daysSinceBuiltFacility = 0;
 
     public static BlackSiteProjectManager getInstance() {
         if (Global.getSector().getPersistentData().get(memflag) == null) {
@@ -62,7 +64,8 @@ public class BlackSiteProjectManager {
     public void setCurrentlyOnGoingProject(AoTDSpecialProject currentlyOnGoingProject) {
         this.currentlyOnGoingProject = currentlyOnGoingProject;
     }
-    public void addScriptInstance(){
+
+    public void addScriptInstance() {
         Global.getSector().addTransientScript(new BlackSiteProjectAdvancer());
     }
 
@@ -72,9 +75,9 @@ public class BlackSiteProjectManager {
 
     public boolean isCurrentOnGoing(AoTDSpecialProject project) {
 
-        return project!=null && getCurrentlyOnGoingProject() != null &&
+        return project != null && getCurrentlyOnGoingProject() != null &&
                 getCurrentlyOnGoingProject().getProjectSpec().getId().equals(project.getProjectSpec().getId()
-        );
+                );
     }
 
     public static void setInstance() {
@@ -105,7 +108,11 @@ public class BlackSiteProjectManager {
                 projects.get(entry.getKey()).update();
             }
         }
-        projects.entrySet().removeIf(entry -> entry.getValue().getProjectSpec()==null||!Global.getSettings().getModManager().isModEnabled(entry.getValue().getProjectSpec().getModId()));
+        projects.entrySet().removeIf(entry -> entry.getValue().getProjectSpec() == null || !Global.getSettings().getModManager().isModEnabled(entry.getValue().getProjectSpec().getModId()));
+    }
+
+    public float getDaysSinceBuiltFacility() {
+        return daysSinceBuiltFacility;
     }
 
     public void advance(float amount) {
@@ -114,31 +121,37 @@ public class BlackSiteProjectManager {
         }
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {
-            if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites()>0){
-                Global.getSector().getPlayerMemoryWithoutUpdate().set(memflagBlacksite,true);
-                projects.values().forEach(AoTDSpecialProject::doCheckForProjectUnlock);
-                GPManager.getInstance().advance(GPManager.getInstance().getProductionOrders());
-                if(currentlyOnGoingProject!=null){
-                    currentlyOnGoingProject.advance(intervalUtil.getElapsed());
-                }
+            if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfResearchFacilities() > 0 && daysSinceBuiltFacility < 10) {
+                daysSinceBuiltFacility += Global.getSector().getClock().convertToDays(intervalUtil.getElapsed());
             }
-            else{
-                for (AoTDSpecialProject value : projects.values()) {
-                    if(value.doCheckForBlacksiteUnlock()){
-                        if(!canEngageInBlackSite()){
-                            Global.getSector().getPlayerMemoryWithoutUpdate().set(memflagBlacksite,true);
-                            Global.getSector().getIntelManager().addIntel(new BlackSiteIntel());
-                        }
+            if (daysSinceBuiltFacility > 5) {
+                if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites() > 0) {
+                    Global.getSector().getPlayerMemoryWithoutUpdate().set(memflagBlacksite, true);
+                    projects.values().forEach(AoTDSpecialProject::doCheckForProjectUnlock);
+                    GPManager.getInstance().advance(GPManager.getInstance().getProductionOrders());
+                    if (currentlyOnGoingProject != null) {
+                        currentlyOnGoingProject.advance(intervalUtil.getElapsed());
+                    }
+                } else {
+                    for (AoTDSpecialProject value : projects.values()) {
+                        if (value.doCheckForBlacksiteUnlock()) {
+                            if (!canEngageInBlackSite()) {
+                                Global.getSector().getPlayerMemoryWithoutUpdate().set(memflagBlacksite, true);
+                                Global.getSector().getIntelManager().addIntel(new BlackSiteIntel());
+                            }
 
+                        }
                     }
                 }
             }
 
+
         }
     }
-    public boolean canEngageInBlackSite(){
 
-        return Global.getSector().getPlayerMemoryWithoutUpdate().is(memflagBlacksite,true);
+    public boolean canEngageInBlackSite() {
+
+        return Global.getSector().getPlayerMemoryWithoutUpdate().is(memflagBlacksite, true);
     }
 
     public static HologramViewer createHologramViewer(AoTDSpecialProjectSpec spec, boolean isForButton, boolean isForBigButton) {
@@ -152,22 +165,22 @@ public class BlackSiteProjectManager {
         SpecialProjectIconData data = spec.getIconData();
         HologramViewer viewer = null;
         Color color = Color.cyan;
-        if(spec.hasTag("dangerous")){
-           color = (Global.getSector().getFaction(Factions.DWELLER).getBrightUIColor());
+        if (spec.hasTag("dangerous")) {
+            color = (Global.getSector().getFaction(Factions.DWELLER).getBrightUIColor());
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.COMMODITY)) {
-            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getCommoditySpec(data.getIconId()).getIconName()),color));
+            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getCommoditySpec(data.getIconId()).getIconName()), color));
 
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.SHIP)) {
-            viewer = new HologramViewer(iconSize, iconSize, new ShipHologram(data.getIconId(),color));
+            viewer = new HologramViewer(iconSize, iconSize, new ShipHologram(data.getIconId(), color));
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.ITEM)) {
-            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getSpecialItemSpec(data.getIconId()).getIconName()),color));
+            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getSpecialItemSpec(data.getIconId()).getIconName()), color));
 
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.WEAPON)) {
-            viewer = new HologramViewer(iconSize, iconSize, new WeaponHologram(data.getIconId(),color));
+            viewer = new HologramViewer(iconSize, iconSize, new WeaponHologram(data.getIconId(), color));
 
         }
 
@@ -179,22 +192,22 @@ public class BlackSiteProjectManager {
         SpecialProjectIconData data = spec.getIconData();
         HologramViewer viewer = null;
         Color color = Color.cyan;
-        if(spec.hasTag("dangerous")){
+        if (spec.hasTag("dangerous")) {
             color = (Global.getSector().getFaction(Factions.DWELLER).getBrightUIColor());
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.COMMODITY)) {
-            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getCommoditySpec(data.getIconId()).getIconName()),color));
+            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getCommoditySpec(data.getIconId()).getIconName()), color));
 
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.SHIP)) {
-            viewer = new HologramViewer(iconSize, iconSize, new ShipHologram(data.getIconId(),color));
+            viewer = new HologramViewer(iconSize, iconSize, new ShipHologram(data.getIconId(), color));
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.ITEM)) {
-            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getSpecialItemSpec(data.getIconId()).getIconName()),color));
+            viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getSpecialItemSpec(data.getIconId()).getIconName()), color));
 
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.WEAPON)) {
-            viewer = new HologramViewer(iconSize, iconSize, new WeaponHologram(data.getIconId(),color));
+            viewer = new HologramViewer(iconSize, iconSize, new WeaponHologram(data.getIconId(), color));
 
         }
         return viewer;
@@ -238,12 +251,12 @@ public class BlackSiteProjectManager {
                         for (FleetMemberAPI member : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
                             if (member.getHullSpec().getBaseHullId().equals(id)) {
                                 for (String fittedWeaponSlot : member.getVariant().getFittedWeaponSlots()) {
-                                    if(member.getVariant().getSlot(fittedWeaponSlot).isBuiltIn())continue;
-                                    if(member.getVariant().getSlot(fittedWeaponSlot).isWeaponSlot()){
-                                        subMarket.getCargo().addWeapons(member.getVariant().getWeaponSpec(fittedWeaponSlot).getWeaponId(),1);
+                                    if (member.getVariant().getSlot(fittedWeaponSlot).isBuiltIn()) continue;
+                                    if (member.getVariant().getSlot(fittedWeaponSlot).isWeaponSlot()) {
+                                        subMarket.getCargo().addWeapons(member.getVariant().getWeaponSpec(fittedWeaponSlot).getWeaponId(), 1);
                                     }
                                 }
-                                if(member.getVariant().getSMods()!=null){
+                                if (member.getVariant().getSMods() != null) {
                                     Global.getSector().getPlayerStats().addStoryPoints(member.getVariant().getSMods().size());
 
                                 }
@@ -344,19 +357,34 @@ public class BlackSiteProjectManager {
         return getProjects().values().stream().filter(x -> x.getProjectSpec().getRewards().stream().anyMatch(y -> y.type == type && y.id.equals(id))).toList();
 
     }
-    public List<AoTDSpecializationSpec>getSpecializationSpecsOrdered(){
+
+    public List<AoTDSpecializationSpec> getSpecializationSpecsOrdered() {
         return SpecialProjectSpecManager.getSpecializations().stream().sorted(Comparator.comparing(AoTDSpecializationSpec::getOrder)).toList();
     }
-    public LinkedHashMap<String,List<AoTDSpecialProject>>getProjectsForUIListOrdered(){
-        LinkedHashMap<String,List<AoTDSpecialProject>> projects = new LinkedHashMap<>();
+
+    public LinkedHashMap<String, List<AoTDSpecialProject>> getProjectsForUIListOrdered() {
+        LinkedHashMap<String, List<AoTDSpecialProject>> projects = new LinkedHashMap<>();
+
         for (AoTDSpecializationSpec spec : getSpecializationSpecsOrdered()) {
-            projects.put(spec.getId(),getProjectMatchingType(spec.getId()));
+            ArrayList<AoTDSpecialProject> allProjects = new ArrayList<>(getProjectMatchingType(spec.getId()));
+            allProjects.sort(Comparator
+                    .comparing(AoTDSpecialProject::checkIfProjectWasCompleted) // incomplete first
+                    .thenComparing(p -> {
+                        if (!p.checkIfProjectWasCompleted()) return 0;
+                        return p.canDoProject() ? 0 : 1; // among completed, repeatable first
+                    })
+            );
+
+
+            projects.put(spec.getId(), allProjects);
         }
+
         return projects;
     }
-    public List<AoTDSpecialProject> getProjectMatchingType( String type) {
+
+    public List<AoTDSpecialProject> getProjectMatchingType(String type) {
         ArrayList<AoTDSpecialProject> projects = new ArrayList<>();
-        return getProjects().values().stream().filter(x->x.getSpecialization().getId().equals(type)).toList();
+        return getProjects().values().stream().filter(x -> x.getSpecialization().getId().equals(type)).toList();
 
     }
 }

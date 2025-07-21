@@ -48,6 +48,7 @@ public class ModDropDown extends PopUpUI {
             researchUI.unlockButtonsFromHover();
             researchUI.getModButton().updateModButton(currId);
         }
+        researchUI.getModButton().updateArrow();
         researchUI.unlockButtonsFromHover();
 
         super.onExit();
