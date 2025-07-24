@@ -423,19 +423,26 @@ public class AoTDFactionResearchManager {
     }
 
     public int getAmountOfBlackSites() {
-        int toReturn = 0;
+
+        return getFacilities("blacksite").size();
+    }
+    public List<Industry> getFacilities(String facilityId) {
+        ArrayList<Industry>industries = new ArrayList<>();
         if (getFaction().isPlayerFaction()) {
             for (MarketAPI marketAPI : Misc.getPlayerMarkets(Global.getSettings().getModManager().isModEnabled("aotd_qol"))) {
-                if (isIndustryFunctional(marketAPI, "blacksite")) toReturn++;
+                if (isIndustryFunctional(marketAPI, facilityId)){
+                    industries.add(marketAPI.getIndustry(facilityId));
+                }
             }
         } else {
             for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
-                if (isIndustryFunctional(marketAPI, "blacksite")) toReturn++;
+                if (isIndustryFunctional(marketAPI, facilityId)) {
+                    industries.add(marketAPI.getIndustry(facilityId));
+                }
             }
         }
-        return toReturn;
+        return industries;
     }
-
     public boolean isIndustryFunctional(MarketAPI market, String industryId) {
         if (market == null || industryId == null) {
             return false;
