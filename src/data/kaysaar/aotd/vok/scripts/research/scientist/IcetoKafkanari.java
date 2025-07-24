@@ -4,9 +4,9 @@ import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
+import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
 
-public class IcetoKafkanari extends ScientistAPI {
+public class IcetoKafkanari extends ScientistPerson {
     public IcetoKafkanari(PersonAPI person, FactionAPI tiedToFaction) {
         super(person, tiedToFaction);
     }
@@ -17,8 +17,33 @@ public class IcetoKafkanari extends ScientistAPI {
     }
 
     @Override
-    public void createSkillDescription(TooltipMakerAPI tooltip) {
-        tooltip.addPara("Skill - Security Specialist", Misc.getHighlightColor(),5f);
+    public void applyActiveSkill() {
+        super.applyActiveSkill();
+    }
+
+    @Override
+    public void unapplyActiveSkill() {
+        super.unapplyActiveSkill();
+    }
+
+
+    @Override
+    public String getPassiveSkillName() {
+        return "Hyperspace Topologist";
+    }
+
+    @Override
+    public void createPassiveSkillDescription(TooltipMakerAPI tooltip) {
+        tooltip.addPara("Unlocks Project : Storm Nullifier",Misc.getTooltipTitleAndLightHighlightColor(),2f);
+    }
+
+    @Override
+    public String getActiveSkillName() {
+        return "Security Specialist";
+    }
+
+    @Override
+    public void createActiveSkillDescription(TooltipMakerAPI tooltip) {
         tooltip.addPara("Lowers Upkeep for all Black sites by %s",2f,Misc.getTooltipTitleAndLightHighlightColor(),Misc.getHighlightColor(),"50%");
     }
 }

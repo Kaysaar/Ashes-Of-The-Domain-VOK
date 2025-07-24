@@ -10,6 +10,7 @@ import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.misc.TrapezoidButtonDetector;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class    ResizableComponent implements CustomUIPanelPlugin {
@@ -131,7 +132,9 @@ public class    ResizableComponent implements CustomUIPanelPlugin {
 
     }
     public void clearUI(){
-        for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(componentPanel)) {
+        ArrayList<UIComponentAPI>comps = (ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(componentPanel);
+
+        for (UIComponentAPI componentAPI : comps) {
             CustomUIPanelPlugin plugin = (CustomUIPanelPlugin) ReflectionUtilis.findFieldByType(componentAPI,CustomUIPanelPlugin.class);
             if(plugin instanceof ResizableComponent){
                 ((ResizableComponent) plugin).clearUI();

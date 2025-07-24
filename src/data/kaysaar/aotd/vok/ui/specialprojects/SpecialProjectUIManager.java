@@ -8,8 +8,6 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.ui.SoundUIManager;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.ui.customprod.components.onhover.CommodityInfo;
@@ -28,7 +26,7 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin, SoundUIMana
     SpecialProjectListManager listManager;
     SpecialProjectShowcase currProjectShowcase;
     CurrentSpecialProjectShowcase showcaseProj;
-
+    ScientistButtonComponent component;
     public SpecialProjectListManager getListManager() {
         return listManager;
     }
@@ -56,11 +54,12 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin, SoundUIMana
         mainPanel = Global.getSettings().createCustom(width, height, this);
         listManager = new SpecialProjectListManager(400, height - 210, this);
         currProjectShowcase = new SpecialProjectShowcase(width - 400 - 15, height - 210, BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject(), this);
-        ScientistAPI scientistAPI = AoTDMainResearchManager.getInstance().getManagerForPlayer().currentHeadOfCouncil;
         createMarketResourcesPanel();
-        HeadOfResearchShowcase showcase = new HeadOfResearchShowcase(450, 130, scientistAPI);
+        HeadOfResearchShowcase showcase = new HeadOfResearchShowcase(450, 130);
+        component = new ScientistButtonComponent(130, 130);
+        component.setSiblingDialog(showcase);
         showcaseProj = new CurrentSpecialProjectShowcase(450, 130, this);
-        mainPanel.addComponent(new ScientistButtonComponent(130, 130, scientistAPI).getPanelOfButton()).inTL(((width - 10) / 2) - 65, height - 130);
+        mainPanel.addComponent(component.getPanelOfButton()).inTL(((width - 10) / 2) - 65, height - 130);
         mainPanel.addComponent(showcaseProj.getMainPanel()).inTL(((width - 10) / 2) - 65 - 455, height - 130);
         mainPanel.addComponent(showcase.getMainPanel()).inTL(((width - 10) / 2) + 70, height - 130);
         mainPanel.addComponent(listManager.mainPanel).inTL(0, 50);
@@ -106,7 +105,7 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin, SoundUIMana
 
     @Override
     public void playSound() {
-        Global.getSoundPlayer().playCustomMusic(1, 1, "music_dweller_encounter_hostile", true);
+        Global.getSoundPlayer().playCustomMusic(1, 1, "aotd_special", true);
     }
 
     @Override

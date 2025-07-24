@@ -6,7 +6,7 @@ import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
+import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
 import data.kaysaar.aotd.vok.scripts.research.scientist.SophiaAnderson;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class SophiaAgreed extends BaseCommandPlugin {
         if(dialog==null) return false;
         if(!ruleId.equals("aotdSophiaAgree"))return false;
         AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getSpecificFactionManager(Global.getSector().getPlayerFaction());
-        ScientistAPI scientist = new SophiaAnderson(Global.getSector().getImportantPeople().getPerson("aotd_sophia"),manager.getFaction());
+        ScientistPerson scientist = new SophiaAnderson(Global.getSector().getImportantPeople().getPerson("aotd_sophia"),manager.getFaction());
         manager.addScientist(scientist);
         if(manager.currentHeadOfCouncil==null){
             manager.currentHeadOfCouncil = scientist;
