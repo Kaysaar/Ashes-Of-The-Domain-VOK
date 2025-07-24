@@ -53,6 +53,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
             panelToShowcase = "production";
         }
 
+        AoTDMainResearchManager.getInstance().getManagerForPlayer().executeResearchCouncilAdvance(0f);
 
         UIData.WIDTH = panelForPlugins.getPosition().getWidth();
         UIData.HEIGHT = panelForPlugins.getPosition().getHeight();

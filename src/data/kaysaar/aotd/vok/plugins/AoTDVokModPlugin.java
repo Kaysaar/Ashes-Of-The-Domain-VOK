@@ -9,9 +9,13 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
-import com.fs.starfarer.api.impl.campaign.ids.*;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.impl.campaign.ids.Items;
+import com.fs.starfarer.api.impl.campaign.ids.Planets;
+import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.Ids.AoTDItems;
 import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
@@ -165,6 +169,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.BIOFACTORY_EMBRYO, "lightproduction,consumerindustry");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,stella_manufactorium");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,stella_manufactorium");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(AoTDItems.TENEBRIUM_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,stella_manufactorium");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PLASMA_DYNAMO, "fracking");
@@ -416,12 +421,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
             addEvents();
         }
-//        for (PlanetAPI planet : Global.getSector().getPlayerFleet().getStarSystem().getPlanets()) {
-//            if(planet.isStar())continue;
-//            NidavelirShipyard shipyard = (NidavelirShipyard)planet.getStarSystem().addCustomEntity(null,"Nid","nid_shipyards",null).getCustomPlugin();
-//            shipyard.trueInit("aotd_nidavelir","aotd_nidavelir_shadow",planet);
-//
-//        }
+
     }
 
     public static StarSystemAPI getTestingGroundSystem() {
@@ -433,37 +433,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
         return Global.getSector().getStarSystem("testing_ground");
     }
-//    public static CodexEntryV2 createMegastructuresTab() {
-//        CodexEntryV2 cat = new CodexEntryV2("aotd_megastructures", "Planetary conditions", CodexDataV2.getIcon("aotd_megastructures")) {
-//            @Override
-//            public boolean hasTagDisplay() {
-//                return true;
-//            }
-//            @Override
-//            public void configureTagDisplay(TagDisplayAPI tags) {
-//                int resource = 0;
-//                int other = 0;
-//                int total = 0;
-//                for (CodexEntryPlugin curr : getChildren()) {
-//                    if (!curr.isVisible() || curr.isLocked() || curr.skipForTags()) continue;
-//                    if (!(curr.getParam() instanceof MarketConditionSpecAPI)) continue;
-//                    MarketConditionSpecAPI spec = (MarketConditionSpecAPI) curr.getParam();
-//                    if (ResourceDepositsCondition.COMMODITY.containsKey(spec.getId())) resource++;
-//                    else other++;
-//
-//                    total++;
-//                }
-//                tags.beginGroup(false, ALL_TYPES);
-//                tags.addTag(RESOURCES, resource);
-//                tags.addTag(OTHER, other);
-//                tags.setTotalOverrideForCurrentGroup(total);
-//                tags.addGroup(0f);
-//
-//                tags.checkAll();
-//            }
-//        };
-//        return cat;
-//    }
+
 
     public static void clearListenersFromTemporaryMarket() {
         ArrayList<BaseIndustry> listeners = new ArrayList<>(Global.getSector().getListenerManager().getListeners(BaseIndustry.class));

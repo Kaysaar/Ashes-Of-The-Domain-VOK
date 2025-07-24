@@ -23,7 +23,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
-import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
+import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -46,7 +46,8 @@ public class AoTDFactionResearchManager {
     public MutableStat getBlackSiteSpecialProjBonus() {
         return blackSiteSpecialProjBonus;
     }
-    IntervalUtil util = new IntervalUtil(1f,1f);
+
+    IntervalUtil util = new IntervalUtil(1f, 1f);
 
 
     public ArrayList<ResearchOption> getResearchRepoOfFaction() {
@@ -61,8 +62,18 @@ public class AoTDFactionResearchManager {
         return queueManager;
     }
 
-    public ArrayList<ScientistAPI> researchCouncil = new ArrayList<>();
-    public ScientistAPI currentHeadOfCouncil;
+    public ArrayList<ScientistPerson> researchCouncil = new ArrayList<>();
+
+    public ArrayList<ScientistPerson> getResearchCouncil() {
+        researchCouncil.sort((a, b) -> {
+            boolean aIsHead = isHeadOfResearch(a);
+            boolean bIsHead = isHeadOfResearch(b);
+            return Boolean.compare(bIsHead, aIsHead); // head (true) comes first
+        });
+        return researchCouncil;
+    }
+
+    public ScientistPerson currentHeadOfCouncil;
     public ArrayList<ResearchOption> researchRepoOfFaction;
     public float bonusToResearch = 0.0f;
     public float pointsTowardsUpgrade = 0.0f;
@@ -143,7 +154,7 @@ public class AoTDFactionResearchManager {
 
     public void advance(float amount) {
         util.advance(amount);
-        if(util.intervalElapsed()){
+        if (util.intervalElapsed()) {
             executeAdvance(util.getElapsed());
 
         }
@@ -151,20 +162,22 @@ public class AoTDFactionResearchManager {
 
     }
 
+    public Boolean isHeadOfResearch(ScientistPerson person) {
+        return currentHeadOfCouncil != null && currentHeadOfCouncil.equals(person);
+    }
+
     private void executeAdvance(float amount) {
-        if (currentHeadOfCouncil != null) {
-            currentHeadOfCouncil.advance(amount);
+        executeResearchCouncilAdvance(amount);
+        int amountB = getAmountOfBlackSites() - 1;
+        int amountR = getAmountOfResearchFacilities() - 1;
+        if (amountR > 0) {
+            getResearchSpeedBonus().modifyFlat("aotd_def_bonus", amountR * 0.1f);
         }
-        int amountB = getAmountOfBlackSites()-1;
-        int amountR = getAmountOfResearchFacilities()-1;
-        if(amountR>0){
-            getResearchSpeedBonus().modifyFlat("aotd_def_bonus",amountR*0.1f);
+        if (amountB > 0) {
+            getBlackSiteSpecialProjBonus().modifyFlat("aotd_def_bonus", amountB * 0.1f);
         }
-        if(amountB>0){
-            getBlackSiteSpecialProjBonus().modifyFlat("aotd_def_bonus",amountB*0.1f);
-        }
-        if(haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)){
-            getBlackSiteSpecialProjBonus().modifyFlat("aotd_def_bonus2",0.2f);
+        if (haveResearched(AoTDTechIds.MEGA_ASSEMBLY_SYSTEMS)) {
+            getBlackSiteSpecialProjBonus().modifyFlat("aotd_def_bonus2", 0.2f);
         }
 
         if (getCurrentFocus() == null) {
@@ -189,13 +202,13 @@ public class AoTDFactionResearchManager {
 
         boolean hadMetreq = false;
         for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
-            if(marketAPI.getIndustries().stream().filter(x->x.getSpecialItem()!=null).anyMatch(x->x.getSpecialItem().getId().equals("omega_processor"))){
+            if (marketAPI.getIndustries().stream().filter(x -> x.getSpecialItem() != null).anyMatch(x -> x.getSpecialItem().getId().equals("omega_processor"))) {
                 hadMetreq = true;
                 break;
             }
         }
 
-        if(getFaction().isPlayerFaction()){
+        if (getFaction().isPlayerFaction()) {
             if (hadMetreq) {
                 Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
             } else {
@@ -210,7 +223,7 @@ public class AoTDFactionResearchManager {
                     researchOption.daysSpentOnResearching += 100 * Global.getSector().getClock().convertToDays(amount);
                 }
                 researchOption.daysSpentOnResearching += Global.getSector().getClock().convertToDays(amount);
-                if (researchOption.getPercentageProgress()>=100) {
+                if (researchOption.getPercentageProgress() >= 100) {
                     researchOption.daysSpentOnResearching = 0;
                     researchOption.setResearched(true);
                     AoTDListenerUtilis.finishedResearch(researchOption.Id, this.getFaction());
@@ -228,6 +241,16 @@ public class AoTDFactionResearchManager {
                 }
 
             }
+        }
+    }
+
+    public void executeResearchCouncilAdvance(float amount) {
+        researchCouncil.forEach(x -> x.advance(amount));
+        researchCouncil.forEach(ScientistPerson::unapplyPassiveSkill);
+        researchCouncil.forEach(ScientistPerson::unapplyActiveSkill);
+        researchCouncil.forEach(ScientistPerson::applyPassiveSkill);
+        if (currentHeadOfCouncil != null) {
+            currentHeadOfCouncil.applyActiveSkill();
         }
     }
 
@@ -280,7 +303,7 @@ public class AoTDFactionResearchManager {
 
     }
 
-    public void addScientist(ScientistAPI scientist) {
+    public void addScientist(ScientistPerson scientist) {
         researchCouncil.add(scientist);
     }
 
@@ -398,21 +421,22 @@ public class AoTDFactionResearchManager {
 
         return marketsToReturn;
     }
+
     public int getAmountOfBlackSites() {
         int toReturn = 0;
         if (getFaction().isPlayerFaction()) {
             for (MarketAPI marketAPI : Misc.getPlayerMarkets(Global.getSettings().getModManager().isModEnabled("aotd_qol"))) {
-                if(isIndustryFunctional(marketAPI,"blacksite"))toReturn++;
+                if (isIndustryFunctional(marketAPI, "blacksite")) toReturn++;
             }
         } else {
             for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
-                if(isIndustryFunctional(marketAPI,"blacksite"))toReturn++;
+                if (isIndustryFunctional(marketAPI, "blacksite")) toReturn++;
             }
         }
         return toReturn;
     }
 
-    public  boolean isIndustryFunctional(MarketAPI market, String industryId) {
+    public boolean isIndustryFunctional(MarketAPI market, String industryId) {
         if (market == null || industryId == null) {
             return false;
         }
@@ -424,15 +448,18 @@ public class AoTDFactionResearchManager {
 
         return false;
     }
+
     public int getAmountOfResearchFacilities() {
         int toReturn = 0;
         if (getFaction().isPlayerFaction()) {
             for (MarketAPI marketAPI : Misc.getPlayerMarkets(Global.getSettings().getModManager().isModEnabled("aotd_qol"))) {
-                if(isIndustryFunctional(marketAPI,AoTDIndustries.RESEARCH_CENTER)||isIndustryFunctional(marketAPI,"blacksite"))toReturn++;
+                if (isIndustryFunctional(marketAPI, AoTDIndustries.RESEARCH_CENTER) || isIndustryFunctional(marketAPI, "blacksite"))
+                    toReturn++;
             }
         } else {
             for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
-                if(isIndustryFunctional(marketAPI,AoTDIndustries.RESEARCH_CENTER)||isIndustryFunctional(marketAPI,"blacksite"))toReturn++;
+                if (isIndustryFunctional(marketAPI, AoTDIndustries.RESEARCH_CENTER) || isIndustryFunctional(marketAPI, "blacksite"))
+                    toReturn++;
             }
         }
 

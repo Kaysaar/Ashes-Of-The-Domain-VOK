@@ -43,13 +43,16 @@ public class ShroudedItemPlugin extends BaseSpecialItemPlugin {
 
         addCostLabel(tooltip, opad, transferHandler, stackSource);
         if (!Global.CODEX_TOOLTIP_MODE) {
-            if (!AoTDMisc.getPlayerFactionMarkets().isEmpty()) {
-                tooltip.addPara("We currently have little understanding of those \"things\". We need to bring those to our R&D team first!", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
+            if(ShroudProjectMisc.getLevelOfUnderstanding()<=0){
+                if (!AoTDMisc.getPlayerFactionMarkets().isEmpty()) {
+                    tooltip.addPara("We currently have little understanding of those \"things\". We need to bring those to our R&D team first!", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
 
-            } else {
-                tooltip.addPara("We currently have little understanding of those \"things\". We need to establish our own R&D team, together with our faction and resources to further study it.", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
+                } else {
+                    tooltip.addPara("We currently have little understanding of those \"things\". We need to establish our own R&D team, together with our faction and resources to further study it.", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
 
+                }
             }
+
 
         } else {
             ShroudProjectMisc.updateCommodityInfo();

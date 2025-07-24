@@ -7,7 +7,7 @@ import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.ui.SoundUIManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistAPI;
+import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
 
 import java.util.List;
 
@@ -19,6 +19,7 @@ public class AoTDResearchNewPlugin implements CustomUIPanelPlugin, SoundUIManage
     CurrentResearchShowcase showcase1;
     TechTreeModButton modButton;
     HeadOfResearchShowcase showcase2;
+    ScientistButtonComponent componentS;
     public TechTreeModButton getModButton() {
         return modButton;
     }
@@ -46,9 +47,11 @@ public class AoTDResearchNewPlugin implements CustomUIPanelPlugin, SoundUIManage
         UILinesRenderer renderer = new UILinesRenderer(0f);
         mainPanel = Global.getSettings().createCustom(width, height, this);
          showcase1 = new CurrentResearchShowcase(450, 130, this);
-        ScientistAPI scientistAPI = AoTDMainResearchManager.getInstance().getManagerForPlayer().currentHeadOfCouncil;
-         showcase2 = new HeadOfResearchShowcase(450, 130, scientistAPI);
-        mainPanel.addComponent(new ScientistButtonComponent(130, 130, scientistAPI).getPanelOfButton()).inTL((width / 2) - 65, height - 130);
+        ScientistPerson scientistPerson = AoTDMainResearchManager.getInstance().getManagerForPlayer().currentHeadOfCouncil;
+         showcase2 = new HeadOfResearchShowcase(450, 130);
+        componentS = new ScientistButtonComponent(130, 130);
+        componentS.setSiblingDialog(showcase2);
+        mainPanel.addComponent(componentS.getPanelOfButton()).inTL((width / 2) - 65, height - 130);
         mainPanel.addComponent(modButton.getPanelOfButton()).inTL((width / 2) - 250, 0);
         mainPanel.addComponent(showcase1.getMainPanel()).inTL((width / 2) - 65 - 455, height - 130);
         mainPanel.addComponent(showcase2.getMainPanel()).inTL((width / 2) + 70, height - 130);
