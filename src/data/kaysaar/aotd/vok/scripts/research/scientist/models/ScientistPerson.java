@@ -13,6 +13,11 @@ public class ScientistPerson {
         this.scientist = person;
         this.tiedToFaction = tiedToFaction;
     }
+
+    public FactionAPI getTiedToFaction() {
+        return tiedToFaction;
+    }
+
     public int getMonthlySalary(){
         return 10000;
     }

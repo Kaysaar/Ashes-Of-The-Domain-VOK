@@ -4,6 +4,7 @@ import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
 
 public class IcetoKafkanari extends ScientistPerson {
@@ -18,12 +19,13 @@ public class IcetoKafkanari extends ScientistPerson {
 
     @Override
     public void applyActiveSkill() {
-        super.applyActiveSkill();
+        AoTDMainResearchManager.getInstance().getSpecificFactionManager(getTiedToFaction()).getFacilities("blacksite").forEach(x->x.getUpkeep().modifyMult("iceto",0.5f,"Iceto Kafkanari"));
     }
 
     @Override
     public void unapplyActiveSkill() {
-        super.unapplyActiveSkill();
+        AoTDMainResearchManager.getInstance().getSpecificFactionManager(getTiedToFaction()).getFacilities("blacksite").forEach(x->x.getUpkeep().unmodifyMult("iceto"));
+
     }
 
 
