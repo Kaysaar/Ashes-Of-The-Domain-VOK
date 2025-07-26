@@ -66,7 +66,7 @@ public class ItemBlueprintPlugin  extends BaseSpecialItemPlugin {
         float cx = x + w/2f;
         float cy = y + h/2f;
 
-        float blX = cx - 25f;
+        float blX = cx - 29f;
         float blY = cy - 15f;
         float tlX = cx - 20f;
         float tlY = cy + 26f;
@@ -75,7 +75,7 @@ public class ItemBlueprintPlugin  extends BaseSpecialItemPlugin {
         float brX = cx + 15f;
         float brY = cy - 18f;
 
-        float blX1 = cx - 20f;
+        float blX1 = cx - 24f;
         float blY1 = cy - 12f;
         float tlX1 = cx - 16f;
         float tlY1 = cy + 20.8f;
