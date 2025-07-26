@@ -167,6 +167,21 @@ public class AoTDFactionResearchManager {
     }
 
     private void executeAdvance(float amount) {
+        boolean hadMetreq = false;
+        for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
+            if (marketAPI.getIndustries().stream().filter(x -> x.getSpecialItem() != null).anyMatch(x -> x.getSpecialItem().getId().equals("omega_processor"))) {
+                hadMetreq = true;
+                break;
+            }
+        }
+
+        if (getFaction().isPlayerFaction()) {
+            if (hadMetreq) {
+                Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
+            } else {
+                Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
+            }
+        }
         executeResearchCouncilAdvance(amount);
         int amountB = getAmountOfBlackSites() - 1;
         int amountR = getAmountOfResearchFacilities() - 1;
@@ -200,21 +215,7 @@ public class AoTDFactionResearchManager {
         }
 
 
-        boolean hadMetreq = false;
-        for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
-            if (marketAPI.getIndustries().stream().filter(x -> x.getSpecialItem() != null).anyMatch(x -> x.getSpecialItem().getId().equals("omega_processor"))) {
-                hadMetreq = true;
-                break;
-            }
-        }
 
-        if (getFaction().isPlayerFaction()) {
-            if (hadMetreq) {
-                Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
-            } else {
-                Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
-            }
-        }
         if (currentFocusId != null && getAmountOfResearchFacilities() != 0) {
 
             ResearchOption researchOption = getResearchOptionFromRepo(currentFocusId);

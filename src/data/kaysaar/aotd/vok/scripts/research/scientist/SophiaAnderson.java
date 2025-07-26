@@ -98,6 +98,11 @@ public class SophiaAnderson extends ScientistPerson {
     }
 
     @Override
+    public int getMonthlySalary() {
+        return 15000;
+    }
+
+    @Override
     public void createPassiveSkillDescription(TooltipMakerAPI tooltip) {
         tooltip.addPara("Every two months, discover a new possible location of a Pre-Collapse Facility.", Misc.getTooltipTitleAndLightHighlightColor(), 2f);
     }

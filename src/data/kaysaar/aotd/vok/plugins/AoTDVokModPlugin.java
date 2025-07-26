@@ -13,6 +13,9 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.impl.campaign.intel.bar.events.AoTDAiScientistEventCreator;
+import com.fs.starfarer.api.impl.campaign.intel.bar.events.BarEventManager;
+import com.fs.starfarer.api.impl.campaign.intel.bar.events.ScientistAICoreBarEventCreator;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDItems;
@@ -43,6 +46,7 @@ import data.kaysaar.aotd.vok.scripts.misc.AoTDFuelConsumptionScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchProgressionScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
+import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistUpkeepListener;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
@@ -101,12 +105,15 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         }
     }
 
+
     private void setListenersIfNeeded() {
         ListenerManagerAPI l = Global.getSector().getListenerManager();
         l.removeListenerOfClass(AoTDIndButtonsListener.class);
         AoTDIndButtonsListener listener = new AoTDIndButtonsListener();
         listener.updateIndustryRepo();
         l.addListener(listener);
+        if (!l.hasListenerOfClass(ScientistUpkeepListener.class))
+            l.addListener(new ScientistUpkeepListener(), true);
         if (!l.hasListenerOfClass(ResourceConditionApplier.class))
             l.addListener(new ResourceConditionApplier(), true);
         if (!l.hasListenerOfClass(ShroudCommodityUpdater.class))
@@ -313,7 +320,11 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
         ShroudProjectMisc.updateCommodityInfo();
-
+        BarEventManager bar = BarEventManager.getInstance();
+        if(bar.hasEventCreator(ScientistAICoreBarEventCreator.class)){
+            bar.getCreators().removeIf(x->x instanceof ScientistAICoreBarEventCreator);
+            bar.addEventCreator(new AoTDAiScientistEventCreator());
+        }
 //        Global.getSector().addTransientScript(new EveryFrameScript() {
 //            protected IntervalUtil util = new IntervalUtil(1f,1.5f);
 //            @Override

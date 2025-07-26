@@ -28,6 +28,10 @@ public class IcetoKafkanari extends ScientistPerson {
 
     }
 
+    @Override
+    public int getMonthlySalary() {
+        return 20000;
+    }
 
     @Override
     public String getPassiveSkillName() {
