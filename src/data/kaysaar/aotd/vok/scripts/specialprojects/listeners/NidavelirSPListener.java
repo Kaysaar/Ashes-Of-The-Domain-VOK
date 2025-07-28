@@ -24,6 +24,7 @@ public class NidavelirSPListener implements SpecialProjectCompletionListener, GP
                     member.getVariant().addPermaMod("aotd_nidavelir_hullmod");
                 }
                 if (mega.getSectionById("nidavelir_bulwark").isRestored) {
+
                     member.getStats().getDynamic().getMod(Stats.MAX_PERMANENT_HULLMODS_MOD).modifyFlatAlways("aotd_nidavelir_bullwark", 2,"");
                     member.getVariant().addPermaMod(HullMods.FLUX_COIL,true);
                     member.getVariant().addPermaMod(HullMods.FLUX_DISTRIBUTOR,true);

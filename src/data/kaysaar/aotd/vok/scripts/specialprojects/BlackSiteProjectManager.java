@@ -166,7 +166,7 @@ public class BlackSiteProjectManager {
         HologramViewer viewer = null;
         Color color = Color.cyan;
         if (spec.hasTag("dangerous")) {
-            color = (Global.getSector().getFaction(Factions.DWELLER).getBrightUIColor());
+            color = (Global.getSector().getFaction(Factions.DWELLER).getBrightUIColor().brighter());
         }
         if (data.getType().equals(SpecialProjectIconData.IconType.COMMODITY)) {
             viewer = new HologramViewer(iconSize, iconSize, new BaseImageHologram(Global.getSettings().getSprite(Global.getSettings().getCommoditySpec(data.getIconId()).getIconName()), color));

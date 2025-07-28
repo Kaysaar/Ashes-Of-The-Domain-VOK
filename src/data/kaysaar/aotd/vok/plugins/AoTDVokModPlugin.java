@@ -48,6 +48,8 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistUpkeepListener;
 import data.kaysaar.aotd.vok.scripts.research.scientist.listeners.ScientistValidationListener;
+import data.kaysaar.aotd.vok.scripts.research.scientist.scripts.ForbiddenScientistUnlock;
+import data.kaysaar.aotd.vok.scripts.research.scientist.scripts.SophiaScriptUnlock;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.listeners.NidavelirSPListener;
@@ -130,7 +132,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             l.addListener(new ResearchDatabankExtractionListener(), true);
         if (!l.hasListenerOfClass(NidavelirSPListener.class))
             l.addListener(new NidavelirSPListener(), true);
-        if (!l.hasListenerOfClass(ScientistValidationListener.class) && !Global.getSector().getMemory().contains("$aotd_passed_validation" + ScientistValidationListener.class.getName()))
+        if (!l.hasListenerOfClass(ScientistValidationListener.class))
             l.addListener(new ScientistValidationListener(), false);
         if (!l.hasListenerOfClass(TechModifiersApplier.class))
             l.addListener(new TechModifiersApplier(), true);
@@ -382,7 +384,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             Global.getSector().addTransientScript(new AoTDCompoundUIScript());
             Global.getSector().addTransientScript(new AoTDCompoundUIInMarketScript());
         }
-
+        ScientistValidationListener.getInstance().addScript(new SophiaScriptUnlock());
+        ScientistValidationListener.getInstance().addScript(new ForbiddenScientistUnlock());
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");
         AoTDMainResearchManager.getInstance().updateModIdRepo();
         if(!  GrowingDemandManager.getInstance().hasDemand("wwlb_cerulean_vapors")){
