@@ -14,7 +14,7 @@ public class ShroudBasedProject extends AoTDSpecialProject {
     @Override
     public void createIntelForUnlocking() {
         super.createIntelForUnlocking();
-        ShroudProjectMisc.setCooldownBetweenProjects(MathUtils.getRandomNumberInRange(10,20));
+        ShroudProjectMisc.setCooldownBetweenProjects(MathUtils.getRandomNumberInRange(5,10));
     }
 
     @Override

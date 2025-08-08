@@ -9,6 +9,6 @@ public class AoTDItems {
     public static final String BASE_ITEM_BLUEPRINT = "aotd_item_bp";
 
     public static final String SHROUDED_SUBSTRATE = "aotd_shrouded_substrate";
-
+    public static final String TENEBRIUM_CELL = "aotd_tenebrium";
     public static final String TENEBRIUM_NANOFORGE = "aotd_shrouded_nanoforge";
 }

@@ -26,6 +26,8 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
     ButtonAPI filterButton;
     SpecialProjectUIManager manager;
     TextFieldAPI field;
+    TooltipMakerAPI tooltip;
+    float offset = 0f;
     HashMap<ButtonAPI, AoTDSpecialProject> buttons = new HashMap<>();
     public boolean update = false;
     int opads = 0;
@@ -54,7 +56,7 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
             mainPanel.removeComponent(tooltipPanel);
         }
         tooltipPanel = Global.getSettings().createCustom(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - opads, null);
-        TooltipMakerAPI tooltip = tooltipPanel.createUIElement(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - opads, true);
+         tooltip = tooltipPanel.createUIElement(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - opads, true);
         float opad = 5f;
         boolean haveAtLeastOne = false;
 
@@ -76,6 +78,9 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         tooltipPanel.addUIElement(tooltip).inTL(0, 0);
         majorPanel = Global.getSettings().createCustom(mainPanel.getPosition().getWidth(), opads, null);
         mainPanel.addComponent(tooltipPanel).inTL(0, opads);
+        if(tooltip.getExternalScroller()!=null){
+            tooltip.getExternalScroller().setYOffset(offset);
+        }
     }
 
     @Override
@@ -95,6 +100,9 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
 
     @Override
     public void advance(float amount) {
+        if(tooltip!=null&&tooltip.getExternalScroller()!=null) {
+            offset = tooltip.getExternalScroller().getYOffset();
+        }
         for (ButtonAPI button : buttons.keySet()) {
             if (button.isChecked()) {
                 button.setChecked(false);
@@ -210,6 +218,7 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
         TooltipMakerAPI tooltip = test.createUIElement(width, height - 40, true);
         TooltipMakerAPI tooltipButtons = test.createUIElement(width, 30, false);
         project.createDetailedTooltipForButton(tooltip, width);
+        tooltip.addSpacer(10f);
         backProject = tooltipButtons.addButton("Show other projects", "show_projects", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, 180, 30, 0);
         if (BlackSiteProjectManager.getInstance().isCurrentOnGoing(project)) {
             cancelProject = tooltipButtons.addButton("Pause Project", project, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, 180, 30, -30f);

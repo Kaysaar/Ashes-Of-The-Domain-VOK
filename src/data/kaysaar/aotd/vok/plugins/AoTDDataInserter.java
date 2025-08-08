@@ -330,15 +330,7 @@ public class AoTDDataInserter {
                 continue;
             }
             for (MarketAPI aiMarket : Misc.getFactionMarkets(faction.getId())) {
-                if (PlanetType != null) {
-                    if (aiMarket.getPlanetEntity() != null) {
-                        if (aiMarket.getPlanetEntity().getTypeId().contains(PlanetType) && industryId.equals(AoTDIndustries.PURIFICATION_CENTER)) {
-                            aiMarket.addIndustry(AoTDIndustries.PURIFICATION_CENTER);
-                            return;
-                        }
-                    }
 
-                }
 
                 for (Industry industry : aiMarket.getIndustries()) {
                     if (industry.isIndustry()) {
@@ -478,7 +470,6 @@ public class AoTDDataInserter {
             setIndustryOnPlanet("Galatia", "Ancyra", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null, null);
             setIndustryOnPlanet("Mayasura", "Mairaath", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_BIOTICS, false, null, null);
             setIndustryOnPlanet("Corvus", "Asharu", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_RECITIFICATES, false, null, null);
-            setIndustryOnPlanet("Askonia", "Volturn", AoTDIndustries.PURIFICATION_CENTER, null, null, false, null, null);
             setIndustryOnPlanet("Eos Exodus", "Baetis", AoTDIndustries.SUBLIMATION, null, null, true, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.CRYSTALIZATOR, Industries.REFINING, null, false, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", Industries.MEGAPORT, Industries.MEGAPORT, null, true, null, null);

@@ -4,19 +4,16 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
-import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.ui.SoundUIManager;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
-import data.kaysaar.aotd.vok.ui.customprod.components.onhover.CommodityInfo;
 import data.kaysaar.aotd.vok.ui.research.HeadOfResearchShowcase;
 import data.kaysaar.aotd.vok.ui.research.ScientistButtonComponent;
 
-import java.awt.*;
 import java.util.List;
-import java.util.Map;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
@@ -124,17 +121,7 @@ public class SpecialProjectUIManager implements CustomUIPanelPlugin, SoundUIMana
         float iconsize = 35;
         float topYImage = 0;
         LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
-        float x = positions;
-        for (Map.Entry<String, Integer> entry : GPManager.getInstance().getTotalResources().entrySet()) {
-            tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconsize, iconsize, 0f);
-            tooltip.addTooltipToPrevious(new CommodityInfo(entry.getKey(), 700, true, false, manager.getProductionOrders()), TooltipMakerAPI.TooltipLocation.BELOW);
-            UIComponentAPI image = tooltip.getPrev();
-            image.getPosition().inTL(x, topYImage);
-            String text = "" + entry.getValue();
-            String text2 = text + "(" + GPManager.getInstance().getReqResources(GPManager.getInstance().getProductionOrders()).get(entry.getKey()) + ")";
-            tooltip.addPara("" + entry.getValue() + " %s", 0f, Misc.getTooltipTitleAndLightHighlightColor(), Color.ORANGE, "(" + manager.getExpectedCostsFromManager().get(entry.getKey()) + ")").getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
-            x += sections;
-        }
+        GPUIMisc.createIconSection(positions,tooltip,iconsize,topYImage,test,sections,GPManager.getInstance().getProductionOrders());
         panelOfMarketData.addUIElement(tooltip).inTL(0, 0);
     }
 }

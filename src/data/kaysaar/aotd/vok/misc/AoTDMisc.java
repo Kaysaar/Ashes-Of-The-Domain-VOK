@@ -10,9 +10,11 @@ import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
 import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
+import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
+import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.loading.WingRole;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -466,6 +468,18 @@ public class AoTDMisc {
 
         return numberRemaining;
     }
+    public static void processItemDifferences(HashMap<String, Integer> itemDifferences, String submarketId, MarketAPI fallbackMarket, List<MarketAPI> affectedMarkets) {
+        for (Map.Entry<String, Integer> entry : itemDifferences.entrySet()) {
+            int amount = entry.getValue();
+            if (amount > 0) {
+                // Add to fallback market (e.g., player gathering point)
+                eatItems(Map.entry(entry.getKey(), amount), submarketId, affectedMarkets);
+            } else if (amount < 0) {
+                // Remove from the list of affected markets
+                addItems(Map.entry(entry.getKey(), -amount), submarketId, fallbackMarket);
+            }
+        }
+    }
 
     public static void eatItems(Map.Entry<String, Integer> entry, String submarketId, List<MarketAPI> affectedMarkets) {
         float numberRemaining = entry.getValue();
@@ -519,7 +533,37 @@ public class AoTDMisc {
             }
         }
     }
+    public static void addItems(Map.Entry<String, Integer> entry, String submarketId, MarketAPI marketAPI) {
 
+            SubmarketAPI subMarket = marketAPI.getSubmarket(submarketId);
+            if (subMarket != null) {
+                if (Global.getSettings().getCommoditySpec(entry.getKey()) != null) {
+                    subMarket.getCargo().addItems(CargoAPI.CargoItemType.RESOURCES, entry.getKey(), entry.getValue());
+
+
+                }
+                if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
+                    subMarket.getCargo().addItems(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(entry.getKey(), null), entry.getValue());
+
+                }
+                try {
+                    if (Global.getSettings().getHullSpec(entry.getKey()) != null) {
+                        for (int i = 0; i < entry.getValue(); i++) {
+                            FleetMemberAPI member = Global.getFactory().createFleetMember(FleetMemberType.SHIP,getVaraint(Global.getSettings().getHullSpec(entry.getKey())));
+                            member.getVariant().setSource(VariantSource.REFIT);
+                            member.getVariant().clear();
+                            subMarket.getCargo().getMothballedShips().addFleetMember(member);
+                        }
+
+                    }
+                } catch (Exception e) {
+
+                }
+
+            }
+
+
+    }
 
     public static boolean isHoveringOverButton(UIComponentAPI button) {
         float x = Global.getSettings().getMouseX();
@@ -758,6 +802,12 @@ public class AoTDMisc {
     }
 
     public static boolean knowsItem(String id, FactionAPI faction) {
+        if(Global.getSettings().getSpecialItemSpec(id)!=null){
+            SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(id);
+            if(spec.hasTag("aotd_ignore_standarization")){
+                return faction.getMemory().is("$aotd" + id, true);
+            }
+        }
         return faction.getMemory().is("$aotd" + id, true) || AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).haveResearched(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION);
     }
 

@@ -199,7 +199,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
 //                    this.graphics.resetLightLocation();
 //                    this.graphics.setLightColorOverride((Color)null);
             }
-            startStencil(tiedToPlanet.getRadius()+31f,tiedToPlanet.getLocation(),360);
+            startStencil(tiedToPlanet.getRadius()+31f,tiedToPlanet.getLocation(),360,10);
             if (layer == CampaignEngineLayers.TERRAIN_3) {
                 for (Planet planet : layers.keySet()) {
                     planet.renderSphere((CombatViewport) viewport);
@@ -220,7 +220,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
         // Apply glitch effect
 
     }
-    public static void startStencil(float radius, Vector2f location, int circlePoints) {
+    public static void startStencil(float radius, Vector2f location, int circlePoints, int reference) {
         GL11.glClearStencil(0);
         GL11.glStencilMask(0xff);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
@@ -228,7 +228,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
         GL11.glColorMask(false, false, false, false);
         GL11.glEnable(GL11.GL_STENCIL_TEST);
 
-        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xff);
+        GL11.glStencilFunc(GL11.GL_ALWAYS, reference, 0xff);
         GL11.glStencilMask(0xff);
         GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
 
@@ -249,7 +249,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
         GL11.glColorMask(true, true, true, true);
 
-        GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+        GL11.glStencilFunc(GL11.GL_EQUAL, reference, 0xFF);
     }
 
     public static void endStencil() {

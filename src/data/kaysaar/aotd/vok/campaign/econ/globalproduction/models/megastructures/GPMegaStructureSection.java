@@ -10,7 +10,7 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
@@ -212,13 +212,13 @@ public class GPMegaStructureSection {
     }
     public void createProductionSection(TooltipMakerAPI tooltip, float width) {
         tooltip.addSectionHeading("Production",Alignment.MID,5f);
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltip(width, 20, 20, getProduction(GPManager.getInstance().getPenaltyMap()), Misc.getPositiveHighlightColor()), 5f);
+        tooltip.addCustom(GPUIMisc.createResourcePanelForSmallTooltip(width, 20, 20, getProduction(GPManager.getInstance().getPenaltyMap()), Misc.getPositiveHighlightColor()), 5f);
 
 
     }
     public void createUpkeepSection(TooltipMakerAPI tooltip, float width) {
         tooltip.addPara("Current monthly upkeep : %s", 5f, Color.ORANGE, Misc.getDGSCredits(getUpkeep(false)));
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed(width*1.5f, 20, 20, getGPUpkeep(), getProduction(GPManager.getInstance().getPenaltyMap())), 5f);
+        tooltip.addCustom(GPUIMisc.createResourcePanelForSmallTooltipCondensed(width*1.5f, 20, 20, getGPUpkeep(), getProduction(GPManager.getInstance().getPenaltyMap())), 5f);
 
 
     }

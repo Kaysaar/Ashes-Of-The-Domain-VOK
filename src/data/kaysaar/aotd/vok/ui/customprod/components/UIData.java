@@ -541,12 +541,25 @@ public class UIData {
         }
         totalSize += padding * (size - 1);
         float beginX = (totalWidth - totalSize) / 2;
+
         for (Map.Entry<String, Integer> entry : option.getSupplyCost().entrySet()) {
-            tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconSize, iconSize, 0f);
-            tooltip.getPrev().getPosition().inTL(beginX, iconSize / 2);
-            LabelAPI label = tooltip.addPara("x" + entry.getValue(), Color.ORANGE, 0f);
-            label.getPosition().inTL(beginX + iconSize, (height / 2) - (label.computeTextHeight(label.getText()) / 2));
-            beginX += iconSize + label.computeTextWidth(label.getText()) + padding;
+            if(GPManager.commodities.getOrDefault(entry.getKey(), GPManager.GPResourceType.COMMODITY).equals(GPManager.GPResourceType.COMMODITY)) {
+                tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconSize, iconSize, 0f);
+                tooltip.getPrev().getPosition().inTL(beginX, iconSize / 2);
+                LabelAPI label = tooltip.addPara("x" + entry.getValue(), Color.ORANGE, 0f);
+                label.getPosition().inTL(beginX + iconSize, (height / 2) - (label.computeTextHeight(label.getText()) / 2));
+                beginX += iconSize + label.computeTextWidth(label.getText()) + padding;
+
+            }
+            else{
+                tooltip.addImage(Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName(), iconSize, iconSize, 0f);
+                tooltip.getPrev().getPosition().inTL(beginX, iconSize / 2);
+                LabelAPI label = tooltip.addPara("x" + entry.getValue(),Misc.getDesignTypeColor("Abyss-Tech"), 0f);
+                label.getPosition().inTL(beginX + iconSize, (height / 2) - (label.computeTextHeight(label.getText()) / 2));
+                beginX += iconSize + label.computeTextWidth(label.getText()) + padding;
+            }
+    ;
+
         }
         panel.addUIElement(tooltip).inTL(-5, 0);
         return panel;
@@ -554,40 +567,4 @@ public class UIData {
 
     }
 
-    public static CustomPanelAPI getGPCostPanelSpecialProjStage(float totalWidth, float height, GPSpec option, int stage) {
-        CustomPanelAPI panel = Global.getSettings().createCustom(totalWidth, height, null);
-        TooltipMakerAPI tooltip = panel.createUIElement(totalWidth, height, false);
-        float iconSize = height / 2;
-        float padding = 2f;
-        float beginX = 0f;
-        for (Map.Entry<String, Integer> entry : option.getStageSupplyCost().get(stage).entrySet()) {
-            tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconSize, iconSize, 0f);
-            tooltip.getPrev().getPosition().inTL(beginX, iconSize / 2);
-            LabelAPI label = tooltip.addPara("x" + entry.getValue(), Color.ORANGE, 0f);
-            label.getPosition().inTL(beginX + iconSize, (height / 2) - (label.computeTextHeight(label.getText()) / 2));
-            beginX += iconSize + label.computeTextWidth(label.getText()) + padding;
-        }
-        panel.addUIElement(tooltip).inTL(-5, 0);
-        return panel;
-
-
-    }
-    public static CustomPanelAPI getGPCostPanel(float totalWidth, float height, LinkedHashMap<String,Integer> map) {
-        CustomPanelAPI panel = Global.getSettings().createCustom(totalWidth, height, null);
-        TooltipMakerAPI tooltip = panel.createUIElement(totalWidth, height, false);
-        float iconSize = height / 2;
-        float padding = 2f;
-        float beginX = 0f;
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconSize, iconSize, 0f);
-            tooltip.getPrev().getPosition().inTL(beginX, iconSize / 2);
-            LabelAPI label = tooltip.addPara("x" + entry.getValue(), Color.ORANGE, 0f);
-            label.getPosition().inTL(beginX + iconSize, (height / 2) - (label.computeTextHeight(label.getText()) / 2));
-            beginX += iconSize + label.computeTextWidth(label.getText()) + padding;
-        }
-        panel.addUIElement(tooltip).inTL(-5, 0);
-        return panel;
-
-
-    }
 }

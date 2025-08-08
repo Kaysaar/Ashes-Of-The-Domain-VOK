@@ -14,6 +14,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.fs.starfarer.api.util.Misc.random;
 
@@ -36,6 +37,14 @@ public class GPOrder implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
+    }
+    public void init(){
+        for (Map.Entry<String, Integer> entry : getSpecFromClass().getSupplyCost().entrySet()) {
+            if(GPManager.commodities.getOrDefault(entry.getKey(), GPManager.GPResourceType.COMMODITY).equals(GPManager.GPResourceType.SPECIAL_ITEM)){
+                int amountReqByOrder = getAmountToProduce()*entry.getValue();
+            }
+        }
+
     }
 
     String specId;
@@ -94,7 +103,8 @@ public class GPOrder implements Cloneable {
         if (isAboutToBeRemoved()) return false;
         // Check if the obtained resources meet or exceed the required resources
         for (String s : getSpecFromClass().getSupplyCost().keySet()) {
-            if (GPManager.getInstance().getTotalResources().get(s) <= 0) {
+            boolean commodity = GPManager.commodities.getOrDefault(s, GPManager.GPResourceType.COMMODITY)== GPManager.GPResourceType.COMMODITY;
+            if (GPManager.getInstance().getTotalResources().get(s) <= 0&&commodity) {
                 return false;
             }
         }
@@ -259,6 +269,7 @@ public class GPOrder implements Cloneable {
                 local.addFighters(getSpecFromClass().getIdOfItemProduced(), produced);
             }
             if (!isAboutToBeRemoved()) {
+                init();
                 daysSpentDoingOrder = 0;
             }
         }

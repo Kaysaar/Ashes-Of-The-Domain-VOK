@@ -11,7 +11,6 @@ import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
-import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.AoTDAiScientistEventCreator;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.BarEventManager;
@@ -35,7 +34,6 @@ import data.kaysaar.aotd.vok.hullmods.AoTDShroudedLensHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedMantleHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedThunderHeadHullmod;
 import data.kaysaar.aotd.vok.listeners.*;
-import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.scripts.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.CoreUITrackerSop;
@@ -92,12 +90,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     AoTDSpecialItemRepo aoTDSpecialItemRepo = new AoTDSpecialItemRepo();
     public static String fontInsigniaMedium = "graphics/fonts/insignia17LTaa.fnt";
 
-    public void spwanMegas(){
-        for (Object object : AoTDMisc.getStarSystemWithMegastructure("")) {
-            
-        }
-        
-    }
     @Override
     public void onApplicationLoad() throws Exception {
         Global.getSettings().loadFont(fontInsigniaMedium);
@@ -255,6 +247,14 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         path.setIndustryCoordinates(map);
         UpgradePathManager.getInstance().addNewCustomPath(path,"aquaculture");
 
+        path = new CustomUpgradePath(1,2);
+        map = new LinkedHashMap<>();
+
+        map.put(AoTDIndustries.RESEARCH_CENTER, new Vector2f(0,0));
+        map.put("blacksite", new Vector2f(0,1));
+        path.setIndustryCoordinates(map);
+        UpgradePathManager.getInstance().addNewCustomPath(path,AoTDIndustries.RESEARCH_CENTER);
+
         path = new CustomUpgradePath(4,5);
         map = new LinkedHashMap<>();
         map.put("shityheavy", new Vector2f(2,0));
@@ -300,8 +300,10 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
+
         SpecialProjectSpecManager.reLoad();
         BlackSiteProjectManager.getInstance().loadAdditionalData();
+        GPManager.reloadCommoditiesMap();
         try {
             aoTDDataInserter.insertSpecItemsForManufactoriumData();
         } catch (JSONException e) {
@@ -396,7 +398,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
         if (newGame) {
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
-                aoTDDataInserter.RandomSetIndustryOnPlanet(AoTDIndustries.PURIFICATION_CENTER, 1, Planets.PLANET_WATER);
                 aoTDDataInserter.initalizeEconomy(true);
             } else {
                 aoTDDataInserter.initalizeEconomy(false);

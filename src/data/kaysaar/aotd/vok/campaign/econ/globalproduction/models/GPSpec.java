@@ -12,6 +12,7 @@ import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
+import data.kaysaar.aotd.vok.Ids.AoTDItems;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDSpecialProjBaseListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.models.AoTDSpecialProjectListener;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -149,7 +150,13 @@ public class GPSpec {
     public static GPSpec getSpecFromItem(SpecialItemSpecAPI specAPI){
         int advanced_component_mult = 10000;
         int domain_grade_mult = 2000;
+        int tenebriumMult = 200000;
         int daysMult = 2500;
+        if(specAPI.getManufacturer().equals("Abyss-Tech")){
+            advanced_component_mult= 20000;
+            domain_grade_mult= 10000;
+            daysMult = 10000;
+        }
         int basePrice = (int) specAPI.getBasePrice();
         float newDays = basePrice/daysMult;
         float newPrice = basePrice*0.7f;
@@ -162,8 +169,13 @@ public class GPSpec {
         HashMap<String,Integer>commodityCost = new HashMap<>();
         int advanced_component = Math.max(basePrice/advanced_component_mult,1);
         int domain_grade = Math.max(basePrice/domain_grade_mult,1);
+
         commodityCost.put("advanced_components",advanced_component);
         commodityCost.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,domain_grade);
+        if(specAPI.getManufacturer().equals("Abyss-Tech")){
+            int tenebrium = Math.max(basePrice/tenebriumMult,1);
+            commodityCost.put(AoTDItems.TENEBRIUM_CELL,tenebrium);
+        }
         spec.setCredistCost(newPrice);
         spec.setSupplyCost(commodityCost);
         return spec;

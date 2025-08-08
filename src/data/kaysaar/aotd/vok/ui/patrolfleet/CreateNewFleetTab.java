@@ -6,7 +6,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPOption;
 import data.kaysaar.aotd.vok.campaign.econ.patrolfleets.AoTDPatrolFleetData;
@@ -85,7 +85,7 @@ public class CreateNewFleetTab implements CustomUIPanelPlugin {
         tooltip.addPara("Officers : %s", 5f, Color.ORANGE, "1 / 5");
         tooltip.addSectionHeading("Fleet Cost", Alignment.MID, 5f);
 
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed(width + 20, height, 20, getCostOfFleet(), new HashMap<String, Integer>()), 5f);
+        tooltip.addCustom(GPUIMisc.createResourcePanelForSmallTooltipCondensed(width + 20, height, 20, getCostOfFleet(), new HashMap<String, Integer>()), 5f);
         tooltip.addPara("Cost to deploy fleet : %s", 5f, Color.ORANGE, Misc.getDGSCredits(getCreditCostOfFleet()));
         tooltip.addPara("Monthly running cost : %s", 5f, Color.ORANGE, Misc.getDGSCredits(data.getEstimatedMonthlyUpkeep()));
         infoPanel.addUIElement(header).inTL(0, 0);

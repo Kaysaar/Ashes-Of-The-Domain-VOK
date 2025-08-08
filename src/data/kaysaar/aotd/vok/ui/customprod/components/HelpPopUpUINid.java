@@ -10,6 +10,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class HelpPopUpUINid extends PopUpUI {
     CustomPanelAPI mainPanel;
@@ -29,8 +30,14 @@ public class HelpPopUpUINid extends PopUpUI {
         TooltipMakerAPI tooltip = mainPanel.createUIElement(panelAPI.getPosition().getWidth()+5,panelAPI.getPosition().getHeight(),true);
         tooltip.addSectionHeading("Global Production (GP)",Alignment.MID,0f);
         ArrayList<String>names = new ArrayList<>();
-        for (String commodity : GPManager.commodities) {
-            names.add(Global.getSettings().getCommoditySpec(commodity).getName());
+        for (Map.Entry<String, GPManager.GPResourceType> commodity : GPManager.commodities.entrySet()) {
+            if(commodity.getValue().equals(GPManager.GPResourceType.COMMODITY)){
+                names.add(Global.getSettings().getCommoditySpec(commodity.getKey()).getName());
+            }
+            else{
+                names.add(Global.getSettings().getSpecialItemSpec(commodity.getKey() ).getName());
+            }
+
         }
         String highlight = Misc.getAndJoined(names);
         tooltip.addPara("Global Production represents the industrial might of colonies under your control.",5f);

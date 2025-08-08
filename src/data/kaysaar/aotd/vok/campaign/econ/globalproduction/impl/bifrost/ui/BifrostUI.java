@@ -15,7 +15,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GP
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonPackage;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
@@ -35,7 +35,7 @@ public class BifrostUI extends BaseMegastrucutreMenu {
 
     @Override
     public void createTitleSection() {
-        mainTitlePanel = MegastructureUIMisc.createTitleSection(mainPanel, megastructureReferedTo, "Bifrost Gates");
+        mainTitlePanel = GPUIMisc.createTitleSection(mainPanel, megastructureReferedTo, "Bifrost Gates");
         mainPanel.addComponent(mainTitlePanel).inTL(-5, lastY + 40);
         lastY += mainTitlePanel.getPosition().getHeight() + 40;
     }

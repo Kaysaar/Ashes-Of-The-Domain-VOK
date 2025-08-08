@@ -18,7 +18,7 @@ import data.kaysaar.aotd.vok.ui.specialprojects.dialogs.PauseProjectDialog;
 import java.util.HashMap;
 import java.util.List;
 
-import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed;
+import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc.createResourcePanelForSmallTooltipCondensed;
 
 public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
     public CustomPanelAPI mainPanel;

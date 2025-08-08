@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.ui.research;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
@@ -41,25 +42,32 @@ public class ResearchPanelComponent extends ButtonComponent {
         for (Map.Entry<String, ResearchRewardType> entry : spec.getRewards().entrySet()) {
             ImageViewer viewer = new ImageViewer(size,size,AoTDMisc.getImagePathForTechIcon(entry.getKey()));
             addComponent(viewer,currX,currY);
+            TooltipMakerAPI tooltip = componentPanel.createUIElement(1,1,false);
+            if(entry.getValue().equals(ResearchRewardType.INDUSTRY)){
+                ResearchInfoUI.createOnHoverTooltipForIndustry(tooltip,entry.getKey(),viewer.getTooltipOnHoverPanel());
+            }
+            if(entry.getValue().equals(ResearchRewardType.MODIFIER)){
+                tooltip.addTooltipTo(new TooltipMakerAPI.TooltipCreator() {
+                    @Override
+                    public boolean isTooltipExpandable(Object tooltipParam) {
+                        return false;
+                    }
+
+                    @Override
+                    public float getTooltipWidth(Object tooltipParam) {
+                        return 400f;
+                    }
+
+                    @Override
+                    public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
+                        tooltip.addSectionHeading("Special Effect After Researching", Alignment.MID,0f);
+                        tooltip.addPara(entry.getKey(),Misc.getPositiveHighlightColor(),5f);
+                    }
+                }, viewer.getTooltipOnHoverPanel(),TooltipMakerAPI.TooltipLocation.BELOW,false);
+            }
             currX += xSpacing+size;
         }
-        TooltipMakerAPI tooltip = componentPanel.createUIElement(1,1,false);
-        tooltip.addTooltipTo(new TooltipMakerAPI.TooltipCreator() {
-            @Override
-            public boolean isTooltipExpandable(Object tooltipParam) {
-                return false;
-            }
 
-            @Override
-            public float getTooltipWidth(Object tooltipParam) {
-                return 123f;
-            }
-
-            @Override
-            public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                tooltip.addPara("test",5f);
-            }
-        }, getTooltipOnHoverPanel(),TooltipMakerAPI.TooltipLocation.BELOW,false);
 
 
 

@@ -1,10 +1,13 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CargoAPI;
+import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
@@ -23,8 +26,8 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructure
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.misc.SearchBarStringComparator;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
-import data.kaysaar.aotd.vok.scripts.specialprojects.models.ProjectReward;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.models.ProjectReward;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -86,7 +89,10 @@ public class GPManager {
         return order.getAtOnce();
 
     }
-
+    public enum GPResourceType{
+        COMMODITY,
+        SPECIAL_ITEM
+    }
     ArrayList<GpManufacturerData> manufacturerData = new ArrayList<>();
     ArrayList<GPOption> shipProductionOption = new ArrayList<>();
     ArrayList<GPOption> weaponProductionOption = new ArrayList<>();
@@ -116,16 +122,20 @@ public class GPManager {
 
     public LinkedHashMap<String, Integer> totalResources = new LinkedHashMap<>();
     public HashMap<String, Integer> reqResources = new HashMap<>();
-    public static ArrayList<String> commodities = new ArrayList<>();
+    public static LinkedHashMap<String,GPResourceType> commodities = new LinkedHashMap<>();
 
-    static {
+    public static void reloadCommoditiesMap(){
+        commodities.clear();
+        commodities.put(Commodities.SHIPS,GPResourceType.COMMODITY);
+        commodities.put(Commodities.HAND_WEAPONS,GPResourceType.COMMODITY);
+        commodities.put("advanced_components",GPResourceType.COMMODITY);
+        if(BlackSiteProjectManager.getInstance().getProject("aotd_tenebrium_proj").checkIfProjectWasCompleted()||Global.getSettings().isDevMode()){
+            commodities.put("aotd_tenebrium",GPResourceType.SPECIAL_ITEM);
+        }
 
-        commodities.add(Commodities.SHIPS);
-        commodities.add(Commodities.HAND_WEAPONS);
-        commodities.add("advanced_components");
-        commodities.add("domain_heavy_machinery");
-        commodities.add("refined_metal");
-        commodities.add("purified_rare_metal");
+        commodities.put("domain_heavy_machinery",GPResourceType.COMMODITY);
+        commodities.put("refined_metal",GPResourceType.COMMODITY);
+        commodities.put("purified_rare_metal",GPResourceType.COMMODITY);
     }
 
     public static String memkey = "aotd_gp_plugin";
@@ -145,7 +155,7 @@ public class GPManager {
         }
         return null;
     }
-    public static ArrayList<String> getCommodities() {
+    public static LinkedHashMap<String,GPResourceType> getCommodities() {
         return commodities;
     }
 
@@ -265,18 +275,41 @@ public class GPManager {
 //        if(Global.getSettings().isDevMode()){
 //            amount = 10000;
 //        }
-        for (String s : commodities) {
+        for (String s : commodities.keySet()) {
             totalResources.put(s, amount);
         }
+        LinkedHashMap<String, GPResourceType> resources = new LinkedHashMap<>(commodities);
+        LinkedHashMap<String, GPResourceType> special = new LinkedHashMap<>(commodities);
+        commodities.forEach((x,y)->{
+            if(y.equals(GPResourceType.SPECIAL_ITEM)){
+                resources.remove(x);
+            }
+        });
+        commodities.forEach((x,y)->{
+            if(y.equals(GPResourceType.COMMODITY)){
+                special.remove(x);
+            }
+        });
         for (MarketAPI factionMarket : Misc.getPlayerMarkets(true)) {
-            for (Industry ind : factionMarket.getIndustries()) {
-                if (ind.getSpec().hasTag("ignore_gp")) continue;
-                for (String commodity : commodities) {
-                    int val = ind.getSupply(commodity).getQuantity().getModifiedInt() * scale;
-                    AoTDMisc.putCommoditiesIntoMap(totalResources, commodity, val);
+            if(factionMarket.hasSubmarket(Submarkets.SUBMARKET_STORAGE)){
+                SubmarketAPI submarketAPI = factionMarket.getSubmarket(Submarkets.SUBMARKET_STORAGE);
+                for (Map.Entry<String, GPResourceType> entry : special.entrySet()) {
+                    int val = (int) submarketAPI.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL,new SpecialItemData(entry.getKey(),null));
+                    AoTDMisc.putCommoditiesIntoMap(totalResources, entry.getKey(), val);
                 }
 
             }
+
+            for (Industry ind : factionMarket.getIndustries()) {
+                if (ind.getSpec().hasTag("ignore_gp")) continue;
+                for (Map.Entry<String, GPResourceType> commodity : resources.entrySet()) {
+                        int val = ind.getSupply(commodity.getKey()).getQuantity().getModifiedInt() * scale;
+                        if(val<0)val =0;
+                        AoTDMisc.putCommoditiesIntoMap(totalResources, commodity.getKey(), val);
+                }
+
+            }
+
         }
         HashMap<String, Integer> resourcesFromMega = new HashMap<>();
         for (GPBaseMegastructure megastructure : GPManager.getInstance().getMegastructures()) {
@@ -325,7 +358,7 @@ public class GPManager {
     public HashMap<String, Integer> getReqResources(ArrayList<GPOrder> orders) {
         if (reqResources == null) reqResources = new HashMap<>();
         reqResources.clear();
-        for (String s : commodities) {
+        for (String s : commodities.keySet()) {
             reqResources.put(s, 0);
         }
         if (BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
@@ -548,7 +581,7 @@ public class GPManager {
     public LinkedHashMap<String, Integer> getExpectedCosts(ArrayList<GPOrder> ordersQueued) {
         LinkedHashMap<String, Integer> reqResources = new LinkedHashMap<>();
         reqResources.clear();
-        for (String s : commodities) {
+        for (String s : commodities.keySet()) {
             reqResources.put(s, 0);
         }
         if (BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject() != null) {
@@ -566,8 +599,7 @@ public class GPManager {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue() * GPManager.getInstance().getAmountForOrder(productionOrder));
                 } else {
-                    int prev = reqResources.get(entry.getKey());
-                    reqResources.put(entry.getKey(), prev + entry.getValue() * GPManager.getInstance().getAmountForOrder(productionOrder));
+                    reqResources.compute(entry.getKey(), (k, prev) -> prev + entry.getValue() * GPManager.getInstance().getAmountForOrder(productionOrder));
                 }
             }
         }
@@ -788,7 +820,7 @@ public class GPManager {
         for (GPOrder order : orders) {
             float totalPenalty = 1;
             for (String s : order.assignedResources.keySet()) {
-                totalPenalty *= penaltyMap.get(s);
+                totalPenalty *= penaltyMap.getOrDefault(s,1f);
             }
             order.setPenalty(totalPenalty);
         }
@@ -813,13 +845,16 @@ public class GPManager {
     private @NotNull HashMap<String, Float> getPenaltyMap(ArrayList<GPOrder> orders) {
         HashMap<String, Float> penaltyMap = new HashMap<>();
         for (Map.Entry<String, Integer> stringIntegerEntry : getTotalResources().entrySet()) {
-            Integer currentDemand = getReqResources(orders).get(stringIntegerEntry.getKey());
-            Integer total = stringIntegerEntry.getValue();
-            float penalty = (float) total / currentDemand;
-            if (penalty >= 1) {
-                penalty = 1;
+            if(commodities.getOrDefault(stringIntegerEntry.getKey(),GPResourceType.COMMODITY).equals(GPResourceType.COMMODITY)){
+                Integer currentDemand = getReqResources(orders).get(stringIntegerEntry.getKey());
+                Integer total = stringIntegerEntry.getValue();
+                float penalty = (float) total / currentDemand;
+                if (penalty >= 1) {
+                    penalty = 1;
+                }
+                penaltyMap.put(stringIntegerEntry.getKey(), penalty);
             }
-            penaltyMap.put(stringIntegerEntry.getKey(), penalty);
+
         }
         return penaltyMap;
     }

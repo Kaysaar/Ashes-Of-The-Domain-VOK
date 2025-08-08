@@ -7,7 +7,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastrcutre;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -112,9 +112,9 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
         }
         tooltip.addPara("This section is going to produce this amount of GP units of resources, as long as demand is met", 5f);
         tooltip.addSectionHeading("Production", Alignment.MID, 5f);
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanel(tooltip.getWidthSoFar(), 40, 40, increase, Misc.getPositiveHighlightColor()), 5f);
+        tooltip.addCustom(GPUIMisc.createResourcePanel(tooltip.getWidthSoFar(), 40, 40, increase, Misc.getPositiveHighlightColor()), 5f);
         tooltip.addSectionHeading("Demand", Alignment.MID, 5f);
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanel(tooltip.getWidthSoFar(), 40, 40, demand, Misc.getNegativeHighlightColor()), 10f);
+        tooltip.addCustom(GPUIMisc.createResourcePanel(tooltip.getWidthSoFar(), 40, 40, demand, Misc.getNegativeHighlightColor()), 10f);
     }
 
     public int getEffectiveManpowerForEffects() {
