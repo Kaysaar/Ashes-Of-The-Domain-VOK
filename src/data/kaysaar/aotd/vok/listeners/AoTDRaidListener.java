@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.listeners.GroundRaidObjectivesListener;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.graid.GroundRaidObjectivePlugin;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
+import data.kaysaar.aotd.vok.Ids.AoTDItems;
 import data.kaysaar.aotd.vok.scripts.raids.SpecialProjectBlueprintPluginImpl;
 
 import java.util.List;
@@ -23,13 +24,13 @@ public class AoTDRaidListener implements GroundRaidObjectivesListener {
                         return;
                     }
                 }
-                SpecialProjectBlueprintPluginImpl curr = new SpecialProjectBlueprintPluginImpl(market,"special_ship_bp","uaf_cherry_core:$uaf_aqq_cherry");
+                SpecialProjectBlueprintPluginImpl curr = new SpecialProjectBlueprintPluginImpl(market, AoTDItems.BASE_SHIP_BLUEPRINT,"uaf_cherry_core:$uaf_aqq_cherry");
 
                 objectives.add(curr);
             }
             if(market.getMemory().is("$uaf_novaeria_bp",true)&&market.getFactionId().equals("uaf")){
                 market.getMemory().set("$bp_value","$uaf_novaeria_bp");
-                SpecialProjectBlueprintPluginImpl curr = new SpecialProjectBlueprintPluginImpl(market,"special_ship_bp","uaf_novaeria:$uaf_aqq_nova");
+                SpecialProjectBlueprintPluginImpl curr = new SpecialProjectBlueprintPluginImpl(market, AoTDItems.BASE_SHIP_BLUEPRINT,"uaf_novaeria:$uaf_aqq_nova");
                 for (GroundRaidObjectivePlugin objective : objectives) {
                     if(objective instanceof SpecialProjectBlueprintPluginImpl){
                         return;

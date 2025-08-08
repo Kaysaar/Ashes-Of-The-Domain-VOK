@@ -46,7 +46,7 @@ public class BaseMegastructureIndustry extends BaseIndustry {
                 GPBaseMegastructure mega = megastructure;
                 megastructure.applySupplyToIndustryFirst(this);
                 HashMap<String,Integer>map = mega.getProduction();
-                for (String commodity : GPManager.commodities) {
+                for (String commodity : GPManager.commodities.keySet()) {
                     if(map.containsKey(commodity)){
                         int amountTotal = map.get(commodity)/GPManager.scale;
                         float accessibility = market.getAccessibilityMod().getFlatBonus();

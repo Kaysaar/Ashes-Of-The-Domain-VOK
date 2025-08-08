@@ -48,6 +48,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
 
     public void init(CustomPanelAPI mainPanel, String panelToShowcase, Object data) {
         this.mainPanel = mainPanel;
+        GPManager.reloadCommoditiesMap();
         this.panelForPlugins = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - 45, null);
         if (panelToShowcase == null) {
             panelToShowcase = "production";

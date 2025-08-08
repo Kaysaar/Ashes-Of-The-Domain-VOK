@@ -3,7 +3,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.d
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -22,7 +22,7 @@ public class BasePopUpDialog extends PopUpUI {
     public void renderBelow(float alphaMult) {
         super.renderBelow(alphaMult);
         if(headerTooltip != null) {
-            MegastructureUIMisc.drawRectangleFilledForTooltip(headerTooltip,1f,  Global.getSector().getPlayerFaction().getDarkUIColor().darker());
+            GPUIMisc.drawRectangleFilledForTooltip(headerTooltip,1f,  Global.getSector().getPlayerFaction().getDarkUIColor().darker());
         }
     }
 

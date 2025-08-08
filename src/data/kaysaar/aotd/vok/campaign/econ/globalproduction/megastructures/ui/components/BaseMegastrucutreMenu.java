@@ -38,19 +38,19 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
         this.mainMenu = menu;
     }
     public void createTitleMenu(){
-        titlePanel = MegastructureUIMisc.createTitleMenu(mainPanel, megastructureReferedTo);
+        titlePanel = GPUIMisc.createTitleMenu(mainPanel, megastructureReferedTo);
         mainPanel.addComponent(titlePanel).inTL(-5,lastY);
         lastY += titlePanel.getPosition().getHeight();
 
     }
     public void createTitleSection(){
-        mainTitlePanel = MegastructureUIMisc.createTitleSection(mainPanel, megastructureReferedTo,"Megastructure Sections");
+        mainTitlePanel = GPUIMisc.createTitleSection(mainPanel, megastructureReferedTo,"Megastructure Sections");
         mainPanel.addComponent(mainTitlePanel).inTL(-5,lastY);
         lastY+=mainTitlePanel.getPosition().getHeight();
 
     }
     public void createSectionMenu(GPMegaStructureSection section,float offsetOpt,float offsetOther){
-        ButtonPackage Bpackage = MegastructureUIMisc.createWidgetForSection(mainPanel,section,offsetOpt,offsetOther);
+        ButtonPackage Bpackage = GPUIMisc.createWidgetForSection(mainPanel,section,offsetOpt,offsetOther);
         CustomPanelAPI sectionsPanel = Bpackage.getPanelOfButtons();
         buttons.add(Bpackage);
         tooltipOfSections.addCustom(sectionsPanel,5f);

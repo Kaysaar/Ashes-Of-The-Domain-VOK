@@ -4,6 +4,7 @@ import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SpecialItemSpecAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
+import data.kaysaar.aotd.vok.Ids.AoTDItems;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class ShroudProjectMisc implements EveryFrameScript {
         return Global.getSector().getPlayerMemoryWithoutUpdate().getBoolean(cooldownBetweenProjects);
     }
     public static void updateCommodityInfo(){
-        SpecialItemSpecAPI specAPI = Global.getSettings().getSpecialItemSpec("aotd_shrouded_substrate");
+        SpecialItemSpecAPI specAPI = Global.getSettings().getSpecialItemSpec(AoTDItems.SHROUDED_SUBSTRATE);
         int levelOfUnderstanding = getLevelOfUnderstanding();
         if(levelOfUnderstanding ==0){
             specAPI.setIconName("graphics/icons/cargo/shrouded_lens.png");

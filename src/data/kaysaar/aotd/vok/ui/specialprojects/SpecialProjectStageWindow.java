@@ -10,7 +10,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.FormationType;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.scripts.specialprojects.*;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
@@ -131,7 +131,7 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         tooltip.addTitle(spec.getName());
 
         tooltip.addSectionHeading("GP Resource cost", Alignment.MID, 5f);
-        CustomPanelAPI custom = MegastructureUIMisc.createResourcePanelForSmallTooltipCondensed(panelInfoOfStage.getPosition().getWidth() + 40, 20, 20, spec.getGpCost(), new HashMap<>());
+        CustomPanelAPI custom = GPUIMisc.createResourcePanelForSmallTooltipCondensed(panelInfoOfStage.getPosition().getWidth() + 40, 20, 20, spec.getGpCost(), new HashMap<>());
         tooltip.addCustom(custom, 5f);
         tooltip.addSectionHeading("Stage starting cost", Alignment.MID, 5f);
         if(Global.getSector().getPlayerFleet().getCargo().getCredits().get()>=spec.getCreditCosts()){

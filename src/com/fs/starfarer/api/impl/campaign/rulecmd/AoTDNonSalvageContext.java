@@ -21,7 +21,7 @@ import java.util.List;
 public class AoTDNonSalvageContext extends FleetEncounterContext {
     @Override
     public void applyAfterBattleEffectsIfThereWasABattle() {
-        if (!hasWinnerAndLoser() || !engagedInHostilities) {
+            if (!hasWinnerAndLoser() || !engagedInHostilities) {
             for (FleetMemberAPI member : Global.getSector().getPlayerFleet().getFleetData().getMembersListCopy()) {
                 member.getStatus().resetAmmoState();
             }

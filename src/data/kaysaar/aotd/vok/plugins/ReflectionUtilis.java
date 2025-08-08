@@ -19,13 +19,14 @@ public class ReflectionUtilis {
     private static final MethodHandle getFieldNameHandle;
     private static final MethodHandle setFieldAccessibleHandle;
     private static final Class<?> methodClass;
+    private static final Class<?> constructorClass;
     private static final MethodHandle getMethodNameHandle;
     private static final MethodHandle invokeMethodHandle;
     private static final MethodHandle setMethodAccessable;
     private static final MethodHandle getModifiersHandle;
     private static final MethodHandle  getParameterTypesHandle;
     private static final MethodHandle  getFieldTypeHandle;
-
+    private static final MethodHandle getDeclaredConstructorsHandle;
     static {
         try {
             fieldClass = Class.forName("java.lang.reflect.Field", false, Class.class.getClassLoader());
@@ -41,6 +42,9 @@ public class ReflectionUtilis {
             setMethodAccessable = lookup.findVirtual(methodClass, "setAccessible", MethodType.methodType(Void.TYPE, boolean.class));
             getModifiersHandle = lookup.findVirtual(methodClass, "getModifiers", MethodType.methodType(int.class));
             getParameterTypesHandle = lookup.findVirtual(methodClass, "getParameterTypes", MethodType.methodType(Class[].class));
+
+            constructorClass = Class.forName("java.lang.reflect.Constructor", false, Class.class.getClassLoader());
+            getDeclaredConstructorsHandle = lookup.findVirtual(constructorClass, "getParameterTypes", MethodType.methodType(Class[].class));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -71,6 +75,59 @@ public class ReflectionUtilis {
             throw new RuntimeException(e);
         }
     }
+    private static boolean isMatchingConstructor(MethodType ctorType) {
+        // We want 5 params exactly
+        if (ctorType.parameterCount() != 5) return false;
+
+        Class<?>[] params = ctorType.parameterArray();
+
+        // Check first 4 parameters exactly
+        if (params[0] == float.class &&
+                params[1] == float.class &&
+                params[2] == boolean.class &&
+                params[3] == boolean.class) {
+            // We don't check params[4] because it's inaccessible, accept any class
+            return true;
+        }
+
+        return false;
+    }
+
+    public static String getFloatFieldNameMatchingValue(Object instance, float targetValue) {
+        try {
+            Class<?> currentClass = instance.getClass();
+
+            while (currentClass != null) {
+                Object[] fields = currentClass.getDeclaredFields();
+
+                for (Object field : fields) {
+                    try {
+                        // Make field accessible
+                        setFieldAccessibleHandle.invoke(field, true);
+
+                        // Check if field is float
+                        Class<?> type = (Class<?>) getFieldTypeHandle.invoke(field);
+                        if (type == float.class) {
+                            float fieldValue = (float) getFieldHandle.invoke(field, instance);
+
+                            if (Float.compare(fieldValue, targetValue) == 0) {
+                                return (String) getFieldNameHandle.invoke(field);
+                            }
+                        }
+                    } catch (Throwable innerEx) {
+                        innerEx.printStackTrace(); // or log silently if preferred
+                    }
+                }
+
+                currentClass = currentClass.getSuperclass();
+            }
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to find float field name", e);
+        }
+
+        return null; // No matching field found
+    }
+
 
     public static Object getPrivateVariableFromSuperClass(String fieldName, Object instanceToGetFrom) {
         try {
@@ -253,6 +310,47 @@ public class ReflectionUtilis {
             throw new RuntimeException(e);
         }
     }
+    public static String findFieldWithMatchingCtor(Object instance) {
+        try {
+            Class<?> currentClass = instance.getClass();
+
+            while (currentClass != null) {
+                Object[] fields = currentClass.getDeclaredFields();
+
+                for (Object field : fields) {
+                    try {
+                        setFieldAccessibleHandle.invoke(field, true);
+                        Object fieldValue = getFieldHandle.invoke(field, instance);
+                        if (fieldValue == null) continue;
+
+                        Class<?> fieldType = (Class<?>) getFieldTypeHandle.invoke(field);
+                        if(fieldType.getConstructors().length!=0){
+                            Object[] constructors = (Object[]) invokeMethod("getConstructors",fieldType);
+                            Class<?>[] classes = (Class<?>[]) invokeMethod("getParameterTypes",constructors[0]);
+                            if(classes.length==5){
+                                if(classes[0]==float.class&&classes[1]==float.class&&classes[2]==boolean.class&&classes[3]==boolean.class){
+                                    return (String) getFieldNameHandle.invoke(field);
+                                }
+                            }
+                        }
+
+
+                    } catch (Throwable inner) {
+                        inner.printStackTrace();
+                    }
+                }
+
+                currentClass = currentClass.getSuperclass();
+            }
+
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to find matching constructor field", e);
+        }
+
+        return null;
+    }
+
+
 
     public static Object invokeMethodWithAutoProjection(String methodName, Object instance, Object... arguments) {
         // Retrieve the method and its parameter types

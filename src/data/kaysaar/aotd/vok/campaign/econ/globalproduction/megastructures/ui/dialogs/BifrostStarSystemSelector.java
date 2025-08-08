@@ -9,7 +9,7 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.StarSystemSelector;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.StarSystemSelectorOtherInfoData;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -71,7 +71,7 @@ public class BifrostStarSystemSelector extends BasePopUpDialog{
         tooltip.setParaInsigniaLarge();
         tooltip.addPara("Building Bifrost Gate will take %s and require monthly income of %s, and it will require following resources for duration of construction",5f,Color.ORANGE, AoTDMisc.convertDaysToString(90),Misc.getDGSCredits(100000));
         tooltip.getPrev().getPosition().inTL(5,-tooltip.getPrev().getPosition().getY()-tooltip.getPrev().getPosition().getHeight()-5f);
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanel(width,40,40, BifrostMega.bifrostGateCost,Color.ORANGE),5f);
+        tooltip.addCustom(GPUIMisc.createResourcePanel(width,40,40, BifrostMega.bifrostGateCost,Color.ORANGE),5f);
 
 
     }

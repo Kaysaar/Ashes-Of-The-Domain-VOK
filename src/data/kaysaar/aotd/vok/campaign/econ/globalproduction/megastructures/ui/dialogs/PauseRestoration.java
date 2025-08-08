@@ -3,7 +3,7 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.d
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.MegastructureUIMisc;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 
@@ -25,7 +25,7 @@ public class PauseRestoration extends BasePopUpDialog{
         tooltip.setParaFont(Fonts.INSIGNIA_LARGE);
         tooltip.addPara(content,2f);
         tooltip.addSectionHeading("Currently consumed", Alignment.MID,10f);
-        tooltip.addCustom(MegastructureUIMisc.createResourcePanel(width,40,40,sectionToRestore.getSpec().getGpRestorationCost(),Color.ORANGE),10f);
+        tooltip.addCustom(GPUIMisc.createResourcePanel(width,40,40,sectionToRestore.getSpec().getGpRestorationCost(),Color.ORANGE),10f);
     }
 
     @Override

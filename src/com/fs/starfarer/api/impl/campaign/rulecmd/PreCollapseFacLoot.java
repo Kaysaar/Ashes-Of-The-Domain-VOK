@@ -3,19 +3,20 @@ package com.fs.starfarer.api.impl.campaign.rulecmd;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.impl.campaign.procgen.SalvageEntityGenDataSpec;
-import com.fs.starfarer.api.impl.campaign.rulecmd.BaseCommandPlugin;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BaseSalvageSpecial;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDItems;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import org.magiclib.achievements.MagicAchievementManager;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class PreCollapseFacLoot extends BaseCommandPlugin {
 
@@ -107,7 +108,7 @@ public class PreCollapseFacLoot extends BaseCommandPlugin {
 
         if(rand<2){
             for (int i = 0; i < rand; i++) {
-                salvage.addSpecial(new SpecialItemData("aotd_item_bp",GPManager.getInstance().getItemsProductionWithoutAICores().get(getRandomNumber(0,GPManager.getInstance().getItemProductionOptionFiltered().size()-1)).getSpec().getItemSpecAPI().getId()),1);
+                salvage.addSpecial(new SpecialItemData(AoTDItems.BASE_ITEM_BLUEPRINT,GPManager.getInstance().getItemsProductionWithoutAICores().get(getRandomNumber(0,GPManager.getInstance().getItemProductionOptionFiltered().size()-1)).getSpec().getItemSpecAPI().getId()),1);
             }
         }
         BaseSalvageSpecial.clearExtraSalvage(memoryMap);

@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="sidebarLib">
+  <library name="sidebarLib1">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../sidebarLib/jars/sidebarLib.jar!/" />
     </CLASSES>

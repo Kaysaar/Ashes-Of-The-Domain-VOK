@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDItems;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import org.lazywizard.lazylib.MathUtils;
 
@@ -16,7 +17,7 @@ public class ShroudUnderstanding extends AoTDSpecialProject {
 
     @Override
     public boolean checkIfProjectShouldUnlock() {
-        return Global.getSector().getPlayerFleet().getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData("aotd_shrouded_substrate",null))>0;
+        return Global.getSector().getPlayerFleet().getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(AoTDItems.SHROUDED_SUBSTRATE,null))>0;
     }
 
     @Override

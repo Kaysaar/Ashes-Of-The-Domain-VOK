@@ -1,7 +1,6 @@
 package data.kaysaar.aotd.vok.scripts;
 
 
-import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignUIAPI;
@@ -18,11 +17,12 @@ import data.kaysaar.aotd.vok.scripts.misc.TrapezoidButtonDetector;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lazywizard.lazylib.ui.FontException;
 import org.lazywizard.lazylib.ui.LazyFont;
-import sidebarLib.UI.sidebarWidget;
-;
+import sidebarLib.UI.sidebarMain;
 
 import java.awt.*;
 import java.util.List;
+
+;
 
 
 public class CurrentResearchProgressUI implements CampaignUIRenderingListener, EveryFrameScript, CampaignInputListener {
@@ -86,12 +86,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             return;
 
         if(Global.getSettings().getModManager().isModEnabled("sidebar")){
-            sidebarWidget widget = sidebarWidget.getSidebar();
-            if(AshMisc.isStringValid(widget.getCurrentButtonSelected())){
-                if(!widget.getCurrentButtonSelected().equals("aotd_vok_research_widget")){
-                    return;
-                }
-            }
+
         }
         int x1 = 0;
         if (!isHidden) {
@@ -187,7 +182,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
 
     private  float getYForRender() {
         if(Global.getSettings().getModManager().isModEnabled("sidebar")){
-            return sidebarWidget.getSidebar().yyLoc()-sidebarWidget.getSidebar().getSidebarHeight()-sidebarWidget.headerHeight()-sprite.getHeight()-5;
+            return sidebarMain.getSidebar().yyLoc()-sidebarMain.getSidebar().getSidebarHeight()-sidebarMain.headerHeight()-sprite.getHeight()-5;
         }
         return Global.getSettings().getScreenHeight() - 200;
     }

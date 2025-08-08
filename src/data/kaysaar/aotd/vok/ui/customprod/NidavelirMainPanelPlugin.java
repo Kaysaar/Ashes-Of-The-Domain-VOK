@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.campaign.CustomVisualDialogDelegate;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
@@ -25,16 +26,18 @@ import data.kaysaar.aotd.vok.ui.customprod.components.*;
 import data.kaysaar.aotd.vok.ui.customprod.components.gatheringpoint.AoTDGatehringPointPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.history.GPHistoryPopUp;
 import data.kaysaar.aotd.vok.ui.customprod.components.onhover.ButtonOnHoverInfo;
-import data.kaysaar.aotd.vok.ui.customprod.components.onhover.CommodityInfo;
 import data.kaysaar.aotd.vok.ui.customprod.components.onhover.GuideTootltip;
 import data.kaysaar.aotd.vok.ui.customprod.components.optionpanels.*;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc.createIconSection;
+import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc.createImage;
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
 public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIManager {
@@ -156,14 +159,15 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
         float x = positions;
         for (Map.Entry<String, Integer> entry : GPManager.getInstance().getExpectedCosts(ordersQueued).entrySet()) {
-            tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconsize, iconsize, 0f);
-            tooltip.addTooltipToPrevious(new CommodityInfo(entry.getKey(), 700, true, false,ordersQueued), TooltipMakerAPI.TooltipLocation.BELOW);
-            UIComponentAPI image = tooltip.getPrev();
-            image.getPosition().inTL(x, topYImage);
-            String text = "" + entry.getValue();
+            createImage(tooltip, iconsize, topYImage, x, entry,ordersQueued);
+            int val = entry.getValue();
+            if(commodities.getOrDefault(entry.getKey(), GPManager.GPResourceType.COMMODITY).equals(GPManager.GPResourceType.SPECIAL_ITEM)){
+                val = calculateDifferenceOfItems().getOrDefault(entry.getKey(),0);
+            }
+            String text = "" + val;
             String text2 = text;
             Color col = Misc.getPositiveHighlightColor();
-            if (entry.getValue() > GPManager.getInstance().getTotalResources().get(entry.getKey()))
+            if (val> GPManager.getInstance().getTotalResources().get(entry.getKey()))
                 col = Misc.getNegativeHighlightColor();
             tooltip.addPara("%s", 0f, col, col, text).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
             x += sections;
@@ -171,6 +175,8 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         customPanel.addUIElement(tooltip).inTL(0, 0);
         return customPanel;
     }
+
+
 
     public CustomPanelAPI createPaymentConfirm(float width, float height) {
         CustomPanelAPI panel = Global.getSettings().createCustom(width, height, null);
@@ -183,15 +189,19 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         tooltip.addPara("Estimated resource cost", 5f).getPosition().inTL(label.getPosition().getX(), -label.getPosition().getY() + 5);
         tooltip.addCustom(createResourceCostAfterTransaction(width, 30), 5f);
         float diff = calculateDifference();
-
+        HashMap<String,Integer>itemDiff = calculateDifferenceOfItems();
         if (!isThereDifferenceBetweenQueueAndOriginal()) {
             button.setEnabled(false);
             caancelBut.setEnabled(false);
         }
         if (diff > Global.getSector().getPlayerFleet().getCargo().getCredits().get()) {
             button.setEnabled(false);
-
         }
+        itemDiff.forEach((x,y)->{
+            if(y>GPManager.getInstance().getTotalResources().get(x)){
+                button.setEnabled(false);
+            }
+        });
         float pos = -caancelBut.getPosition().getY() - 30;
         button.getPosition().inTL(width - width / 3, pos);
         caancelBut.getPosition().inTL(0, pos);
@@ -262,6 +272,61 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
             credits += gpOrder.getAmountToProduce() * gpOrder.getSpecFromClass().getCredistCost();
         }
         return credits;
+    }
+    public HashMap<String, Integer> calculateDifferenceOfItems() {
+        HashMap<String, Integer> itemDifferences = new HashMap<>();
+
+        // Build a map of projectId -> GPOrder for quick lookup
+        Map<String, GPOrder> queuedMap = new HashMap<>();
+        for (GPOrder order : ordersQueued) {
+            queuedMap.put(order.getSpecFromClass().getProjectId(), order);
+        }
+
+        Map<String, GPOrder> currentMap = new HashMap<>();
+        for (GPOrder order : GPManager.getInstance().getProductionOrders()) {
+            currentMap.put(order.getSpecFromClass().getProjectId(), order);
+        }
+
+        // Handle common and current-only orders
+        for (Map.Entry<String, GPOrder> entry : currentMap.entrySet()) {
+            String projectId = entry.getKey();
+            GPOrder currentOrder = entry.getValue();
+            GPOrder queuedOrder = queuedMap.get(projectId);
+
+            int currentAmount = currentOrder.getAmountToProduce();
+            int queuedAmount = (queuedOrder != null) ? queuedOrder.getAmountToProduce() : 0;
+            int diffAmount = queuedAmount - currentAmount;
+
+            for (Map.Entry<String, Integer> costEntry : currentOrder.getSpecFromClass().getSupplyCost().entrySet()) {
+                String itemId = costEntry.getKey();
+                int costPerUnit = costEntry.getValue();
+
+                if (GPManager.commodities.getOrDefault(itemId, GPManager.GPResourceType.COMMODITY) == GPManager.GPResourceType.SPECIAL_ITEM) {
+                    int itemDiff = diffAmount * costPerUnit;
+                    itemDifferences.merge(itemId, itemDiff, Integer::sum);
+                }
+            }
+        }
+
+        // Handle queued-only orders (those not present in currentMap)
+        for (Map.Entry<String, GPOrder> entry : queuedMap.entrySet()) {
+            if (!currentMap.containsKey(entry.getKey())) {
+                GPOrder queuedOrder = entry.getValue();
+                int queuedAmount = queuedOrder.getAmountToProduce();
+
+                for (Map.Entry<String, Integer> costEntry : queuedOrder.getSpecFromClass().getSupplyCost().entrySet()) {
+                    String itemId = costEntry.getKey();
+                    int costPerUnit = costEntry.getValue();
+
+                    if (GPManager.commodities.getOrDefault(itemId, GPManager.GPResourceType.COMMODITY) == GPManager.GPResourceType.SPECIAL_ITEM) {
+                        int itemDiff = queuedAmount * costPerUnit;
+                        itemDifferences.merge(itemId, itemDiff, Integer::sum);
+                    }
+                }
+            }
+        }
+
+        return itemDifferences;
     }
 
 
@@ -438,20 +503,12 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
         float iconsize = 35;
         float topYImage = 0;
         LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
-        float x = positions;
-        for (Map.Entry<String, Integer> entry : GPManager.getInstance().getTotalResources().entrySet()) {
-            tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconsize, iconsize, 0f);
-            tooltip.addTooltipToPrevious(new CommodityInfo(entry.getKey(), 700, true, false,ordersQueued), TooltipMakerAPI.TooltipLocation.BELOW);
-            UIComponentAPI image = tooltip.getPrev();
-            image.getPosition().inTL(x, topYImage);
-            String text = "" + entry.getValue();
-            String text2 = text + "(" + GPManager.getInstance().getReqResources(ordersQueued).get(entry.getKey()) + ")";
-            tooltip.addPara("" + entry.getValue() + " %s", 0f, Misc.getTooltipTitleAndLightHighlightColor(), Color.ORANGE, "(" +  GPManager.getInstance().getExpectedCosts(ordersQueued).get(entry.getKey()) + ")").getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
-            x += sections;
-        }
+        createIconSection(positions, tooltip, iconsize, topYImage, test, sections,GPManager.getInstance().getProductionOrders());
         panelOfMarketData.addUIElement(tooltip).inTL(0, 0);
         panel.addComponent(panelOfMarketData).inTL(5 + width / 2, 5);
     }
+
+
 
     public void reset() {
 
@@ -600,6 +657,16 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
             if (confirmButton.isChecked()) {
                 confirmButton.setChecked(false);
                 float money = calculateDifference();
+                HashMap<String,Integer> items = calculateDifferenceOfItems();
+
+                MarketAPI market = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
+                if (market == null && !Misc.getPlayerMarkets(true).isEmpty()) {
+                    market = Misc.getPlayerMarkets(true).get(0);
+                }
+
+                List<MarketAPI> affectedMarkets = Misc.getPlayerMarkets(true);
+
+                AoTDMisc.processItemDifferences(items, "storage", market, affectedMarkets);
                 Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(money);
                 for (GPOrder productionOrder : GPManager.getInstance().getProductionOrders()) {
                     for (GPOrder gpOrder : ordersQueued) {
