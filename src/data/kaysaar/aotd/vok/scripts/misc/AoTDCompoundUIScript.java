@@ -18,6 +18,12 @@ public class AoTDCompoundUIScript implements EveryFrameScript {
     public transient boolean removed = false;
     public static
     float frames = 0f;
+
+    public static int getYPad() {
+
+        return 45;
+    }
+
     @Override
     public boolean isDone() {
         return removed;
@@ -31,7 +37,7 @@ public class AoTDCompoundUIScript implements EveryFrameScript {
     @Override
     public void advance(float amount) {
         frames++;
-        if(frames<4)return;
+        if (frames < 4) return;
         if (!removed) {
             UIPanelAPI coreUI = ProductionUtil.getCoreUI();
             UIPanelAPI leChildren = null;
@@ -57,10 +63,10 @@ public class AoTDCompoundUIScript implements EveryFrameScript {
                     }
                 }
                 for (UIComponentAPI componentAPI : componentAPIS) {
-                    if(ReflectionUtilis.hasMethodOfName("getValueDelta", componentAPI)) {
+                    if (ReflectionUtilis.hasMethodOfName("getValueDelta", componentAPI)) {
                         Object delta = ReflectionUtilis.invokeMethodWithAutoProjection("getValueDelta", componentAPI);
-                        String font = (String) ReflectionUtilis.invokeMethodWithAutoProjection("getFont",delta);
-                        if(font.equals("graphics/fonts/orbitron20aabold.fnt")){
+                        String font = (String) ReflectionUtilis.invokeMethodWithAutoProjection("getFont", delta);
+                        if (font.equals("graphics/fonts/orbitron20aabold.fnt")) {
                             testing = (UIPanelAPI) componentAPI;
                         }
                     }
@@ -92,7 +98,7 @@ public class AoTDCompoundUIScript implements EveryFrameScript {
                     insider.addComponent(main);
                     TooltipMakerAPI tooltip = testings.createUIElement(1, 1, true);
                     tooltip.addTooltipTo(new AoTDFuelTooltip(), main, TooltipMakerAPI.TooltipLocation.ABOVE);
-                    leChildren.addComponent(testings).aboveLeft(testing, 45);
+                    leChildren.addComponent(testings).aboveLeft(testing, getYPad());
 
 
                     return;

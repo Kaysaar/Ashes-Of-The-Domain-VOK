@@ -73,26 +73,8 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
             nameOfChargeUpFieldInBeamStatus = getFloatFieldNameMatchingValue(beamStatusField, 1);
             didItOnce = true;
         }
-        // The overrider for the duration of firing beam
-        // Does it work? I don't fuckin know
-        // Set all weapons and defense system to be disabled
         if (weapon.isFiring()) {
-            if (hasFired || charge >= 0.99f){
-                // Disable the shields or phase
-                weapon.getShip().setDefenseDisabled(true);
-               if( weapon.getShip().getFluxTracker().getCurrFlux() <0){
-                   weapon.getShip().getFluxTracker().increaseFlux(15,true);
-               }
-                if (weapon.getShip() == Global.getCombatEngine().getPlayerShip()) {
-                    Global.getCombatEngine().maintainStatusForPlayerShip(
-                            weapon.getShip(),
-                            shadowlanceIcon,
-                            "Shadowlance: Currently firing",
-                            "Defensive systems and weapons are disabled",
-                            true
-                    );
-                }
-            }
+
             if (charge != 0.5f) {
                 if (!didIt) {
                     // this overrides the beam duration
@@ -106,7 +88,22 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                     ReflectionUtilis.setPrivateVariableFromSuperclass(nameOfChargeUpFieldInBeamStatus, beamStatusField, seconds);
                     didIt = true;
                 }
-
+                if (hasFired || charge >= 0.99f){
+                    // Disable the shields or phase
+                    weapon.getShip().setDefenseDisabled(true);
+                    if( weapon.getShip().getFluxTracker().getCurrFlux() <0){
+                        weapon.getShip().getFluxTracker().increaseFlux(15,true);
+                    }
+                    if (weapon.getShip() == Global.getCombatEngine().getPlayerShip()) {
+                        Global.getCombatEngine().maintainStatusForPlayerShip(
+                                weapon.getShip(),
+                                shadowlanceIcon,
+                                "Shadowlance: Currently firing",
+                                "Defensive systems and weapons are disabled",
+                                true
+                        );
+                    }
+                }
                 for (WeaponAPI weaponID : weapon.getShip().getAllWeapons()) {
                     // Of fucking course, exclude the weapon itself otherwise IT WILL NOT WORK
                     if (weaponID.getId().equals("aotd_shadowlance")) continue;
@@ -269,24 +266,6 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                             }
                         }
                     }
-                }
-                else {
-                    // OG Flux Remover
-//                    if (0.01f < FluxRemover) { //                        if (ship.getHardFluxLevel() + 0.01f < FluxRemover) {
-//                        Global.getCombatEngine().maintainStatusForPlayerShip(
-//                                weapon.getShip() + "TOOLTIP_2",
-//                                Global.getSettings().getSpriteName("tooltips", "grimoire_deepstrike"),
-//                                "AOTD TEST WEAPON: " + Misc.getRoundedValue(FluxRemover) + "%",
-//                                "Currently discharging built up flux...",
-//                                false
-//                        );
-//                        if (FluxRemover > 0.75f) {
-//                            ship.getFluxTracker().decreaseFlux(25f);
-//                        }
-//                        else {
-//                            ship.getFluxTracker().decreaseFlux(25f * FluxRemover);
-//                        }
-//                    }
                 }
                 // Another part that you can put various shit into
                 if (charge == 1f) {
