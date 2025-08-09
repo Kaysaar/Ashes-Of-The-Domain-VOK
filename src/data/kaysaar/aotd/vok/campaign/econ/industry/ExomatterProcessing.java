@@ -64,7 +64,7 @@ public class ExomatterProcessing extends BaseIndustry {
         TooltipMakerAPI helper = panelAPI.createUIElement(panelAPI.getPosition().getWidth(),panelAPI.getPosition().getHeight(),false);
         float spacer =15;
         for (int i = 0; i < 1; i++) {
-            ImageViewer viewer = new ImageViewer(28,28,Global.getSettings().getSpecialItemSpec(AoTDItems.SHROUDED_SUBSTRATE).getIconName());
+            ImageViewer viewer = new ImageViewer(30,30,Global.getSettings().getSpecialItemSpec(AoTDItems.SHROUDED_SUBSTRATE).getIconName());
             helper.addCustom(viewer.getComponentPanel(),0f).getPosition().inTL(i*spacer,0);
         }
         float x = helper.getPrev().getPosition().getX()+35;
@@ -74,7 +74,7 @@ public class ExomatterProcessing extends BaseIndustry {
 
         x=labelAPI.getPosition().getX()+labelAPI.computeTextWidth(labelAPI.getText())+8;
         for (int i = 0; i < getConversionAmount(); i++) {
-            ImageViewer viewer = new ImageViewer(28,28,Global.getSettings().getSpecialItemSpec(AoTDItems.TENEBRIUM_CELL).getIconName());
+            ImageViewer viewer = new ImageViewer(30,30,Global.getSettings().getSpecialItemSpec(AoTDItems.TENEBRIUM_CELL).getIconName());
             helper.addCustom(viewer.getComponentPanel(),0f).getPosition().inTL(x+(i*spacer),0);
         }
         float width = helper.getPrev().getPosition().getX()+30;

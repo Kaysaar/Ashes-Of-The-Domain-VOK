@@ -27,7 +27,7 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
         this.component = component;
         ImageViewer viewer = new ImageViewer(24, 24, Global.getSettings().getSpriteName("aotd_icons", "compound_info"));
         viewer.setColorOverlay(new Color(138, 41, 255, 255));
-        mainPanel.addComponent(viewer.getComponentPanel()).inTL(2, 0);
+        mainPanel.addComponent(viewer.getComponentPanel()).inTL(6, 1);
         mainPanel.addComponent(component.getRenderingPanel()).inTL(30, 0);
         createTooltipPanel(false);
 
@@ -45,8 +45,6 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
         width = tooltipPanel.getPosition().getWidth();
         height = tooltipPanel.getPosition().getHeight();
         tooltip.setParaFont("graphics/fonts/orbitron12condensed.fnt");
-        LabelAPI labelAPI = tooltip.addPara("Compound Effectiveness", new Color(210, 187, 236), 0f);
-        labelAPI.getPosition().inTL(15, 0);
         Color[] colors = new Color[2];
         colors[1] = new Color(248, 181, 145);
         colors[0] = new Color(201, 156, 255, 255);
@@ -54,7 +52,7 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
         LabelAPI label = tooltip.addPara("%s / %s", 5f, colors, ""+AoTDFuelConsumptionScript.getCompound(Global.getSector().getPlayerFleet().getCargo()), "" + Global.getSector().getPlayerFleet().getCargo().getFuel());
         label.getPosition().inTL(component.getRenderingPanel().getPosition().getCenterX() - (label.computeTextWidth(label.getText()) / 2), height / 4 + 19);
         if(button==null){
-            button = tooltip.addButton("Start Infustion",null,new Color(201, 156, 255, 255),new Color(90, 43, 148, 255),Alignment.MID,CutStyle.ALL,width/2+15,20,0f);
+            button = tooltip.addButton("Start Infusion",null,new Color(201, 156, 255, 255),new Color(90, 43, 148, 255),Alignment.MID,CutStyle.ALL,width/2+15,20,0f);
             button.getPosition().inTL(15,height+25);
         }
         else{

@@ -49,7 +49,7 @@ public class AoTDShadowLanceBeamEffect implements BeamEffectPlugin {
 
 	@Override
 	public void advance(float amount, CombatEngineAPI engine, BeamAPI beam) {
-		if (beam.getSource() == null || beam.getWeapon() == null) {
+		if (beam.getSource() == null || beam.getWeapon() == null||!beam.getWeapon().getShip().isAlive()) {
 			return;
 		}
 
