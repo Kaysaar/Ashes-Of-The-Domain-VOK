@@ -20,10 +20,12 @@ public class ShipHologram implements HologramViewerObjectRendererAPI {
 
     public ShipHologram(String spec,Color color){
         this.shipSpec = spec;
+        this.color = color;
+
     }
     @Override
     public void init(CustomPanelAPI panelOfRendering) {
-        Pair<CustomPanelAPI, ShipRenderer> rendererPair= ShipInfoGenerator.getShipImageWithoutInitPanel(Global.getSettings().getHullSpec(shipSpec),panelOfRendering.getPosition().getWidth(), Color.CYAN);
+        Pair<CustomPanelAPI, ShipRenderer> rendererPair= ShipInfoGenerator.getShipImageWithoutInitPanel(Global.getSettings().getHullSpec(shipSpec),panelOfRendering.getPosition().getWidth(),color);
 
         panelOfRendering.addComponent(rendererPair.one).inTL(0,0);
         renderer= rendererPair.two;

@@ -87,7 +87,7 @@ public class GPSpec {
         GPSpec spec = new GPSpec();
         spec.setProjectId(specAPI.getWeaponId());
         spec.setObjectToBeProduced(specAPI.getWeaponId(),ProductionType.WEAPON);
-
+        int tenebriumMult =2;
         HashMap<String,Integer>commodityCost = new HashMap<>();
         int price =(int) basePrice/priceScaling;
         if(price==0){
@@ -107,6 +107,14 @@ public class GPSpec {
         }
         if(specAPI.getSize().equals(WeaponAPI.WeaponSize.LARGE)){
             days = Math.min(basePrice/dayScaling,50);
+        }
+        if(specAPI.getManufacturer().equals("Abyss-Tech")){
+            String substrate = specAPI.getTags().stream().filter(x->x.contains("substrate")).findFirst().orElse(null);
+            if(substrate!=null){
+                int number = Integer.parseInt(substrate.split("_")[1]);
+                commodityCost.put(AoTDItems.TENEBRIUM_CELL,number*tenebriumMult);
+            }
+
         }
         if(days<=0)days=2;
         spec.setDays((int) days);

@@ -69,6 +69,7 @@ public class SpecialProjectListManager implements CustomUIPanelPlugin {
             }
 
         }
+
         if (!haveAtLeastOne) {
             LabelAPI labelAPI = tooltip.addSectionHeading("No Project Available", Misc.getTooltipTitleAndLightHighlightColor(), null, Alignment.MID, 0f);
             labelAPI.getPosition().inTL(0, mainPanel.getPosition().getHeight() / 2 - (labelAPI.getPosition().getHeight() / 2));

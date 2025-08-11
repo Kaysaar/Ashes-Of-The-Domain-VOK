@@ -52,7 +52,7 @@ public class GPUIData {
         LinkedHashMap<String, Integer> shipManInfo = new LinkedHashMap<>();
         for (GPOption learnedShipPackage : GPManager.getInstance().getLearnedShipPackages()) {
             String man = learnedShipPackage.getSpec().getShipHullSpecAPI().getManufacturer();
-            if (man == null) {
+            if (man == null||man.isEmpty()) {
                 man = "Unknown";
             }
             if (shipManInfo.get(man) == null) {

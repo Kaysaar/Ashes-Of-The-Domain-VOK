@@ -300,7 +300,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
-
+        Global.getSettings().getAllWeaponSpecs().stream().filter(x->x.getManufacturer().equals("Shrouded Dweller")).forEach(x->x.setManufacturer("Abyss-Tech"));
         SpecialProjectSpecManager.reLoad();
         BlackSiteProjectManager.getInstance().loadAdditionalData();
         GPManager.reloadCommoditiesMap();
