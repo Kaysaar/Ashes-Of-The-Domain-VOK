@@ -81,7 +81,7 @@ public class HologramViewer extends ResizableComponent {
     public void render(float alphaMult) {
         this.curAlpha = alphaMult;
 
-        if (componentPanel.getPosition().getWidth() == 0 || componentPanel.getPosition().getHeight() == 0) return;
+        if (componentPanel.getPosition().getWidth() == 0 || componentPanel.getPosition().getHeight() == 0)  return;
 
         // Calculate position and size only if necessary
         if (requiresUpdate || isPositionChanged()) {

@@ -28,11 +28,11 @@ public class WeaponHologram implements HologramViewerObjectRendererAPI {
     }
     @Override
     public void init(CustomPanelAPI panelOfRendering) {
-        Pair<CustomPanelAPI, WeaponSpriteRenderer> rendererPair= WeaponInfoGenerator.getImageOfWeapon(Global.getSettings().getWeaponSpec(weaponSpec),panelOfRendering.getPosition().getWidth());
+        Pair<CustomPanelAPI, WeaponSpriteRenderer> rendererPair= WeaponInfoGenerator.getImageOfWeaponNonInit(Global.getSettings().getWeaponSpec(weaponSpec),panelOfRendering.getPosition().getWidth());
 
         panelOfRendering.addComponent(rendererPair.one).inTL(0,0);
         renderer= rendererPair.two;
-        renderer.setOverlayColor(Color.CYAN);
+        renderer.setOverlayColor(color);
     }
 
     @Override

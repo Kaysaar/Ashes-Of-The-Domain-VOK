@@ -52,7 +52,7 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
 
         ShipAPI ship = weapon.getShip();
 
-        if (weapon.getCooldownRemaining() > 1f) {
+        if (weapon.getCooldownRemaining() > 0.1f) {
             if (weapon.getShip() == Global.getCombatEngine().getPlayerShip()) {
                 Global.getCombatEngine().maintainStatusForPlayerShip(
                         weapon.toString(),
@@ -88,8 +88,21 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                     ReflectionUtilis.setPrivateVariableFromSuperclass(nameOfChargeUpFieldInBeamStatus, beamStatusField, seconds);
                     didIt = true;
                 }
+                if(hasFired||charge>=0.98f){
+                    if(!commencedSucking){
+                        commencedSucking = true;
+                        Global.getSoundPlayer().playSound("shadowlance_on_fire"
+                                ,0.9f,  1,
+                                weapon.getLocation(), weapon.getShip().getVelocity());
+                    }
+                }
                 if (hasFired || charge >= 0.99f){
                     // Disable the shields or phase
+                    if(hasFired){
+                        Global.getSoundPlayer().playLoop("shadowlance_fire",
+                                weapon.getShip(),0.7f,  0.8f,
+                                weapon.getLocation(), weapon.getShip().getVelocity());
+                    }
                     weapon.getShip().setDefenseDisabled(true);
                     if( weapon.getShip().getFluxTracker().getCurrFlux() <0){
                         weapon.getShip().getFluxTracker().increaseFlux(15,true);
@@ -114,6 +127,7 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                     // Try to see if you can change the vfx of disabled weapons smoke
                     // Wait... maybe not, I can't or- it's too fucking complex for such minor details
                 }
+
                 if (charge < 0.95f) {
                     if (weapon.getShip() == Global.getCombatEngine().getPlayerShip()) {
                         Global.getCombatEngine().maintainStatusForPlayerShip(
@@ -145,6 +159,9 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                 int barrel = i;
                 float TURRET_OFFSET = weapon.getSpec().getTurretFireOffsets().get(barrel).x;
                 float OFFSET_Y = weapon.getSpec().getTurretFireOffsets().get(barrel).y;
+                if(!weapon.getSlot().isHardpoint()){
+                    TURRET_OFFSET-=15;
+                }
 
                 charge = weapon.getChargeLevel();
 
@@ -160,6 +177,9 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                         );
                         ship.getFluxTracker().setCurrFlux(fluxCurr - (fluxCurr * charge));
                         ship.getFluxTracker().setHardFlux(fluxCurr - (fluxCurr * charge));
+                        Global.getSoundPlayer().playLoop("shadowlance_charge",
+                                weapon.getShip(), Math.max(0.3f,charge),  Math.max(0.4f,charge),
+                                weapon.getLocation(), weapon.getShip().getVelocity());
                     }
 
                     particle.advance(amount);
@@ -169,7 +189,6 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                         VectorUtils.rotate(offset, weapon.getCurrAngle(), offset);
                         Vector2f.add(offset, origin, origin);
                         Vector2f vel = weapon.getShip().getVelocity();
-
                         // LIGHT VFX THAT POOLS IN THE SUCTION AREA, YEAH I DON'T KNOW EITHER WHY IS IT HERE BEFORE THE SUCTION CODE
                         engine.addHitParticle(
                                 origin,
@@ -277,6 +296,8 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
         } else {
             // So the whole ass animation won't repeat until it fire again
             hasFired = false;
+            commencedSucking= false;
+            charge =0f;
         }
     }
 
