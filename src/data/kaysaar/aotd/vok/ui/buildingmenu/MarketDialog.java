@@ -12,10 +12,9 @@ import com.fs.starfarer.api.util.MutableValue;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
-import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.CoreUITracker2;
 import data.kaysaar.aotd.vok.scripts.misc.TrapezoidButtonDetector;
+import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -142,7 +141,6 @@ public class MarketDialog extends BasePopUpDialog {
         table.clearTable();
         table.activeTags.clear();
         table.specs.clear();
-        CoreUITracker2.didIt = false;
     }
 
     @Override

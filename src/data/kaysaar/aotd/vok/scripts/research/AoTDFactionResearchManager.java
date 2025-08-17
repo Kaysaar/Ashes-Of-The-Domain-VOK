@@ -20,7 +20,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import data.kaysaar.aotd.vok.scripts.CoreUITracker;
+import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;

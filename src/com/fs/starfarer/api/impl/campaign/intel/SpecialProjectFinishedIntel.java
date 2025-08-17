@@ -6,7 +6,7 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.scripts.CoreUITracker;
+import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 
 import java.awt.*;

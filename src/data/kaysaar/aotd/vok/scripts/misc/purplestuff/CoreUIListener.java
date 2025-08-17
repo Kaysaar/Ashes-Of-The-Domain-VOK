@@ -10,5 +10,6 @@ public class CoreUIListener implements CoreUITabListener {
         if(tab.equals(CoreUITabId.FLEET)){
             Global.getSector().addTransientScript(new InsertTalkToOfficerButton());
         }
+
     }
 }

@@ -48,10 +48,11 @@ public class ExomatterProcessing extends BaseIndustry {
 
     @Override
     public void apply() {
+        super.apply(true);
         if (!market.hasSubmarket(subMarketId)) {
             market.addSubmarket(subMarketId);
         }
-        super.apply(true);
+
         demand(Commodities.MARINES,6);
 
     }

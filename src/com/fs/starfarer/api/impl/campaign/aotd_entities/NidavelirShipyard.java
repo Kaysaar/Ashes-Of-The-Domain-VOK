@@ -29,6 +29,20 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
     public boolean isAppearing =false;
     float currAlpha = 1f;
     public float waitingTime = 0f;
+    public String type;
+    public float currAngle;
+
+    public float getCurrAngle() {
+        return currAngle;
+    }
+
+    public void setCurrAngle(float currAngle) {
+        this.currAngle = currAngle;
+    }
+
+    public String getType() {
+        return type;
+    }
 
     @Override
     public void advance(float amount) {
@@ -91,6 +105,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
     PlanetAPI tiedToPlanet;
     public void reinitRendering(String type,String shadowType,boolean isDestroyed){
         layers.clear();
+        this.type = type;
         this.entity.setLocation(tiedToPlanet.getLocation().x,tiedToPlanet.getLocation().y);
         float angle = (float)Math.random() * 360.0F;
         if(!isDestroyed){
@@ -130,6 +145,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
             }
         }
         else{
+
             for (int i = 0; i < 3; i++) {
                 Planet rendererText = new Planet(type,tiedToPlanet.getRadius()+35-0.5f*i,0.0f,new Vector2f());
                 rendererText.setAngle(angle);
@@ -137,7 +153,7 @@ public class NidavelirShipyard extends BaseCustomEntityPlugin {
                 layers.put(rendererText,type);
             }
         }
-
+        setCurrAngle(angle);
 
 
     }

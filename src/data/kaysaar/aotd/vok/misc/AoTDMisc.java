@@ -23,6 +23,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.Nidav
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
@@ -74,7 +75,13 @@ public class AoTDMisc {
     public static NidavelirComplexMegastructure getNidavelirIfOwned(){
         return (NidavelirComplexMegastructure) GPManager.getInstance().getMegastructure("aotd_nidavelir");
     }
+    public static NidavelirComplexMegastructure getNidavelir(){
+       StarSystemAPI system = Global.getSector().getStarSystem(Global.getSector().getPlayerMemoryWithoutUpdate().getString("$aotd_mega_system_id_aotd_nidavelir"));
+       PlanetAPI planet  = system.getPlanets().stream().filter(x->x.hasCondition("aotd_nidavelir_complex")).findFirst().orElse(null);
 
+       if(planet == null) return null;
+       return (NidavelirComplexMegastructure) planet.getMemoryWithoutUpdate().get(GPBaseMegastructure.memKey);
+    }
     public static List<MarketAPI> retrieveFactionMarkets(FactionAPI faction) {
         ArrayList<MarketAPI> marketsToReturn = new ArrayList<>();
         if (faction.isPlayerFaction()) {

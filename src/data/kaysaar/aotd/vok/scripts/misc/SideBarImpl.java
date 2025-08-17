@@ -4,7 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.scripts.CoreUITracker;
+import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import sidebarLib.buttons.sidebarButton;
 
 public class SideBarImpl extends sidebarButton {

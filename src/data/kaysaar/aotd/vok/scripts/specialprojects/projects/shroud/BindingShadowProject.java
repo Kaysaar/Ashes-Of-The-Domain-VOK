@@ -15,7 +15,7 @@ public class BindingShadowProject extends ShroudBasedProject{
     }
     @Override
     public void createRewardSection(TooltipMakerAPI tooltip, float width) {
-        tooltip.addPara("Gain Shadowlance, the superweapon based on the designs of Abyssal Glare.", Misc.getPositiveHighlightColor(),5f);
+        tooltip.addPara("Gain Entropy Lance, the superweapon based on the designs of Abyssal Glare.", Misc.getPositiveHighlightColor(),5f);
 
     }
 

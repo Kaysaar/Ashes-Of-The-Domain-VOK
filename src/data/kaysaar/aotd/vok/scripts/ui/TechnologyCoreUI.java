@@ -8,7 +8,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.scripts.CoreUITracker;
+import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.ui.SoundUIManager;
