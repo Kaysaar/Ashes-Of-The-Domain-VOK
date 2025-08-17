@@ -49,6 +49,53 @@ public class ReflectionUtilis {
             throw new RuntimeException(e);
         }
     }
+    public static Object instantiateExact(Class<?> clazz, Class<?>[] parameterTypes, Object... arguments) {
+        try {
+            // Match constructor exactly with the provided parameter types
+            MethodType ctorType = MethodType.methodType(void.class, parameterTypes);
+            MethodHandle constructorHandle = lookup.findConstructor(clazz, ctorType);
+
+            // Invoke the constructor with the provided arguments
+            return constructorHandle.invokeWithArguments(arguments);
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to instantiate (exact) " + clazz.getName(), e);
+        }
+    }
+
+    public static Object instantiate(Class<?> clazz, Object... arguments) {
+        try {
+            // Auto-derive parameter types from arguments
+            Class<?>[] parameterTypes = new Class<?>[arguments.length];
+            for (int i = 0; i < arguments.length; i++) {
+                Object arg = arguments[i];
+                parameterTypes[i] = (arg != null && arg.getClass().isPrimitive())
+                        ? arg.getClass() // Won't really hit here often — boxing will happen
+                        : (arg != null && getPrimitiveType(arg.getClass()) != null)
+                        ? getPrimitiveType(arg.getClass())
+                        : (arg != null ? arg.getClass() : Object.class);
+            }
+
+            MethodType ctorType = MethodType.methodType(void.class, parameterTypes);
+            MethodHandle constructorHandle = lookup.findConstructor(clazz, ctorType);
+
+            return constructorHandle.invokeWithArguments(arguments);
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to instantiate " + clazz.getName(), e);
+        }
+    }
+
+    // Helper: map boxed -> primitive types
+    private static Class<?> getPrimitiveType(Class<?> boxed) {
+        if (boxed == Integer.class) return int.class;
+        if (boxed == Long.class) return long.class;
+        if (boxed == Double.class) return double.class;
+        if (boxed == Float.class) return float.class;
+        if (boxed == Short.class) return short.class;
+        if (boxed == Byte.class) return byte.class;
+        if (boxed == Boolean.class) return boolean.class;
+        if (boxed == Character.class) return char.class;
+        return null;
+    }
 
     public static Object getPrivateVariable(String fieldName, Object instanceToGetFrom) {
         try {
@@ -75,6 +122,45 @@ public class ReflectionUtilis {
             throw new RuntimeException(e);
         }
     }
+    public static Object findNestedMarketApiFieldFromOutpostParams(Object instance) {
+        try {
+            Class<?> outerClass = instance.getClass();
+            while (outerClass != null) {
+                Object[] outerFields = outerClass.getDeclaredFields();
+                for (Object outerField : outerFields) {
+                    try {
+                        // Make outer field accessible
+                        setFieldAccessibleHandle.invoke(outerField, true);
+                        Object innerObject = getFieldHandle.invoke(outerField, instance);
+                        if (innerObject == null) continue;
+
+                        // Get the class of the inner object
+                        Class<?> innerClass = innerObject.getClass();
+                        Object[] innerFields = innerClass.getDeclaredFields();
+
+                        // Check: inner class must have exactly one field
+                        if (innerFields.length == 1) {
+                            Object innerField = innerFields[0];
+                            Class<?> innerFieldType = (Class<?>) getFieldTypeHandle.invoke(innerField);
+
+                            // Check if that single field is a MarketAPI
+                            if (com.fs.starfarer.api.campaign.econ.MarketAPI.class.isAssignableFrom(innerFieldType)) {
+                                setFieldAccessibleHandle.invoke(innerField, true);
+                                return getFieldHandle.invoke(innerField, innerObject);
+                            }
+                        }
+                    } catch (Throwable innerEx) {
+                        innerEx.printStackTrace();
+                    }
+                }
+                outerClass = outerClass.getSuperclass();
+            }
+            return null; // No match found
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to find nested MarketAPI field", e);
+        }
+    }
+
     private static boolean isMatchingConstructor(MethodType ctorType) {
         // We want 5 params exactly
         if (ctorType.parameterCount() != 5) return false;
@@ -250,6 +336,30 @@ public class ReflectionUtilis {
         // Return null if the method was not found in the class hierarchy
         return null;
     }
+    public static Object findFieldOfClass(Object instance, Class<?> fieldType) {
+        try {
+            Class<?> currentClass = instance.getClass();
+            while (currentClass != null) {
+                Object[] fields = currentClass.getDeclaredFields();
+                for (Object field : fields) {
+                    try {
+                        Class<?> type = (Class<?>) getFieldTypeHandle.invoke(field);
+                        if (fieldType.isAssignableFrom(type)) {
+                            setFieldAccessibleHandle.invoke(field, true);
+                            return getFieldHandle.invoke(field, instance);
+                        }
+                    } catch (Throwable inner) {
+                        inner.printStackTrace();
+                    }
+                }
+                currentClass = currentClass.getSuperclass();
+            }
+            return null;
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to find field of type " + fieldType.getName(), e);
+        }
+    }
+
     public static Object invokeStaticMethodWithAutoProjection(Class<?> targetClass, String methodName, Object... arguments) {
         try {
             // Find the method by its name and parameter types

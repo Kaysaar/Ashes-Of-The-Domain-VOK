@@ -1,21 +1,18 @@
-package data.kaysaar.aotd.vok.scripts;
+package data.kaysaar.aotd.vok.scripts.coreui;
 
+
+import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
-import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.ui.*;
-import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.campaign.command.CustomProductionPanel;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
-import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;
 import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
+import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
+import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;;
 import data.kaysaar.aotd.vok.ui.patrolfleet.PatrolFleetDataManager;
-import data.misc.AoTDSopMisc;
-import data.misc.UIDataSop;
-import data.ui.FactionPanel;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
@@ -24,14 +21,13 @@ import java.util.HashMap;
 
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.tryToGetButtonProd;
 
-public class CoreUITrackerSop extends CoreUITracker{
+public class CoreUITracker implements EveryFrameScript {
     boolean inserted = false;
     boolean insertedOnce = false;
     boolean removed = false;
     TechnologyCoreUI coreUiTech = null;
     PatrolFleetDataManager fleetManager = null;
     boolean pausedMusic = true;
-    FactionPanel factionPanel ;
 
     @Override
     public boolean isDone() {
@@ -45,7 +41,6 @@ public class CoreUITrackerSop extends CoreUITracker{
     public static boolean sendSignalToOpenCore = false;
     public static final String memFlag = "$aotd_outpost_state";
     public static final String memFlag2 = "$aotd_technology_tab_state";
-    public static final String memFlag3 = "$aotd_faction_tab_state";
     public static void setMemFlag(String value) {
         Global.getSector().getMemory().set(memFlag, value);
     }
@@ -56,16 +51,6 @@ public class CoreUITrackerSop extends CoreUITracker{
         String s = null;
         try {
             s = Global.getSector().getMemory().getString(memFlag2);
-
-        } catch (Exception e) {
-
-        }
-        return s;
-    }
-    public static String getMemFlagForFactinTab(){
-        String s = null;
-        try {
-            s = Global.getSector().getMemory().getString(memFlag3);
 
         } catch (Exception e) {
 
@@ -100,10 +85,6 @@ public class CoreUITrackerSop extends CoreUITracker{
                 coreUiTech = null;
 
             }
-            if(factionPanel!=null){
-                factionPanel.clearUI(tunedMusicOnce);
-                factionPanel = null;
-            }
             tunedMusicOnce = false;
             removed = false;
             insertedOnce = false;
@@ -115,9 +96,7 @@ public class CoreUITrackerSop extends CoreUITracker{
         UIPanelAPI mainParent = ProductionUtil.getCurrentTab();
         if (mainParent == null) return;
         ButtonAPI button = tryToGetButtonProd("income");
-        ButtonAPI toRemove2 = tryToGetButtonProd("orders");
-
-
+        ButtonAPI toRemove2 = tryToGetButtonProd("doctrine & blueprints");
         ButtonAPI toRemove = tryToGetButtonProd("custom production");
         if (button == null){
             return;
@@ -128,6 +107,7 @@ public class CoreUITrackerSop extends CoreUITracker{
 //        if(toRemove2!=null) {
 //            mainParent.removeComponent(toRemove2);
 //        }
+
         if (tryToGetButtonProd(getStringForCoreTabResearch()) == null) {
 
 //            insertButton(button, mainParent, "Faction Fleets", new TooltipMakerAPI.TooltipCreator() {
@@ -161,36 +141,10 @@ public class CoreUITrackerSop extends CoreUITracker{
 
                 @Override
                 public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                    tooltip.addSectionHeading("Ashes of the Domain : Vaults of Knowledge", Alignment.MID,0f);
+                    tooltip.addSectionHeading("Ashes of the Domain : Vaults of Knowledge",Alignment.MID,0f);
                     tooltip.addPara("In this tab, you can find the research tab to manage your technological advancement and special technology projects, the custom order tab to build new ships and weapons as well as launch special military projects, and the megastructure tab to manage the Domain-era marvels you've seized or built.",5f);
                 }
             }, tryToGetButtonProd("colonies"), 240, Keyboard.KEY_5, false);
-        }
-        if(toRemove2!=null){
-
-
-            insertButton(tryToGetButtonProd("colonies"), mainParent, "Faction", new TooltipMakerAPI.TooltipCreator() {
-                @Override
-                public boolean isTooltipExpandable(Object tooltipParam) {
-                    return false;
-                }
-
-                @Override
-                public float getTooltipWidth(Object tooltipParam) {
-                    return 500;
-                }
-
-                @Override
-                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                    tooltip.addSectionHeading("Ashes of the Domain : Seats Of Power",Alignment.MID,0f);
-                    tooltip.addPara("In this tab,your empire timeline and can govern your faction by changing policies.",5f);
-                }
-            }, tryToGetButtonProd("colonies"), toRemove2.getPosition().getWidth(), Keyboard.KEY_2, false);
-
-            mainParent.removeComponent(toRemove2);
-            tryToGetButtonProd("income").getPosition().rightOfMid(tryToGetButtonProd("faction"),1f);
-            AoTDSopMisc.tryToGetButtonProd("faction").setEnabled(!Misc.getFactionMarkets(Factions.PLAYER).isEmpty());
-
         }
 
         if (shouldHandleReset()) {
@@ -226,15 +180,12 @@ public class CoreUITrackerSop extends CoreUITracker{
                 UIComponentAPI componentToReplace = (UIComponentAPI) panelMap.get(button);
                 UIData.WIDTH = Global.getSettings().getScreenWidth() - tryToGetButtonProd("colonies").getPosition().getX();
                 UIData.HEIGHT = componentToReplace.getPosition().getHeight();
-                    UIDataSop.WIDTH = UIData.WIDTH;
-                    UIDataSop.HEIGHT = UIData.HEIGHT;
-                
                 UIData.recompute();
 
             }
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);
             insertNewPanel(tryToGetButtonProd(getStringForCoreTabResearch()));
-            insertNewPanelFaction(tryToGetButtonProd(getStringForFaction()));
+//            insertNewPanelPatrol(tryToGetButtonProd(getStringForPatrolTemplate()));
 
 
         }
@@ -268,7 +219,7 @@ public class CoreUITrackerSop extends CoreUITracker{
         if (!hasComponentPresent((UIComponentAPI) panelMap.get(currentTab))) {
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);
             mainParent.addComponent((UIComponentAPI) panelMap.get(currentTab));
-            setMemFlag(currentTab.getText().toLowerCase());
+                setMemFlag(currentTab.getText().toLowerCase());
 
 
             ;
@@ -284,9 +235,6 @@ public class CoreUITrackerSop extends CoreUITracker{
     }
     public static @NotNull String getStringForPatrolTemplate() {
         return "faction fleets";
-    }
-    public static @NotNull String getStringForFaction() {
-        return "faction";
     }
     private static void removePanels(ArrayList<UIComponentAPI> componentAPIS, UIPanelAPI mainParent, UIComponentAPI panelToIgnore) {
         for (UIComponentAPI componentAPI : componentAPIS) {
@@ -367,16 +315,6 @@ public class CoreUITrackerSop extends CoreUITracker{
         }
 
         panelMap.put(tiedButton, coreUiTech.getMainPanel());
-    }
-    private void insertNewPanelFaction(ButtonAPI tiedButton) {
-        if (factionPanel == null) {
-            factionPanel = new FactionPanel();
-            float width = UIDataSop.WIDTH;
-            float height = UIDataSop.HEIGHT;
-            factionPanel.init(Global.getSettings().createCustom(width, height, factionPanel), getMemFlagForFactinTab(), panelMap.get(tryToGetButtonProd("colonies")));
-        }
-
-        panelMap.put(tiedButton, factionPanel.getMainPanel());
     }
     private void insertNewPanelPatrol(ButtonAPI tiedButton) {
         if (fleetManager == null) {

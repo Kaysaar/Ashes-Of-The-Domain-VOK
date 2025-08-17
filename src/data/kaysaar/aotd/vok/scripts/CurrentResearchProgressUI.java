@@ -13,6 +13,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
+import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.misc.TrapezoidButtonDetector;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lazywizard.lazylib.ui.FontException;

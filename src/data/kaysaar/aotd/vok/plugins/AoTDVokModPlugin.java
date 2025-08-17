@@ -35,8 +35,7 @@ import data.kaysaar.aotd.vok.hullmods.AoTDShroudedMantleHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedThunderHeadHullmod;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
-import data.kaysaar.aotd.vok.scripts.CoreUITracker;
-import data.kaysaar.aotd.vok.scripts.CoreUITrackerSop;
+import data.kaysaar.aotd.vok.scripts.coreui.*;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIScript;
@@ -304,6 +303,9 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         SpecialProjectSpecManager.reLoad();
         BlackSiteProjectManager.getInstance().loadAdditionalData();
         GPManager.reloadCommoditiesMap();
+        Global.getSector().addTransientScript(new DialogPlanetTracker());
+        Global.getSector().addTransientScript(new PlanetBackgroundTracker());
+        Global.getSector().addTransientScript(new IndustryTooltipInserter());
         try {
             aoTDDataInserter.insertSpecItemsForManufactoriumData();
         } catch (JSONException e) {
