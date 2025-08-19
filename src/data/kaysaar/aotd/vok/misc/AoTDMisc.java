@@ -69,6 +69,9 @@ public class AoTDMisc {
         return variantId;
 
     }
+    public static String getPercentageString(float percentage){
+        return Misc.getRoundedValueMaxOneAfterDecimal(percentage*100f)+"%";
+    }
     public static List<MarketAPI>getPlayerFactionMarkets(){
         return Misc.getFactionMarkets(Factions.PLAYER).stream().filter(x -> !x.hasTag("nex_playerOutpost")).toList();
     }

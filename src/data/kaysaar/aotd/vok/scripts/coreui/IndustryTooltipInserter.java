@@ -10,6 +10,10 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.ui.SynergyInfoMarket;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.ui.TrainUIRenderer;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 
 import java.util.ArrayList;
@@ -48,9 +52,28 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                     UIPanelAPI markets = (UIPanelAPI) componentAPIS.stream().filter(x -> ReflectionUtilis.hasMethodOfName("showOverview", x)).findFirst().orElse(null);
                     UIComponentAPI panelOfIndustries = ReflectionUtilis.getChildrenCopy(markets).stream().filter(x -> ReflectionUtilis.hasMethodOfName("recreateWithEconUpdate", x)).findFirst().orElse(null);
                     MarketAPI market = (MarketAPI) ReflectionUtilis.findFieldByType(componentAPI,MarketAPI.class);
+                    UIPanelAPI panelOfOtherInfo = (UIPanelAPI) ReflectionUtilis.getChildrenCopy((UIPanelAPI) panelOfIndustries).stream().filter(x->ReflectionUtilis.hasMethodOfName("getImmigration",x)).findFirst().orElse(null);
+                    if(panelOfOtherInfo!=null) {
+                        boolean found = false;
+                        for (UIComponentAPI uiComponentAPI : ReflectionUtilis.getChildrenCopy(panelOfOtherInfo)) {
+                            if(uiComponentAPI instanceof CustomPanelAPI panel){
+                                if(panel.getPlugin() instanceof SynergyInfoMarket){
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(!found){
+                            UIPanelAPI another = (UIPanelAPI) ReflectionUtilis.invokeMethodWithAutoProjection("getImmigration",panelOfOtherInfo);
+                            SynergyInfoMarket marketS = new SynergyInfoMarket(market);
+                            panelOfOtherInfo.addComponent(marketS.getMainPanel()).rightOfTop(another,20);
+                        }
+                    }
                     if(!market.hasIndustry("aotd_maglev"))return;
                     if(market.getIndustry("aotd_maglev").isBuilding())return;
                     if(market.getIndustry("aotd_maglev").isHidden())return;
+                    ArrayList<BaseIndustrySynergy>synergiesPresent = new ArrayList<>(IndustrySynergiesManager.getInstance().getSynergyScriptsValidForMarket(market));
+                    if(synergiesPresent.isEmpty())return;
                     if (Global.getSettings().getModManager().isModEnabled("GrandColonies")) {
                         CustomPanelAPI panelAPI = (CustomPanelAPI) ReflectionUtilis.getChildrenCopy((UIPanelAPI) panelOfIndustries).stream().filter(x -> x instanceof CustomPanelAPI && x.getPosition().getWidth() == 830 && x.getPosition().getHeight() == 400).findFirst().orElse(null);
                         if (panelAPI != null) {
@@ -62,7 +85,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                                 ArrayList<CustomPanelAPI> insiders = new ArrayList<>();
                                 for (UIComponentAPI uiComponentAPI : ReflectionUtilis.getChildrenCopy(contentInside)) {
                                     if (uiComponentAPI instanceof CustomPanelAPI panel) {
-                                        if(panel.getPlugin() instanceof LineRenderer){
+                                        if(panel.getPlugin() instanceof TrainUIRenderer){
                                             return;
                                         }
                                         insiders.add(panel);
@@ -78,19 +101,22 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                                     if (id.equals("aotd_maglev")) {
                                         mainWidget = widget;
                                     } else {
-                                        widgetsToDraw.put(id,widget);
+                                        if(synergiesPresent.stream().anyMatch(x->x.getIndustriesForSynergy().contains(id))){
+                                            widgetsToDraw.put(id,widget);
+                                        }
                                     }
+
                                 }
                                 CustomPanelAPI centerOfRows = Global.getSettings().createCustom(1,1,null);
-                                contentInside.addComponent(centerOfRows).inTL(415,107);
-                                new LineRenderer((UIPanelAPI) mainWidget, widgetsToDraw, contentInside,centerOfRows);
+                                contentInside.addComponent(centerOfRows).inTL(413,107);
+                                new TrainUIRenderer((UIPanelAPI) mainWidget, widgetsToDraw, contentInside,centerOfRows,synergiesPresent);
 
                             } else {
                                 UIPanelAPI contentInside = (UIPanelAPI) ReflectionUtilis.getChildrenCopy(panelInsider).get(0);
                                 ArrayList<CustomPanelAPI> insiders = new ArrayList<>();
                                 for (UIComponentAPI uiComponentAPI : ReflectionUtilis.getChildrenCopy(contentInside)) {
                                     if (uiComponentAPI instanceof CustomPanelAPI panel) {
-                                        if(panel.getPlugin() instanceof LineRenderer){
+                                        if(panel.getPlugin() instanceof TrainUIRenderer){
                                             return;
                                         }
                                         insiders.add(panel);
@@ -106,12 +132,14 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                                     if (id.equals("aotd_maglev")) {
                                         mainWidget = widget;
                                     } else {
-                                        widgetsToDraw.put(id,widget);
+                                        if(synergiesPresent.stream().anyMatch(x->x.getIndustriesForSynergy().contains(id))){
+                                            widgetsToDraw.put(id,widget);
+                                        }
                                     }
                                 }
                                 CustomPanelAPI centerOfRows = Global.getSettings().createCustom(1,1,null);
-                                contentInside.addComponent(centerOfRows).inTL(415,107);
-                                new LineRenderer((UIPanelAPI) mainWidget, widgetsToDraw, contentInside,centerOfRows);
+                                contentInside.addComponent(centerOfRows).inTL(413,107);
+                                new TrainUIRenderer((UIPanelAPI) mainWidget, widgetsToDraw, contentInside,centerOfRows,synergiesPresent);
                             }
 
 
@@ -121,7 +149,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                         UIPanelAPI panelAPI = (UIPanelAPI) ReflectionUtilis.getChildrenCopy((UIPanelAPI) panelOfIndustries).stream().filter(x ->ReflectionUtilis.hasMethodOfName("getWidgets",x)).findFirst().orElse(null);
                         for (UIComponentAPI uiComponentAPI : ReflectionUtilis.getChildrenCopy(panelAPI)) {
                             if (uiComponentAPI instanceof CustomPanelAPI panel) {
-                                if(panel.getPlugin() instanceof LineRenderer){
+                                if(panel.getPlugin() instanceof TrainUIRenderer){
                                     return;
                                 }
                             }
@@ -135,12 +163,14 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                             if (id.equals("aotd_maglev")) {
                                 mainWidget = widget;
                             } else {
-                                widgetsToDraw.put(id,widget);
+                                if(synergiesPresent.stream().anyMatch(x->x.getIndustriesForSynergy().contains(id))){
+                                    widgetsToDraw.put(id,widget);
+                                }
                             }
                         }
                         CustomPanelAPI centerOfRows = Global.getSettings().createCustom(1,1,null);
-                        panelAPI.addComponent(centerOfRows).inTL(415,107);
-                        new LineRenderer((UIPanelAPI) mainWidget, widgetsToDraw, panelAPI,centerOfRows);
+                        panelAPI.addComponent(centerOfRows).inTL(408,107);
+                        new TrainUIRenderer((UIPanelAPI) mainWidget, widgetsToDraw, panelAPI,centerOfRows,synergiesPresent);
                     }
 
                     break;
