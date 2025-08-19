@@ -30,6 +30,11 @@ import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMan
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMover;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.buildingmenu.IndustryBlockerListener;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.AgroTourism;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.CommissionedMaterials;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.OreToCore;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.PlausibleDeniability;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedLensHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedMantleHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedThunderHeadHullmod;
@@ -115,8 +120,6 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             l.addListener(new IndustryBlockerListener(), true);
         if (!l.hasListenerOfClass(AodAdvancedHeavyIndustryApplier.class))
             l.addListener(new AodAdvancedHeavyIndustryApplier(), true);
-        if (!l.hasListenerOfClass(AoDIndustrialMightListener.class))
-            l.addListener(new AoDIndustrialMightListener(), true);
         if (!l.hasListenerOfClass(PCFPlanetListener.class))
             l.addListener(new PCFPlanetListener(), true);
         if (!l.hasListenerOfClass(ResearchDatabankExtractionListener.class))
@@ -294,6 +297,12 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSector().addTransientListener(new AoTDxIndieCollabListener());
 
     }
+    public void populateSynergies(){
+        IndustrySynergiesManager.getInstance().addSynergy("agro_tourism",new AgroTourism());
+        IndustrySynergiesManager.getInstance().addSynergy("aotd_mining_feed",new OreToCore());
+        IndustrySynergiesManager.getInstance().addSynergy("cabbage_comm_materials",new CommissionedMaterials());
+        IndustrySynergiesManager.getInstance().addSynergy("ildrenium_black_site_fools",new PlausibleDeniability());
+    }
 
     public void onGameLoad(boolean newGame) {
 
@@ -435,6 +444,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         BlackSiteProjectManager.getInstance().addScriptInstance();
         clearListenersFromTemporaryMarket();
         populatePaths();
+        populateSynergies();
         if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
             addEvents();
         }

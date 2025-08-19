@@ -17,7 +17,7 @@ public class Fishery extends BaseIndustry {
         super.apply(true);
         supply(Commodities.FOOD, market.getSize()+3);
         demand(Commodities.HEAVY_MACHINERY, 3);
-        if(market.hasIndustry(Conditions.VOLTURNIAN_LOBSTER_PENS)){
+        if(market.hasCondition(Conditions.VOLTURNIAN_LOBSTER_PENS)){
             supply(Commodities.LOBSTER,market.getSize()-1);
         }
 

@@ -441,6 +441,7 @@ public class AoTDMainResearchManager {
     }
 
     public boolean isAvailableForThisMarket(String id, MarketAPI market) {
+        if(market==null)return true;
         if (getSpecificFactionManager(market.getFaction()) == null) return false;
         if (market.isPlayerOwned() || market.getFaction().isPlayerFaction()) {
             return isResearchedForPlayer(id);
