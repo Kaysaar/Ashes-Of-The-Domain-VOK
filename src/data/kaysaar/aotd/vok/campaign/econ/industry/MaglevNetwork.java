@@ -34,11 +34,15 @@ public class MaglevNetwork extends BaseIndustry {
     public void apply() {
         super.apply(true);
         if(isFunctional()){
-            IndustrySynergiesManager.getInstance().getSynergyScriptsValidForMarket(market).forEach(x->x.apply(1f,market));
-
+            applyEffects();
         }
     }
-
+    public void applyEffects(){
+        IndustrySynergiesManager.getInstance().getSynergyScriptsValidForMarket(market).forEach(this::applySynergyEffect);
+    }
+    public void applySynergyEffect(BaseIndustrySynergy synergy){
+        synergy.apply(efficinecy,market);
+    }
     @Override
     public void unapply() {
         super.unapply();

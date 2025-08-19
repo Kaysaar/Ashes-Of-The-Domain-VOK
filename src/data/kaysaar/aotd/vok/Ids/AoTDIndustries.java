@@ -18,6 +18,7 @@ public class AoTDIndustries {
     public static final String SUBLIMATION = "mining_megaplex"; // because i am lazy and i am not gonna replace it over and over
     public static final String BENEFICATION = "mining_megaplex";
     public static final String SMELTING = "smelting";
+    public static final String MAGLEV_CENTRAL_HUB = "aotd_maglev";
     public static final String CRYSTALIZATOR = "crystalizator";
     public static final String ISOTOPE_SEPARATOR = "isotope_separator";
     public static final String POLICRYSTALIZATOR = "policrystalizator";
@@ -32,4 +33,5 @@ public class AoTDIndustries {
     public static final String SUPPLY_HEAVY = "supplyheavy";
     public static final String CONSUMER_INDUSTRY = "consumerindustry";
     public static final String BLAST_PROCESSING = "blast_processing";
+    public static final String BIOSYNTH_LABORATORY = "druglight";
 }

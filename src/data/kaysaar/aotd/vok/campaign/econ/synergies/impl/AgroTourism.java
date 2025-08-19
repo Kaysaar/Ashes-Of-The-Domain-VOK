@@ -45,14 +45,14 @@ public class AgroTourism extends BaseIndustrySynergy {
     }
 
     @Override
-    public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency) {
-        float baseValue = 0.1f * efficiency;
+    public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency,MarketAPI market) {
+        float baseValue = 0.3f * efficiency;
         tooltip.addPara("Increase income of %s by %s", 3f, base, highLight, Global.getSettings().getIndustrySpec(AoTDIndustries.RESORT).getName(), AoTDMisc.getPercentageString(baseValue));
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s are required to be functional on same colony! ",3f,base,highLight,
+        tooltip.addPara("%s and %s are required to be functional",3f,base,highLight,
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.RESORT),
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.ARTISANAL_FARMING));
     }
@@ -61,7 +61,7 @@ public class AgroTourism extends BaseIndustrySynergy {
     public void apply(float efficiencyPercent, MarketAPI market) {
         if (market.hasIndustry(AoTDIndustries.RESORT)) {
             Industry resort = market.getIndustry(AoTDIndustries.RESORT);
-            resort.getIncome().modifyMult(getIdForEffects(), 1f + (0.1f * efficiencyPercent), "Industry Synergy");
+            resort.getIncome().modifyMult(getIdForEffects(), 1f + (0.3f * efficiencyPercent), "Industry Synergy");
         }
 
     }

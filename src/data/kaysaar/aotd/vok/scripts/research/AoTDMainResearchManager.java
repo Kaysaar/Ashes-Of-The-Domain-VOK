@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.scripts.research;
 
+import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
@@ -109,6 +110,7 @@ public class AoTDMainResearchManager {
     public void updateModIdRepo() {
         if (modIDsRepo == null) modIDsRepo = new ArrayList<>();
         for (ResearchOptionSpec spec : researchOptionSpec.values()) {
+            if(!AshMisc.isStringValid(spec.getModId()))continue;
             boolean shouldAdd = true;
             if (modIDsRepo.isEmpty()) {
                 modIDsRepo.add(spec.getModId());
