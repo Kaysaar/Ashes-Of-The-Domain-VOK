@@ -63,7 +63,7 @@ public class SynergyInfoDisplay implements ExtendUIPanelPlugin {
             opad =5f;
         }
         availableSynergyInfo.addUIElement(tooltipHeader).inTL(0,0);
-        availableSynergyInfo.addUIElement(properTooltip).inTL(-3,20);
+        availableSynergyInfo.addUIElement(properTooltip).inTL(-2,20);
         mainPanel.addComponent(availableSynergyInfo).inTL(0,0);
     }
     private void createUnavailableSynergyInfo() {

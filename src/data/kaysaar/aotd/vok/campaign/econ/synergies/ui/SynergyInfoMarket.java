@@ -38,9 +38,9 @@ public class SynergyInfoMarket implements ExtendUIPanelPlugin {
         }
         contentPanel = Global.getSettings().createCustom(mainPanel.getPosition().getWidth(),mainPanel.getPosition().getHeight(),null);
         TooltipMakerAPI tooltip = contentPanel.createUIElement(contentPanel.getPosition().getWidth(),300,false);
-        List<BaseIndustrySynergy>synergies = IndustrySynergiesManager.getInstance().getSynergyScriptsValidForMarket(tiedMarket);
+        List<BaseIndustrySynergy>synergies = IndustrySynergiesManager.getInstance().getSynergyScriptsValidForMarketInUI(tiedMarket);
         tooltip.setParaFont("graphics/fonts/orbitron12condensed.fnt");
-        title=tooltip.addPara("Industry Synergies", tiedMarket.getFaction().getBaseUIColor(),4f);
+        title=tooltip.addPara("Synergies", tiedMarket.getFaction().getBaseUIColor(),4f);
         title.setAlignment(Alignment.MID);
         title.setHighlightOnMouseover(true);
         tooltip.setParaFont("graphics/fonts/insignia25LTaa.fnt");
@@ -75,8 +75,8 @@ public class SynergyInfoMarket implements ExtendUIPanelPlugin {
 
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                tooltip.addTitle("Industry Synergies");
-                tooltip.addPara("With well established logistical network on colony, certain industries can benefit from each-other",5f);
+                tooltip.addTitle("Synergies");
+                tooltip.addPara("With well established logistical network on colony, certain structures/industries can benefit from each-other",5f);
                 tooltip.addPara("For such benefits we must first build %s, which requires %s to be researched first!",5,Color.ORANGE,"Maglev Central Hub","Urban Throughput Systems");
                 if(!buttonToCheckSynergies.isEnabled()){
                     tooltip.addPara("We need to first research %s to be able to see possible synergies!",5f,Color.ORANGE,"Urban Throughput Systems");

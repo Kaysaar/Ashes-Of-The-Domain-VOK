@@ -31,6 +31,16 @@ public class IndustrySynergiesMisc {
         return false;
 
     }
+    public static String getIndustriesListed(ArrayList<String> ids ,MarketAPI marketAPI){
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < ids.size(); i++) {
+            builder.append(getIndustryName(marketAPI,ids.get(i)));
+            if (i < ids.size() - 1) {
+                builder.append("/");
+            }
+        }
+        return builder.toString();
+    }
     public static boolean isAtLeastOneIndustryFunctionalFromListIncludingUpgrades(MarketAPI market, String... ids) {
         for (String id : ids) {
             if(isAtLeastOneIndustryFunctionalFromList(market, getIdsOfTreeFromIndustry(id).toArray(new String[0]))) return true;

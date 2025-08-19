@@ -44,7 +44,7 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
     }
 
     @Override
-    public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency) {
+    public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency,MarketAPI market) {
         float percent = 0.1f*efficiency;
         tooltip.addPara("Reduces upkeep of %s by %s",3f,base,highLight,"Black Site", AoTDMisc.getPercentageString(percent));
         tooltip.addPara("Slightly reduced pather interest on market!",Misc.getPositiveHighlightColor(),3f);
@@ -52,7 +52,7 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s are required to be functional on same colony! ",3f,base,highLight,
+        tooltip.addPara("%s and %s are required to be functional! ",3f,base,highLight,
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.BLACK_SITE),
                 IndustrySynergiesMisc.getIndustryName(market,Industries.TECHMINING));
     }
@@ -60,8 +60,8 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
     @Override
     public void apply(float efficiencyPercent, MarketAPI market) {
         if (market.hasIndustry(AoTDIndustries.BLACK_SITE)) {
-            float percent = 10f*efficiencyPercent;
-            market.getIndustry(AoTDIndustries.BLACK_SITE).getUpkeep().modifyPercent(getIdForEffects(),percent,"Plausible Deniability");
+            float percent = 0.1f*efficiencyPercent;
+            market.getIndustry(AoTDIndustries.BLACK_SITE).getUpkeep().modifyMult(getIdForEffects(),1f-percent,"Plausible Deniability");
         }
 
     }
@@ -69,7 +69,7 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
     @Override
     public void unapply(MarketAPI market) {
         if (market.hasIndustry(AoTDIndustries.BLACK_SITE)) {
-            market.getIndustry(AoTDIndustries.BLACK_SITE).getUpkeep().unmodifyPercent(getIdForEffects());
+            market.getIndustry(AoTDIndustries.BLACK_SITE).getUpkeep().unmodifyMult(getIdForEffects());
         }
 
     }
@@ -87,7 +87,7 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
 
     @Override
     public Color getColorForWagons(String industry) {
-        return Misc.getGrayColor().darker();
+        return new Color(75, 75, 75);
     }
 
     @Override

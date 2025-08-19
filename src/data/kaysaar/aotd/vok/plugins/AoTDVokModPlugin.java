@@ -30,10 +30,7 @@ import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMan
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMover;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.buildingmenu.IndustryBlockerListener;
-import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.AgroTourism;
-import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.CommissionedMaterials;
-import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.OreToCore;
-import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.PlausibleDeniability;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.*;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedLensHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedMantleHullmod;
@@ -257,7 +254,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         path.setIndustryCoordinates(map);
         UpgradePathManager.getInstance().addNewCustomPath(path,AoTDIndustries.RESEARCH_CENTER);
 
-        path = new CustomUpgradePath(4,5);
+        path = new CustomUpgradePath(4,4);
         map = new LinkedHashMap<>();
         map.put("shityheavy", new Vector2f(2,0));
         map.put("heavyindustry", new Vector2f(2,1));
@@ -298,10 +295,14 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
     }
     public void populateSynergies(){
+        IndustrySynergiesManager.getInstance().ensureHasMoverScript();
         IndustrySynergiesManager.getInstance().addSynergy("agro_tourism",new AgroTourism());
         IndustrySynergiesManager.getInstance().addSynergy("aotd_mining_feed",new OreToCore());
         IndustrySynergiesManager.getInstance().addSynergy("cabbage_comm_materials",new CommissionedMaterials());
         IndustrySynergiesManager.getInstance().addSynergy("ildrenium_black_site_fools",new PlausibleDeniability());
+        IndustrySynergiesManager.getInstance().addSynergy("darkhellthepro_syndicate_line",new SyndicateLine());
+        IndustrySynergiesManager.getInstance().addSynergy("aotd_lockheed_martin",new LockheedInitiative());
+        IndustrySynergiesManager.getInstance().addSynergy("cabbage_gas_station",new InterstellarGasStation());
     }
 
     public void onGameLoad(boolean newGame) {

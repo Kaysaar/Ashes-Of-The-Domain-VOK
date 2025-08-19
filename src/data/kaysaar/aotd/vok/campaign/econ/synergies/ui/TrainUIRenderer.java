@@ -11,10 +11,13 @@ import com.fs.starfarer.api.ui.UIPanelAPI;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.ui.basecomps.ExtendUIPanelPlugin;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+
+import static org.lwjgl.opengl.GL11.GL_BLEND;
 
 public class TrainUIRenderer implements ExtendUIPanelPlugin {
     CustomPanelAPI mainPanel;
@@ -75,7 +78,7 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
         float mainHalfHeight = mainPos.getHeight() / 2f;
 
         lineSprite.setColor(Color.CYAN);
-        lineSprite.setAdditiveBlend();
+        lineSprite.setNormalBlend();
         lineSprite.setAlphaMult(alphaMult);
 
         for (UIComponentAPI ref : references.values()) {
@@ -90,62 +93,72 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
                 float leg1 = mainHalfHeight;
                 lineSprite.setSize(leg1, 3f);
                 lineSprite.setAngle(90f);
-                lineSprite.renderAtCenter(mainX - 1, mainY - refHalfHeight + 9);
+                lineSprite.renderAtCenter(mainX - 1, mainY - refHalfHeight + getSecondValueForY());
 
                 float leg2 = centerOfRows.getPosition().getX() - main.getPosition().getCenterX();
                 lineSprite.setSize(Math.abs(leg2), 3f);
                 lineSprite.setAngle(0f);
                 if (leg2 < 0) {
-                    lineSprite.render(mainX + (leg2), mainY - refHalfHeight - 19);
+                    lineSprite.render(mainX + (leg2), mainY - refHalfHeight - getValueForY());
                 } else {
-                    lineSprite.render(mainX, mainY - refHalfHeight - 19);
+                    lineSprite.render(mainX, mainY - refHalfHeight - getValueForY());
                 }
 
                 if (OffsetY < 0) {
-                    lineSprite.setSize(3f, Math.abs(OffsetY));
+                    lineSprite.setSize(3f, Math.abs(OffsetY)+1);
                     lineSprite.setAngle(0f);
-                    lineSprite.render(mainX + (leg2), mainY - refHalfHeight - 19);
+                    lineSprite.render(mainX + (leg2), mainY - refHalfHeight - getValueForY());
                 } else {
-                    lineSprite.setSize(3f, Math.abs(OffsetY));
+                    lineSprite.setSize(3f, Math.abs(OffsetY)+1);
                     lineSprite.setAngle(0f);
-                    lineSprite.render(mainX + (leg2), mainY - refHalfHeight - 19 - OffsetY);
+                    lineSprite.render(mainX + (leg2), mainY - refHalfHeight - getValueForY() - OffsetY);
                 }
 
                 leg2 = centerOfRows.getPosition().getX() - ref.getPosition().getCenterX();
                 lineSprite.setSize(Math.abs(leg2), 3f);
                 if (leg2 < 0) {
-                    lineSprite.render(refX + (leg2), mainY - refHalfHeight - 19 - (OffsetY));
+                    lineSprite.render(refX + (leg2), mainY - refHalfHeight - getValueForY() - (OffsetY));
                 } else {
-                    lineSprite.render(refX, mainY - refHalfHeight - 19 - (OffsetY));
+                    lineSprite.render(refX, mainY - refHalfHeight - getValueForY() - (OffsetY));
                 }
                 lineSprite.setSize(leg1, 3f);
                 lineSprite.setAngle(90f);
-                lineSprite.renderAtCenter(refX - 1, refY - refHalfHeight + 9);
+                lineSprite.renderAtCenter(refX - 1, refY - refHalfHeight + getSecondValueForY());
             } else {
                 float step1Y = mainY + mainHalfHeight;
                 float leg1 = mainHalfHeight;
                 lineSprite.setSize(leg1, 3f);
                 lineSprite.setAngle(90f);
-                lineSprite.renderAtCenter(mainX - 1, mainY - refHalfHeight + 9);
+                lineSprite.renderAtCenter(mainX - 1, mainY - refHalfHeight + getSecondValueForY());
                 float leg2 = ref.getPosition().getCenterX() - mainX;
                 lineSprite.setAngle(0f);
                 lineSprite.setSize(Math.abs(leg2), 3f);
                 if (leg2 < 0) {
-                    lineSprite.render(mainX + (leg2), mainY - refHalfHeight - 19);
+                    lineSprite.render(mainX + (leg2), mainY - refHalfHeight - getValueForY());
                 } else {
-                    lineSprite.render(mainX, mainY - refHalfHeight - 19);
+                    lineSprite.render(mainX, mainY - refHalfHeight - getValueForY());
                 }
                 lineSprite.setSize(leg1, 3f);
                 lineSprite.setAngle(90f);
-                lineSprite.renderAtCenter(refX - 1, refY - refHalfHeight + 9);
+                lineSprite.renderAtCenter(refX - 1, refY - refHalfHeight + getSecondValueForY());
             }
         }
 
-        if (activeTrain != null) activeTrain.render(alphaMult);
+
+    }
+
+    private static int getSecondValueForY() {
+        return getValueForY()-22;
+    }
+
+    private static int getValueForY() {
+        return 25;
     }
 
     @Override
-    public void render(float alphaMult) { }
+    public void render(float alphaMult) {
+        if (activeTrain != null) activeTrain.render(alphaMult);
+    }
 
     @Override
     public void advance(float amount) {
@@ -268,18 +281,18 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
             if (Math.abs(OffsetY) == 0) {
                 float leg2 = refPos.getCenterX() - mainX;
                 addAnchorTLFromRender(mainX - 1, mainY);
-                addAnchorTLFromRender(mainX - 1, (mainY - (refHalfHeight) - 17));
-                addAnchorTLFromRender(mainX - 1 + leg2, (mainY - (refHalfHeight) - 17));
+                addAnchorTLFromRender(mainX - 1, (mainY - (refHalfHeight) - getTrainOffsetY()));
+                addAnchorTLFromRender(mainX - 1 + leg2, (mainY - (refHalfHeight) - getTrainOffsetY()));
                 addAnchorTLFromRender(refX - 1, refY);
             } else {
                 float leg2 = centerOfRows.getPosition().getX() - mainX;
                 addAnchorTLFromRender(mainX - 1, mainY);
-                addAnchorTLFromRender(mainX - 1, mainY - refHalfHeight - 17);
-                addAnchorTLFromRender(mainX + (leg2) + 1, mainY - refHalfHeight - 17);
-                addAnchorTLFromRender(mainX + (leg2) + 1, mainY - refHalfHeight - 17 - OffsetY);
+                addAnchorTLFromRender(mainX - 1, mainY - refHalfHeight - getTrainOffsetY());
+                addAnchorTLFromRender(mainX + (leg2) + 1, mainY - refHalfHeight - getTrainOffsetY());
+                addAnchorTLFromRender(mainX + (leg2) + 1, mainY - refHalfHeight - getTrainOffsetY() - OffsetY);
                 leg2 = centerOfRows.getPosition().getX() - refPos.getCenterX();
-                addAnchorTLFromRender(refX + (leg2) + 1, mainY - refHalfHeight - 17 - (OffsetY));
-                addAnchorTLFromRender(refX - 1, mainY - refHalfHeight - 17 - (OffsetY));
+                addAnchorTLFromRender(refX + (leg2) + 1, mainY - refHalfHeight - getTrainOffsetY() - (OffsetY));
+                addAnchorTLFromRender(refX - 1, mainY - refHalfHeight - getTrainOffsetY() - (OffsetY));
                 addAnchorTLFromRender(refX - 1, refY);
             }
 
@@ -373,7 +386,7 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
 
         void render(float alphaMult) {
             if (finished || anchors.size() < 2) return;
-
+            GL11.glDisable(GL_BLEND);
             wagonSprite.setAlphaMult(alphaMult);
             wagonSprite.setColor(wagonColor);
 
@@ -410,6 +423,8 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
                 wagonSprite.setAngle(angle);
                 wagonSprite.renderAtCenter(x, y);
             }
+            GL11.glEnable(GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         }
 
         private int findSegmentForDistance(float d) {
@@ -433,5 +448,9 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
             if (a < -180f) a += 360f;
             return from + a * t;
         }
+    }
+
+    private  int getTrainOffsetY() {
+        return getValueForY()-2;
     }
 }

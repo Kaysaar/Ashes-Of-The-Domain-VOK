@@ -65,6 +65,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                         }
                         if(!found){
                             UIPanelAPI another = (UIPanelAPI) ReflectionUtilis.invokeMethodWithAutoProjection("getImmigration",panelOfOtherInfo);
+                            IndustrySynergiesManager.getInstance().advanceImpl(0f);
                             SynergyInfoMarket marketS = new SynergyInfoMarket(market);
                             panelOfOtherInfo.addComponent(marketS.getMainPanel()).rightOfTop(another,20);
                         }
@@ -72,7 +73,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                     if(!market.hasIndustry("aotd_maglev"))return;
                     if(market.getIndustry("aotd_maglev").isBuilding())return;
                     if(market.getIndustry("aotd_maglev").isHidden())return;
-                    ArrayList<BaseIndustrySynergy>synergiesPresent = new ArrayList<>(IndustrySynergiesManager.getInstance().getSynergyScriptsValidForMarket(market));
+                    ArrayList<BaseIndustrySynergy>synergiesPresent = new ArrayList<>(IndustrySynergiesManager.getInstance().getSynergyScriptsValidForMarketInUI(market));
                     if(synergiesPresent.isEmpty())return;
                     if (Global.getSettings().getModManager().isModEnabled("GrandColonies")) {
                         CustomPanelAPI panelAPI = (CustomPanelAPI) ReflectionUtilis.getChildrenCopy((UIPanelAPI) panelOfIndustries).stream().filter(x -> x instanceof CustomPanelAPI && x.getPosition().getWidth() == 830 && x.getPosition().getHeight() == 400).findFirst().orElse(null);

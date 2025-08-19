@@ -76,7 +76,7 @@ public class CommissionedMaterials extends BaseIndustrySynergy {
         return "Commissioned Materials";
     }
     @Override
-    public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency) {
+    public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency,MarketAPI market) {
         int baseValue  = (int) (2*efficiency);
         tooltip.addPara("Increase amount of ships and heavy weapons, produced by %s by %s",3f,base,highLight,"Heavy Industry or one of it's upgrades",baseValue+"");
         tooltip.addPara("Decrease amount of metals , produced by %s by %s",3f,Misc.getNegativeHighlightColor(),highLight,"Refining or one of it's upgrades","1");
@@ -84,7 +84,7 @@ public class CommissionedMaterials extends BaseIndustrySynergy {
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s are required to be functional on same colony! ", 3f, base, highLight,
+        tooltip.addPara("%s and %s are required to be functional! ", 3f, base, highLight,
                 "Heavy Industry or one of it's upgrades excluding Civilian Heavy Industry",
                 "Refining or one of it's upgrades");
     }

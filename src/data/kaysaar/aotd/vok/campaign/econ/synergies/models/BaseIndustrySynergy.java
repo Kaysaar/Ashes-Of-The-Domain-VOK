@@ -3,9 +3,14 @@ package data.kaysaar.aotd.vok.campaign.econ.synergies.models;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class BaseIndustrySynergy implements Cloneable{
 
@@ -15,10 +20,16 @@ public class BaseIndustrySynergy implements Cloneable{
     public String getIdForEffects(){
         return this.getClass().getSimpleName();
     }
+    public boolean doesSynergyMetTotalReq(MarketAPI market){
+        return doesSynergyMetReq(market)&& IndustrySynergiesMisc.isIndustryFunctionalAndExisting(market, AoTDIndustries.MAGLEV_CENTRAL_HUB);
+    }
     public void unapply(MarketAPI market){
     }
     public void advance(MarketAPI market,float amount){
 
+    }
+    public boolean runsInEveryFrameScript(){
+        return false;
     }
     public boolean doesSynergyMetReq(MarketAPI market){
         return false;
@@ -27,7 +38,7 @@ public class BaseIndustrySynergy implements Cloneable{
         return false;
     }
     public HashSet<String> getIndustriesForSynergy(){
-        HashSet<String> industries = new HashSet<>();
+        LinkedHashSet<String> industries = new LinkedHashSet<>();
         populateListForSynergies(industries);
         return industries;
     }
@@ -39,13 +50,13 @@ public class BaseIndustrySynergy implements Cloneable{
     }
     public void printEffects(TooltipMakerAPI tooltip,MarketAPI market,float efficiency){
         if(market==null){
-            printEffectsImpl(tooltip,Misc.getTooltipTitleAndLightHighlightColor(),Color.ORANGE,efficiency);
+            printEffectsImpl(tooltip,Misc.getTooltipTitleAndLightHighlightColor(),Color.ORANGE,efficiency,market);
         }
         else{
-            printEffectsImpl(tooltip,Misc.getPositiveHighlightColor(),Color.ORANGE,efficiency);
+            printEffectsImpl(tooltip,Misc.getPositiveHighlightColor(),Color.ORANGE,efficiency,market);
         }
     }
-    public void printEffectsImpl(TooltipMakerAPI tooltip,Color base,Color highLight,float efficiency){
+    public void printEffectsImpl(TooltipMakerAPI tooltip,Color base,Color highLight,float efficiency,MarketAPI market){
 
     }
     public void printReq(TooltipMakerAPI tooltip,MarketAPI market){
@@ -78,7 +89,13 @@ public class BaseIndustrySynergy implements Cloneable{
     public Color getColorForWagons(String industry){
         return Color.ORANGE;
     }
+    public void advanceInEveryFrameScript(float amount){
+        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites()>0){
+            for (MarketAPI playerFactionMarket : AoTDMisc.getPlayerFactionMarkets()) {
 
+            }
+        }
+    }
     @Override
     public BaseIndustrySynergy clone() {
         try {
