@@ -98,7 +98,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                                 for (CustomPanelAPI insider : insiders) {
                                     UIComponentAPI widget = ReflectionUtilis.getChildrenCopy(insider).get(0);
                                     Industry ind = (Industry) ReflectionUtilis.findFieldOfClass(widget, Industry.class);
-                                    String id = ind.getSpec().getId();
+                                    String id = ind.getId();
                                     if (id.equals("aotd_maglev")) {
                                         mainWidget = widget;
                                     } else {
@@ -129,7 +129,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                                 for (CustomPanelAPI insider : insiders) {
                                     UIComponentAPI widget = ReflectionUtilis.getChildrenCopy(insider).get(0);
                                     Industry ind = (Industry) ReflectionUtilis.findFieldOfClass(widget, Industry.class);
-                                    String id = ind.getSpec().getId();
+                                    String id = ind.getId();
                                     if (id.equals("aotd_maglev")) {
                                         mainWidget = widget;
                                     } else {
@@ -160,7 +160,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                         UIComponentAPI mainWidget = null;
                         for (UIPanelAPI widget : widgets) {
                             Industry ind = (Industry) ReflectionUtilis.findFieldOfClass(widget, Industry.class);
-                            String id = ind.getSpec().getId();
+                            String id = ind.getId();
                             if (id.equals("aotd_maglev")) {
                                 mainWidget = widget;
                             } else {

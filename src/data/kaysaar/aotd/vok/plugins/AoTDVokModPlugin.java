@@ -305,6 +305,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         IndustrySynergiesManager.getInstance().addSynergy("cabbage_gas_station",new InterstellarGasStation());
         IndustrySynergiesManager.getInstance().addSynergy("touchOfVanilla_deep_sea_scan",new DeepSeaScan());
         IndustrySynergiesManager.getInstance().addSynergy("tschudy_emergency_measures",new EmergencyMeasures());
+        IndustrySynergiesManager.getInstance().addSynergy("omeganavie_fishing_resort",new FishingResort());
+        IndustrySynergiesManager.getInstance().addSynergy("tata_mono_bio_synthesis",new BioSynthesis());
     }
 
     public void onGameLoad(boolean newGame) {
