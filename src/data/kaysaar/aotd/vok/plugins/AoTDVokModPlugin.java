@@ -307,6 +307,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         IndustrySynergiesManager.getInstance().addSynergy("tschudy_emergency_measures",new EmergencyMeasures());
         IndustrySynergiesManager.getInstance().addSynergy("omeganavie_fishing_resort",new FishingResort());
         IndustrySynergiesManager.getInstance().addSynergy("tata_mono_bio_synthesis",new BioSynthesis());
+        IndustrySynergiesManager.getInstance().addSynergy("seventhslayer_defensive_network",new DefensiveNetwork());
     }
 
     public void onGameLoad(boolean newGame) {
