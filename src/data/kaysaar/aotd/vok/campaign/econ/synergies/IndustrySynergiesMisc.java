@@ -31,6 +31,7 @@ public class IndustrySynergiesMisc {
         return false;
 
     }
+
     public static String getIndustriesListed(ArrayList<String> ids ,MarketAPI marketAPI){
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {

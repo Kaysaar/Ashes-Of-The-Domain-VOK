@@ -54,6 +54,7 @@ public class AoTDMainResearchManager {
     private Map<String, ResearchProjectSpec> researchProjectSpec = new HashMap<>();
 
     public ArrayList<String> getModIDsRepo() {
+        modIDsRepo.removeIf(x->!Global.getSettings().getModManager().isModEnabled(x));
         return modIDsRepo;
     }
 
