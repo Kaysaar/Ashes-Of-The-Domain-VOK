@@ -1,16 +1,16 @@
 package data.kaysaar.aotd.vok.campaign.econ.synergies.models;
 
+import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
-import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Random;
 
 public class BaseIndustrySynergy implements Cloneable{
 
@@ -36,6 +36,12 @@ public class BaseIndustrySynergy implements Cloneable{
     }
     public boolean canShowSynergyInUI(MarketAPI market){
         return false;
+    }
+    public CargoAPI generateCargoForGatheringPoint(MarketAPI market, Random random){
+        return null;
+    }
+    public void endOfTheDay(MarketAPI market){
+
     }
     public HashSet<String> getIndustriesForSynergy(){
         LinkedHashSet<String> industries = new LinkedHashSet<>();
@@ -90,11 +96,6 @@ public class BaseIndustrySynergy implements Cloneable{
         return Color.ORANGE;
     }
     public void advanceInEveryFrameScript(float amount){
-        if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites()>0){
-            for (MarketAPI playerFactionMarket : AoTDMisc.getPlayerFactionMarkets()) {
-
-            }
-        }
     }
     @Override
     public BaseIndustrySynergy clone() {
@@ -104,4 +105,5 @@ public class BaseIndustrySynergy implements Cloneable{
             throw new AssertionError();
         }
     }
+
 }

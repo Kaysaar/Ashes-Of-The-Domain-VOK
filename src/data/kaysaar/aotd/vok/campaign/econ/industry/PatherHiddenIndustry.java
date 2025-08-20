@@ -14,6 +14,7 @@ public class PatherHiddenIndustry extends BaseIndustry {
         return (PatherHiddenIndustry) market.getIndustry("aotd_hidden_pather_influencer");
     }
 
+
     public MutableStat getPatherInterestManipulator() {
         return patherIntrestManipulator;
     }

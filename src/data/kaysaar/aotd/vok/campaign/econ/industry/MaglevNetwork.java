@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
@@ -20,6 +21,7 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.IconRenderMode;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
@@ -27,9 +29,12 @@ import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesMan
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
+import java.util.Random;
 
 public class MaglevNetwork extends BaseIndustry {
     float efficinecy = 1f;
+    IntervalUtil util = new IntervalUtil(Global.getSector().getClock().getSecondsPerDay(),Global.getSector().getClock().getSecondsPerDay());
+
     @Override
     public void apply() {
         super.apply(true);
@@ -48,6 +53,20 @@ public class MaglevNetwork extends BaseIndustry {
         super.unapply();
         IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x->x.unapply(market));
 
+    }
+
+    @Override
+    public CargoAPI generateCargoForGatheringPoint(Random random) {
+        if(!isFunctional())return null;
+        CargoAPI result = Global.getFactory().createCargo(true);
+        IndustrySynergiesManager.getInstance().getSynergyScriptsValidForMarket(market).forEach(x->{
+            CargoAPI cargo = x.generateCargoForGatheringPoint(market,random);
+            if(cargo!=null){
+                result.addAll(cargo,true);
+            }
+
+        });
+        return result;
     }
 
     @Override
@@ -86,7 +105,17 @@ public class MaglevNetwork extends BaseIndustry {
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x->x.advance(market,amount));
+        if(util==null){
+            util = new IntervalUtil(Global.getSector().getClock().getSecondsPerDay(),Global.getSector().getClock().getSecondsPerDay());
+        }
+        if(isFunctional()){
+            IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x->x.advance(market,amount));
+            util.advance(amount);
+            if(util.intervalElapsed()){
+                IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x->x.endOfTheDay(market));
+            }
+        }
+
     }
 
     @Override

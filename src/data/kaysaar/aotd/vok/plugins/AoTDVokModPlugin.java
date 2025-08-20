@@ -303,6 +303,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         IndustrySynergiesManager.getInstance().addSynergy("darkhellthepro_syndicate_line",new SyndicateLine());
         IndustrySynergiesManager.getInstance().addSynergy("aotd_lockheed_martin",new LockheedInitiative());
         IndustrySynergiesManager.getInstance().addSynergy("cabbage_gas_station",new InterstellarGasStation());
+        IndustrySynergiesManager.getInstance().addSynergy("touchOfVanilla_deep_sea_scan",new DeepSeaScan());
+        IndustrySynergiesManager.getInstance().addSynergy("tschudy_emergency_measures",new EmergencyMeasures());
     }
 
     public void onGameLoad(boolean newGame) {
