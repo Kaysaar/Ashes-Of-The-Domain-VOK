@@ -119,7 +119,7 @@ public class SynergyInfoMarket implements ExtendUIPanelPlugin {
         if(buttonToCheckSynergies!=null&&buttonToCheckSynergies.isChecked()){
             buttonToCheckSynergies.setChecked(false);
             SynergyInfoPopUp nid = new SynergyInfoPopUp(tiedMarket);
-            AshMisc.placePopUpUI(nid,buttonToCheckSynergies, 710,500);
+            AshMisc.placePopUpUI(nid,buttonToCheckSynergies, 730,500);
         }
     }
 
