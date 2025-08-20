@@ -221,9 +221,7 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
         }
     }
 
-    public void setTurnForActiveTrain(int junctionIdx, float durationSec, float extraDegrees) {
-        if (activeTrain != null) activeTrain.setTurn(junctionIdx, durationSec, extraDegrees);
-    }
+
 
     private class Train {
         final UIComponentAPI start, end;
@@ -234,7 +232,6 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
         float totalLen = 0f;
 
         float s = 0f;
-        final float speed = 110f;
         int wagons;
         final float wagonSpacing = 15f;
         final float wagonW = 10f;
@@ -352,7 +349,7 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
                 }
             }
 
-            s += 110f * amount;
+            s += getSpeedOfTrain() * amount;
 
             int segIdx = findSegmentForDistance(s);
             if (segIdx >= 0 && segIdx < segLen.size()) {
@@ -382,6 +379,10 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
                 for (CustomPanelAPI p : anchors) insertTo.removeComponent(p);
                 anchors.clear();
             }
+        }
+
+        private float getSpeedOfTrain() {
+            return 140f;
         }
 
         void render(float alphaMult) {
