@@ -1,12 +1,16 @@
 package data.kaysaar.aotd.vok.weapons;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.combat.*;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.plugins.AoTDVokModPlugin;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
+import org.lazywizard.console.Console;
 import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.VectorUtils;
+import org.lazywizard.lazylib.combat.AIUtils;
 import org.lazywizard.lazylib.combat.entities.SimpleEntity;
 import org.lwjgl.util.vector.ReadableVector2f;
 import org.lwjgl.util.vector.Vector2f;
@@ -52,13 +56,127 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
 
         ShipAPI ship = weapon.getShip();
 
+        // Purple Nebula's Code Regarding AI ==================================
+        ShipAPI enemyShip = Misc.findClosestShipEnemyOf(
+                ship,
+                ship.getLocation(),
+                ShipAPI.HullSize.CRUISER,
+                weapon.getRange(),
+                true
+        );
+
+        // Part of AI behavior - Purple Nebula
+        if (enemyShip != null && ship.getShipAI() != null) {
+            // Set target to the closest enemy ship of Cruiser-size or bigger
+            ship.setShipTarget(enemyShip);
+            ship.getShipAI().setTargetOverride(enemyShip);
+            // Control angle of ship towards enemy ship
+            float desiredAngle = Misc.getAngleInDegrees(ship.getLocation(),enemyShip.getLocation());
+            boolean withinAngleCheck = ship.getFacing() <= desiredAngle+5f && ship.getFacing() >= desiredAngle-5f;
+
+//            if (withinAngleCheck) {
+//                if (ship.getFacing() > desiredAngle) ship.setAngularVelocity(ship.getAngularVelocity()-1);
+//                else if (ship.getFacing() < desiredAngle) ship.setAngularVelocity(ship.getAngularVelocity()+1);
+//                else return;
+//            }
+            if (withinAngleCheck) {
+                if (weapon.getCurrAngle() > desiredAngle) weapon.setCurrAngle(weapon.getCurrAngle()-0.07f);
+                else if (weapon.getCurrAngle() < desiredAngle) weapon.setCurrAngle(weapon.getCurrAngle()+0.07f);
+                else return;
+            }
+        }
+//        for (WeaponAPI wapi : Global.getCombatEngine().getPlayerShip().getAllWeapons()) {
+//            if (!wapi.getId().equals("aotd_shadowlance")) continue;
+//            Console.showMessage("Current angle: "+wapi.getCurrAngle());
+//            break;
+//        }
+
+        ShipwideAIFlags aiFlags = ship.getAIFlags();
+        aiFlags.unsetFlag(ShipwideAIFlags.AIFlags.BACK_OFF_MIN_RANGE);
+        aiFlags.removeFlag(ShipwideAIFlags.AIFlags.BACK_OFF_MIN_RANGE);
+        aiFlags.unsetFlag(ShipwideAIFlags.AIFlags.BACKING_OFF);
+        aiFlags.removeFlag(ShipwideAIFlags.AIFlags.BACKING_OFF);
+        aiFlags.unsetFlag(ShipwideAIFlags.AIFlags.BACK_OFF_MAX_RANGE);
+        aiFlags.removeFlag(ShipwideAIFlags.AIFlags.BACK_OFF_MAX_RANGE);
+        aiFlags.unsetFlag(ShipwideAIFlags.AIFlags.BACK_OFF);
+        aiFlags.removeFlag(ShipwideAIFlags.AIFlags.BACK_OFF);
+        aiFlags.setFlag(ShipwideAIFlags.AIFlags.DO_NOT_BACK_OFF);
+//        if (ship.getShipAI() != null) {
+//
+//
+//            if (ship.getCurrFlux() < (ship.getMaxFlux()*0.8f)) {
+//                weapon.setForceNoFireOneFrame(true);
+//                WeaponGroupAPI wgApi = ship.getWeaponGroupFor(weapon);
+//                wgApi.toggleOff();
+//
+//            } else {
+//                ShipAPI enemyShip = Misc.findClosestShipEnemyOf(
+//                        ship,
+//                        ship.getLocation(),
+//                        ShipAPI.HullSize.CRUISER,
+//                        weapon.getRange(),
+//                        true
+//                );
+//                Vector2f targeting = MathUtils.getPoint(ship.getLocation(),weapon.getRange(),ship.getFacing());
+//                if (enemyShip != null) {
+//                    targeting = AIUtils.getBestInterceptPoint(
+//                            weapon.getFirePoint(0), weapon.getProjectileSpeed(),
+//                            enemyShip.getLocation(),enemyShip.getVelocity()
+//                    );
+//
+//                }
+//
+//                ship.setShipTarget(enemyShip);
+//                ship.getShipAI().setTargetOverride(enemyShip);
+//                if (enemyShip != null && ship.getShipTarget() == enemyShip) {
+//
+//                    float desiredAngle = Misc.getAngleInDegrees(ship.getLocation(),enemyShip.getLocation());
+//                    float distanceToTarget = Misc.getDistance(ship.getLocation(),enemyShip.getLocation());
+//                    boolean withinAngleCheck = ship.getFacing() <= desiredAngle+5f && ship.getFacing() >= desiredAngle-5f;
+////                    if (ship.getFacing() != desiredAngle) {
+//                    WeaponGroupAPI wgApi = ship.getWeaponGroupFor(weapon);
+//                    if (withinAngleCheck) {
+//                        if (distanceToTarget < weapon.getRange()) {
+//                            wgApi.toggleOn();
+//                            weapon.setForceNoFireOneFrame(false);
+//                            weapon.setForceFireOneFrame(true);
+//                            weapon.repair();
+//                        }
+//                    } else {
+//                        wgApi.toggleOff();
+//                        weapon.setForceNoFireOneFrame(true);
+//                        weapon.setForceFireOneFrame(false);
+//                        weapon.disable(false);
+//                    }
+//
+////                    ShipAPI playerShip = Global.getCombatEngine().getPlayerShip();
+////                    Console.showMessage("Player ship X: "+playerShip.getLocation().getX());
+////                    Console.showMessage("Player ship Y: "+playerShip.getLocation().getY());
+////                    Console.showMessage("Enemy ship X: "+playerShip.getShipTarget().getLocation().getX());
+////                    Console.showMessage("Enemy ship Y: "+playerShip.getShipTarget().getLocation().getY());
+//////                    float angle = (float) Math.toDegrees(Math.atan2(
+//////                            playerShip.getShipTarget().getLocation().getY() - playerShip.getLocation().getY(),
+//////                            playerShip.getShipTarget().getLocation().getX() - playerShip.getLocation().getX())
+//////                    );
+//////                    Console.showMessage("Desired angle: "+angle);
+////                    Console.showMessage("Desired angle: "+Misc.getAngleInDegrees(playerShip.getLocation(),playerShip.getShipTarget().getLocation()));
+//////                    playerShip.setFacing(angle);
+//
+//                }
+//            }
+//
+//        }
+        // ====================================================================
+
+        // Mayu's Code regarding VFX Effect
         if (weapon.getCooldownRemaining() > 0.1f) {
             if (weapon.getShip() == Global.getCombatEngine().getPlayerShip()) {
                 Global.getCombatEngine().maintainStatusForPlayerShip(
                         weapon.toString(),
                         shadowlanceIcon,
                         "Shadowlance: Recharging",
-                        Misc.getRoundedValue(weapon.getCooldownRemaining()) + " secs before firing again",
+                        Misc.getRoundedValue(weapon.getCooldownRemaining()) + " seconds remaining", // Purple Nebula's
+//                        Misc.getRoundedValue(weapon.getCooldownRemaining()) + " secs before firing again", // Mayu's
                         false
                 );
             }
@@ -73,8 +191,28 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
             nameOfChargeUpFieldInBeamStatus = getFloatFieldNameMatchingValue(beamStatusField, 1);
             didItOnce = true;
         }
+        // The overrider for the duration of firing beam
+        // Does it work? I don't fuckin know
+        // Set all weapons and defense system to be disabled
         if (weapon.isFiring()) {
 
+            if (hasFired || charge >= 0.99f){
+                // Disable the shields or phase
+                weapon.getShip().setDefenseDisabled(true);
+                weapon.getShip().setShipSystemDisabled(true);
+                if( weapon.getShip().getFluxTracker().getCurrFlux() <0){
+                    weapon.getShip().getFluxTracker().increaseFlux(15,true);
+                }
+                if (weapon.getShip() == Global.getCombatEngine().getPlayerShip()) {
+                    Global.getCombatEngine().maintainStatusForPlayerShip(
+                            weapon.getShip(),
+                            shadowlanceIcon,
+                            "Shadowlance: Currently firing",
+                            "Defensive systems and weapons are disabled",
+                            true
+                    );
+                }
+            }
             if (charge != 0.5f) {
                 if (!didIt) {
                     // this overrides the beam duration
@@ -88,6 +226,7 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                     ReflectionUtilis.setPrivateVariableFromSuperclass(nameOfChargeUpFieldInBeamStatus, beamStatusField, seconds);
                     didIt = true;
                 }
+
                 if(hasFired||charge>=0.98f){
                     if(!commencedSucking){
                         commencedSucking = true;
@@ -117,6 +256,7 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                         );
                     }
                 }
+
                 for (WeaponAPI weaponID : weapon.getShip().getAllWeapons()) {
                     // Of fucking course, exclude the weapon itself otherwise IT WILL NOT WORK
                     if (weaponID.getId().equals("aotd_shadowlance")) continue;
@@ -143,10 +283,31 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
         }
         else {
             for (WeaponAPI weaponID : weapon.getShip().getAllWeapons()) {
-                // Re-enables the weapons
-                weaponID.setForceDisabled(false);
+                if (weaponID.getId().equals("aotd_shadowlance")  && ship.getShipAI() != null) {
+                    if (weapon.getShip().getCurrFlux() < weapon.getShip().getMaxFlux()*0.8f) {
+//                if (weapon.getCooldownRemaining() > 0) return;
+//                weapon.setRemainingCooldownTo(2f);
+                        weapon.setForceDisabled(true);
+                    } else {
+                        if (enemyShip != null) {
+                            float desiredAngle = Misc.getAngleInDegrees(ship.getLocation(),enemyShip.getLocation());
+                            float distanceToTarget = Misc.getDistance(ship.getLocation(),enemyShip.getLocation());
+                            boolean withinAngleCheck = ship.getFacing() <= desiredAngle+5f && ship.getFacing() >= desiredAngle-5f;
+                            boolean withinRangeCheck = distanceToTarget < weapon.getRange();
+                            if (withinAngleCheck && withinRangeCheck) {
+//                    if (weapon.getCooldownRemaining() > 2f) weapon.setRemainingCooldownTo(0);
+                                weapon.setForceDisabled(false);
+                            }
+                        }
+                    }
+                }
+                else {
+                    // Re-enables the weapons
+                    weaponID.setForceDisabled(false);
+                }
             }
             // Re-enables the defense system
+            weapon.getShip().setShipSystemDisabled(false);
             weapon.getShip().setDefenseDisabled(false);
             didIt = false;
         }
@@ -189,6 +350,7 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                         VectorUtils.rotate(offset, weapon.getCurrAngle(), offset);
                         Vector2f.add(offset, origin, origin);
                         Vector2f vel = weapon.getShip().getVelocity();
+
                         // LIGHT VFX THAT POOLS IN THE SUCTION AREA, YEAH I DON'T KNOW EITHER WHY IS IT HERE BEFORE THE SUCTION CODE
                         engine.addHitParticle(
                                 origin,
@@ -285,6 +447,24 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                             }
                         }
                     }
+                }
+                else {
+                    // OG Flux Remover
+//                    if (0.01f < FluxRemover) { //                        if (ship.getHardFluxLevel() + 0.01f < FluxRemover) {
+//                        Global.getCombatEngine().maintainStatusForPlayerShip(
+//                                weapon.getShip() + "TOOLTIP_2",
+//                                Global.getSettings().getSpriteName("tooltips", "grimoire_deepstrike"),
+//                                "AOTD TEST WEAPON: " + Misc.getRoundedValue(FluxRemover) + "%",
+//                                "Currently discharging built up flux...",
+//                                false
+//                        );
+//                        if (FluxRemover > 0.75f) {
+//                            ship.getFluxTracker().decreaseFlux(25f);
+//                        }
+//                        else {
+//                            ship.getFluxTracker().decreaseFlux(25f * FluxRemover);
+//                        }
+//                    }
                 }
                 // Another part that you can put various shit into
                 if (charge == 1f) {
