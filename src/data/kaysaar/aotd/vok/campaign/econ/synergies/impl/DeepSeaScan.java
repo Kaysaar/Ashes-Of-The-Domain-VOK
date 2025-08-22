@@ -3,7 +3,6 @@ package data.kaysaar.aotd.vok.campaign.econ.synergies.impl;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.TechMining;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -20,6 +19,7 @@ import java.util.Random;
 
 import static com.fs.starfarer.api.impl.campaign.econ.impl.TechMining.TECH_MINING_MULT;
 import static data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc.getIndustriesListed;
+import static data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc.getTechMiningMult;
 
 public class DeepSeaScan extends BaseIndustrySynergy {
     @Override
@@ -42,7 +42,7 @@ public class DeepSeaScan extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE));
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.TECHMINING));
     }
@@ -73,14 +73,7 @@ public class DeepSeaScan extends BaseIndustrySynergy {
         return new Color(26, 32, 197);
     }
 
-    public float getTechMiningMult(MarketAPI market) {
-        MemoryAPI mem = market.getMemoryWithoutUpdate();
-        if (mem.contains(TECH_MINING_MULT)) {
-            return mem.getFloat(TECH_MINING_MULT);
-        }
-        mem.set(TECH_MINING_MULT, 1f);
-        return 1f;
-    }
+
 
     @Override
     public CargoAPI generateCargoForGatheringPoint(MarketAPI market, Random random) {

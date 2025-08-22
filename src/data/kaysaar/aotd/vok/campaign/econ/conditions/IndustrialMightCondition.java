@@ -65,7 +65,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
         } else {
             market.getStability().unmodifyFlat("IndSynergyStab");
         }
-        if (hasTwoIndustriesForSynergy(AoTDIndustries.BENEFICATION, AoTDIndustries.POLICRYSTALIZATOR)) {
+        if (hasTwoIndustriesForSynergy(AoTDIndustries.MINING_MEGAPLEX, AoTDIndustries.POLICRYSTALIZATOR)) {
             Industry poli = market.getIndustry(AoTDIndustries.POLICRYSTALIZATOR);
             poli.getSupply(AoTDCommodities.REFINED_METAL).getQuantity().modifyFlat("IndSynergyCascade", +1, "Industry Synergy");
             poli.getUpkeep().modifyMult("Oh boi that can be broken ", 0.75f, "Industry Synergy");
@@ -179,7 +179,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
             );
 
         }
-        if (hasTwoIndustriesForSynergy(AoTDIndustries.BENEFICATION, AoTDIndustries.POLICRYSTALIZATOR)) {
+        if (hasTwoIndustriesForSynergy(AoTDIndustries.MINING_MEGAPLEX, AoTDIndustries.POLICRYSTALIZATOR)) {
             tooltip.addPara(
                     "Policrystalizator and Benefication: %s",
                     10f,
@@ -262,7 +262,7 @@ public class IndustrialMightCondition extends BaseMarketConditionPlugin {
     public boolean showIcon() {
         boolean firstarg = (hasTwoIndustriesForSynergy(AoTDIndustries.TERMINUS, AoTDIndustries.MILITARY_HEAVY) ||
                 hasTwoIndustriesForSynergy(AoTDIndustries.TERMINUS, AoTDIndustries.SUPPLY_HEAVY) ||
-                hasTwoIndustriesForSynergy(AoTDIndustries.BENEFICATION, AoTDIndustries.POLICRYSTALIZATOR) ||
+                hasTwoIndustriesForSynergy(AoTDIndustries.MINING_MEGAPLEX, AoTDIndustries.POLICRYSTALIZATOR) ||
                 hasTwoIndustriesForSynergy(AoTDIndustries.SUBLIMATION, AoTDIndustries.CASCADE_REPROCESSOR)||
                 hasTwoIndustriesForSynergy(AoTDIndustries.CASCADE_REPROCESSOR, AoTDIndustries.ORBITAL_SKUNKWORK)||
                 hasTwoIndustriesForSynergy(AoTDIndustries.POLICRYSTALIZATOR, AoTDIndustries.ORBITAL_FLEETWORK)||

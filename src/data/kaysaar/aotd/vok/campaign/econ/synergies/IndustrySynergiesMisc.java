@@ -2,11 +2,16 @@ package data.kaysaar.aotd.vok.campaign.econ.synergies;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Stats;
+import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import kaysaar.bmo.buildingmenu.BuildingMenuMisc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static com.fs.starfarer.api.impl.campaign.econ.impl.TechMining.TECH_MINING_MULT;
 
 public class IndustrySynergiesMisc {
     public static boolean isIndustryFunctionalAndExisting(MarketAPI market, String... ids) {
@@ -21,6 +26,13 @@ public class IndustrySynergiesMisc {
         return true;
 
     }
+    public static boolean isIndustryFunctionalAndExistingIncludingUpgrades(MarketAPI market, String... ids) {
+        for (String id : ids) {
+            if(!isAtLeastOneIndustryFunctionalFromList(market, getIdsOfTreeFromIndustry(id).toArray(new String[0]))) return false;
+        }
+        return true;
+
+    }
     public static boolean isAtLeastOneIndustryFunctionalFromList(MarketAPI market, String... ids) {
         for (String id : ids) {
             if (market.hasIndustry(id)) {
@@ -31,7 +43,18 @@ public class IndustrySynergiesMisc {
         return false;
 
     }
-
+    public static float getTechMiningMult(MarketAPI market) {
+        MemoryAPI mem = market.getMemoryWithoutUpdate();
+        if (mem.contains(TECH_MINING_MULT)) {
+            return mem.getFloat(TECH_MINING_MULT);
+        }
+        mem.set(TECH_MINING_MULT, 1f);
+        return 1f;
+    }
+    public static float getEffectivenessMult(MarketAPI market) {
+        float mult = market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).getModifiedValue();
+        return mult;
+    }
     public static String getIndustriesListed(ArrayList<String> ids ,MarketAPI marketAPI){
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {
@@ -60,6 +83,11 @@ public class IndustrySynergiesMisc {
         results.add(industryId);
         BuildingMenuMisc.getIndustryTree(industryId).forEach(x->results.add(x.getId()));
         Arrays.stream(toTrim).forEach(results::remove);
+        return results;
+    }
+    public static ArrayList<String>getIdsOfIndustryWithSameTag(String tag,MarketAPI market){
+        ArrayList<String>results =new ArrayList<>();
+        Global.getSettings().getAllIndustrySpecs().stream().filter(x->x.hasTag(tag)&&!x.hasTag(Tags.INDUSTRY_DO_NOT_SHOW_IN_BUILD_DIALOG)&&(x.getNewPluginInstance(market).isAvailableToBuild()||x.getNewPluginInstance(market).showWhenUnavailable())).forEach(x->results.add(x.getId()));
         return results;
     }
     public static String getIndustryName(MarketAPI market, String id) {

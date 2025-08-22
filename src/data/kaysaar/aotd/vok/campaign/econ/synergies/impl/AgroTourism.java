@@ -39,7 +39,7 @@ public class AgroTourism extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.add(AoTDIndustries.RESORT);
         industries.add(AoTDIndustries.ARTISANAL_FARMING);
     }

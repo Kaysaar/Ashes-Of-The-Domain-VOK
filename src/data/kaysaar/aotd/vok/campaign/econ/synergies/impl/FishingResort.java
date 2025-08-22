@@ -30,7 +30,7 @@ public class FishingResort extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.add(AoTDIndustries.RESORT);
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE));
     }

@@ -1,21 +1,16 @@
 package data.kaysaar.aotd.vok.campaign.econ.synergies.impl;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.TechMining;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-
-import static data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc.getIndustriesListed;
 
 public class DefensiveNetwork extends BaseIndustrySynergy {
     @Override
@@ -25,9 +20,7 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
     }
     @Override
     public boolean doesSynergyMetReq(MarketAPI market) {
-        boolean max_tier_station = market.hasIndustry(Industries.STARFORTRESS) ||
-                market.hasIndustry(Industries.STARFORTRESS_MID) ||
-                market.hasIndustry(Industries.STARFORTRESS_HIGH);
+        boolean max_tier_station = market.getIndustries().stream().anyMatch(x->x.getSpec().hasTag(Industries.TAG_STARFORTRESS));
         return max_tier_station &&
                 market.hasIndustry(Industries.HEAVYBATTERIES) && market.hasIndustry(Industries.HIGHCOMMAND);
     }
@@ -37,10 +30,8 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
-        industries.add(Industries.STARFORTRESS);
-        industries.add(Industries.STARFORTRESS_MID);
-        industries.add(Industries.STARFORTRESS_HIGH);
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
+        industries.addAll(IndustrySynergiesMisc.getIdsOfIndustryWithSameTag(Industries.TAG_STARFORTRESS,market));
         industries.add(Industries.HEAVYBATTERIES);
         industries.add(Industries.HIGHCOMMAND);
 
@@ -53,7 +44,7 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
         float baseValA = 0.1f * efficiency;
         tooltip.addPara("Increases total defense rating by %s", 3f, base, highLight, "x" + baseValDR);
         tooltip.addPara("Increases fleet size by %s", 3f, base, highLight, AoTDMisc.getPercentageString(baseValFS));
-        tooltip.addPara("Decreases accessibility by %s", 3f, base, highLight, AoTDMisc.getPercentageString(baseValA));
+        tooltip.addPara("Decreases accessibility by %s", 3f, Misc.getNegativeHighlightColor(), highLight, AoTDMisc.getPercentageString(baseValA));
     }
 
     @Override
@@ -72,7 +63,11 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
     }
 
     @Override
-    public void unapply(MarketAPI market) { /* ADD FUNCTIONALITY */ }
+    public void unapply(MarketAPI market) {
+        market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getIdForEffects());
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyPercent(getIdForEffects());
+        market.getAccessibilityMod().unmodifyPercent(getIdForEffects());
+    }
 
     @Override
     public Color getColorForWagons(String industry) {

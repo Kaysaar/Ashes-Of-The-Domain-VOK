@@ -37,8 +37,8 @@ import data.kaysaar.aotd.vok.hullmods.AoTDShroudedMantleHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedThunderHeadHullmod;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
-import data.kaysaar.aotd.vok.scripts.coreui.*;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
+import data.kaysaar.aotd.vok.scripts.coreui.*;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDFuelConsumptionScript;
@@ -298,6 +298,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         IndustrySynergiesManager.getInstance().ensureHasMoverScript();
         IndustrySynergiesManager.getInstance().addSynergy("agro_tourism",new AgroTourism());
         IndustrySynergiesManager.getInstance().addSynergy("aotd_mining_feed",new OreToCore());
+        IndustrySynergiesManager.getInstance().addSynergy("aotd_refining_feed",new CoreToForge());
         IndustrySynergiesManager.getInstance().addSynergy("cabbage_comm_materials",new CommissionedMaterials());
         IndustrySynergiesManager.getInstance().addSynergy("ildrenium_black_site_fools",new PlausibleDeniability());
         IndustrySynergiesManager.getInstance().addSynergy("darkhellthepro_syndicate_line",new SyndicateLine());
@@ -308,6 +309,16 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         IndustrySynergiesManager.getInstance().addSynergy("omeganavie_fishing_resort",new FishingResort());
         IndustrySynergiesManager.getInstance().addSynergy("tata_mono_bio_synthesis",new BioSynthesis());
         IndustrySynergiesManager.getInstance().addSynergy("seventhslayer_defensive_network",new DefensiveNetwork());
+        IndustrySynergiesManager.getInstance().addSynergy("mstachife_rock_and_stone",new RockAndStone());
+        IndustrySynergiesManager.getInstance().addSynergy("aotd_rapid_transportation",new RapidTransportation());
+        IndustrySynergiesManager.getInstance().addSynergy("r3dstylum_frl",new FacilitatedResearchLogistics());
+        IndustrySynergiesManager.getInstance().addSynergy("ildrenium_aep",new ArgentEnergyProcessing());
+
+        if(Global.getSettings().getModManager().isModEnabled("uaf")){
+            IndustrySynergiesManager.getInstance().addSynergy("bunchienumbies_fmp",new UAFFederallyMandatedPastries());
+            IndustrySynergiesManager.getInstance().addSynergy("bunchienumbies_od",new UAFOutsourcedDesserts());
+            IndustrySynergiesManager.getInstance().addSynergy("omeganavie_ap",new UAFAddictivePastries());
+        }
     }
 
     public void onGameLoad(boolean newGame) {

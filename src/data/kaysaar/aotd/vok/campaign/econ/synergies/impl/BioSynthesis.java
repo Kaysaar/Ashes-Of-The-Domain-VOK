@@ -32,7 +32,7 @@ public class BioSynthesis extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.add(AoTDIndustries.SUBSIDISED_FARMING);
         industries.add(AoTDIndustries.BIOSYNTH_LABORATORY);
     }

@@ -24,7 +24,7 @@ public class EmergencyMeasures extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.add(Industries.POPULATION);
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.WAYSTATION));
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.HEAVYINDUSTRY));

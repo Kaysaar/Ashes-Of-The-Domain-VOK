@@ -25,7 +25,7 @@ public class BaseIndustrySynergy implements Cloneable{
     }
     public void unapply(MarketAPI market){
     }
-    public void advance(MarketAPI market,float amount){
+    public void advance(MarketAPI market,float amount,boolean aboutToRemove){
 
     }
     public boolean runsInEveryFrameScript(){
@@ -43,12 +43,12 @@ public class BaseIndustrySynergy implements Cloneable{
     public void endOfTheDay(MarketAPI market){
 
     }
-    public HashSet<String> getIndustriesForSynergy(){
+    public HashSet<String> getIndustriesForSynergy(MarketAPI market){
         LinkedHashSet<String> industries = new LinkedHashSet<>();
-        populateListForSynergies(industries);
+        populateListForSynergies(industries,market);
         return industries;
     }
-    public void populateListForSynergies(HashSet<String> industries){
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market){
 
     }
     public String getSynergyName(){
@@ -66,7 +66,7 @@ public class BaseIndustrySynergy implements Cloneable{
 
     }
     public void printReq(TooltipMakerAPI tooltip,MarketAPI market){
-        if(!getIndustriesForSynergy().isEmpty()){
+        if(!getIndustriesForSynergy(market).isEmpty()){
             if(market==null){
                 printReqImpl(tooltip,market,Misc.getTooltipTitleAndLightHighlightColor(),Color.ORANGE);
 

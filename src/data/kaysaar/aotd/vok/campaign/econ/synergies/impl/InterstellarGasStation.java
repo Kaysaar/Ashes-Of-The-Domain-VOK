@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.synergies.impl;
 
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -40,7 +41,7 @@ public class InterstellarGasStation extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.WAYSTATION));
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.FUELPROD));
     }
@@ -72,10 +73,12 @@ public class InterstellarGasStation extends BaseIndustrySynergy {
 
     @Override
     public void apply(float efficiencyPercent, MarketAPI market) {
-        if (market.hasIndustry(AoTDIndustries.RESORT)) {
-            Industry resort = market.getIndustry(AoTDIndustries.RESORT);
-            resort.getIncome().modifyMult(getIdForEffects(), 1f + (0.3f * efficiencyPercent), "Industry Synergy");
+        if (market.hasIndustry(Industries.WAYSTATION)) {
+            Industry waystation = market.getIndustry(Industries.WAYSTATION);
+            waystation.getDemand(Commodities.FUEL).getQuantity().modifyFlat(getIdForEffects(),-1,getSynergyName());
         }
+        float baseVal = 0.1f*efficiencyPercent;
+        market.getAccessibilityMod().modifyFlat(getIdForEffects(),baseVal,getSynergyName());
 
     }
 
@@ -85,7 +88,7 @@ public class InterstellarGasStation extends BaseIndustrySynergy {
             Industry resort = market.getIndustry(AoTDIndustries.RESORT);
             resort.getIncome().unmodifyMult(getIdForEffects());
         }
-
+        market.getAccessibilityMod().unmodifyFlat(getIdForEffects());
     }
 
     @Override
