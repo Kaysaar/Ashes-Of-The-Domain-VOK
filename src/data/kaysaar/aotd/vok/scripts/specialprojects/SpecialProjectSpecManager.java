@@ -22,6 +22,9 @@ public class SpecialProjectSpecManager {
         return stagSpecs.get(specId);
     }
     public static AoTDSpecialProjectSpec getSpec(String specName) {
+        if(specs.isEmpty()){
+            reLoad();
+        }
         return specs.get(specName);
     }
     public static ArrayList<AoTDSpecializationSpec>specializations = new ArrayList<>();

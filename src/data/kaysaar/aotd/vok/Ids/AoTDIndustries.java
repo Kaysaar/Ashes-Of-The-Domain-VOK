@@ -24,6 +24,7 @@ public class AoTDIndustries {
     public static final String POLICRYSTALIZATOR = "policrystalizator";
     public static final String CASCADE_REPROCESSOR = "cascade_reprocesor";
     public static final String FISHING = "fishery";
+    public static final String PLASMA_HARVESTER = "fracking";
     public static final String BLACK_SITE = "blacksite";
     public static final String LIGHT_PRODUCTION = "lightproduction";
     public static final String ORBITAL_SKUNKWORK = "triheavy";

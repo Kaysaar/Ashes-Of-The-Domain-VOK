@@ -34,6 +34,7 @@ public class ScientistValidationListener implements EconomyTickListener {
     @Override
     public void reportEconomyTick(int iterIndex) {
         scripts.stream().filter(ScientistScriptUnlock::shouldRun).forEach(ScientistScriptUnlock::run);
+        scripts.removeIf(x->!x.shouldRun());
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.AoTDAiScientistEventCreator;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.BarEventManager;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.ScientistAICoreBarEventCreator;
+import com.fs.starfarer.api.util.DelayedActionScript;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDItems;
@@ -313,7 +314,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         IndustrySynergiesManager.getInstance().addSynergy("aotd_rapid_transportation",new RapidTransportation());
         IndustrySynergiesManager.getInstance().addSynergy("r3dstylum_frl",new FacilitatedResearchLogistics());
         IndustrySynergiesManager.getInstance().addSynergy("ildrenium_aep",new ArgentEnergyProcessing());
-
+        IndustrySynergiesManager.getInstance().addSynergy("aotd_volatile_line",new VolatileLine());
         if(Global.getSettings().getModManager().isModEnabled("uaf")){
             IndustrySynergiesManager.getInstance().addSynergy("bunchienumbies_fmp",new UAFFederallyMandatedPastries());
             IndustrySynergiesManager.getInstance().addSynergy("bunchienumbies_od",new UAFOutsourcedDesserts());
@@ -352,11 +353,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             Global.getSector().addScript(new AoTDFactionResearchProgressionScript());
         }
         ShroudProjectMisc.updateCommodityInfo();
-        BarEventManager bar = BarEventManager.getInstance();
-        if(bar.hasEventCreator(ScientistAICoreBarEventCreator.class)){
-            bar.getCreators().removeIf(x->x instanceof ScientistAICoreBarEventCreator);
-            bar.addEventCreator(new AoTDAiScientistEventCreator());
-        }
+
 //        Global.getSector().addTransientScript(new EveryFrameScript() {
 //            protected IntervalUtil util = new IntervalUtil(1f,1.5f);
 //            @Override
@@ -409,7 +406,16 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         } else {
             Global.getSector().addTransientScript(new CoreUITracker());
         }
-
+        Global.getSector().addTransientScript(new DelayedActionScript(0.1f) {
+            @Override
+            public void doAction() {
+                BarEventManager bar = BarEventManager.getInstance();
+                if(bar.hasEventCreator(ScientistAICoreBarEventCreator.class)){
+                    bar.getCreators().removeIf(x->x instanceof ScientistAICoreBarEventCreator);
+                        bar.addEventCreator(new AoTDAiScientistEventCreator());
+                }
+            }
+        });
         if (Global.getSector().getMemory().is("$aotd_compound_unlocked", true)) {
             Global.getSector().addTransientScript(new AoTDCompoundUIScript());
             Global.getSector().addTransientScript(new AoTDCompoundUIInMarketScript());
@@ -423,6 +429,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             mapOfReplacement.put(Commodities.DRUGS, 1);
             GrowingDemandManager.getInstance().addDemand("wwlb_cerulean_vapors", new SpaceDrugsDemand("wwlb_cerulean_vapors", mapOfReplacement));
         }
+
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
         if (newGame) {
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
