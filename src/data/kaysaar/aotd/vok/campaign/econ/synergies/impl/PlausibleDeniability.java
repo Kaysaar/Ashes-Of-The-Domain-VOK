@@ -38,7 +38,7 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.add(AoTDIndustries.BLACK_SITE);
         industries.add(Industries.TECHMINING);
     }
@@ -75,8 +75,8 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
     }
 
     @Override
-    public void advance(MarketAPI market, float amount) {
-        if(this.doesSynergyMetReq(market)) {
+    public void advance(MarketAPI market, float amount,boolean aboutToRemove) {
+        if(this.doesSynergyMetTotalReq(market)&&!aboutToRemove) {
             PatherHiddenIndustry.getInstance(market).getPatherInterestManipulator().modifyFlat(getIdForEffects(),-5,"Plausible Deniability");
         }
         else{

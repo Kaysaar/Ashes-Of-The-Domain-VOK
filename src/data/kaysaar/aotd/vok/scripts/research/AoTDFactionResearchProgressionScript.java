@@ -1,14 +1,11 @@
 package data.kaysaar.aotd.vok.scripts.research;
 
 import com.fs.starfarer.api.EveryFrameScript;
-import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.ui.UIComponentAPI;
-import com.fs.starfarer.api.ui.UIPanelAPI;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
-
-import java.util.ArrayList;
+import com.fs.starfarer.api.util.IntervalUtil;
 
 public class AoTDFactionResearchProgressionScript implements EveryFrameScript {
+    IntervalUtil util = new IntervalUtil(0.5f, 0.5f);
+
     @Override
     public boolean isDone() {
         return false;
@@ -21,8 +18,11 @@ public class AoTDFactionResearchProgressionScript implements EveryFrameScript {
 
     @Override
     public void advance(float amount) {
-         AoTDMainResearchManager.getInstance().advance(amount);
-
+        if (util == null) util = new IntervalUtil(0.5f, 0.5f);
+        util.advance(amount);
+        if (util.intervalElapsed()) {
+            AoTDMainResearchManager.getInstance().advance(util.getElapsed());
+        }
 
 
     }

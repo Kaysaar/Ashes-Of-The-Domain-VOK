@@ -49,7 +49,7 @@ public class AIColonyManagerListener implements EconomyTickListener {
         }
     }
     public void initalizeUpgradeOfHeavyIndustry(FactionAPI faction){
-        HashMap<String, Integer> industriesPoll= generateValuesForIndustries(faction,AoTDIndustries.BENEFICATION,AoTDIndustries.SUBLIMATION,AoTDIndustries.ISOTOPE_SEPARATOR,AoTDIndustries.CRYSTALIZATOR);
+        HashMap<String, Integer> industriesPoll= generateValuesForIndustries(faction,AoTDIndustries.MINING_MEGAPLEX,AoTDIndustries.SUBLIMATION,AoTDIndustries.ISOTOPE_SEPARATOR,AoTDIndustries.CRYSTALIZATOR);
         for (Integer value : industriesPoll.values()) {
             if(value==0){
                 return;
@@ -89,8 +89,8 @@ public class AIColonyManagerListener implements EconomyTickListener {
 
     }
     public void heavyIndManager(FactionAPI faction) {
-        HashMap<String, Integer> industriesPoll = generateValuesForIndustries(faction,AoTDIndustries.BENEFICATION,AoTDIndustries.SUBLIMATION,AoTDIndustries.ISOTOPE_SEPARATOR,AoTDIndustries.CRYSTALIZATOR);
-        if (industriesPoll.get(AoTDIndustries.BENEFICATION) == 0) {
+        HashMap<String, Integer> industriesPoll = generateValuesForIndustries(faction,AoTDIndustries.MINING_MEGAPLEX,AoTDIndustries.SUBLIMATION,AoTDIndustries.ISOTOPE_SEPARATOR,AoTDIndustries.CRYSTALIZATOR);
+        if (industriesPoll.get(AoTDIndustries.MINING_MEGAPLEX) == 0) {
             beneficationRoll(faction);
             log.info("Faction "+faction.getId()+" has rolled for construction of benefication for the first time");
         }
@@ -118,7 +118,7 @@ public class AIColonyManagerListener implements EconomyTickListener {
             }
             if(industry!=null){
                 log.info("Faction "+faction.getId()+" has rolled for construction of "+industry);
-                if(industry.equals(AoTDIndustries.BENEFICATION)){
+                if(industry.equals(AoTDIndustries.MINING_MEGAPLEX)){
                     beneficationRoll(faction);
                 }
                 if(industry.equals(AoTDIndustries.SUBLIMATION)){
@@ -171,7 +171,7 @@ public class AIColonyManagerListener implements EconomyTickListener {
 
         HashMap<String, Integer> industryConditions = new HashMap<>();
         industryConditions.put(AoTDIndustries.ISOTOPE_SEPARATOR,2);
-        industryConditions.put(AoTDIndustries.BENEFICATION,-1000);
+        industryConditions.put(AoTDIndustries.MINING_MEGAPLEX,-1000);
         industryConditions.put(AoTDIndustries.SUBLIMATION,-1000);
 
         MarketAPI market = determineLocationOfIndustry(faction,Industries.MINING,marketConditions,industryConditions);
@@ -229,11 +229,11 @@ public class AIColonyManagerListener implements EconomyTickListener {
 
         HashMap<String, Integer> industryConditions = new HashMap<>();
         industryConditions.put(AoTDIndustries.POLICRYSTALIZATOR,2);
-        industryConditions.put(AoTDIndustries.BENEFICATION,-1000);
+        industryConditions.put(AoTDIndustries.MINING_MEGAPLEX,-1000);
         industryConditions.put(AoTDIndustries.SUBLIMATION,-1000);
         MarketAPI market = determineLocationOfIndustry(faction,Industries.MINING,marketConditions,industryConditions);
         if(market!=null){
-            startBuildingIndustry(market,Industries.MINING,AoTDIndustries.BENEFICATION);
+            startBuildingIndustry(market,Industries.MINING,AoTDIndustries.MINING_MEGAPLEX);
 
         }
     }

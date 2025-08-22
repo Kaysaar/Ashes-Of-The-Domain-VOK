@@ -34,7 +34,7 @@ public class SyndicateLine extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.add(AoTDIndustries.UNDERWORLD);
         industries.add(AoTDIndustries.BIOSYNTH_LABORATORY);
         industries.add(Industries.LIGHTINDUSTRY);
@@ -57,7 +57,7 @@ public class SyndicateLine extends BaseIndustrySynergy {
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.UNDERWORLD));
         tooltip.addPara("Market must have Free Port!",base,3f);
         tooltip.addPara("One of following must be functional:",Misc.getTooltipTitleAndLightHighlightColor(),3f);
-        for (String string : getIndustriesForSynergy()) {
+        for (String string : getIndustriesForSynergy(market)) {
             if(string.equals(AoTDIndustries.UNDERWORLD))continue;
             Color high = Misc.getNegativeHighlightColor();
             if(market.hasIndustry(string)){

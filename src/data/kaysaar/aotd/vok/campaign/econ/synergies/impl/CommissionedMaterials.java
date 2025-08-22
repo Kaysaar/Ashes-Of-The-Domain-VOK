@@ -66,7 +66,7 @@ public class CommissionedMaterials extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustryTrimmed(Industries.HEAVYINDUSTRY,IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.SUPPLY_HEAVY).toArray(new String[0])));
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.REFINING));
     }

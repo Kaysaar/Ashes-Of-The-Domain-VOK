@@ -109,12 +109,19 @@ public class MaglevNetwork extends BaseIndustry {
             util = new IntervalUtil(Global.getSector().getClock().getSecondsPerDay(),Global.getSector().getClock().getSecondsPerDay());
         }
         if(isFunctional()){
-            IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x->x.advance(market,amount));
+            IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x->x.advance(market,amount,false));
             util.advance(amount);
             if(util.intervalElapsed()){
                 IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x->x.endOfTheDay(market));
             }
         }
+
+    }
+
+    @Override
+    public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
+        super.notifyBeingRemoved(mode, forUpgrade);
+        IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x->x.advance(market,0f,true));
 
     }
 

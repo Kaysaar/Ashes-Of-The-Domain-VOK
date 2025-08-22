@@ -108,7 +108,7 @@ public class SynergyInfoDisplay implements ExtendUIPanelPlugin {
         properTooltip.setBulletedListMode(null);
         properTooltip.addSectionHeading("Related Structures/Industries to Synergy", Alignment.MID,5f);
         properTooltip.setBulletedListMode("  -");
-        for (String string : synergy.getIndustriesForSynergy()) {
+        for (String string : synergy.getIndustriesForSynergy(market)) {
             if(market.hasIndustry(string)){
                 properTooltip.addPara(market.getIndustry(string).getCurrentName(), Color.ORANGE,3f);
             }

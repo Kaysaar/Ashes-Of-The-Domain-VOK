@@ -40,7 +40,7 @@ public class LockheedInitiative extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.add(AoTDIndustries.ORBITAL_SKUNKWORK);
         industries.add(AoTDIndustries.BLACK_SITE);
     }
@@ -77,10 +77,7 @@ public class LockheedInitiative extends BaseIndustrySynergy {
 
     }
 
-    @Override
-    public void advance(MarketAPI market, float amount) {
 
-    }
 
     @Override
     public Color getColorForWagons(String industry) {

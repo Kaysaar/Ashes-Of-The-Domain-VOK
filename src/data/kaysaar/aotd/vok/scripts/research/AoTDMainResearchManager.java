@@ -3,18 +3,12 @@ package data.kaysaar.aotd.vok.scripts.research;
 import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
-import com.fs.starfarer.api.campaign.comm.CommMessageAPI;
-import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
-import com.fs.starfarer.api.campaign.comm.IntelManagerAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
-import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
-import com.fs.starfarer.api.impl.campaign.intel.ResearchExpeditionIntel;
+import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
 import data.kaysaar.aotd.vok.scripts.research.models.*;
-import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -46,7 +40,7 @@ public class AoTDMainResearchManager {
     public float expeditionCounter = 0;
     public String expeditionSender = null;
     public float expeditionThreshold = 120;
-
+    public IntervalUtil util = new IntervalUtil(2.5f,2.5f);
 
     @NotNull
     private Map<String, ResearchOptionSpec> researchOptionSpec = new HashMap<>();
@@ -366,55 +360,7 @@ public class AoTDMainResearchManager {
     }
 
     public void advance(float amount) {
-        int cycle = 210;
-        expeditionThreshold = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_EXPEDITION_THRESHOLD);
-        cycle = AoTDSettingsManager.getIntValue(AoTDSettingsManager.AOTD_EXPEDITION_BEGIN);
-
-
-        weight.clear();
-        for (AoTDFactionResearchManager factionResearchManager : factionResearchManagers) {
-            factionResearchManager.advance(amount);
-            weight.put(factionResearchManager.getFaction().getId(), factionResearchManager.pointTowardsExpedition);
-        }
-
-
-        if (Global.getSector().getClock().getCycle() >= cycle) {
-            expeditionCounter += Global.getSector().getClock().convertToDays(amount);
-        }
-        if (expeditionCounter >= expeditionThreshold && expeditionSender == null) {
-            expeditionSender = pickFactionForExpedition();
-            IntelManagerAPI intelManager = Global.getSector().getIntelManager();
-
-            // Checks if this intel exists already
-
-
-            ResearchExpeditionIntel report = new ResearchExpeditionIntel(Global.getSector().getFaction(expeditionSender), expeditionThreshold);
-            // Should the report appear in the "New" tab?
-            report.setNew(true);
-            // Adds the intel, can force no notification
-            intelManager.addIntel(report, false);
-
-
-            MessageIntel intel = new MessageIntel("Faction Expedition imminent in " + expeditionThreshold + " days " + Global.getSector().getFaction(expeditionSender).getDisplayName(), Misc.getBasePlayerColor());
-            intel.setIcon(Global.getSector().getPlayerFaction().getCrest());
-            intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
-            Global.getSector().getCampaignUI().addMessage(intel, CommMessageAPI.MessageClickAction.COLONY_INFO);
-        }
-        if (expeditionCounter >= expeditionThreshold * 2 && expeditionSender != null) {
-            expeditionCounter = 0;
-
-            setExpeditionFleet(expeditionSender);
-            expeditionSender = null;
-        }
-        for (IntelInfoPlugin intelInfoPlugin : Global.getSector().getIntelManager().getIntel(ResearchExpeditionIntel.class)) {
-            ResearchExpeditionIntel intel = (ResearchExpeditionIntel) intelInfoPlugin;
-            intel.advance(amount);
-        }
-        if (getManagerForPlayer().getAmountOfResearchFacilities() != 0) {
-            for (ResearchProject project : researchProjects) {
-                project.advance(amount);
-            }
-        }
+        getManagerForPlayer().advance(amount);
 
     }
 

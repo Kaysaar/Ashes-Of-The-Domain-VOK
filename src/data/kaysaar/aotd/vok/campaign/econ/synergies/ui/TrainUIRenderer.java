@@ -195,7 +195,7 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
             Collections.shuffle(order, rng);
 
             for (BaseIndustrySynergy syn : order) {
-                ArrayList<String> ids = new ArrayList<>(syn.getIndustriesForSynergy());
+                ArrayList<String> ids = new ArrayList<>(syn.getIndustriesForSynergy(market));
                 if (ids.isEmpty()) continue;
                 Collections.shuffle(ids, rng);
 

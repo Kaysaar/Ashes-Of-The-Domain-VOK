@@ -61,12 +61,12 @@ public class IndustrySynergiesManager {
     public List<BaseIndustrySynergy> getSynergyScriptsValidForMarketInUI(MarketAPI market) {
 
         if(market==null)return getSynergyScripts();
-        return synergyScripts.values().stream().filter(x->x.doesSynergyMetReq(market)&&x.canShowSynergyInUI(market)).toList();
+        return synergyScripts.values().stream().filter(x->x.doesSynergyMetReq(market)&&(x.canShowSynergyInUI(market)||Global.getSettings().isDevMode())).toList();
     }
     public List<BaseIndustrySynergy> getSynergiesNotValidForMarketInUI(MarketAPI market) {
 
         if(market==null)return getSynergyScripts();
-        return synergyScripts.values().stream().filter(x->!x.doesSynergyMetReq(market)&&x.canShowSynergyInUI(market)).toList();
+        return synergyScripts.values().stream().filter(x->!x.doesSynergyMetReq(market)&&(x.canShowSynergyInUI(market)||Global.getSettings().isDevMode())).toList();
     }
     public static void setInstance() {
         Global.getSector().getPersistentData().put(permaDataKey, new IndustrySynergiesManager());

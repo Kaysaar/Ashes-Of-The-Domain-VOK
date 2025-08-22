@@ -37,7 +37,7 @@ public class OreToCore extends BaseIndustrySynergy {
     }
 
     @Override
-    public void populateListForSynergies(HashSet<String> industries) {
+    public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         ArrayList<String>ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.MINING);
         ids.remove("fracking");
 
@@ -62,14 +62,22 @@ public class OreToCore extends BaseIndustrySynergy {
 
     @Override
     public void apply(float efficiencyPercent, MarketAPI market) {
-
+        for (String id : IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.REFINING)) {
+            if(market.hasIndustry(id)) {
+                market.getIndustry(id).getSupplyBonusFromOther().modifyFlat(getIdForEffects(),2,"Ore To Core");
+            }
+        }
 
     }
 
 
     @Override
     public void unapply(MarketAPI market) {
-
+        for (String id : IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.REFINING)) {
+            if(market.hasIndustry(id)) {
+                market.getIndustry(id).getSupplyBonusFromOther().unmodifyFlat(getIdForEffects());
+            }
+        }
 
     }
 
