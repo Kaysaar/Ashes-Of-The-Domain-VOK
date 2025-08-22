@@ -45,20 +45,20 @@ public class CoreUiInterceptor implements CoreUITabListener {
             }
 
             if (tab.equals(CoreUITabId.CARGO) && ProductionUtil.getCoreUI() != null) {
-                if (Global.getSector().getCampaignUI().getCurrentInteractionDialog() != null) {
-                    if (Global.getSector().getCampaignUI().getCurrentInteractionDialog().getInteractionTarget() instanceof PlanetAPI planetAPI) {
-                        if (planetAPI.getMemoryWithoutUpdate().get(GPBaseMegastructure.memKey) instanceof NidavelirComplexMegastructure megastructure) {
-                            initalizeBackgroundPLanet(megastructure);
-                        }
-                    }
-                } else if (param != null) {
+                if (param != null) {
                     if (ReflectionUtilis.findNestedMarketApiFieldFromOutpostParams(param) instanceof MarketAPI market) {
                         if (market.getPrimaryEntity().getMemoryWithoutUpdate().get(GPBaseMegastructure.memKey) instanceof NidavelirComplexMegastructure megastructure) {
                             initalizeBackgroundPLanet(megastructure);
                         }
                     }
-
+                } else if (Global.getSector().getCampaignUI().getCurrentInteractionDialog() != null) {
+                    if (Global.getSector().getCampaignUI().getCurrentInteractionDialog().getInteractionTarget() instanceof PlanetAPI planetAPI) {
+                        if (planetAPI.getMemoryWithoutUpdate().get(GPBaseMegastructure.memKey) instanceof NidavelirComplexMegastructure megastructure) {
+                            initalizeBackgroundPLanet(megastructure);
+                        }
+                    }
                 }
+
 
 
             }
@@ -70,6 +70,13 @@ public class CoreUiInterceptor implements CoreUITabListener {
     private  void initalizeBackgroundPLanet(NidavelirComplexMegastructure megastructure) {
         UIPanelAPI saved = (UIPanelAPI) ReflectionUtilis.invokeMethod("getPlanetBackground", ProductionUtil.getCoreUI());
         CampaignPlanet planetSaved = (CampaignPlanet) ReflectionUtilis.invokeMethod("getPlanet", saved);
+        for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(ProductionUtil.getCoreUI())) {
+            if(componentAPI instanceof CustomPanelAPI panel) {
+                if(panel.getPlugin() instanceof BackgroundInterlooper) {
+                    return;
+                }
+            }
+        }
         BackgroundInterlooper interlooper = new BackgroundInterlooper(megastructure.shipyard.getType(), saved.getPosition().getWidth(), saved.getPosition().getHeight(), planetSaved, saved,megastructure.shipyard.getCurrAngle());
         ProductionUtil.getCoreUI().addComponent(interlooper.getMainPanel()).inBL(0, 0);
         ReflectionUtilis.invokeMethodWithAutoProjection("" +

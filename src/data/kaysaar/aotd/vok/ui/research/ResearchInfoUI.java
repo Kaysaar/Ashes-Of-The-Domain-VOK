@@ -319,11 +319,9 @@ public class ResearchInfoUI extends PopUpUI {
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
                 MarketAPI marketAPI = initalizeMarket();
                 marketAPI.addIndustry(Industries.POPULATION);
-                marketAPI.addIndustry(industryId);
+                marketAPI.addIndustry(Industries.SPACEPORT);
                 marketAPI.reapplyConditions();
-                Industry ind = marketAPI.getIndustry(industryId);
-                marketAPI.reapplyIndustries();
-                marketAPI.reapplyConditions();
+                Industry ind = Global.getSettings().getIndustrySpec(industryId).getNewPluginInstance(marketAPI);
                 if (ind.getId().equals(Industries.FARMING)) {
                     ind.getSupply(Commodities.FOOD).getQuantity().modifyFlat("test", 6);
                 }
@@ -345,7 +343,6 @@ public class ResearchInfoUI extends PopUpUI {
                     tooltip.addPara("This industry upgrades from : %s ", 10f, Color.ORANGE, "" + Global.getSettings().getIndustrySpec(ind.getSpec().getDowngrade()).getName());
 
                 }
-                marketAPI.removeIndustry(ind.getSpec().getId(), MarketAPI.MarketInteractionMode.REMOTE,false);
                 clearListenersFromTemporaryMarket();
 
             }
@@ -513,6 +510,7 @@ public class ResearchInfoUI extends PopUpUI {
             }
             marketToShowTooltip.setUseStockpilesForShortages(true);
             Global.getSector().getMemory().set("$aotd_checkout_market", marketToShowTooltip);
+
             return marketToShowTooltip;
         }
     }

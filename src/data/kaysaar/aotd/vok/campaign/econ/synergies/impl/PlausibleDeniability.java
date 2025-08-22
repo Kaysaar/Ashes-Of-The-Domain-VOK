@@ -76,6 +76,7 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
 
     @Override
     public void advance(MarketAPI market, float amount,boolean aboutToRemove) {
+
         if(this.doesSynergyMetTotalReq(market)&&!aboutToRemove) {
             PatherHiddenIndustry.getInstance(market).getPatherInterestManipulator().modifyFlat(getIdForEffects(),-5,"Plausible Deniability");
         }

@@ -95,6 +95,9 @@ public class BlackSiteProjectManager {
     }
 
     public AoTDSpecialProject getProject(String id) {
+        if(projects.isEmpty()){
+            loadAdditionalData();
+        }
         return projects.get(id);
     }
 
