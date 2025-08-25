@@ -59,6 +59,9 @@ public class SynergyInfoMarket implements ExtendUIPanelPlugin {
         buttonToCheckSynergies = tooltip.addAreaCheckbox("Show Synergy List",null,tiedMarket.getFaction().getBaseUIColor(),tiedMarket.getFaction().getDarkUIColor(),tiedMarket.getFaction().getBrightUIColor(),contentPanel.getPosition().getWidth(),20,16f);
         buttonToCheckSynergies.getPosition().setXAlignOffset(-5);
         buttonToCheckSynergies.setEnabled(AoTDMainResearchManager.getInstance().isAvailableForThisMarket("aotd_tech_maglev",tiedMarket));
+        if(!tiedMarket.getFaction().isPlayerFaction()&&!tiedMarket.isPlayerOwned()){
+            buttonToCheckSynergies.setEnabled(false);
+        }
         contentPanel.addUIElement(tooltip).inTL(0,0);
         mainPanel.addComponent(contentPanel).inTL(0,-4);
         boolean finalNotAvailable = notAvailable;

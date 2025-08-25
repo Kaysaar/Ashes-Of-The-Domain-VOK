@@ -132,6 +132,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             l.addListener(new AIColonyManagerListener());
         if (!l.hasListenerOfClass(AoTDRaidListener.class))
             l.addListener(new AoTDRaidListener());
+        if (!l.hasListenerOfClass(AoTDTierFourAutoresolveListener.class))
+            l.addListener(new AoTDTierFourAutoresolveListener(),true);
 
         l.removeListenerOfClass(CurrentResearchProgressUI.class);
         if (!l.hasListenerOfClass(CurrentResearchProgressUI.class)) {
@@ -420,6 +422,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             Global.getSector().addTransientScript(new AoTDCompoundUIScript());
             Global.getSector().addTransientScript(new AoTDCompoundUIInMarketScript());
         }
+        Global.getSector().registerPlugin(new AoTDCoreCampaignPluginImpl());
         ScientistValidationListener.getInstance().addScript(new SophiaScriptUnlock());
         ScientistValidationListener.getInstance().addScript(new ForbiddenScientistUnlock());
         Global.getSettings().getCommoditySpec(Commodities.SHIPS).setName("Ship hulls");

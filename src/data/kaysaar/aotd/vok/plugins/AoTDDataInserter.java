@@ -457,6 +457,8 @@ public class AoTDDataInserter {
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ORBITAL_SKUNKWORK, Industries.ORBITALWORKS, null, false, Commodities.ALPHA_CORE, null);
             setIndustryOnPlanet("Hybrasil", "Culann", Industries.MEGAPORT, Industries.MEGAPORT, null, true, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.ORBITAL_FLEETWORK, Industries.ORBITALWORKS, null, false, null, Items.PRISTINE_NANOFORGE);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", "aotd_citadel",Industries.STARFORTRESS, null, false, null, null);
+
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, true, Commodities.ALPHA_CORE, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.PLANETARY_DEFENCE_FORCE, null, null, false, null, null);
             setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null, null);
