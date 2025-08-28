@@ -4,8 +4,6 @@ import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -21,7 +19,7 @@ public class BaseIndustrySynergy implements Cloneable{
         return this.getClass().getSimpleName();
     }
     public boolean doesSynergyMetTotalReq(MarketAPI market){
-        return doesSynergyMetReq(market)&& IndustrySynergiesMisc.isIndustryFunctionalAndExisting(market, AoTDIndustries.MAGLEV_CENTRAL_HUB);
+        return doesSynergyMetReq(market);
     }
     public void unapply(MarketAPI market){
     }

@@ -12,6 +12,7 @@ import com.fs.starfarer.campaign.CampaignPlanet;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+import data.kaysaar.aotd.vok.campaign.econ.listeners.AoDIndustrialMightListener;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.coreui.BackgroundInterlooper;
@@ -34,7 +35,7 @@ public class CoreUiInterceptor implements CoreUITabListener {
             CoreUITracker.setMemFlag("colonies");
         }
         IndustrySynergiesManager.getInstance().advanceImpl(0f);
-
+        AoDIndustrialMightListener.applyResourceConditionToAllMarkets();
         for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(ProductionUtil.getCoreUI())) {
             if (componentAPI instanceof CustomPanelAPI panel) {
                 if (panel.getPlugin() instanceof BackgroundInterlooper looper) {

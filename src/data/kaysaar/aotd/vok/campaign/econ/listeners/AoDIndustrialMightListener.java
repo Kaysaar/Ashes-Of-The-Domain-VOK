@@ -5,20 +5,20 @@ import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
-import data.kaysaar.aotd.vok.campaign.econ.conditions.IndustrialMightCondition;
+import data.kaysaar.aotd.vok.campaign.econ.conditions.IndustrySynergiesCond;
 
 
 public class AoDIndustrialMightListener implements PlayerColonizationListener, EconomyTickListener {
     public static void applyResourceConditionToAllMarkets() {
         for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
-            IndustrialMightCondition.applyRessourceCond(m);
+            IndustrySynergiesCond.applyRessourceCond(m);
         }
     }
 
     @Override
     public void reportPlayerColonizedPlanet(PlanetAPI planetAPI) {
         MarketAPI m = planetAPI.getMarket();
-        IndustrialMightCondition.applyRessourceCond(m);
+        IndustrySynergiesCond.applyRessourceCond(m);
     }
 
     @Override

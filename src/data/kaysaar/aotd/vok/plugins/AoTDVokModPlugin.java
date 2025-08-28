@@ -10,6 +10,7 @@ import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.AoTDAiScientistEventCreator;
@@ -31,7 +32,11 @@ import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMan
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMover;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.buildingmenu.IndustryBlockerListener;
-import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.*;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.HypercognitionTestSynergy;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.MaglevSource;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.SpaceportSource;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies.*;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedLensHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedMantleHullmod;
@@ -149,7 +154,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         l.addListener(new NidavelirClaimMegastructure(), true);
         l.addListener(new AoTDSupertencileListener(), true);
         l.addListener(new BifrostReesarchListener(), true);
-        l.addListener(new CompoundProducitonListener(), true);
+        l.addListener(new AoDIndustrialMightListener(),true);
         l.addListener(new EconomyTickListener() {
             @Override
             public void reportEconomyTick(int iterIndex) {
@@ -299,6 +304,27 @@ public class AoTDVokModPlugin extends BaseModPlugin {
     }
     public void populateSynergies(){
         IndustrySynergiesManager.getInstance().ensureHasMoverScript();
+        for (String id : IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.SPACEPORT)) {
+            if(id.equals(Industries.SPACEPORT)){
+                IndustrySynergiesManager.getInstance().addSynergySource(id,new SpaceportSource(0.05f,id));
+            }
+            else{
+                IndustrySynergiesManager.getInstance().addSynergySource(id,new SpaceportSource(0.1f,id));
+
+            }
+        }
+        for (String id : IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.WAYSTATION)) {
+            if(id.equals(Industries.WAYSTATION)){
+                IndustrySynergiesManager.getInstance().addSynergySource(id,new SpaceportSource(0.1f,id));
+            }
+            else{
+                IndustrySynergiesManager.getInstance().addSynergySource(id,new SpaceportSource(0.2f,id));
+
+            }
+        }
+        IndustrySynergiesManager.getInstance().addSynergySource(AoTDIndustries.MAGLEV_CENTRAL_HUB,new MaglevSource(0.7f,AoTDIndustries.MAGLEV_CENTRAL_HUB));
+        IndustrySynergiesManager.getInstance().addSynergySource("test",new HypercognitionTestSynergy(0.2f,Industries.POPULATION));
+
         IndustrySynergiesManager.getInstance().addSynergy("agro_tourism",new AgroTourism());
         IndustrySynergiesManager.getInstance().addSynergy("aotd_mining_feed",new OreToCore());
         IndustrySynergiesManager.getInstance().addSynergy("aotd_refining_feed",new CoreToForge());
@@ -317,6 +343,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         IndustrySynergiesManager.getInstance().addSynergy("r3dstylum_frl",new FacilitatedResearchLogistics());
         IndustrySynergiesManager.getInstance().addSynergy("ildrenium_aep",new ArgentEnergyProcessing());
         IndustrySynergiesManager.getInstance().addSynergy("aotd_volatile_line",new VolatileLine());
+        IndustrySynergiesManager.getInstance().addSynergy("somerandomsmuck_ditd",new DrumsInTheDeep());
         if(Global.getSettings().getModManager().isModEnabled("uaf")){
             IndustrySynergiesManager.getInstance().addSynergy("bunchienumbies_fmp",new UAFFederallyMandatedPastries());
             IndustrySynergiesManager.getInstance().addSynergy("bunchienumbies_od",new UAFOutsourcedDesserts());

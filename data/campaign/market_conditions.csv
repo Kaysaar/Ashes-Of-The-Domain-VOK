@@ -4,7 +4,7 @@ AoDFoodDemand,AoDFoodDemand,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions
 ,,,,,,,
 ,,,,,,,
 WaterMiningSupply,watterSupplyMining,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMinningCond,,graphics/icons/markets/capital.png,601
-Industrial Center,industrial_might,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.IndustrialMightCondition,,graphics/icons/markets/capital.png,602
+Industrial Center,industrial_might,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.IndustrySynergiesCond,,graphics/icons/markets/capital.png,602
 GP mod,aotd_gp_mod,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.GPModifiers,,graphics/icons/markets/capital.png,610
 BiFrostGateRemoving,bifrost_removal,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.BiFrostGateRemovingCondtion,,graphics/icons/markets/light_industrial.png,603
 Pre Collapse Facility,pre_collapse_facility,,,data.kaysaar.aotd.vok.campaign.econ.conditions.PreCollapseFacility,"This planet harbors numerous ancient Domain-marked facilities, rich with potential valuable data.",graphics/icons/markets/light_industrial.png,604

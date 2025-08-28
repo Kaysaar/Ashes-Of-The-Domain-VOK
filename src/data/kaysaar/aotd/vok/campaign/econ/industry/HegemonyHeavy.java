@@ -39,7 +39,7 @@ public class HegemonyHeavy extends HeavyIndustry {
             }
         }
         if(market.getId().equals("chicomoztoc")){
-            demand(AoTDCommodities.REFINED_METAL, size-1);
+            demand(AoTDCommodities.REFINED_METAL, size-3);
         }
         else{
             demand(AoTDCommodities.REFINED_METAL, size+2);
@@ -158,7 +158,7 @@ public class HegemonyHeavy extends HeavyIndustry {
             }
         if(market.getId().equals("chicomoztoc")){
             tooltip.addSectionHeading("Might of Chicomoztoc",market.getFaction().getBaseUIColor(),market.getFaction().getDarkUIColor(), Alignment.MID,10f);
-            tooltip.addPara("Reduces demand for refined metal by 3 units!",Misc.getPositiveHighlightColor(),10f);
+            tooltip.addPara("Reduces demand for refined metal by 5 units!",Misc.getPositiveHighlightColor(),10f);
             tooltip.addPara("*For the High Hegemon does not ask. He commands.", Color.gray, 10f);
         }
 

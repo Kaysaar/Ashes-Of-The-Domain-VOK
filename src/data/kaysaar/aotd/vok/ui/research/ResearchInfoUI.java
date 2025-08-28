@@ -321,7 +321,8 @@ public class ResearchInfoUI extends PopUpUI {
                 marketAPI.addIndustry(Industries.POPULATION);
                 marketAPI.addIndustry(Industries.SPACEPORT);
                 marketAPI.reapplyConditions();
-                Industry ind = Global.getSettings().getIndustrySpec(industryId).getNewPluginInstance(marketAPI);
+                marketAPI.addIndustry(industryId);
+                Industry ind =marketAPI.getIndustry(industryId);
                 if (ind.getId().equals(Industries.FARMING)) {
                     ind.getSupply(Commodities.FOOD).getQuantity().modifyFlat("test", 6);
                 }
@@ -343,6 +344,7 @@ public class ResearchInfoUI extends PopUpUI {
                     tooltip.addPara("This industry upgrades from : %s ", 10f, Color.ORANGE, "" + Global.getSettings().getIndustrySpec(ind.getSpec().getDowngrade()).getName());
 
                 }
+                marketAPI.removeIndustry(industryId, MarketAPI.MarketInteractionMode.REMOTE,false);
                 clearListenersFromTemporaryMarket();
 
             }

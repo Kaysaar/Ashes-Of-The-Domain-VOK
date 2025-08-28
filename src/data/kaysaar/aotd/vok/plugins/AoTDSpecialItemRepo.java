@@ -14,7 +14,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDItems;
-import data.kaysaar.aotd.vok.campaign.econ.industry.PatherHiddenIndustry;
+import data.kaysaar.aotd.vok.campaign.econ.industry.MiscHiddenIndustry;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -73,12 +73,12 @@ public class AoTDSpecialItemRepo {
                 super.apply(industry);
                 industry.getMarket().getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD)
                         .modifyFlat("nanoforge", 0.8f, Misc.ucFirst(spec.getName().toLowerCase()));
-                PatherHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().modifyFlat("tenebrium_nanoforge",12,"Abyss-Tech");
+                MiscHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().modifyFlat("tenebrium_nanoforge",12,"Abyss-Tech");
             }
             public void unapply(Industry industry) {
                 super.unapply(industry);
                 industry.getMarket().getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodifyFlat("nanoforge");
-                PatherHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().unmodifyFlat("tenebrium_nanoforge");
+                MiscHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().unmodifyFlat("tenebrium_nanoforge");
 
             }
             protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
