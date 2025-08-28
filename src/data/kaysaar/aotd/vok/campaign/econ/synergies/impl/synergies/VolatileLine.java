@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.campaign.econ.synergies.impl;
+package data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -42,14 +42,16 @@ public class VolatileLine extends BaseIndustrySynergy {
 
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
-        tooltip.addPara("Increase production of %s by %s",3f,base,highLight,  IndustrySynergiesMisc.getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.FUELPROD),market),2+"");
+        int number = Math.round(2*efficiency);
+        tooltip.addPara("Increase production of %s by %s",3f,base,highLight,  IndustrySynergiesMisc.getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.FUELPROD),market),number+"");
     }
 
     @Override
     public void apply(float efficiencyPercent, MarketAPI market) {
         for (String string : IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.FUELPROD)) {
             if(market.hasIndustry(string)) {
-                market.getIndustry(string).getSupplyBonusFromOther().modifyFlat(getIdForEffects(),2,getSynergyName());
+                int number = Math.round(2*efficiencyPercent);
+                market.getIndustry(string).getSupplyBonusFromOther().modifyFlat(getIdForEffects(),number,getSynergyName());
             }
         };
     }

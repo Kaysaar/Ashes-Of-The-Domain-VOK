@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.synergies;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
@@ -60,7 +61,7 @@ public class IndustrySynergiesMisc {
         for (int i = 0; i < ids.size(); i++) {
             builder.append(getIndustryName(marketAPI,ids.get(i)));
             if (i < ids.size() - 1) {
-                builder.append("/");
+                builder.append(" / ");
             }
         }
         return builder.toString();
@@ -84,6 +85,14 @@ public class IndustrySynergiesMisc {
         BuildingMenuMisc.getIndustryTree(industryId).forEach(x->results.add(x.getId()));
         Arrays.stream(toTrim).forEach(results::remove);
         return results;
+    }
+    public static Industry getIndustryFromUpgradeTree(String industryId, MarketAPI market){
+        for (String id : getIdsOfTreeFromIndustry(industryId)) {
+            if(market.hasIndustry(id)){
+                return market.getIndustry(id);
+            }
+        }
+        return null;
     }
     public static ArrayList<String>getIdsOfIndustryWithSameTag(String tag,MarketAPI market){
         ArrayList<String>results =new ArrayList<>();

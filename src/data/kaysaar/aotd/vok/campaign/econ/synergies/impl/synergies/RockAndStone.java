@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.campaign.econ.synergies.impl;
+package data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
@@ -15,6 +15,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
@@ -103,6 +104,8 @@ public class RockAndStone extends BaseIndustrySynergy {
         if(market.hasIndustry(AoTDIndustries.MINING_MEGAPLEX)){
             chances =3;
         }
+        chances = Math.round(chances* IndustrySynergiesManager.getInstance().calculateEfficiency(market));
+        if(chances==0)return super.generateCargoForGatheringPoint(market, random);
 
 
         base *= IndustrySynergiesMisc.getEffectivenessMult(market);

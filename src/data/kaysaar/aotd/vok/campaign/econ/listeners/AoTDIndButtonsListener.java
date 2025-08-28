@@ -10,24 +10,23 @@ import com.fs.starfarer.api.campaign.listeners.DialogCreatorUI;
 import com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-
 import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.CoronalSegment;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergySourceAPI;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.ui.UpgradeListUI;
-import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AoTDIndButtonsListener implements IndustryOptionProvider {
     public HashMap<String, ArrayList<String>>upgradeForIndustryRepo = new HashMap<>();
@@ -184,7 +183,11 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
 
     @Override
     public void addToIndustryTooltip(Industry ind, Industry.IndustryTooltipMode mode, TooltipMakerAPI tooltip, float width, boolean expanded) {
-
+        for (Map.Entry<String, IndustrySynergySourceAPI> entry : IndustrySynergiesManager.getInstance().getSourcesOfSynergy().entrySet()) {
+            if(entry.getValue().getId().equals(ind.getId())){
+                entry.getValue().addToTooltip(ind, mode, tooltip, width, expanded);
+            }
+        }
     }
     public void updateIndustryRepo(){
         for (IndustrySpecAPI indsSpec : Global.getSettings().getAllIndustrySpecs()) {

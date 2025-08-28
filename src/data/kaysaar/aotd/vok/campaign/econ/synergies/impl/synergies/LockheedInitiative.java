@@ -1,10 +1,10 @@
-package data.kaysaar.aotd.vok.campaign.econ.synergies.impl;
+package data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.campaign.econ.industry.MaglevNetwork;
+import data.kaysaar.aotd.vok.campaign.econ.conditions.IndustrySynergiesCond;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -96,8 +96,7 @@ public class LockheedInitiative extends BaseIndustrySynergy {
         if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites()<=0)return;
         for (MarketAPI market : AoTDMisc.getPlayerFactionMarkets()) {
             if(doesSynergyMetTotalReq(market)){
-                MaglevNetwork network = (MaglevNetwork) market.getIndustry(AoTDIndustries.MAGLEV_CENTRAL_HUB);
-                network.applySynergyEffect(this);
+                IndustrySynergiesCond.getInstance(market).applySynergyEffect(this);
             }
         }
         if(efficinecy==0){

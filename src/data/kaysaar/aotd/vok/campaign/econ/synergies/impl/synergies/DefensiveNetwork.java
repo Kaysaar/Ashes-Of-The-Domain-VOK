@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.campaign.econ.synergies.impl;
+package data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -42,7 +42,7 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
         float baseValDR = 1.5f * efficiency;
         float baseValFS = 0.2f * efficiency;
         float baseValA = 0.1f * efficiency;
-        tooltip.addPara("Increases total defense rating by %s", 3f, base, highLight, "x" + baseValDR);
+        tooltip.addPara("Increases total defense rating by %s", 3f, base, highLight, "x" + Misc.getRoundedValueMaxOneAfterDecimal(baseValDR));
         tooltip.addPara("Increases fleet size by %s", 3f, base, highLight, AoTDMisc.getPercentageString(baseValFS));
         tooltip.addPara("Decreases accessibility by %s", 3f, Misc.getNegativeHighlightColor(), highLight, AoTDMisc.getPercentageString(baseValA));
     }

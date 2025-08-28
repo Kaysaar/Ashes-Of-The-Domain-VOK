@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.campaign.econ.synergies.impl;
+package data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;

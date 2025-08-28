@@ -1,13 +1,14 @@
-package data.kaysaar.aotd.vok.campaign.econ.synergies.impl;
+package data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
-import data.kaysaar.aotd.vok.campaign.econ.industry.PatherHiddenIndustry;
+import data.kaysaar.aotd.vok.campaign.econ.industry.MiscHiddenIndustry;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 
@@ -78,10 +79,10 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
     public void advance(MarketAPI market, float amount,boolean aboutToRemove) {
 
         if(this.doesSynergyMetTotalReq(market)&&!aboutToRemove) {
-            PatherHiddenIndustry.getInstance(market).getPatherInterestManipulator().modifyFlat(getIdForEffects(),-5,"Plausible Deniability");
+            MiscHiddenIndustry.getInstance(market).getPatherInterestManipulator().modifyFlat(getIdForEffects(),-5* IndustrySynergiesManager.getInstance().calculateEfficiency(market),"Plausible Deniability");
         }
         else{
-            PatherHiddenIndustry.getInstance(market).getPatherInterestManipulator().unmodifyFlat(getIdForEffects());
+            MiscHiddenIndustry.getInstance(market).getPatherInterestManipulator().unmodifyFlat(getIdForEffects());
 
         }
     }

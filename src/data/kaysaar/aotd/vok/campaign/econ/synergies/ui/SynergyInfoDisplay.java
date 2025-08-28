@@ -59,12 +59,9 @@ public class SynergyInfoDisplay implements ExtendUIPanelPlugin {
     private void createAvailableSynergyInfo() {
         availableSynergyInfo = Global.getSettings().createCustom(210, mainPanel.getPosition().getHeight()-10, null);
         TooltipMakerAPI tooltipHeader = availableSynergyInfo.createUIElement(availableSynergyInfo.getPosition().getWidth(),20,false);
-        if(market.hasIndustry("aotd_maglev")){
-            tooltipHeader.addSectionHeading("Current Synergies", Alignment.MID,0f);
-        }
-        else{
-            tooltipHeader.addSectionHeading("Available Synergies", Alignment.MID,0f);
-        }
+        tooltipHeader.addSectionHeading("Current Synergies", Alignment.MID,0f);
+
+
         TooltipMakerAPI properTooltip = availableSynergyInfo.createUIElement(availableSynergyInfo.getPosition().getWidth(), availableSynergyInfo.getPosition().getHeight()-25,true);
         float opad = 0f;
         for (BaseIndustrySynergy baseIndustrySynergy : IndustrySynergiesManager.getInstance().getSynergyScriptsValidForMarketInUI(market)) {
@@ -100,7 +97,7 @@ public class SynergyInfoDisplay implements ExtendUIPanelPlugin {
         LabelAPI label = tooltipHeader.addSectionHeading("Synergy Info", Alignment.MID,0f);
         synergyInfo.addUIElement(tooltipHeader).inTL(0,0);
         BaseIndustrySynergy synergy = (BaseIndustrySynergy) currentlyChosen.getCustomData();
-        TooltipMakerAPI properTooltip = synergyInfo.createUIElement(synergyInfo.getPosition().getWidth()+5, synergyInfo.getPosition().getHeight()-15,true);
+        TooltipMakerAPI properTooltip = synergyInfo.createUIElement(synergyInfo.getPosition().getWidth()+5, synergyInfo.getPosition().getHeight()-20,true);
         properTooltip.addTitle(synergy.getSynergyName());
         properTooltip.setBulletedListMode("   ");
         synergy.printReq(properTooltip,market);
@@ -117,6 +114,8 @@ public class SynergyInfoDisplay implements ExtendUIPanelPlugin {
             }
         }
         properTooltip.setBulletedListMode(null);
+        properTooltip.addPara("*Note: All bonuses are shown for market with %s efficiency, lower efficiency will result in lower bonuses, higher efficiency with higher bonuses.",3f,Misc.getGrayColor(),Color.ORANGE,"100%");
+        properTooltip.addSpacer(5f);
         synergyInfo.addUIElement(properTooltip).inTL(0,20);
         mainPanel.addComponent(synergyInfo).inTL(availableSynergyInfo.getPosition().getWidth()+10+unavailableSynergyList.getPosition().getWidth()+5,5);
     }

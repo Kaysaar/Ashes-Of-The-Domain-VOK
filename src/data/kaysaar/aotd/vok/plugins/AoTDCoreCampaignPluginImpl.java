@@ -22,12 +22,15 @@ public class AoTDCoreCampaignPluginImpl extends CoreCampaignPluginImpl {
             }
             if(fleet.getBattle()!=null){
                 BattleAPI battle = fleet.getBattle();
-                CampaignFleetAPI station = fleet.getBattle().getStationSide().stream().filter(CampaignFleetAPI::isStationMode).findAny().orElse(null);
-                if(station!=null){
-                    if(station.getFleetData().getMembersListCopy().stream().filter(FleetMemberAPI::isStation).anyMatch(x->x.getHullSpec().hasTag("tier4station"))){
-                        return new PluginPick<>(new TierFourStationBattleCreatorPlugin(),PickPriority.MOD_SPECIFIC);
+                if(fleet.getBattle().getStationSide()!=null){
+                    CampaignFleetAPI station = fleet.getBattle().getStationSide().stream().filter(CampaignFleetAPI::isStationMode).findAny().orElse(null);
+                    if(station!=null){
+                        if(station.getFleetData().getMembersListCopy().stream().filter(FleetMemberAPI::isStation).anyMatch(x->x.getHullSpec().hasTag("tier4station"))){
+                            return new PluginPick<>(new TierFourStationBattleCreatorPlugin(),PickPriority.MOD_SPECIFIC);
+                        }
                     }
                 }
+
             }
         }
         return super.pickBattleCreationPlugin(opponent);
