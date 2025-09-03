@@ -67,7 +67,7 @@ public class CurrentResearchShowcase implements CustomUIPanelPlugin {
             }
             double multiplier = AoTDSettingsManager.getFloatValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
             float defaultDays = (option.TimeToResearch*(float) multiplier);
-            float days = AoDUtilis.getDaysFromResearch(option);
+            float days = AoDUtilis.getDaysFromResearch(option)-option.daysSpentOnResearching;
             ProgressBarComponent component = new ProgressBarComponent(width-15,25,option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
 
             tooltip.addCustom(component.getRenderingPanel(),0f).getPosition().inTL(10,currY+45);
@@ -184,7 +184,7 @@ public class CurrentResearchShowcase implements CustomUIPanelPlugin {
             ProgressBarComponent component = new ProgressBarComponent(width-15,25,option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
 
             tooltip.addCustom(component.getRenderingPanel(),0f).getPosition().inTL(13,currY+45);
-            LabelAPI labelAPI =                 tooltip.addPara("Current progress : %s ( %s left till researched)", 5f, Color.ORANGE, option.getPercentageProgress() + "%", AoTDMisc.convertDaysToString((int) AoDUtilis.getDaysFromResearch(option)));
+            LabelAPI labelAPI =                 tooltip.addPara("Current progress : %s ( %s left till researched)", 5f, Color.ORANGE, option.getPercentageProgress() + "%", AoTDMisc.convertDaysToString((int) (AoDUtilis.getDaysFromResearch(option)-option.daysSpentOnResearching)));
 
             labelAPI.getPosition().inTL(width/2-(labelAPI.computeTextWidth(labelAPI.getText())/2),currY+50);
             buttonAPI = tooltip.addButton("Cancel research",null,Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.NONE,((width-20))-1,20,0f);

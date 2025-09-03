@@ -14,4 +14,5 @@ public class ShroudEnergyUsage extends ShroudBasedProject{
     public int getRequiredShroudExpertLevel() {
         return 2;
     }
+
 }

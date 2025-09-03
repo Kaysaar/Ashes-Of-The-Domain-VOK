@@ -51,7 +51,7 @@ public class GPManager {
     public MutableStat cruiserCapitalSpeed = new MutableStat(1f);
     public MutableStat frigateDestroyerSpeed = new MutableStat(1f);
     public IntervalUtil intervalUtil = new IntervalUtil(9.5f, CampaignClock.SECONDS_PER_GAME_DAY);
-
+    public transient boolean initalized = false;
     public MutableStat getCruiserCapitalSpeed() {
         if (cruiserCapitalSpeed == null) {
             cruiserCapitalSpeed = new MutableStat(1f);
@@ -145,9 +145,15 @@ public class GPManager {
         if (Global.getSector().getPersistentData().get(memkey) == null) {
             return setInstance();
         }
-        return (GPManager) Global.getSector().getPersistentData().get(memkey);
+        GPManager manager = (GPManager) Global.getSector().getPersistentData().get(memkey);
+        if(!manager.initalized){
+            manager.initalized = true;
+            manager.reInitalize();
+        }
+        return manager;
     }
     public GPBaseMegastructure getMegastructure(String id){
+        if(megastructures==null)return null;
         for (GPBaseMegastructure megastructure : megastructures) {
             if(megastructure.getSpec().getMegastructureID().equals(id)){
                 return megastructure;
@@ -789,7 +795,7 @@ public class GPManager {
         }
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {
-            advanceProductions(intervalUtil.getElapsed());
+                advanceProductions(intervalUtil.getElapsed());
         }
     }
 
@@ -802,9 +808,10 @@ public class GPManager {
         for (GPBaseMegastructure megastructure : megastructures) {
             megastructure.advance(amount);
         }
-        advance(getProductionOrders());
+        ArrayList<GPOrder>oredrs = new ArrayList<>(getProductionOrders());
+        advance(oredrs);
         if (!AoTDMisc.isPLayerHavingHeavyIndustry()) return;
-        for (GPOrder productionOrder : getProductionOrders()) {
+        for (GPOrder productionOrder : oredrs) {
             if (!productionOrder.isCountingToContribution()) continue;
             if (productionOrder.canProceed()) {
                 productionOrder.advance(amount);

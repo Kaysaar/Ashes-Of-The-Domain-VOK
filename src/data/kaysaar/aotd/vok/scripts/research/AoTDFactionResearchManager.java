@@ -13,7 +13,6 @@ import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.impl.campaign.intel.MessageIntel;
-import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
@@ -46,9 +45,6 @@ public class AoTDFactionResearchManager {
     public MutableStat getBlackSiteSpecialProjBonus() {
         return blackSiteSpecialProjBonus;
     }
-
-    IntervalUtil util = new IntervalUtil(1f, 1f);
-
 
     public ArrayList<ResearchOption> getResearchRepoOfFaction() {
         return researchRepoOfFaction;
@@ -153,12 +149,7 @@ public class AoTDFactionResearchManager {
     }
 
     public void advance(float amount) {
-        util.advance(amount);
-        if (util.intervalElapsed()) {
-            executeAdvance(util.getElapsed());
-
-        }
-
+        executeAdvance(amount);
 
     }
 

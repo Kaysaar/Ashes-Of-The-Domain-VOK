@@ -8,13 +8,13 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
-import data.ui.basecomps.ExtendUIPanelPlugin;
+import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SynergyInfoDisplay implements ExtendUIPanelPlugin {
+public class SynergyInfoDisplay implements ExtendedUIPanelPlugin {
     CustomPanelAPI mainPanel, synergyInfo,unavailableSynergyList, availableSynergyInfo;
     public ButtonAPI currentlyChosen;
     public ArrayList<ButtonAPI>buttons = new ArrayList<>();

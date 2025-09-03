@@ -17,6 +17,7 @@ import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesMan
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.coreui.BackgroundInterlooper;
 import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
+import data.kaysaar.aotd.vok.scripts.coreui.PlanetBackgroundTracker;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 
 public class CoreUiInterceptor implements CoreUITabListener {
@@ -25,6 +26,7 @@ public class CoreUiInterceptor implements CoreUITabListener {
         if (tab.equals(CoreUITabId.CARGO)) {
             AoTDCompoundUIInMarketScript.didIt = false;
         }
+        PlanetBackgroundTracker.ignoreOutpostParam= false;
         if (param instanceof String) {
             String s = (String) param;
             if (s.equals("income_report")) {
@@ -61,6 +63,14 @@ public class CoreUiInterceptor implements CoreUITabListener {
                 }
 
 
+            }
+            if (tab.equals(CoreUITabId.OUTPOSTS) && ProductionUtil.getCoreUI() != null) {
+                if (param instanceof MarketAPI market) {
+                    if (market.getPrimaryEntity().getMemoryWithoutUpdate().get(GPBaseMegastructure.memKey) instanceof NidavelirComplexMegastructure megastructure) {
+                        CoreUiInterceptor.initalizeBackgroundPLanet(megastructure);                    }
+
+                }
+
 
             }
 
@@ -68,17 +78,18 @@ public class CoreUiInterceptor implements CoreUITabListener {
         CoreUITracker.sendSignalToOpenCore = true;
     }
 
-    private  void initalizeBackgroundPLanet(NidavelirComplexMegastructure megastructure) {
+    public static void initalizeBackgroundPLanet(NidavelirComplexMegastructure megastructure) {
         UIPanelAPI saved = (UIPanelAPI) ReflectionUtilis.invokeMethod("getPlanetBackground", ProductionUtil.getCoreUI());
+        if(saved==null)return;
         CampaignPlanet planetSaved = (CampaignPlanet) ReflectionUtilis.invokeMethod("getPlanet", saved);
         for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(ProductionUtil.getCoreUI())) {
-            if(componentAPI instanceof CustomPanelAPI panel) {
-                if(panel.getPlugin() instanceof BackgroundInterlooper) {
+            if (componentAPI instanceof CustomPanelAPI panel) {
+                if (panel.getPlugin() instanceof BackgroundInterlooper) {
                     return;
                 }
             }
         }
-        BackgroundInterlooper interlooper = new BackgroundInterlooper(megastructure.shipyard.getType(), saved.getPosition().getWidth(), saved.getPosition().getHeight(), planetSaved, saved,megastructure.shipyard.getCurrAngle());
+        BackgroundInterlooper interlooper = new BackgroundInterlooper(megastructure.shipyard.getType(), saved.getPosition().getWidth(), saved.getPosition().getHeight(), planetSaved, saved, megastructure.shipyard.getCurrAngle());
         ProductionUtil.getCoreUI().addComponent(interlooper.getMainPanel()).inBL(0, 0);
         ReflectionUtilis.invokeMethodWithAutoProjection("" +
                 "sendToBottomWithinItself", ProductionUtil.getCoreUI(), interlooper.getMainPanel());

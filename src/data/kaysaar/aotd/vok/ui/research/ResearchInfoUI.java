@@ -219,13 +219,13 @@ public class ResearchInfoUI extends PopUpUI {
         TooltipMakerAPI tooltip = progression.createUIElement(originPanel.getPosition().getWidth(), 50, false);
         int defaultDays = (int) AoDUtilis.getDaysFromResearch(option);
 
-        tooltip.addPara("This technology takes %s to research", 5f, Color.ORANGE, AoTDMisc.convertDaysToString(defaultDays));
+        tooltip.addPara("This technology takes %s to research", 5f, Color.ORANGE, AoTDMisc.convertDaysToString((int) (defaultDays-option.daysSpentOnResearching)));
         if (option.isResearched) {
             tooltip.addPara("Current research progress :%s", 5f, Color.ORANGE, "Finished");
         } else {
             AoTDFactionResearchManager manager = AoTDMainResearchManager.getInstance().getManagerForPlayerFaction();
             if (manager.getCurrentFocus() != null && manager.getCurrentFocus().getSpec().getId().equals(option.getSpec().getId())) {
-                tooltip.addPara("Current research progress : %s ( %s left )", 5f, Color.ORANGE, option.getPercentageProgress() + "%", AoTDMisc.convertDaysToString((int) AoDUtilis.getDaysFromResearch(option)));
+                tooltip.addPara("Current research progress : %s ( %s left )", 5f, Color.ORANGE, option.getPercentageProgress() + "%", AoTDMisc.convertDaysToString((int) (AoDUtilis.getDaysFromResearch(option)-option.daysSpentOnResearching)));
 
             } else {
                 tooltip.addPara("Current research progress : %s", 5f, Color.ORANGE, option.getPercentageProgress() + "%");

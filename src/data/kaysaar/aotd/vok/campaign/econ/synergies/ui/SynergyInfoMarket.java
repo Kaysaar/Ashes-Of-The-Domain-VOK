@@ -12,13 +12,13 @@ import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesMan
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergySourceAPI;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.ui.basecomps.ExtendUIPanelPlugin;
+import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
 
 import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-public class SynergyInfoMarket implements ExtendUIPanelPlugin {
+public class SynergyInfoMarket implements ExtendedUIPanelPlugin {
     CustomPanelAPI mainPanel, contentPanel;
     ButtonAPI buttonToCheckSynergies;
     MarketAPI tiedMarket;

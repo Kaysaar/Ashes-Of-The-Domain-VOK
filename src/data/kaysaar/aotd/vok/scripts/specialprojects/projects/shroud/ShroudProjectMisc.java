@@ -91,7 +91,7 @@ public class ShroudProjectMisc implements EveryFrameScript {
         if (util.intervalElapsed()) {
             int currentLevel = getLevelOfUnderstanding();
             int currentProjects = getAmountOfProjectsOnLevel(currentLevel);
-            int requiredProjects = projectThresholds.getOrDefault(currentLevel, Integer.MAX_VALUE);
+            int requiredProjects = projectThresholds.getOrDefault(currentLevel+1, Integer.MAX_VALUE);
             if (currentProjects >= requiredProjects) {
                 // You can increase level, trigger events, etc.
                 setLevelOfUnderstanding(currentLevel + 1);

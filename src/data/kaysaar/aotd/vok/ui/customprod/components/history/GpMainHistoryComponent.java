@@ -6,16 +6,16 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GpHistory;
+import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.SortingState;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
-import data.ui.basecomps.ExtendUIPanelPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin.*;
 
-public class GpMainHistoryComponent implements ExtendUIPanelPlugin {
+public class GpMainHistoryComponent implements ExtendedUIPanelPlugin {
     CustomPanelAPI mainPanel, contentPanelHistory, contentPanelYears;
     public ButtonAPI currentlyChosen;
     public ArrayList<ButtonAPI>buttons = new ArrayList<>();
