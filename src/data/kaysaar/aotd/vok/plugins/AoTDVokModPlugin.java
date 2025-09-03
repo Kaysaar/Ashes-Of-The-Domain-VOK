@@ -181,6 +181,8 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PLASMA_DYNAMO, "fracking");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.DEALMAKER_HOLOSUITE, AoTDIndustries.UNDERWORLD);
+
         aoTDSpecialItemRepo.absoluteSetItemParams(Items.CORONAL_PORTAL, "");
         Global.getSettings().getHullModSpec("shrouded_thunderhead").setEffectClass(AoTDShroudedThunderHeadHullmod.class.getName());
         Global.getSettings().getHullModSpec("shrouded_mantle").setEffectClass(AoTDShroudedMantleHullmod.class.getName());
@@ -476,6 +478,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSector().addTransientScript(new AoTDCollabSpScript());
         Global.getSector().addTransientListener(new AoTDxUafAfterCombatListener());
         Global.getSector().addTransientListener(new AoTDSPListener());
+        Global.getSector().addTransientScript(new ShroudProjectMisc());
         aoTDSpecialItemRepo.putInfoForSpecialItems();
         aoTDDataInserter.setStarterIndustriesUpgrades();
 

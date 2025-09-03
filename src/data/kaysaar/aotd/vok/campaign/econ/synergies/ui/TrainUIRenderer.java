@@ -10,7 +10,7 @@ import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.ui.basecomps.ExtendUIPanelPlugin;
+import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -19,7 +19,7 @@ import java.util.*;
 
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 
-public class TrainUIRenderer implements ExtendUIPanelPlugin {
+public class TrainUIRenderer implements ExtendedUIPanelPlugin {
     CustomPanelAPI mainPanel;
     HashMap<String, UIComponentAPI> references;
     UIComponentAPI main;
@@ -46,10 +46,11 @@ public class TrainUIRenderer implements ExtendUIPanelPlugin {
     private final ArrayList<Trip> tripQueue = new ArrayList<>();
 
     public TrainUIRenderer(UIPanelAPI main, HashMap<String, UIComponentAPI> references,
-                           UIPanelAPI insertTo, UIPanelAPI centerOfRows, ArrayList<BaseIndustrySynergy> synergies) {
+                           UIPanelAPI insertTo, UIPanelAPI centerOfRows, ArrayList<BaseIndustrySynergy> synergies,MarketAPI market) {
         this.mainPanel = Global.getSettings().createCustom(1, 1, this);
         this.references = references;
         this.main = main;
+        this.market = market;
         this.centerOfRows = centerOfRows;
         insertTo.addComponent(mainPanel);
         this.insertTo = insertTo;

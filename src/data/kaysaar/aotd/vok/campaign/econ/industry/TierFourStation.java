@@ -13,4 +13,14 @@ public class TierFourStation extends OrbitalStation {
             stationFleet.getMemoryWithoutUpdate().set(Misc.DANGER_LEVEL_OVERRIDE,10);
         }
     }
+
+    @Override
+    public boolean isAvailableToBuild() {
+        return false;
+    }
+
+    @Override
+    public boolean showWhenUnavailable() {
+        return false;
+    }
 }

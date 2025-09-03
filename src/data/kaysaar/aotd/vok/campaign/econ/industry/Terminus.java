@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class Terminus extends Waystation {
 
     public static float UPKEEP_MULT_PER_DEFICIT = 0.3f;
-    public static final float BASE_ACCESSIBILITY = 0.4f;
+    public static final float BASE_ACCESSIBILITY = 0.3f;
 
     public static final float IMPROVE_ACCESSIBILITY = 0.2f;
 

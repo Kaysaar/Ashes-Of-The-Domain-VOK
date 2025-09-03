@@ -10,13 +10,13 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
+import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
 import data.kaysaar.aotd.vok.ui.basecomps.ImageViewer;
-import data.ui.basecomps.ExtendUIPanelPlugin;
 
 import java.awt.*;
 import java.util.List;
 
-public class ScientistButton implements ExtendUIPanelPlugin {
+public class ScientistButton implements ExtendedUIPanelPlugin {
     public CustomPanelAPI mainPanel;
     public CustomPanelAPI contentPanel;
     ButtonAPI button;

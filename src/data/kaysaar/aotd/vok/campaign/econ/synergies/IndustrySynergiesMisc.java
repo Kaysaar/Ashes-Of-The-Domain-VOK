@@ -96,8 +96,12 @@ public class IndustrySynergiesMisc {
     }
     public static ArrayList<String>getIdsOfIndustryWithSameTag(String tag,MarketAPI market){
         ArrayList<String>results =new ArrayList<>();
-        Global.getSettings().getAllIndustrySpecs().stream().filter(x->x.hasTag(tag)&&!x.hasTag(Tags.INDUSTRY_DO_NOT_SHOW_IN_BUILD_DIALOG)&&(x.getNewPluginInstance(market).isAvailableToBuild()||x.getNewPluginInstance(market).showWhenUnavailable())).forEach(x->results.add(x.getId()));
+        Global.getSettings().getAllIndustrySpecs().stream().filter(x->x.hasTag(tag)&&!x.hasTag(Tags.INDUSTRY_DO_NOT_SHOW_IN_BUILD_DIALOG)&&(getProperlyInstance(market,x.getId()).isAvailableToBuild())).forEach(x->results.add(x.getId()));
         return results;
+    }
+    public static Industry getProperlyInstance(MarketAPI market,String id){
+        Industry ind = Global.getSettings().getIndustrySpec(id).getNewPluginInstance(market);
+        return ind;
     }
     public static String getIndustryName(MarketAPI market, String id) {
         if(market==null){

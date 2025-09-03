@@ -43,7 +43,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
             return;
         }
 
-        if (CoreUITabId.CARGO.equals(Global.getSector().getCampaignUI().getCurrentCoreTab())) {
+        if (CoreUITabId.CARGO.equals(Global.getSector().getCampaignUI().getCurrentCoreTab())||CoreUITabId.OUTPOSTS.equals(Global.getSector().getCampaignUI().getCurrentCoreTab())) {
             UIPanelAPI currentTab = ProductionUtil.getCurrentTab();
             for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(currentTab)) {
                 if (ReflectionUtilis.hasMethodOfName("getOutpostPanelParams", componentAPI)) {
@@ -54,6 +54,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                         UIComponentAPI panelOfIndustries = ReflectionUtilis.getChildrenCopy(markets).stream().filter(x -> ReflectionUtilis.hasMethodOfName("recreateWithEconUpdate", x)).findFirst().orElse(null);
                         if (panelOfIndustries != null) {
                             MarketAPI market = (MarketAPI) ReflectionUtilis.findFieldByType(componentAPI, MarketAPI.class);
+                            if(market==null)return;
                             UIPanelAPI panelOfOtherInfo = (UIPanelAPI) ReflectionUtilis.getChildrenCopy((UIPanelAPI) panelOfIndustries).stream().filter(x -> ReflectionUtilis.hasMethodOfName("getImmigration", x)).findFirst().orElse(null);
                             if (panelOfOtherInfo != null) {
                                 boolean found = false;
@@ -112,7 +113,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                                         }
                                         CustomPanelAPI centerOfRows = Global.getSettings().createCustom(1, 1, null);
                                         contentInside.addComponent(centerOfRows).inTL(413, 107);
-                                        new TrainUIRenderer((UIPanelAPI) mainWidget, widgetsToDraw, contentInside, centerOfRows, synergiesPresent);
+                                        new TrainUIRenderer((UIPanelAPI) mainWidget, widgetsToDraw, contentInside, centerOfRows, synergiesPresent,market);
 
                                     } else {
                                         UIPanelAPI contentInside = (UIPanelAPI) ReflectionUtilis.getChildrenCopy(panelInsider).get(0);
@@ -142,7 +143,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                                         }
                                         CustomPanelAPI centerOfRows = Global.getSettings().createCustom(1, 1, null);
                                         contentInside.addComponent(centerOfRows).inTL(413, 107);
-                                        new TrainUIRenderer((UIPanelAPI) mainWidget, widgetsToDraw, contentInside, centerOfRows, synergiesPresent);
+                                        new TrainUIRenderer((UIPanelAPI) mainWidget, widgetsToDraw, contentInside, centerOfRows, synergiesPresent,market);
                                     }
 
 
@@ -173,7 +174,7 @@ public class IndustryTooltipInserter implements EveryFrameScript {
                                 }
                                 CustomPanelAPI centerOfRows = Global.getSettings().createCustom(1, 1, null);
                                 panelAPI.addComponent(centerOfRows).inTL(408, 107);
-                                new TrainUIRenderer((UIPanelAPI) mainWidget, widgetsToDraw, panelAPI, centerOfRows, synergiesPresent);
+                                new TrainUIRenderer((UIPanelAPI) mainWidget, widgetsToDraw, panelAPI, centerOfRows, synergiesPresent,market);
                             }
 
                         }

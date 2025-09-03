@@ -54,7 +54,7 @@ public class CoreToForge extends BaseIndustrySynergy {
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         tooltip.addPara("%s and %s are required to be functional! ", 3f, base, highLight,
                 "Refining or one of it's upgrades",
-                "Mining or one of it's upgrades, excluding Plasma Harvester");
+                "Heavy Industry or one of it's upgrades");
     }
 
     @Override

@@ -120,7 +120,7 @@ public class BifrostMega extends GPBaseMegastructure {
 
                 }
             }
-            totalBonus *= 10f;
+            totalBonus /= 10f;
             totality += totalBonus;
 
         }

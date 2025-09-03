@@ -10,7 +10,7 @@ import com.fs.starfarer.combat.CombatViewport;
 import com.fs.starfarer.combat.entities.terrain.Planet;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.ui.basecomps.ExtendUIPanelPlugin;
+import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import static com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyard
 import static com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyard.startStencil;
 
 
-public class BackgroundInterlooper implements ExtendUIPanelPlugin {
+public class BackgroundInterlooper implements ExtendedUIPanelPlugin {
     ArrayList<Planet> planets;
     public CustomPanelAPI mainPanel;
     public CampaignPlanet campaignPlanet;

@@ -31,6 +31,11 @@ public class MiscHiddenIndustry extends BaseIndustry {
     }
 
     @Override
+    public boolean isHidden() {
+        return true;
+    }
+
+    @Override
     public boolean canBeDisrupted() {
         return false;
     }

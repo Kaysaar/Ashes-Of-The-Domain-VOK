@@ -17,6 +17,7 @@ public class ShroudBeacon extends ShroudBasedProject{
     @Override
     public void projectCompleted() {
         ShroudProjectMisc.setBoolean(ShroudProjectMisc.hasAbilityToSummonGreatFleet,true);
+        super.projectCompleted();
     }
 }
 
