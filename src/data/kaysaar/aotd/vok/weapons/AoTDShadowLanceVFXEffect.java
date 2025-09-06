@@ -1,16 +1,12 @@
 package data.kaysaar.aotd.vok.weapons;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.combat.*;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.plugins.AoTDVokModPlugin;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import org.lazywizard.console.Console;
 import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.VectorUtils;
-import org.lazywizard.lazylib.combat.AIUtils;
 import org.lazywizard.lazylib.combat.entities.SimpleEntity;
 import org.lwjgl.util.vector.ReadableVector2f;
 import org.lwjgl.util.vector.Vector2f;
@@ -339,7 +335,7 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                         ship.getFluxTracker().setCurrFlux(fluxCurr - (fluxCurr * charge));
                         ship.getFluxTracker().setHardFlux(fluxCurr - (fluxCurr * charge));
                         Global.getSoundPlayer().playLoop("shadowlance_charge",
-                                weapon.getShip(), Math.max(0.3f,charge),  Math.max(0.4f,charge),
+                                weapon.getShip(), Math.max(0.3f,charge),  Math.max(0.9f,charge),
                                 weapon.getLocation(), weapon.getShip().getVelocity());
                     }
 

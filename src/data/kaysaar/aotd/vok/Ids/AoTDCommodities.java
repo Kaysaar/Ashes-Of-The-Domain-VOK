@@ -6,5 +6,5 @@ public class AoTDCommodities {
     public static final String PURIFIED_TRANSPLUTONICS = "purified_rare_metal";
     public static final String ADVANCED_COMPONENTS = "advanced_components";
     public static final String DOMAIN_GRADE_MACHINERY = "domain_heavy_machinery";
-
+    public static final String COMPOUND = "compound";
 }

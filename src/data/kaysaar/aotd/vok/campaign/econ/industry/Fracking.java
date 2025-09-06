@@ -59,7 +59,7 @@ public class Fracking extends BaseIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        boolean gasGiant = this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().getTypeId().equals(Planets.GAS_GIANT);
+        boolean gasGiant = this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().isGasGiant();
             return  (AoDUtilis.getVolatilesAmount(market)>=-1)
                     && AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&gasGiant;
 
