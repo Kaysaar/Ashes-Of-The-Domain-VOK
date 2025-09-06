@@ -65,7 +65,7 @@ public class FacilitatedResearchLogistics extends BaseIndustrySynergy {
         market.getAccessibilityMod().modifyFlat(getIdForEffects(),efficiencyPercent*0.05f,getSynergyName());
         for (String id : IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.RESEARCH_CENTER)) {
             if(market.hasIndustry(id)){
-                market.getIndustry(id).getUpkeep().modifyFlat(getIdForEffects(),1-(efficiencyPercent*0.1f),getSynergyName());
+                market.getIndustry(id).getUpkeep().modifyMult(getIdForEffects(),1-(efficiencyPercent*0.1f),getSynergyName());
             }
         }
     }
@@ -75,7 +75,7 @@ public class FacilitatedResearchLogistics extends BaseIndustrySynergy {
         market.getAccessibilityMod().unmodifyFlat(getIdForEffects());
         for (String id : IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.RESEARCH_CENTER)) {
             if(market.hasIndustry(id)){
-                market.getIndustry(id).getUpkeep().unmodifyFlat(getIdForEffects());
+                market.getIndustry(id).getUpkeep().unmodifyMult(getIdForEffects());
             }
         }
     }

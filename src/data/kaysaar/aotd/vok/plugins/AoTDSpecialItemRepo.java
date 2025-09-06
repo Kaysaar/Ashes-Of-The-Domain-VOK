@@ -8,6 +8,7 @@ import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.InstallableIndustryItemPlugin;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BoostIndustryInstallableItemEffect;
 import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -83,7 +84,10 @@ public class AoTDSpecialItemRepo {
             }
             protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
                                                   InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
-                String heavyIndustry = "heavy industry ";
+                String heavyIndustry ="";
+                if(industry!=null) {
+                    heavyIndustry = industry.getCurrentName()+" ";
+                }
                 if (mode == InstallableIndustryItemPlugin.InstallableItemDescriptionMode.MANAGE_ITEM_DIALOG_LIST) {
                     heavyIndustry = "";
                 }
@@ -93,6 +97,38 @@ public class AoTDSpecialItemRepo {
                         pad, Misc.getHighlightColor(),
                         "" + (int) Math.round(0.8f * 100f) + "%",
                         "" + (int) 6);
+            }
+
+        });
+        ItemEffectsRepo.ITEM_EFFECTS.put(AoTDItems.TENEBRIUM_SYNCHROTRON, new BoostIndustryInstallableItemEffect(
+                AoTDItems.TENEBRIUM_SYNCHROTRON, 0, 0) {
+            public void apply(Industry industry) {
+                super.apply(industry);
+                MiscHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().modifyFlat("tenebrium_synchotron",18,"Abyss-Tech");
+                if(industry.getSupply(Commodities.FUEL).getQuantity().getModifiedInt()>0){
+                    industry.getSupply(Commodities.FUEL).getQuantity().modifyFlat("tenebrium_synchotron",6,"Tenebrium Synchrotron");
+                }
+                if(industry.getSupply(AoTDCommodities.COMPOUND).getQuantity().getModifiedInt()>0){
+                    industry.getSupply(AoTDCommodities.COMPOUND).getQuantity().modifyFlat("tenebrium_synchotron",4,"Tenebrium Synchrotron");
+                }
+            }
+            public void unapply(Industry industry) {
+                super.unapply(industry);
+                MiscHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().unmodifyFlat("tenebrium_synchotron");
+                industry.getSupply(Commodities.FUEL).getQuantity().unmodifyFlat("tenebrium_synchotron");
+                industry.getSupply(AoTDCommodities.COMPOUND).getQuantity().unmodifyFlat("tenebrium_synchotron");
+
+            }
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+
+                text.addPara(pre  +
+                                "Increases "  + "production of %s by %s units." +
+                                "Increases "  + "production of %s by %s units." +
+                                "Causes very high Pather interest.",
+                        pad, Misc.getHighlightColor(),
+                        "Fuel",
+                        "" + (int) 6,"Compound",""+4);
             }
 
         });

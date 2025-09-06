@@ -28,6 +28,7 @@ public class ReflectionUtilis {
     private static final MethodHandle  getParameterTypesHandle;
     private static final MethodHandle  getFieldTypeHandle;
     private static final MethodHandle getDeclaredConstructorsHandle;
+    private static final Class<?>fileClass;
     static {
         try {
             fieldClass = Class.forName("java.lang.reflect.Field", false, Class.class.getClassLoader());
@@ -46,10 +47,12 @@ public class ReflectionUtilis {
 
             constructorClass = Class.forName("java.lang.reflect.Constructor", false, Class.class.getClassLoader());
             getDeclaredConstructorsHandle = lookup.findVirtual(constructorClass, "getParameterTypes", MethodType.methodType(Class[].class));
+            fileClass = Class.forName("java.io.File", false, Class.class.getClassLoader());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
     public static Object instantiateExact(Class<?> clazz, Class<?>[] parameterTypes, Object... arguments) {
         try {
             // Match constructor exactly with the provided parameter types
@@ -215,6 +218,40 @@ public class ReflectionUtilis {
         return null; // No matching field found
     }
 
+    public static String getStringFieldMatchingValue(Object instance, String targetValue) {
+        try {
+            Class<?> currentClass = instance.getClass();
+
+            while (currentClass != null) {
+                Object[] fields = currentClass.getDeclaredFields();
+
+                for (Object field : fields) {
+                    try {
+                        // Make field accessible
+                        setFieldAccessibleHandle.invoke(field, true);
+
+                        // Check if field is float
+                        Class<?> type = (Class<?>) getFieldTypeHandle.invoke(field);
+                        if (type == String.class) {
+                            String fieldValue = (String) getFieldHandle.invoke(field, instance);
+
+                            if (targetValue.equals(fieldValue)) {
+                                return (String) getFieldNameHandle.invoke(field);
+                            }
+                        }
+                    } catch (Throwable innerEx) {
+                        innerEx.printStackTrace(); // or log silently if preferred
+                    }
+                }
+
+                currentClass = currentClass.getSuperclass();
+            }
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to find float field name", e);
+        }
+
+        return null; // No matching field found
+    }
 
     public static Object getPrivateVariableFromSuperClass(String fieldName, Object instanceToGetFrom) {
         try {

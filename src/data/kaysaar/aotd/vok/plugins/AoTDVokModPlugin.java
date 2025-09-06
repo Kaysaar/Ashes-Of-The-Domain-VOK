@@ -182,6 +182,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PLASMA_DYNAMO, "fracking");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.DEALMAKER_HOLOSUITE, AoTDIndustries.UNDERWORLD);
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(AoTDItems.TENEBRIUM_SYNCHROTRON, AoTDIndustries.BLAST_PROCESSING);
 
         aoTDSpecialItemRepo.absoluteSetItemParams(Items.CORONAL_PORTAL, "");
         Global.getSettings().getHullModSpec("shrouded_thunderhead").setEffectClass(AoTDShroudedThunderHeadHullmod.class.getName());

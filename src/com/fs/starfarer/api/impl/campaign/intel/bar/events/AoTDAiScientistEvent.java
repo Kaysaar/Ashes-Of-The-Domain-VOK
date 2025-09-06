@@ -10,7 +10,7 @@ public class AoTDAiScientistEvent extends ScientistAICoreBarEvent{
     protected void doExtraConfirmActions() {
         person.setId(getIDOfScientist());
         Global.getSector().getImportantPeople().addPerson(person);
-
+        super.doExtraConfirmActions();
 
     }
 }
