@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.scripts.coreui;
 
+import com.fs.graphics.util.Fader;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
@@ -26,11 +27,18 @@ public class BackgroundInterlooper implements ExtendedUIPanelPlugin {
     public CampaignPlanet campaignPlanet;
     public UIPanelAPI reference;
     public boolean doesHaveShadowOnStart = false;
+    boolean dialogMode = false;
     Planet shadow;
     float scale =1f;
     float currRadius = 0f;
     float currAngle = 0f;
-    public BackgroundInterlooper(String planetType, float width, float height, CampaignPlanet reference2, UIPanelAPI reference,float angle) {
+    float maxOpacity =1f;
+
+    public void setMaxOpacity(float maxOpacity) {
+        this.maxOpacity = maxOpacity;
+    }
+
+    public BackgroundInterlooper(String planetType, float width, float height, CampaignPlanet reference2, UIPanelAPI reference, float angle) {
         planets = new ArrayList<>();
         if(planetType.equals("aotd_nidavelir")){
             shadow = new Planet("aotd_nidavelir_shadow", reference2.getRadius() , 0.0f, new Vector2f());
@@ -58,6 +66,10 @@ public class BackgroundInterlooper implements ExtendedUIPanelPlugin {
 
     }
 
+    public void setDialogMode(boolean dialogMode) {
+        this.dialogMode = dialogMode;
+    }
+
     @Override
     public void renderBelow(float alphaMult) {
 
@@ -65,10 +77,15 @@ public class BackgroundInterlooper implements ExtendedUIPanelPlugin {
 
     @Override
     public void render(float alphaMult) {
-        if (ReflectionUtilis.invokeMethod("getPlanetBackground", ProductionUtil.getCoreUI()) == null) return;
+        if(!dialogMode){
+            if (ReflectionUtilis.invokeMethod("getPlanetBackground", ProductionUtil.getCoreUI()) == null) return;
+        }
+
 
         if (reference != null) {
             PositionAPI refPos = reference.getPosition();
+            Fader fader = (Fader) ReflectionUtilis.invokeMethodWithAutoProjection("getFader",reference);
+            float alpha =Math.min(fader.getBrightness()*reference.getOpacity(),maxOpacity);
             float refX = refPos.getX();
             float refY = refPos.getY();
             float refCenterX = refPos.getCenterX();
@@ -99,8 +116,8 @@ public class BackgroundInterlooper implements ExtendedUIPanelPlugin {
             CombatViewport sphereViewport = new CombatViewport(refX, refY, refWidth, refHeight);
             CombatViewport shadowViewport = new CombatViewport(refX, refY, refWidth, refHeight);
 
-            sphereViewport.setAlphaMult(alphaMult);
-            shadowViewport.setAlphaMult(Math.min(alphaMult, 0.4f));
+            sphereViewport.setAlphaMult(alpha);
+            shadowViewport.setAlphaMult(Math.min(alpha, 0.4f));
 
             currRadius = scaledRadius;
             scale = scaledRadius / campaignPlanet.getRadius();
@@ -110,7 +127,7 @@ public class BackgroundInterlooper implements ExtendedUIPanelPlugin {
             Vector2f centerPos = isRightSide
                     ? new Vector2f(refCenterX + refWidth / 3.0f, refCenterY)
                     : new Vector2f(refCenterX, refCenterY);
-            startStencil(trueRadius - 3, centerPos, 360, 2);
+            startStencil(trueRadius - 3, centerPos, 360, 6);
 
             // Draw shadow
             if (shadow != null) {

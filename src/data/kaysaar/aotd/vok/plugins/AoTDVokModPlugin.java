@@ -207,7 +207,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         path.setIndustryCoordinates(map);
         UpgradePathManager.getInstance().addNewCustomPath(path,"extractive");
 
-        path = new CustomUpgradePath(3,4);
+        path = new CustomUpgradePath(3,3);
         map = new LinkedHashMap<>();
         map.put("smelting", new Vector2f(1,0));
         map.put("refining", new Vector2f(1,1));
@@ -358,6 +358,11 @@ public class AoTDVokModPlugin extends BaseModPlugin {
 
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
+        MarketAPI chico = AoTDDataInserter.getMarketBasedOnName("Aztlan", "Chicomoztoc");
+        if (chico != null) {
+            chico.getMemory().set("$aotd_tier_4_bp_key", "aotd_citadel");
+        }
+
         Global.getSettings().getAllWeaponSpecs().stream().filter(x->x.getManufacturer().equals("Shrouded Dweller")).forEach(x->x.setManufacturer("Abyss-Tech"));
         SpecialProjectSpecManager.reLoad();
         BlackSiteProjectManager.getInstance().loadAdditionalData();

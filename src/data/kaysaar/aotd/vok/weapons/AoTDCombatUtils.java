@@ -51,6 +51,7 @@ public class AoTDCombatUtils
      */
     public static Vector2f getRandomPointInShipCollisionBounds(ShipAPI ship) {
         BoundsAPI bounds = ship.getExactBounds();
+
         if (bounds == null || !ship.isAlive()) return null;
 
         bounds.update(ship.getLocation(), ship.getFacing());

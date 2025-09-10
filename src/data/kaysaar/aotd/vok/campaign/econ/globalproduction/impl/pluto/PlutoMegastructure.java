@@ -34,6 +34,14 @@ public class PlutoMegastructure extends GPBaseMegastructure {
     }
 
     @Override
+    public String getCurrentImage() {
+        if(getLaserSection().isFiringLaser()){
+            return Global.getSettings().getSpriteName("megastructureImage","pluto_active");
+        }
+        return super.getCurrentImage();
+    }
+
+    @Override
     public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
         return new PlutoUI(this,parentPanel,menu);
     }

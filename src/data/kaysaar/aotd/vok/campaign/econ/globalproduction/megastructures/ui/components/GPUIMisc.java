@@ -39,7 +39,7 @@ public class GPUIMisc {
         TooltipMakerAPI imageTootlip,mapTooltip,descriptionTooltip;
 
         imageTootlip = titlePanel.createUIElement(sectionWidth*2,100,false);
-        imageTootlip.addImage(Global.getSettings().getSpriteName("megastructureImage",mega.getSpec().getImageForMegastructure()),sectionWidth*2,0f);
+        imageTootlip.addImage(mega.getCurrentImage(), sectionWidth*2,0f);
         height = imageTootlip.getPrev().getPosition().getHeight();
         imageTootlip.getPosition().setSize(sectionWidth*2,height);
         titlePanel.getPosition().setSize(titlePanel.getPosition().getWidth(),height);

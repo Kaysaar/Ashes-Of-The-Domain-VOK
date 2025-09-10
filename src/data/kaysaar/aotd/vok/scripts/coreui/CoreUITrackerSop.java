@@ -261,8 +261,15 @@ public class CoreUITrackerSop extends CoreUITracker{
                     coreUiTech.playSound(coreUiTech.getCurrentlyChosen());
                 }
             }
-        }
-        else{
+        } else if (currentTab.getText().toLowerCase().contains(getStringForFaction())) {
+            if(!tunedMusicOnce){
+                tunedMusicOnce = true;
+                if(coreUiTech.getCurrentlyChosen()!=null){
+                    factionPanel.playSound();
+                }
+            }
+
+        } else{
             tunedMusicOnce = false;
         }
         if (!hasComponentPresent((UIComponentAPI) panelMap.get(currentTab))) {
@@ -327,6 +334,7 @@ public class CoreUITrackerSop extends CoreUITracker{
     }
 
     private void handleButtons() {
+        boolean pauseSound = true;
         for (ButtonAPI buttonAPI : panelMap.keySet()) {
             if (buttonAPI.isChecked()) {
                 buttonAPI.setChecked(false);
@@ -335,10 +343,18 @@ public class CoreUITrackerSop extends CoreUITracker{
                     if(buttonAPI.getText().toLowerCase().contains(getStringForCoreTabResearch())){
                         if(coreUiTech.getCurrentlyChosen()!=null){
                             coreUiTech.playSound(coreUiTech.getCurrentlyChosen());
+                            pauseSound = false;
                         }
                     } else if (currentTab.getText().toLowerCase().contains(getStringForCoreTabResearch())) {
                         coreUiTech.pauseSound();
                     }
+                    if(buttonAPI.getText().toLowerCase().contains(getStringForFaction())){
+                        factionPanel.playSound();
+
+                    } else if (currentTab.getText().toLowerCase().contains(getStringForFaction())&&pauseSound) {
+                        factionPanel.pauseSound();
+                    }
+
                     currentTab = buttonAPI;
                     setMemFlag(currentTab.getText().toLowerCase());
                 }

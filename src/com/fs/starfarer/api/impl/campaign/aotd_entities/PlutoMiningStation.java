@@ -157,6 +157,12 @@ public class PlutoMiningStation extends BaseCustomEntityPlugin {
     public void advance(float amount) {
         PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(GPBaseMegastructure.memKey);
         if(megastructure!=null){
+            if(megastructure.getLaserSection().isFiringLaser()){
+                this.entity.setInteractionImage("megastructureImage","pluto_active");
+            }
+            else{
+                this.entity.setInteractionImage("megastructureImage","pluto");
+            }
             if(megastructure.getLaserSection().isFiringLaser()&&!isActive()){
                 activate();
             }

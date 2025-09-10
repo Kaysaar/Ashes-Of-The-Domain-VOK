@@ -259,10 +259,13 @@ public class AoTDDataInserter {
                 cons = hypershuntSystem.getConstellation();
             } else {
                 int amount = cons.getSystems().stream().filter(x -> !x.hasPulsar() && !x.isNebula()).toList().size();
-                int contender = hypershuntSystem.getConstellation().getSystems().stream().filter(x -> !x.hasPulsar() && !x.isNebula()).toList().size();
-                if (contender > amount) {
-                    cons = hypershuntSystem.getConstellation();
+                if(hypershuntSystem.getConstellation()!=null){
+                    int contender = hypershuntSystem.getConstellation().getSystems().stream().filter(x -> !x.hasPulsar() && !x.isNebula()).toList().size();
+                    if (contender > amount) {
+                        cons = hypershuntSystem.getConstellation();
+                    }
                 }
+
             }
         }
         if (cons != null) {

@@ -16,7 +16,7 @@ public class TierFourStation extends OrbitalStation {
 
     @Override
     public boolean isAvailableToBuild() {
-        return false;
+        return market.getFaction().knowsIndustry(this.getSpec().getId());
     }
 
     @Override
