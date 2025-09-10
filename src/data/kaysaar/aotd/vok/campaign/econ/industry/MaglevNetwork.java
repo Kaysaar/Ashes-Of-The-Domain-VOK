@@ -61,7 +61,7 @@ public class MaglevNetwork extends BaseIndustry {
 
     @Override
     public boolean showWhenUnavailable() {
-        return false;
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.MAGLEV,market);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.listeners;
 
+import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -9,6 +10,7 @@ import com.fs.starfarer.api.impl.campaign.graid.GroundRaidObjectivePlugin;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import data.kaysaar.aotd.vok.Ids.AoTDItems;
 import data.kaysaar.aotd.vok.scripts.raids.SpecialProjectBlueprintPluginImpl;
+import data.kaysaar.aotd.vok.scripts.raids.Tier4StationProjectPluginImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,15 @@ public class AoTDRaidListener implements GroundRaidObjectivesListener {
                     }
                 }
                 objectives.add(curr);
+            }
+            if(AshMisc.isStringValid(market.getMemory().getString("$aotd_tier_4_bp_key"))){
+                String data = market.getMemory().getString("$aotd_tier_4_bp_key");
+                for (GroundRaidObjectivePlugin objective : objectives) {
+                    if(objective instanceof Tier4StationProjectPluginImpl){
+                        return;
+                    }
+                }
+                objectives.add(new Tier4StationProjectPluginImpl(market,"aotd_tier_four_citadel",data));
             }
         }
         }

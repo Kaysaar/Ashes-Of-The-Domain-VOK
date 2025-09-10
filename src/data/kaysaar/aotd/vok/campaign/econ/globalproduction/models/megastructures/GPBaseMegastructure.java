@@ -39,6 +39,9 @@ public class GPBaseMegastructure {
     public boolean metCustomCriteria(){
         return true;
     }
+    public String getCurrentImage(){
+        return Global.getSettings().getSpriteName("megastructureImage",getSpec().getImageForMegastructure());
+    }
     public void printCustomCriteria(InteractionDialogAPI dialog){
 
     }

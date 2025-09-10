@@ -77,7 +77,24 @@ public class CoreUiInterceptor implements CoreUITabListener {
         }
         CoreUITracker.sendSignalToOpenCore = true;
     }
-
+    public static void initalizeBackgroundPLanetWithPreSetOpacity(NidavelirComplexMegastructure megastructure,float oppacity) {
+        UIPanelAPI saved = (UIPanelAPI) ReflectionUtilis.invokeMethod("getPlanetBackground", ProductionUtil.getCoreUI());
+        if(saved==null)return;
+        CampaignPlanet planetSaved = (CampaignPlanet) ReflectionUtilis.invokeMethod("getPlanet", saved);
+        for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(ProductionUtil.getCoreUI())) {
+            if (componentAPI instanceof CustomPanelAPI panel) {
+                if (panel.getPlugin() instanceof BackgroundInterlooper) {
+                    return;
+                }
+            }
+        }
+        BackgroundInterlooper interlooper = new BackgroundInterlooper(megastructure.shipyard.getType(), saved.getPosition().getWidth(), saved.getPosition().getHeight(), planetSaved, saved, megastructure.shipyard.getCurrAngle());
+        interlooper.setMaxOpacity(oppacity);
+        ProductionUtil.getCoreUI().addComponent(interlooper.getMainPanel()).inBL(0, 0);
+        ReflectionUtilis.invokeMethodWithAutoProjection(
+                "sendToBottomWithinItself", ProductionUtil.getCoreUI(), interlooper.getMainPanel());
+        ReflectionUtilis.invokeMethodWithAutoProjection("sendToBottomWithinItself", ProductionUtil.getCoreUI(), saved);
+    }
     public static void initalizeBackgroundPLanet(NidavelirComplexMegastructure megastructure) {
         UIPanelAPI saved = (UIPanelAPI) ReflectionUtilis.invokeMethod("getPlanetBackground", ProductionUtil.getCoreUI());
         if(saved==null)return;
@@ -91,8 +108,28 @@ public class CoreUiInterceptor implements CoreUITabListener {
         }
         BackgroundInterlooper interlooper = new BackgroundInterlooper(megastructure.shipyard.getType(), saved.getPosition().getWidth(), saved.getPosition().getHeight(), planetSaved, saved, megastructure.shipyard.getCurrAngle());
         ProductionUtil.getCoreUI().addComponent(interlooper.getMainPanel()).inBL(0, 0);
-        ReflectionUtilis.invokeMethodWithAutoProjection("" +
+        ReflectionUtilis.invokeMethodWithAutoProjection(
                 "sendToBottomWithinItself", ProductionUtil.getCoreUI(), interlooper.getMainPanel());
         ReflectionUtilis.invokeMethodWithAutoProjection("sendToBottomWithinItself", ProductionUtil.getCoreUI(), saved);
+    }
+    public static BackgroundInterlooper initalizeBackgroundPLanetForOtherDialog(NidavelirComplexMegastructure megastructure,UIPanelAPI saved,UIPanelAPI addTo) {
+        if(saved==null)return  null;
+        CampaignPlanet planetSaved = (CampaignPlanet) ReflectionUtilis.invokeMethod("getPlanet", saved);
+        for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(addTo)) {
+            if (componentAPI instanceof CustomPanelAPI panel) {
+                if (panel.getPlugin() instanceof BackgroundInterlooper) {
+                    return null;
+                }
+            }
+        }
+        BackgroundInterlooper interlooper = new BackgroundInterlooper(megastructure.shipyard.getType(), saved.getPosition().getWidth(), saved.getPosition().getHeight(), planetSaved, saved, megastructure.shipyard.getCurrAngle());
+        addTo.addComponent(interlooper.getMainPanel()).inBL(0, 0);
+        interlooper.setDialogMode(true);
+        ReflectionUtilis.invokeMethodWithAutoProjection(
+                "sendToBottomWithinItself", addTo, interlooper.getMainPanel());
+        ReflectionUtilis.invokeMethodWithAutoProjection("sendToBottomWithinItself",addTo, saved);
+        ReflectionUtilis.invokeMethodWithAutoProjection(
+                "ensureCompRendersAbove", addTo, interlooper.getMainPanel(),ReflectionUtilis.invokeMethodWithAutoProjection("getBg",addTo));
+        return interlooper;
     }
 }

@@ -227,7 +227,7 @@ public class AoTDShadowLanceVFXEffect implements EveryFrameWeaponEffectPlugin {
                     if(!commencedSucking){
                         commencedSucking = true;
                         Global.getSoundPlayer().playSound("shadowlance_on_fire"
-                                ,0.9f,  1,
+                                ,0.9f,  2,
                                 weapon.getLocation(), weapon.getShip().getVelocity());
                     }
                 }

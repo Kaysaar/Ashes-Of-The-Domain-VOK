@@ -2,7 +2,6 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sect
 
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
@@ -29,7 +28,8 @@ public class EterniumCore extends NidavelirBaseSection {
 
     @Override
     public void unapplyEffectOfSection() {
-        GPManager.getInstance().getSpecialProjSpeed().unmodifyMult("aotd_nidav");
+        AoTDMainResearchManager.getInstance().getManagerForPlayer().getBlackSiteSpecialProjBonus().unmodifyMult("aotd_nidav");
+        AoTDMainResearchManager.getInstance().getManagerForPlayer().getBlackSiteSpecialProjBonus().unmodifyFlat("aotd_nidav");
     }
 
     @Override
@@ -42,9 +42,9 @@ public class EterniumCore extends NidavelirBaseSection {
 
     @Override
     public void applyEffectOfSection() {
-        effectivePercent = 5;
-        int points = (int) (getEffectiveManpowerForEffects() * effectivePercent * getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));
-        AoTDMainResearchManager.getInstance().getManagerForPlayer().getBlackSiteSpecialProjBonus().modifyMult("aotd_nidav", (points/100f));
+        int manpowerAssigned = getEffectiveManpowerForEffects();
+        int points = (int) (manpowerAssigned * effectivePercent * getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));
+        AoTDMainResearchManager.getInstance().getManagerForPlayer().getBlackSiteSpecialProjBonus().modifyFlat("aotd_nidav", (points/100f));
     }
 
     @Override
