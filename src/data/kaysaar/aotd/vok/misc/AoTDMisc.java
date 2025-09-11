@@ -12,7 +12,6 @@ import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
-import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.loading.WingRole;
@@ -39,8 +38,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
@@ -73,7 +72,7 @@ public class AoTDMisc {
         return Misc.getRoundedValueMaxOneAfterDecimal(percentage*100f)+"%";
     }
     public static List<MarketAPI>getPlayerFactionMarkets(){
-        return Misc.getFactionMarkets(Factions.PLAYER).stream().filter(x -> !x.hasTag("nex_playerOutpost")).toList();
+        return Misc.getPlayerMarkets(true).stream().filter(x -> !x.hasTag("nex_playerOutpost")).toList();
     }
     public static NidavelirComplexMegastructure getNidavelirIfOwned(){
         return (NidavelirComplexMegastructure) GPManager.getInstance().getMegastructure("aotd_nidavelir");

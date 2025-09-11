@@ -4,7 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
-import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
+import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
@@ -27,7 +27,16 @@ public class PCFPlanetIntel extends BaseIntelPlugin {
     public PCFPlanetIntel(PlanetAPI planet) {
         this.planet = planet;
     }
-
+    public static boolean doesContainPlanet(PlanetAPI planet){
+        for (IntelInfoPlugin intelInfoPlugin : Global.getSector().getIntelManager().getIntel(PCFPlanetIntel.class)) {
+            if(intelInfoPlugin instanceof PCFPlanetIntel intel){
+                if(intel.getPlanet().equals(planet)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     @Override
     public void createIntelInfo(TooltipMakerAPI info, ListInfoMode mode) {
         Color title = getTitleColor(mode);

@@ -30,7 +30,7 @@ public class ResearchPanelComponent extends ButtonComponent {
         this.panel = panel;
         ImageViewer mainIcon = new ImageViewer(100,100, Global.getSettings().getSpriteName("ui_icons_tech_tree",spec.IconId));
         addComponent(mainIcon,5,15);
-        LabelComponent title = new LabelComponent(Fonts.ORBITRON_20AABOLD,20,spec.getName(), Color.ORANGE,width-60,110);
+        LabelComponent title = new LabelComponent(Fonts.ORBITRON_20AABOLD,20,spec.getName(), Color.ORANGE,width-50,110);
         addComponent(title,width-title.getTextWidth()-5,5);
         queueText = new LabelComponent(Fonts.ORBITRON_20AABOLD,20,"", Misc.getBrightPlayerColor(),width-80,110);
         addComponent(queueText,width-30,height-22);

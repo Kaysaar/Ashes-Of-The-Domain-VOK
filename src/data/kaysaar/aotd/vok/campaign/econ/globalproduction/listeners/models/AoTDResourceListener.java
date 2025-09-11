@@ -4,4 +4,5 @@ import java.util.HashMap;
 
 public interface AoTDResourceListener {
     public HashMap<String,Integer> increaseProductionCapacity(Object ignoreInCalculations);
+    public HashMap<String,Integer> increaseDemand();
 }
