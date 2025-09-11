@@ -458,7 +458,7 @@ public class AoTDDataInserter {
     public void initalizeEconomy(boolean random) {
         if (!random) {
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ORBITAL_SKUNKWORK, Industries.ORBITALWORKS, null, false, Commodities.ALPHA_CORE, null);
-            setIndustryOnPlanet("Hybrasil", "Culann", Industries.MEGAPORT, Industries.MEGAPORT, null, true, null, null);
+            setIndustryOnPlanet("Hybrasil", "Culann", Industries.MEGAPORT, Industries.SPACEPORT, null, true, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.ORBITAL_FLEETWORK, Industries.ORBITALWORKS, null, false, null, Items.PRISTINE_NANOFORGE);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", "aotd_citadel",Industries.STARFORTRESS, null, false, null, null);
 
@@ -485,7 +485,8 @@ public class AoTDDataInserter {
             setIndustryOnPlanet("Hybrasil", "Culann", Industries.HEAVYBATTERIES, Industries.HEAVYBATTERIES, null, true, Commodities.ALPHA_CORE, null);
             setIndustryOnPlanet("Thule", "Kazeron", AoTDIndustries.MINING_MEGAPLEX, Industries.MINING, null, false, null, Items.MANTLE_BORE);
             setIndustryOnPlanet("Thule", "Kazeron", AoTDIndustries.TERMINUS, null, null, true, null, null);
-            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.TERMINUS, Industries.MINING, null, false, null, null);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.TERMINUS, Industries.WAYSTATION, null, false, null, null);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.MAGLEV_CENTRAL_HUB, null, null, false, null, null);
 
         }
 

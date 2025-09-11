@@ -11,10 +11,8 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.intel.PCFPlanetIntel;
-import com.fs.starfarer.api.impl.campaign.intel.bar.events.BaseBarEvent;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
-
 
 import java.awt.*;
 import java.util.*;
@@ -108,6 +106,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
         ArrayList<PlanetAPI>validPlanets = new ArrayList<>();
         if(preCollapsePlanets!=null){
             for (PlanetAPI preCollapsePlanet : preCollapsePlanets) {
+                if(PCFPlanetIntel.doesContainPlanet(preCollapsePlanet))continue;
                 if(!preCollapsePlanet.getMarket().getSurveyLevel().equals(MarketAPI.SurveyLevel.FULL)){
                     validPlanets.add(preCollapsePlanet);
                 }
@@ -220,7 +219,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
         TextPanelAPI text = dialog.getTextPanel();
 
         PlanetAPI planet = targetPlanet;
-        if (planet != null) {
+        if (planet != null&&!PCFPlanetIntel.doesContainPlanet(planet)) {
             PCFPlanetIntel intel = new PCFPlanetIntel(planet);
             Global.getSector().getIntelManager().addIntel(intel, false, text);
         }

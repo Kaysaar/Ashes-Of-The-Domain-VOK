@@ -2,7 +2,6 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -21,6 +20,7 @@ import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.ui.basecomps.ImageViewer;
 
 import java.awt.*;
+import java.util.AbstractMap;
 
 public class ExomatterProcessing extends BaseIndustry {
     public static String subMarketId = "aotd_exomatter_processing";
@@ -37,9 +37,9 @@ public class ExomatterProcessing extends BaseIndustry {
     float daysConverting = 0;
     public int getConversionAmount(){
         if(Commodities.ALPHA_CORE.equals(getAICoreId())){
-            return 6;
+            return 2;
         }
-        return 5;
+        return 1;
     }
     public void setCurrentlyConverting(boolean currentlyConverting) {
         isCurrentlyConverting = currentlyConverting;
@@ -56,7 +56,12 @@ public class ExomatterProcessing extends BaseIndustry {
         demand(Commodities.MARINES,6);
 
     }
-
+    public int getShroudedSubstrateReq(){
+        if(this.isImproved()){
+            return 2;
+        }
+        return 4;
+    }
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         String str =Global.getSettings().getSpecialItemSpec(AoTDItems.SHROUDED_SUBSTRATE).getName();
@@ -64,7 +69,7 @@ public class ExomatterProcessing extends BaseIndustry {
         CustomPanelAPI panelAPI = Global.getSettings().createCustom(tooltip.getWidthSoFar(),28,null);
         TooltipMakerAPI helper = panelAPI.createUIElement(panelAPI.getPosition().getWidth(),panelAPI.getPosition().getHeight(),false);
         float spacer =15;
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < getShroudedSubstrateReq(); i++) {
             ImageViewer viewer = new ImageViewer(30,30,Global.getSettings().getSpecialItemSpec(AoTDItems.SHROUDED_SUBSTRATE).getIconName());
             helper.addCustom(viewer.getComponentPanel(),0f).getPosition().inTL(i*spacer,0);
         }
@@ -83,7 +88,7 @@ public class ExomatterProcessing extends BaseIndustry {
 
         panelAPI.addUIElement(helper).inTL(centerX-(width/2),0);
         tooltip.addCustom(panelAPI,10f);
-        tooltip.addPara("With current rate we are able to convert %s into %s every %s",5f, Color.ORANGE,"1 "+str,getConversionAmount()+" "+Global.getSettings().getSpecialItemSpec(AoTDItems.TENEBRIUM_CELL).getName(),AoTDMisc.convertDaysToString((int) getDaysForConversion()));
+        tooltip.addPara("With current rate we are able to convert %s into %s every %s",5f, Color.ORANGE,getShroudedSubstrateReq()+" "+str,getConversionAmount()+" "+Global.getSettings().getSpecialItemSpec(AoTDItems.TENEBRIUM_CELL).getName(),AoTDMisc.convertDaysToString((int) getDaysForConversion()));
         if(isCurrentlyConverting){
             tooltip.addPara("We will convert this %s into %s within %s",10f,Color.ORANGE,str,Global.getSettings().getSpecialItemSpec(AoTDItems.TENEBRIUM_CELL).getName(), AoTDMisc.convertDaysToString((int) (getDaysForConversion()-daysConverting)));
         }
@@ -176,6 +181,8 @@ public class ExomatterProcessing extends BaseIndustry {
                 if(daysConverting>=getDaysForConversion()){
                     daysConverting=0;
                     isCurrentlyConverting = false;
+                    MarketAPI market = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
+                    if(market==null)market = this.market;
                     if(market.hasSubmarket(Submarkets.SUBMARKET_STORAGE)){
                         market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addSpecial(new SpecialItemData(AoTDItems.TENEBRIUM_CELL,null),getConversionAmount());
                     }
@@ -185,14 +192,29 @@ public class ExomatterProcessing extends BaseIndustry {
                 if(!market.hasSubmarket(subMarketId)){
                     market.addSubmarket(subMarketId);
                 }
-                if(market.getSubmarket(subMarketId).getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL,new SpecialItemData(AoTDItems.SHROUDED_SUBSTRATE,null))>=1){
-                    market.getSubmarket(subMarketId).getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL,new SpecialItemData(AoTDItems.SHROUDED_SUBSTRATE,null),1);
+                if(AoTDMisc.retrieveAmountOfItems(AoTDItems.SHROUDED_SUBSTRATE,Submarkets.SUBMARKET_STORAGE)>=getShroudedSubstrateReq()){
+                    AoTDMisc.eatItems(new AbstractMap.SimpleEntry<>(AoTDItems.SHROUDED_SUBSTRATE,getShroudedSubstrateReq()),Submarkets.SUBMARKET_STORAGE,AoTDMisc.getPlayerFactionMarkets());
                     isCurrentlyConverting = true;
                 }
             }
         }
     }
 
+    @Override
+    public boolean canImprove() {
+        return true;
+    }
+
+    @Override
+    public void addImproveDesc(TooltipMakerAPI info, ImprovementDescriptionMode mode) {
+        if(!mode.equals(ImprovementDescriptionMode.INDUSTRY_TOOLTIP)){
+            info.addPara("Each improvement made at a colony doubles the number of " +
+                            "" + Misc.STORY + " points required to make an additional improvement.", 0f,
+                    Misc.getStoryOptionColor(), Misc.STORY + " points");
+            info.addPara("Decrease amount of %s required by %s",3f, Color.ORANGE,Global.getSettings().getSpecialItemSpec(AoTDItems.SHROUDED_SUBSTRATE).getName(),"2");
+            info.addSpacer(-5f);
+        }
+    }
 
     @Override
     public void finishBuildingOrUpgrading() {

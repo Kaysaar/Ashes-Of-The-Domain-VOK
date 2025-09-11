@@ -20,6 +20,7 @@ import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.campaign.CampaignClock;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSpec;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GpMegaStructureSectionsSpec;
@@ -372,8 +373,7 @@ public class GPManager {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue());
                 } else {
-                    int prev = reqResources.get(entry.getKey());
-                    reqResources.put(entry.getKey(), prev + entry.getValue());
+                    reqResources.compute(entry.getKey(), (k, prev) -> prev + entry.getValue());
                 }
             }
         }
@@ -382,8 +382,7 @@ public class GPManager {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue() * getAmountForOrder(productionOrder));
                 } else {
-                    int prev = reqResources.get(entry.getKey());
-                    reqResources.put(entry.getKey(), prev + entry.getValue() * getAmountForOrder(productionOrder));
+                    reqResources.compute(entry.getKey(), (k, prev) -> prev + entry.getValue() * getAmountForOrder(productionOrder));
                 }
             }
         }
@@ -392,12 +391,11 @@ public class GPManager {
                 if (reqResources.get(entry.getKey()) == null) {
                     reqResources.put(entry.getKey(), entry.getValue());
                 } else {
-                    int prev = reqResources.get(entry.getKey());
-                    reqResources.put(entry.getKey(), prev + entry.getValue());
+                    reqResources.compute(entry.getKey(), (k, prev) -> prev + entry.getValue());
                 }
             }
         }
-
+        AoTDListenerUtilis.increaseDemand(reqResources);
         return reqResources;
     }
 
@@ -619,6 +617,7 @@ public class GPManager {
                 }
             }
         }
+        AoTDListenerUtilis.increaseDemand(reqResources);
         return reqResources;
     }
 

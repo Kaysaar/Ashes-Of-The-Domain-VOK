@@ -49,7 +49,8 @@ public class ResearchFacility extends BaseIndustry  {
 
     @Override
     public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
-        if(!forUpgrade){
+
+        if(!forUpgrade&&mode!=null){
                 if(market.hasSubmarket(subMarketId)){
                     CargoAPI cargoAPI = market.getSubmarket(subMarketId).getCargo();
                     market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addAll(cargoAPI);
@@ -60,6 +61,7 @@ public class ResearchFacility extends BaseIndustry  {
         }
         super.notifyBeingRemoved(mode, forUpgrade);
     }
+
 
     @Override
     public void unapply() {

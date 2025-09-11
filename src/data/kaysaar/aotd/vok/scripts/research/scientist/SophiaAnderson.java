@@ -2,15 +2,20 @@ package data.kaysaar.aotd.vok.scripts.research.scientist;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
+import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
+import com.fs.starfarer.api.impl.campaign.intel.PCFPlanetIntel;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOptionSpec;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 public class SophiaAnderson extends ScientistPerson {
@@ -22,7 +27,18 @@ public class SophiaAnderson extends ScientistPerson {
 
     @Override
     public void advance(float amount) {
-
+        daysSince+=Global.getSector().getClock().convertToDays(amount);
+        if(daysSince>=60){
+            daysSince = 0;
+            ArrayList<PlanetAPI> preCollapsePlanets = new ArrayList<>((ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList));
+            Collections.shuffle(preCollapsePlanets);
+            preCollapsePlanets.removeIf(PCFPlanetIntel::doesContainPlanet);
+            PlanetAPI planetValid = preCollapsePlanets.stream().findFirst().orElse(null);
+            if(planetValid!=null){
+                Global.getSector().getCampaignUI().addMessage("Our scientist "+getScientistPerson().getNameString()+" has discovered the location of new Pre Collapse Facility",Misc.getPositiveHighlightColor());
+                Global.getSector().getIntelManager().addIntel(new PCFPlanetIntel(planetValid));
+            }
+        }
     }
 
     @Override

@@ -21,7 +21,7 @@ public class AoTDMegastructureUpkeepListener implements EconomyTickListener {
         MonthlyReport report = SharedData.getData().getCurrentReport();
 
         MonthlyReport.FDNode fleetNode = report.getNode(MegaNodeID);
-        fleetNode.name = "Megastructrures";
+        fleetNode.name = "Megastructrures"; // NO MIDLINE
         fleetNode.custom = MegaNodeID;
         fleetNode.tooltipCreator = report.getMonthlyReportTooltip();
         for (final GPBaseMegastructure megastructure : GPManager.getInstance().getMegastructures()) {

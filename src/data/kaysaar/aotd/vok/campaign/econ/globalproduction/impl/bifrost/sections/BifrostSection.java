@@ -4,10 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.combat.MutableStat;
-import com.fs.starfarer.api.impl.campaign.submarkets.MilitarySubmarketPlugin;
 import com.fs.starfarer.api.ui.Alignment;
-import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
@@ -148,6 +145,13 @@ public class BifrostSection extends GPMegaStructureSection {
         } else {
             tooltip.addSectionHeading("Effects upon completion", Alignment.MID, 5f);
 
+        }
+    }
+
+    @Override
+    public void addPenaltyFromLackOfResourcesInfo(TooltipMakerAPI tooltip, float width) {
+        if(isRestored){
+            tooltip.addPara("Any shortage of resources required to maintain station will cause drop in Combat Readiness and will make it's regeneration much slower",5f);
         }
     }
 
