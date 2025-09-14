@@ -12,4 +12,6 @@ public class AoTDItems {
     public static final String TENEBRIUM_CELL = "aotd_tenebrium";
     public static final String TENEBRIUM_NANOFORGE = "aotd_shrouded_nanoforge";
     public static final String TENEBRIUM_SYNCHROTRON = "aotd_shrouded_synchrotron";
+    public static final String TENEBRIUM_CATALYTIC_CORE = "aotd_shrouded_catalytic_core";
+    public static final String TENEBRIUM_ATMOSPHERIC_DRIVE = "aotd_atmospheric_driver";
 }

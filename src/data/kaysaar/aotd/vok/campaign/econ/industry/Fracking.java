@@ -3,7 +3,6 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Planets;
-import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
@@ -26,10 +25,6 @@ public class Fracking extends BaseIndustry {
 
         super.apply(true);
         int size = market.getSize();
-        if(this.special!=null){
-            Misc.getStorageCargo(this.getMarket()).addSpecial(this.special, 1);
-            this.special=null;
-        }
         demand(Commodities.HEAVY_MACHINERY, size - 2);
         demand(Commodities.DRUGS,  size - 2);
         if(AoDUtilis.getVolatilesAmount(market)>=-1){

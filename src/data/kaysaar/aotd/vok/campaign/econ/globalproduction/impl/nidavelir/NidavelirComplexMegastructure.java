@@ -19,12 +19,14 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructure
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 
 public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     public NidavelirShipyard shipyard;
     public static LinkedHashMap<String, Float> commoditiesProd = new LinkedHashMap<>();
     public static LinkedHashMap<String, Float> commoditiesDemand = new LinkedHashMap<>();
+    public boolean didGiveGungnirSections = false;
 
     static {
         commoditiesProd.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY, 20f);
@@ -95,6 +97,17 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     @Override
     public String getIndustryIfIfPresent() {
         return "nidavelir_complex";
+    }
+
+    @Override
+    public void advance(float amount) {
+        super.advance(amount);
+        if(!didGiveGungnirSections){
+            ArrayList<NidavelirBaseSection>sections = new ArrayList<>(getSections());
+            Collections.shuffle(sections);
+            sections.get(0).shouldGiveGungnir = true;
+            didGiveGungnirSections =  true;
+        }
     }
 
     public ArrayList<NidavelirBaseSection> getSections() {

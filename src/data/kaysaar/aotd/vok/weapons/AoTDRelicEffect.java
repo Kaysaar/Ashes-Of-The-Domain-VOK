@@ -2,8 +2,13 @@ package data.kaysaar.aotd.vok.weapons;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.SoundAPI;
-import com.fs.starfarer.api.combat.*;
+import com.fs.starfarer.api.combat.CombatEngineAPI;
+import com.fs.starfarer.api.combat.DamageType;
+import com.fs.starfarer.api.combat.EveryFrameWeaponEffectPlugin;
+import com.fs.starfarer.api.combat.ShipAPI;
+import com.fs.starfarer.api.combat.WeaponAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
+import com.fs.starfarer.api.util.FaderUtil;
 import com.fs.starfarer.api.util.Misc;
 import org.lazywizard.lazylib.MathUtils;
 import org.lazywizard.lazylib.VectorUtils;
@@ -23,9 +28,16 @@ public class AoTDRelicEffect implements EveryFrameWeaponEffectPlugin {
     private static final String PARTICLE_EFFECT_1 = "graphics/fx/ParticleEffect1.png";
     private static final String PARTICLE_EFFECT_2 = "graphics/fx/ParticleEffect2.png";
 
+    private static String gungnirIcon = "graphics/icons/hud/Gungnir_icon.png";
+
     private boolean fired = false;
     private float lastChargeLevel = 0.0F;
     private SoundAPI chargeSound;
+
+    //forced weapon cooldown
+    private boolean hasFired = false;
+    private float charge = 0f;
+    private FaderUtil fader = new FaderUtil(1f,5f);
 
     public void advance(float amount, CombatEngineAPI engine, WeaponAPI weapon) {
         if (engine.isPaused() || weapon == null || amount < 0) {
@@ -38,6 +50,41 @@ public class AoTDRelicEffect implements EveryFrameWeaponEffectPlugin {
         if(weapon.getCooldownRemaining()>0){
             chargeLevel = 0;
         }
+
+        //From AoTDShadowLanceVFX
+        if (weapon.getAmmoTracker().getReloadProgress() > 0.01f) {
+            if (weapon.getShip() == Global.getCombatEngine().getPlayerShip()) {
+                float reloadTime = 1 / weapon.getAmmoPerSecond();
+                float secondsToReload = reloadTime - weapon.getAmmoTracker().getReloadProgress() * reloadTime;
+                Global.getCombatEngine().maintainStatusForPlayerShip(
+                        weapon.toString(),
+                        gungnirIcon,
+                        "Gungnir: Recharging",
+                        Misc.getRoundedValue(secondsToReload) + " seconds remaining", // Purple Nebula's
+//                        Misc.getRoundedValue(weapon.getCooldownRemaining()) + " secs before firing again", // Mayu's
+                        false
+                );
+            }
+        }
+
+//        if (weapon.isFiring()) {
+//            charge = weapon.getChargeLevel();
+//            if (charge == 1f){
+//                hasFired = true;
+//            }
+//        }else{
+//            charge = 0f;
+//        }
+//        if (weapon.getGlowSpriteAPI().getAlphaMult() == 0){
+//            hasFired = false;
+//        }
+//        if (hasFired && weapon.getGlowSpriteAPI().getAlphaMult() > 0.1f){
+//            fader.fadeOut();
+//            fader.advance(amount);
+//            weapon.setGlowAmount(fader.getBrightness(),weapon.getSpec().getGlowColor());
+//            weapon.getGlowSpriteAPI().setAlphaMult(fader.getBrightness());
+//        }
+
         if (weapon.isFiring()) {
             ShipAPI source = weapon.getShip();
             if (source.getOwner() == 0 && Math.random() < (5.0f * amount) && !source.isStationModule() && !source.isStation()) {

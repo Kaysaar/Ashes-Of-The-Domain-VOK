@@ -1,5 +1,8 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections;
 
+import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
@@ -20,6 +23,7 @@ import java.util.Map;
 public class NidavelirBaseSection extends GPMegaStructureSection {
     public int currentManpowerAssigned;
     public static int MaxManpowerPerSection = 6;
+    public boolean shouldGiveGungnir = false;
 
     public int getCurrentManpowerAssigned() {
         return currentManpowerAssigned;
@@ -35,6 +39,25 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
     public void clear() {
         setAutomated(false);
         setCurrentManpowerAssigned(0);
+    }
+
+    @Override
+    public void apply() {
+        super.apply();
+        if (shouldGiveGungnir) {
+            shouldGiveGungnir = false;
+            if (Global.getSector().getPlayerFaction().getProduction().getGatheringPoint() != null) {
+                MarketAPI market = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
+                market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addWeapons("gungnir_railgun", 1);
+                Global.getSector().getCampaignUI().addMessage("We have found ancient weapon within Nidavelir, it has already been transported to " + market.getName());
+
+            } else {
+                MarketAPI market = Misc.getPlayerMarkets(true).get(0);
+                market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addWeapons("gungnir_railgun", 1);
+                Global.getSector().getCampaignUI().addMessage("We have found ancient weapon within Nidavelir, it has already been transported to " + market.getName());
+
+            }
+        }
     }
 
     public boolean isAutomated() {
@@ -91,6 +114,7 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
 
 
     }
+
 
     public void createTooltipForMainSection(TooltipMakerAPI tooltip) {
 
