@@ -30,8 +30,7 @@ public class TierFourStationResourceApplier implements AoTDResourceListener {
         int amount =0;
         for (MarketAPI playerFactionMarket : AoTDMisc.getPlayerFactionMarkets()) {
             if(playerFactionMarket.hasIndustry("starfortress")){
-                TierFourStation ind = (TierFourStation) playerFactionMarket.getIndustry("starfortress");
-                if(ind.isUpgrading()){
+                if(playerFactionMarket.getIndustry("starfortress").isUpgrading()){
                     amount++;
                 }
             }

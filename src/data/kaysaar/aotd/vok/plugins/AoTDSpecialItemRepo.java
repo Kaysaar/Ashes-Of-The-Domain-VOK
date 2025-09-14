@@ -9,6 +9,7 @@ import com.fs.starfarer.api.campaign.econ.InstallableIndustryItemPlugin;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BoostIndustryInstallableItemEffect;
 import com.fs.starfarer.api.impl.campaign.econ.impl.ItemEffectsRepo;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -129,6 +130,69 @@ public class AoTDSpecialItemRepo {
                         pad, Misc.getHighlightColor(),
                         "Fuel",
                         "" + (int) 6,"Compound",""+4);
+            }
+
+        });
+        ItemEffectsRepo.ITEM_EFFECTS.put(AoTDItems.TENEBRIUM_ATMOSPHERIC_DRIVE, new BoostIndustryInstallableItemEffect(
+                AoTDItems.TENEBRIUM_ATMOSPHERIC_DRIVE, 3, 0) {
+            public void apply(Industry industry) {
+                super.apply(industry);
+                MiscHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().modifyFlat(AoTDItems.TENEBRIUM_ATMOSPHERIC_DRIVE,25,"Abyss-Tech");
+                industry.getMarket().suppressCondition(Conditions.EXTREME_WEATHER);
+            }
+            public void unapply(Industry industry) {
+                super.unapply(industry);
+                MiscHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().unmodifyFlat(AoTDItems.TENEBRIUM_ATMOSPHERIC_DRIVE);
+                industry.getMarket().unsuppressCondition(Conditions.EXTREME_WEATHER);
+            }
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+
+                String heavyIndustry ="";
+                if(industry!=null) {
+                    heavyIndustry = industry.getCurrentName()+" ";
+                }
+                if (mode == InstallableIndustryItemPlugin.InstallableItemDescriptionMode.MANAGE_ITEM_DIALOG_LIST) {
+                    heavyIndustry = "";
+                }
+                text.addPara("Increases " + heavyIndustry + "production by %s units." +
+                                "Causes very high Pather interest."+
+                                "Counters the effects of %s",
+                        pad, Misc.getHighlightColor(),
+                        "3", "Extreme Weather");
+
+
+            }
+
+        });
+        ItemEffectsRepo.ITEM_EFFECTS.put(AoTDItems.TENEBRIUM_CATALYTIC_CORE, new BoostIndustryInstallableItemEffect(
+                AoTDItems.TENEBRIUM_CATALYTIC_CORE, 3, 0) {
+            public void apply(Industry industry) {
+                super.apply(industry);
+                MiscHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().modifyFlat(AoTDItems.TENEBRIUM_ATMOSPHERIC_DRIVE,20,"Abyss-Tech");
+
+            }
+            public void unapply(Industry industry) {
+                super.unapply(industry);
+                MiscHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().unmodifyFlat(AoTDItems.TENEBRIUM_ATMOSPHERIC_DRIVE);
+
+            }
+            protected void addItemDescriptionImpl(Industry industry, TooltipMakerAPI text, SpecialItemData data,
+                                                  InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
+
+                String heavyIndustry ="";
+                if(industry!=null) {
+                    heavyIndustry = industry.getCurrentName()+" ";
+                }
+                if (mode == InstallableIndustryItemPlugin.InstallableItemDescriptionMode.MANAGE_ITEM_DIALOG_LIST) {
+                    heavyIndustry = "";
+                }
+                text.addPara("Increases " + heavyIndustry + "production by %s units." +
+                                "Causes very high Pather interest.",
+                        pad, Misc.getHighlightColor(),
+                        "3");
+
+
             }
 
         });
