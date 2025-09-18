@@ -25,8 +25,8 @@ import java.util.Iterator;
 
 public class AoTDGungnirRelicPhaseRounds implements OnHitEffectPlugin,OnFireEffectPlugin {
 
-    private static final float EMP_DAMAGE_MULTIPLIER = 3f;
-    public static final float PIERCE_DAMAGE_MULTIPLIER = 0.7f;
+    private static final float EMP_DAMAGE_MULTIPLIER = 2f;
+    public static final float PIERCE_DAMAGE_MULTIPLIER = 0.3f;
 
     public static final float PEN_EXPLOSIONS = 8;
 
@@ -72,7 +72,6 @@ public class AoTDGungnirRelicPhaseRounds implements OnHitEffectPlugin,OnFireEffe
                     }
                 }
             }
-
             if (!shieldHit) {
                 doPierceScript(projectile, targetShip, point);
             }
@@ -166,10 +165,14 @@ public class AoTDGungnirRelicPhaseRounds implements OnHitEffectPlugin,OnFireEffe
     @Override
     public void onFire(DamagingProjectileAPI projectile, WeaponAPI weapon, CombatEngineAPI engine) {
         ArrayList<ShipAPI> target = findPhaseTarget(projectile, weapon, engine);
+        if(weapon.getEffectPlugin() instanceof  AoTDRelicEffect effect){
+            effect.initReload();
+        }
         if(target == null) return;
         for (ShipAPI shipAPI : target) {
             engine.addPlugin(new AoTDGungnirRelicPhaseHit(projectile, shipAPI));
         }
+        engine.addPlugin(new AoTDGungnirRelicProjCorrector(projectile));
 
     }
 

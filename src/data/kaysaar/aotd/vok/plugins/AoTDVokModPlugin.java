@@ -30,6 +30,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.SpaceDrugsDemand;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandManager;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMover;
+import data.kaysaar.aotd.vok.campaign.econ.industry.AoTDHeavyIndustry;
 import data.kaysaar.aotd.vok.campaign.econ.industry.TierFourStation;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.buildingmenu.IndustryBlockerListener;
@@ -193,6 +194,10 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         Global.getSettings().getHullModSpec("shrouded_mantle").setEffectClass(AoTDShroudedMantleHullmod.class.getName());
         Global.getSettings().getHullModSpec("shrouded_lens").setEffectClass(AoTDShroudedLensHullmod.class.getName());
         Global.getSettings().getIndustrySpec(Industries.STARFORTRESS).setPluginClass(TierFourStation.class.getName());
+        Global.getSettings().getIndustrySpec(Industries.HEAVYINDUSTRY).setPluginClass(AoTDHeavyIndustry.class.getName());
+        Global.getSettings().getIndustrySpec(Industries.ORBITALWORKS).setPluginClass(AoTDHeavyIndustry.class.getName());
+
+
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker", "subfarming");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_dimen_nanoforge", "supplyheavy,weaponheavy,triheavy,hegeheavy,stella_manufactorium");
@@ -261,6 +266,17 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         map.put("fishery", new Vector2f(0,1));
         path.setIndustryCoordinates(map);
         UpgradePathManager.getInstance().addNewCustomPath(path,"aquaculture");
+
+        path = new CustomUpgradePath(1,4);
+        map = new LinkedHashMap<>();
+
+        map.put(Industries.ORBITALSTATION, new Vector2f(0,0));
+        map.put(Industries.BATTLESTATION, new Vector2f(0,1));
+        map.put(Industries.STARFORTRESS, new Vector2f(0,2));
+        map.put(AoTDIndustries.STAR_CITADEL_LOW, new Vector2f(0,3));
+        path.setIndustryCoordinates(map);
+
+        UpgradePathManager.getInstance().addNewCustomPath(path,Industries.ORBITALSTATION);
 
         path = new CustomUpgradePath(1,2);
         map = new LinkedHashMap<>();

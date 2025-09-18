@@ -192,8 +192,8 @@ public class ExomatterProcessing extends BaseIndustry {
                 if(!market.hasSubmarket(subMarketId)){
                     market.addSubmarket(subMarketId);
                 }
-                if(AoTDMisc.retrieveAmountOfItems(AoTDItems.SHROUDED_SUBSTRATE,Submarkets.SUBMARKET_STORAGE)>=getShroudedSubstrateReq()){
-                    AoTDMisc.eatItems(new AbstractMap.SimpleEntry<>(AoTDItems.SHROUDED_SUBSTRATE,getShroudedSubstrateReq()),Submarkets.SUBMARKET_STORAGE,AoTDMisc.getPlayerFactionMarkets());
+                if(AoTDMisc.retrieveAmountOfItems(AoTDItems.SHROUDED_SUBSTRATE,subMarketId)>=getShroudedSubstrateReq()){
+                    AoTDMisc.eatItems(new AbstractMap.SimpleEntry<>(AoTDItems.SHROUDED_SUBSTRATE,getShroudedSubstrateReq()),subMarketId,AoTDMisc.getPlayerFactionMarkets());
                     isCurrentlyConverting = true;
                 }
             }

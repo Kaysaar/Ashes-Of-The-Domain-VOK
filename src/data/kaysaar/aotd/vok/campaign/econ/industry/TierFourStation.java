@@ -89,7 +89,7 @@ public class TierFourStation extends OrbitalStation {
             tooltip.addPara("Due to intensive work required with upgrade of this station, massive resources are needed for it's construction.",Misc.getTooltipTitleAndLightHighlightColor(),3f);
             tooltip.addCustom(GPUIMisc.createResourcePanelForSmallTooltip(tooltip.getWidthSoFar()+10,30,30,costMap,null),5f);
         }
-        if(mode.equals(IndustryTooltipMode.UPGRADE)){
+        if(mode.equals(IndustryTooltipMode.UPGRADE)&&this.getSpec().hasTag("starcitadel")){
             tooltip.addSectionHeading("Sophisticated Scaffolding (Global Production)", Alignment.MID,5f);
             tooltip.addPara("Due to intensive work required with upgrade of this station, massive resources are needed for it's construction.",Misc.getTooltipTitleAndLightHighlightColor(),3f);
             tooltip.addCustom(GPUIMisc.createResourcePanelForSmallTooltip(tooltip.getWidthSoFar()+10,30,30,costMap,null),5f);
@@ -99,6 +99,9 @@ public class TierFourStation extends OrbitalStation {
     @Override
     public boolean isAvailableToBuild() {
         if(this.getSpec().hasTag("starcitadel")){
+            if(market.isPlayerOwned()){
+                return Global.getSector().getPlayerFaction().knowsIndustry(this.getSpec().getId());
+            }
             return market.getFaction().knowsIndustry(this.getSpec().getId());
         }
         return super.isAvailableToBuild();

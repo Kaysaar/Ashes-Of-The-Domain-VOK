@@ -3,7 +3,6 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
@@ -17,7 +16,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class TriTachyonHeavy extends HeavyIndustry {
+public class TriTachyonHeavy extends AoTDHeavyIndustry {
     public static float QUALITY_BONUS = 0.8f;
 
     public void apply() {
