@@ -43,6 +43,7 @@ public class DisgustingResilience extends BaseHullMod {
 
             ShipAPI ship = (ShipAPI) target;
             DamagingProjectileAPI projectile = (DamagingProjectileAPI) param;
+
             boolean isMissile = projectile instanceof MissileAPI;
             boolean isBallistic = projectile.getWeapon() != null &&
                     projectile.getWeapon().getSpec().getType() == WeaponAPI.WeaponType.BALLISTIC;
@@ -50,7 +51,7 @@ public class DisgustingResilience extends BaseHullMod {
             if (!isMissile && !isBallistic) {
                 return null;
             }
-
+            if(projectile.getWeapon().getSpec().hasTag("always_pierce"))return null;
             float chance = isMissile ? MISSILE_DEFLECT_CHANCE : BALLISTIC_RICOCHET_CHANCE;
             if (Math.random() > chance) {
                 return null;

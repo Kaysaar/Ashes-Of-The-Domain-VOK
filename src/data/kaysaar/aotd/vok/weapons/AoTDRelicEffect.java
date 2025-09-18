@@ -38,29 +38,43 @@ public class AoTDRelicEffect implements EveryFrameWeaponEffectPlugin {
     private boolean hasFired = false;
     private float charge = 0f;
     private FaderUtil fader = new FaderUtil(1f,5f);
+    public float reloadTime = 25;
+    public float timeSpent;
+    public transient boolean reloading= false;
+
+    public  void initReload(){
+        timeSpent = 0;
+        reloading  = true;
+    }
 
     public void advance(float amount, CombatEngineAPI engine, WeaponAPI weapon) {
         if (engine.isPaused() || weapon == null || amount < 0) {
             //Added amount <0 because in Refit Screen this script is being initalized with amount being max negative float
             return;
         }
-
         float chargeLevel = weapon.getChargeLevel();
         Vector2f muzzleLocation = weapon.getFirePoint(0);
         if(weapon.getCooldownRemaining()>0){
             chargeLevel = 0;
         }
+        if(reloading){
+            timeSpent+=amount;
+            if(timeSpent>reloadTime){
+                timeSpent = 0;
+                reloading = false;
+                weapon.setForceDisabled(false);
+            }
+        }
 
         //From AoTDShadowLanceVFX
-        if (weapon.getAmmoTracker().getReloadProgress() > 0.01f) {
+        if (reloading) {
+            weapon.setForceDisabled(true);
             if (weapon.getShip() == Global.getCombatEngine().getPlayerShip()) {
-                float reloadTime = 1 / weapon.getAmmoPerSecond();
-                float secondsToReload = reloadTime - weapon.getAmmoTracker().getReloadProgress() * reloadTime;
                 Global.getCombatEngine().maintainStatusForPlayerShip(
                         weapon.toString(),
                         gungnirIcon,
                         "Gungnir: Recharging",
-                        Misc.getRoundedValue(secondsToReload) + " seconds remaining", // Purple Nebula's
+                        Misc.getRoundedValue(Math.max(0,(this.reloadTime-timeSpent))) + " seconds remaining", // Purple Nebula's
 //                        Misc.getRoundedValue(weapon.getCooldownRemaining()) + " secs before firing again", // Mayu's
                         false
                 );
@@ -175,11 +189,12 @@ public class AoTDRelicEffect implements EveryFrameWeaponEffectPlugin {
             if (!this.fired) {
                 this.fired = true;
                 this.chargeSound = Global.getSoundPlayer().playSound("RelicCharge", 1.0F, 1.0F, muzzleLocation, new Vector2f());
+
             } else {
                 if (Math.random() < (7.0F * amount)) {
                     for(int i = 0; i < (int)(Math.random() * 2) + 1; ++i) {
                         float radius = 50.0F + MathUtils.getRandomNumberInRange(150.0F, 200.0F) * (1.0F - chargeLevel);
-                        Vector2f spawnVector = MathUtils.getRandomPointInCircle(muzzleLocation, radius);
+                        Vector2f spawnVector = AoTDCombatUtils.getRandomPointInShipCollisionBounds(weapon.getShip());
                         float width = MathUtils.getRandomNumberInRange(4.0F, 10.0F);
 
                         try {

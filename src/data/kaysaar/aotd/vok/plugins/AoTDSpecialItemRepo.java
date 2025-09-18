@@ -76,6 +76,7 @@ public class AoTDSpecialItemRepo {
                 industry.getMarket().getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD)
                         .modifyFlat("nanoforge", 0.8f, Misc.ucFirst(spec.getName().toLowerCase()));
                 MiscHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().modifyFlat("tenebrium_nanoforge",12,"Abyss-Tech");
+
             }
             public void unapply(Industry industry) {
                 super.unapply(industry);
@@ -167,6 +168,7 @@ public class AoTDSpecialItemRepo {
         });
         ItemEffectsRepo.ITEM_EFFECTS.put(AoTDItems.TENEBRIUM_CATALYTIC_CORE, new BoostIndustryInstallableItemEffect(
                 AoTDItems.TENEBRIUM_CATALYTIC_CORE, 3, 0) {
+
             public void apply(Industry industry) {
                 super.apply(industry);
                 MiscHiddenIndustry.getInstance(industry.getMarket()).getPatherInterestManipulator().modifyFlat(AoTDItems.TENEBRIUM_ATMOSPHERIC_DRIVE,20,"Abyss-Tech");

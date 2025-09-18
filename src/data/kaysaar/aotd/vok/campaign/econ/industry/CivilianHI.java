@@ -1,7 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
@@ -10,7 +9,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.util.ArrayList;
 
-public class CivilianHI extends HeavyIndustry {
+public class CivilianHI extends AoTDHeavyIndustry {
 
     @Override
     public void apply() {

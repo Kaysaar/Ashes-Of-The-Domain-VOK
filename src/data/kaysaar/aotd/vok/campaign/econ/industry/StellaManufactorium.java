@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StellaManufactorium extends HeavyIndustry {
+public class StellaManufactorium extends AoTDHeavyIndustry {
     @Override
     public boolean isAvailableToBuild() {
         return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STELLA_MANUFACTORIUM,market) &&super.isAvailableToBuild();

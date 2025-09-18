@@ -4,7 +4,6 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
@@ -19,7 +18,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class HegemonyHeavy extends HeavyIndustry {
+public class HegemonyHeavy extends AoTDHeavyIndustry {
     public static float WIDE_FACTION_PRODUCTION_BONUS = 0.25f;
     public int getAdvancedComponents(){
         return market.getSize()-7;
