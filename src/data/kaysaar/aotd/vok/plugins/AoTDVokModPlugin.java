@@ -23,9 +23,9 @@ import data.kaysaar.aotd.vok.Ids.AoTDItems;
 import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.TierFourStationResourceApplier;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureUpkeepListener;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDSupertencileListener;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.TierFourStationResourceApplier;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.SpaceDrugsDemand;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandManager;
@@ -40,6 +40,7 @@ import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.MaglevSource;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.SpaceportSource;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies.*;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.ui.SynergyUiInjector;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedLensHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedMantleHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedThunderHeadHullmod;
@@ -47,6 +48,8 @@ import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.coreui.*;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.ColonyUIListener;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.MarketContextListenerInjector;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDFuelConsumptionScript;
@@ -92,7 +95,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 
-public class AoTDVokModPlugin extends BaseModPlugin {
+public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextListenerInjector {
     public static final String specsFilename = "data/campaign/aotd_tech_options.csv";
     private static Logger log = Global.getLogger(AoTDVokModPlugin.class);
     AoTDDataInserter aoTDDataInserter = new AoTDDataInserter();
@@ -390,7 +393,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         GPManager.reloadCommoditiesMap();
         Global.getSector().addTransientScript(new DialogPlanetTracker());
         Global.getSector().addTransientScript(new PlanetBackgroundTracker());
-        Global.getSector().addTransientScript(new IndustryTooltipInserter());
+        Global.getSector().addTransientScript(new IndustryTooltipPlacer());
         try {
             aoTDDataInserter.insertSpecItemsForManufactoriumData();
         } catch (JSONException e) {
@@ -488,7 +491,7 @@ public class AoTDVokModPlugin extends BaseModPlugin {
             mapOfReplacement.put(Commodities.DRUGS, 1);
             GrowingDemandManager.getInstance().addDemand("wwlb_cerulean_vapors", new SpaceDrugsDemand("wwlb_cerulean_vapors", mapOfReplacement));
         }
-
+        ColonyUIListener.refresh();
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
         if (newGame) {
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
@@ -581,6 +584,12 @@ public class AoTDVokModPlugin extends BaseModPlugin {
         TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new ResearchFacilityEvent(null)));
 
 
+    }
+
+    @Override
+    public void reloadListenerContext() {
+        ColonyUIListener.addMarketListener(new SynergyUiInjector());
+//        ColonyUIListener.addMarketListener(new GrandProjectLabelInjector());
     }
 }
 

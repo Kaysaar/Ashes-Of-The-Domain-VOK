@@ -26,7 +26,7 @@ import java.util.Iterator;
 public class AoTDGungnirRelicPhaseRounds implements OnHitEffectPlugin,OnFireEffectPlugin {
 
     private static final float EMP_DAMAGE_MULTIPLIER = 2f;
-    public static final float PIERCE_DAMAGE_MULTIPLIER = 0.3f;
+    public static final float PIERCE_DAMAGE_MULTIPLIER = 0.4f;
 
     public static final float PEN_EXPLOSIONS = 8;
 

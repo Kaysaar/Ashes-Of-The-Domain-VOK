@@ -49,6 +49,9 @@ public class UpgradeListUI implements CustomDialogDelegate {
 
 
     public String helperIndustryStructureOrIndustry(String id) {
+        if(Global.getSettings().getIndustrySpec(id).hasTag("grand_project")){
+            return " - Grand Project";
+        }
         if (isIndustry(id)) {
             return " - Industry";
         }
