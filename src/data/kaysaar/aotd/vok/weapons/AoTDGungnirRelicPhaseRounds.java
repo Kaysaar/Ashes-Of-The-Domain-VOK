@@ -26,7 +26,7 @@ import java.util.Iterator;
 public class AoTDGungnirRelicPhaseRounds implements OnHitEffectPlugin,OnFireEffectPlugin {
 
     private static final float EMP_DAMAGE_MULTIPLIER = 2f;
-    public static final float PIERCE_DAMAGE_MULTIPLIER = 0.4f;
+    public static final float PIERCE_DAMAGE_MULTIPLIER = 0.3f;
 
     public static final float PEN_EXPLOSIONS = 8;
 
@@ -85,17 +85,28 @@ public class AoTDGungnirRelicPhaseRounds implements OnHitEffectPlugin,OnFireEffe
         float empDamage = proj.getEmpAmount() * PIERCE_DAMAGE_MULTIPLIER;
 
         if (target != null) {
-            if (proj != null) {
+            if (proj != null && proj.getWeapon() != null) {
                 float facingangle = proj.getFacing();
-                Vector2f projloc = proj.getLocation();
 
                 //project line and get other end of the ship
                 Vector2f lineEnd = MathUtils.getPoint(point,9999f,proj.getFacing());
                 Vector2f collisionPoint = CollisionUtils.getCollisionPoint(lineEnd,point,target);
                 if (collisionPoint == null) return;
 
+                float offset = proj.getCollisionRadius() + 10f;
+                Vector2f spawnPoint = MathUtils.getPoint(collisionPoint, offset, facingangle);
+
+                float distance = MathUtils.getDistance(point,collisionPoint);
+                if (distance == 0) return;
+
+                //if module ships, revert to fixed distance
+                if (target.isStationModule() || target.isStation()){
+                    distance = target.getCollisionRadius() + offset;
+                    spawnPoint = MathUtils.getPoint(point, distance, facingangle);
+                }
+
                 for (int i = 0; i < PEN_EXPLOSIONS; i++) {
-                    float radius = MathUtils.getDistance(point,collisionPoint) * (i / PEN_EXPLOSIONS);
+                    float radius = distance * (i / PEN_EXPLOSIONS);
                     Vector2f splodeloc = MathUtils.getPoint(point,radius,facingangle);
                     engine.spawnDamagingExplosion(createExplosionSpec(),proj.getSource(),splodeloc);
 
@@ -133,9 +144,8 @@ public class AoTDGungnirRelicPhaseRounds implements OnHitEffectPlugin,OnFireEffe
                         );
                     }
                 }
-                if (proj.getWeapon() != null) {
-                    engine.spawnProjectile(proj.getSource(), proj.getWeapon(), proj.getWeapon().getId(), MathUtils.getPoint(collisionPoint, 10f, facingangle), facingangle, target.getVelocity());
-                }
+
+                engine.spawnProjectile(proj.getSource(), proj.getWeapon(), proj.getWeapon().getId(), spawnPoint, facingangle, target.getVelocity());
             }
         }
     }
@@ -164,25 +174,28 @@ public class AoTDGungnirRelicPhaseRounds implements OnHitEffectPlugin,OnFireEffe
 
     @Override
     public void onFire(DamagingProjectileAPI projectile, WeaponAPI weapon, CombatEngineAPI engine) {
-        ArrayList<ShipAPI> target = findPhaseTarget(projectile, weapon, engine);
+        ArrayList<ShipAPI> target = findPhaseTarget(weapon, engine);
+        if(target == null) return;
+
         if(weapon.getEffectPlugin() instanceof  AoTDRelicEffect effect){
             effect.initReload();
+            effect.getTargets(target);
         }
-        if(target == null) return;
+
         for (ShipAPI shipAPI : target) {
-            engine.addPlugin(new AoTDGungnirRelicPhaseHit(projectile, shipAPI));
+            if (shipAPI.getPhaseCloak() != null){
+                engine.addPlugin(new AoTDGungnirRelicPhaseHit(projectile, shipAPI));
+            }
         }
         engine.addPlugin(new AoTDGungnirRelicProjCorrector(projectile));
 
     }
 
-    public ArrayList<ShipAPI> findPhaseTarget(DamagingProjectileAPI proj, WeaponAPI weapon, CombatEngineAPI engine){
-        float range = weapon.getRange() + 100f;
-        Vector2f from = proj.getLocation();
+    public ArrayList<ShipAPI> findPhaseTarget(WeaponAPI weapon, CombatEngineAPI engine){
+        float range =46000;
         ArrayList<ShipAPI>ships = new ArrayList<>();
         Iterator<ShipAPI> iter = engine.getShips().iterator();
         int owner = weapon.getShip().getOwner();
-        float minScore = Float.MAX_VALUE;
 
         while (iter.hasNext()){
             boolean phaseHit = false;
@@ -190,13 +203,10 @@ public class AoTDGungnirRelicPhaseRounds implements OnHitEffectPlugin,OnFireEffe
             ShipAPI otherShip = iter.next();
             if (otherShip.getOwner() == owner) continue;
             if (otherShip.isHulk()) continue;
-            if (otherShip.getPhaseCloak() == null)continue;
-            if (otherShip.isPhased()) phaseHit = true;
-            if (!otherShip.isTargetable()) continue;
-            if (!phaseHit && otherShip.getCollisionClass() == CollisionClass.NONE) continue;
-
-//            float radius = Misc.getTargetingRadius(from, otherShip, false);
-//            float dist = Misc.getDistance(from, otherShip.getLocation()) - radius;
+            if(otherShip.isFighter())continue;
+//            if (otherShip.getPhaseCloak() == null)continue;
+//            if (otherShip.isPhased()) phaseHit = true;
+//            if (!phaseHit && otherShip.getCollisionClass() == CollisionClass.NONE) continue;
 
             float dist = MathUtils.getDistance(weapon.getLocation(),otherShip.getLocation()) - otherShip.getCollisionRadius();
             float expectedAngle = VectorUtils.getAngle(weapon.getLocation(),otherShip.getLocation());
@@ -205,7 +215,6 @@ public class AoTDGungnirRelicPhaseRounds implements OnHitEffectPlugin,OnFireEffe
 
             if (dist > range) continue;
             if (diff > 20f) continue;
-//            if (!Misc.isInArc(weapon.getCurrAngle(), 5f, from, otherShip.getLocation())) continue;
             ships.add(otherShip);
         }
         return ships;

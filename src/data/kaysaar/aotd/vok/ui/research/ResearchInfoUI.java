@@ -390,7 +390,8 @@ public class ResearchInfoUI extends PopUpUI {
         tooltip.addSpacer(5f);
         other.addUIElement(tooltip).inTL(0, 0);
         if (tooltip.getHeightSoFar() <= 30) {
-            other.getPosition().setSize(other.getPosition().getWidth(), tooltip.getHeightSoFar());
+            other.getPosition().setSize(other.getPosition().getWidth(), tooltip.getHeightSoFar()+5);
+            tooltip.getPosition().setSize(other.getPosition().getWidth(),tooltip.getHeightSoFar()+5);
 
         } else {
             other.getPosition().setSize(other.getPosition().getWidth(), 30);

@@ -19,28 +19,32 @@ import java.awt.*;
 import java.util.List;
 
 public class AoTDGungnirRelicPhaseHit extends BaseEveryFrameCombatPlugin {
-    private DamagingProjectileAPI proj;
-    private ShipAPI target;
+    private transient DamagingProjectileAPI proj;
+    private transient ShipAPI target;
+    private transient float hullDamage;
+    private transient float empDamage;
     private float elapsed = 0;
     private float estimatedHitTime;
     public AoTDGungnirRelicPhaseHit(DamagingProjectileAPI proj, ShipAPI target){
         this.proj = proj;
         this.target = target;
+        this.hullDamage = proj.getDamageAmount() * AoTDGungnirRelicPhaseRounds.PIERCE_DAMAGE_MULTIPLIER;
+        this.empDamage = proj.getEmpAmount() * AoTDGungnirRelicPhaseRounds.PIERCE_DAMAGE_MULTIPLIER;
         //estimates when the proj will hit target to simulate the hit
-        estimatedHitTime = MathUtils.getDistance(proj,target) / proj.getMoveSpeed();
+        estimatedHitTime = MathUtils.getDistance(proj,target) /Math.min(proj.getMoveSpeed(),6000);
     }
     public void advance(float amount, List<InputEventAPI> events) {
         CombatEngineAPI engine = Global.getCombatEngine();
         if(engine.isPaused() || proj == null || target == null) return;
 
         elapsed += amount;
-        if(elapsed >= 7f){
+        if(elapsed >= 12f){
             cleanUp();
         }
 
         if(elapsed >= estimatedHitTime){
+            if (!target.isPhased() && target.getCollisionClass() == CollisionClass.NONE) return;
             if (proj.getSource() != null){
-                //engine.addFloatingText(target.getLocation(),"target hit",20f, Color.RED,proj.getSource(),1f,3f);
                 Vector2f lineStart = proj.getLocation();
                 Vector2f lineEnd = MathUtils.getPoint(lineStart,9999f,proj.getFacing());
                 Vector2f collisionStart = CollisionUtils.getCollisionPoint(lineStart,lineEnd,target);
@@ -49,11 +53,9 @@ public class AoTDGungnirRelicPhaseHit extends BaseEveryFrameCombatPlugin {
 
                 float facingangle = proj.getFacing();
 
-                float hullDamage = proj.getDamageAmount() * AoTDGungnirRelicPhaseRounds.PIERCE_DAMAGE_MULTIPLIER;
-                float empDamage = proj.getEmpAmount() * AoTDGungnirRelicPhaseRounds.PIERCE_DAMAGE_MULTIPLIER;
                 for (int i = 0;i < AoTDGungnirRelicPhaseRounds.PEN_EXPLOSIONS;i++) {
                     float radius = MathUtils.getDistance(collisionStart,collisionEnd) * (i / AoTDGungnirRelicPhaseRounds.PEN_EXPLOSIONS);
-                    Vector2f splodeloc = MathUtils.getRandomPointInCone(collisionStart, radius, facingangle - 15, facingangle + 15);
+                    Vector2f splodeloc = MathUtils.getPoint(collisionStart,radius,facingangle);
 
                     engine.spawnDamagingExplosion(createExplosionSpec(),proj.getSource(),splodeloc);
                     engine.applyDamage(target,
@@ -65,28 +67,26 @@ public class AoTDGungnirRelicPhaseHit extends BaseEveryFrameCombatPlugin {
                             false,
                             proj.getSource());
 
-                    if (proj.getSource() != null) {
-                        EmpArcEntityAPI.EmpArcParams params = new EmpArcEntityAPI.EmpArcParams();
-                        params.glowSizeMult = 0.8f;
-                        params.segmentLengthMult = 2f;
-                        params.flickerRateMult = 1f;
-                        params.minFadeOutMult = 1.4f;
-                        EmpArcEntityAPI arc = engine.spawnEmpArc(
-                                proj.getSource(),
-                                splodeloc,
-                                new SimpleEntity(splodeloc),
-                                target,
-                                DamageType.ENERGY,
-                                50f,
-                                empDamage,
-                                target.getCollisionRadius(),
-                                "tachyon_lance_emp_impact",
-                                30f,
-                                new Color(255, 200, 50, 255),
-                                new Color(255, 255, 255, 255),
-                                params
-                        );
-                    }
+                    EmpArcEntityAPI.EmpArcParams params = new EmpArcEntityAPI.EmpArcParams();
+                    params.glowSizeMult = 0.8f;
+                    params.segmentLengthMult = 2f;
+                    params.flickerRateMult = 1f;
+                    params.minFadeOutMult = 1.4f;
+                    EmpArcEntityAPI arc = engine.spawnEmpArc(
+                            proj.getSource(),
+                            splodeloc,
+                            new SimpleEntity(splodeloc),
+                            target,
+                            DamageType.ENERGY,
+                            50f,
+                            empDamage,
+                            target.getCollisionRadius(),
+                            "tachyon_lance_emp_impact",
+                            30f,
+                            new Color(255, 200, 50, 255),
+                            new Color(255, 255, 255, 255),
+                            params
+                    );
                 }
             }
             cleanUp();
