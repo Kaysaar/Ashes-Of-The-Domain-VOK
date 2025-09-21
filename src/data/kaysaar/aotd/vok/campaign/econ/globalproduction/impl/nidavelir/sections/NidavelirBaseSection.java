@@ -44,20 +44,23 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
     @Override
     public void apply() {
         super.apply();
-        if (shouldGiveGungnir) {
-            shouldGiveGungnir = false;
-            if (Global.getSector().getPlayerFaction().getProduction().getGatheringPoint() != null) {
-                MarketAPI market = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
-                market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addWeapons("gungnir_railgun", 1);
-                Global.getSector().getCampaignUI().addMessage("We have found ancient weapon within Nidavelir, it has already been transported to " + market.getName());
+        if(isRestored){
+            if (shouldGiveGungnir) {
+                shouldGiveGungnir = false;
+                if (Global.getSector().getPlayerFaction().getProduction().getGatheringPoint() != null) {
+                    MarketAPI market = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
+                    market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addWeapons("gungnir_railgun", 1);
+                    Global.getSector().getCampaignUI().addMessage("We have found ancient weapon within Nidavelir, it has already been transported to " + market.getName());
 
-            } else {
-                MarketAPI market = Misc.getPlayerMarkets(true).get(0);
-                market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addWeapons("gungnir_railgun", 1);
-                Global.getSector().getCampaignUI().addMessage("We have found ancient weapon within Nidavelir, it has already been transported to " + market.getName());
+                } else {
+                    MarketAPI market = Misc.getPlayerMarkets(true).get(0);
+                    market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addWeapons("gungnir_railgun", 1);
+                    Global.getSector().getCampaignUI().addMessage("We have found ancient weapon within Nidavelir, it has already been transported to " + market.getName());
 
+                }
             }
         }
+
     }
 
     public boolean isAutomated() {
