@@ -28,7 +28,7 @@ public class BioSynthesis extends BaseIndustrySynergy {
 
     @Override
     public String getSynergyName() {
-        return "Bio Synthesis";
+        return "Neurochem Synthesis";
     }
 
     @Override
@@ -57,8 +57,8 @@ public class BioSynthesis extends BaseIndustrySynergy {
     public void apply(float efficiencyPercent, MarketAPI market) {
         if (market.hasIndustry(AoTDIndustries.SUBSIDISED_FARMING)) {
             Industry cryo = market.getIndustry(AoTDIndustries.SUBSIDISED_FARMING);
-            cryo.getSupplyBonusFromOther().modifyFlat(getIdForEffects(),2,"Bio Synthesis");
-            cryo.getDemand(Commodities.DRUGS).getQuantity().modifyFlat(getIdForEffects(),1,"Bio Synthesis");
+            cryo.getSupplyBonusFromOther().modifyFlat(getIdForEffects(),2,getSynergyName());
+            cryo.getDemand(Commodities.DRUGS).getQuantity().modifyFlat(getIdForEffects(),1,getSynergyName());
 
         }
 

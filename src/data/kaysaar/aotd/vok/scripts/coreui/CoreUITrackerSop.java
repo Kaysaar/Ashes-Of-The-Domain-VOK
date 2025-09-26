@@ -1,13 +1,16 @@
 package data.kaysaar.aotd.vok.scripts.coreui;
 
+import com.fs.graphics.util.Fader;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.campaign.command.CustomProductionPanel;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+import data.kaysaar.aotd.vok.campaign.econ.industry.MiscHiddenIndustry;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;
 import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
@@ -32,7 +35,7 @@ public class CoreUITrackerSop extends CoreUITracker{
     PatrolFleetDataManager fleetManager = null;
     boolean pausedMusic = true;
     FactionPanel factionPanel ;
-
+    boolean needsToResetStates = false;
     @Override
     public boolean isDone() {
         return false;
@@ -129,24 +132,8 @@ public class CoreUITrackerSop extends CoreUITracker{
 //            mainParent.removeComponent(toRemove2);
 //        }
         if (tryToGetButtonProd(getStringForCoreTabResearch()) == null) {
-
-//            insertButton(button, mainParent, "Faction Fleets", new TooltipMakerAPI.TooltipCreator() {
-//                @Override
-//                public boolean isTooltipExpandable(Object tooltipParam) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public float getTooltipWidth(Object tooltipParam) {
-//                    return 500;
-//                }
-//
-//                @Override
-//                public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-//                    tooltip.addSectionHeading("Ashes of the Domain : Vaults of Knowledge",Alignment.MID,0f);
-//                    tooltip.addPara("In this tab you will be able to create fleet templates for your patrol fleets.",5f);
-//                }
-//            }, tryToGetButtonProd("colonies"), 180, Keyboard.KEY_4, false);
+            mainParent.removeComponent(tryToGetButtonProd("doctrine & blueprints"));
+            insertButton(button, mainParent, "Doctrine & Blueprints", null, tryToGetButtonProd("colonies"), 200, Keyboard.KEY_4, false);
 
             insertButton(tryToGetButtonProd("doctrine & blueprints"), mainParent, "Research & Production", new TooltipMakerAPI.TooltipCreator() {
                 @Override
@@ -243,6 +230,7 @@ public class CoreUITrackerSop extends CoreUITracker{
                 if (buttonAPI.isHighlighted()) {
                     currentTab = buttonAPI;
                     setMemFlag(currentTab.getText().toLowerCase());
+                    refreshHiddenInd(currentTab);
                     break;
                 }
             }
@@ -251,9 +239,12 @@ public class CoreUITrackerSop extends CoreUITracker{
             for (ButtonAPI buttonAPI : panelMap.keySet()) {
                 if (buttonAPI.getText().toLowerCase().contains(getMemFlag())) {
                     currentTab = buttonAPI;
+                    refreshHiddenInd(currentTab);
                 }
             }
         }
+
+
         if(currentTab.getText().toLowerCase().contains(getStringForCoreTabResearch())){
             if(!tunedMusicOnce){
                 tunedMusicOnce = true;
@@ -274,6 +265,13 @@ public class CoreUITrackerSop extends CoreUITracker{
         }
         if (!hasComponentPresent((UIComponentAPI) panelMap.get(currentTab))) {
             removePanels((ArrayList<UIComponentAPI>) ReflectionUtilis.getChildrenCopy(mainParent), mainParent, null);
+            if(currentTab.getText().toLowerCase().contains("doctrine & blueprints")){
+                UIComponentAPI comp =(UIComponentAPI) panelMap.get(currentTab);
+                ReflectionUtilis.invokeMethodWithAutoProjection("createIfNeeded",comp);
+                ReflectionUtilis.invokeMethodWithAutoProjection("restoreTableUIState", comp);
+                Fader fader = (Fader) ReflectionUtilis.invokeMethodWithAutoProjection("getFader",comp);
+                fader.forceIn();
+            }
             mainParent.addComponent((UIComponentAPI) panelMap.get(currentTab));
             setMemFlag(currentTab.getText().toLowerCase());
 
@@ -284,6 +282,17 @@ public class CoreUITrackerSop extends CoreUITracker{
         handleButtons();
 
 
+    }
+
+    public static void refreshHiddenInd(ButtonAPI currentTab) {
+        if(currentTab.getText().toLowerCase().contains("income")||currentTab.getText().toLowerCase().contains("colonies")){
+            MiscHiddenIndustry.clearHiddenIndustries();
+        }
+        else{
+            for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+                MiscHiddenIndustry.getInstance(playerMarket);
+            }
+        }
     }
 
     public static @NotNull String getStringForCoreTabResearch() {
@@ -335,10 +344,26 @@ public class CoreUITrackerSop extends CoreUITracker{
 
     private void handleButtons() {
         boolean pauseSound = true;
+        if(!tryToGetButtonProd("doctrine & blueprints").isEnabled()){
+            if(!needsToResetStates){
+                needsToResetStates = true;
+                for (ButtonAPI buttonAPI : panelMap.keySet()) {
+                    buttonAPI.setEnabled(false);
+                }
+            }
+
+        }
+        else if (needsToResetStates){
+            needsToResetStates = false;
+            panelMap.keySet().forEach(x->x.setEnabled(true));
+            AoTDSopMisc.tryToGetButtonProd("faction").setEnabled(!Misc.getFactionMarkets(Factions.PLAYER).isEmpty());
+        }
+
         for (ButtonAPI buttonAPI : panelMap.keySet()) {
             if (buttonAPI.isChecked()) {
                 buttonAPI.setChecked(false);
                 if (!currentTab.equals(buttonAPI)) {
+                    refreshHiddenInd(buttonAPI);
                     ProductionUtil.getCurrentTab().removeComponent((UIComponentAPI) panelMap.get(currentTab));
                     if(buttonAPI.getText().toLowerCase().contains(getStringForCoreTabResearch())){
                         if(coreUiTech.getCurrentlyChosen()!=null){
@@ -356,6 +381,7 @@ public class CoreUITrackerSop extends CoreUITracker{
                     }
 
                     currentTab = buttonAPI;
+
                     setMemFlag(currentTab.getText().toLowerCase());
                 }
 
@@ -366,6 +392,16 @@ public class CoreUITrackerSop extends CoreUITracker{
 
     private HashMap<ButtonAPI, Object> getPanelMap(UIComponentAPI mainParent) {
         HashMap<ButtonAPI, Object> map = (HashMap<ButtonAPI, Object>) ReflectionUtilis.invokeMethod("getButtonToTab", mainParent);
+        ButtonAPI replace = null;
+        for (ButtonAPI value : map.keySet()) {
+            if(value.getText().toLowerCase().contains("doctrine & blueprints")){
+                replace = value;
+                break;
+            }
+        }
+        Object target = map.get(replace);
+        map.remove(replace);
+        map.put(tryToGetButtonProd("doctrine & blueprints"), target);
         return map;
     }
 

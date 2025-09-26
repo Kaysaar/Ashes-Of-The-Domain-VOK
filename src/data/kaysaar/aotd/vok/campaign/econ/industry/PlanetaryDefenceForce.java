@@ -13,11 +13,8 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PlanetaryDefenceForce extends BaseIndustry implements EconomyTickListener {
 
@@ -180,13 +177,9 @@ public class PlanetaryDefenceForce extends BaseIndustry implements EconomyTickLi
     }
     @Override
     public boolean isAvailableToBuild() {
-        if(Global.getSettings().getModManager().isModEnabled("aod_core")){
-            Map<String,Boolean> researchSaved = (HashMap<String, Boolean>) Global.getSector().getPersistentData().get("researchsaved");
-            return researchSaved != null ?  researchSaved.get(this.getId()) : false;
-        }
-
-       return true;
+       return false;
     }
+
 
     public void addImproveDesc(TooltipMakerAPI info, ImprovementDescriptionMode mode) {
         float opad = 10f;
@@ -215,7 +208,7 @@ public class PlanetaryDefenceForce extends BaseIndustry implements EconomyTickLi
         return level.next();
     }
     public boolean showWhenUnavailable() {
-        return Global.getSector().getPlayerFaction().knowsIndustry(AoTDIndustries.PLANETARY_DEFENCE_FORCE);
+        return false;
     }
 
 

@@ -16,6 +16,7 @@ import java.util.Random;
 
 public class Tier4StationProjectPluginImpl extends BaseGroundRaidObjectivePluginImpl {
     String data;
+    String faction;
     public Tier4StationProjectPluginImpl(MarketAPI market, String id,String stationID) {
         super(market, id);
         setSource(null);
@@ -23,7 +24,7 @@ public class Tier4StationProjectPluginImpl extends BaseGroundRaidObjectivePlugin
         int marines = level.marineTokens;
         setMarinesRequired(marines);
         this.data =stationID;
-
+        this.faction = market.getFaction().getDisplayName();
 
     }
 

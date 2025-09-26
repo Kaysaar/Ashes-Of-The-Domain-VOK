@@ -3,7 +3,7 @@ package data.kaysaar.aotd.vok.weapons;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.BaseEveryFrameCombatPlugin;
 import com.fs.starfarer.api.combat.CombatEngineAPI;
-import com.fs.starfarer.api.combat.DamagingProjectileAPI;
+import com.fs.starfarer.api.combat.CombatEntityAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -13,11 +13,11 @@ public class AoTDGungnirRelicProjCorrector  extends BaseEveryFrameCombatPlugin{
     private transient float originalAngularVelocity;
     private transient float facing;
     private transient Vector2f originalVelocity;
-    private DamagingProjectileAPI proj;
+    private CombatEntityAPI proj;
     float elapsed = 0f;
-    public float maxSpeed = 6000f;
+    public static float maxSpeed = 5000f;
 
-    public AoTDGungnirRelicProjCorrector(DamagingProjectileAPI proj){
+    public AoTDGungnirRelicProjCorrector(CombatEntityAPI proj){
         this.proj = proj;
         originalAngularVelocity = proj.getAngularVelocity();
         this.facing = proj.getFacing();

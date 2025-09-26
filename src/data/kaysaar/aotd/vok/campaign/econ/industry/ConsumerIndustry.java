@@ -1,6 +1,5 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
-import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.econ.impl.LightIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Pair;
@@ -45,12 +44,7 @@ public class ConsumerIndustry extends LightIndustry {
 
     @Override
     public String getCurrentImage() {
-        float size = market.getSize();
-        if (size >= SIZE_FOR_LARGE_IMAGE) {
-            return Global.getSettings().getSpriteName("industry", "aotd_consumer_industry_high");
-        }
-
-        return super.getCurrentImage();
+        return getSpec().getImageName();
     }
 
     @Override

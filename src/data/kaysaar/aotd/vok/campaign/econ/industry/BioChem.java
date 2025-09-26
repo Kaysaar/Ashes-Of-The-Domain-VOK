@@ -31,6 +31,7 @@ public class BioChem extends LightIndustry {
         } else {
             supply(Commodities.DRUGS, 0);
         }
+        supply(Commodities.DOMESTIC_GOODS, size-2);
         if(!market.isIllegal("wwlb_cerulean_vapors")&&  Global.getSector().getMemory().is("$aotd_vapors_unlocked", true)){
             if(market.hasCondition("niko_MPC_hyperspaceBipartisan")){
                 niko_MPC_hyperspaceLinked linked = (niko_MPC_hyperspaceLinked) this.market.getCondition("niko_MPC_hyperspaceBipartisan").getPlugin();
@@ -62,7 +63,7 @@ public class BioChem extends LightIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DRUGS_AMPLIFICATION,market)&&market.isFreePort();
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DRUGS_AMPLIFICATION,market);
     }
 
     @Override
@@ -73,9 +74,6 @@ public class BioChem extends LightIndustry {
     @Override
     public String getUnavailableReason() {
         ArrayList<String>reasons = new ArrayList<>();
-        if(!market.isFreePort()){
-            reasons.add("Market must have free port status.");
-        }
         if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DRUGS_AMPLIFICATION,market)){
             reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.DRUGS_AMPLIFICATION));
 

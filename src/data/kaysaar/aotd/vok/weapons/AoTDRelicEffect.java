@@ -2,12 +2,7 @@ package data.kaysaar.aotd.vok.weapons;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.SoundAPI;
-import com.fs.starfarer.api.combat.CombatEngineAPI;
-import com.fs.starfarer.api.combat.DamageType;
-import com.fs.starfarer.api.combat.EveryFrameWeaponEffectPlugin;
-import com.fs.starfarer.api.combat.ShipAPI;
-import com.fs.starfarer.api.combat.ShipwideAIFlags;
-import com.fs.starfarer.api.combat.WeaponAPI;
+import com.fs.starfarer.api.combat.*;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.util.Misc;
 import org.lazywizard.lazylib.MathUtils;
@@ -16,7 +11,6 @@ import org.lwjgl.util.vector.Vector2f;
 import org.magiclib.util.MagicRender;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class AoTDRelicEffect implements EveryFrameWeaponEffectPlugin {
     private static final Color BASE_GOLD = new Color(255, 215, 0, 255);
@@ -40,7 +34,6 @@ public class AoTDRelicEffect implements EveryFrameWeaponEffectPlugin {
     public float timeSpent;
     public transient boolean reloading= false;
 
-    private transient ArrayList<ShipAPI> targets;
     private float forceTime = 10f;
     private float timeSpentAIFlag;
     private transient boolean hasFired;
@@ -49,9 +42,7 @@ public class AoTDRelicEffect implements EveryFrameWeaponEffectPlugin {
         timeSpent = 0;
         reloading  = true;
     }
-    public void getTargets(ArrayList<ShipAPI> targets){
-        this.targets = targets;
-    }
+
 
     public void advance(float amount, CombatEngineAPI engine, WeaponAPI weapon) {
         if (engine.isPaused() || weapon == null || amount < 0) {
@@ -72,24 +63,6 @@ public class AoTDRelicEffect implements EveryFrameWeaponEffectPlugin {
             }
         }
 
-        if (targets != null){
-            if (timeSpentAIFlag > forceTime){
-                targets.clear();
-                timeSpentAIFlag -= forceTime;
-            }
-            if (!targets.isEmpty() && timeSpentAIFlag < forceTime){
-                timeSpentAIFlag += amount;
-                for (ShipAPI ship : targets){
-                    ShipwideAIFlags aiFlags = ship.getAIFlags();
-                    if (ship.getShield() != null){
-                        aiFlags.setFlag(ShipwideAIFlags.AIFlags.KEEP_SHIELDS_ON);
-                    }
-                    if (ship.getPhaseCloak() != null){
-                        aiFlags.setFlag(ShipwideAIFlags.AIFlags.STAY_PHASED);
-                    }
-                }
-            }
-        }
 
         //From AoTDShadowLanceVFX
         if (reloading) {

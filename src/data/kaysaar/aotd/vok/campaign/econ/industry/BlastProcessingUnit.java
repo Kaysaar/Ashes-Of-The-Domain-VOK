@@ -1,8 +1,10 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.FuelProduction;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -30,7 +32,11 @@ public class BlastProcessingUnit extends FuelProduction {
 
     @Override
     public String getCurrentImage() {
-        return getSpec().getImageName();
+        PlanetAPI planet = market.getPlanetEntity();
+        if (planet == null || planet.isGasGiant() || planet.hasCondition(Conditions.NO_ATMOSPHERE)) {
+            return Global.getSettings().getSpriteName("industry", "aotd_fuel_refinery_no_atmo");
+        }
+            return getSpec().getImageName();
     }
 
     @Override

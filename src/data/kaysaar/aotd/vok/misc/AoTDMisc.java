@@ -435,17 +435,22 @@ public class AoTDMisc {
                     continue;
                 }
             }
-            if (Global.getSettings().getHullSpec(id) != null) {
-                if (subMarket != null) {
-                    int sameHull = 0;
-                    for (FleetMemberAPI o : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
-                        if (o.getHullSpec().getHullId().equals(id)) {
-                            sameHull++;
+            try {
+                if (Global.getSettings().getHullSpec(id) != null) {
+                    if (subMarket != null) {
+                        int sameHull = 0;
+                        for (FleetMemberAPI o : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
+                            if (o.getHullSpec().getHullId().equals(id)) {
+                                sameHull++;
+                            }
                         }
+                        numberRemaining += sameHull;
                     }
-                    numberRemaining += sameHull;
                 }
+            } catch (Exception e) {
+                //ignore the fuck out
             }
+
 
         }
 

@@ -20,6 +20,7 @@ public class AoTDIndustries {
     public static final String SMELTING = "smelting";
     public static final String MAGLEV_CENTRAL_HUB = "aotd_maglev";
     public static final String STAR_CITADEL_LOW = "aotd_citadel";
+    public static final String STAR_CITADEL_HIGH = "aotd_citadel_hightech";
     public static final String CRYSTALIZATOR = "crystalizator";
     public static final String ISOTOPE_SEPARATOR = "isotope_separator";
     public static final String POLICRYSTALIZATOR = "policrystalizator";

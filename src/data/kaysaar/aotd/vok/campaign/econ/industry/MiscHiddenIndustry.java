@@ -18,16 +18,29 @@ public class MiscHiddenIndustry extends BaseIndustry {
         }
         return (MiscHiddenIndustry) market.getIndustry("aotd_misc_hidden_industry");
     }
+    public static void clearHiddenIndustries(){
+        for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
+            if(marketAPI.hasIndustry("aotd_misc_hidden_industry")){
+                MiscHiddenIndustry ind = (MiscHiddenIndustry) marketAPI.getIndustry("aotd_misc_hidden_industry");
+                ind.unapply();
+                marketAPI.removeIndustry("aotd_misc_hidden_industry", null,false);
+            }
+        }
+    }
 
 
     public MutableStat getPatherInterestManipulator() {
         return patherIntrestManipulator;
     }
 
+
     @Override
     public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
         super.notifyBeingRemoved(mode, forUpgrade);
-        IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x->x.advance(market,0f,true));
+        if(mode==null){
+            IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x->x.advance(market,0f,true));
+        }
+
     }
 
     @Override

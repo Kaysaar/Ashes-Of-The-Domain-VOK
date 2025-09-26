@@ -47,13 +47,20 @@ public class AoTDRaidListener implements GroundRaidObjectivesListener {
                         return;
                     }
                 }
-                objectives.add(new Tier4StationProjectPluginImpl(market,"aotd_tier_four_citadel",data));
+                objectives.add(new Tier4StationProjectPluginImpl(market,getIDForItem(data),data));
             }
         }
         }
 
     @Override
     public void reportRaidObjectivesAchieved(RaidResultData data, InteractionDialogAPI dialog, Map<String, MemoryAPI> memoryMap) {
+
+    }
+    public String getIDForItem(String station){
+        if(station.equals("aotd_citadel")){
+            return "aotd_tier_four_citadel";
+        }
+        return "aotd_tier_four_citadel_hightech";
 
     }
 }

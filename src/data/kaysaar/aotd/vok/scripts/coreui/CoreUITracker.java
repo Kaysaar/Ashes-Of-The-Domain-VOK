@@ -8,10 +8,10 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Pair;
 import com.fs.starfarer.campaign.command.CustomProductionPanel;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
+import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;
 import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
-import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;;
 import data.kaysaar.aotd.vok.ui.patrolfleet.PatrolFleetDataManager;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.tryToGetButtonProd;
+import static data.kaysaar.aotd.vok.scripts.coreui.CoreUITrackerSop.refreshHiddenInd;
+
+;
 
 public class CoreUITracker implements EveryFrameScript {
     boolean inserted = false;
@@ -28,6 +31,7 @@ public class CoreUITracker implements EveryFrameScript {
     TechnologyCoreUI coreUiTech = null;
     PatrolFleetDataManager fleetManager = null;
     boolean pausedMusic = true;
+    private boolean needsToResetStates = false;
 
     @Override
     public boolean isDone() {
@@ -275,19 +279,39 @@ public class CoreUITracker implements EveryFrameScript {
     }
 
     private void handleButtons() {
+        boolean pauseSound = true;
+        if(!tryToGetButtonProd("doctrine & blueprints").isEnabled()){
+            if(!needsToResetStates){
+                needsToResetStates = true;
+                for (ButtonAPI buttonAPI : panelMap.keySet()) {
+                    buttonAPI.setEnabled(false);
+                }
+            }
+
+        }
+        else if (needsToResetStates){
+            needsToResetStates = false;
+            panelMap.keySet().stream().filter(x->!x.getText().contains("orders")).forEach(x->x.setEnabled(true));
+        }
+
         for (ButtonAPI buttonAPI : panelMap.keySet()) {
             if (buttonAPI.isChecked()) {
                 buttonAPI.setChecked(false);
                 if (!currentTab.equals(buttonAPI)) {
+                    refreshHiddenInd(buttonAPI);
                     ProductionUtil.getCurrentTab().removeComponent((UIComponentAPI) panelMap.get(currentTab));
                     if(buttonAPI.getText().toLowerCase().contains(getStringForCoreTabResearch())){
                         if(coreUiTech.getCurrentlyChosen()!=null){
                             coreUiTech.playSound(coreUiTech.getCurrentlyChosen());
+                            pauseSound = false;
                         }
                     } else if (currentTab.getText().toLowerCase().contains(getStringForCoreTabResearch())) {
                         coreUiTech.pauseSound();
                     }
+
+
                     currentTab = buttonAPI;
+
                     setMemFlag(currentTab.getText().toLowerCase());
                 }
 
@@ -295,9 +319,18 @@ public class CoreUITracker implements EveryFrameScript {
             }
         }
     }
-
     private HashMap<ButtonAPI, Object> getPanelMap(UIComponentAPI mainParent) {
         HashMap<ButtonAPI, Object> map = (HashMap<ButtonAPI, Object>) ReflectionUtilis.invokeMethod("getButtonToTab", mainParent);
+        ButtonAPI replace = null;
+        for (ButtonAPI value : map.keySet()) {
+            if(value.getText().toLowerCase().contains("doctrine & blueprints")){
+                replace = value;
+                break;
+            }
+        }
+        Object target = map.get(replace);
+        map.remove(replace);
+        map.put(tryToGetButtonProd("doctrine & blueprints"), target);
         return map;
     }
 
