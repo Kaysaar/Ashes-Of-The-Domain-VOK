@@ -48,7 +48,7 @@ public class SyndicateLine extends BaseIndustrySynergy {
         int bonus = (int) (3*efficiency);
         tooltip.addPara("If %s is present: Increase production of organs, produced in %s by %s",3f,base,highLight,"Cryosanctum","Cryosanctum",bonus+"");
         tooltip.addPara("If %s is present: Increase market income multiplier by %s",3f,base,highLight,"Light Industry", AoTDMisc.getPercentageString(baseValue));
-        tooltip.addPara("If %s is present: Increase market income multiplier by %s",3f,base,highLight,"BioSynth Laboratory", AoTDMisc.getPercentageString(highLightValue));
+        tooltip.addPara("If %s is present: Increase market income multiplier by %s",3f,base,highLight,"Neurochemical Laboratory", AoTDMisc.getPercentageString(highLightValue));
     }
 
     @Override

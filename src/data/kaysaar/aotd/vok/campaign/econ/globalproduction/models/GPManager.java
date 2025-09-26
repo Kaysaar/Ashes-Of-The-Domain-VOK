@@ -433,6 +433,7 @@ public class GPManager {
             }
             if (option.getSpec().getItemSpecAPI().hasTag("aotd_ignore_gp")) continue;
             if (option.getSpec().getItemSpecAPI().hasTag("mission_item")) continue;
+            if (option.getSpec().getItemSpecAPI().hasTag("aotd_ignore_standarization")) continue;
             if (ItemEffectsRepo.ITEM_EFFECTS.get(option.getSpec().getProjectId()) != null) {
                 options.add(option);
             }

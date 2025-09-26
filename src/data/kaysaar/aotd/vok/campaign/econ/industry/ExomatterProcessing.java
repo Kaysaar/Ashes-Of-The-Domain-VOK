@@ -174,7 +174,7 @@ public class ExomatterProcessing extends BaseIndustry {
 
     @Override
     public void advance(float amount) {
-        super.advance(amount);
+
         if(isFunctional()){
             if(isCurrentlyConverting){
                 daysConverting+=Global.getSector().getClock().convertToDays(amount);
@@ -198,6 +198,7 @@ public class ExomatterProcessing extends BaseIndustry {
                 }
             }
         }
+        super.advance(amount);
     }
 
     @Override

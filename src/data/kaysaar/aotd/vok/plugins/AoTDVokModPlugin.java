@@ -281,6 +281,17 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 
         UpgradePathManager.getInstance().addNewCustomPath(path,Industries.ORBITALSTATION);
 
+        path = new CustomUpgradePath(1,4);
+        map = new LinkedHashMap<>();
+
+        map.put(Industries.ORBITALSTATION_HIGH, new Vector2f(0,0));
+        map.put(Industries.BATTLESTATION_HIGH, new Vector2f(0,1));
+        map.put(Industries.STARFORTRESS_HIGH, new Vector2f(0,2));
+        map.put(AoTDIndustries.STAR_CITADEL_HIGH, new Vector2f(0,3));
+        path.setIndustryCoordinates(map);
+
+        UpgradePathManager.getInstance().addNewCustomPath(path,Industries.ORBITALSTATION_HIGH);
+
         path = new CustomUpgradePath(1,2);
         map = new LinkedHashMap<>();
 
@@ -386,7 +397,10 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         if (chico != null) {
             chico.getMemory().set("$aotd_tier_4_bp_key", "aotd_citadel");
         }
-
+        MarketAPI culann = AoTDDataInserter.getMarketBasedOnName("Hybrasil", "Culann");
+        if (culann != null) {
+            culann.getMemory().set("$aotd_tier_4_bp_key", "aotd_citadel_hightech");
+        }
         Global.getSettings().getAllWeaponSpecs().stream().filter(x->x.getManufacturer().equals("Shrouded Dweller")).forEach(x->x.setManufacturer("Abyss-Tech"));
         SpecialProjectSpecManager.reLoad();
         BlackSiteProjectManager.getInstance().loadAdditionalData();

@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.scripts.ui;
 
 import ashlib.data.plugins.ui.plugins.UILinesRenderer;
+import com.fs.graphics.util.Fader;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
@@ -8,6 +9,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
@@ -67,20 +69,35 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
                 break;
             }
         }
-
+        for (CustomPanelAPI value : panelMap.values()) {
+            panelForPlugins.addComponent(value).inTL(0,0);
+        }
 
         if (currentlyChosen != null) {
-            panelForPlugins.addComponent(panelMap.get(currentlyChosen)).inTL(0, 0);
+            for (Map.Entry<ButtonAPI, CustomPanelAPI> entry : panelMap.entrySet()) {
+                Fader fader = (Fader) ReflectionUtilis.invokeMethodWithAutoProjection("getFader",entry.getValue());
+                if(entry.getKey().equals(currentlyChosen)) {
+                    fader.forceIn();
+                }
+                else{
+                    fader.forceOut();
+                }
+            }
         }
         this.mainPanel.addComponent(panelForPlugins).inTL(0, 35);
     }
 
     public void resetCurrentPlugin(ButtonAPI newButton) {
-        if (currentlyChosen != null) {
-            this.panelForPlugins.removeComponent(panelMap.get(currentlyChosen));
-        }
         currentlyChosen = newButton;
-        this.panelForPlugins.addComponent(panelMap.get(currentlyChosen)).inTL(0, 0);
+        for (Map.Entry<ButtonAPI, CustomPanelAPI> entry : panelMap.entrySet()) {
+            Fader fader = (Fader) ReflectionUtilis.invokeMethodWithAutoProjection("getFader",entry.getValue());
+            if(entry.getKey().equals(currentlyChosen)) {
+                fader.forceIn();
+            }
+            else{
+                fader.forceOut();
+            }
+        }
         playSound(currentlyChosen);
     }
 

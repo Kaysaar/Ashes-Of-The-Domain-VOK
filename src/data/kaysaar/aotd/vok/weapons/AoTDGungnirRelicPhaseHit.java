@@ -28,10 +28,10 @@ public class AoTDGungnirRelicPhaseHit extends BaseEveryFrameCombatPlugin {
     public AoTDGungnirRelicPhaseHit(DamagingProjectileAPI proj, ShipAPI target){
         this.proj = proj;
         this.target = target;
-        this.hullDamage = proj.getDamageAmount() * AoTDGungnirRelicPhaseRounds.PIERCE_DAMAGE_MULTIPLIER;
+        this.hullDamage = proj.getDamageAmount() * AoTDGungnirRelicPhaseRounds.PIERCE_DAMAGE_MULTIPLIER*3;
         this.empDamage = proj.getEmpAmount() * AoTDGungnirRelicPhaseRounds.PIERCE_DAMAGE_MULTIPLIER;
         //estimates when the proj will hit target to simulate the hit
-        estimatedHitTime = MathUtils.getDistance(proj,target) /Math.min(proj.getMoveSpeed(),6000);
+        estimatedHitTime = MathUtils.getDistance(proj,target) /Math.min(proj.getMoveSpeed(),5000);
     }
     public void advance(float amount, List<InputEventAPI> events) {
         CombatEngineAPI engine = Global.getCombatEngine();
