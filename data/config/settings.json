@@ -20,6 +20,8 @@
 		},
 		"intel": {
 			"respite40":"graphics/icons/markets/respite40.png",
+			"sp_unlock_finish":"graphics/icons/intel/dark_purple.png",
+			"sp_stage_finish":"graphics/icons/intel/purple.png",
 		},
 		"ui_icons_tech_tree":{
 			"farming1":"graphics/icons/tech/farming1.png",
@@ -55,9 +57,12 @@
 			"minorindustry2":"graphics/icons/tech/minorindustry2.png",
 			"minorindustry3":"graphics/icons/tech/minorindustry3.png",
 			"minorindustry4":"graphics/icons/tech/minorindustry4.png",
+			"ai_core_thesis":"graphics/icons/tech/ai_core_thesis.png",
+			"maglev":"graphics/icons/tech/megalev logistics colorized.png",
 			"oceanology":"graphics/icons/tech/oceanology.png",
 			"specialmodifier":"graphics/icons/tech/specialmodifier.png",
 			"stellamanufactorum":"graphics/icons/tech/stellamanufactorum.png",
+			"fuelsynth":"graphics/icons/tech/fuelsynth.png",
 			"hypershunt_energy_distribution":"graphics/icons/tech/hypershunt_energy_distribution.png",
 			"megastrcuture_analysis":"graphics/icons/tech/megastrcuture_analysis.png",
 			"supertensile":"graphics/icons/tech/supertensile.png",
@@ -93,11 +98,13 @@
 			"shityheavy_sub":"graphics/icons/tech/subicon_shityheavy.png",
 			"supplyheavy_sub":"graphics/icons/tech/subicon_civilianheavy.png",
 			"weaponheavy_sub":"graphics/icons/tech/subicon_militaryheavy.png",
+			"aotd_maglev_sub":"graphics/icons/tech/subicon_aotd_maglev.png",
 			"triheavy_sub":"graphics/icons/tech/subicon_triheavy.png",
 			"hegeheavy_sub":"graphics/icons/tech/subicon_hegeheavy.png",
 			"orbitalheavy_sub":"graphics/icons/tech/subicon_orbital_manu.png",
 			"bifrost_sub":"graphics/icons/tech/subicon_bifrost.png",
 			"stella_manufactorium_sub":"graphics/icons/tech/subicon_stella.png",
+			"fuelprod_sub":"graphics/icons/tech/subicon_fuelprod.png",
 			"hightech_sub":"graphics/icons/tech/subicon_modula_program.png",
 			"none":"graphics/icons/tech/generic.png",
 			"researched":"graphics/icons/tech/researched.png",
@@ -126,8 +133,10 @@
 			"aotd_holder":"graphics/ui/holder.png",
 			"sidebar_icon_research":"graphics/ui/atomic-64.png",
 			"hud_circle":"graphics/fx/circ.png",
-				"shimmer":"graphics/fx/shimmer.png"
-			
+			"shimmer":"graphics/fx/shimmer.png",
+			"diagonal":"graphics/fx/squareDiagonal.png",
+			"aotd_shadowlance":"graphics/icons/hud/aotd_shadowlance_icon.png",
+			"aotd_gungnirIcon":"graphics/icons/hud/Gungnir_icon.png",
 		},
 		"rendering":{
             "GlitchSquare":"graphics/fx/solid_square.png",
@@ -147,6 +156,11 @@
 
 
 		},
+		"fx": {#for magictrails
+			"aotd_gungnir_trail1":"graphics/fx/aotd_gungnir_core_trail.png",
+			"aotd_gungnir_trail2":"graphics/fx/aotd_gungnir_star_trail.png",
+			"aotd_gungnir_trail3":"graphics/fx/aotd_gungnir_stripes_trail.png"
+		},
 		"megastructures":{
             "hypershunt":"graphics/icons/coronal_shunt.png",
 			"nidavelir":"graphics/icons/nidavelir.png",
@@ -165,7 +179,7 @@
 			"AegisSystem":"graphics/icons/megastructures/coronal_port.png",
 			"NexusCore":"graphics/icons/megastructures/nexus_core_merged.png",
 			"VanguardForge":"graphics/icons/megastructures/vanguard_forge.png",
-			"BulwarkFoundry":"graphics/icons/megastructures/nid_4.png",
+			"BulwarkFoundry":"graphics/icons/megastructures/bulawrk_foundry.png",
 			"EterniumCore":"graphics/icons/megastructures/nid_1.png",
 			"SentinelCore":"graphics/icons/megastructures/nid_5.png",
 			"BifrostGate":"graphics/icons/megastructures/bifrost.png",
@@ -179,8 +193,12 @@
 			"nidavelir":"graphics/illustrations/nidavelir.png",
 			"bifrost":"graphics/illustrations/active_gate.jpg",
 			"pluto":"graphics/illustrations/pluto.png",
+			"pluto_active":"graphics/illustrations/pluto_active.png",
 
-
+		},
+		"industry":{
+			"pluto_active":"graphics/icons/industry/aotd_pluto_industry_active.png",
+			"aotd_fuel_refinery_no_atmo":"graphics/icons/industry/aotd_fuel_refinery_no_atmo.png",
 		},
 		
 		"illustrations":{
@@ -190,6 +208,12 @@
             "keypad_bg":"graphics/ui/keypad.png"
 		}
 
-	}
+	},
+	"designTypeColors": {
+    "Abyss-Tech": [180, 0, 90, 255],
+	"Nidavellir Reliquary": [205, 173, 0, 255]
+}
+
+	
 }
 

@@ -1,0 +1,17 @@
+{
+  "hullName": "Illussion Shield",
+  "hullId": "t4_illusion_shield",
+  "hullSize": "FRIGATE",
+  "spriteName": "graphics/ships/invisible.png",
+  "style": "HIGH_TECH",
+  "height": 1,
+  "width": 1,
+  "center": [0.5, 0.5],
+  "collisionRadius": 37.5,
+  "shieldCenter": [0, 0],
+  "shieldRadius": 244.5,
+  "viewOffset": 0,
+  "weaponSlots": [],
+  "engineSlots": [],
+  "bounds": []
+}

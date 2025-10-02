@@ -1,0 +1,32 @@
+{
+  "variantId": "t4_ht_short_module_variant",
+  "hullId": "t4_ht_short_module",
+  "displayName": "New Variant",
+  "goalVariant": false,
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [],
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "WS0001": "tachyonlance",
+        "WS0002": "tachyonlance",
+        "WS0003": "ionpulser",
+        "WS0004": "ionpulser",
+        "WS0005": "phasebeam",
+        "WS0006": "phasebeam",
+        "WS0007": "railgun",
+        "WS0008": "railgun",
+        "WS0009": "railgun",
+        "WS0010": "railgun",
+        "WS0011": "plasma"
+      }
+    }
+  ],
+  "modules": [],
+  "wings": []
+}

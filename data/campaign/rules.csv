@@ -9,15 +9,17 @@ BarCMD playAmbience
 AddText ""You make your way inside a bar when suddenly you are approached by a woman with white hair. First thing that catches your attention is a golden mark on her face and a uniform typical for a researcher. As you consider what to say, your thoughts are interrupted by her gentle voice asking you for a drink and 5 minutes of your time""",,"aotdSophiaTalk:Follow
 aotdSophiaDontTalk:Don't follow",
 aotdSophiaTalk,DialogOptionSelected,$option == aotdSophiaTalk,"SaveCurrentVisual
-BeginConversation aotd_sophia 
-$global.aotd_sophia",Both of you sit in the bar ordering a small glass of fine booze. After a moment you hear that her name is Sophia and she is one of researchers from Galatia as you guessed it earlier. “I have heard stories about technological advancements of your faction and  I have come with a proposition for you”,aotdSophiaListen: Listen to proposition,
+BeginConversation aotd_sophia
+$global.aotd_sophia = true",Both of you sit in the bar ordering a small glass of fine booze. After a moment you hear that her name is Sophia and she is one of researchers from Galatia as you guessed it earlier. “I have heard stories about technological advancements of your faction and  I have come with a proposition for you”,aotdSophiaListen: Listen to proposition,
 aotdSophiaListen,DialogOptionSelected,$option == aotdSophiaListen,,"So getting to the point, I am a seeker of knowledge, Galatia limits me with regulations, but you? You pursue knowledge without any bounds and I want to be part of it . So my question is will you allow my humble person to help you in that matter?
 ","aotdSophiaAgree:Accept Propostion 
 aotdSophiaInfo:See her skills
 aotdReturn:Decline ,and leave the bar",
 aotdSophiaAgree,DialogOptionSelected,$option == aotdSophiaAgree,"SophiaAgreed  
 AddTextSmall ""$personName joined your faction"" highlight",,aotdReturn: Leave the bar,
-aotdSophiaInfo,DialogOptionSelected,$option == aotdSophiaInfo,"AddTextSmall ""Skill - Resourceful."" highlight
+aotdSophiaInfo,DialogOptionSelected,$option == aotdSophiaInfo,"AddTextSmall ""Passive Skill - Archivist."" highlight
+AddTextSmall  ""Every two months, discover a new possible location of a Pre-Collapse Facility"" highlight
+AddTextSmall ""Active Skill - Resourceful."" highlight
 AddTextSmall  ""Decrease cost of item for initial research by 100 units or 1 if given item is research databank. This does not include colony items"" highlight
 ",,,
 aotdReturn,DialogOptionSelected,$option == aotdReturn,"EndConversation DO_NOT_FIRE
@@ -28,11 +30,11 @@ BarCMD showOptions",You return to the bar.,,
 ,,,,,,
 ,,,,,,
 aotdSophiaDontTalk,DialogOptionSelected,$option == aotdSophiaDontTalk,"BarCMD showOptions 
-$global.aotd_can_sophia = false",,,
+$global.aotd_sophia = true",,,
 aotdSophiaIgnore,DialogOptionSelected,$option == aotdSophiaIgnore,"EndConversation DO_NOT_FIRE
 RestoreSavedVisual
 BarCMD showOptions
-$global.aotd_can_sophia=false",,,
+$global.aotd_sophia=false",,,
 ,,,,,,
 ,,,,,,
 ,,,,,,
@@ -146,7 +148,7 @@ aotd_mega_check,AoTDMegaCheck,,AoTDMegastructureRules researchedTech,,,
 aotd_nida_block_colony,PopulateOptions,"$market.isPlanetConditionMarketOnly
 $market.isSurveyed
 !$market.hasUnexploredRuins
-!AoTDMegastructureRules researchedTech",SetEnabled surveyPerform false,"We can't colonize this world, due to our poor understand of megastructures, we can colonize it after we researched Megastrucutre Analysis.",,
+!AoTDMegastructureRules researchedTech",SetEnabled surveyPerform false,,,
 # Research Databank sell ,,,,,,
 databanks_turnInOption,PopulateOptions,"$isPerson
 ResearchSell personCanAcceptDbs",FireBest DissableDatabankOptionIfNeeded,,"15:databanks_startTurnIn:""I'd like to turn in these databanks that I've acquired...""",
@@ -176,15 +178,95 @@ aotd_stable_point_proceed,DialogOptionSelected,$option == aotd_stable_point_crea
 DismissDialog",,,
 aotd_stable_point_cancel,DialogOptionSelected,$option == aotd_stable_point_cancel,FireAll PopulateOptions,,,
 #Pluto mining station,,,,,,
-aotd_pluto_interact,OpenInteractionDialog,"$customType == aotd_pluto_station
-!$aotd_claimed","SetShortcut defaultLeave ESCAPE 
+aotd_pluto_interact,OpenInteractionDialog,$customType == aotd_pluto_station,"SetShortcut defaultLeave ESCAPE 
 ShowDefaultVisual
 AoTDPlutoEncounter start
-FireAll AoTDMegaCheck",,"0:aotd_claim_megastructure:Claim megastructure
-1:defaultLeave:Leave",
+FireAll AoTDMegaCheck",,1:defaultLeave:Leave,
 ,,,,,,
+#Shroud Overhaul,,,,,,
+aotd_dwellerContSel,DialogOptionSelected,$option == abyssalLight_dwellerCont score:10000,AoTDDwellerCMD checkForBetterSurvey,,"abyssalLight_maxSensors:Order a sensor sweep, full power, focused on the anomalous drive-bubble penetrations
+abyssalLight_wait:Wait
+abyssalLight_emCon:""Go to maximum emission control! EMCON zero-zero alpha, immediate execute.""",
+aotd_dwellerHugeFleet,DialogOptionSelected,$option == abyssalLight_ultrasensors,AoTDDwellerCMD hugeFleet,"""Aye $playerSirOrMadam. Commencing full-spectrum sweep."" Sensors acknowledges, voice steady but hands moving with grim certainty, overriding safety interlocks one by one.
+
+The $shipOrFleet glows on the central display, its signature flaring brighter with every passing second. Amber turns to white-hot as sensor arrays flood hyperspace with precision pulses, targeting every distorted ripple, every erratic fracture along the drive-bubble sheath.
+
+For a brief, deceptive moment, the bridge feels calm—controlled. Protocol followed, procedure executed.
+
+Then the shift comes—imperceptible at first, a thickening of space, a low groan from the inertial compensators. Fissures bloom across the void in malignant red. Power surges climb unchecked. Alarms blink not in warning, but in confirmation.
+
+Beyond the veil, something notices. Hunger stirs, drawn not by accident, but by deliberate signal—the irresistible lure of prey that screams its presence into the dark.
+
+This was a mistake. A choice made by those who should have known better.
+
+And now it comes—tendrils, maws, and seething forms pressing eagerly through widening rifts, answering a call they were never meant to hear.",,
 ,,,,,,
+#Scientist Hijack,,,,,,
+aotd_scientist_ai_hijack,DialogOptionSelected,$option == saic_giveCore score:10000,AoTDForbiddenScientist markDecision,"The shielded crate shuts with the sound of powered bolts sliding home. It sends off a one-time coded hyperwave burst. Confirmation, you suppose. It would have been good of that scientist to warn you about this little trick; hopefully no pirates - or anything else - was listening nearby.",saic_continueGiveCore:Loot the rest of the cache,
 ,,,,,,
+aotd_scientist_greeting,PickGreeting,$id == aotd_scientist_forbidden score:1000,"SaveCurrentVisual
+ShowPersonVisual","You arrive at the coordinates embedded in the signal.
+A familiar figure awaits you — cleaner, calmer, but still radiating the barely-contained intensity you remember.
+
+$HeOrShe steps forward. ""You came. I wasn’t sure, but… something told me you would. We have much to discuss.""","aotd_forbidden_start:Wait a minute, you are that scientist from bar right?",
+aotd_scientist_foribdden_1,DialogOptionSelected,$option == aotd_forbidden_start,,"""Ah — Commander! Yes, yes. I wasn’t sure you’d come. Back then I was just another voice in the static, wasn’t I? But you listened.""
+""Because of you, I’ve made... progress. Real progress.",aotd_forbidden_continiue_1:Why you wanted to contact with me?,
+aotd_scientist_foribdden_2,DialogOptionSelected,$option == aotd_forbidden_continiue_1,,"""That AI core you gave me — it wasn’t just any Alpha-class unit. It was something far older. Pre-Alpha, possibly even prototype-stage.
+Its architecture was riddled with quantum cryptographic subsystems — designed not to think, but to crack.
+
+With it, I accessed a Domain-era databank. Not scraps, not corrupted fragments. A sealed vault of knowledge untouched since the gates fell.
+I have data no one else in the Persean Sector has seen.
+
+With all of that, I have proposition for you.""
+",aotd_forbidden_continiue_2:Listen to proposition,
+aotd_scientist_foribdden_3,DialogOptionSelected,$option == aotd_forbidden_continiue_2,,"""This databank… it contains knowledge that simply doesn’t exist in the Sector anymore. Designs, theories, protocols — real Domain science.
+But it’s raw. Fragmented. Interlocked with infrastructure and keys that haven’t existed for centuries.
+To make it usable, we need to take steps. Reconstruct missing links, build interfaces, maybe even recreate parts of the old system itself.""
+
+""And I want to do that with you.
+You could’ve kept that AI core. Sold it, dismantled it, turned it over to someone else for money. But you didn’t.""
+
+""So this is how I repay that trust.
+My knowledge — my expertise — it’s yours now. I offer you my services, as a scientist. Whatever you need: research, integration, development. I’ll help.
+Together, we can bring this knowledge back to life.""","aotdForbiddenScientistAgree:Accept Propostion 
+aotdForbiddenScientistInfo:See scientist skills
+aotdForbiddenScientistReturn:Politley decline offer",
+aotd_scientist_foribdden_info,DialogOptionSelected,$option == aotdForbiddenScientistInfo,"AddTextSmall ""Passive Skill - Forbidden Knowledge."" highlight
+AddTextSmall ""Unlock Experimental Tier of Tech tree, bypassing requirement for Hyperdimensional Processor."" highlight
+AddTextSmall ""Active Skill - AI Assistant."" highlight
+AddTextSmall ""Reduces amount of GP resources needed for projects by 20%"" highlight
+",,,
+aotd_scientist_foribdden_confirm,DialogOptionSelected,$option == aotdForbiddenScientistAgree,"AoTDForbiddenScientist grantScientist  
+AddTextSmall ""$personName joined your faction"" highlight",,0:cutCommLink:Return,
+aotd_scientist_foribdden_reject,DialogOptionSelected,$option == aotdForbiddenScientistReturn,AoTDForbiddenScientist grantScientist ,"""Ah… I see.
+Well, I can’t say I’m not disappointed, but… I understand.""
+
+""This is dangerous ground we’re stepping on. Old ghosts. Old powers.
+Maybe it's for the best to keep some things in the past.""",0:cutCommLink:Return,
 ,,,,,,
-,,,,,,
-,,,,,,
+#Shroud overhaul part 2 ,,,,,,
+abyssalLight_maxSensorsSel_aotd,DialogOptionSelected,$option == abyssalLight_maxSensors score:10000,AoTDDwellerCMD largeFleet,"""Aye $playerSirOrMadam! Executing."" Sensors barks, then deftly executes a series of overrides. 
+
+Your $shipOrFleet status is up on the central display - shield bubble an unsteady amber, incursions of N-space fissures marked in garish red. A blink of white as active sensors trigger and-
+
+-pressure on the drive bubble spikes, an amber flash, a cacophony of alarms...
+
+* * *
+
+A hidden blackness waiting, lurking, jolts awake. Tendrils lunge eagerly, hungrily, through fissures in the dark behind the night.",,
+abyssalLight_emConSel,DialogOptionSelected,$option == abyssalLight_emCon score:10000,AoTDDwellerCMD smallFleet,"At your command, the unperceived chorus of a multitude of ship systems and machinery dies down with a deepening sigh into muted quietude.
+
+All that remains is the breath and bodies of your bridge crew, a strange assertion of your shared humanity. 
+
+Backup e-lighting, simple chemical things, provide an eerie glow. A series of dimly pulsing commands illuminate your executive interface - a flock of ardent subsystems ready to awaken from minimum operation at your touch.
+
+* * *
+
+A hidden blackness feels the brush of a shadow. Less than a morsel, unworthy of wakefulness. By some analog of distributed instinct a few listless tendrils explore this disturbance, this ripple in the darkness behind the night.",,
+abyssalLight_dwellerWaitSel,DialogOptionSelected,$option == abyssalLight_wait score:10000,AoTDDwellerCMD mediumFleet,"You wait.
+
+Alarms are reset, battle restraints engaged. Activity on the bridge gradually quiets as all officers, crew, and systems reach a state of readiness, even anticipation - fight or flight.
+
+The incursions crawl closer to the center of your display volume, expanding unwaveringly and intentionally. 
+
+All eyes are on command interfaces, and all attention is on your next order.",,

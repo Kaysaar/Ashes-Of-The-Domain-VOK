@@ -1,0 +1,29 @@
+{
+  "hullName": "Ring Core",
+  "hullId": "t4_ht_core2",
+  "hullSize": "CRUISER",
+  "spriteName": "graphics/ships/HT Station Assembly/Core2.png",
+  "style": "HIGH_TECH",
+  "height": 649,
+  "width": 647,
+  "center": [323.5, 324.5],
+  "collisionRadius": 337,
+  "shieldCenter": [0, 0],
+  "shieldRadius": 0,
+  "viewOffset": 0,
+  "builtInMods": [
+    "anchorrotation"
+  ],
+  "weaponSlots": [],
+  "engineSlots": [],
+  "bounds": [
+    -61, -26,
+    -27, -49.5,
+    29, -49.5,
+    59.5, -26,
+    59.5, 53.5,
+    29.5, 78.5,
+    -27, 78.5,
+    -61, 56
+  ]
+}

@@ -1,7 +1,8 @@
 id,name,faction,desc,script,icon,order
 researchfacil,"Research
 Facility",player,"Storage for materials, that are used for research",data.kaysaar.aotd.vok.submarkets.ResearchFacilityMarket,graphics/factions/researchfacil.png,1700
-,,,,,,
+aotd_exomatter_processing,"Exomatter
+Processing",dweller,Storage for materials which are needed by the Exomatter Processing in order to produce Tenebrium Cells,data.kaysaar.aotd.vok.submarkets.ExomatterMarket,graphics/factions/exomatter_processing_storage.png,1701
 ,,,,,,
 ,,,,,,
 ,,,,,,

@@ -1,0 +1,38 @@
+{
+    "hullName": "Rotating Armor Module",
+    "hullId": "t4_ht_amodule",
+    "hullSize": "FRIGATE",
+    "style": "HIGH_TECH",
+    "spriteName": "graphics/ships/HT Station Assembly/ArmorPlate.png",
+    "height": 177,
+    "width": 478,
+    "center": [
+        239, 88.5
+    ],
+    "moduleAnchor": [
+        -520, 0
+    ],
+    "collisionRadius": 249,
+    "coversColor": "",
+    "shieldCenter": [
+        0, 0
+    ],
+    "shieldRadius": 0,
+    "viewOffset": 0,
+    "builtInMods": [
+        "anchorrotation"
+    ],
+    "builtInWings": [],
+    "builtInModules": null,
+    "weaponSlots": [],
+    "engineSlots": [],
+    "bounds": [
+              91,    -47.5,
+             -35,   -243.5,
+             -66,    -11.5,
+             -66,     11.5,
+             -35,    243.5,
+        
+              91,     47.5
+    ]
+}

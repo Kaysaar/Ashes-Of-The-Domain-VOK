@@ -1,0 +1,14 @@
+{
+  "variantId": "armor_small_variant",
+  "hullId": "armor_small",
+  "displayName": "Small Armor Plate",
+  "goalVariant": false,
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [],
+  "weaponGroups": [],
+  "modules": [],
+  "wings": []
+}

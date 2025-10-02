@@ -1,0 +1,32 @@
+{
+    "displayName": "New Variant",
+    "fluxCapacitors": 0,
+    "fluxVents": 0,
+    "goalVariant": false,
+    "hullId": "t4_ht_core1",
+    "hullMods": [],
+    "quality": 1.0,
+    "variantId": "t4_ht_core1_variant",
+    "weaponGroups": [],
+    "modules": {
+        "COREMOD1": "t4_ht_core2_variant",
+        "WS 010": "t4_ht_shieldmod1_variant",
+        "WS 011": "t4_ht_shieldmod1_variant",
+        "WS 012": "t4_ht_shieldmod2_variant",
+        "WS 013": "t4_ht_shieldmod2_variant",
+        "WS 014": "t4_ht_shieldmod1_variant",
+        "WS 015": "t4_ht_shieldmod1_variant",
+        "STRUT1": "strut_long_variant",
+        "STRUT2": "strut_long_variant",
+        "STRUT3": "strut_short_variant",
+        "STRUT4": "strut_short_variant",
+        "WS 001": "t4_ht_bubble_module_variant",
+        "WS 000": "t4_ht_bubble_module_variant",
+        "WS 003": "t4_ht_amodule_variant",
+        "WS 002": "t4_ht_amodule_variant",
+        "WS 004": "t4_ht_short_module_variant",
+        "WS 005": "t4_ht_short_module_variant",
+        "WS 006": "t4_ht_long_module_variant",
+        "WS 007": "t4_ht_long_module_variant"
+    }
+}

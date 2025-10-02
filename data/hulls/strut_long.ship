@@ -1,0 +1,43 @@
+{
+    "hullName": "Strut Long",
+    "hullId": "strut_long",
+    "hullSize": "CRUISER",
+    "style": "HIGH_TECH",
+    "spriteName": "graphics/ships/HT Station Assembly/StrutLong.png",
+    "height": 657,
+    "width": 194,
+    "center": [
+        97, 325
+    ],
+    "moduleAnchor": [
+        -469, 0
+    ],
+    "collisionRadius": 350,
+    "coversColor": "",
+    "shieldCenter": [
+        3.5, 0
+    ],
+    "shieldRadius": 0,
+    "viewOffset": 0,
+    "builtInMods": [
+        "anchorrotation",
+        "vastbulk"
+    ],
+    "builtInWings": [],
+    "builtInModules": null,
+    "weaponSlots": [],
+    "engineSlots": [],
+    "bounds": [
+          -327.5,    -90.5,
+          -284.5,    -93.5,
+          -200.5,    -70.5,
+           252.5,    -54.5,
+           324.5,    -31.5,
+        
+           324.5,     31.5,
+           252.5,     54.5,
+          -200.5,     70.5,
+          -284.5,     93.5,
+          -327.5,     90.5
+    ]
+}

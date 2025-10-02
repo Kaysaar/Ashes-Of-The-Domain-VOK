@@ -1,0 +1,26 @@
+{
+  "hullName": "Small Armor Plate",
+  "hullId": "armor_small",
+  "hullSize": "FRIGATE",
+  "spriteName": "graphics/ships/StationAssembly/armor_small.png",
+  "style": "LOW_TECH",
+  "height": 57,
+  "width": 144,
+  "center": [71.5, 8],
+  "collisionRadius": 279.5,
+  "shieldCenter": [35.5, -37.5],
+  "shieldRadius": 0,
+  "viewOffset": 0,
+  "builtInMods": [
+    "disgusting_resilience2"
+  ],
+  "weaponSlots": [],
+  "engineSlots": [],
+  "bounds": [
+    28, -69,
+    10.5, -69.5,
+    10.5, 69.5,
+    28, 69,
+    49.5, 0.5
+  ]
+}

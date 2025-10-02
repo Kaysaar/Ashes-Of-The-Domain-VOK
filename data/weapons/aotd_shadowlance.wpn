@@ -1,0 +1,62 @@
+{
+  "id": "aotd_shadowlance",
+  "specClass": "beam",
+  "type": "ENERGY",
+  "size": "LARGE",
+  "beamEffect": "data.kaysaar.aotd.vok.weapons.AoTDShadowLanceBeamEffect",
+  "everyFrameEffect": "data.kaysaar.aotd.vok.weapons.AoTDShadowLanceVFXEffect",
+  "collisionClass": "RAY",
+  "collisionClassByFighter": "RAY_FIGHTER",
+  "turretSprite": "graphics/weapons/shadowlance.png",
+  "turretGlowSprite": "graphics/weapons/shadowlanceglow.png",
+  "hardpointSprite": "graphics/weapons/shadowlancehardpoint.png",
+  "hardpointGlowSprite": "graphics/weapons/shadowlanceglow.png",
+  "glowColor": [
+    255,
+    50,
+    75,
+    255
+  ],
+  "hitGlowRadius": 75,
+  "renderHints": [
+    NEVER_RENDER_IN_CAMPAIGN
+  ],
+  "turretOffsets": [
+    5.0,
+    0
+  ],
+  "turretAngleOffsets": [
+    0
+  ],
+  "hardpointOffsets": [
+    20.5,
+    0
+  ],
+  "hardpointAngleOffsets": [
+    0
+  ],
+  "beamFireOnlyOnFullCharge": true,
+  "fringeColor": [
+    255,
+    30,
+    45,
+    155
+  ],
+  "coreColor": [
+    255,
+    255,
+    255,
+    255
+  ],
+  "width": 60,
+  "textureType": SMOOTH,
+  "textureScrollSpeed": 300,
+  "pixelsPerTexel": 2,
+  "pierceSet": [
+    PROJECTILE_FF,
+    PROJECTILE_NO_FF,
+    PROJECTILE_FIGHTER,
+    MISSILE_FF,
+    MISSILE_NO_FF
+  ]
+}

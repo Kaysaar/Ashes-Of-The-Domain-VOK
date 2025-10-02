@@ -1,0 +1,7 @@
+id,name,red,green,blue,order
+ship_engineering,Ship Engineering,180,100,40,1
+physics,Physics,80,120,230,2
+computers,Computers,60,200,160,3
+chemistry,Chemistry,140,60,180,4
+shroud,Exotic,150,10,30,5
+superweapon,Superweapon,255,215,0,6
