@@ -44,12 +44,14 @@ public class BackgroundInterlooper implements ExtendedUIPanelPlugin {
             shadow = new Planet("aotd_nidavelir_shadow", reference2.getRadius() , 0.0f, new Vector2f());
             shadow.setTilt(reference2.getGraphics().getTilt());
             shadow.setAngle(angle);
+            shadow.setPitch(reference2.getGraphics().getPitch());
             currAngle = shadow.getAngle();
         }
         for (int i = 0; i < 3; i++) {
             Planet planet = new Planet(planetType, reference2.getRadius() + 35 - (0.5f * i), 0.0f, new Vector2f());
             planet.setTilt(reference2.getGraphics().getTilt());
             planet.setAngle(angle);
+            planet.setPitch(reference2.getGraphics().getPitch());
             planets.add(planet);
 
         }

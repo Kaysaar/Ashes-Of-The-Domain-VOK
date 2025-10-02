@@ -21,5 +21,6 @@
     <orderEntry type="library" name="AodCapitals" level="project" />
     <orderEntry type="library" name="niko_morePlanetaryConditions" level="project" />
     <orderEntry type="library" name="sidebarLib1" level="project" />
+    <orderEntry type="library" name="niko_stationAugments" level="project" />
   </component>
 </module>

@@ -300,17 +300,16 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         path.setIndustryCoordinates(map);
         UpgradePathManager.getInstance().addNewCustomPath(path,AoTDIndustries.RESEARCH_CENTER);
 
-        path = new CustomUpgradePath(4,4);
+        path = new CustomUpgradePath(4,3);
         map = new LinkedHashMap<>();
-        map.put("shityheavy", new Vector2f(2,0));
-        map.put("heavyindustry", new Vector2f(2,1));
-        map.put("orbitalworks", new Vector2f(1,2));
-        map.put("supplyheavy", new Vector2f(3,2));
-        map.put("triheavy",new Vector2f(2,3));
-        map.put("hegeheavy",new Vector2f(0,3));
-        map.put("stella_manufactorium",new Vector2f(3,3));
+        map.put("heavyindustry", new Vector2f(2,0));
+        map.put("orbitalworks", new Vector2f(1,1));
+        map.put("supplyheavy", new Vector2f(3,1));
+        map.put("triheavy",new Vector2f(2,2));
+        map.put("hegeheavy",new Vector2f(0,2));
+        map.put("stella_manufactorium",new Vector2f(3,2));
         path.setIndustryCoordinates(map);
-        UpgradePathManager.getInstance().addNewCustomPath(path,"shityheavy");
+        UpgradePathManager.getInstance().addNewCustomPath(path,Industries.HEAVYINDUSTRY);
     }
     @Override
     public void onNewGameAfterEconomyLoad() {

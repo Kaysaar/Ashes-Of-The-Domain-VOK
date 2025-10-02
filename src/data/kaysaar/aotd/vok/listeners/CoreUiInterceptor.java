@@ -5,9 +5,11 @@ import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.CoreUITabListener;
+import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
+import com.fs.starfarer.api.util.DelayedActionScript;
 import com.fs.starfarer.campaign.CampaignPlanet;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
@@ -20,7 +22,7 @@ import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.coreui.PlanetBackgroundTracker;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 
-public class CoreUiInterceptor implements CoreUITabListener {
+public class CoreUiInterceptor implements CoreUITabListener, PlayerColonizationListener {
     @Override
     public void reportAboutToOpenCoreTab(CoreUITabId tab, Object param) {
         if (tab.equals(CoreUITabId.CARGO)) {
@@ -131,5 +133,29 @@ public class CoreUiInterceptor implements CoreUITabListener {
         ReflectionUtilis.invokeMethodWithAutoProjection(
                 "ensureCompRendersAbove", addTo, interlooper.getMainPanel(),ReflectionUtilis.invokeMethodWithAutoProjection("getBg",addTo));
         return interlooper;
+    }
+
+    @Override
+    public void reportPlayerColonizedPlanet(PlanetAPI planet) {
+        MarketAPI market = planet.getMarket();
+        if (market.getPrimaryEntity().getMemoryWithoutUpdate().get(GPBaseMegastructure.memKey) instanceof NidavelirComplexMegastructure megastructure) {
+            Global.getSector().addTransientScript(new DelayedActionScript(0.003f) {
+                @Override
+                public boolean runWhilePaused() {
+                    return true;
+                }
+
+                @Override
+                public void doAction() {
+                    initalizeBackgroundPLanet(megastructure);
+                }
+            });
+
+        }
+    }
+
+    @Override
+    public void reportPlayerAbandonedColony(MarketAPI colony) {
+
     }
 }

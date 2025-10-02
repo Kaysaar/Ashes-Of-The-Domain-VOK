@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="niko_stationAugments">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../Station Augments/jars/niko_stationAugments.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

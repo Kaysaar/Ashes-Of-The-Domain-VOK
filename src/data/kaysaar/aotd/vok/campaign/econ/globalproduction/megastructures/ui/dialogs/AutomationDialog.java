@@ -37,6 +37,9 @@ public class AutomationDialog  extends BasePopUpDialog{
     @Override
     public void applyConfirmScript() {
         section.setAutomated(!section.isAutomated());
+        if(section.isAutomated){
+            section.setCurrentManpowerAssigned(0);
+        }
         menu.resetSection(section.getSpec().getSectionID());
     }
 }
