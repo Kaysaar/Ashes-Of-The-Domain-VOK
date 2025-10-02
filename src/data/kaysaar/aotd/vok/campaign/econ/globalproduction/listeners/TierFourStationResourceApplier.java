@@ -29,10 +29,8 @@ public class TierFourStationResourceApplier implements AoTDResourceListener {
         HashMap<String,Integer>demand = new HashMap<>(TierFourStation.costMap);
         int amount =0;
         for (MarketAPI playerFactionMarket : AoTDMisc.getPlayerFactionMarkets()) {
-            if(playerFactionMarket.hasIndustry("starfortress")){
-                if(playerFactionMarket.getIndustry("starfortress").isUpgrading()){
-                    amount++;
-                }
+            if(TierFourStation.validStationsToCheckForUpgrade.stream().anyMatch(x->playerFactionMarket.hasIndustry(x)&&playerFactionMarket.getIndustry(x).isUpgrading())){
+                amount++;
             }
         }
         float percent = 1f;

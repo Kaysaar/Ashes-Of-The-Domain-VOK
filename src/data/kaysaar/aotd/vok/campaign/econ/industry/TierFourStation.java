@@ -26,16 +26,23 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.co
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 
 import java.awt.*;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 public class TierFourStation extends OrbitalStation {
-    public static LinkedHashMap<String,Integer>costMap = new LinkedHashMap<>();
+    public static LinkedHashMap<String, Integer> costMap = new LinkedHashMap<>();
+    public static HashSet<String> validStationsToCheckForUpgrade = new HashSet<>();
+
     static {
-        costMap.put(AoTDCommodities.REFINED_METAL,150);
-        costMap.put(AoTDCommodities.PURIFIED_TRANSPLUTONICS,50);
-        costMap.put(AoTDCommodities.ADVANCED_COMPONENTS,100);
-        costMap.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,150);
+        costMap.put(AoTDCommodities.REFINED_METAL, 150);
+        costMap.put(AoTDCommodities.PURIFIED_TRANSPLUTONICS, 50);
+        costMap.put(AoTDCommodities.ADVANCED_COMPONENTS, 100);
+        costMap.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY, 150);
+
+        validStationsToCheckForUpgrade.add(Industries.STARFORTRESS);
+        validStationsToCheckForUpgrade.add(Industries.STARFORTRESS_HIGH);
     }
+
     @Override
     public void advance(float amount) {
         boolean disrupted = isDisrupted();
@@ -53,8 +60,8 @@ public class TierFourStation extends OrbitalStation {
 
         if (building && !disrupted) {
             float days = Global.getSector().getClock().convertToDays(amount);
-            if(isUpgrading()){
-            days*= GPManager.getInstance().getTotalPenaltyFromResources(AoTDCommodities.PURIFIED_TRANSPLUTONICS,AoTDCommodities.DOMAIN_GRADE_MACHINERY,AoTDCommodities.ADVANCED_COMPONENTS,AoTDCommodities.REFINED_METAL);
+            if (isUpgrading()) {
+                days *= GPManager.getInstance().getTotalPenaltyFromResources(AoTDCommodities.PURIFIED_TRANSPLUTONICS, AoTDCommodities.DOMAIN_GRADE_MACHINERY, AoTDCommodities.ADVANCED_COMPONENTS, AoTDCommodities.REFINED_METAL);
             }
             //DebugFlags.COLONY_DEBUG = true;
             if (DebugFlags.COLONY_DEBUG) {
@@ -79,8 +86,8 @@ public class TierFourStation extends OrbitalStation {
             if (stationFleet.getOrbit() == null && stationEntity != null) {
                 stationFleet.setCircularOrbit(stationEntity, 0, 0, 100);
             }
-            if(this.getSpec().hasTag("starcitadel")){
-                stationFleet.getMemoryWithoutUpdate().set(Misc.DANGER_LEVEL_OVERRIDE,10);
+            if (this.getSpec().hasTag("starcitadel")) {
+                stationFleet.getMemoryWithoutUpdate().set(Misc.DANGER_LEVEL_OVERRIDE, 10);
             }
         }
 
@@ -97,18 +104,19 @@ public class TierFourStation extends OrbitalStation {
         return super.getBuildOrUpgradeProgressText();
     }
 
+
     @Override
     protected void addPostUpkeepSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
         super.addPostUpkeepSection(tooltip, mode);
-        if(mode.equals(IndustryTooltipMode.NORMAL)&&isUpgrading()){
-            tooltip.addSectionHeading("Grand Project (Global Production)", Alignment.MID,5f);
-            tooltip.addPara("Due to intensive work required with upgrade of this station, massive resources are needed for it's construction.",Misc.getTooltipTitleAndLightHighlightColor(),3f);
-            tooltip.addCustom(GPUIMisc.createResourcePanelForSmallTooltip(tooltip.getWidthSoFar()+10,30,30,costMap,null),5f);
+        if (mode.equals(IndustryTooltipMode.NORMAL) && isUpgrading()) {
+            tooltip.addSectionHeading("Grand Project (Global Production)", Alignment.MID, 5f);
+            tooltip.addPara("Due to intensive work required with upgrade of this station, massive resources are needed for it's construction.", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
+            tooltip.addCustom(GPUIMisc.createResourcePanelForSmallTooltip(tooltip.getWidthSoFar() + 10, 30, 30, costMap, null), 5f);
         }
-        if(mode.equals(IndustryTooltipMode.UPGRADE)&&this.getSpec().hasTag("starcitadel")){
-            tooltip.addSectionHeading("Grand Project (Global Production)", Alignment.MID,5f);
-            tooltip.addPara("Due to intensive work required with upgrade of this station, massive resources are needed for it's construction.",Misc.getTooltipTitleAndLightHighlightColor(),3f);
-            tooltip.addCustom(GPUIMisc.createResourcePanelForSmallTooltip(tooltip.getWidthSoFar()+10,30,30,costMap,null),5f);
+        if (mode.equals(IndustryTooltipMode.UPGRADE) && this.getSpec().hasTag("starcitadel")) {
+            tooltip.addSectionHeading("Grand Project (Global Production)", Alignment.MID, 5f);
+            tooltip.addPara("Due to intensive work required with upgrade of this station, massive resources are needed for it's construction.", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
+            tooltip.addCustom(GPUIMisc.createResourcePanelForSmallTooltip(tooltip.getWidthSoFar() + 10, 30, 30, costMap, null), 5f);
         }
     }
 
@@ -246,7 +254,6 @@ public class TierFourStation extends OrbitalStation {
         }
 
 
-
         addRightAfterDescriptionSection(tooltip, mode);
 
         if (isDisrupted()) {
@@ -349,9 +356,18 @@ public class TierFourStation extends OrbitalStation {
                 int income = getIncome().getModifiedInt();
                 tooltip.addPara("Monthly income: %s", opad, highlight, Misc.getDGSCredits(income));
                 tooltip.addStatModGrid(300, 65, 10, pad, getIncome(), true, new TooltipMakerAPI.StatModValueGetter() {
-                    public String getPercentValue(MutableStat.StatMod mod) {return null;}
-                    public String getMultValue(MutableStat.StatMod mod) {return null;}
-                    public Color getModColor(MutableStat.StatMod mod) {return null;}
+                    public String getPercentValue(MutableStat.StatMod mod) {
+                        return null;
+                    }
+
+                    public String getMultValue(MutableStat.StatMod mod) {
+                        return null;
+                    }
+
+                    public Color getModColor(MutableStat.StatMod mod) {
+                        return null;
+                    }
+
                     public String getFlatValue(MutableStat.StatMod mod) {
                         return Misc.getWithDGS(mod.value) + Strings.C;
                     }
@@ -362,9 +378,18 @@ public class TierFourStation extends OrbitalStation {
                 int upkeep = getUpkeep().getModifiedInt();
                 tooltip.addPara("Monthly upkeep: %s", opad, highlight, Misc.getDGSCredits(upkeep));
                 tooltip.addStatModGrid(300, 65, 10, pad, getUpkeep(), true, new TooltipMakerAPI.StatModValueGetter() {
-                    public String getPercentValue(MutableStat.StatMod mod) {return null;}
-                    public String getMultValue(MutableStat.StatMod mod) {return null;}
-                    public Color getModColor(MutableStat.StatMod mod) {return null;}
+                    public String getPercentValue(MutableStat.StatMod mod) {
+                        return null;
+                    }
+
+                    public String getMultValue(MutableStat.StatMod mod) {
+                        return null;
+                    }
+
+                    public Color getModColor(MutableStat.StatMod mod) {
+                        return null;
+                    }
+
                     public String getFlatValue(MutableStat.StatMod mod) {
                         return Misc.getWithDGS(mod.value) + Strings.C;
                     }
@@ -491,11 +516,10 @@ public class TierFourStation extends OrbitalStation {
     }
 
 
-
     @Override
     public boolean isAvailableToBuild() {
-        if(this.getSpec().hasTag("starcitadel")){
-            if(market.isPlayerOwned()){
+        if (this.getSpec().hasTag("starcitadel")) {
+            if (market.isPlayerOwned()) {
                 return Global.getSector().getPlayerFaction().knowsIndustry(this.getSpec().getId());
             }
             return market.getFaction().knowsIndustry(this.getSpec().getId());
@@ -505,7 +529,7 @@ public class TierFourStation extends OrbitalStation {
 
     @Override
     public boolean showWhenUnavailable() {
-        if(this.getSpec().hasTag("starcitadel")){
+        if (this.getSpec().hasTag("starcitadel")) {
             return false;
         }
         return super.showWhenUnavailable();

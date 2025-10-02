@@ -139,7 +139,6 @@ public class AoTDDataInserter {
                 allIndustrySpec.addTag(AOTD + Industries.LIGHTINDUSTRY);
             }
             if (allIndustrySpec.getId().equals(Industries.HEAVYINDUSTRY)) {
-                allIndustrySpec.setDowngrade(AoTDIndustries.HEAVY_PRODUCTION);
                 allIndustrySpec.addTag(AOTD + Industries.HEAVYINDUSTRY);
                 allIndustrySpec.setUpgrade(null);
             }

@@ -65,6 +65,7 @@ public class DialogPlanetTracker implements EveryFrameScript {
                                 Planet curr = (Planet) ReflectionUtilis.invokeMethod("getGraphics", saved);
                                 planet.setTilt(curr.getTilt());
                                 planet.setAngle(megastructure.shipyard.getCurrAngle());
+                                planet.setPitch(curr.getPitch());
                                 didIt = true;
                                 break;
                             }
@@ -91,6 +92,7 @@ public class DialogPlanetTracker implements EveryFrameScript {
                     Planet planet = (Planet) ReflectionUtilis.findFieldOfClass(ring,Planet.class);
                     Planet curr = (Planet) ReflectionUtilis.findFieldOfClass(saved,Planet.class);
                     planet.setTilt(curr.getTilt());
+                    planet.setPitch(curr.getPitch());
                     curr.setAngle(planet.getAngle());
                 }
 
