@@ -1,0 +1,49 @@
+{
+    "hullName": "Shield Module 1",
+    "hullId": "t4_ht_shieldmod1",
+    "hullSize": "FRIGATE",
+    "style": "HIGH_TECH",
+    "spriteName": "graphics/ships/HT Station Assembly/ShieldDrone1.png",
+    "height": 101,
+    "width": 90,
+    "center": [
+        45, 50.5
+    ],
+    "moduleAnchor": [
+        -350, 0
+    ],
+    "collisionRadius": 110.5,
+    "coversColor": "",
+    "shieldCenter": [
+        0, 0
+    ],
+    "shieldRadius": 110.5,
+    "viewOffset": 0,
+    "builtInMods": [
+        "advancedshieldemitter",
+        "anchorrotation",
+        "shield_always_on"
+    ],
+    "builtInWings": [],
+    "builtInModules": null,
+    "weaponSlots": [],
+    "engineSlots": [],
+    "bounds": [
+             -44,    -23.5,
+           -35.5,    -26.5,
+           -21.5,    -44.5,
+           -12.5,    -45.5,
+              -9,    -41.5,
+        
+            38.5,      -17,
+            51.5,        0,
+            38.5,       17,
+              -9,     41.5,
+           -12.5,     45.5,
+        
+           -21.5,     44.5,
+           -35.5,     26.5,
+             -44,     23.5
+    # 13 points total.
+    ]
+}

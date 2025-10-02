@@ -1,0 +1,14 @@
+{
+  "variantId": "t4_ht_core2_variant",
+  "hullId": "t4_ht_core2",
+  "displayName": "New Variant",
+  "goalVariant": false,
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [],
+  "weaponGroups": [],
+  "modules": [],
+  "wings": []
+}

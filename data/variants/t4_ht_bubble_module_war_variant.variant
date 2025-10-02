@@ -1,0 +1,49 @@
+{
+  "variantId": "t4_ht_bubble_module_war_variant",
+  "hullId": "t4_ht_bubble_module",
+  "displayName": "New Variant",
+  "goalVariant": false,
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [],
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "WS 022": "pulselaser",
+        "WS 023": "pulselaser",
+        "WS 026": "lrpdlaser",
+        "WS 027": "lrpdlaser",
+        "WS 028": "ionpulser",
+        "WS 029": "ionpulser",
+        "WS0001": "ionbeam",
+        "WS0002": "ionbeam",
+        "WS0003": "ionpulser",
+        "WS0004": "ionpulser",
+        "WS0005": "tachyonlance",
+        "WS0006": "tachyonlance",
+        "WS0007": "plasma",
+        "WS0008": "plasma",
+        "WS0009": "tachyonlance",
+        "WS0010": "tachyonlance",
+        "WS0011": "ionpulser",
+        "WS0012": "ionpulser",
+        "WS0013": "ionbeam",
+        "WS0014": "ionbeam",
+        "WS0015": "irpulse",
+        "WS0016": "irpulse",
+        "WS0017": "irpulse",
+        "WS0018": "irpulse",
+        "WS0019": "ioncannon",
+        "WS0020": "ioncannon",
+        "WS0021": "ioncannon",
+        "WS0022": "ioncannon"
+      }
+    }
+  ],
+  "modules": [],
+  "wings": []
+}

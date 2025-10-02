@@ -1,0 +1,326 @@
+{
+  "hullName": "Low Tech Citadel T4",
+  "hullId": "t4_citadel",
+  "hullSize": "CAPITAL_SHIP",
+  "spriteName": "graphics/ships/StationAssembly/low_tech_t4_core.png",
+  "style": "LOW_TECH",
+  "height": 672,
+  "width": 672,
+  "center": [336, 336],
+  "collisionRadius": 1439,
+  "shieldCenter": [0, 0],
+  "shieldRadius": 0,
+  "viewOffset": 0,
+  "builtInMods": [
+    "vastbulk",
+    "commanding_presence",
+    "axialrotation",
+    "supercomputer",
+    "stealth_minefield_lt",
+    "shared_flux_sink"
+  ],
+  "weaponSlots": [
+    {
+      "id": "WS0001",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -135,
+      "locations": [-155.5, -154]
+    },
+    {
+      "id": "WS0002",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 135,
+      "locations": [-155, 153]
+    },
+    {
+      "id": "WS0003",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -45,
+      "locations": [152.5, -153.5]
+    },
+    {
+      "id": "WS0004",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 45,
+      "locations": [152.5, 153.5]
+    },
+    {
+      "id": "P_MODULE_WEST",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 0,
+      "locations": [553.5, -0],
+      "renderOrderMod": -2
+    },
+    {
+      "id": "P_MODULE_EAST",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 180,
+      "locations": [-555, -0],
+      "renderOrderMod": -2
+    },
+    {
+      "id": "P_MODULE_SOUTH",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -90,
+      "locations": [0, -558.5],
+      "renderOrderMod": -2
+    },
+    {
+      "id": "P_MODULE_NORTH",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 90,
+      "locations": [0, 558.5],
+      "renderOrderMod": -2
+    },
+    {
+      "id": "B1",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 77.5,
+      "locations": [838.5, 90],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B2",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -77.5,
+      "locations": [838.5, -90],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "A1",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 0,
+      "locations": [919.5, -0],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B3",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -77.5,
+      "locations": [599, -153],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B4",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 77.5,
+      "locations": [599, 153],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B13",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -103,
+      "locations": [-600.5, -153],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B14",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 103,
+      "locations": [-600.5, 153],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B16",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -103,
+      "locations": [-842.5, -89],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B15",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 103,
+      "locations": [-842.5, 89],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "A4",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 180,
+      "locations": [-920, 0.5],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B12",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -164.5,
+      "locations": [-154, -600],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B8",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 165,
+      "locations": [-152, 600],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B11",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -165,
+      "locations": [-89, -843.5],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B7",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 165,
+      "locations": [-89, 845],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B9",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -14.5,
+      "locations": [150, -600],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B6",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 15,
+      "locations": [150, 600],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B10",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -14.5,
+      "locations": [86.5, -843.5],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "B5",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 15,
+      "locations": [86.5, 845],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "A3",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": -90,
+      "locations": [-2, -920],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "A2",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 90,
+      "locations": [-2, 920],
+      "renderOrderMod": -1
+    },
+    {
+      "id": "WS0006",
+      "size": "SMALL",
+      "type": "STATION_MODULE",
+      "mount": "HARDPOINT",
+      "arc": 0,
+      "angle": 0,
+      "locations": [0, -0]
+    }
+  ],
+  "engineSlots": [],
+  "bounds": [
+    230.5, 41,
+    146.5, 186,
+    41, 232,
+    -0.5, 252,
+    -37, 237,
+    -156.5, 187.5,
+    -241.5, 33,
+    -241.5, -33,
+    -156.5, -187.5,
+    -37, -237,
+    -0.5, -252,
+    41, -232,
+    146.5, -186,
+    230.5, -41
+  ]
+}

@@ -1,0 +1,258 @@
+{
+    "hullName": "High Tech Citadel",
+    "hullId": "t4_ht_core1",
+    "hullSize": "CAPITAL_SHIP",
+    "style": "HIGH_TECH",
+    "spriteName": "graphics/ships/HT Station Assembly/Core1.png",
+    "height": 399,
+    "width": 399,
+    "center": [
+        197.5, 199
+    ],
+    "collisionRadius": 238.5,
+    "coversColor": "",
+    "shieldCenter": [
+        0, 0
+    ],
+    "shieldRadius": 234,
+    "viewOffset": 0,
+	"builtInMods": [
+    "disgusting_resilience",
+	"stealth_minefield"
+  ],
+    "builtInWings": [],
+    "builtInModules": null,
+    "weaponSlots": [
+        {
+            "id": "COREMOD1",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": -270,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "STRUT1",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": 90,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "STRUT2",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": -90,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "STRUT3",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": 180,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "STRUT4",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": 0,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 000",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": 270,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 001",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": 90,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 002",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": 180,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 003",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": 0,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 004",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": 0,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 005",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "arc": 0,
+            "angle": 180,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 006",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "renderOrderMod": -20,
+            "arc": 0,
+            "angle": 270,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 007",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "renderOrderMod": -20,
+            "arc": 0,
+            "angle": -270,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 010",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "renderOrderMod": 100,
+            "arc": 0,
+            "angle": 210,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 011",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "renderOrderMod": 100,
+            "arc": 0,
+            "angle": 151,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 012",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "renderOrderMod": 100,
+            "arc": 0,
+            "angle": 0,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 013",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "renderOrderMod": 100,
+            "arc": 0,
+            "angle": -180,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 014",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "renderOrderMod": 100,
+            "arc": 0,
+            "angle": 329.5,
+            "locations": [
+                       0,        0
+            ]
+        },
+        {
+            "id": "WS 015",
+            "size": "SMALL",
+            "type": "STATION_MODULE",
+            "mount": "TURRET",
+            "renderOrderMod": 100,
+            "arc": 0,
+            "angle": 30,
+            "locations": [
+                       0,        0
+            ]
+        }
+    ],
+    "engineSlots": [],
+    "bounds": [
+          -188.5,    -75.5,
+            -102,   -169.5,
+            -0.5,   -200.5,
+             110,     -166,
+             190,    -71.5,
+        
+             190,     70.5,
+             110,      165,
+            -0.5,    199.5,
+            -102,    168.5,
+          -188.5,     74.5
+    ]
+}

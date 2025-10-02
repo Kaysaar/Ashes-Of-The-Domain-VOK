@@ -1,32 +1,5 @@
 {
-	"hypershunt_aotd":{
-		"defaultName":"Coronal Hypershunt", # used if name=null in addCustomEntity()
-		"nameInText":"coronal hypershunt",
-		"shortName":"coronal hypershunt",
-		"aOrAn":"a",
-		"isOrAre":"is",
-		"defaultRadius":150, # used if radius<0 in addCustomEntity()
-		"customDescriptionId":"coronal_tap",
-		"interactionImage":"graphics/illustrations/coronal_tap.jpg",
-		"icon":"graphics/icons/coronal_shunt.png",
-		"iconWidth":32,
-		"iconHeight":32,
-		"sprite":"graphics/stations/coronal_shunt2.png",
-		"spriteWidth":240,
-		"spriteHeight":240,
-		"renderShadow":true,
-		"useLightColor":true,
-		"showInCampaign":true,
-		"showIconOnMap":true,
-		"showNameOnMap":false,
-		"scaleNameWithZoom":false,
-		"scaleIconWithZoom":true,
-		"tags":["has_interaction_dialog", "coronal_tap", "neutrino_high", "protects_from_corona_in_battle", "not_random_mission_target","station"],
-		"layers":[STATIONS], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
-		"renderCircleIndicator":true,
-		"renderCircleIndicatorSelectionFlash":true,
-		#"pluginClass":"com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin",
-	},	
+
 	"bifrost_gate":{
 		"defaultName":"Bifrost Gate", # used if name=null in addCustomEntity()
 		"nameInText":"bifrost gate",
@@ -55,7 +28,7 @@
 		"renderCircleIndicator":true,
 		"renderCircleIndicatorSelectionFlash":true,
 		"customDescriptionId":"bifrost_gate",
-		"tags":["bifrost", "neutrino","has_interaction_dialog"],
+		"tags":["bifrost", "neutrino","has_interaction_dialog",""],
 		"layers":[STATIONS, BELOW_STATIONS], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
 		"pluginClass":"com.fs.starfarer.api.impl.campaign.aotd_entities.BiFrostGateEntity",
 	},
@@ -64,7 +37,7 @@
 		"nameInText":"pluto station",
 		"aOrAn":"the",
 		"defaultRadius":140, # used if radius<0 in addCustomEntity()
-		"interactionImage":"graphics/illustrations/orbital.jpg",
+		"interactionImage":"graphics/illustrations/pluto.png",
 		"icon":"graphics/icons/aotd_pluto_mining_station.png",
 		"iconWidth":40,
 		"iconHeight":40,

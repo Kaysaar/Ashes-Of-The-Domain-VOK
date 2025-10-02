@@ -1,0 +1,11 @@
+{
+    "displayName": "New Variant",
+    "fluxCapacitors": 0,
+    "fluxVents": 0,
+    "goalVariant": false,
+    "hullId": "strut_long",
+    "hullMods": [],
+    "quality": 1.0,
+    "variantId": "strut_long_variant",
+    "weaponGroups": []
+}

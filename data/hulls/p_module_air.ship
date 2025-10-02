@@ -1,0 +1,186 @@
+{
+  "hullName": "Primary Module Air",
+  "hullId": "p_module_air",
+  "hullSize": "CRUISER",
+  "spriteName": "graphics/ships/StationAssembly/prime_module_air_E.png",
+  "style": "LOW_TECH",
+  "height": 600,
+  "width": 339,
+  "center": [169.5, 238.5],
+  "collisionRadius": 633.5,
+  "shieldCenter": [534, -1],
+  "shieldRadius": 0,
+  "viewOffset": 0,
+  "builtInMods": [
+    "supercomputer",
+    "disgusting_resilience",
+    "hardened_subsystems",
+    "armoredweapons",
+    "repair_gantry",
+    "never_detaches",
+    "reduced_explosion"
+  ],
+  "weaponSlots": [
+    {
+      "id": "LB 1",
+      "size": "LARGE",
+      "type": "LAUNCH_BAY",
+      "mount": "HIDDEN",
+      "arc": 360,
+      "angle": 0,
+      "locations": [-27.5, 33.5]
+    },
+    {
+      "id": "LB 2",
+      "size": "LARGE",
+      "type": "LAUNCH_BAY",
+      "mount": "HIDDEN",
+      "arc": 360,
+      "angle": 0,
+      "locations": [-27, -31.5]
+    },
+    {
+      "id": "WS0001",
+      "size": "LARGE",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 100,
+      "angle": -71,
+      "locations": [296.5, -34]
+    },
+    {
+      "id": "WS0002",
+      "size": "LARGE",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 100,
+      "angle": 71,
+      "locations": [296.5, 34]
+    },
+    {
+      "id": "WS0003",
+      "size": "MEDIUM",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 60,
+      "angle": -78.5,
+      "locations": [267.5, -72]
+    },
+    {
+      "id": "WS0004",
+      "size": "MEDIUM",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 60,
+      "angle": 78.5,
+      "locations": [267.5, 72]
+    },
+    {
+      "id": "WS0005",
+      "size": "MEDIUM",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 60,
+      "angle": -78.5,
+      "locations": [132.5, -108]
+    },
+    {
+      "id": "WS0006",
+      "size": "MEDIUM",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 60,
+      "angle": 78.5,
+      "locations": [132.5, 108]
+    },
+    {
+      "id": "WS0007",
+      "size": "MEDIUM",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 60,
+      "angle": -78.5,
+      "locations": [13, -140]
+    },
+    {
+      "id": "WS0008",
+      "size": "MEDIUM",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 60,
+      "angle": 78.5,
+      "locations": [13, 140]
+    },
+    {
+      "id": "WS0009",
+      "size": "LARGE",
+      "type": "MISSILE",
+      "mount": "TURRET",
+      "arc": 75,
+      "angle": -29,
+      "locations": [51.5, -53.5]
+    },
+    {
+      "id": "WS0010",
+      "size": "LARGE",
+      "type": "MISSILE",
+      "mount": "TURRET",
+      "arc": 75,
+      "angle": 29,
+      "locations": [51.5, 53.5]
+    },
+    {
+      "id": "WS0019",
+      "size": "SMALL",
+      "type": "BALLISTIC",
+      "mount": "TURRET",
+      "arc": 360,
+      "angle": 0,
+      "locations": [342, -22.5]
+    },
+    {
+      "id": "WS0020",
+      "size": "SMALL",
+      "type": "BALLISTIC",
+      "mount": "TURRET",
+      "arc": 360,
+      "angle": -0,
+      "locations": [342, 22.5]
+    },
+    {
+      "id": "WS0011",
+      "size": "SMALL",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 60,
+      "angle": 78.5,
+      "locations": [-125, 119.5]
+    },
+    {
+      "id": "WS0012",
+      "size": "SMALL",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 60,
+      "angle": -78.5,
+      "locations": [-125, -119.5]
+    }
+  ],
+  "engineSlots": [],
+  "bounds": [
+    -193.5, -64,
+    -41.5, -64.5,
+    -147.5, -105.5,
+    -148, -127,
+    -114.5, -165.5,
+    12.5, -161.5,
+    359, -68,
+    359, 73,
+    12.5, 166.5,
+    -114.5, 170.5,
+    -148, 132,
+    -147.5, 110.5,
+    -41.5, 69.5,
+    -193.5, 69
+  ]
+}

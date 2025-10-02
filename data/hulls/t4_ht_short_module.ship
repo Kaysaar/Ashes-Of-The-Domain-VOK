@@ -1,0 +1,140 @@
+{
+  "hullName": "Short High Tech Module ",
+  "hullId": "t4_ht_short_module",
+  "hullSize": "FRIGATE",
+  "spriteName": "graphics/ships/HT Station Assembly/ModuleShort.png",
+  "style": "HIGH_TECH",
+  "height": 145,
+  "width": 292,
+  "center": [146, 72.5],
+  "collisionRadius": 165,
+  "shieldCenter": [-51, -0.5],
+  "shieldRadius": 160.5,
+  "viewOffset": 0,
+  "moduleAnchor": [
+    -180,
+    0
+  ],
+  "builtInMods": [
+    "anchorrotation",
+    "shield_always_on",
+	"stealth_minefield",
+    "disgusting_resilience",
+    "supercomputer",
+    "armoredweapons",
+    "reduced_explosion"
+  ],
+  "weaponSlots": [
+    {
+      "id": "WS0001",
+      "size": "LARGE",
+      "type": "ENERGY",
+      "mount": "TURRET",
+      "arc": 120,
+      "angle": 10.5,
+      "locations": [29.5, 67]
+    },
+    {
+      "id": "WS0002",
+      "size": "LARGE",
+      "type": "ENERGY",
+      "mount": "TURRET",
+      "arc": 120,
+      "angle": -10.5,
+      "locations": [29.5, -67]
+    },
+    {
+      "id": "WS0003",
+      "size": "MEDIUM",
+      "type": "ENERGY",
+      "mount": "TURRET",
+      "arc": 120,
+      "angle": 13,
+      "locations": [7.5, 99]
+    },
+    {
+      "id": "WS0004",
+      "size": "MEDIUM",
+      "type": "ENERGY",
+      "mount": "TURRET",
+      "arc": 120,
+      "angle": -13,
+      "locations": [7.5, -99]
+    },
+    {
+      "id": "WS0005",
+      "size": "MEDIUM",
+      "type": "ENERGY",
+      "mount": "TURRET",
+      "arc": 120,
+      "angle": 36.5,
+      "locations": [-14, 125]
+    },
+    {
+      "id": "WS0006",
+      "size": "MEDIUM",
+      "type": "ENERGY",
+      "mount": "TURRET",
+      "arc": 120,
+      "angle": -36.5,
+      "locations": [-14, -125]
+    },
+    {
+      "id": "WS0007",
+      "size": "SMALL",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 270,
+      "angle": 37.5,
+      "locations": [19.5, 122]
+    },
+    {
+      "id": "WS0008",
+      "size": "SMALL",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 270,
+      "angle": -37.5,
+      "locations": [19.5, -122]
+    },
+    {
+      "id": "WS0009",
+      "size": "SMALL",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 270,
+      "angle": 28,
+      "locations": [62.5, 42]
+    },
+    {
+      "id": "WS0010",
+      "size": "SMALL",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 270,
+      "angle": -28,
+      "locations": [62.5, -42]
+    },
+    {
+      "id": "WS0011",
+      "size": "LARGE",
+      "type": "HYBRID",
+      "mount": "TURRET",
+      "arc": 270,
+      "angle": 0,
+      "locations": [41.5, 0]
+    }
+  ],
+  "engineSlots": [],
+  "bounds": [
+    68, -51.5,
+    22, -136.5,
+    -45, -149.5,
+    -62, -131.5,
+    -45, -1,
+    -62, 131.5,
+    -45, 149.5,
+    22, 136.5,
+    68, 51.5
+  ]
+}

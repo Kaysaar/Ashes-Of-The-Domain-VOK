@@ -1,0 +1,43 @@
+{
+    "hullName": "Strut Short",
+    "hullId": "strut_short",
+    "hullSize": "CRUISER",
+    "style": "HIGH_TECH",
+    "spriteName": "graphics/ships/HT Station Assembly/StrutShort.png",
+    "height": 465,
+    "width": 194,
+    "center": [
+        96.5, 210
+    ],
+    "moduleAnchor": [
+        -355, 0
+    ],
+    "collisionRadius": 287,
+    "coversColor": "",
+    "shieldCenter": [
+        118.5, -0.5
+    ],
+    "shieldRadius": 0,
+    "viewOffset": 0,
+    "builtInMods": [
+        "anchorrotation",
+        "vastbulk"
+    ],
+    "builtInWings": [],
+    "builtInModules": null,
+    "weaponSlots": [],
+    "engineSlots": [],
+    "bounds": [
+          -212.5,      -91,
+          -169.5,      -94,
+           -85.5,      -71,
+             164,    -58.5,
+           251.5,    -42.5,
+        
+           251.5,     41.5,
+             164,     57.5,
+           -85.5,       70,
+          -169.5,       93,
+          -212.5,       90
+    ]
+}

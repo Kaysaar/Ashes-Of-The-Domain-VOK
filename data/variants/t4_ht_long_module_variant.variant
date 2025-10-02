@@ -1,0 +1,46 @@
+{
+  "variantId": "t4_ht_long_module_variant",
+  "hullId": "t4_ht_long_module",
+  "displayName": "New Variant",
+  "goalVariant": false,
+  "fluxCapacitors": 0,
+  "fluxVents": 0,
+  "quality": 1,
+  "permaMods": [],
+  "hullMods": [],
+  "weaponGroups": [
+    {
+      "autofire": false,
+      "mode": "LINKED",
+      "weapons": {
+        "WS0001": "tachyonlance",
+        "WS0002": "tachyonlance",
+        "WS0003": "tachyonlance",
+        "WS0004": "tachyonlance",
+        "WS0005": "plasma",
+        "WS0006": "plasma",
+        "WS0007": "ionbeam",
+        "WS0008": "ionbeam",
+        "WS0009": "pdburst",
+        "WS0010": "pdburst",
+        "WS0011": "pdburst",
+        "WS0012": "pdburst",
+        "WS0013": "pdburst",
+        "WS0014": "pdburst",
+        "WS0015": "ionpulser",
+        "WS0016": "ionpulser",
+        "WS0017": "phasebeam",
+        "WS0018": "phasebeam"
+      }
+    }
+  ],
+  "modules": [],
+  "wings": [
+    "xyphos_wing",
+    "xyphos_wing",
+    "xyphos_wing",
+    "xyphos_wing",
+    "xyphos_wing",
+    "xyphos_wing"
+  ]
+}

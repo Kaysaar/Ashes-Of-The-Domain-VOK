@@ -1,0 +1,51 @@
+{
+  "id": "ring_deco",
+  "specClass": "beam",
+  "type": "DECORATIVE",
+  "size": "SMALL",
+  "collisionClass": "RAY",
+  "collisionClassByFighter": "RAY_FIGHTER",
+  "turretSprite": "",
+  "turretUnderSprite": "graphics/weapons/bg_ring.png",
+  "hardpointSprite": "",
+   "hardpointUnderSprite": "graphics/weapons/bg_ring.png",
+  "glowColor": [
+    255,
+    255,
+    255,
+    255
+  ],
+  "hitGlowRadius": 0,
+  "turretOffsets": [
+    0,
+    0
+  ],
+  "turretAngleOffsets": [
+    0
+  ],
+  "hardpointOffsets": [
+    0,
+    0
+  ],
+  "hardpointAngleOffsets": [
+    0
+  ],
+  "fringeColor": [
+    255,
+    255,
+    255,
+    255
+  ],
+  "coreColor": [
+    255,
+    255,
+    255,
+    255
+  ],
+  "width": 10,
+  "textureType": "ROUGH",
+  "textureScrollSpeed": 64,
+  "pixelsPerTexel": 1,
+  "renderBelowAll": true,
+  "renderLayer": "BELOW_ALL"
+}
