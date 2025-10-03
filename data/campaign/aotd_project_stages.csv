@@ -74,4 +74,7 @@ aotd_shroud_weapons_1,Harmonic Resonance Mapping,20,advanced_components:50,20000
 aotd_shroud_weapons_2,Containment Field Optimization,15,"advanced_components:40,domain_heavy_machinery:20",1000000,aotd_tenebrium:ITEM:10,STEPPED,HORIZONTAL,"130,580","700,745",,,,,
 aotd_shroud_weapons_3,Directed Energy Finalization,30,hand_weapons:100,250000,,STEPPED,HORIZONTAL,"840,620","700,690",,,,,
 ,,,,,,,,,,,,,,
+aotd_shroud_beacon_1,Abyssal Collimation,50,"domain_heavy_machinery:30,advanced_components:30",1000000,aotd_shrouded_substrate:ITEM:8,STRAIGHT,HORIZONTAL,"130,550","680,680",,,,,
+aotd_shroud_beacon_2,N-Space Stabilization,30,"domain_heavy_machinery:20,advanced_components:20,refined_metal:30",1000000,alpha_core:COMMODITY:1,STRAIGHT,HORIZONTAL,"840,620","680,750",,,,,
+,,,,,,,,,,,,,,
 aotd_hullmod_1,Tenebrium Flux Grid,50,"domain_heavy_machinery:30,advanced_components:30",400000,aotd_tenebrium:ITEM:5,STRAIGHT,HORIZONTAL,"130,550","700,680",,,,,
