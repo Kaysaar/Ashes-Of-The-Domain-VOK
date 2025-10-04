@@ -12,6 +12,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
 
@@ -107,16 +109,8 @@ public class Underworld extends BaseIndustry implements MarketImmigrationModifie
     }
 
     public boolean isAvailableToBuild() {
-        if(market.hasIndustry("kaysaarcapital_forbidden_city")){
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DUAL_TRADE,market)){
             return false;
-        }
-        if(market.hasIndustry("commerce")){
-            return false;
-        }
-        if(Global.getSettings().getModManager().isModEnabled("yunruindustries")){
-            if(market.hasIndustry("yunru_bazaar")){
-                return false;
-            }
         }
         if(market.hasSpaceport()&&market.isFreePort()){
             return true;
@@ -125,18 +119,12 @@ public class Underworld extends BaseIndustry implements MarketImmigrationModifie
         return false;
     }
 
+    @Override
+    public boolean showWhenUnavailable() {
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DUAL_TRADE,market);
+    }
+
     public String getUnavailableReason() {
-        if(market.hasIndustry("kaysaarcapital_forbidden_city")){
-            return  "Requires a functional spaceport and enabled Free Port policy"+"Cannot be build due to Forbidden City being already established on this planet.";
-        }
-        if(market.hasIndustry("commerce")){
-            return  "Requires a functional spaceport and enabled Free Port policy"+"Cannot be build due to Independent trade being well established on this planet by the Commerce industry.";
-        }
-        if(Global.getSettings().getModManager().isModEnabled("yunruindustries")){
-            if(market.hasIndustry("yunru_bazaar")){
-                return  "Requires a functional spaceport and enabled Free Port policy"+"Cannot be build due, to Independent trade being well established on this planet by the Baazar.";
-            }
-        }
         return "Requires a functional spaceport and enabled Free Port policy.";
     }
 
