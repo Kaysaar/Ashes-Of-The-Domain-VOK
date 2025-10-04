@@ -111,7 +111,6 @@ public class PreCollapseFacIntel extends BaseIntelPlugin {
         super.notifyEnded();
         Global.getSector().removeScript(this);
         Misc.makeUnimportant(planet, planet.getName()+"aotd_precollapse");
-
     }
     @Override
     public Set<String> getIntelTags(SectorMapAPI map) {
