@@ -42,7 +42,7 @@ public class GPMegaStructureSection {
 
     }
 
-    public float progressOfRestoration;
+    public float progressOfRestoration = 0f;
     public boolean isRestored;
     public boolean isRestoring;
     public float penaltyFromLackOfResources=1f;

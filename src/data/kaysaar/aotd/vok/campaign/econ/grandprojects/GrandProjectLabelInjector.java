@@ -4,7 +4,8 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.coreui.listeners.MarketContextUI;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.CargoPanelContextUI;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.IndustryPanelContextUI;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.MarketUIListener;
 import data.kaysaar.aotd.vok.ui.basecomps.LabelWithHighlight;
 
@@ -12,7 +13,7 @@ import java.awt.*;
 
 public class GrandProjectLabelInjector implements MarketUIListener {
     @Override
-    public void onMarketOverviewDiscovered(MarketContextUI ctx) {
+    public void onMarketOverviewDiscovered(IndustryPanelContextUI ctx) {
         MarketAPI market = ctx.market;
         UIPanelAPI panelOfOtherInfo = ctx.panelOfOtherInfo;
         UIPanelAPI mainColonyPanel = ctx.mainColonyPanel;
@@ -47,5 +48,10 @@ public class GrandProjectLabelInjector implements MarketUIListener {
         });
         label.createUI();
         mainColonyPanel.addComponent(label.getMainPanel()).inTL(500, 585);
+    }
+
+    @Override
+    public void onSubmarketCargoCreated(CargoPanelContextUI ctx) {
+
     }
 }

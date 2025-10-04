@@ -18,7 +18,7 @@ public final class ColonyUIListener {
         MARKET_UI_LISTENERS.remove(l);
     }
 
-    public static void notifyMarketOverview(MarketContextUI ctx) {
+    public static void notifyMarketOverview(IndustryPanelContextUI ctx) {
         for (MarketUIListener l : MARKET_UI_LISTENERS) {
             try {
                 l.onMarketOverviewDiscovered(ctx);
@@ -27,7 +27,15 @@ public final class ColonyUIListener {
             }
         }
     }
+    public static void notifyMarketOverview(CargoPanelContextUI ctx) {
+        for (MarketUIListener l : MARKET_UI_LISTENERS) {
+            try {
+                l.onSubmarketCargoCreated(ctx);
+            } catch (Throwable ignored) {
 
+            }
+        }
+    }
     /** Re-register listeners on game load. */
     public static void refresh() {
         MARKET_UI_LISTENERS.clear();

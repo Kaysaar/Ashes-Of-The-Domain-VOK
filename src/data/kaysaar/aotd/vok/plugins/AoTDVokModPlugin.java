@@ -132,6 +132,8 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
             l.addListener(new PCFPlanetListener(), true);
         if (!l.hasListenerOfClass(ResearchDatabankExtractionListener.class))
             l.addListener(new ResearchDatabankExtractionListener(), true);
+        if (!l.hasListenerOfClass(SubmarketOpenedListener.class))
+            l.addListener(new SubmarketOpenedListener(), true);
         if (!l.hasListenerOfClass(NidavelirSPListener.class))
             l.addListener(new NidavelirSPListener(), true);
         if (!l.hasListenerOfClass(ScientistValidationListener.class))
@@ -229,6 +231,14 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         path.setIndustryCoordinates(map);
         UpgradePathManager.getInstance().addNewCustomPath(path,"smelting");
 
+        path = new CustomUpgradePath(3,2);
+        map = new LinkedHashMap<>();
+        map.put(AoTDIndustries.TRADE_OUTPOST, new Vector2f(1,0));
+        map.put(Industries.COMMERCE, new Vector2f(0,1));
+        map.put(AoTDIndustries.UNDERWORLD, new Vector2f(2,1));
+        path.setIndustryCoordinates(map);
+        UpgradePathManager.getInstance().addNewCustomPath(path,AoTDIndustries.TRADE_OUTPOST);
+
         path = new CustomUpgradePath(3,3);
         map = new LinkedHashMap<>();
         map.put("lightproduction", new Vector2f(1,0));
@@ -317,7 +327,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         BlackSiteProjectManager.getInstance().loadAdditionalData();
         GPManager.getInstance().reInitalize();
         super.onNewGameAfterEconomyLoad();
-        Global.getSector().addListener(new AoTDxUafAfterCombatListener());
+
         aoTDDataInserter.generatePreCollapseFacilities();
         aoTDDataInserter.spawnVeilPlanet();
         aoTDDataInserter.spawnMegas();
@@ -407,6 +417,8 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         Global.getSector().addTransientScript(new DialogPlanetTracker());
         Global.getSector().addTransientScript(new PlanetBackgroundTracker());
         Global.getSector().addTransientScript(new IndustryTooltipPlacer());
+        Global.getSector().addTransientListener(new AoTDxUafAfterCombatListener());
+        Global.getSector().addTransientListener(new AoTDCampaignListener());
         try {
             aoTDDataInserter.insertSpecItemsForManufactoriumData();
         } catch (JSONException e) {
@@ -602,6 +614,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
     @Override
     public void reloadListenerContext() {
         ColonyUIListener.addMarketListener(new SynergyUiInjector());
+        ColonyUIListener.addMarketListener(new TradeOutpostCreditEnforcer());
 //        ColonyUIListener.addMarketListener(new GrandProjectLabelInjector());
     }
 }

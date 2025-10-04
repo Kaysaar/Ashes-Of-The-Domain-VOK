@@ -10,7 +10,8 @@ import com.fs.starfarer.api.ui.UIPanelAPI;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.coreui.listeners.MarketContextUI;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.CargoPanelContextUI;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.IndustryPanelContextUI;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.MarketUIListener;
 
 import java.util.*;
@@ -18,7 +19,7 @@ import java.util.*;
 public class SynergyUiInjector implements MarketUIListener {
 
     @Override
-    public void onMarketOverviewDiscovered(MarketContextUI ctx) {
+    public void onMarketOverviewDiscovered(IndustryPanelContextUI ctx) {
         MarketAPI market = ctx.market;
         UIPanelAPI panelOfOtherInfo = ctx.panelOfOtherInfo;
         UIPanelAPI panelOfIndustries = ctx.mainColonyPanel;
@@ -37,6 +38,11 @@ public class SynergyUiInjector implements MarketUIListener {
 
         if (ctx.grandColoniesLayout) injectForGrandColonies(panelOfIndustries, synergiesPresent, market);
         else injectForVanilla(panelOfIndustries, synergiesPresent, market);
+    }
+
+    @Override
+    public void onSubmarketCargoCreated(CargoPanelContextUI ctx) {
+
     }
 
     private void ensureSynergyInfoPanel(UIPanelAPI panelOfOtherInfo, MarketAPI market) {
