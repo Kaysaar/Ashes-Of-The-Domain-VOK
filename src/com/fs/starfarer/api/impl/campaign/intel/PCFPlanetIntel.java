@@ -23,6 +23,8 @@ public class PCFPlanetIntel extends BaseIntelPlugin {
     private static final String INTEL_PLANET = "Pre Collapse Facilities";
     private final PlanetAPI planet;
 
+    private boolean deleteIntel = false;
+
     // Don't touch this one
     public PCFPlanetIntel(PlanetAPI planet) {
         this.planet = planet;
@@ -61,9 +63,9 @@ public class PCFPlanetIntel extends BaseIntelPlugin {
     protected String getName() {
         // The text in the title of the intel
         if(getPlanet().getMarket().getMemory().is("$aotd_fac_explored",true)){
-            return "Pre Collapse Facility - "+planet.getName()+" :Plundered";
+            return "Pre-Collapse Facility - "+planet.getName()+" : Plundered";
         }
-        return "Pre Collapse Facility - "+planet.getName();
+        return "Pre-Collapse Facility - "+planet.getName();
     }
 
     @Override
@@ -76,6 +78,25 @@ public class PCFPlanetIntel extends BaseIntelPlugin {
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
         // Create the small description here, you can place images, multiple paragraphs, anything
         info.addPara("This is a location of planet that might possess long lost ruins of Domain's technological might.", Misc.getGrayColor(), 0);
+        if (getName().contains("Plundered")) {
+            addDeleteButton(info,width-10);
+        }
+    }
+
+    // 3 Methods regarding intel deletion upon button press
+    @Override
+    protected void notifyEnded() {
+        if (getName().contains("Plundered")) {
+            Global.getSector().getIntelManager().removeIntel(this);
+        }
+    }
+    @Override
+    protected void addDeleteButton(TooltipMakerAPI info, float width) {
+        addDeleteButton(info, width, "Delete Pre-Collapse Facility entry");
+    }
+    @Override
+    protected void createDeleteConfirmationPrompt(TooltipMakerAPI prompt) {
+        prompt.addPara("Are you sure you want to permanently delete this Pre-Collapse Facility log entry?", Misc.getTextColor(), 0f);
     }
 
     @Override
@@ -108,7 +129,7 @@ public class PCFPlanetIntel extends BaseIntelPlugin {
     @Override
     public boolean shouldRemoveIntel() {
         // The condition which will remove the intel
-        return planet == null || !planet.isAlive();
+        return planet == null || !planet.isAlive() || deleteIntel;
     }
 
     @Override
