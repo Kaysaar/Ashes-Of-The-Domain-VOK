@@ -46,7 +46,8 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
         industries.add(new Pair<>(Industries.ORBITALWORKS,"aotd_tech_orbital_assembly"));
         industries.add(new Pair<>(Industries.LIGHTINDUSTRY,"aotd_tech_nanometal"));
         industries.add(new Pair<>(Industries.FUELPROD,"aotd_tech_antimater_production"));
-
+        industries.add(new Pair<>(Industries.COMMERCE,"aotd_tech_dual_trade_system"));
+        industries.add(new Pair<>(Industries.MEGAPORT,"aotd_tech_spaceport_expansion"));
     }
     @Override
     public List<IndustryOptionData> getIndustryOptions(Industry ind) {

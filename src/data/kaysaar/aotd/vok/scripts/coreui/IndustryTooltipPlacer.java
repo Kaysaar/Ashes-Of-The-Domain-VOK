@@ -9,8 +9,9 @@ import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.CargoPanelContextUI;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.ColonyUIListener;
-import data.kaysaar.aotd.vok.scripts.coreui.listeners.MarketContextUI;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.IndustryPanelContextUI;
 
 import java.util.List;
 
@@ -36,7 +37,6 @@ public class IndustryTooltipPlacer implements EveryFrameScript {
                     .filter(x -> ReflectionUtilis.hasMethodOfName("showOverview", x))
                     .findFirst().orElse(null);
             if (markets == null) break;
-
             UIComponentAPI panelOfIndustries = ReflectionUtilis.getChildrenCopy(markets).stream()
                     .filter(x -> ReflectionUtilis.hasMethodOfName("recreateWithEconUpdate", x))
                     .findFirst().orElse(null);
@@ -56,9 +56,11 @@ public class IndustryTooltipPlacer implements EveryFrameScript {
                     .findFirst().orElse(null);
             if (gcSizeMatch != null) grandColoniesLayout = true;
 
-            ColonyUIListener.notifyMarketOverview(new MarketContextUI(
+            ColonyUIListener.notifyMarketOverview(new IndustryPanelContextUI(
                     market, panelOfOtherInfo, (UIPanelAPI) panelOfIndustries, grandColoniesLayout
             ));
+            ColonyUIListener.notifyMarketOverview(new CargoPanelContextUI((UIPanelAPI) componentAPI,market));
+
             break;
         }
     }

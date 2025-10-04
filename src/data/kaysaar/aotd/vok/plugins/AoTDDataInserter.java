@@ -138,6 +138,10 @@ public class AoTDDataInserter {
                 allIndustrySpec.setDowngrade(AoTDIndustries.LIGHT_PRODUCTION);
                 allIndustrySpec.addTag(AOTD + Industries.LIGHTINDUSTRY);
             }
+            if (allIndustrySpec.getId().equals(Industries.COMMERCE)) {
+                allIndustrySpec.setDowngrade(AoTDIndustries.TRADE_OUTPOST);
+                allIndustrySpec.addTag(AOTD + AoTDIndustries.TRADE_OUTPOST);
+            }
             if (allIndustrySpec.getId().equals(Industries.HEAVYINDUSTRY)) {
                 allIndustrySpec.addTag(AOTD + Industries.HEAVYINDUSTRY);
                 allIndustrySpec.setUpgrade(null);
@@ -146,6 +150,10 @@ public class AoTDDataInserter {
                 allIndustrySpec.addTag(AOTD + Industries.HEAVYINDUSTRY);
                 allIndustrySpec.addTag("advanced_heavy_industry");
 
+            }
+            if (allIndustrySpec.getId().equals(Industries.SPACEPORT)) {
+                allIndustrySpec.addTag(AOTD + Industries.SPACEPORT);
+                allIndustrySpec.setUpgrade(null);
             }
             if (allIndustrySpec.getId().equals(Industries.WAYSTATION)) {
                 allIndustrySpec.addTag("starter");
