@@ -13,6 +13,7 @@ import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.CargoPanelContextUI;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.IndustryPanelContextUI;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.MarketUIListener;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.SurveyPanelContextUI;
 
 import java.util.*;
 
@@ -42,6 +43,11 @@ public class SynergyUiInjector implements MarketUIListener {
 
     @Override
     public void onSubmarketCargoCreated(CargoPanelContextUI ctx) {
+
+    }
+
+    @Override
+    public void onSurveyPanelCreated(SurveyPanelContextUI ctx) {
 
     }
 

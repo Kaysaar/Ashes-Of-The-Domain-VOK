@@ -27,6 +27,15 @@ public final class ColonyUIListener {
             }
         }
     }
+    public static void notifySurveyPanelOverview(SurveyPanelContextUI ctx) {
+        for (MarketUIListener l : MARKET_UI_LISTENERS) {
+            try {
+                l.onSurveyPanelCreated(ctx);
+            } catch (Throwable ignored) {
+
+            }
+        }
+    }
     public static void notifyMarketOverview(CargoPanelContextUI ctx) {
         for (MarketUIListener l : MARKET_UI_LISTENERS) {
             try {

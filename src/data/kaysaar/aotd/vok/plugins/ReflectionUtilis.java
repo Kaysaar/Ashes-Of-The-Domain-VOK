@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.plugins;
 
+import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import com.fs.starfarer.api.util.Pair;
@@ -65,7 +66,41 @@ public class ReflectionUtilis {
             throw new RuntimeException("Failed to instantiate (exact) " + clazz.getName(), e);
         }
     }
+    public static ButtonAPI findButtonWithText(Object instance, String textQuery,
+                                               boolean caseInsensitive, boolean substringMatch) {
+        if (instance == null || textQuery == null) return null;
 
+        try {
+            Class<?> current = instance.getClass();
+            while (current != null) {
+                Object[] fields = current.getDeclaredFields();
+                for (Object field : fields) {
+                    try {
+                        // Make field accessible and get its value
+                        setFieldAccessibleHandle.invoke(field, true);
+                        Object value = getFieldHandle.invoke(field, instance);
+                        if (!(value instanceof ButtonAPI)) continue;
+
+                        String text = ((ButtonAPI) value).getText();
+                        if (text == null) continue;
+
+                        String a = caseInsensitive ? text.toLowerCase() : text;
+                        String b = caseInsensitive ? textQuery.toLowerCase() : textQuery;
+
+                        boolean match = substringMatch ? a.contains(b) : a.equals(b);
+                        if (match) return (ButtonAPI) value;
+                    } catch (Throwable inner) {
+                        // Mirror your style: don't abort on a single bad field
+                        inner.printStackTrace();
+                    }
+                }
+                current = current.getSuperclass();
+            }
+            return null;
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to find ButtonAPI with text \"" + textQuery + "\"", e);
+        }
+    }
     public static Object instantiate(Class<?> clazz, Object... arguments) {
         try {
             // Auto-derive parameter types from arguments
@@ -85,6 +120,57 @@ public class ReflectionUtilis {
             return constructorHandle.invokeWithArguments(arguments);
         } catch (Throwable e) {
             throw new RuntimeException("Failed to instantiate " + clazz.getName(), e);
+        }
+    }
+
+
+
+    public static Object enumFromExampleEnum( Class<?>  exampleEnumValue, int ordinal) {
+        if (exampleEnumValue == null) throw new IllegalArgumentException("exampleEnumValue is null");
+        try {
+            boolean isEnum = (boolean) invokeMethodWithAutoProjection("isEnum", exampleEnumValue);
+            if (!isEnum) throw new IllegalArgumentException("exampleEnumValue is not an enum: " + exampleEnumValue.getName());
+            Object[] constants = (Object[]) invokeMethodWithAutoProjection("getEnumConstants", exampleEnumValue);
+            if (constants == null) throw new IllegalStateException("Enum constants array is null for: " + exampleEnumValue.getName());
+            if (ordinal < 0 || ordinal >= constants.length) {
+                throw new IllegalArgumentException("Ordinal " + ordinal + " out of range 0.." + (constants.length - 1) + " for " + exampleEnumValue.getName());
+            }
+            return constants[ordinal];
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to obtain enum from example enum value", e);
+        }
+    }
+
+
+    public static Class<?> findFirstEnumClassWithConstantsCount(Object instance, int expectedCount) {
+        try {
+            Class<?> current = instance.getClass();
+            while (current != null) {
+                Object[] fields = current.getDeclaredFields();
+                for (Object field : fields) {
+                    try {
+                        setFieldAccessibleHandle.invoke(field, true);
+                        Class<?> fieldType = (Class<?>) getFieldTypeHandle.invoke(field);
+
+                        // Must be an enum
+                        boolean isEnum = (boolean) invokeMethodWithAutoProjection("isEnum", fieldType);
+                        if (!isEnum) continue;
+
+                        Object constantsArr = invokeMethodWithAutoProjection("getEnumConstants", fieldType);
+                        Object[] constants = (Object[]) constantsArr;
+                        if (constants != null && constants.length == expectedCount) {
+                            return fieldType;
+                        }
+                    } catch (Throwable inner) {
+                        // Keep scanning; mirror your existing pattern
+                        inner.printStackTrace();
+                    }
+                }
+                current = current.getSuperclass();
+            }
+            return null;
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to find enum class with " + expectedCount + " ordinals", e);
         }
     }
 
@@ -123,7 +209,7 @@ public class ReflectionUtilis {
             }
             return null;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
     public static Object findNestedMarketApiFieldFromOutpostParams(Object instance) {

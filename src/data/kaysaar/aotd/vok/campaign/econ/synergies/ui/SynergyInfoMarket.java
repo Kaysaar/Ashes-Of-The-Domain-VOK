@@ -86,9 +86,10 @@ public class SynergyInfoMarket implements ExtendedUIPanelPlugin {
                 tooltip.addSectionHeading("Efficiency", Alignment.MID, 5f);
                 tooltip.addPara("Synergies are directly affected by efficiency of logistics, established throughout colony. More efficient logistics - more powerful synergies become.", 3f);
                 tooltip.addPara("Currently this market efficiency is %s", 3f, Color.ORANGE, percent);
+                tooltip.addPara("Minimum value of this stat is always %s and can't go below that.",3f,Color.ORANGE,"0%");
                 tooltip.setBulletedListMode(BaseIntelPlugin.BULLET);
                 for (Map.Entry<String, IndustrySynergySourceAPI> entry : IndustrySynergiesManager.getInstance().getSourcesOfSynergy().entrySet()) {
-                    if(tiedMarket.hasIndustry(entry.getValue().getId())&&entry.getValue().calculateEfficiencyFromIndustry(tiedMarket.getIndustry(entry.getValue().getId()),true)>0){
+                    if(tiedMarket.hasIndustry(entry.getValue().getId())&&entry.getValue().calculateEfficiencyFromIndustry(tiedMarket.getIndustry(entry.getValue().getId()),true)!=0){
                         entry.getValue().addToTooltipForInfo(tiedMarket.getIndustry(entry.getValue().getId()),tooltip);
                     }
                 }

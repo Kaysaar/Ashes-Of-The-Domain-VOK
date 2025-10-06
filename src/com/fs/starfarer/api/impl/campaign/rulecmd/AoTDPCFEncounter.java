@@ -157,7 +157,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
             defenders.getMemoryWithoutUpdate().set("$knowsWhoPlayerIs",false);
 
         }
-        if(defenders.isEmpty()){
+        if(defenders.isEmpty()||entity.getMemory().is("$aotd_defeated_pcf",true)){
             defenders.deflate();
             dialog.getOptionPanel().addOption("Send a salvage team down to the facility", "explore_PreFac");
             dialog.getOptionPanel().addOption("Leave", "defaultLeave");
@@ -226,6 +226,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
                         dialog.getVisualPanel().finishFadeFast();
                         dialog.getVisualPanel().showPlanetInfo(dialog.getInteractionTarget());
                         defenders.deflate();
+                        entity.getMemory().set("$aotd_defeated_pcf",true);
                         dialog.getOptionPanel().addOption("Send a salvage team down to the facility", "explore_PreFac");
                         dialog.getOptionPanel().addOption("Leave", "defaultLeave");
 

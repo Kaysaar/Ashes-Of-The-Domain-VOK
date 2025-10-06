@@ -30,7 +30,6 @@ public class ExomatterProcessing extends BaseIndustry {
                 return 15;
             }
         }
-        this.getSpec().setUpkeep(10);
         return 35;
     }
     boolean isCurrentlyConverting = false;

@@ -18,6 +18,7 @@ import data.kaysaar.aotd.vok.scripts.misc.TrapezoidButtonDetector;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lazywizard.lazylib.ui.FontException;
 import org.lazywizard.lazylib.ui.LazyFont;
+import org.lwjgl.opengl.GL11;
 import sidebarLib.UI.sidebarMain;
 
 import java.awt.*;
@@ -121,6 +122,8 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 techString.setMaxWidth(sprite.getWidth() - 98);
                 techString.setFontSize(12);
                 techString.setBaseColor(Misc.getTextColor());
+                techString.setBlendSrc(GL11.GL_SRC_ALPHA);
+                techString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
                 techString.draw(95, getYForRender() + 75);
                 progressionBarChanged.setWidth(progressionBarFull.getWidth() * AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()));
                 progressionBarChanged.render(7, y - sprite.getHeight() + 2);
@@ -128,6 +131,8 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 techString.setText("Currently nothing is being\nresearched!");
                 techString.setFontSize(12);
                 techString.setBaseColor(Misc.getTextColor());
+                techString.setBlendSrc(GL11.GL_SRC_ALPHA);
+                techString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
                 techString.draw(95, getYForRender() + 75);
             }
 
@@ -148,6 +153,8 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             buttonString.setText("Access Tech Tree");
             buttonString.setFontSize(12);
             buttonString.setBaseColor(Misc.getTextColor());
+            buttonString.setBlendSrc(GL11.GL_SRC_ALPHA);
+            buttonString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
             buttonString.draw(130, getYForRender() +30);
             if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()!=null){
                 progressionString.setText((int) (AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()) * 100) + "%");
@@ -159,6 +166,8 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                     progressionString.setBaseColor(Misc.getTooltipTitleAndLightHighlightColor());
 
                 }
+                progressionString.setBlendSrc(GL11.GL_SRC_ALPHA);
+                progressionString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
                 progressionString.draw(125, getYForRender() +11);
             }
             
