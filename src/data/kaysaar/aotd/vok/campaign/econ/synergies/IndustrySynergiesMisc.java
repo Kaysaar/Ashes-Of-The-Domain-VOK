@@ -11,6 +11,7 @@ import kaysaar.bmo.buildingmenu.BuildingMenuMisc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.fs.starfarer.api.impl.campaign.econ.impl.TechMining.TECH_MINING_MULT;
 
@@ -56,7 +57,8 @@ public class IndustrySynergiesMisc {
         float mult = market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).getModifiedValue();
         return mult;
     }
-    public static String getIndustriesListed(ArrayList<String> ids ,MarketAPI marketAPI){
+
+    public static String getIndustriesListed(List<String> ids , MarketAPI marketAPI){
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < ids.size(); i++) {
             builder.append(getIndustryName(marketAPI,ids.get(i)));

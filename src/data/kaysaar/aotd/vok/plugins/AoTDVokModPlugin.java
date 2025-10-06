@@ -21,6 +21,10 @@ import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDItems;
 import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.CentralizedCore;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.DistributedRegionalNetwork;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.PerseanStandardized;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.listeners.NidavelirClaimMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDMegastructureUpkeepListener;
@@ -35,6 +39,7 @@ import data.kaysaar.aotd.vok.campaign.econ.industry.TierFourStation;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.buildingmenu.IndustryBlockerListener;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.ColonyDevelopmentApplier;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.HypercognitionTestSynergy;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.MaglevSource;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.SpaceportSource;
@@ -349,6 +354,18 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         Global.getSector().addTransientListener(new AoTDxIndieCollabListener());
 
     }
+    public void populateColonyDevelopment(){
+        ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("core",new CentralizedCore());
+        ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("standard",new PerseanStandardized());
+        ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("distributed",new DistributedRegionalNetwork());
+
+        DistributedRegionalNetwork.addNewIndustries(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.MONOCULTURE));
+        DistributedRegionalNetwork.addNewIndustries(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE));
+        DistributedRegionalNetwork.addNewIndustries(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.EXTRACTIVE_OPERATION));
+
+
+
+    }
     public void populateSynergies(){
         IndustrySynergiesManager.getInstance().ensureHasMoverScript();
         for (String id : IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.SPACEPORT)) {
@@ -371,6 +388,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         }
         IndustrySynergiesManager.getInstance().addSynergySource(AoTDIndustries.MAGLEV_CENTRAL_HUB,new MaglevSource(0.7f,AoTDIndustries.MAGLEV_CENTRAL_HUB));
         IndustrySynergiesManager.getInstance().addSynergySource("test",new HypercognitionTestSynergy(0.2f,Industries.POPULATION));
+        IndustrySynergiesManager.getInstance().addSynergySource("colonyDevelopmentMan",new ColonyDevelopmentApplier(0.2f,Industries.POPULATION));
 
         IndustrySynergiesManager.getInstance().addSynergy("agro_tourism",new AgroTourism());
         IndustrySynergiesManager.getInstance().addSynergy("aotd_mining_feed",new OreToCore());
@@ -557,6 +575,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         clearListenersFromTemporaryMarket();
         populatePaths();
         populateSynergies();
+        populateColonyDevelopment();
         if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
             addEvents();
         }
@@ -614,7 +633,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
     @Override
     public void reloadListenerContext() {
         ColonyUIListener.addMarketListener(new SynergyUiInjector());
-        ColonyUIListener.addMarketListener(new TradeOutpostCreditEnforcer());
+        ColonyUIListener.addMarketListener(new TradeOutpostAndSurveyInterceptor());
 //        ColonyUIListener.addMarketListener(new GrandProjectLabelInjector());
     }
 }

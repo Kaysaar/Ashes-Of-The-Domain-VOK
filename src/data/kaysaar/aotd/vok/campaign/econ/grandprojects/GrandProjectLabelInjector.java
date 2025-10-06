@@ -7,6 +7,7 @@ import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.CargoPanelContextUI;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.IndustryPanelContextUI;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.MarketUIListener;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.SurveyPanelContextUI;
 import data.kaysaar.aotd.vok.ui.basecomps.LabelWithHighlight;
 
 import java.awt.*;
@@ -52,6 +53,11 @@ public class GrandProjectLabelInjector implements MarketUIListener {
 
     @Override
     public void onSubmarketCargoCreated(CargoPanelContextUI ctx) {
+
+    }
+
+    @Override
+    public void onSurveyPanelCreated(SurveyPanelContextUI ctx) {
 
     }
 }

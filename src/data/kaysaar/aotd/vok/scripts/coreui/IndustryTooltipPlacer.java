@@ -12,6 +12,7 @@ import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.CargoPanelContextUI;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.ColonyUIListener;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.IndustryPanelContextUI;
+import data.kaysaar.aotd.vok.scripts.coreui.listeners.SurveyPanelContextUI;
 
 import java.util.List;
 
@@ -40,10 +41,20 @@ public class IndustryTooltipPlacer implements EveryFrameScript {
             UIComponentAPI panelOfIndustries = ReflectionUtilis.getChildrenCopy(markets).stream()
                     .filter(x -> ReflectionUtilis.hasMethodOfName("recreateWithEconUpdate", x))
                     .findFirst().orElse(null);
-            if (panelOfIndustries == null) break;
-
+            UIComponentAPI panelOfSurvey = ReflectionUtilis.getChildrenCopy(markets).stream()
+                    .filter(x -> ReflectionUtilis.hasMethodOfName("showOtherFactors", x))
+                    .findFirst().orElse(null);
             MarketAPI market = (MarketAPI) ReflectionUtilis.findFieldByType(componentAPI, MarketAPI.class);
             if (market == null) break;
+            if (panelOfIndustries == null){
+                if(panelOfSurvey!=null){
+                    ColonyUIListener.notifySurveyPanelOverview(new SurveyPanelContextUI((UIPanelAPI) panelOfSurvey,market));
+                }
+                break;
+            }
+
+
+
 
             UIPanelAPI panelOfOtherInfo = (UIPanelAPI) ReflectionUtilis.getChildrenCopy((UIPanelAPI) panelOfIndustries)
                     .stream().filter(x -> ReflectionUtilis.hasMethodOfName("getImmigration", x))

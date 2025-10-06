@@ -26,6 +26,8 @@ public class LabelComponent extends ResizableComponent {
         try {
             this.font = LazyFont.FontLoader.loadFont(font);
             draw = this.font.createText(text, color, fontSize);
+            draw.setBlendSrc(GL11.GL_SRC_ALPHA);
+            draw.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
             draw.setMaxWidth(width);
         } catch (FontException e) {
             throw new RuntimeException(e);

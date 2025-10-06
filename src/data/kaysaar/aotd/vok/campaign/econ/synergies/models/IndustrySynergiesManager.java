@@ -45,16 +45,9 @@ public class IndustrySynergiesManager {
                 efficency += entry.getValue().calculateEfficiencyFromIndustry(market.getIndustry(entry.getValue().getId()),true);
             }
         }
-        return efficency;
+        return Math.max(0,efficency);
     }
-    public static IndustrySynergiesManager getInstance() {
-        if (Global.getSector().getPersistentData().get(permaDataKey) == null) {
-            setInstance();
-        }
-        IndustrySynergiesManager manager = (IndustrySynergiesManager) Global.getSector().getPersistentData().get(permaDataKey);
-        manager.ensureListsAreInitalized();
-        return manager;
-    }
+
     protected void ensureListsAreInitalized(){
         if(sourcesOfSynergy==null)sourcesOfSynergy = new LinkedHashMap<>();
         if(synergyScripts==null)synergyScripts = new LinkedHashMap<>();
@@ -98,6 +91,14 @@ public class IndustrySynergiesManager {
     }
     public static void setInstance() {
         Global.getSector().getPersistentData().put(permaDataKey, new IndustrySynergiesManager());
+    }
+    public static IndustrySynergiesManager getInstance() {
+        if (Global.getSector().getPersistentData().get(permaDataKey) == null) {
+            setInstance();
+        }
+        IndustrySynergiesManager manager = (IndustrySynergiesManager) Global.getSector().getPersistentData().get(permaDataKey);
+        manager.ensureListsAreInitalized();
+        return manager;
     }
     public void advanceImpl(float amount){
 
