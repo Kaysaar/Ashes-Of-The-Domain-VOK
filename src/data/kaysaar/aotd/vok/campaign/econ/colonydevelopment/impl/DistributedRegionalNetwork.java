@@ -42,7 +42,7 @@ public class DistributedRegionalNetwork extends BaseColonyDevelopment {
                 industry.getSupplyBonusFromOther().modifyFlat("aotd_distributed",Math.min(3,size-2),getName());
             }
             else{
-                industry.getSupplyBonusFromOther().modifyFlat("aotd_distributed",Math.min(4,size-2),getName());
+                industry.getSupplyBonusFromOther().modifyFlat("aotd_distributed",-Math.min(4,size-2),getName());
 
             }
         }
