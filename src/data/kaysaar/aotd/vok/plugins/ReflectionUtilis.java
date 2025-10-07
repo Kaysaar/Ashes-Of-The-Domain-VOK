@@ -101,6 +101,220 @@ public class ReflectionUtilis {
             throw new RuntimeException("Failed to find ButtonAPI with text \"" + textQuery + "\"", e);
         }
     }
+    public static boolean doesHaveConstructorExact(Class<?> clazz, Class<?>... parameterTypes) {
+        try {
+            if (parameterTypes == null) parameterTypes = new Class<?>[0];
+
+            Class<?>[] normalized = new Class<?>[parameterTypes.length];
+            for (int i = 0; i < parameterTypes.length; i++) {
+                Class<?> p = parameterTypes[i];
+                normalized[i] = (p != null && getPrimitiveType(p) != null) ? getPrimitiveType(p) : p;
+            }
+
+            MethodType ctorType = MethodType.methodType(void.class, normalized);
+            lookup.findConstructor(clazz, ctorType);
+            return true; // found & accessible
+        } catch (Throwable t) {
+            return false; // not found or not accessible
+        }
+    }
+
+    public static boolean doesHaveConstructor(Class<?> clazz, Object... arguments) {
+        if (arguments == null) arguments = new Object[0];
+
+        // Null args are ambiguous for an "exact" signature check.
+        for (Object arg : arguments) {
+            if (arg == null) return false;
+        }
+
+        try {
+            Class<?>[] parameterTypes = new Class<?>[arguments.length];
+            for (int i = 0; i < arguments.length; i++) {
+                Class<?> c = arguments[i].getClass();
+                Class<?> prim = getPrimitiveType(c);
+                parameterTypes[i] = (prim != null) ? prim : c;
+            }
+
+            MethodType ctorType = MethodType.methodType(void.class, parameterTypes);
+            lookup.findConstructor(clazz, ctorType);
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+    @SuppressWarnings("unchecked")
+    public static Object instantiateAutoProjected(Class<?> targetClass, Object... arguments) {
+        try {
+            if (arguments == null) arguments = new Object[0];
+
+            // Get ALL declared ctors via indirection (no direct Constructor usage)
+            Object[] ctors = (Object[]) invokeMethodWithAutoProjection("getDeclaredConstructors", targetClass);
+            if (ctors == null || ctors.length == 0) {
+                throw new NoSuchMethodException("No constructors on " + targetClass.getName());
+            }
+
+            for (Object ctor : ctors) {
+                try {
+                    // Parameter types of this ctor
+                    Class<?>[] paramTypes = (Class<?>[]) getDeclaredConstructorsHandle.invoke(ctor);
+                    boolean varArgs = false;
+                    try {
+                        varArgs = (boolean) invokeMethodWithAutoProjection("isVarArgs", ctor);
+                    } catch (Throwable ignored) {}
+
+                    // Quick arity checks
+                    if (!varArgs && paramTypes.length != arguments.length) continue;
+                    if (varArgs && arguments.length < paramTypes.length - 1) continue;
+
+                    // Try to project/convert arguments for this ctor shape
+                    Object[] projected = projectCtorArgs(arguments, paramTypes, varArgs);
+                    if (projected == null) continue; // couldn't convert for this ctor
+
+                    // Be permissive with access like elsewhere
+                    try { invokeMethodWithAutoProjection("setAccessible", ctor, true); } catch (Throwable ignored) {}
+
+                    // NOTE: Constructor::newInstance takes a single Object[] parameter
+                    return invokeMethodWithAutoProjection("newInstance", ctor, (Object) projected);
+                } catch (Throwable perCtor) {
+                    // Try other ctors; mirror your style (don't fail the loop on one bad attempt)
+                    perCtor.printStackTrace();
+                }
+            }
+
+            throw new NoSuchMethodException("No compatible constructor on " + targetClass.getName() +
+                    " for " + arguments.length + " args after auto-projection");
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to instantiate (auto-projected) " + targetClass.getName(), e);
+        }
+    }
+
+    /** Build the argument array for a constructor (handles fixed + varargs). */
+    private static Object[] projectCtorArgs(Object[] args, Class<?>[] paramTypes, boolean varArgs) {
+        try {
+            if (!varArgs) {
+                Object[] out = new Object[paramTypes.length];
+                for (int i = 0; i < paramTypes.length; i++) {
+                    out[i] = convertArgumentAuto(args[i], paramTypes[i]);
+                }
+                return out;
+            }
+
+            // varargs: last param is T[]
+            int fixedCount = paramTypes.length - 1;
+            Class<?> arrayType = paramTypes[fixedCount];
+            Class<?> compType = arrayType.getComponentType();
+
+            // Fixed portion
+            Object[] fixed = new Object[fixedCount];
+            for (int i = 0; i < fixedCount; i++) {
+                fixed[i] = convertArgumentAuto(args[i], paramTypes[i]);
+            }
+
+            int varCount = args.length - fixedCount;
+
+            // If caller passed the varargs array already (exact type), just use it
+            if (varCount == 1 && args[fixedCount] != null && arrayType.isInstance(args[fixedCount])) {
+                Object[] out = new Object[paramTypes.length];
+                System.arraycopy(fixed, 0, out, 0, fixedCount);
+                out[fixedCount] = args[fixedCount];
+                return out;
+            }
+
+            // Build T[] and fill
+            Object varArray = java.lang.reflect.Array.newInstance(compType, varCount);
+            for (int i = 0; i < varCount; i++) {
+                Object converted = convertArgumentAuto(args[fixedCount + i], compType);
+                java.lang.reflect.Array.set(varArray, i, converted);
+            }
+
+            Object[] out = new Object[paramTypes.length];
+            System.arraycopy(fixed, 0, out, 0, fixedCount);
+            out[fixedCount] = varArray;
+            return out;
+        } catch (Throwable t) {
+            // Signal this ctor doesn't fit
+            return null;
+        }
+    }
+
+    /**
+     * Wrapper around your convertArgument(...) with a few safe, common widenings:
+     *  - to String / CharSequence via String.valueOf(...)
+     *  - booleans & chars from String
+     *  - enums from String (name, case-insensitive fallback) or Number (ordinal)
+     *  - java.io.File from String (constructed via MethodHandles, not "new")
+     *  - falls back to your convertArgument(...) for primitives/boxing/casts
+     */
+    public static Object convertArgumentAuto(Object arg, Class<?> targetType) {
+        // Null handling
+        if (arg == null) {
+            if (targetType.isPrimitive()) {
+                throw new IllegalArgumentException("null for primitive " + targetType.getName());
+            }
+            return null;
+        }
+
+        // Already assignable
+        if (targetType.isAssignableFrom(arg.getClass())) return arg;
+
+        // Strings / CharSequence
+        if (targetType == String.class || CharSequence.class.isAssignableFrom(targetType)) {
+            return String.valueOf(arg);
+        }
+
+        // Enums
+        if (targetType.isEnum()) {
+            return toEnumCoerce((Class<? extends Enum<?>>) targetType, arg);
+        }
+
+        // File from String (constructed via our MethodHandles path, no direct "new File")
+        try {
+            if (fileClass != null && fileClass.isAssignableFrom(targetType) && arg instanceof CharSequence) {
+                return instantiateExact(fileClass, new Class<?>[]{String.class}, arg.toString());
+            }
+        } catch (Throwable ignored) {}
+
+        // Booleans/Chars from String
+        if (targetType == boolean.class || targetType == Boolean.class) {
+            if (arg instanceof CharSequence) return Boolean.parseBoolean(arg.toString().trim());
+        }
+        if (targetType == char.class || targetType == Character.class) {
+            if (arg instanceof CharSequence) {
+                String s = arg.toString();
+                if (s.length() == 1) return s.charAt(0);
+            }
+        }
+
+        // Let your original converter handle numbers, primitives, and normal casts
+        return convertArgument(arg, targetType);
+    }
+
+    /** Enum coercion helpers – no direct reflection; uses standard Enum APIs. */
+    private static Object toEnumCoerce(Class<? extends Enum<?>> enumType, Object arg) {
+        if (enumType.isInstance(arg)) return arg;
+
+        if (arg instanceof CharSequence) {
+            String name = arg.toString();
+            try {
+                // exact first
+                return Enum.valueOf((Class) enumType, name);
+            } catch (IllegalArgumentException ignored) {}
+            // case-insensitive fallback
+            for (Object e : enumType.getEnumConstants()) {
+                if (((Enum<?>) e).name().equalsIgnoreCase(name)) return e;
+            }
+            throw new IllegalArgumentException("No enum constant " + enumType.getName() + "." + name);
+        }
+
+        if (arg instanceof Number) {
+            int ord = ((Number) arg).intValue();
+            Object[] all = enumType.getEnumConstants();
+            if (ord >= 0 && ord < all.length) return all[ord];
+            throw new IllegalArgumentException("Enum ordinal out of range: " + ord + " for " + enumType.getName());
+        }
+
+        throw new IllegalArgumentException("Cannot convert " + arg.getClass().getName() + " to enum " + enumType.getName());
+    }
     public static Object instantiate(Class<?> clazz, Object... arguments) {
         try {
             // Auto-derive parameter types from arguments
