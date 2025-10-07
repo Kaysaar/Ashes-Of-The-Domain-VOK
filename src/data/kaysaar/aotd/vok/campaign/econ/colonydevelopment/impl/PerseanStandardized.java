@@ -1,7 +1,5 @@
 package data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl;
 
-import com.fs.starfarer.api.campaign.PlanetAPI;
-import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -48,10 +46,6 @@ public class PerseanStandardized extends BaseColonyDevelopment {
 
     @Override
     public boolean canBeAppliedOnMarket(MarketAPI market) {
-        SectorEntityToken token = market.getPrimaryEntity();
-        if(token instanceof PlanetAPI planet){
-            return !planet.isGasGiant();
-        }
 
         return true;
     }

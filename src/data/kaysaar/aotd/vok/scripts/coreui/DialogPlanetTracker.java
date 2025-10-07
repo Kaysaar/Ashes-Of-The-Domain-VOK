@@ -50,27 +50,36 @@ public class DialogPlanetTracker implements EveryFrameScript {
         if(dialog.getInteractionTarget() instanceof PlanetAPI planeta){
             if(planeta.getMemory().get(GPBaseMegastructure.memKey) instanceof NidavelirComplexMegastructure megastructure){
                 if (!didIt) {
-                    if (AoTDMisc.getNidavelir() != null) {
-                        for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy((UIPanelAPI) panel)) {
-                            if(ReflectionUtilis.hasMethodOfName("getPlanet",componentAPI)&&ReflectionUtilis.hasMethodOfName("setForce2dMode",componentAPI)){
-                                saved = componentAPI;
-                                this.looper  =initalizeBackgroundPLanetForOtherDialog(megastructure, (UIPanelAPI) componentAPI, (UIPanelAPI) panel);
-                                didIt = true;
-                            }
-                            else if  (ReflectionUtilis.hasMethodOfName("getPlanet", componentAPI)) {
-                                saved = componentAPI;
-                                ring = (UIComponentAPI) ReflectionUtilis.instantiate(saved.getClass(), new CampaignPlanet((String) null, (String) null, megastructure.shipyard.getType(), dialog.getInteractionTarget().getRadius() + 35, (CampaignEntity) dialog.getInteractionTarget().getLightSource()), 500f, 500f, true);
-                                ((UIPanelAPI) panel).addComponent(ring).inTL(saved.getPosition().getX() - 55, saved.getPosition().getCenterY() - 400);
-                                Planet planet = (Planet) ReflectionUtilis.invokeMethod("getGraphics", ring);
-                                Planet curr = (Planet) ReflectionUtilis.invokeMethod("getGraphics", saved);
-                                planet.setTilt(curr.getTilt());
-                                planet.setAngle(megastructure.shipyard.getCurrAngle());
-                                planet.setPitch(curr.getPitch());
-                                didIt = true;
-                                break;
+
+                        if (AoTDMisc.getNidavelir() != null) {
+                            for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy((UIPanelAPI) panel)) {
+                                if(ReflectionUtilis.hasMethodOfName("getPlanet",componentAPI)&&ReflectionUtilis.hasMethodOfName("setForce2dMode",componentAPI)){
+                                    saved = componentAPI;
+                                    this.looper  =initalizeBackgroundPLanetForOtherDialog(megastructure, (UIPanelAPI) componentAPI, (UIPanelAPI) panel);
+                                    didIt = true;
+                                }
+                                else if  (ReflectionUtilis.hasMethodOfName("getPlanet", componentAPI)&&ReflectionUtilis.hasMethodOfName("updateLightSourceInfo",componentAPI)
+                                &&ReflectionUtilis.doesHaveConstructorExact(componentAPI.getClass(),CampaignPlanet.class,float.class,float.class,boolean.class)) {
+                                    saved = componentAPI;
+                                    Planet curr = (Planet) ReflectionUtilis.invokeMethod("getGraphics", saved);
+                                    Object source =dialog.getInteractionTarget().getLightSource();
+                                    if(!(source instanceof CampaignEntity)){
+                                        source = null;
+                                    }
+                                    Object obj = ReflectionUtilis.instantiateAutoProjected(CampaignPlanet.class,(String)null,(String)null,megastructure.shipyard.getType(),dialog.getInteractionTarget().getRadius()+35,source);
+                                    ring = (UIComponentAPI) ReflectionUtilis.instantiateAutoProjected(saved.getClass(), obj, 500f, 500f, true);
+                                    ((UIPanelAPI) panel).addComponent(ring).inTL(saved.getPosition().getX() - 55, saved.getPosition().getCenterY() - 400);
+                                    Planet planet = (Planet) ReflectionUtilis.invokeMethod("getGraphics", ring);
+
+                                    planet.setTilt(curr.getTilt());
+                                    planet.setAngle(megastructure.shipyard.getCurrAngle());
+                                    planet.setPitch(curr.getPitch());
+                                    didIt = true;
+                                    break;
+                                }
                             }
                         }
-                    }
+
 
                 }
                 if(CoreUITabId.OUTPOSTS.equals(Global.getSector().getCampaignUI().getCurrentCoreTab())&&!switchedToPanelDuringInteraction&&saved!=null){
