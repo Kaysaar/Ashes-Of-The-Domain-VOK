@@ -51,6 +51,7 @@ public class DisgustingResilience extends BaseHullMod {
             if (!isMissile && !isBallistic) {
                 return null;
             }
+            if(projectile.getWeapon()==null)return null;
             if(projectile.getWeapon().getSpec().hasTag("always_pierce"))return null;
             float chance = isMissile ? MISSILE_DEFLECT_CHANCE : BALLISTIC_RICOCHET_CHANCE;
             if (Math.random() > chance) {
