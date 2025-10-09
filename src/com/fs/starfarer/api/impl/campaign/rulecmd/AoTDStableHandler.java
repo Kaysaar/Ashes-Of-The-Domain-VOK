@@ -4,7 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
-import com.fs.starfarer.api.impl.campaign.aotd_entities.HypershuntReciverEntityPlugin;
+import com.fs.starfarer.api.impl.campaign.aotd_entities.HypershuntReceiverEntityPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.ui.*;
@@ -65,11 +65,11 @@ public class AoTDStableHandler extends BaseCommandPlugin {
         options = dialog.getOptionPanel();
         if(command.contains("wantToConstruct")){
             String arg = command.split(":")[1];
-            if(arg.equals("aotd_hypershunt_reciver")){
+            if(arg.equals("aotd_hypershunt_receiver")){
                 dialog.getOptionPanel().clearOptions();
                 dialog.getOptionPanel().addOption("Proceed","SL_aotd_hypershunt_construct",Color.ORANGE,null);
                 dialog.getOptionPanel().addOption("Nevermind","SL_cancelBuild");
-                dialog.getTextPanel().addPara(Global.getSettings().getDescription("aotd_hypershunt_reciver", Description.Type.CUSTOM).getText1());
+                dialog.getTextPanel().addPara(Global.getSettings().getDescription("aotd_hypershunt_receiver", Description.Type.CUSTOM).getText1());
                TooltipMakerAPI tooltipMakerAPI =  dialog.getTextPanel().beginTooltip();
                tooltipMakerAPI.addTitle("Resources: consumed (available)");
                tooltipMakerAPI.addCustom(createTooltipOfResorucesForDialog(550,45,45,getCost(arg),false),5f);
@@ -88,7 +88,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
         }
         if(command.contains("salvageExplain")){
             String arg = command.split(":")[1];
-            if(arg.equals("aotd_hypershunt_reciver")){
+            if(arg.equals("aotd_hypershunt_receiver")){
                 dialog.getOptionPanel().clearOptions();
                 dialog.getOptionPanel().addOption("Proceed","SL_aotd_hypershunt_deconstruct",Color.ORANGE,null);
                 dialog.getOptionPanel().addOption("Nevermind","defaultLeave");
@@ -112,7 +112,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
         }
         if(command.contains("salvageStart")){
             dialog.getOptionPanel().clearOptions();
-            HypershuntReciverEntityPlugin plugin = (HypershuntReciverEntityPlugin) entity.getCustomPlugin();
+            HypershuntReceiverEntityPlugin plugin = (HypershuntReceiverEntityPlugin) entity.getCustomPlugin();
 
             dialog.getOptionPanel().addOption("Break it for salvage","AoTD_Mega_Salvage");
             dialog.getOptionPanel().addOption("Leave","defaultLeave");
@@ -120,7 +120,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
         }
         if(command.contains("salvageComplete")){
             CargoAPI salvage = Global.getFactory().createCargo(true);
-            for (Map.Entry<String, Integer> entry : getCostForSalvage("aotd_hypershunt_reciver").entrySet()) {
+            for (Map.Entry<String, Integer> entry : getCostForSalvage("aotd_hypershunt_receiver").entrySet()) {
                 if(Global.getSettings().getSpecialItemSpec(entry.getKey())==null){
                     salvage.addCommodity(entry.getKey(),entry.getValue());
                 }
@@ -157,7 +157,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
     }
     public LinkedHashMap<String,Integer>getCost(String idOfStructure){
         LinkedHashMap<String,Integer>costs = new LinkedHashMap<>();
-        if(idOfStructure.equals("aotd_hypershunt_reciver")){
+        if(idOfStructure.equals("aotd_hypershunt_receiver")){
             costs.put(AoTDCommodities.REFINED_METAL,1000);
             costs.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,100);
             costs.put(Items.CORONAL_PORTAL,1);
@@ -166,7 +166,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
     }
     public LinkedHashMap<String,Integer>getCostForSalvage(String idOfStructure){
         LinkedHashMap<String,Integer>costs = new LinkedHashMap<>();
-        if(idOfStructure.equals("aotd_hypershunt_reciver")){
+        if(idOfStructure.equals("aotd_hypershunt_receiver")){
             costs.put(AoTDCommodities.REFINED_METAL,700);
             costs.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,50);
             costs.put(Items.CORONAL_PORTAL,1);

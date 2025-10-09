@@ -7,11 +7,11 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastrcutre;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
 
 import java.awt.*;
 
-public class HypershuntReciverEntityPlugin extends BaseCampaignObjectivePlugin {
+public class HypershuntReceiverEntityPlugin extends BaseCampaignObjectivePlugin {
     boolean isAboutToBeRemoved = false;
     @Override
     public void advance(float amount) {
@@ -20,7 +20,7 @@ public class HypershuntReciverEntityPlugin extends BaseCampaignObjectivePlugin {
             for (MarketAPI market : Global.getSector().getEconomy().getMarkets(this.entity.getStarSystem())) {
                 if(!market.isPlayerOwned()&&!market.getFaction().isPlayerFaction())continue;
                 if(range){
-                    market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).modifyFlat("aotd_hypershunt",2,"Hypershunt Reciver");
+                    market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).modifyFlat("aotd_hypershunt",2,"Hypershunt Receiver");
                 }
                 else{
                     market.getStats().getDynamic().getMod(Stats.MAX_INDUSTRIES).unmodifyFlat("aotd_hypershunt");
@@ -34,7 +34,7 @@ public class HypershuntReciverEntityPlugin extends BaseCampaignObjectivePlugin {
 
     }
     public boolean isWithinRange(){
-        return HypershuntMegastrcutre.isWithinRangeOfAtLeastOneHypershunt(entity);
+        return HypershuntMegastructure.isWithinRangeOfAtLeastOneHypershunt(entity);
     }
     public void unmodify(){
         for (MarketAPI market : Global.getSector().getEconomy().getMarkets(this.entity.getStarSystem())) {

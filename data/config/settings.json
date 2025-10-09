@@ -172,7 +172,7 @@
 			"compound_info":"graphics/icons/smoll_icon/comp_smol.png"
 		},
 		"sectionImage":{
-            "WormholeGenerator":"graphics/icons/megastructures/coronal_reciver.png",
+            "WormholeGenerator":"graphics/icons/megastructures/coronal_receiver.png",
 			"CoronalCollector":"graphics/icons/megastructures/plasma_shield_generator.png",
 			"AegisSystem":"graphics/icons/megastructures/coronal_port.png",
 			"NexusCore":"graphics/icons/megastructures/nexus_core_merged.png",
