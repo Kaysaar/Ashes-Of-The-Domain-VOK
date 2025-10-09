@@ -51,7 +51,7 @@ public class AoTDMegastructureUpkeepListener implements EconomyTickListener {
                     }
 
                     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                        tooltip.addPara("Monthly upkeep of " + megastructure.getName(), 0f);
+                        tooltip.addPara("Monthly upkeep of the " + megastructure.getName(), 0f);
                     }
                 };
             }

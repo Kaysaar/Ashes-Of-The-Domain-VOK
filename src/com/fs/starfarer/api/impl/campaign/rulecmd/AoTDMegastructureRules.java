@@ -45,7 +45,7 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
 
                 if(megastructure.metCustomCriteria()){
                     if(AoTDMisc.getPlayerFactionMarkets().isEmpty()&&!megastructure.isPlanetaryMegastructure){
-                        dialog.getTextPanel().addPara("We must first establish faction, if we want to claim this megastrucutre");
+                        dialog.getTextPanel().addPara("We must first establish faction, if we want to claim this megastructure");
                         return false;
                     }
                 }
@@ -59,7 +59,7 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
 
 
         }
-        if (arg.equals("researchedReciver")) {
+        if (arg.equals("researchedReceiver")) {
             return AoTDMainResearchManager.getInstance().getManagerForPlayer().haveResearched(AoTDTechIds.HP_ENERGY_DISTRIB);
         }
 
@@ -111,9 +111,9 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
     }
 
     //Note : Used when for example megastructure is tied to planet, so you can tie it to planet manually
-    public static void claimMegastructureManually(InteractionDialogAPI dialogAPI, SectorEntityToken token, String specOfmegastructure) {
+    public static void claimMegastructureManually(InteractionDialogAPI dialogAPI, SectorEntityToken token, String specOfMegastructure) {
         GPBaseMegastructure megastructure;
-        GPMegaStructureSpec spec = GPManager.getInstance().getMegaSpecFromList(specOfmegastructure);
+        GPMegaStructureSpec spec = GPManager.getInstance().getMegaSpecFromList(specOfMegastructure);
         if (token != null) {
             token.setFaction(Factions.PLAYER);
             if (token.getMemory().contains(GPBaseMegastructure.memKey)) {
@@ -139,9 +139,9 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
         Global.getSector().getPlayerFleet().getCommanderStats().addStoryPoints(1);
     }
 
-    public static GPBaseMegastructure putMegastructure(SectorEntityToken token, String specOfmegastructure) {
+    public static GPBaseMegastructure putMegastructure(SectorEntityToken token, String specOfMegastructure) {
         GPBaseMegastructure megastructure;
-        GPMegaStructureSpec spec = GPManager.getInstance().getMegaSpecFromList(specOfmegastructure);
+        GPMegaStructureSpec spec = GPManager.getInstance().getMegaSpecFromList(specOfMegastructure);
         megastructure = spec.getScript();
         if (!megastructure.wasInitalized) {
             megastructure.trueInit(spec.getMegastructureID(), token);

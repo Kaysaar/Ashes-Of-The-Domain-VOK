@@ -137,15 +137,17 @@ public class GPBaseMegastructure {
 
         tooltip.addSectionHeading("Costs",Alignment.MID,10f);
         dialogAPI.getTextPanel().addTooltip();
-        dialogAPI.getTextPanel().addPara("Monthly upkeep of %s is estimated to be around %s",Color.ORANGE,this.getName(),Misc.getDGSCredits(getUpkeep()));
+        dialogAPI.getTextPanel().addPara("Monthly upkeep of the %s is estimated to be around %s",Color.ORANGE,this.getName(),Misc.getDGSCredits(getUpkeep()));
         tooltip = dialogAPI.getTextPanel().beginTooltip();
-        tooltip.addSectionHeading("Megastructure information",Alignment.MID,10f);
+        tooltip.addSectionHeading("Megastructure Information",Alignment.MID,10f);
         dialogAPI.getTextPanel().addTooltip();
         String sections = "sections";
+        String require = "require";
         if(megaStructureSections.size()==1){
             sections = "section";
+            require = "requires";
         }
-        dialogAPI.getTextPanel().addPara("This megastructure have distinct %s "+sections+", which require great restoration efforts, to bring them to their former glory",Color.ORANGE,""+megaStructureSections.size());
+        dialogAPI.getTextPanel().addPara("This megastructure has %s distinct "+sections+", that "+require+" great restoration efforts to bring them back to their former glory.",Color.ORANGE,""+megaStructureSections.size());
 
 
 
