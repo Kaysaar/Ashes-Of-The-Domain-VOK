@@ -58,7 +58,7 @@ public class PlanetRenderResizableComponent extends ResizableComponent {
 
         }
         else{
-            renderPlanet(planet.getTypeId(),new Vector2f(componentPanel.getPosition().getCenterX(),componentPanel.getPosition().getCenterY()),originalSize*scale,planet.getFacing(),planet.getSpec().getPitch(),0f,0f,alphaMult,isStar);
+            renderPlanet(planet.getTypeId(),new Vector2f(componentPanel.getPosition().getCenterX(),componentPanel.getPosition().getCenterY()),originalSize*scale,planet.getFacing(),planet.getSpec().getPitch(),angle,angle/2,alphaMult,isStar);
 
         }
 
