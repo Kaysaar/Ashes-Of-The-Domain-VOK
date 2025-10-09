@@ -2,11 +2,13 @@ package data.kaysaar.aotd.vok.ui.template.wip;
 
 import ashlib.data.plugins.ui.models.resizable.ResizableComponent;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.OrbitAPI;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
+import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -36,9 +38,21 @@ public class MapMainComponent implements ExtendedUIPanelPlugin {
         MapGridRenderer renderer = new MapGridRenderer(leftTop,rightTop,leftBottom,rightBottom);
         component.addComponent(renderer,0,0);
         for (PlanetAPI planet : corvus.getPlanets()) {
+
+            if(!planet.isStar()){
+                OrbitAPI orbit = planet.getOrbit();
+                MapOrbitRenderer rendererOrb = new MapOrbitRenderer(Misc.getDistance(planet.getLocation(),orbit.getFocus().getLocation()));
+                Vector2f newLocation = translateCoordinatesToUI(orbit.getFocus().getLocation());
+                component.addComponent(rendererOrb,newLocation.x,newLocation.y);
+            }
+        }
+
+        for (PlanetAPI planet : corvus.getPlanets()) {
             PlanetRenderResizableComponent components = new PlanetRenderResizableComponent(planet);
             Vector2f newLocation = translateCoordinatesToUI(planet.getLocation());
             component.addComponent(components,newLocation.x,newLocation.y);
+
+
         }
 
         contentPanel = Global.getSettings().createCustom(width,height,null);
