@@ -21,6 +21,7 @@
     "viewOffset": 0,
     "builtInMods": [
         "anchorrotation",
+		"never_detaches",
         "vastbulk"
     ],
     "builtInWings": [],

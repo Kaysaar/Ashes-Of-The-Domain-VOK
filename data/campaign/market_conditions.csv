@@ -14,7 +14,7 @@ Coronal Hypershunt,aotd_coronal_market_cond,,,data.kaysaar.aotd.vok.campaign.eco
 Nidavelir Complex,aotd_nidavelir_complex,TRUE,FALSE,data.kaysaar.aotd.vok.campaign.econ.conditions.NidavelirComplex,"Former Domain gem, this megastructure is capable of producing ships and weapons at scale, never seen in the Persean Sector.",graphics/icons/markets/nidavelir_complex.png,640
 Pluto Mining Station,aotd_pluto_station,TRUE,FALSE,data.kaysaar.aotd.vok.campaign.econ.conditions.PlutoStation,"Former Domain gem, this megastructure is capable of excavation and refining enormous amount of resources.",graphics/icons/markets/aotd_pluto.png,641
 aotd_growing_demand_applier,aotd_growing_demand_applier,,TRUE,data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandConditionEnforcer,,graphics/icons/markets/aotd_pluto.png,641
-,,,,,,,
+Colony Development Program,aotd_colony_development_cond,,TRUE,data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentCondition,This settlement follows a defined development path that shapes the colony on multiple levels.,graphics/icons/markets/capital.png,50
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,
