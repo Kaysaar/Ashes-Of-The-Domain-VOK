@@ -12,7 +12,9 @@
   "shieldRadius": 0,
   "viewOffset": 0,
   "builtInMods": [
-    "anchorrotation"
+    "anchorrotation",
+	"vastbulk",
+	"stealth_minefield"
   ],
   "weaponSlots": [],
   "engineSlots": [],
