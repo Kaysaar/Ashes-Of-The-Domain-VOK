@@ -83,6 +83,7 @@ import data.kaysaar.aotd.vok.timeline.templates.MegastructureRestoredEvent;
 import data.kaysaar.aotd.vok.timeline.templates.SpecialProjectCompletionEvent;
 import data.kaysaar.aotd.vok.timeline.unique.BifrostNetworkEstablished;
 import data.kaysaar.aotd.vok.timeline.unique.HyperdimensionalProcessorEvent;
+import data.kaysaar.aotd.vok.ui.template.TemplateDialogEveryFrameScript;
 import data.listeners.timeline.MiscEventListener;
 import data.listeners.timeline.models.FirstIndustryListener;
 import data.memory.AoTDSopMemFlags;
@@ -160,6 +161,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
                 throw new RuntimeException(e);
             }
         }
+        l.addListener(new TemplateDialogEveryFrameScript(), true);
         l.addListener(new CoreUiInterceptor(), true);
         l.addListener(new TierFourStationResourceApplier(), true);
         l.addListener(new AoTDMegastructureUpkeepListener(), true);

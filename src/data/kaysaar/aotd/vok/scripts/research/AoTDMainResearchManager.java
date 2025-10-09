@@ -360,7 +360,10 @@ public class AoTDMainResearchManager {
     }
 
     public void advance(float amount) {
-        getManagerForPlayer().advance(amount);
+        util.advance(amount);
+        if(util.intervalElapsed()){
+            getManagerForPlayer().advance(amount);
+        }
 
     }
 
