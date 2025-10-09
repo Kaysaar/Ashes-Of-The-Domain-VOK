@@ -3,7 +3,10 @@ researchfacil,"Research
 Facility",player,"Storage for materials, that are used for research",data.kaysaar.aotd.vok.submarkets.ResearchFacilityMarket,graphics/factions/researchfacil.png,1700
 aotd_exomatter_processing,"Exomatter
 Processing",dweller,Storage for materials which are needed by the Exomatter Processing in order to produce Tenebrium Cells,data.kaysaar.aotd.vok.submarkets.ExomatterMarket,graphics/factions/exomatter_processing_storage.png,1701
-,,,,,,
+aotd_trade_outpost,"Trade
+Outpost Market",,"The trade outpost.Only legal goods may be traded here, but transactions are subjected to no tariffs! More goods are available when stability is high.
+
+Selling enough of a commodity will temporarily resolve a shortage.",data.kaysaar.aotd.vok.submarkets.TradePostMarket,,1
 ,,,,,,
 ,,,,,,
 ,,,,,,
