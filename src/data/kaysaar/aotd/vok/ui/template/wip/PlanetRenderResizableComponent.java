@@ -7,6 +7,8 @@ import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.combat.CombatViewport;
 import com.fs.starfarer.combat.entities.terrain.Planet;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import org.lwjgl.util.vector.Vector2f;
 
 public class PlanetRenderResizableComponent extends ResizableComponent {
@@ -65,6 +67,12 @@ public class PlanetRenderResizableComponent extends ResizableComponent {
         }
         else{
             renderPlanet(planet.getTypeId(),new Vector2f(componentPanel.getPosition().getCenterX(),componentPanel.getPosition().getCenterY()),originalSize,planet.getFacing(),planet.getSpec().getPitch(),angle,angle/2,alphaMult,isStar,planet.getSpec().getTilt(),scale);
+            if(Global.getSettings().getModManager().isModEnabled("aotd_vok")){
+                if((AoTDMisc.getNidavelir()!=null&&AoTDMisc.getNidavelir().getEntityTiedTo().equals(planet))){
+                    NidavelirComplexMegastructure megastructure = AoTDMisc.getNidavelir();
+                    renderPlanet(megastructure.shipyard.type,new Vector2f(componentPanel.getPosition().getCenterX(),componentPanel.getPosition().getCenterY()),originalSize + 35,planet.getFacing(),planet.getSpec().getPitch(),0f,angle/2f,alphaMult,isStar,planet.getSpec().getTilt(),scale);
+                }
+            }
 
         }
 
@@ -73,7 +81,7 @@ public class PlanetRenderResizableComponent extends ResizableComponent {
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        angle+=0.2f;
+        angle+=planet.getSpec().getRotation()*amount;
         if(angle>360){
             angle =-360f;
             angle+=0.2f;

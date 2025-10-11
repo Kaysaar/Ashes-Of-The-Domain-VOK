@@ -44,9 +44,6 @@
             float factor = Math.max(1e-6f, zoom.getData().scale);
 
             // clip to panel (optional)
-            GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_SCISSOR_BIT);
-            GL11.glEnable(GL11.GL_SCISSOR_TEST);
-            GL11.glScissor(Math.round(pBLX), Math.round(pBLY), Math.round(pW), Math.round(pH));
 
             // ---- place the tiled terrain so its world center appears at (sx, sy) ----
             GL11.glPushMatrix();
@@ -57,7 +54,6 @@
             terrain.getPlugin().renderOnMap(factor, alphaMult);
 
             GL11.glPopMatrix();
-            GL11.glPopAttrib();
         }
 
 
