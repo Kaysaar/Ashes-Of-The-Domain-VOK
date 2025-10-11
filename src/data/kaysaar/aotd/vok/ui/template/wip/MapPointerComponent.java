@@ -63,9 +63,8 @@ public class MapPointerComponent extends ResizableComponent {
 
         if (width <= 0f || height <= 0f) return;
 
-        // follower center
-        float cx = mainComponent.follower.getComponentPanel().getPosition().getCenterX();
-        float cy = mainComponent.follower.getComponentPanel().getPosition().getCenterY();
+        float cx = Global.getSettings().getMouseX();
+        float cy = Global.getSettings().getMouseY();
 
         // clamp crosshair to grid rect
         if (cx < left)  cx = left;

@@ -16,14 +16,14 @@ import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 
-public class StationRendererComponent extends ResizableComponent {
+public class EntityRendererComponent extends ResizableComponent {
     String stationSpec;
     ShipVariantAPI viewMember;
 
     /** base visual radius for the orbit ring (in px, at scale=1). default: use panel radius */
     public float orbitRadiusPx = -1f;
     /** appearance */
-    public Color orbitColor = new Color(29, 94, 159, 180);
+    public Color orbitColor = new Color(126, 126, 126, 180);
     public float orbitLineWidth = 1f;
     public float facing ;
     /** panel radius you passed in (used if orbitRadiusPx < 0) */
@@ -31,12 +31,12 @@ public class StationRendererComponent extends ResizableComponent {
     SpriteAPI sprite;
     float originalWidth,originalHeight;
 
-    public StationRendererComponent(String stationSpec, float radius) {
+    public EntityRendererComponent(String stationSpec, float radius) {
         this.stationSpec = stationSpec;
         this.radius = radius;
         componentPanel = Global.getSettings().createCustom(radius * 2f, radius * 2f, this);
     }
-    public StationRendererComponent(String spriteName,float width,float height, float radius,float facing) {
+    public EntityRendererComponent(String spriteName, float width, float height, float radius, float facing) {
          sprite = Global.getSettings().getSprite(spriteName);
         this.facing = facing;
         this.originalWidth = width;
@@ -44,7 +44,7 @@ public class StationRendererComponent extends ResizableComponent {
         this.radius = radius;
         componentPanel = Global.getSettings().createCustom(radius * 2f, radius * 2f, this);
     }
-    public StationRendererComponent(ShipVariantAPI var, float radius, float facing) {
+    public EntityRendererComponent(ShipVariantAPI var, float radius, float facing) {
         this.viewMember = var;
         this.radius = radius;
         componentPanel = Global.getSettings().createCustom(radius * 2f, radius * 2f, this);
