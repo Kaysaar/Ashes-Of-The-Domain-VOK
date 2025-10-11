@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.ui.template.wip;
 import ashlib.data.plugins.ui.models.resizable.ResizableComponent;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.graphics.SpriteAPI;
+import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 
@@ -11,21 +12,38 @@ public class MapGridRenderer extends ResizableComponent {
     private final ResizableComponent topRight;
     private final ResizableComponent bottomLeft;
     private final ResizableComponent bottomRight;
-
+    private final ResizableComponent center;
     /** Base grid size at scale = 1 */
     public float gridSize = 3000f;
 
     transient SpriteAPI spriteToRender = Global.getSettings().getSprite("rendering", "GlitchSquare");
 
     public MapGridRenderer(ResizableComponent topLeft, ResizableComponent topRight,
-                           ResizableComponent bottomLeft, ResizableComponent bottomRight) {
+                           ResizableComponent bottomLeft, ResizableComponent bottomRight,ResizableComponent center) {
         this.componentPanel = Global.getSettings().createCustom(1,1,this);
         this.topLeft = topLeft;
         this.topRight = topRight;
         this.bottomLeft = bottomLeft;
         this.bottomRight = bottomRight;
+        this.center = center;
     }
+    public Vector2f getSizeOfMapCurrently(){
+        float startX = topLeft.getComponentPanel().getPosition().getX();
+        float endX = topRight.getComponentPanel().getPosition().getX();
+        float topY = topLeft.getComponentPanel().getPosition().getCenterY();
+        float bottomY = bottomLeft.getComponentPanel().getPosition().getCenterY();
+        // Ensure correct Y order
+        if (bottomY > topY) {
+            float tmp = bottomY;
+            bottomY = topY;
+            topY = tmp;
+        }
 
+        float width = endX - startX;
+        float height = topY - bottomY;
+        return new Vector2f(width, height);
+
+    }
     @Override
     public void renderBelow(float alphaMult) {
         super.renderBelow(alphaMult);
