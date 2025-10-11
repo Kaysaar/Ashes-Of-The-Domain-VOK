@@ -226,6 +226,16 @@ public class ZoomPanelComponent implements CustomUIPanelPlugin {
             }
         }
     }
+    public float getMouseX(){
+        PositionAPI panelPos = mainPanel.getPosition();
+        float panelX = panelPos.getX();
+        return Global.getSettings().getMouseX() - panelX;
+    }
+    public float getMouseY(){
+        PositionAPI panelPos = mainPanel.getPosition();
+        float panelYTop = convertYBLtoYTL(panelPos.getY() + panelPos.getHeight());
+        return  convertYBLtoYTL(Global.getSettings().getMouseY()) - panelYTop;
+    }
 
     public Vector2f calculateWorldCoords(float mouseX, float mouseY) {
         float exactLookingAtX = mouseX - (data.getCurrentOffsetX()*currScale);

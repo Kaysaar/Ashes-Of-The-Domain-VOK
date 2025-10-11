@@ -1,9 +1,14 @@
 package data.kaysaar.aotd.vok.plugins;
 
+import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CampaignUIAPI;
+import com.fs.starfarer.api.campaign.CoreUIAPI;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import com.fs.starfarer.api.util.Pair;
+import com.fs.starfarer.campaign.CampaignState;
+import com.fs.state.AppDriver;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -66,6 +71,32 @@ public class ReflectionUtilis {
             throw new RuntimeException("Failed to instantiate (exact) " + clazz.getName(), e);
         }
     }
+    public static UIPanelAPI getCoreUI() {
+        CampaignUIAPI campaignUI;
+        campaignUI = Global.getSector().getCampaignUI();
+        Object dialog = campaignUI.getCurrentInteractionDialog();
+        if(AppDriver.getInstance().getCurrentState() instanceof CampaignState){
+            dialog = data.scripts.reflection.ReflectionUtilis.invokeMethod("getEncounterDialog", AppDriver.getInstance().getCurrentState());
+        }
+
+        CoreUIAPI core;
+        if (dialog == null) {
+            core = (CoreUIAPI) data.scripts.reflection.ReflectionUtilis.invokeMethod("getCore",campaignUI);
+        }
+        else {
+            core = (CoreUIAPI) data.scripts.reflection.ReflectionUtilis.invokeMethod( "getCoreUI",dialog);
+        }
+        return core == null ? null : (UIPanelAPI) core;
+    }
+    public static UIPanelAPI getCurrentTab() {
+        UIPanelAPI coreUltimate = getCoreUI();
+        if(getCoreUI()==null) {
+            return null;
+        }
+        UIPanelAPI core = (UIPanelAPI) data.scripts.reflection.ReflectionUtilis.invokeMethod("getCurrentTab",coreUltimate);
+        return core == null ? null : (UIPanelAPI) core;
+    }
+
     public static ButtonAPI findButtonWithText(Object instance, String textQuery,
                                                boolean caseInsensitive, boolean substringMatch) {
         if (instance == null || textQuery == null) return null;
@@ -142,7 +173,6 @@ public class ReflectionUtilis {
             return false;
         }
     }
-
     @SuppressWarnings("unchecked")
     public static Object instantiateAutoProjected(Class<?> targetClass, Object... arguments) {
         try {
@@ -644,36 +674,218 @@ public class ReflectionUtilis {
         }
     }
 
-    public static Pair<Object, Class<?>[]> getMethodFromSuperclass(String methodName, Object instance) {
+    public static Pair<Object, Class<?>[]> getMethodFromSuperclass(String methodName, Object instance, Object... args) {
+        if (instance == null) return null;
+        if (args == null) args = new Object[0];
+
         Class<?> currentClass = instance.getClass();
 
+        Object bestMethod = null;
+        Class<?>[] bestParams = null;
+        int bestScore = Integer.MAX_VALUE;
+
         while (currentClass != null) {
-            // Retrieve all declared methods in the current class
-            Object[] methods = currentClass.getDeclaredMethods();
+            Object[] methods = currentClass.getDeclaredMethods(); // typed as Object[] on purpose
 
             for (Object method : methods) {
                 try {
-                    // Retrieve the MethodHandle for the getParameterTypes method
-                    MethodHandle getParameterTypesHandle = ReflectionBetterUtilis.getParameterTypesHandle(method.getClass(), "getParameterTypes");
-                    // Use the MethodHandle to retrieve the method's name
+                    Class<?> mClass = method.getClass(); // this is java.lang.reflect.Method at runtime
 
-                    // Check if the method name matches
-                    if (getMethodNameHandle.invoke(method).equals(methodName)) {
-                        // Invoke the MethodHandle to get the parameter types
-                        Class<?>[] parameterTypes = (Class<?>[]) getParameterTypesHandle.invoke(method);
-                        return new Pair<>(method, parameterTypes);
+                    MethodHandle getNameH = MethodHandles.publicLookup()
+                            .findVirtual(mClass, "getName", MethodType.methodType(String.class));
+                    String name = (String) getNameH.invoke(method);
+                    if (!methodName.equals(name)) continue;
+
+                    MethodHandle getParamTypesH = MethodHandles.publicLookup()
+                            .findVirtual(mClass, "getParameterTypes", MethodType.methodType(Class[].class));
+                    MethodHandle isVarArgsH = MethodHandles.publicLookup()
+                            .findVirtual(mClass, "isVarArgs", MethodType.methodType(boolean.class));
+
+                    Class<?>[] paramTypes = (Class<?>[]) getParamTypesH.invoke(method);
+                    boolean isVarArgs = (boolean) isVarArgsH.invoke(method);
+
+                    int score = matchScore(paramTypes, args, isVarArgs);
+                    if (score < bestScore) {
+                        bestScore = score;
+                        bestMethod = method;
+                        bestParams = paramTypes;
+                        if (score == 0) break; // perfect match; early exit within this class
                     }
-                } catch (Throwable e) {
-
-                    e.printStackTrace();  // Handle any reflection errors
+                } catch (Throwable t) {
+                    t.printStackTrace();
                 }
             }
-            // Move to the superclass if no match is found
+
+            if (bestScore == 0) break; // perfect match found in this class; done
             currentClass = currentClass.getSuperclass();
         }
 
-        // Return null if the method was not found in the class hierarchy
-        return null;
+        return bestMethod == null ? null : new Pair<>(bestMethod, bestParams);
+    }
+
+// ---------- Matching helpers ----------
+
+    private static int matchScore(Class<?>[] params, Object[] args, boolean isVarArgs) {
+        final int INF = Integer.MAX_VALUE / 2; // large but won't overflow on sums
+        int nParams = params.length;
+        int nArgs = args.length;
+
+        if (!isVarArgs) {
+            if (nParams != nArgs) return INF;
+            int score = 0;
+            for (int i = 0; i < nParams; i++) {
+                int s = paramScore(params[i], args[i]);
+                if (s >= INF) return INF;
+                score += s;
+            }
+            return score;
+        }
+
+        // varargs
+        int fixed = nParams - 1;
+        if (nArgs < fixed) return INF;
+
+        int score = 0;
+        for (int i = 0; i < fixed; i++) {
+            int s = paramScore(params[i], args[i]);
+            if (s >= INF) return INF;
+            score += s;
+        }
+
+        Class<?> varArrayType = params[nParams - 1];
+        Class<?> compType = varArrayType.getComponentType();
+
+        if (nArgs == nParams) {
+            // two possibilities:
+            // 1) last arg is already an array to bind directly to varargs array
+            Object lastArg = args[nArgs - 1];
+            if (lastArg == null) {
+                // null can bind to array param (reference type)
+                return score + 3;
+            }
+            Class<?> lastType = lastArg.getClass();
+            if (lastType.isArray()) {
+                // array-to-array assignability
+                int s = arrayParamScore(varArrayType, lastType);
+                return (s >= INF) ? INF : score + s;
+            } else {
+                // treat as single element of the varargs
+                int s = paramScore(compType, lastArg);
+                return (s >= INF) ? INF : score + s + 1; // tiny penalty to prefer true array match
+            }
+        } else {
+            // more than one element to fill varargs
+            for (int i = fixed; i < nArgs; i++) {
+                int s = paramScore(compType, args[i]);
+                if (s >= INF) return INF;
+                score += s + 1; // small penalty for each vararg element vs exact arity
+            }
+            return score;
+        }
+    }
+
+    private static int arrayParamScore(Class<?> paramArrayType, Class<?> argArrayType) {
+        final int INF = Integer.MAX_VALUE / 2;
+        if (!paramArrayType.isArray() || !argArrayType.isArray()) return INF;
+
+        Class<?> pComp = paramArrayType.getComponentType();
+        Class<?> aComp = argArrayType.getComponentType();
+
+        // exact array type
+        if (paramArrayType.equals(argArrayType)) return 0;
+
+        // component compatibility (primitive arrays must match exactly in component primitive type)
+        if (pComp.isPrimitive() || aComp.isPrimitive()) {
+            // primitive array types are not covariant beyond exact same component type
+            return (pComp.equals(aComp)) ? 1 : INF;
+        }
+
+        // reference arrays are covariant on component types
+        if (pComp.isAssignableFrom(aComp)) return 2;
+
+        return INF;
+    }
+
+    private static int paramScore(Class<?> param, Object arg) {
+        final int INF = Integer.MAX_VALUE / 2;
+
+        if (arg == null) {
+            // null cannot go into primitives
+            return param.isPrimitive() ? INF : 3; // allow, but not ideal
+        }
+
+        Class<?> argType = arg.getClass();
+
+        // Exact match
+        if (param.equals(argType)) return 0;
+
+        // Reference assignability
+        if (!param.isPrimitive()) {
+            if (param.isAssignableFrom(argType)) return 1;
+
+            // Handle wrapper -> super wrapper (rare, but keep a small penalty)
+            Class<?> argPrim = toPrimitive(argType);
+            if (argPrim != null) {
+                // wrapper can go to a reference Number or Object etc.
+                if (param.isAssignableFrom(wrapperFor(argPrim))) return 2;
+            }
+            return INF;
+        }
+
+        // param is primitive: allow boxing/unboxing + numeric widening
+        Class<?> argPrim = toPrimitive(argType);
+        if (argPrim == null) return INF; // e.g., String to int is not OK
+
+        if (param.equals(argPrim)) return 1; // unbox exact
+
+        // numeric widening for primitives
+        return isWideningPrimitiveConvertible(argPrim, param) ? 2 : INF;
+    }
+
+    private static Class<?> toPrimitive(Class<?> c) {
+        if (c == Boolean.class) return boolean.class;
+        if (c == Byte.class) return byte.class;
+        if (c == Short.class) return short.class;
+        if (c == Character.class) return char.class;
+        if (c == Integer.class) return int.class;
+        if (c == Long.class) return long.class;
+        if (c == Float.class) return float.class;
+        if (c == Double.class) return double.class;
+        return c.isPrimitive() ? c : null;
+    }
+
+    private static Class<?> wrapperFor(Class<?> primitive) {
+        if (!primitive.isPrimitive()) return primitive;
+        if (primitive == boolean.class) return Boolean.class;
+        if (primitive == byte.class) return Byte.class;
+        if (primitive == short.class) return Short.class;
+        if (primitive == char.class) return Character.class;
+        if (primitive == int.class) return Integer.class;
+        if (primitive == long.class) return Long.class;
+        if (primitive == float.class) return Float.class;
+        if (primitive == double.class) return Double.class;
+        return primitive;
+    }
+
+    private static boolean isWideningPrimitiveConvertible(Class<?> from, Class<?> to) {
+        // Only primitives here
+        if (!from.isPrimitive() || !to.isPrimitive()) return false;
+        if (from == to) return true;
+
+        // JLS 5.1.2 Widening primitive conversions
+        if (from == byte.class)    return to == short.class || to == int.class || to == long.class || to == float.class || to == double.class;
+        if (from == short.class)   return to == int.class || to == long.class || to == float.class || to == double.class;
+        if (from == char.class)    return to == int.class || to == long.class || to == float.class || to == double.class;
+        if (from == int.class)     return to == long.class || to == float.class || to == double.class;
+        if (from == long.class)    return to == float.class || to == double.class;
+        if (from == float.class)   return to == double.class;
+        if (from == boolean.class) return false;
+        return false;
+    }
+
+    // Optional: keep your old signature for backwards compatibility
+    public static Pair<Object, Class<?>[]> getMethodFromSuperclass(String methodName, Object instance) {
+        return getMethodFromSuperclass(methodName, instance, new Object[0]);
     }
     public static Object findFieldOfClass(Object instance, Class<?> fieldType) {
         try {
@@ -803,7 +1015,7 @@ public class ReflectionUtilis {
 
     public static Object invokeMethodWithAutoProjection(String methodName, Object instance, Object... arguments) {
         // Retrieve the method and its parameter types
-        Pair<Object, Class<?>[]> methodPair = getMethodFromSuperclass(methodName, instance);
+        Pair<Object, Class<?>[]> methodPair = getMethodFromSuperclass(methodName, instance,arguments);
 
         // Check if the method was found
         if (methodPair == null) {
@@ -996,6 +1208,6 @@ public class ReflectionUtilis {
 
 
     public static List<UIComponentAPI> getChildren(UIPanelAPI panelAPI) {
-        return ReflectionUtilis.getChildrenCopy(panelAPI);
+        return data.scripts.reflection.ReflectionUtilis.getChildrenCopy(panelAPI);
     }
 }

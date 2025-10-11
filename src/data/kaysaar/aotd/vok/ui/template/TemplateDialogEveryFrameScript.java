@@ -20,7 +20,7 @@ public class TemplateDialogEveryFrameScript implements CampaignInputListener {
             if(x.getEventValue()== Keyboard.KEY_T&&x.isKeyDownEvent()&& Global.getSettings().isDevMode()){
                 x.consume();
                 // specify your ExtendedUI
-                Global.getSector().setPaused(true);
+
                 new TemplateDialog("Test",new MapMainComponent(1000,600));
             }
         });

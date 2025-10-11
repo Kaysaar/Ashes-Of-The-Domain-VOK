@@ -3,14 +3,22 @@ package data.kaysaar.aotd.vok.ui.template;
 import ashlib.data.plugins.misc.AshMisc;
 import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
 
 public class TemplateDialog extends BasePopUpDialog {
     ExtendedUIPanelPlugin testPlugin;
+    boolean wasPaused;
+   boolean wasRenderingEveryting;
+   LocationAPI prevLocation;
+
     public TemplateDialog(String headerTitle,ExtendedUIPanelPlugin testPlugin) {
         super(headerTitle);
         this.testPlugin = testPlugin;
+         wasPaused = Global.getSector().isPaused();
+         wasRenderingEveryting =  Global.getSector().getViewport().isEverythingNearViewport();
+        Global.getSector().setPaused(true);
         AshMisc.initPopUpDialog(this,testPlugin.getMainPanel().getPosition().getWidth()+100,testPlugin.getMainPanel().getPosition().getHeight()+100);
     }
 
@@ -24,6 +32,7 @@ public class TemplateDialog extends BasePopUpDialog {
     @Override
     public void onExit() {
         super.onExit();
-        Global.getSector().setPaused(false);
+        Global.getSector().getViewport().setEverythingNearViewport(wasRenderingEveryting);
+        Global.getSector().setPaused(wasPaused);
     }
 }
