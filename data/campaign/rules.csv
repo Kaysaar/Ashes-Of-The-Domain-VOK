@@ -1,40 +1,40 @@
 id,trigger,conditions,script,text,options,notes
-#RULESET_NAME aotd,,,,,,
+"#RULESET_NAME aotd",,,,,,
 ,,,,,,
 # BEYOND VEIL,,,,,,
-veil_open_dialog,OpenInteractionDialog,$aotd_quest_veil score:1000,"SalvageGenFromSeed
+veil_open_dialog,OpenInteractionDialog,"$aotd_quest_veil score:1000","SalvageGenFromSeed
 ShowDefaultVisual
 FireBest SalvageCheckHostile","Your $shipOrFleet approaches $entityName.
 
 The sensors are having a hard time evaluating the tenuous megastructure enveloping its entire surface. Your sensors officer takes the initiative and applies some exotic parameters to the interferometer feed; inputs go green and a few seconds later the sub-AI tentatively identifies a stable planetary-scale energy field with highly unusual properties.",,
-veil_defenderDesc,TriggerAutomatedDefenses,$aotd_quest_veil score:1000,SalvageDefenderInteraction,"As your fleet moves in closer, sensors detect multiple energy signatures rising up from the depths of the planet.",,
-veil_continueAfterDefeating,BeatDefendersContinue,$aotd_quest_veil score:1000,,Your fleet finishes its approach to $entityName without further incident.,0:salBeatDefendersContinue:Continue,
-veil_beatDefenders,BeginSalvage,$aotd_quest_veil score:1000,SetShortcut defaultLeave ESCAPE,The transmission is set on repeat and garbled in ways that are indicative of aging equipment. You make out enough to gather that part of a research team was stranded here - at a secret Tri-Tachyon research facility - after the fully automated defenses overweighed certain executive security contingency orders in the wake of one of the AI Wars and decided it was now imperative to shoot down any craft attempting to leave the planet.,"0:veil_explore:Send a salvage team down to the facility
+veil_defenderDesc,TriggerAutomatedDefenses,"$aotd_quest_veil score:1000","SalvageDefenderInteraction","As your fleet moves in closer, sensors detect multiple energy signatures rising up from the depths of the planet.",,
+veil_continueAfterDefeating,BeatDefendersContinue,"$aotd_quest_veil score:1000",,"Your fleet finishes its approach to $entityName without further incident.","0:salBeatDefendersContinue:Continue",
+veil_beatDefenders,BeginSalvage,"$aotd_quest_veil score:1000","SetShortcut defaultLeave ESCAPE","The transmission is set on repeat and garbled in ways that are indicative of aging equipment. You are barely able to gather info that part of a research team was stranded here - at a secret Tri-Tachyon research facility - after the fully automated defenses overweighed certain executive security contingency orders in the wake of one of the AI Wars and decided it was now imperative to shoot down any craft attempting to leave the planet.","0:veil_explore:Send a salvage team down to the facility
 100:defaultLeave:Leave",
-veil_exploreFacility,DialogOptionSelected,$option == veil_explore,,"A tiny shuttle with a jury-rigged shield generator darts through a spot failure in the shield. A landing at the primary control center is achieved without incident and the crew is able to deactivate the shield entirely upon breaching the facility. Follow-up shuttles with heavier equipment launch quickly thereafter, and soon the salvage operation is in full swing.",0:veil_salvage:Pick through the salvage,
-veil_salvage,DialogOptionSelected,$option == veil_salvage,BeyondQuest genLoot,,,
-#END BEYOND VEIL,,,,,,
+veil_exploreFacility,DialogOptionSelected,"$option == veil_explore",,"A tiny shuttle with a jury-rigged shield generator darts through a spot failure in the shield. Landing at the primary control center goes without incident and the crew is able to deactivate the shield entirely upon breaching the facility. Follow-up shuttles with heavier equipment launch quickly thereafter, and soon the salvage operation is in full swing.","0:veil_salvage:Pick through the salvage",
+veil_salvage,DialogOptionSelected,"$option == veil_salvage","BeyondQuest genLoot",,,
+"#END BEYOND VEIL",,,,,,
 ,,,,,,
 # BIFROST SECTION,,,,,,
-bifrostPrintReceiver,bifrostCanBeUsed,$connected==true,,"Due to being connected with a Hypershunt, this gate is charged with the energy of a star, increasing its efficiency by no longer requiring a cooldown sequence after each use.",,
-bifrostAccess,OpenInteractionDialog,$customType == bifrost_gate score:1000,"SetShortcut defaultLeave ESCAPE  
+bifrostPrintReceiver,bifrostCanBeUsed,"$connected==true",,"By being connected with a Hypershunt, this gate is charged with the energy of a star, increasing its efficiency by no longer requiring a cooldown sequence after each use.",,
+bifrostAccess,OpenInteractionDialog,"$customType == bifrost_gate score:1000","SetShortcut defaultLeave ESCAPE  
 SetEnabled bifrostUse false
 FireAll bifrostCanBeUsed","A dull hum begins to sound in your ear, emanating from the gate as space-time begins to rumble and roil. The dull interior of the gigantic ring slowly lightens, unnatural purple light drifting inwards even as the humming begins to rise in tempo, rising a roar. Waves and distortions, barely visible from a distance echo from the structure, sensor reports streaming in about conflicting celestial objects, before it reaches a crescendo. In a tide, space normalizes and a tunnel in reality itself forms to completion, giving a full glimpse to the other side.
 
 The Bifrost Network is now operational and ready for use…","0:bifrostUse:Use Bifrost Network
 1:defaultLeave:Leave",
-bifrostUse,DialogOptionSelected,$option == bifrostUse,BiFrostCMD selectDestination,,,
+bifrostUse,DialogOptionSelected,"$option == bifrostUse","BiFrostCMD selectDestination",,,
 bifrostCanBeUsed,bifrostCanBeUsed,"$used==false
 $cooldown <=0
-$supplied == true",SetEnabled bifrostUse true,,,
-#END BIFROST SECTION,,,,,,
+$supplied == true","SetEnabled bifrostUse true",,,
+"#END BIFROST SECTION",,,,,,
 ,,,,,,
 # Coronal Rework,,,,,,
-cTap_defenderDesc_Override,TriggerAutomatedDefenses,$customType == coronal_tap score:100000,SalvageDefenderInteraction,"As your $shipOrFleet moves into a close holding orbit, an executive summary of the hypershunt's specifications is helpfully presented by your TriPad's pseudo-AI assistant.
+cTap_defenderDesc_Override,TriggerAutomatedDefenses,"$customType == coronal_tap score:100000","SalvageDefenderInteraction","As your $shipOrFleet moves into a close holding orbit, an executive summary of the Hypershunt's specifications is helpfully presented by your TriPad's pseudo-AI assistant.
 
 The bridge sounds an alert as several previously indistinguishable shapes detach themselves from the superstructure and smoothly accelerate towards your fleet just as you finish reading, ""-and for reasons of safety, automated defense drones are no longer a standard feature.""
 
-Your tactical officer waves for your attention, ""We're close enough to the magfield generated by the megastructure that the anticipated combat volume should be unaffected by the star's corona. Mostly. However,"" they examine their console, ""The hostiles, they're... their profile is unknown. Incoming fast."" They are starting to look concerned, and in a brittle voice say, ""This might be something new, captain.""",,
+Your tactical officer waves for your attention, ""We're close enough to the magfield generated by the megastructure that the anticipated combat volume should be unaffected by the star's corona. Mostly. However,"" they examine their console, ""The hostiles, they're... their profile is unknown. Incoming fast."" The tactical officer looks concerned, and in a brittle voice says, ""This might be something new, captain.""",,
 cTap_infoText_Override,BeginSalvage,"$customType == coronal_tap score:100000
 !$usable 
 !$aotd_claimed","SetShortcut defaultLeave ESCAPE
@@ -44,56 +44,56 @@ However, as with most mega-scale Domain technology from the late pre-Collapse er
 
 Regrettably, the self-repair systems have sustained damage, though they are recoverable. Our imperative is to establish a compact presence on-site. We've identified secure space within the Hypershunt, earmarked for conversion into living quarters. Due to spatial constraints, our presence can accommodate no more than 100 crew members, tasked with overseeing the restoration project for the Hypershunt.","0:aotd_claim_megastructure:Claim megastructure
 100:defaultLeave:Leave",
-aotd_megastructure_info_before_claim,DialogOptionSelected,$option == aotd_claim_megastructure,AoTDMegastructureRules printInfo,,,
-aotd_megastructure_info_claim,DialogOptionSelected,$option == aotd_claim_megastructure_complete,AoTDMegastructureRules claim,,,
+aotd_megastructure_info_before_claim,DialogOptionSelected,"$option == aotd_claim_megastructure","AoTDMegastructureRules printInfo",,,
+aotd_megastructure_info_claim,DialogOptionSelected,"$option == aotd_claim_megastructure_complete","AoTDMegastructureRules claim",,,
 aotd_coronal_text_override,BeginSalvage,"$customType == coronal_tap score:1000
 $aotd_claimed score:10000
-!$beingRepaired",,This structure is now under our control.,100:defaultLeave:Leave,
-aotd_hypershunt_receiver_build,Stable_AddBuildOptions,AoTDMegastructureRules researchedReceiver,,,25:SL_aotd_hypershunt:Construct a Hypershunt Receiver,
-aotd_hypershunt_receiver_print,DialogOptionSelected,$option == SL_aotd_hypershunt,AoTDStableHandler wantToConstruct:aotd_hypershunt_receiver, ,,
-aotd_hypershunt_construct,DialogOptionSelected,$option == SL_aotd_hypershunt_construct,AoTDStableHandler construct:aotd_hypershunt_receiver,,,
-aotd_populate_options_for_receiver,COB_AddOptions,$tag:aotd_hypershunt_receiver,AoTDStableHandler salvageStart:aotd_hypershunt_receiver,,,
-aotd_mega_check,AoTDMegaCheck,,AoTDMegastructureRules researchedTech,,,
+!$beingRepaired",,"This structure is now under our control.","100:defaultLeave:Leave",
+aotd_hypershunt_receiver_build,Stable_AddBuildOptions,"AoTDMegastructureRules researchedReceiver",,,"25:SL_aotd_hypershunt:Construct a Hypershunt Receiver",
+aotd_hypershunt_receiver_print,DialogOptionSelected,"$option == SL_aotd_hypershunt","AoTDStableHandler wantToConstruct:aotd_hypershunt_receiver"," ",,
+aotd_hypershunt_construct,DialogOptionSelected,"$option == SL_aotd_hypershunt_construct","AoTDStableHandler construct:aotd_hypershunt_receiver",,,
+aotd_populate_options_for_receiver,COB_AddOptions,"$tag:aotd_hypershunt_receiver","AoTDStableHandler salvageStart:aotd_hypershunt_receiver",,,
+aotd_mega_check,AoTDMegaCheck,,"AoTDMegastructureRules researchedTech",,,
 aotd_nida_block_colony,PopulateOptions,"$market.isPlanetConditionMarketOnly
 $market.isSurveyed
 !$market.hasUnexploredRuins
-!AoTDMegastructureRules researchedTech",SetEnabled surveyPerform false,,,
-#END Coronal Rework,,,,,,
+!AoTDMegastructureRules researchedTech","SetEnabled surveyPerform false",,,
+"#END Coronal Rework",,,,,,
 ,,,,,,
 # Getting Stable Point From Janus Device Analysis Tech,,,,,,
 aotd_stable_point_gen_start,PopulateOptions,"$hasMarket
 $menuState == main
-AoTDAddStablePointScript checkIfValid",,,30:aotd_stable_point_add:Create stable location,
-aotd_stable_point_req,DialogOptionSelected,$option == aotd_stable_point_add,AoTDAddStablePointScript printReq,"Our recent analysis of the Janus Device reveals that constructing a component similar to it, but with reversed polarization, can create a stable point within a star system.","10:aotd_stable_point_create:Proceed
+AoTDAddStablePointScript checkIfValid",,,"30:aotd_stable_point_add:Create stable location",
+aotd_stable_point_req,DialogOptionSelected,"$option == aotd_stable_point_add","AoTDAddStablePointScript printReq","Our recent analysis of the Janus Device reveals that constructing a component similar to it, but with reversed polarization, can create a stable point within a star system.","10:aotd_stable_point_create:Proceed
 20:aotd_stable_point_cancel:On second thought...",
-aotd_stable_point_proceed,DialogOptionSelected,$option == aotd_stable_point_create,"AoTDAddStablePointScript addStable
+aotd_stable_point_proceed,DialogOptionSelected,"$option == aotd_stable_point_create","AoTDAddStablePointScript addStable
 DismissDialog",,,
-aotd_stable_point_cancel,DialogOptionSelected,$option == aotd_stable_point_cancel,FireAll PopulateOptions,,,
-#END Getting Stable Point From Janus Device Analysis Tech,,,,,,
+aotd_stable_point_cancel,DialogOptionSelected,"$option == aotd_stable_point_cancel","FireAll PopulateOptions",,,
+"#END Getting Stable Point From Janus Device Analysis Tech",,,,,,
 ,,,,,,
 # Pluto Mining Station,,,,,,
-aotd_pluto_interact,OpenInteractionDialog,$customType == aotd_pluto_station,"SetShortcut defaultLeave ESCAPE 
+aotd_pluto_interact,OpenInteractionDialog,"$customType == aotd_pluto_station","SetShortcut defaultLeave ESCAPE 
 ShowDefaultVisual
 AoTDPlutoEncounter start
-FireAll AoTDMegaCheck",,1:defaultLeave:Leave,
-#END Pluto Mining Station,,,,,,
+FireAll AoTDMegaCheck",,"1:defaultLeave:Leave",
+"#END Pluto Mining Station",,,,,,
 ,,,,,,
 # Pre-Collapse Facility - Battle Variant,,,,,,
-pre_collapse_orbiting,OpenInteractionDialog,$aotd_r_expedition_present score:1000,"ShowDefaultVisual
+pre_collapse_orbiting,OpenInteractionDialog,"$aotd_r_expedition_present score:1000","ShowDefaultVisual
 AoTDPCFEncounter init",,,
-pre_Collapse_bribery,OpenCommLink,$entity.fleetType == aotd_expedition score:10000,AoTDBeginConversation,,,
-pre_collapse_bribery_offer,DialogOptionSelected,$option == aotd_bribery_without_sp,AoTDBribery proposeBribery,,,
-pre_collapse_bribery_offer_succeed,DialogOptionSelected,$option == aotd_bribery_suceed,AoTDPCFEncounter bribery,,,
-preCollapse_continiueAfterDefeatingExpedition,BeatDefendersContinue,,SetShortcut defaultLeave ESCAPE,,0:salBeatDefendersContinue:Continue,
+pre_Collapse_bribery,OpenCommLink,"$entity.fleetType == aotd_expedition score:10000","AoTDBeginConversation",,,
+pre_collapse_bribery_offer,DialogOptionSelected,"$option == aotd_bribery_without_sp","AoTDBribery proposeBribery",,,
+pre_collapse_bribery_offer_succeed,DialogOptionSelected,"$option == aotd_bribery_suceed","AoTDPCFEncounter bribery",,,
+preCollapse_continiueAfterDefeatingExpedition,BeatDefendersContinue,,"SetShortcut defaultLeave ESCAPE",,"0:salBeatDefendersContinue:Continue",
 preCollapse_beatExpedition,BeginSalvage,"$market.isSurveyed
 $market.isPlanetConditionMarketOnly
 $market.mc:pre_collapse_facility
 !$market.aotd_fac_explored
 !$tag:gas_giant
-!$market.aotd_failed_pre_collapse",SetShortcut defaultLeave ESCAPE,,"0:explore_PreFac:Send a salvage team  to the facility
+!$market.aotd_failed_pre_collapse","SetShortcut defaultLeave ESCAPE",,"0:explore_PreFac:Send a salvage team  to the facility
 100:defaultLeave:Leave",
-explore_PreFacility,DialogOptionSelected,$option == explore_PreFac,,,0:pre_salvage:Pick through the salvage,
-preSalvage,DialogOptionSelected,$option == pre_salvage,"PreCollapseFacLoot genLoot 
+explore_PreFacility,DialogOptionSelected,"$option == explore_PreFac",,,"0:pre_salvage:Pick through the salvage",
+preSalvage,DialogOptionSelected,"$option == pre_salvage","PreCollapseFacLoot genLoot 
 $market.aotd_fac_explored = true",,,
 ,,,,,,
 ,,,,,,
@@ -125,20 +125,20 @@ $market.mc:pre_collapse_facility
 !$tag:gas_giant
 $market.aotd_failed_pre_collapse","AoTDPCFFailed removeCondition 
 
-SetShortcut defaultLeave ESCAPE","Unfortunately, a previous scavenger has cleared the entire planet of all of potentially valuable data. There is nothing left for us.",0:aotd_leave:Leave,
-preCollapse_fac_failed2,DialogOptionSelected,$option == aotd_leave,AoTDPCFFailed dismiss,,,
-#END Pre-Collapse Facility - Battle Variant,,,,,,
+SetShortcut defaultLeave ESCAPE","Unfortuanelty previous fleet have cleared entire planet from all of valuable data. There is nothing left valuable for us ","0:aotd_leave:Leave",
+preCollapse_fac_failed2,DialogOptionSelected,"$option == aotd_leave","AoTDPCFFailed dismiss",,,
+"#END Pre-Collapse Facility - Battle Variant",,,,,,
 ,,,,,,
-# Research Databank sell,,,,,,
+# Research Databank Sell,,,,,,
 databanks_turnInOption,PopulateOptions,"$isPerson
-ResearchSell personCanAcceptDbs",FireBest DissableDatabankOptionIfNeeded,,"15:databanks_startTurnIn:""I'd like to turn in these databanks that I've acquired...""",
-databanks_disableTurnInOption,DissableDatabankOptionIfNeeded,!ResearchSell playerHasDbs,"SetTooltip databanks_startTurnIn ""You do not have any databanks in your possession.""
+ResearchSell personCanAcceptDbs","FireBest DissableDatabankOptionIfNeeded",,"15:databanks_startTurnIn:""I'd like to turn in these databanks that I've acquired...""",
+databanks_disableTurnInOption,DissableDatabankOptionIfNeeded,"!ResearchSell playerHasDbs","SetTooltip databanks_startTurnIn ""You do not have any databanks in your possession.""
 SetEnabled databanks_startTurnIn false",,,
-databanks_turnInOptionSelGeneric,DialogOptionSelected,$option == databanks_startTurnIn,ResearchSell generateInitResponse,,,
+databanks_turnInOptionSelGeneric,DialogOptionSelected,"$option == databanks_startTurnIn","ResearchSell generateInitResponse",,,
 ,,,,,,
 ,,,,,,
-databanks_neverMindOptionSelected,DialogOptionSelected,$option == databanks_neverMind,FireAll PopulateOptions,,,
-databanks_turnInOptionSelected,DialogOptionSelected,$option == databanks_selectDbs,ResearchSell selectDatabanks,,,
+databanks_neverMindOptionSelected,DialogOptionSelected,"$option == databanks_neverMind","FireAll PopulateOptions",,,
+databanks_turnInOptionSelected,DialogOptionSelected,"$option == databanks_selectDbs","ResearchSell selectDatabanks",,,
 ,,,,,,
 ,,,,,,
 ,,,,,,
@@ -146,29 +146,29 @@ databanks_turnInResponseDefault,DatabanksTurnedIn,"$isPerson
 ResearchSell personCanAcceptDbs","FireAll PopulateOptions
 ResearchSell generateAfterResponse",,,
 ,,,,,,
-aotd_salvage_confirm,DialogOptionSelected,$option == AoTD_Mega_Salvage,AoTDStableHandler salvageExplain:aotd_hypershunt_receiver,,,
-aotd_salvage_confirm2,DialogOptionSelected,$option == SL_aotd_hypershunt_deconstruct,AoTDStableHandler salvageComplete:aotd_hypershunt_receiver,,,
-#END Research Databank sell,,,,,,
+aotd_salvage_confirm,DialogOptionSelected,"$option == AoTD_Mega_Salvage","AoTDStableHandler salvageExplain:aotd_hypershunt_receiver",,,
+aotd_salvage_confirm2,DialogOptionSelected,"$option == SL_aotd_hypershunt_deconstruct","AoTDStableHandler salvageComplete:aotd_hypershunt_receiver",,,
+"#END Research Databank Sell",,,,,,
 ,,,,,,
 # Scientist Hijack,,,,,,
-aotd_scientist_ai_hijack,DialogOptionSelected,$option == saic_giveCore score:10000,AoTDForbiddenScientist markDecision,"The shielded crate shuts with the sound of powered bolts sliding home. It sends off a one-time coded hyperwave burst. Confirmation, you suppose. It would have been good of that scientist to warn you about this little trick; hopefully no pirates - or anything else - was listening nearby.",saic_continueGiveCore:Loot the rest of the cache,
+aotd_scientist_ai_hijack,DialogOptionSelected,"$option == saic_giveCore score:10000","AoTDForbiddenScientist markDecision","The shielded crate shuts with the sound of powered bolts sliding home. It sends off a one-time coded hyperwave burst. Confirmation, you suppose. It would have been good of that scientist to warn you about this little trick; hopefully no pirates - or anything else - was listening nearby.","saic_continueGiveCore:Loot the rest of the cache",
 ,,,,,,
-aotd_scientist_greeting,PickGreeting,$id == aotd_scientist_forbidden score:1000,"SaveCurrentVisual
+aotd_scientist_greeting,PickGreeting,"$id == aotd_scientist_forbidden score:1000","SaveCurrentVisual
 ShowPersonVisual","You arrive at the coordinates embedded in the signal.
 A familiar figure awaits you — cleaner, calmer, but still radiating the barely-contained intensity you remember.
 
 $HeOrShe steps forward. ""You came. I wasn’t sure, but… something told me you would. We have much to discuss.""","aotd_forbidden_start:Wait a minute, you are that scientist from bar right?",
-aotd_scientist_foribdden_1,DialogOptionSelected,$option == aotd_forbidden_start,,"""Ah — Commander! Yes, yes. I wasn’t sure you’d come. Back then I was just another voice in the static, wasn’t I? But you listened.""
-""Because of you, I’ve made... progress. Real progress.",aotd_forbidden_continiue_1:Why you wanted to contact with me?,
-aotd_scientist_foribdden_2,DialogOptionSelected,$option == aotd_forbidden_continiue_1,,"""That AI core you gave me — it wasn’t just any Alpha-class unit. It was something far older. Pre-Alpha, possibly even prototype-stage.
+aotd_scientist_foribdden_1,DialogOptionSelected,"$option == aotd_forbidden_start",,"""Ah — Commander! Yes, yes. I wasn’t sure you’d come. Back then I was just another voice in the static, wasn’t I? But you listened.""
+""Because of you, I’ve made... progress. Real progress.","aotd_forbidden_continiue_1:Why you wanted to contact with me?",
+aotd_scientist_foribdden_2,DialogOptionSelected,"$option == aotd_forbidden_continiue_1",,"""That AI core you gave me — it wasn’t just any Alpha-class unit. It was something far older. Pre-Alpha, possibly even prototype-stage.
 Its architecture was riddled with quantum cryptographic subsystems — designed not to think, but to crack.
 
 With it, I accessed a Domain-era databank. Not scraps, not corrupted fragments. A sealed vault of knowledge untouched since the gates fell.
 I have data no one else in the Persean Sector has seen.
 
 With all of that, I have proposition for you.""
-",aotd_forbidden_continiue_2:Listen to proposition,
-aotd_scientist_foribdden_3,DialogOptionSelected,$option == aotd_forbidden_continiue_2,,"""This databank… it contains knowledge that simply doesn’t exist in the Sector anymore. Designs, theories, protocols — real Domain science.
+","aotd_forbidden_continiue_2:Listen to proposition",
+aotd_scientist_foribdden_3,DialogOptionSelected,"$option == aotd_forbidden_continiue_2",,"""This databank… it contains knowledge that simply doesn’t exist in the Sector anymore. Designs, theories, protocols — real Domain science.
 But it’s raw. Fragmented. Interlocked with infrastructure and keys that haven’t existed for centuries.
 To make it usable, we need to take steps. Reconstruct missing links, build interfaces, maybe even recreate parts of the old system itself.""
 
@@ -180,25 +180,25 @@ My knowledge — my expertise — it’s yours now. I offer you my services, as 
 Together, we can bring this knowledge back to life.""","aotdForbiddenScientistAgree:Accept Propostion 
 aotdForbiddenScientistInfo:See scientist skills
 aotdForbiddenScientistReturn:Politley decline offer",
-aotd_scientist_foribdden_info,DialogOptionSelected,$option == aotdForbiddenScientistInfo,"AddTextSmall ""Passive Skill - Forbidden Knowledge."" highlight
+aotd_scientist_foribdden_info,DialogOptionSelected,"$option == aotdForbiddenScientistInfo","AddTextSmall ""Passive Skill - Forbidden Knowledge."" highlight
 AddTextSmall ""Unlock Experimental Tier of Tech tree, bypassing requirement for Hyperdimensional Processor."" highlight
 AddTextSmall ""Active Skill - AI Assistant."" highlight
 AddTextSmall ""Reduces amount of GP resources needed for projects by 20%"" highlight
 ",,,
-aotd_scientist_foribdden_confirm,DialogOptionSelected,$option == aotdForbiddenScientistAgree,"AoTDForbiddenScientist grantScientist  
-AddTextSmall ""$personName joined your faction"" highlight",,0:cutCommLink:Return,
-aotd_scientist_foribdden_reject,DialogOptionSelected,$option == aotdForbiddenScientistReturn,AoTDForbiddenScientist grantScientist ,"""Ah… I see.
+aotd_scientist_foribdden_confirm,DialogOptionSelected,"$option == aotdForbiddenScientistAgree","AoTDForbiddenScientist grantScientist  
+AddTextSmall ""$personName joined your faction"" highlight",,"0:cutCommLink:Return",
+aotd_scientist_foribdden_reject,DialogOptionSelected,"$option == aotdForbiddenScientistReturn","AoTDForbiddenScientist grantScientist ","""Ah… I see.
 Well, I can’t say I’m not disappointed, but… I understand.""
 
 ""This is dangerous ground we’re stepping on. Old ghosts. Old powers.
-Maybe it's for the best to keep some things in the past.""",0:cutCommLink:Return,
-#END Scientist Hijack,,,,,,
+Maybe it's for the best to keep some things in the past.""","0:cutCommLink:Return",
+"#END Scientist Hijack",,,,,,
 ,,,,,,
 # Shroud Overhaul,,,,,,
-aotd_dwellerContSel,DialogOptionSelected,$option == abyssalLight_dwellerCont score:10000,AoTDDwellerCMD checkForBetterSurvey,,"abyssalLight_maxSensors:Order a sensor sweep, full power, focused on the anomalous drive-bubble penetrations
+aotd_dwellerContSel,DialogOptionSelected,"$option == abyssalLight_dwellerCont score:10000","AoTDDwellerCMD checkForBetterSurvey",,"abyssalLight_maxSensors:Order a sensor sweep, full power, focused on the anomalous drive-bubble penetrations
 abyssalLight_wait:Wait
 abyssalLight_emCon:""Go to maximum emission control! EMCON zero-zero alpha, immediate execute.""",
-aotd_dwellerHugeFleet,DialogOptionSelected,$option == abyssalLight_ultrasensors,AoTDDwellerCMD hugeFleet,"""Aye $playerSirOrMadam. Commencing full-spectrum sweep."" Sensors acknowledges, voice steady but hands moving with grim certainty, overriding safety interlocks one by one.
+aotd_dwellerHugeFleet,DialogOptionSelected,"$option == abyssalLight_ultrasensors","AoTDDwellerCMD hugeFleet","""Aye $playerSirOrMadam. Commencing full-spectrum sweep."" Sensors acknowledges, voice steady but hands moving with grim certainty, overriding safety interlocks one by one.
 
 The $shipOrFleet glows on the central display, its signature flaring brighter with every passing second. Amber turns to white-hot as sensor arrays flood hyperspace with precision pulses, targeting every distorted ripple, every erratic fracture along the drive-bubble sheath.
 
@@ -211,10 +211,10 @@ Beyond the veil, something notices. Hunger stirs, drawn not by accident, but by 
 This was a mistake. A choice made by those who should have known better.
 
 And now it comes—tendrils, maws, and seething forms pressing eagerly through widening rifts, answering a call they were never meant to hear.",,
-#END Shroud Overhaul,,,,,,
+"#END Shroud Overhaul",,,,,,
 ,,,,,,
 # Shroud Overhaul Part 2,,,,,,
-abyssalLight_maxSensorsSel_aotd,DialogOptionSelected,$option == abyssalLight_maxSensors score:10000,AoTDDwellerCMD largeFleet,"""Aye $playerSirOrMadam! Executing."" Sensors barks, then deftly executes a series of overrides. 
+abyssalLight_maxSensorsSel_aotd,DialogOptionSelected,"$option == abyssalLight_maxSensors score:10000","AoTDDwellerCMD largeFleet","""Aye $playerSirOrMadam! Executing."" Sensors barks, then deftly executes a series of overrides. 
 
 Your $shipOrFleet status is up on the central display - shield bubble an unsteady amber, incursions of N-space fissures marked in garish red. A blink of white as active sensors trigger and-
 
@@ -223,7 +223,7 @@ Your $shipOrFleet status is up on the central display - shield bubble an unstead
 * * *
 
 A hidden blackness waiting, lurking, jolts awake. Tendrils lunge eagerly, hungrily, through fissures in the dark behind the night.",,
-abyssalLight_emConSel,DialogOptionSelected,$option == abyssalLight_emCon score:10000,AoTDDwellerCMD smallFleet,"At your command, the unperceived chorus of a multitude of ship systems and machinery dies down with a deepening sigh into muted quietude.
+abyssalLight_emConSel,DialogOptionSelected,"$option == abyssalLight_emCon score:10000","AoTDDwellerCMD smallFleet","At your command, the unperceived chorus of a multitude of ship systems and machinery dies down with a deepening sigh into muted quietude.
 
 All that remains is the breath and bodies of your bridge crew, a strange assertion of your shared humanity. 
 
@@ -232,14 +232,14 @@ Backup e-lighting, simple chemical things, provide an eerie glow. A series of di
 * * *
 
 A hidden blackness feels the brush of a shadow. Less than a morsel, unworthy of wakefulness. By some analog of distributed instinct a few listless tendrils explore this disturbance, this ripple in the darkness behind the night.",,
-abyssalLight_dwellerWaitSel,DialogOptionSelected,$option == abyssalLight_wait score:10000,AoTDDwellerCMD mediumFleet,"You wait.
+abyssalLight_dwellerWaitSel,DialogOptionSelected,"$option == abyssalLight_wait score:10000","AoTDDwellerCMD mediumFleet","You wait.
 
 Alarms are reset, battle restraints engaged. Activity on the bridge gradually quiets as all officers, crew, and systems reach a state of readiness, even anticipation - fight or flight.
 
 The incursions crawl closer to the center of your display volume, expanding unwaveringly and intentionally. 
 
 All eyes are on command interfaces, and all attention is on your next order.",,
-#END Shroud Overhaul Part 2,,,,,,
+"#END Shroud Overhaul Part 2",,,,,,
 ,,,,,,
 # Sophia Encounter,,,,,,
 aotdSophiaEncounters,DialogOptionSelected,"$faction.id != pirates
@@ -250,32 +250,32 @@ $global.aotd_can_sophia == true","FireBest BarShuttleDownPrintDesc
 BarCMD playAmbience
 AddText ""You make your way inside a bar when suddenly you are approached by a woman with white hair. First thing that catches your attention is a golden mark on her face and a uniform typical for a researcher. As you consider what to say, your thoughts are interrupted by her gentle voice asking you for a drink and 5 minutes of your time""",,"aotdSophiaTalk:Follow
 aotdSophiaDontTalk:Don't follow",
-aotdSophiaTalk,DialogOptionSelected,$option == aotdSophiaTalk,"SaveCurrentVisual
+aotdSophiaTalk,DialogOptionSelected,"$option == aotdSophiaTalk","SaveCurrentVisual
 BeginConversation aotd_sophia
-$global.aotd_sophia = true",Both of you sit in the bar ordering a small glass of fine booze. After a moment you hear that her name is Sophia and she is one of researchers from Galatia as you guessed it earlier. “I have heard stories about technological advancements of your faction and  I have come with a proposition for you”,aotdSophiaListen: Listen to proposition,
-aotdSophiaListen,DialogOptionSelected,$option == aotdSophiaListen,,"So getting to the point, I am a seeker of knowledge, Galatia limits me with regulations, but you? You pursue knowledge without any bounds and I want to be part of it . So my question is will you allow my humble person to help you in that matter?
+$global.aotd_sophia = true","Both of you sit in the bar ordering a small glass of fine booze. After a moment you hear that her name is Sophia and she is one of researchers from Galatia as you guessed it earlier. “I have heard stories about technological advancements of your faction and  I have come with a proposition for you”","aotdSophiaListen: Listen to proposition",
+aotdSophiaListen,DialogOptionSelected,"$option == aotdSophiaListen",,"So getting to the point, I am a seeker of knowledge, Galatia limits me with regulations, but you? You pursue knowledge without any bounds and I want to be part of it . So my question is will you allow my humble person to help you in that matter?
 ","aotdSophiaAgree:Accept Propostion 
 aotdSophiaInfo:See her skills
 aotdReturn:Decline ,and leave the bar",
-aotdSophiaAgree,DialogOptionSelected,$option == aotdSophiaAgree,"SophiaAgreed  
-AddTextSmall ""$personName joined your faction"" highlight",,aotdReturn: Leave the bar,
-aotdSophiaInfo,DialogOptionSelected,$option == aotdSophiaInfo,"AddTextSmall ""Passive Skill - Archivist."" highlight
+aotdSophiaAgree,DialogOptionSelected,"$option == aotdSophiaAgree","SophiaAgreed  
+AddTextSmall ""$personName joined your faction"" highlight",,"aotdReturn: Leave the bar",
+aotdSophiaInfo,DialogOptionSelected,"$option == aotdSophiaInfo","AddTextSmall ""Passive Skill - Archivist."" highlight
 AddTextSmall  ""Every two months, discover a new possible location of a Pre-Collapse Facility"" highlight
 AddTextSmall ""Active Skill - Resourceful."" highlight
 AddTextSmall  ""Decrease cost of item for initial research by 100 units or 1 if given item is research databank. This does not include colony items"" highlight
 ",,,
-aotdReturn,DialogOptionSelected,$option == aotdReturn,"EndConversation DO_NOT_FIRE
+aotdReturn,DialogOptionSelected,"$option == aotdReturn","EndConversation DO_NOT_FIRE
 RestoreSavedVisual
-BarCMD showOptions",You return to the bar.,,
+BarCMD showOptions","You return to the bar.",,
 ,,,,,,
 ,,,,,,
 ,,,,,,
 ,,,,,,
-aotdSophiaDontTalk,DialogOptionSelected,$option == aotdSophiaDontTalk,"BarCMD showOptions 
+aotdSophiaDontTalk,DialogOptionSelected,"$option == aotdSophiaDontTalk","BarCMD showOptions 
 $global.aotd_sophia = true",,,
-aotdSophiaIgnore,DialogOptionSelected,$option == aotdSophiaIgnore,"EndConversation DO_NOT_FIRE
+aotdSophiaIgnore,DialogOptionSelected,"$option == aotdSophiaIgnore","EndConversation DO_NOT_FIRE
 RestoreSavedVisual
 BarCMD showOptions
 $global.aotd_sophia=false",,,
-#END Sophia Encounter,,,,,,
-,,,,,,
+"#END Sophia Encounter",,,,,,
+
