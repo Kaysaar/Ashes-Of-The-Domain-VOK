@@ -54,7 +54,7 @@ public class Fracking extends BaseIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        boolean gasGiantOrStation = (this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().isGasGiant())||this.getMarket().getPrimaryEntity().hasTag(Tags.STATION);
+        boolean gasGiantOrStation = (this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().isGasGiant())||(this.getMarket().getPrimaryEntity()!=null&&this.getMarket().getPrimaryEntity().hasTag(Tags.STATION));
             return  (AoDUtilis.getVolatilesAmount(market)>=-1)
                     && AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&gasGiantOrStation;
 
@@ -63,7 +63,7 @@ public class Fracking extends BaseIndustry {
     @Override
     public String getUnavailableReason() {
         ArrayList<String> reasons = new ArrayList<>();
-        boolean gasGiantOrStation = (this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().isGasGiant())||this.getMarket().getPrimaryEntity().hasTag(Tags.STATION);
+        boolean gasGiantOrStation = (this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().isGasGiant())||(this.getMarket().getPrimaryEntity()!=null&&this.getMarket().getPrimaryEntity().hasTag(Tags.STATION));
 
         if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)){
             reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.DEEP_MINING_METHODS));
