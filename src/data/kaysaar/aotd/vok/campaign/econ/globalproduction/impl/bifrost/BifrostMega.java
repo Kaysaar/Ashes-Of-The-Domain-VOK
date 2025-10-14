@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -11,6 +12,7 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.BifrostUI;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog.BifrostLocationData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
@@ -49,7 +51,34 @@ public class BifrostMega extends GPBaseMegastructure {
         test.getMemory().set("$supplied", true);
         return test;
     }
+    public static SectorEntityToken spawnGate(BifrostLocationData data) {
+        float orbitRadius = data.radius;
+        String name =data.center.getName();
+        if(data.center.getMarket()!=null){
+            name = data.center.getMarket().getName();
+        }
+        SectorEntityToken test = data.center.getStarSystem().addCustomEntity((String) null,  name+ " Bifrost Gate", "bifrost_gate", Factions.PLAYER);
+        if(!data.center.getContainingLocation().getAllEntities().contains(test)){
+            data.center.getContainingLocation().addEntity(test);
+        }
+        test.setCircularOrbitWithSpin(data.center, data.angle, orbitRadius, orbitRadius / 10.0F, 5.0F, 5.0F);
+        test.setLocation(data.locationOfGate.x,data.locationOfGate.y);
 
+        MarketAPI market = data.center.getMarket();
+        if(market!=null){
+            market.getConnectedEntities().add(test);
+            test.setMarket(market);
+
+        }
+
+        test.setDiscoverable(false);
+
+        test.getMemory().set("$used", false);
+        test.getMemory().set("$cooldown", 0f);
+        test.getMemory().set("$supplied", true);
+
+        return test;
+    }
     @Override
     public void trueInit(String specId, SectorEntityToken entityTiedTo) {
         this.specId = specId;
@@ -66,7 +95,15 @@ public class BifrostMega extends GPBaseMegastructure {
 
         this.megaStructureSections.add(section);
     }
+    public void addNewBifrostGate(StarSystemAPI systemAPI,BifrostLocationData data) {
+        BifrostSection section = (BifrostSection) GPManager.getInstance().getMegaSectionSpecFromList("bifrost_section").getScript();
+        section.init(this, false);
+        section.setStarSystemAPI(systemAPI);
+        section.startReconstruction();
+        section.setData(data);
 
+        this.megaStructureSections.add(section);
+    }
     public ArrayList<BifrostSection> getSections() {
         ArrayList<BifrostSection> section = new ArrayList<>();
         for (GPMegaStructureSection megaStructureSection : megaStructureSections) {

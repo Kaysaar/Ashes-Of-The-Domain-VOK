@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs;
+package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
@@ -12,15 +12,21 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.co
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.StarSystemSelector;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.StarSystemSelectorOtherInfoData;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class BifrostStarSystemSelector extends BasePopUpDialog{
-    StarSystemSelector selector;
+public class BifrostStarSystemSelectorDialog extends BasePopUpDialog {
+    BifrostStarSystemSelector selector;
     BaseMegastrucutreMenu menu ;
-    public BifrostStarSystemSelector(String headerTitle,BaseMegastrucutreMenu menu) {
+    BifrostLocationData data;
+    public StarSystemSelector getSelector() {
+        return selector;
+    }
+
+    public BifrostStarSystemSelectorDialog(String headerTitle, BaseMegastrucutreMenu menu) {
         super(headerTitle);
         this.menu = menu;
     }
@@ -40,7 +46,7 @@ public class BifrostStarSystemSelector extends BasePopUpDialog{
         for (BifrostSection section : mega.getSections()) {
             systems.remove(section.getStarSystemAPI());
         }
-        selector = new StarSystemSelector(systems, Global.getSettings().createCustom(590, 220, null), new StarSystemSelectorOtherInfoData() {
+        selector = new BifrostStarSystemSelector(systems, Global.getSettings().createCustom(590, 220, null), new StarSystemSelectorOtherInfoData() {
             @Override
             public String getNameForLabel() {
                 return "Available bonus from Bifrost Gate";
@@ -65,7 +71,8 @@ public class BifrostStarSystemSelector extends BasePopUpDialog{
                 label.getPosition().inTL(width/2-(label.computeTextWidth(label.getText())/2),height/2-(label.computeTextHeight(label.getText())/2));
 
             }
-        });
+
+        },this);
         selector.init();
         tooltip.addCustom(selector.getMainPanel(),5f).getPosition().inTL((width-selector.getMainPanel().getPosition().getWidth())/2,-tooltip.getPrev().getPosition().getY()-selector.getMainPanel().getPosition().getHeight());
         tooltip.setParaInsigniaLarge();
@@ -86,11 +93,15 @@ public class BifrostStarSystemSelector extends BasePopUpDialog{
 
     @Override
     public void applyConfirmScript() {
-        if(selector.getCurrentlyChosenStarSystem()!=null){
+        if(selector.getCurrentlyChosenStarSystem()!=null&&data==null){
             BifrostMega mega = (BifrostMega) menu.getMegastructure();
             mega.addNewBifrostGate(selector.getCurrentlyChosenStarSystem());
             menu.resetEntireUI();
+        } else if (selector.getCurrentlyChosenStarSystem()!=null&&data!=null) {
 
+            BifrostMega mega = (BifrostMega) menu.getMegastructure();
+            mega.addNewBifrostGate(selector.getCurrentlyChosenStarSystem(),data);
+            menu.resetEntireUI();
         }
     }
 }
