@@ -114,6 +114,7 @@ public class StarSystemSelector implements CustomUIPanelPlugin {
                 if(button.isChecked()){
                     currentlyChosenStarSystem = system;
                     button.setChecked(false);
+                    onChangeOfStarSystem(currentlyChosenStarSystem);
                 }
                 if(button.getCustomData().equals(currentlyChosenStarSystem)){
                     button.highlight();
@@ -123,6 +124,9 @@ public class StarSystemSelector implements CustomUIPanelPlugin {
                 }
             }
         }
+    }
+    public void onChangeOfStarSystem(StarSystemAPI starSystem){
+
     }
 
     @Override

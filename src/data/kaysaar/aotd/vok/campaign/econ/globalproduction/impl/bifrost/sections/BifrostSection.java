@@ -9,6 +9,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog.BifrostLocationData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastrcutre;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
@@ -26,6 +27,12 @@ public class BifrostSection extends GPMegaStructureSection {
     public SectorEntityToken getGateTiedTo() {
         return gateTiedTo;
     }
+    BifrostLocationData data;
+
+    public BifrostLocationData getData() {
+        return data;
+    }
+
 
     @Override
     public String getName() {
@@ -185,6 +192,9 @@ public class BifrostSection extends GPMegaStructureSection {
         }
     }
 
+    public void setData(BifrostLocationData data) {
+        this.data = data;
+    }
 
     @Override
     public HashMap<String, Integer> getGPUpkeep() {
@@ -193,16 +203,22 @@ public class BifrostSection extends GPMegaStructureSection {
     @Override
     public void aboutToReconstructSection() {
         super.aboutToReconstructSection();
-        MarketAPI market = null;
-        for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarkets(starSystemAPI)) {
-            if(marketAPI.isPlayerOwned()||marketAPI.getFaction().isPlayerFaction()){
-                market = marketAPI;
-                break;
+        if(getData()==null){
+            MarketAPI market = null;
+            for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarkets(starSystemAPI)) {
+                if(marketAPI.isPlayerOwned()||marketAPI.getFaction().isPlayerFaction()){
+                    market = marketAPI;
+                    break;
+                }
+            }
+            if(market!=null){
+                gateTiedTo = BifrostMega.spawnGate(market);
             }
         }
-        if(market!=null){
-            gateTiedTo = BifrostMega.spawnGate(market);
+        else{
+            gateTiedTo = BifrostMega.spawnGate(getData());
         }
+
 
     }
 }

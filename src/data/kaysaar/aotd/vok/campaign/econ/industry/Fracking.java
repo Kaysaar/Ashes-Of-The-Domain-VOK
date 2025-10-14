@@ -2,7 +2,7 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Planets;
+import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
@@ -54,23 +54,23 @@ public class Fracking extends BaseIndustry {
 
     @Override
     public boolean isAvailableToBuild() {
-        boolean gasGiant = this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().isGasGiant();
+        boolean gasGiantOrStation = (this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().isGasGiant())||this.getMarket().getPrimaryEntity().hasTag(Tags.STATION);
             return  (AoDUtilis.getVolatilesAmount(market)>=-1)
-                    && AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&gasGiant;
+                    && AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&gasGiantOrStation;
 
     }
 
     @Override
     public String getUnavailableReason() {
         ArrayList<String> reasons = new ArrayList<>();
-        boolean gasGiant = this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().getTypeId().equals(Planets.GAS_GIANT);
+        boolean gasGiantOrStation = (this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().isGasGiant())||this.getMarket().getPrimaryEntity().hasTag(Tags.STATION);
 
         if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)){
             reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.DEEP_MINING_METHODS));
 
         }
-        if(gasGiant){
-            reasons.add("Planet must be gas giant");
+        if(gasGiantOrStation){
+            reasons.add("Planet must either gas giant, or siphon station. ");
         }
         StringBuilder bd = new StringBuilder();
         boolean insert = false;
