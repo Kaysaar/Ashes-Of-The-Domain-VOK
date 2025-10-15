@@ -11,6 +11,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog.BifrostLocationData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastrcutre;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
@@ -83,7 +84,7 @@ public class BifrostSection extends GPMegaStructureSection {
         if(isDisabled){
             map.clear();
         }
-        if(isRestored && HypershuntMegastrcutre.isWithinReciverSystem(getGateTiedTo())){
+        if(isRestored && HypershuntMegastructure.isWithinReceiverSystem(getGateTiedTo())){
             map.remove(AoTDCommodities.PURIFIED_TRANSPLUTONICS);
         }
     }
@@ -129,7 +130,7 @@ public class BifrostSection extends GPMegaStructureSection {
         if(isRestored&&getGateTiedTo()!=null) {
             tooltip.addPara("Bifrost Gate Operational !",Misc.getPositiveHighlightColor(),5f);
             int cooldown = (int) this.getGateTiedTo().getMemory().getFloat("$cooldown");
-            if(!HypershuntMegastrcutre.isWithinReciverSystem(this.getGateTiedTo())){
+            if(!HypershuntMegastructure.isWithinReceiverSystem(this.getGateTiedTo())){
                 tooltip.addPara("Cooldown of gate %s",5f,Color.ORANGE, AoTDMisc.convertDaysToString(cooldown));
             }
             else{
