@@ -1,4 +1,4 @@
-id,time_to_make_one,resoruces_to_make_one
+id,time_to_make_one,resources_to_make_one
 pristine_nanoforge,120,"advanced_components:7,refined_metal:3,purified_rare_metal:3"
 synchrotron,90,"advanced_components:4,volatiles:4,purified_rare_metal:3,organics:3"
 orbital_fusion_lamp,30,"advanced_components:3,purified_rare_metal:6,volatiles:6"
