@@ -1,14 +1,12 @@
 package data.kaysaar.aotd.vok.campaign.econ.conditions;
 
-import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.BaseMarketConditionPlugin;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.impl.campaign.ids.Items;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 
-public class WaterMinningCond extends BaseMarketConditionPlugin {
+public class WaterMiningCond extends BaseMarketConditionPlugin {
     public static final String UpgradeCond = "watterSupplyMining";
     @Override
     public void apply(String id) {
