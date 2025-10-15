@@ -173,7 +173,7 @@ public class PopUpUI implements CustomUIPanelPlugin {
                     }
                 }
                 if(!event.isConsumed()){
-                    if(event.getEventValue()== Keyboard.KEY_ESCAPE&&!event.isMouseEvent()){
+                    if(event.getEventValue()== Keyboard.KEY_ESCAPE&&!event.isMouseEvent()&&event.isKeyUpEvent()&&cancelButton==null){
                         ProductionUtil.getCoreUI().removeComponent(panelToInfluence);
                         event.consume();
                         onExit();

@@ -125,6 +125,7 @@ public class GPOrder implements Cloneable {
     }
 
     public void updateResourceCost() {
+
         assignedResources = getSpecFromClass().supplyCost;
     }
 
@@ -144,6 +145,8 @@ public class GPOrder implements Cloneable {
             }
 
         }
+
+
         return null;
     }
 

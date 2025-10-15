@@ -1,13 +1,14 @@
-package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs;
+package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog;
 
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
 
 import java.awt.*;
 
-public class BifrostGateActivationDialog extends BasePopUpDialog{
+public class BifrostGateActivationDialog extends BasePopUpDialog {
     BifrostSection section;
     BaseMegastrucutreMenu menu;
     public BifrostGateActivationDialog(String headerTitle,BifrostSection section,BaseMegastrucutreMenu menu) {

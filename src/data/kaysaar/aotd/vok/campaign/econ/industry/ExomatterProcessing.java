@@ -156,7 +156,7 @@ public class ExomatterProcessing extends BaseIndustry {
 
     @Override
     public boolean showWhenUnavailable() {
-        return false;
+        return isAvailableToBuild();
     }
 
     @Override
