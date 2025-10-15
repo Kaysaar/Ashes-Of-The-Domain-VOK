@@ -11,6 +11,8 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog.BifrostGateActivationDialog;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog.BifrostStarSystemSelectorDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
@@ -98,7 +100,7 @@ public class BifrostUI extends BaseMegastrucutreMenu {
         super.advance(amount);
         if (addGate != null && addGate.isChecked()) {
             addGate.setChecked(false);
-            BifrostStarSystemSelector dialog = new BifrostStarSystemSelector("Choose system to build Bifrost Gate", this);
+            BifrostStarSystemSelectorDialog dialog = new BifrostStarSystemSelectorDialog("Choose system to build Bifrost Gate", this);
             CustomPanelAPI panelAPI = Global.getSettings().createCustom(800, 420, dialog);
             UIPanelAPI panelAPI1 = ProductionUtil.getCoreUI();
             dialog.init(panelAPI, panelAPI1.getPosition().getCenterX() - (panelAPI.getPosition().getWidth() / 2), panelAPI1.getPosition().getCenterY() + (panelAPI.getPosition().getHeight() / 2), true);

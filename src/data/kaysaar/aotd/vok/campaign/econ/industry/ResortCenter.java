@@ -10,6 +10,8 @@ import com.fs.starfarer.api.impl.campaign.population.PopulationComposition;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.awt.*;
 
@@ -113,10 +115,12 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
     }
     public boolean isAvailableToBuild() {
         if(market.hasCondition(CONDITION_HABITABLE)&&market.hasSpaceport()&&!market.hasCondition("pollution")){
-            return true;
+            return  AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.LUXURY_CIVIC_PLANNING,market);
         }
+
         return false;
     }
+
     public String getUnavailableReason() {
         return "Requires a functional spaceport and a habitable planet without any pollution.";
     }
@@ -197,7 +201,7 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
     }
     @Override
     public boolean showWhenUnavailable() {
-        return true;
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.LUXURY_CIVIC_PLANNING,market);
     }
     public String getNameForModifier() {
         return Misc.ucFirst(getCurrentName().toLowerCase());

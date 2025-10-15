@@ -144,6 +144,13 @@ public class UpgradeListUI implements CustomDialogDelegate {
             if(!canAfford(ind)||!ind.isAvailableToBuild()){
                 button.setClickable(false);
             }
+            if(ind.isIndustry()){
+                int curr = Misc.getNumIndustries(market);
+                int max = Misc.getMaxIndustries(market);
+                if(curr>=max){
+                    button.setClickable(false);
+                }
+            }
             buttons.add(button);
             mainPanel.addUIElement(tooltipButton).inTL(-5,0);
             mainPanel.addUIElement(tooltipImage).inTL(0,5);
