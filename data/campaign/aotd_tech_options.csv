@@ -25,7 +25,7 @@ aotd_tech_orbital_assembly,Orbital Assembly,2,90,"aotd_tech_hull_manufacture,aot
 aotd_tech_consumer,Consumer Goods Production,2,45,aotd_tech_nanometal,research_databank:12,minorindustry2,consumerindustry:industry,0,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_drug_production,Drugs Amplification,2,25,aotd_tech_consumer,research_databank:8,minorindustry3,druglight:industry,1,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_maglev,Urban Throughput Systems,2,30,aotd_tech_alloy_production,research_databank:10,maglev,aotd_maglev:industry,1,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_resort_tech,Luxury Civic Planning,2,25,aotd_tech_spaceport_expansion,research_databank:5,tourism,tourism:industry,1,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_resort_tech,Luxury Civic Planning,2,25,aotd_tech_spaceport_expansion,research_databank:5,aotd_resort_center,aotd_resort_center:industry,1,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_dual_trade_system,Twin Economy Protocols,2,30,aotd_tech_spaceport_expansion,research_databank10,dual_market,"commerce:industry
 underworld:industry",0,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

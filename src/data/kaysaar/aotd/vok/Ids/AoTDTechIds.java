@@ -11,6 +11,7 @@ public class AoTDTechIds {
     public static final String HAZMAT_WORKING_EQUIPMENT = "aotd_tech_hazmat_equipment";
 
     public static final String LOBSTER_BREEDING_PROGRAM = "aotd_tech_lobster_breeding";
+    public static final String LUXURY_CIVIC_PLANNING = "aotd_tech_resort_tech";
     public static final String IMPROVED_FERTILIZERS = "aotd_tech_improved_fertilizers";
     public static final String GEOTHERMAL_FRACKING = "aotd_tech_geothermal_fracking";
     public static final String ALLOY_PRODUCTION_MATRIX = "aotd_tech_alloy_production";

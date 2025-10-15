@@ -3,7 +3,7 @@ package data.kaysaar.aotd.vok.Ids;
 public class AoTDIndustries {
     public static final String CRYOHARVESTER = "cryoorganharvester";
     public static final String CRYOREVIVAL = "cryorevival";
-    public static final String RESORT = "tourism";
+    public static final String RESORT = "aotd_resort_center";
     public static final String UNDERWORLD = "underworld";
     public static final String TERMINUS = "logisitcbureau";
     public static final String TRADE_OUTPOST = "aotd_trade_outpost";

@@ -3,13 +3,11 @@ package data.kaysaar.aotd.vok.achivements;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.magiclib.achievements.MagicAchievement;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class AoTDBaseBuildingAchivement extends MagicAchievement {
+public class AoTDBaseBuildingAchievement extends MagicAchievement {
     public LinkedHashMap<String,Boolean>mapOfProgress = new LinkedHashMap<>();
     @Override
     public void onSaveGameLoaded(boolean isComplete) {

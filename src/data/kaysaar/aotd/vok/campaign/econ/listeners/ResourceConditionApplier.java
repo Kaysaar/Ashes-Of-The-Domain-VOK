@@ -12,7 +12,7 @@ import data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMiningCond;
 public class ResourceConditionApplier implements PlayerColonizationListener, EconomyTickListener {
     public static void applyResourceConditionToAllMarkets() {
         for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
-            WaterMinningCond.applyIndustryUpgradeCondition(m);
+            WaterMiningCond.applyIndustryUpgradeCondition(m);
             AoDFoodDemand.applyRessourceCond(m);
         }
     }
@@ -20,7 +20,7 @@ public class ResourceConditionApplier implements PlayerColonizationListener, Eco
     @Override
     public void reportPlayerColonizedPlanet(PlanetAPI planetAPI) {
         MarketAPI m = planetAPI.getMarket();
-        WaterMinningCond.applyIndustryUpgradeCondition(m);
+        WaterMiningCond.applyIndustryUpgradeCondition(m);
         AoDFoodDemand.applyRessourceCond(m);
 
     }
