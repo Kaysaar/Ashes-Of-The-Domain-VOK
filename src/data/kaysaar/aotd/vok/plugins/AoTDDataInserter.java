@@ -78,7 +78,7 @@ public class AoTDDataInserter {
             String id = obj.getString("id");
             if (id == null || id.isEmpty()) continue;
 
-            String itemCostRaw = obj.getString("resoruces_to_make_one");
+            String itemCostRaw = obj.getString("resources_to_make_one");
             float dayCost = Float.parseFloat(obj.getString("time_to_make_one"));
             HashMap<String, Integer> itemCost = getItemCost(itemCostRaw);
             insertedSpecItemForManufactorium.add(new SMSpecialItem(itemCost, id, dayCost));

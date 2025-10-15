@@ -3,7 +3,7 @@ name,id,planetary,decivRemove,script,desc,icon,order
 AoDFoodDemand,AoDFoodDemand,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.AoDFoodDemand,,graphics/icons/markets/cryosanctum.png,1000
 aotd_industry_synergies,aotd_industry_synergies,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.IndustrySynergiesCond,,graphics/icons/markets/capital.png,19
 ,,,,,,,
-WaterMiningSupply,watterSupplyMining,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMinningCond,,graphics/icons/markets/capital.png,601
+WaterMiningSupply,watterSupplyMining,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMiningCond,,graphics/icons/markets/capital.png,601
 ,,,,,,,
 GP mod,aotd_gp_mod,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.GPModifiers,,graphics/icons/markets/capital.png,610
 BiFrostGateRemoving,bifrost_removal,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.BiFrostGateRemovingCondtion,,graphics/icons/markets/light_industrial.png,603

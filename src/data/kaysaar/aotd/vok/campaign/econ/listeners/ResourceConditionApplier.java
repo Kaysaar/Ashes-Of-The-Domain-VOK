@@ -6,7 +6,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.AoDFoodDemand;
-import data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMinningCond;
+import data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMiningCond;
 
 
 public class ResourceConditionApplier implements PlayerColonizationListener, EconomyTickListener {
