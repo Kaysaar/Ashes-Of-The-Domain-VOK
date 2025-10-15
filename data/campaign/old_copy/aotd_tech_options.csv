@@ -35,8 +35,8 @@ aotd_tech_streamlined_production,Streamlined Production,3,60,"aotd_tech_alloy_pr
 
 orbitalheavy:industry",0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_megastructure_analysis,Megastructure Analysis,3,60,aotd_tech_streamlined_production,research_databank:14,megastrcuture_analysis,Allow to claim megastructures:modifier,1,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_advanced_logistic,Interstellar Logistics,3,60,aotd_tech_streamlined_production,research_databank:14,logistics,logisitcbureau:industry,1,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_megastructure_analysis,Megastructure Analysis,3,60,aotd_tech_streamlined_production,research_databank:14,megastructure_analysis,Allow to claim megastructures:modifier,1,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_advanced_logistic,Interstellar Logistics,3,60,aotd_tech_streamlined_production,research_databank:14,logistics,aotd_terminus:industry,1,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_deep_mining_methods,Deep Mining,3,120,aotd_tech_geothermal_fracking,research_databank:16,mining3,mining_megaplex:industry,1,0,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_alloy_purification,Alloy Purification,3,60,aotd_tech_streamlined_production,research_databank:8,alloy3,"policrystalizator:industry
 cascade_reprocesor:industry",1,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

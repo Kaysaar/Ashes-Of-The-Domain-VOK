@@ -5,7 +5,7 @@ public class AoTDIndustries {
     public static final String CRYOREVIVAL = "cryorevival";
     public static final String RESORT = "aotd_resort_center";
     public static final String UNDERWORLD = "underworld";
-    public static final String TERMINUS = "logisitcbureau";
+    public static final String TERMINUS = "aotd_terminus";
     public static final String TRADE_OUTPOST = "aotd_trade_outpost";
     public static final String PLANETARY_DEFENCE_FORCE = "militarygarrison";
     public static final String FORBIDDEN_CITY = "kaysaarcapital_forbidden_city";
