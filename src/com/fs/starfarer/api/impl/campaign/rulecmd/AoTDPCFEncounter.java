@@ -50,7 +50,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
     public void init(InteractionDialogAPI dialogAPI, Map<String, MemoryAPI> memoryMap) {
         dialogAPI.getOptionPanel().clearOptions();
         if(getNearby(dialogAPI.getInteractionTarget())!=null){
-            dialogAPI.getTextPanel().addPara("We have been intercepted by fleet that is orbiting this planet.");
+            dialogAPI.getTextPanel().addPara("We have been intercepted by a fleet that is orbiting this planet.");
             if (dialogAPI.getInteractionTarget().getMemory().is("$aotd_r_expedition_present", true))
                 initBattle(dialogAPI, memoryMap);
         }
@@ -187,7 +187,7 @@ public class AoTDPCFEncounter extends BaseCommandPlugin {
         config.impactsEnemyReputation = false;
         config.pullInEnemies = false;
         //config.pullInAllies = false;
-        config.noSalvageLeaveOptionText = Misc.ucFirst("Continiue");
+        config.noSalvageLeaveOptionText = Misc.ucFirst("Continue");
         config.dismissOnLeave = false;
         config.printXPToDialog = true;
 

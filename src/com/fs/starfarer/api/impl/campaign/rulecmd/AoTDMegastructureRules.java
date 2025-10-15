@@ -45,7 +45,7 @@ public class AoTDMegastructureRules extends BaseCommandPlugin {
 
                 if(megastructure.metCustomCriteria()){
                     if(AoTDMisc.getPlayerFactionMarkets().isEmpty()&&!megastructure.isPlanetaryMegastructure){
-                        dialog.getTextPanel().addPara("We must first establish faction, if we want to claim this megastructure");
+                        dialog.getTextPanel().addPara("We must first establish a faction, if we want to claim this megastructure");
                         return false;
                     }
                 }

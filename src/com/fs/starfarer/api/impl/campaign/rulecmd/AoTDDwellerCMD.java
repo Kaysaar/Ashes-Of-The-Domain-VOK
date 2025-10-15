@@ -60,7 +60,7 @@ public class AoTDDwellerCMD extends DwellerCMD{
     }
     public void checkForBetterSurvey(InteractionDialogAPI dialog, Map<String, MemoryAPI> memoryMap, MemoryAPI memory){
         if(ShroudProjectMisc.getBoolean(ShroudProjectMisc.hasAbilityToSummonGreatFleet)){
-            dialog.getOptionPanel().addOption("Use Shroud Beacon to lure them directly to us","abyssalLight_ultrasensors", Color.ORANGE,null);
+            dialog.getOptionPanel().addOption("Use a Shroud Beacon to lure them directly to us","abyssalLight_ultrasensors", Color.ORANGE,null);
             dialog.getOptionPanel().addOptionConfirmation("abyssalLight_ultrasensors","Are you sure about this?","Proceed","Abort");
         }
     }
