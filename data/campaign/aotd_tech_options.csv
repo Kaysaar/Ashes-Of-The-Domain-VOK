@@ -27,7 +27,7 @@ aotd_tech_drug_production,Drugs Amplification,2,25,aotd_tech_consumer,research_d
 aotd_tech_maglev,Urban Throughput Systems,2,30,aotd_tech_alloy_production,research_databank:10,maglev,aotd_maglev:industry,1,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_resort_tech,Luxury Civic Planning,2,25,aotd_tech_spaceport_expansion,research_databank:5,aotd_resort_center,aotd_resort_center:industry,1,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_dual_trade_system,Twin Economy Protocols,2,30,aotd_tech_spaceport_expansion,research_databank10,dual_market,"commerce:industry
-underworld:industry",0,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_underworld:industry",0,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

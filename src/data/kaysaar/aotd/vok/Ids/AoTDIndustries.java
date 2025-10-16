@@ -4,12 +4,12 @@ public class AoTDIndustries {
     public static final String CRYOHARVESTER = "cryoorganharvester";
     public static final String CRYOREVIVAL = "cryorevival";
     public static final String RESORT = "aotd_resort_center";
-    public static final String UNDERWORLD = "underworld";
+    public static final String UNDERWORLD = "aotd_underworld";
     public static final String TERMINUS = "aotd_terminus";
     public static final String TRADE_OUTPOST = "aotd_trade_outpost";
     public static final String PLANETARY_DEFENCE_FORCE = "militarygarrison";
     public static final String FORBIDDEN_CITY = "kaysaarcapital_forbidden_city";
-    public static final String RESEARCH_CENTER = "researchfacility";
+    public static final String RESEARCH_CENTER = "aotd_research_facility";
     public static final String ARTISANAL_FARMING = "artifarming";
     public static final String SUBSIDISED_FARMING = "subfarming";
     public static final String MONOCULTURE = "monoculture";
@@ -27,7 +27,7 @@ public class AoTDIndustries {
     public static final String CASCADE_REPROCESSOR = "cascade_reprocesor";
     public static final String FISHING = "fishery";
     public static final String PLASMA_HARVESTER = "fracking";
-    public static final String BLACK_SITE = "blacksite";
+    public static final String BLACK_SITE = "aotd_blacksite";
     public static final String LIGHT_PRODUCTION = "lightproduction";
     public static final String ORBITAL_SKUNKWORK = "triheavy";
     public static final String ORBITAL_FLEETWORK = "hegeheavy";
