@@ -81,8 +81,8 @@ public class AIColonyManagerListener implements EconomyTickListener {
         for (MarketAPI factionMarket : Misc.getFactionMarkets(faction)) {
             if(factionMarket.hasIndustry(Industries.FUELPROD)){
                 factionMarket.removeIndustry(Industries.FUELPROD,null,false);
-                factionMarket.addIndustry(AoTDIndustries.BLAST_PROCESSING);
-                factionMarket.getIndustry(AoTDIndustries.BLAST_PROCESSING).startBuilding();
+                factionMarket.addIndustry(AoTDIndustries.FUEL_REFINERY);
+                factionMarket.getIndustry(AoTDIndustries.FUEL_REFINERY).startBuilding();
                 break;
             }
         }

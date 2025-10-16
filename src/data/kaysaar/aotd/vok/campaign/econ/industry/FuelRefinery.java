@@ -11,7 +11,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.util.ArrayList;
 
-public class BlastProcessingUnit extends FuelProduction {
+public class FuelRefinery extends FuelProduction {
     @Override
     public void apply() {
         super.apply(true);

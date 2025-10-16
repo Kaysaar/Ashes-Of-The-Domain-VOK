@@ -193,10 +193,10 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "crystalizator,isotope_separator");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(AoTDItems.TENEBRIUM_CATALYTIC_CORE, "crystalizator,isotope_separator");
 
-        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "blast_processing");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SYNCHROTRON, "aotd_fuel_refinery");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PLASMA_DYNAMO, "fracking");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.DEALMAKER_HOLOSUITE, AoTDIndustries.UNDERWORLD);
-        aoTDSpecialItemRepo.setSpecialItemNewIndustries(AoTDItems.TENEBRIUM_SYNCHROTRON, AoTDIndustries.BLAST_PROCESSING);
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(AoTDItems.TENEBRIUM_SYNCHROTRON, AoTDIndustries.FUEL_REFINERY);
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(AoTDItems.TENEBRIUM_ATMOSPHERIC_DRIVE, "aquaculture,subfarming,"+AoTDIndustries.ARTISANAL_FARMING+","+AoTDIndustries.FISHING);
 
         aoTDSpecialItemRepo.absoluteSetItemParams(Items.CORONAL_PORTAL, "");
@@ -212,7 +212,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker", "subfarming");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_dimen_nanoforge", "supplyheavy,weaponheavy,triheavy,hegeheavy,stella_manufactorium");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_modular_purifier", "crystalizator,isotope_separator");
-            aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_servosync_pump", "blast_processing");
+            aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_servosync_pump", "aotd_fuel_refinery");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_garrison_transmitter", AoTDIndustries.TERMINUS);
         }
     }
@@ -266,7 +266,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         path = new CustomUpgradePath(1,2);
         map = new LinkedHashMap<>();
         map.put("fuelprod", new Vector2f(0,0));
-        map.put("blast_processing", new Vector2f(0,1));
+        map.put("aotd_fuel_refinery", new Vector2f(0,1));
         path.setIndustryCoordinates(map);
         UpgradePathManager.getInstance().addNewCustomPath(path,"fuelprod");
 
