@@ -17,11 +17,11 @@ public class CompoundSpecialProject extends AoTDSpecialProject {
     @Override
     public void createRewardSection(TooltipMakerAPI tooltip, float width) {
         tooltip.addPara("Gain access to produce new commodity : Compound, that can enhance efficiency of fuel.", Misc.getPositiveHighlightColor(),5f);
-        tooltip.addPara("Each Blast Processing Unit will have supply of compound equal to half of market size.", Misc.getPositiveHighlightColor(),5f);
+        tooltip.addPara("Each Fuel Refinery will have a supply of compound equal to half of the market size.", Misc.getPositiveHighlightColor(),5f);
     }
     @Override
     public boolean checkIfProjectShouldUnlock() {
-        return AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.ANTIMATTER_SYNTHESIS)&& AoTDMisc.isPLayerHavingIndustry(AoTDIndustries.BLAST_PROCESSING);
+        return AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.ANTIMATTER_SYNTHESIS)&& AoTDMisc.isPLayerHavingIndustry(AoTDIndustries.FUEL_REFINERY);
     }
 
     @Override
