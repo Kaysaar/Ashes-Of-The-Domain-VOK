@@ -311,7 +311,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         map = new LinkedHashMap<>();
 
         map.put(AoTDIndustries.RESEARCH_CENTER, new Vector2f(0,0));
-        map.put("blacksite", new Vector2f(0,1));
+        map.put(AoTDIndustries.BLACK_SITE, new Vector2f(0,1));
         path.setIndustryCoordinates(map);
         UpgradePathManager.getInstance().addNewCustomPath(path,AoTDIndustries.RESEARCH_CENTER);
 
