@@ -26,7 +26,7 @@ public class ForbiddenKnowledgeScientist extends ScientistPerson {
 
     @Override
     public void applyPassiveSkill() {
-        Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
+        Global.getSector().getMemory().set("$aotd_experimental_tier", true);
     }
 
     @Override

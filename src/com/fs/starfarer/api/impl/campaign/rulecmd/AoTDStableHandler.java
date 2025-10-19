@@ -17,7 +17,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import static data.kaysaar.aotd.vok.misc.AoTDMisc.createTooltipOfResorucesForDialog;
+import static data.kaysaar.aotd.vok.misc.AoTDMisc.createTooltipOfResourcesForDialog;
 
 public class AoTDStableHandler extends BaseCommandPlugin {
     protected CampaignFleetAPI playerFleet;
@@ -72,7 +72,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
                 dialog.getTextPanel().addPara(Global.getSettings().getDescription("aotd_hypershunt_receiver", Description.Type.CUSTOM).getText1());
                TooltipMakerAPI tooltipMakerAPI =  dialog.getTextPanel().beginTooltip();
                tooltipMakerAPI.addTitle("Resources: consumed (available)");
-               tooltipMakerAPI.addCustom(createTooltipOfResorucesForDialog(550,45,45,getCost(arg),false),5f);
+               tooltipMakerAPI.addCustom(createTooltipOfResourcesForDialog(550,45,45,getCost(arg),false),5f);
 
                 for (Map.Entry<String, Integer> entry : getCost(arg).entrySet()) {
                     if(AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey())<entry.getValue()){
@@ -94,7 +94,7 @@ public class AoTDStableHandler extends BaseCommandPlugin {
                 dialog.getOptionPanel().addOption("Nevermind","defaultLeave");
                 TooltipMakerAPI tooltipMakerAPI =  dialog.getTextPanel().beginTooltip();
                 tooltipMakerAPI.addTitle("Potential Salvage");
-                tooltipMakerAPI.addCustom(createTooltipOfResorucesForDialog(550,45,45,getCostForSalvage(arg),true),5f);
+                tooltipMakerAPI.addCustom(createTooltipOfResourcesForDialog(550,45,45,getCostForSalvage(arg),true),5f);
                 dialog.getTextPanel().addTooltip();
 
             }

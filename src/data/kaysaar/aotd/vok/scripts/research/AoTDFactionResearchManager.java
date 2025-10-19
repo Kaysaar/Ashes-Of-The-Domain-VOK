@@ -168,9 +168,9 @@ public class AoTDFactionResearchManager {
 
         if (getFaction().isPlayerFaction()) {
             if (hadMetreq) {
-                Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
+                Global.getSector().getMemory().set("$aotd_experimental_tier", true);
             } else {
-                Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
+                Global.getSector().getMemory().set("$aotd_experimental_tier", false);
             }
         }
         executeResearchCouncilAdvance(amount);

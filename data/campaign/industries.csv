@@ -16,7 +16,7 @@ dummy_industry,Research Facility,100,30,,,,,"aotd_research_facility,structure,hi
 aotd_blacksite,Black Site,100,30,,,aotd_research_facility,,"aotd_research_facility,structure",,graphics/icons/industry/black_site_research_crop.png,data.kaysaar.aotd.vok.campaign.econ.industry.BlackSite,"A covert and heavily secured installation, hidden from public records and oversight. Unlike conventional research facilities, black sites operate under absolute secrecy, often with no accountability. Here, breakthroughs and atrocities walk a razor’s edge—whether experimenting with forbidden science, housing dangerous anomalies, or developing weapons of terrifying potential. While officially disavowed, many powers quietly rely on these shadowy outposts to conduct the kind of work that civilized society refuses to acknowledge.",2250,EXTREME,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
-#FUEL PRODCUTION SECTION,,,,,,,,,,,,,,,
+#FUEL PRODUCTION SECTION,,,,,,,,,,,,,,,
 aotd_fuel_refinery,Fuel Refinery,150,120,,15,fuelprod,,"fuelprod, industry, industrial,aotd_fuelprod",,graphics/icons/industry/aotd_fuel_refinery.png,data.kaysaar.aotd.vok.campaign.econ.industry.FuelRefinery,"A groundbreaking facility that defies the limits of energy production, specializing in the creation of Antimatter Fuel at a rate reminiscent of the illustrious era of The Domain. This cutting-edge unit harnesses advanced technologies to achieve unprecedented efficiency, ensuring a reliable and abundant supply of Antimatter Fuel. A beacon of energy innovation, stands as a testament to the resurgence of Domain-era industrial capabilities.",1905,,
 ,,,,,,,,,,,,,,,
 #SHROUD INDUSTRY,,,,,,,,,,,,,,,
