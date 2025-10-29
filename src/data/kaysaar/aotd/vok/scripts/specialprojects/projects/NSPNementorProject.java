@@ -22,7 +22,7 @@ import java.awt.*;
 public class NSPNementorProject extends AoTDSpecialProject {
     @Override
     public boolean checkIfProjectShouldUnlock() {
-        return BlackSiteProjectManager.getInstance().getProject("guardian_aotd").checkIfProjectWasCompleted()&& AoTDMisc.isPLayerHavingIndustry(AoTDIndustries.ORBITAL_SKUNKWORK)&& Global.getSector().getPlayerFaction().getMemory().is("$aotd_aqq_nemetor", true);
+        return BlackSiteProjectManager.getInstance().getProject("aotd_guardian").checkIfProjectWasCompleted()&& AoTDMisc.isPLayerHavingIndustry(AoTDIndustries.ORBITAL_SKUNKWORK)&& Global.getSector().getPlayerFaction().getMemory().is("$aotd_aqq_nemetor", true);
     }
 
     @Override

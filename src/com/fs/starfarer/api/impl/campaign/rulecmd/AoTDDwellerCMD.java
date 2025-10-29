@@ -158,7 +158,7 @@ public class AoTDDwellerCMD extends DwellerCMD{
                 }
 
                 float chanceToFail = 0.8f;
-                if(ShroudProjectMisc.getBoolean(ShroudProjectMisc.hasBetterContaimentMethods)){
+                if(ShroudProjectMisc.getBoolean(ShroudProjectMisc.hasBetterContainmentMethods)){
                     chanceToFail = 0.4f;
                 }
                 int substrate = 0;
@@ -167,7 +167,7 @@ public class AoTDDwellerCMD extends DwellerCMD{
                 for (FleetMemberAPI member : losses) {
                     if (member.getHullSpec().hasTag(Tags.DWELLER)) {
                         int amount = member.getHullSpec().getHullSize().ordinal()-2;
-                        if(ShroudProjectMisc.getBoolean(ShroudProjectMisc.hasBetterContaimentMethods)){
+                        if(ShroudProjectMisc.getBoolean(ShroudProjectMisc.hasBetterContainmentMethods)){
                             amount++;
                         }
                         float ch = random.nextFloat();
