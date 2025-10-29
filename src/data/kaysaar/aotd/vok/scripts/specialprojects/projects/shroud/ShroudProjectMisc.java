@@ -13,7 +13,7 @@ public class ShroudProjectMisc implements EveryFrameScript {
     public static String shroudUnderstandingLevel = "$aotd_shroud_understand";
     public static String cooldownBetweenProjects = "$aotd_shroud_cooldown";
     public static String hasAbilityToSummonGreatFleet = "$aotd_shroud_great_fleet";
-    public static String hasBetterContaimentMethods = "$aotd_shroud_better_contaiment_methods";
+    public static String hasBetterContainmentMethods = "$aotd_shroud_better_containment_methods";
     public static String memFlagForAmountOfProjectsDoneInLevel = "$aotd_shroud_proj_count_";
     public static Map<Integer, Integer> projectThresholds = new HashMap<>();
 
@@ -61,7 +61,7 @@ public class ShroudProjectMisc implements EveryFrameScript {
             specAPI.setManufacturer("?????");
         }
         if(levelOfUnderstanding ==1){
-            if(getBoolean(hasBetterContaimentMethods)){
+            if(getBoolean(hasBetterContainmentMethods)){
                 specAPI.setIconName("graphics/icons/cargo/shrouded_substrate.png");
                 specAPI.setDesc("Refined containment methods have stabilized the exotic matter, allowing for safer handling and improved storage efficiency. Energy surges and spatial distortions are significantly reduced, though caution is still advised when transporting or interacting with the substrate.");
             } else {
