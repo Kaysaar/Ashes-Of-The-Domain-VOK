@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.achivements;
+package data.kaysaar.aotd.vok.achievements;
 
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;

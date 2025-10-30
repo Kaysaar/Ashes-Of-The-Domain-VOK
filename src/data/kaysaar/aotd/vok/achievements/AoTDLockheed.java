@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.achivements;
+package data.kaysaar.aotd.vok.achievements;
 
 public class AoTDLockheed extends AoTDBaseBuildingAchievement {
     public AoTDLockheed(){

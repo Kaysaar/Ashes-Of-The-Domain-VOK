@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.achivements;
+package data.kaysaar.aotd.vok.achievements;
 
 import com.fs.starfarer.api.Global;
 import org.magiclib.achievements.MagicAchievement;

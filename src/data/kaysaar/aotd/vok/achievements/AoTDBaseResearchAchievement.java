@@ -1,13 +1,11 @@
-package data.kaysaar.aotd.vok.achivements;
+package data.kaysaar.aotd.vok.achievements;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.campaign.econ.listeners.AoTDResearchListener;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import org.jetbrains.annotations.NotNull;

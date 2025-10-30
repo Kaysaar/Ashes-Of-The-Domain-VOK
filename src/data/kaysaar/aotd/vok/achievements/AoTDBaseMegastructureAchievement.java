@@ -1,8 +1,6 @@
-package data.kaysaar.aotd.vok.achivements;
+package data.kaysaar.aotd.vok.achievements;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import org.magiclib.achievements.MagicAchievement;

@@ -1,7 +1,6 @@
-package data.kaysaar.aotd.vok.achivements;
+package data.kaysaar.aotd.vok.achievements;
 
 import com.fs.starfarer.api.Global;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.magiclib.achievements.MagicAchievement;
 
 public class AoTDHyperdimensional extends MagicAchievement {
