@@ -1,4 +1,4 @@
-package data.kaysaar.aotd.vok.achivements;
+package data.kaysaar.aotd.vok.achievements;
 
 public class AoTDNewParadise extends AoTDBaseBuildingAchievement {
     public AoTDNewParadise(){
