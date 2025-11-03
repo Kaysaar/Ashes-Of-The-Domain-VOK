@@ -4,7 +4,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 
 public class AoTDSparkOfDomain extends AoTDBaseResearchAchievement{
     public AoTDSparkOfDomain() {
-        technologies.add(AoTDTechIds.STELLA_MANUFACTORIUM);
+        technologies.add(AoTDTechIds.MACRO_INDUSTRIAL_COMPLEX);
 
     }
 }

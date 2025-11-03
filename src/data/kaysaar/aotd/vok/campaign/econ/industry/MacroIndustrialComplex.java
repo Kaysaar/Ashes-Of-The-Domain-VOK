@@ -1,35 +1,23 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
-import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.SpecialItemData;
-import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
-import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
-import com.fs.starfarer.api.ui.Alignment;
-import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class StellaManufactorium extends AoTDHeavyIndustry {
+public class MacroIndustrialComplex extends AoTDHeavyIndustry {
     @Override
     public boolean isAvailableToBuild() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STELLA_MANUFACTORIUM,market) &&super.isAvailableToBuild();
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.MACRO_INDUSTRIAL_COMPLEX,market) &&super.isAvailableToBuild();
     }
 
     @Override
     public boolean showWhenUnavailable() {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STELLA_MANUFACTORIUM,market);
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.MACRO_INDUSTRIAL_COMPLEX,market);
     }
 
     @Override
@@ -71,8 +59,8 @@ public class StellaManufactorium extends AoTDHeavyIndustry {
     @Override
     public String getUnavailableReason() {
         ArrayList<String> reasons = new ArrayList<>();
-        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STELLA_MANUFACTORIUM,market)){
-            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.STELLA_MANUFACTORIUM));
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.MACRO_INDUSTRIAL_COMPLEX,market)){
+            reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.MACRO_INDUSTRIAL_COMPLEX));
 
         }
         StringBuilder bd = new StringBuilder();

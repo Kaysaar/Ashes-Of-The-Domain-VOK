@@ -70,9 +70,9 @@ public class AoTDDataInserter {
         Global.getSector().getPersistentData().put(preCollapseFacList, planetsWithFac);
     }
 
-    public void insertSpecItemsForManufactoriumData() throws JSONException, IOException {
-        JSONArray json = Global.getSettings().getMergedSpreadsheetDataForMod("id", "data/campaign/stella_manufactorium.csv", "aod_core");
-        ArrayList<SMSpecialItem> insertedSpecItemForManufactorium = new ArrayList<SMSpecialItem>();
+    public void insertSpecItemsForMacroIndustrialComplexData() throws JSONException, IOException {
+        JSONArray json = Global.getSettings().getMergedSpreadsheetDataForMod("id", "data/campaign/macro_industrial_complex.csv", "aod_core");
+        ArrayList<SMSpecialItem> insertedSpecItemForMacroIndustrialComplex = new ArrayList<SMSpecialItem>();
         for (int i = 0; i < json.length(); i++) {
             JSONObject obj = json.getJSONObject(i);
             String id = obj.getString("id");
@@ -81,10 +81,10 @@ public class AoTDDataInserter {
             String itemCostRaw = obj.getString("resources_to_make_one");
             float dayCost = Float.parseFloat(obj.getString("time_to_make_one"));
             HashMap<String, Integer> itemCost = getItemCost(itemCostRaw);
-            insertedSpecItemForManufactorium.add(new SMSpecialItem(itemCost, id, dayCost));
+            insertedSpecItemForMacroIndustrialComplex.add(new SMSpecialItem(itemCost, id, dayCost));
 
         }
-        Global.getSector().getPersistentData().put("$stella_manufactorium_items", insertedSpecItemForManufactorium);
+        Global.getSector().getPersistentData().put("$aotd_macro_industrial_complex_items", insertedSpecItemForMacroIndustrialComplex);
     }
 
     public void insertSophia() {

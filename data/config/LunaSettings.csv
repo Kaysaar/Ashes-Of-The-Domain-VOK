@@ -3,10 +3,10 @@ aotd_vok_header,Expedition Settings,Header,Settings,,,,,Research Expeditions
 aotd_expedition_threshold,Frequency of research expeditions,Int,240,,"Increase/Decrease frequency of research expeditions, conducted by faction. (Days)",30,400,Research Expeditions
 aotd_expedition_begin,Expedition Year Threshold,Int,210,,"Increase/Decrease year, where research expeditions are beginning.",207,220,Research Expeditions
 ,,,,,,,,
-aotd_vok_header2,PCF Settings,Header,Settings,,,,,Pre Collapse Facilties
-aotd_defence_min_val,Minimal spawning value of PCF Defence Forces,Int,140,,Incresae/Decrease minimal DP value of PCF defence fleet (should be lower than max),20,500,Pre Collapse Facilties
-aotd_defence_max_val,Maximal spawning value of PCF Defence forces,Int,180,,Incresae/Decrease maximal  DP value of PCF defence fleet ,20,500,Pre Collapse Facilties
-aotd_pcf_amount,Amount of Pre Collapse Facilities,Int,50,,Increase/Decrease amount of Pre Collapse Facilities spawning per sector.,10,180,Pre Collapse Facilties
+aotd_vok_header2,PCF Settings,Header,Settings,,,,,Pre Collapse Facilities
+aotd_defence_min_val,Minimal spawning value of PCF Defence Forces,Int,140,,Increase/Decrease minimal DP value of PCF defence fleet (should be lower than max),20,500,Pre Collapse Facilities
+aotd_defence_max_val,Maximal spawning value of PCF Defence forces,Int,180,,Increase/Decrease maximal  DP value of PCF defence fleet ,20,500,Pre Collapse Facilities
+aotd_pcf_amount,Amount of Pre Collapse Facilities,Int,50,,Increase/Decrease amount of Pre Collapse Facilities spawning per sector.,10,180,Pre Collapse Facilities
 ,,,,,,,,
 aotd_vok_header3,Research Settings,Header,Settings,,,,,Research Mechanics
 aotd_research_speed_multiplier,Research Speed Multiplier,Double,1.0,,Increase/Decrease multiplier of research speed. If research by default takes 30 days with multiplier 2 will take 60 days etc etc. NOTE CHANGE IT ONLY WHEN YOU ARE IN MAIN MENU AS IT WILL SCREW UP SOME THINGS DURING THE GAME.,0.5,10.0,Research Mechanics
@@ -17,8 +17,8 @@ aotd_tier_4_unlock,Tier 4 Unlock,Boolean,false,,"Unlock tier 4 of industries (Sk
 aotd_tier_experimental_unlock,Experimental Tier Unlock,Boolean,false,,Unlock experimental tier of tech tree and all bellow this tier.,,,Research Mechanics
 ,,,,,,,,
 aotd_vok_header4,Titans of Industry,Header,Settings,,,,,Titans of Industry
-aotd_titans_of_industry,Enable Titans of Industry content ,Boolean,true,,NOTE! DEPRECEATED SETTING : DONT SET IT TO FALSE,,,Titans of Industry
+aotd_titans_of_industry,Enable Titans of Industry content ,Boolean,true,,NOTE! DEPRECATED SETTING : DON'T SET IT TO FALSE,,,Titans of Industry
 aotd_scale,Scale Setting,Int,10,,Increase/Decrease multiplier of Global Production commodities ( x amount of supply times scale),1,100,Titans of Industry
-aotd_shipyard_pag_per_page,Paggination,Int,60,,ncrease/Decrease amount of items displayed per page ( WARNING : INCREASING THIS NUMBER MIGHT RESULT IN PRODUCTION UI LAGGING),1,5000,Titans of Industry
+aotd_shipyard_pag_per_page,Paggination,Int,60,,Increase/Decrease amount of items displayed per page ( WARNING : INCREASING THIS NUMBER MIGHT RESULT IN PRODUCTION UI LAGGING),1,5000,Titans of Industry
 ,,,,,,,,
 ,,,,,,,,
