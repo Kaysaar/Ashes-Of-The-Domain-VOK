@@ -1,5 +1,6 @@
 package com.fs.starfarer.api.impl.campaign.intel;
 
+import ashlib.data.plugins.coreui.CommandTabMemoryManager;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
@@ -8,7 +9,6 @@ import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
-import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 
 import java.awt.*;
 
@@ -76,9 +76,8 @@ public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if(buttonId== Button_Megastructure){
-            CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
-
-            CoreUITracker.setMemFlagForTechTab("megastructures");
+            CommandTabMemoryManager.getInstance().setLastCheckedTab("research & production");
+            CommandTabMemoryManager.getInstance().getTabStates().put("research & production","megastructures");
             Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }
 

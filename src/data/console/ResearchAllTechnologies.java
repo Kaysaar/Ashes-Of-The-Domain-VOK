@@ -1,10 +1,9 @@
 package data.console;
 
-import com.fs.starfarer.api.Global;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
-import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
+import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import org.jetbrains.annotations.NotNull;
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.CommonStrings;

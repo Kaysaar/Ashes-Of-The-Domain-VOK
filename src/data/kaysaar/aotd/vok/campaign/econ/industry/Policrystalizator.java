@@ -23,7 +23,7 @@ public class Policrystalizator extends BaseIndustry {
                 supply(AoTDCommodities.REFINED_METAL, market.getSize()+2);
             }
             else{
-                supply(AoTDCommodities.REFINED_METAL, size-2);
+                supply(AoTDCommodities.REFINED_METAL, market.getSize()-2);
             }
 
         supply(Commodities.METALS, market.getSize()+2);

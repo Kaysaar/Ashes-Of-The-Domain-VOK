@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.scripts.research;
 
+import ashlib.data.plugins.coreui.CommandTabMemoryManager;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
 import com.fs.starfarer.api.campaign.CoreUITabId;
@@ -19,7 +20,6 @@ import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
-import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
@@ -264,7 +264,7 @@ public class AoTDFactionResearchManager {
         MessageIntel intel = new MessageIntel("Faction " + getFaction().getDisplayName() + " Researched Technology - " + researchOption.Name, Misc.getBasePlayerColor());
         intel.setIcon(getFaction().getCrest());
         intel.setSound(BaseIntelPlugin.getSoundMajorPosting());
-        CoreUITracker.setMemFlagForTechTab("research");
+        CommandTabMemoryManager.getInstance().setLastCheckedTab("research & production");
         Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
     }
 

@@ -1,10 +1,10 @@
 package data.kaysaar.aotd.vok.scripts.misc;
 
+import ashlib.data.plugins.coreui.CommandTabMemoryManager;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import sidebarLib.buttons.sidebarButton;
 
 public class SideBarImpl extends sidebarButton {
@@ -12,8 +12,8 @@ public class SideBarImpl extends sidebarButton {
 
     @Override
     public void executePrimary() {
-        CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
-        CoreUITracker.setMemFlagForTechTab("research");
+        CommandTabMemoryManager.getInstance().setLastCheckedTab("research & production");
+        CommandTabMemoryManager.getInstance().getTabStates().put("research & production","research");;
         Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
     }
 

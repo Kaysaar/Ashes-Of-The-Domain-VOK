@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.scripts.misc;
 
+import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -9,19 +10,28 @@ import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class AoTDCompoundUIInMarketScript extends CoreUITracker {
+public class AoTDCompoundUIInMarketScript implements EveryFrameScript {
     public static boolean didIt = false;
     transient UIPanelAPI marketWidget;
     transient MarketAPI currentMarket;
 
-//    @Override
+    @Override
+    public boolean isDone() {
+        return false;
+    }
+
+    @Override
+    public boolean runWhilePaused() {
+        return true;
+    }
+
+    //    @Override
 //    public void advance(float amount) {
 //        if(Global.getSector().getCampaignUI().getCurrentCoreTab()==null){
 //            return;
