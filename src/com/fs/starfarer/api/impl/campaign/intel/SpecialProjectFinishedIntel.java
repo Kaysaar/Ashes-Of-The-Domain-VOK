@@ -1,12 +1,12 @@
 package com.fs.starfarer.api.impl.campaign.intel;
 
+import ashlib.data.plugins.coreui.CommandTabMemoryManager;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 
 import java.awt.*;
@@ -64,8 +64,8 @@ public class SpecialProjectFinishedIntel extends BaseIntelPlugin {
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
         if(buttonId==Button_SHIP){
-            CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
-            CoreUITracker.setMemFlagForTechTab("black site projects");
+            CommandTabMemoryManager.getInstance().setLastCheckedTab("research & production");
+            CommandTabMemoryManager.getInstance().getTabStates().put("research & production","black site projects");
             Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
         }
 

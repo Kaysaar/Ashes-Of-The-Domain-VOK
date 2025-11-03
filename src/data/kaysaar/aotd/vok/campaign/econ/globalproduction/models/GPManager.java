@@ -476,9 +476,6 @@ public class GPManager {
         }
     }
 
-    public boolean hasSpecialProject(ProjectReward.ProjectRewardType type, String rewardId) {
-        return !BlackSiteProjectManager.getInstance().getProjectMatchingReward(type,rewardId).isEmpty();
-    }
 
     public void loadProductionSpecs() {
         if (specs != null) {
@@ -790,14 +787,16 @@ public class GPManager {
 
     public void mainAdvance(float amount) {
         if (intervalUtil == null) {
-            intervalUtil = new IntervalUtil(2.5f, 2.5f); //
+            intervalUtil = new IntervalUtil(9.5f, Global.getSector().getClock().getSecondsPerDay()); //
         }
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {
                 advanceProductions(intervalUtil.getElapsed());
         }
     }
-
+    public static boolean hasSpecialProject(ProjectReward.ProjectRewardType type, String rewardId) {
+        return !BlackSiteProjectManager.getInstance().getProjectMatchingReward(type, rewardId).isEmpty();
+    }
     public void advanceProductions(float amount) {
 
         for (GPBaseMegastructure megastructure : megastructures) {
@@ -848,7 +847,7 @@ public class GPManager {
         HashMap<String, Float> penaltyMap = new HashMap<>();
         for (Map.Entry<String, Integer> stringIntegerEntry : getTotalResources().entrySet()) {
             if(commodities.getOrDefault(stringIntegerEntry.getKey(),GPResourceType.COMMODITY).equals(GPResourceType.COMMODITY)){
-                Integer currentDemand = getReqResources(orders).get(stringIntegerEntry.getKey());
+                Integer currentDemand = getReqResources(orders).getOrDefault(stringIntegerEntry.getKey(),0);
                 Integer total = stringIntegerEntry.getValue();
                 float penalty = (float) total / currentDemand;
                 if (penalty >= 1) {
