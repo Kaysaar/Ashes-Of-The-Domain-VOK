@@ -1,19 +1,18 @@
 package data.kaysaar.aotd.vok.scripts.ui;
 
+import ashlib.data.plugins.coreui.CommandTabMemoryManager;
+import ashlib.data.plugins.coreui.CommandUIPlugin;
 import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.graphics.util.Fader;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
-import data.kaysaar.aotd.vok.ui.SoundUIManager;
 import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
 import data.kaysaar.aotd.vok.ui.research.AoTDResearchNewPlugin;
@@ -27,29 +26,31 @@ import java.util.Map;
 
 import static data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager.memflagBlacksite;
 
-public class TechnologyCoreUI implements CustomUIPanelPlugin {
+public class TechnologyCoreUI extends CommandUIPlugin {
     NidavelirMainPanelPlugin customProdPlugin = null;
     AoTDResearchNewPlugin pluginResearch = null;
     GPMegasturcutreMenu pluginMega = null;
     SpecialProjectUIManager projectUIManager = null;
-    CustomPanelAPI mainPanel;
-    CustomPanelAPI panelForPlugins = null;
-    CustomPanelAPI buttonPanel = null;
-    ButtonAPI currentlyChosen;
-    SoundUIManager manager;
-    HashMap<ButtonAPI, CustomPanelAPI> panelMap = new HashMap<>();
     boolean pausedMusic = true;
+
+    public TechnologyCoreUI(float width, float height) {
+        super(width, height);
+    }
 
     public HashMap<ButtonAPI, CustomPanelAPI> getPanelMap() {
         return panelMap;
+    }
+
+    @Override
+    public boolean doesPlayCustomSound() {
+        return true;
     }
 
     public CustomPanelAPI getMainPanel() {
         return mainPanel;
     }
 
-    public void init(CustomPanelAPI mainPanel, String panelToShowcase, Object data) {
-        this.mainPanel = mainPanel;
+    public void init(String panelToShowcase, Object data) {
         GPManager.reloadCommoditiesMap();
         this.panelForPlugins = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - 45, null);
         if (panelToShowcase == null) {
@@ -99,6 +100,11 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
             }
         }
         playSound(currentlyChosen);
+    }
+
+    @Override
+    public void clearUI() {
+        super.clearUI();
     }
 
     public void clearUI(boolean clearMusic) {
@@ -197,6 +203,11 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
     }
 
     @Override
+    public String getTabStateId() {
+        return "research & production";
+    }
+
+    @Override
     public void advance(float amount) {
 
         for (Map.Entry<ButtonAPI, CustomPanelAPI> entry : panelMap.entrySet()) {
@@ -205,7 +216,7 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
                 entry.getKey().setChecked(false);
                 if (!entry.getKey().equals(currentlyChosen)) {
                     resetCurrentPlugin(entry.getKey());
-                    CoreUITracker.setMemFlagForTechTab(entry.getKey().getText().toLowerCase());
+                    CommandTabMemoryManager.getInstance().getTabStates().put(getTabStateId(),entry.getKey().getText().toLowerCase());
                 }
 
 
@@ -265,13 +276,19 @@ public class TechnologyCoreUI implements CustomUIPanelPlugin {
         pausedMusic = true;
     }
 
-    public void playSound(ButtonAPI button) {
+    @Override
+    public void playSound(Object data) {
+        playSoundButton((ButtonAPI) data);
+    }
+
+    public void playSoundButton(ButtonAPI button) {
         if (button.getText().toLowerCase().contains("production")) {
             customProdPlugin.playSound();
         }
         if (button.getText().toLowerCase().contains("research")) {
             pluginResearch.playSound();
         }
+
         if (button.getText().toLowerCase().contains("megastructures")) {
             pluginMega.playSound();
         }

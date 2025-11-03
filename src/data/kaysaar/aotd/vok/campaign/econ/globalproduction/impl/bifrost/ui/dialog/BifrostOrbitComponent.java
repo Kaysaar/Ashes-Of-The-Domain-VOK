@@ -193,6 +193,7 @@ public class BifrostOrbitComponent extends MapOrbitRenderer {
         // Face center:
         float faceCenterDeg = (float) Math.toDegrees(angleRadToUse) + 180f + spriteAngleOffsetDeg;
         if(isLocked()){
+            savedRadiusWorld = radiusUI/scale;
             gateSprite.setSize(spriteW * scale, spriteH * scale);
             gateSprite.setColor(Color.cyan);
             gateSprite.setAlphaMult(0.9f * alphaMult);

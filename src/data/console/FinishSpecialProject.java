@@ -1,8 +1,8 @@
 package data.console;
 
 import com.fs.starfarer.api.Global;
-import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectCompletionListener;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectCompletionListener;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStage;
 import org.jetbrains.annotations.NotNull;
