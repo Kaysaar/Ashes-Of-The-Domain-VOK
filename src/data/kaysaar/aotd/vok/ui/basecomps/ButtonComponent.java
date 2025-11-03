@@ -72,6 +72,7 @@ public class ButtonComponent extends ResizableComponent {
         return (doesHover() || overrideHighlight)&&isClickable;
     }
 
+
     public CustomPanelAPI getPanelOfButton() {
         return componentPanel;
     }

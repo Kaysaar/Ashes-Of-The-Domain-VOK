@@ -213,8 +213,7 @@ public class AoTDMisc {
         if (map.get(commodity) == null) {
             map.put(commodity, val);
         } else {
-            int prev = map.get(commodity);
-            map.put(commodity, val + prev);
+            map.compute(commodity, (k, prev) -> val + prev);
         }
     }
 

@@ -51,6 +51,7 @@ import data.kaysaar.aotd.vok.hullmods.AoTDShroudedMantleHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedThunderHeadHullmod;
 import data.kaysaar.aotd.vok.listeners.*;
 import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
+import data.kaysaar.aotd.vok.plugins.coreui.RnDTabListener;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.coreui.*;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.ColonyUIListener;
@@ -505,11 +506,12 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 
         Global.getSector().removeTransientScriptsOfClass(AoTDCompoundUIScript.class);
         Global.getSector().removeTransientScriptsOfClass(AoTDCompoundUIInMarketScript.class);
-        if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
-            Global.getSector().addTransientScript(new CoreUITrackerSop());
-        } else {
-            Global.getSector().addTransientScript(new CoreUITracker());
-        }
+//        if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
+//            Global.getSector().addTransientScript(new CoreUITrackerSop());
+//        } else {
+//            Global.getSector().addTransientScript(new CoreUITracker());
+//        }
+        Global.getSector().getListenerManager().addListener(new RnDTabListener(),true);
         Global.getSector().addTransientScript(new DelayedActionScript(0.1f) {
             @Override
             public void doAction() {
@@ -522,7 +524,6 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         });
         if (Global.getSector().getMemory().is("$aotd_compound_unlocked", true)) {
             Global.getSector().addTransientScript(new AoTDCompoundUIScript());
-            Global.getSector().addTransientScript(new AoTDCompoundUIInMarketScript());
         }
         Global.getSector().registerPlugin(new AoTDCoreCampaignPluginImpl());
         ScientistValidationListener.getInstance().addScript(new SophiaScriptUnlock());
@@ -569,7 +570,6 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         Global.getSettings().getCommoditySpec(Commodities.BETA_CORE).getTags().add("aotd_ai_core");
         Global.getSettings().getCommoditySpec(Commodities.ALPHA_CORE).getTags().add("aotd_ai_core");
         GPManager.getInstance().reInitalize();
-        CoreUITracker.setMemFlag(CoreUITracker.getStringForCoreTabResearch());
         Global.getSector().addTransientScript(new GrowingDemandMover());
         BlackSiteProjectManager.getInstance().addScriptInstance();
         clearListenersFromTemporaryMarket();

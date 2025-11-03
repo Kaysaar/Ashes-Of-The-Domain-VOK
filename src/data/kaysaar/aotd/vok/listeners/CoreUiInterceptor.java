@@ -18,7 +18,6 @@ import data.kaysaar.aotd.vok.campaign.econ.listeners.AoDIndustrialMightListener;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.coreui.BackgroundInterlooper;
-import data.kaysaar.aotd.vok.scripts.coreui.CoreUITracker;
 import data.kaysaar.aotd.vok.scripts.coreui.PlanetBackgroundTracker;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 
@@ -29,15 +28,7 @@ public class CoreUiInterceptor implements CoreUITabListener, PlayerColonizationL
             AoTDCompoundUIInMarketScript.didIt = false;
         }
         PlanetBackgroundTracker.ignoreOutpostParam= false;
-        if (param instanceof String) {
-            String s = (String) param;
-            if (s.equals("income_report")) {
-                CoreUITracker.setMemFlag("income");
-            }
-        }
-        if (param instanceof MarketAPI) {
-            CoreUITracker.setMemFlag("colonies");
-        }
+
         IndustrySynergiesManager.getInstance().advanceImpl(0f);
         AoDIndustrialMightListener.applyResourceConditionToAllMarkets();
         for (UIComponentAPI componentAPI : ReflectionUtilis.getChildrenCopy(ProductionUtil.getCoreUI())) {
@@ -77,7 +68,6 @@ public class CoreUiInterceptor implements CoreUITabListener, PlayerColonizationL
             }
 
         }
-        CoreUITracker.sendSignalToOpenCore = true;
     }
     public static void initalizeBackgroundPLanetWithPreSetOpacity(NidavelirComplexMegastructure megastructure,float oppacity) {
         UIPanelAPI saved = (UIPanelAPI) ReflectionUtilis.invokeMethod("getPlanetBackground", ProductionUtil.getCoreUI());
