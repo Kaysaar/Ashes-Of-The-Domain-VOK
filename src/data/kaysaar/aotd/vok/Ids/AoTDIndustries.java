@@ -35,6 +35,7 @@ public class AoTDIndustries {
     public static final String MILITARY_HEAVY = "weaponheavy";
     public static final String SUPPLY_HEAVY = "supplyheavy";
     public static final String CONSUMER_INDUSTRY = "consumerindustry";
+    public static final String MACRO_INDUSTRIAL_COMPLEX = "aotd_macro_industrial_complex";
     public static final String FUEL_REFINERY = "aotd_fuel_refinery";
     public static final String BIOSYNTH_LABORATORY = "druglight";
 }

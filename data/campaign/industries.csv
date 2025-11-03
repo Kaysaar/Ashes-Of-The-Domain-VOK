@@ -81,7 +81,7 @@ hegeheavy,Orbital Fleetwork Facility,200,200,,35,orbitalworks,,"heavyindustry, u
 ,,,,,,,,,,,,,,,
 #EXPERIMENTAL,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
-stella_manufactorium,Macro-Industrial Complex,200,150,,20,supplyheavy,,"industry,experimental, no_databank,heavyindustry,aotd_heavyindustry",,graphics/icons/industry/aotd_macro_complex.png,data.kaysaar.aotd.vok.campaign.econ.industry.StellaManufactorium,"This complex stands in defiance of the Collapse. Possessing the ability to produce the Domain’s old artifacts, it is the first step to truly replicate the glory of the old Domain. It heralds the resurrection of humanity’s industrial might, allowing for production unseen in the modern Sector.",2501,EXTREME,
+aotd_macro_industrial_complex,Macro-Industrial Complex,200,150,,20,supplyheavy,,"industry,experimental, no_databank,heavyindustry,aotd_heavyindustry",,graphics/icons/industry/aotd_macro_complex.png,data.kaysaar.aotd.vok.campaign.econ.industry.MacroIndustrialComplex,"This complex stands in defiance of the Collapse. Possessing the ability to produce the Domain’s old artifacts, it is the first step to truly replicate the glory of the old Domain. It heralds the resurrection of humanity’s industrial might, allowing for production unseen in the modern Sector.",2501,EXTREME,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,

@@ -63,7 +63,7 @@
 			"dual_market":"graphics/icons/tech/dual_market_system.png",
 			"spaceportI":"graphics/icons/tech/spaceportI.png",
 			"specialmodifier":"graphics/icons/tech/specialmodifier.png",
-			"stellamanufactorum":"graphics/icons/tech/stellamanufactorum.png",
+			"macro_industrial_complex":"graphics/icons/tech/macro_industrial_complex.png",
 			"fuelsynth":"graphics/icons/tech/fuelsynth.png",
 			"aotd_resort_center":"graphics/icons/tech/resort_center.png",
 			"hypershunt_energy_distribution":"graphics/icons/tech/hypershunt_energy_distribution.png",
@@ -101,7 +101,7 @@
 			"triheavy_sub":"graphics/icons/tech/subicon_triheavy.png",
 			"hegeheavy_sub":"graphics/icons/tech/subicon_hegeheavy.png",
 			"megaport_sub":"graphics/icons/tech/subicon_megaport.png",
-			"stella_manufactorium_sub":"graphics/icons/tech/subicon_stella.png",
+			"aotd_macro_industrial_complex_sub":"graphics/icons/tech/subicon_macro_industrial_complex.png",
 			"fuelprod_sub":"graphics/icons/tech/subicon_fuelprod.png",
 			"hightech_sub":"graphics/icons/tech/subicon_modula_program.png",
 			"none":"graphics/icons/tech/generic.png",
@@ -209,7 +209,7 @@
 	},
 	"designTypeColors": {
     "Abyss-Tech": [180, 0, 90, 255],
-	"Nidavellir Reliquary": [205, 173, 0, 255]
+	"Nidavelir Reliquary": [205, 173, 0, 255]
 }
 
 	

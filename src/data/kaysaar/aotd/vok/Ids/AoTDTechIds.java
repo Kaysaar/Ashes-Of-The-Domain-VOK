@@ -31,7 +31,7 @@ public class AoTDTechIds {
     public static final String MEGA_ASSEMBLY_SYSTEMS = "aotd_tech_mega_assembly";
     public static final String DOMAIN_TYPE_MODEL_STANDARDIZATION = "aotd_tech_domain_template_construct";
     public static final String DRUGS_AMPLIFICATION = "aotd_tech_drug_production";
-    public static final String STELLA_MANUFACTORIUM = "aotd_tech_stella_manufactorium";
+    public static final String MACRO_INDUSTRIAL_COMPLEX = "aotd_tech_macro_industrial_complex";
     public static final String BIFROST_GATE = "aotd_tech_bifrost_gate";
     public static final String MEGA_ANALYSIS = "aotd_tech_megastructure_analysis";
     public static final String DUAL_TRADE = "aotd_tech_dual_trade_system";
