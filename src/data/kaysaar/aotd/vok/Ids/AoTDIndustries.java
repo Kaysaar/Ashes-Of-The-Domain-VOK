@@ -10,9 +10,9 @@ public class AoTDIndustries {
     public static final String PLANETARY_DEFENCE_FORCE = "militarygarrison";
     public static final String FORBIDDEN_CITY = "kaysaarcapital_forbidden_city";
     public static final String RESEARCH_CENTER = "aotd_research_facility";
-    public static final String ARTISANAL_FARMING = "artifarming";
+    public static final String ARTISANAL_FARMING = "aotd_artisanal_farming";
     public static final String SUBSIDISED_FARMING = "subfarming";
-    public static final String MONOCULTURE = "monoculture";
+    public static final String MONOCULTURE = "aotd_monoculture_plots";
     public static final String EXOMATTER_PROCESSING = "aotd_exomatter_processing";
     public static final String EXTRACTIVE_OPERATION = "extractive";
     public static final String SUBLIMATION = "mining_megaplex"; // because i am lazy and i am not gonna replace it over and over
