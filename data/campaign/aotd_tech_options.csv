@@ -2,7 +2,7 @@ id,name,tier,timeToResearch,reqToResearchFirst,itemReqToResearch,iconId,rewards,
 aotd_tech_ind_base_template,Industrial Base Template,0,15,none,,basic,"lightproduction:industry
 smelting:industry
 extractive:industry",0,1,true,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_rudimentary_eq,Rudimentary Working Equipment,0,20,none,,farming1,"monoculture:industry
+aotd_tech_rudimentary_eq,Rudimentary Working Equipment,0,20,none,,farming1,"aotd_monoculture_plots:industry
 aquaculture:industry",0,4,true,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_agriculture,Agriculture Industrialization,1,15,aotd_tech_rudimentary_eq,research_databank:3,farming2,farming:industry,0,7,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_exoskeletons,Exo-Skeletons,1,30,aotd_tech_ind_base_template,research_databank:4,mining1,mining:industry,0,0,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -17,7 +17,7 @@ aotd_tech_spaceport_expansion,High-Capacity Docking,1,40,aotd_tech_rudimentary_e
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_improved_fertilizers,Improved Fertilizers,2,30,aotd_tech_agriculture,research_databank:6,farming3,"subfarming:industry
-artifarming:industry",0,7,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_artisanal_farming:industry",0,7,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_geothermal_fracking,Advanced Mining Equipment,2,60,aotd_tech_exoskeletons,research_databank:8,mining2,+1 towards production of all ores:modifier,0,0,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_alloy_production,Alloy Production Matrix,2,60,aotd_tech_nanometal,research_databank:6,alloy1,"crystalizator:industry
 isotope_separator:industry",0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

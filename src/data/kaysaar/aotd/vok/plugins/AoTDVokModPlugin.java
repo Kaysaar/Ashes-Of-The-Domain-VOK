@@ -257,12 +257,12 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 
         path = new CustomUpgradePath(3,3);
         map = new LinkedHashMap<>();
-        map.put("monoculture", new Vector2f(1,0));
+        map.put("aotd_monoculture_plots", new Vector2f(1,0));
         map.put("farming", new Vector2f(1,1));
-        map.put("artifarming", new Vector2f(0,2));
+        map.put("aotd_artisanal_farming", new Vector2f(0,2));
         map.put("subfarming", new Vector2f(2,2));
         path.setIndustryCoordinates(map);
-        UpgradePathManager.getInstance().addNewCustomPath(path,"monoculture");
+        UpgradePathManager.getInstance().addNewCustomPath(path,"aotd_monoculture_plots");
 
         path = new CustomUpgradePath(1,2);
         map = new LinkedHashMap<>();

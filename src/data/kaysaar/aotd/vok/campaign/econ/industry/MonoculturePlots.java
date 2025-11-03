@@ -4,15 +4,11 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.econ.impl.Farming;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.impl.campaign.ids.Planets;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.MarketCMD;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 
-import java.util.HashSet;
-import java.util.Set;
-
-public class Monoculture extends BaseIndustry {
+public class MonoculturePlots extends BaseIndustry {
 
     public void apply() {
         super.apply(true);
