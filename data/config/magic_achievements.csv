@@ -1,7 +1,7 @@
 id,name,description,tooltip,script,image,spoilerLevel,rarity,
 # id: Required. The id of the achievement. Must be unique. Prefix with your mod id.,,,,,,,,
 # name: Required. The name of the achievement.,,,,,,,,
-"# description: Required. The description of the achievement. Use past tense (""Killed 10 ships""). Aim for one or two sentences.",,,,,,,,
+# description: Required. The description of the achievement. Use past tense (""Killed 10 ships""). Aim for one or two sentences.,,,,,,,,
 # tooltip: Optional. A hardcoded tooltip to display when the player hovers over the achievement in the achievement list,,,,,,,,
 #     for example for any detailed explanation that doesn't fit in the description.,,,,,,,,
 # script: Required. The fully qualified name of the script (Java/Kotlin) class that implements the achievement. Must be a subclass of MagicAchievement.,,,,,,,,
