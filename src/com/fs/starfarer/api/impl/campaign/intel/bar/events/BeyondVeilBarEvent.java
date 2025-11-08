@@ -20,7 +20,7 @@ import java.util.Set;
 public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
     public static enum OptionId {
         INIT,
-        INTRUIGED,
+        INTRIGUED,
         CONTINUE_1,
         CONTINUE_2,
         WHERE_WAS_SYSTEM,
@@ -85,7 +85,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
 
         TextPanelAPI text = dialog.getTextPanel();
         text.addPara("A rough-looking veteran spacer with strange cybernetic augmentations seems to have been staring at you for a while now, " +
-                "making you feel quite unnerving...");
+                "making you feel quite unnerved...");
 
 //		Color c = Misc.getHighlightColor();
 //		c = Misc.getHighlightedOptionColor();
@@ -126,10 +126,10 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
         switch (option) {
             case INIT:
                 text.addPara("\"Oh, it's nothing. Let's just say you caught my attention.\"");
-                options.addOption(getHisOrHer() + " attention? What does " + getHeOrShe().toLowerCase() + " mean by that?", OptionId.INTRUIGED);
+                options.addOption(getHisOrHer() + " attention? What does " + getHeOrShe().toLowerCase() + " mean by that?", OptionId.INTRIGUED);
                 options.addOption("Suggest that " + getHeOrShe().toLowerCase() + " mistook you for someone else.", OptionId.LEAVE);
                 break;
-            case INTRUIGED:
+            case INTRIGUED:
                 text.addPara("\"Look, space might be a big place, but there is no way you can't hear about " + Global.getSector().getPlayerPerson().getName().getFullName() + ".\"" +
                         "\n\"Believe it or not, some people even began calling you the 'The Seeker of Knowledge'. Your deeds haven't gone unnoticed.\"");
 
@@ -187,7 +187,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
 
         if (!success) {
             text.addPara("For a minute, you were caught up by the story, but you now see that following up " +
-                    "on it would be a fool's errand.");
+                    "on it would be a fools errand. The question is, are you a bigger fool for not investigating?");
         }
     }
 
@@ -215,6 +215,6 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
     protected FullName.Gender getPersonGender() {
         return FullName.Gender.ANY;
     }
-
+    //Above flags a lot of identical methods, although I think this is more my IDE flagging this than it being something different-Zero
 
 }

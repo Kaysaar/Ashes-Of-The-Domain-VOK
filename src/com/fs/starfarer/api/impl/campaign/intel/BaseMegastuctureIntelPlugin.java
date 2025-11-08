@@ -32,7 +32,7 @@ public class BaseMegastuctureIntelPlugin extends BaseIntelPlugin {
 
         // Title of the intel
         info.addPara(getName(), title, 0f);
-        info.addPara("A new megastucture has been claimed by our faction!", 5f);
+        info.addPara("A new megastructure has been claimed by our faction!", 5f);
         info.addPara("Received a story point!", Misc.getPositiveHighlightColor(), 5f);
 
     }

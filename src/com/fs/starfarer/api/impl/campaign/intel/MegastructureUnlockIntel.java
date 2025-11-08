@@ -20,7 +20,7 @@ public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
     }
 
     @Override
-    public SectorEntityToken getMapLocation(SectorMapAPI map) {
+    public SectorEntityToken getMapLocation(SectorMapAPI map) {     //Flagged as redundant method, needs checking -Zero
      return  data.getEntityTiedTo();   // The location on the map of the intel
     }
 
@@ -33,7 +33,7 @@ public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
         info.addPara(getName(), title,0f);
 
         if(!data.haveRecivedStoryPoint){
-            info.addPara("A new megastucture has been claimed by our faction!",5f);
+            info.addPara("A new megastructure has been claimed by our faction!",5f);
             info.addPara("Received a story point!", Misc.getPositiveHighlightColor(),5f);
         }
         else{

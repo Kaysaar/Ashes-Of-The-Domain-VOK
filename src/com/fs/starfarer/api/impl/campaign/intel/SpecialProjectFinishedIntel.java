@@ -37,7 +37,7 @@ public class SpecialProjectFinishedIntel extends BaseIntelPlugin {
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara("After investing huge amount of resources we have finally managed to finish this project", 5f);
+        info.addPara("After investing a huge amount of resources we have finally managed to finish this project", 5f);
         specialProject.createRewardSectionForInfo(info,width);
         addGenericButton(info,width,"Access Special Projects",Button_SHIP);
     }
