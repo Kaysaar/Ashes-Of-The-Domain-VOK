@@ -9,7 +9,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.util.ArrayList;
 
-public class CascadeReprocessor extends BaseIndustry {
+public class EnrichmentFacility extends BaseIndustry {
     public void apply() {
         super.apply(true);
         int size = market.getSize() - 3;

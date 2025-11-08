@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class SubsidizedFarming extends BaseIndustry {
+public class SubsidisedFarming extends BaseIndustry {
 
     public static Set<Pair<String, Integer>> FARMING_CONDITIONS = new HashSet<Pair<String, Integer>>();
 

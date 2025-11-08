@@ -10,7 +10,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.util.ArrayList;
 
-public class Fracking extends BaseIndustry {
+public class PlasmaHarvester extends BaseIndustry {
     private boolean isCryovolcanicOrFrozen() {
         boolean isCryovolcanicOrFrozen = false;
         if(market.getPlanetEntity()!=null){
@@ -63,14 +63,15 @@ public class Fracking extends BaseIndustry {
     @Override
     public String getUnavailableReason() {
         ArrayList<String> reasons = new ArrayList<>();
-        boolean gasGiantOrStation = (this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().isGasGiant())||(this.getMarket().getPrimaryEntity()!=null&&this.getMarket().getPrimaryEntity().hasTag(Tags.STATION));
+        boolean isGasGiantOrStation = (this.market.getPlanetEntity()!=null && this.getMarket().getPlanetEntity().isGasGiant()) ||
+                (this.getMarket().getPrimaryEntity()!=null && this.getMarket().getPrimaryEntity().hasTag(Tags.STATION));
 
         if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)){
             reasons.add(AoTDMainResearchManager.getInstance().getNameForResearchBd(AoTDTechIds.DEEP_MINING_METHODS));
 
         }
-        if(gasGiantOrStation){
-            reasons.add("Planet must either gas giant, or siphon station. ");
+        if(!isGasGiantOrStation){
+            reasons.add("Planet must be a gas giant or a siphon station.");
         }
         StringBuilder bd = new StringBuilder();
         boolean insert = false;

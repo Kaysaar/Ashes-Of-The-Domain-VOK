@@ -25,7 +25,7 @@ public class SyndicateLine extends BaseIndustrySynergy {
     public boolean doesSynergyMetReq(MarketAPI market) {
         boolean tech = AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.NANOMETAL_FUSION_SYNTHESIS, market);
 
-        return  tech &&market.isFreePort() &&IndustrySynergiesMisc.isIndustryFunctionalAndExisting(market, AoTDIndustries.UNDERWORLD)&&IndustrySynergiesMisc.isAtLeastOneIndustryFunctionalFromList(market, Industries.CRYOSANCTUM,AoTDIndustries.BIOSYNTH_LABORATORY,Industries.LIGHTINDUSTRY);
+        return  tech &&market.isFreePort() &&IndustrySynergiesMisc.isIndustryFunctionalAndExisting(market, AoTDIndustries.UNDERWORLD)&&IndustrySynergiesMisc.isAtLeastOneIndustryFunctionalFromList(market, Industries.CRYOSANCTUM,AoTDIndustries.NEUROCHEMICAL_LABORATORY,Industries.LIGHTINDUSTRY);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SyndicateLine extends BaseIndustrySynergy {
     @Override
     public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.add(AoTDIndustries.UNDERWORLD);
-        industries.add(AoTDIndustries.BIOSYNTH_LABORATORY);
+        industries.add(AoTDIndustries.NEUROCHEMICAL_LABORATORY);
         industries.add(Industries.LIGHTINDUSTRY);
         industries.add(Industries.CRYOSANCTUM);
     }
@@ -78,7 +78,7 @@ public class SyndicateLine extends BaseIndustrySynergy {
             float val =10f*efficiencyPercent;
             market.getIncomeMult().modifyPercent(getIdForEffects(), val, "Syndicate Line");
         }
-        if(market.hasIndustry(AoTDIndustries.BIOSYNTH_LABORATORY)){
+        if(market.hasIndustry(AoTDIndustries.NEUROCHEMICAL_LABORATORY)){
             float val = 60f*efficiencyPercent;
             market.getIncomeMult().modifyPercent(getIdForEffects(), val, "Syndicate Line");
         }

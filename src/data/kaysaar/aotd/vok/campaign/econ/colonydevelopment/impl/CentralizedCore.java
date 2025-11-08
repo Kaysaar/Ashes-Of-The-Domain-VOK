@@ -40,7 +40,7 @@ public class CentralizedCore extends BaseColonyDevelopment {
             if(!spec.hasTag("grounddefenses")&&!spec.hasTag("military")&&!spec.hasTag("command")&&!spec.hasTag("patrol")){
                 industry.getUpkeep().modifyMult("aotd_centralized",0.8f,getName());
             }
-            if(DistributedRegionalNetwork.extractiveIndustries.contains(industry.getSpec().getId())){
+            if(DistributedRegionalNetwork.extractiveOperationIndustries.contains(industry.getSpec().getId())){
                 industry.getSupplyBonusFromOther().modifyFlat("aotd_centralized",-Math.min(3,size-2),getName());
             }
             else{
