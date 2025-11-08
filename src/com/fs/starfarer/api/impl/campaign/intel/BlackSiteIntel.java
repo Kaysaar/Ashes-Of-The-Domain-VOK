@@ -16,7 +16,7 @@ public class BlackSiteIntel extends BaseIntelPlugin{
         try {
             return Global.getSector().getPlayerFaction().getProduction().getGatheringPoint().getPrimaryEntity();
         }
-        catch (Exception  e ){
+        catch (Exception  e ){          //Empty Catch Block - Don't know if this is intended or not -Zero
 
         }
 

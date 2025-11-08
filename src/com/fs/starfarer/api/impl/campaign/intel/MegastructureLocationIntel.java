@@ -62,7 +62,7 @@ public class MegastructureLocationIntel extends BaseIntelPlugin{
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
         // Create the small description here, you can place images, multiple paragraphs, anything
-        info.addPara("This is a location of one of megastructures", Misc.getGrayColor(), 0);
+        info.addPara("This is a location of a megastructure", Misc.getGrayColor(), 0);
     }
 
     @Override
