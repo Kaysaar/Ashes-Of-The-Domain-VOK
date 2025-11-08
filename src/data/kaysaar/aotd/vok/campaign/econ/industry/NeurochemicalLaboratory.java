@@ -12,7 +12,7 @@ import data.scripts.campaign.econ.conditions.terrain.hyperspace.niko_MPC_hypersp
 import java.util.ArrayList;
 import java.util.List;
 
-public class BioChem extends LightIndustry {
+public class NeurochemicalLaboratory extends LightIndustry {
     @Override
     public List<SpecialItemData> getVisibleInstalledItems() {
         return super.getVisibleInstalledItems();

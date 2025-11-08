@@ -10,7 +10,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class Fishery extends BaseIndustry {
+public class FishingHarbour extends BaseIndustry {
     public static Set<String> AQUA_PLANETS = Farming.AQUA_PLANETS;
     @Override
     public void apply() {

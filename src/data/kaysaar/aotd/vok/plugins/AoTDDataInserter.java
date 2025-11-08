@@ -487,7 +487,7 @@ public class AoTDDataInserter {
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", Industries.MEGAPORT, Industries.MEGAPORT, null, true, null, null);
             setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.MINING_MEGAPLEX, null, null, true, null, null);
             setIndustryOnPlanet("Askonia", "Volturn", AoTDIndustries.SUBLIMATION, Industries.MINING, null, false, Commodities.GAMMA_CORE, null);
-            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ISOTOPE_SEPARATOR, Industries.REFINING, null, true, Commodities.ALPHA_CORE, null);
+            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ENRICHMENT_FACILITY, Industries.REFINING, null, true, Commodities.ALPHA_CORE, null);
             setIndustryOnPlanet("Hybrasil", "Culann", Industries.HEAVYBATTERIES, Industries.HEAVYBATTERIES, null, true, Commodities.ALPHA_CORE, null);
             setIndustryOnPlanet("Thule", "Kazeron", AoTDIndustries.MINING_MEGAPLEX, Industries.MINING, null, false, null, Items.MANTLE_BORE);
             setIndustryOnPlanet("Thule", "Kazeron", AoTDIndustries.TERMINUS, null, null, true, null, null);

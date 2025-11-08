@@ -22,7 +22,7 @@ public class UAFAddictivePastries extends BaseIndustrySynergy {
     public boolean doesSynergyMetReq(MarketAPI market) {
         boolean tech =canShowSynergyInUI(market);
 
-        return  tech  && IndustrySynergiesMisc.isIndustryFunctionalAndExisting(market, AoTDIndustries.BIOSYNTH_LABORATORY,"uaf_bakery_branch");
+        return  tech  && IndustrySynergiesMisc.isIndustryFunctionalAndExisting(market, AoTDIndustries.NEUROCHEMICAL_LABORATORY,"uaf_bakery_branch");
     }
 
     @Override
@@ -33,7 +33,7 @@ public class UAFAddictivePastries extends BaseIndustrySynergy {
     @Override
     public void populateListForSynergies(HashSet<String> industries, MarketAPI market) {
         industries.add("uaf_bakery_branch");
-        industries.add(AoTDIndustries.BIOSYNTH_LABORATORY);
+        industries.add(AoTDIndustries.NEUROCHEMICAL_LABORATORY);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class UAFAddictivePastries extends BaseIndustrySynergy {
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         tooltip.addPara("%s and %s must be functional!",3f,base,highLight,
                 IndustrySynergiesMisc.getIndustryName(market,"uaf_bakery_branch"),
-                IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.BIOSYNTH_LABORATORY));
+                IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.NEUROCHEMICAL_LABORATORY));
 
     }
 

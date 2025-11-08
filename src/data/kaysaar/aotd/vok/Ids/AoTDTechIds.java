@@ -13,7 +13,7 @@ public class AoTDTechIds {
     public static final String LOBSTER_BREEDING_PROGRAM = "aotd_tech_lobster_breeding";
     public static final String LUXURY_CIVIC_PLANNING = "aotd_tech_resort_tech";
     public static final String IMPROVED_FERTILIZERS = "aotd_tech_improved_fertilizers";
-    public static final String GEOTHERMAL_FRACKING = "aotd_tech_geothermal_fracking";
+    public static final String ADVANCED_MINING_EQUIPMENT = "aotd_tech_advanced_mining_equipment";
     public static final String ALLOY_PRODUCTION_MATRIX = "aotd_tech_alloy_production";
     public static final String ORBITAL_ASSEMBLY = "aotd_tech_orbital_assembly";
     public static final String CONSUMER_GOODS_PRODUCTION = "aotd_tech_consumer";
