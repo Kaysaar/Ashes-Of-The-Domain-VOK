@@ -21,7 +21,7 @@
 		"intel": {
 			"respite40":"graphics/icons/markets/respite40.png",
 			"sp_unlock_finish":"graphics/icons/intel/dark_purple.png",
-			"sp_stage_finish":"graphics/icons/intel/purple.png",
+			"sp_stage_finish":"graphics/icons/intel/purple.png"
 		},
 		"ui_icons_tech_tree":{
 			"farming1":"graphics/icons/tech/farming1.png",
@@ -134,7 +134,7 @@
 			"shimmer":"graphics/fx/shimmer.png",
 			"diagonal":"graphics/fx/squareDiagonal.png",
 			"aotd_shadowlance":"graphics/icons/hud/aotd_shadowlance_icon.png",
-			"aotd_gungnirIcon":"graphics/icons/hud/Gungnir_icon.png",
+			"aotd_gungnirIcon":"graphics/icons/hud/Gungnir_icon.png"
 		},
 		"rendering":{
             "GlitchSquare":"graphics/fx/solid_square.png",
@@ -150,7 +150,7 @@
 			"aotd_beam4":"graphics/fx/aotd_beam4.png",
 			"aotd_planet_glow0":"graphics/fx/aotd_planet_glow0.png",
 			"aotd_planet_glow1":"graphics/fx/aotd_planet_glow1.png",
-			"aotd_planet_glow2":"graphics/fx/aotd_planet_glow2.png",
+			"aotd_planet_glow2":"graphics/fx/aotd_planet_glow2.png"
 
 
 		},
@@ -163,7 +163,7 @@
             "hypershunt":"graphics/icons/coronal_shunt.png",
 			"nidavelir":"graphics/icons/nidavelir.png",
 			"bifrost":"graphics/icons/bifrost.png",
-			"pluto":"graphics/icons/aotd_pluto_mining_station.png",
+			"pluto":"graphics/icons/aotd_pluto_mining_station.png"
 			
 		},
 		"aotd_icons":{
@@ -183,7 +183,7 @@
 			"BifrostGate":"graphics/icons/megastructures/bifrost.png",
 			"OpticCommandNexus":"graphics/icons/megastructures/optic_comand_nexus.png",
 			"PurificationCore":"graphics/icons/megastructures/purification_core.png",
-			"FusionForge":"graphics/icons/megastructures/fusion_forge.png",
+			"FusionForge":"graphics/icons/megastructures/fusion_forge.png"
 		}
 		,
 		"megastructureImage":{
@@ -191,12 +191,12 @@
 			"nidavelir":"graphics/illustrations/nidavelir.png",
 			"bifrost":"graphics/illustrations/active_gate.jpg",
 			"pluto":"graphics/illustrations/pluto.png",
-			"pluto_active":"graphics/illustrations/pluto_active.png",
+			"pluto_active":"graphics/illustrations/pluto_active.png"
 
 		},
 		"industry":{
 			"pluto_active":"graphics/icons/industry/aotd_pluto_industry_active.png",
-			"aotd_fuel_refinery_no_atmo":"graphics/icons/industry/aotd_fuel_refinery_no_atmo.png",
+			"aotd_fuel_refinery_no_atmo":"graphics/icons/industry/aotd_fuel_refinery_no_atmo.png"
 		},
 		
 		"illustrations":{
