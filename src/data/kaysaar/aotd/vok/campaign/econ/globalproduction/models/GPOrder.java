@@ -126,7 +126,11 @@ public class GPOrder implements Cloneable {
 
     public void updateResourceCost() {
 
-        assignedResources = getSpecFromClass().supplyCost;
+        try {
+            assignedResources = getSpecFromClass().supplyCost;
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid GP Spec: " + this.specId,e);
+        }
     }
 
     public static GPSpec getSpec(String id) {

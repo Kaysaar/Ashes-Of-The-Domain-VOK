@@ -20,7 +20,7 @@ public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
     }
 
     @Override
-    public SectorEntityToken getMapLocation(SectorMapAPI map) {     //Flagged as redundant method, needs checking -Zero
+    public SectorEntityToken getMapLocation(SectorMapAPI map) { // Redundant, same as super, maybe remove - Purple Nebula
      return  data.getEntityTiedTo();   // The location on the map of the intel
     }
 
