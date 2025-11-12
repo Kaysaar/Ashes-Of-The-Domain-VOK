@@ -1,10 +1,11 @@
 package data.kaysaar.aotd.vok.ui.customprod.components.history;
 
+import ashlib.data.plugins.ui.models.InstantPopUpUI;
 import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
-public class GPHistoryPopUp extends PopUpUI {
+public class GPHistoryPopUp extends InstantPopUpUI {
     CustomPanelAPI mainPanel;
     GpMainHistoryComponent history;
     @Override

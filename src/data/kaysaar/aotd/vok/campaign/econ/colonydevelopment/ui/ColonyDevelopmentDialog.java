@@ -28,6 +28,7 @@ public class ColonyDevelopmentDialog extends BasePopUpDialog {
         content = new ColonyDevelopmentMainContent(width, height,market);
         tooltip.addCustom(content.getMainPanel(),0f);
         tooltip.setHeightSoFar(height);
+        super.createContentForDialog(tooltip, width);
     }
 
     @Override
