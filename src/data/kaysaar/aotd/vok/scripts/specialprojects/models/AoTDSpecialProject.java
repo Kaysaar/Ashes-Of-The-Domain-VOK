@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
+import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.intel.ProjectStageCompletionIntel;
@@ -7,7 +8,6 @@ import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectFinishedIntel;
 import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectUnlockingIntel;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectCompletionListener;
@@ -315,7 +315,7 @@ public class AoTDSpecialProject {
             printSpecialization(tooltip);
         }
 
-        ProgressBarComponent component = new ProgressBarComponent(width - 110, 18, getTotalProgress(), Misc.getBasePlayerColor().darker().darker());
+        ProgressBarComponentV2 component = new ProgressBarComponentV2(width - 110, 18, getTotalProgress(), Misc.getBasePlayerColor().darker().darker());
         tooltip.addCustom(component.getRenderingPanel(), 5);
 
         LabelAPI labelAPI = tooltip.addSectionHeading(""+(int)(this.getTotalProgress()*100)+"%", Misc.getTextColor(), null, Alignment.MID, width - 110, -18f);
@@ -335,7 +335,7 @@ public class AoTDSpecialProject {
         CustomPanelAPI test = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltip = test.createUIElement(width, height, false);
         tooltip.addSectionHeading(getStage(stageID).getSpec().getName(), Misc.getBasePlayerColor(), null, Alignment.MID, width, 0f);
-        ProgressBarComponent component = new ProgressBarComponent(width - 5, 11, getProgressForStage(stageID), Misc.getBasePlayerColor().darker().darker());
+        ProgressBarComponentV2 component = new ProgressBarComponentV2(width - 5, 11, getProgressForStage(stageID), Misc.getBasePlayerColor().darker().darker());
         tooltip.addCustom(component.getRenderingPanel(), 2f);
         test.getPosition().setSize(width, tooltip.getHeightSoFar());
         test.addUIElement(tooltip).inTL(0, 0);

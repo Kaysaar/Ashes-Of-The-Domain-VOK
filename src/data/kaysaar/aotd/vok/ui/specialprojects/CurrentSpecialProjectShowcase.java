@@ -1,13 +1,14 @@
 package data.kaysaar.aotd.vok.ui.specialprojects;
 
+import ashlib.data.plugins.ui.models.BasePopUpDialog;
+import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
+
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
@@ -50,7 +51,7 @@ public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
             tooltip.addTitle(currProjectShowing.getNameOverride());
             tooltip.addCustom(createResourcePanelForSmallTooltipCondensed(mainPanel.getPosition().getWidth() - 95, 24, 24, currProjectShowing.getGpCostFromStages(), new HashMap<>()), 2f);
 
-            ProgressBarComponent component = new ProgressBarComponent(mainPanel.getPosition().getWidth() - 110, 18, currProjectShowing.getTotalProgress(), Misc.getBasePlayerColor().darker());
+            ProgressBarComponentV2 component = new ProgressBarComponentV2(mainPanel.getPosition().getWidth() - 110, 18, currProjectShowing.getTotalProgress(), Misc.getBasePlayerColor().darker());
             tooltip.addCustom(component.getRenderingPanel(), 3f);
             LabelAPI labelAPI = tooltip.addSectionHeading("" + (int) (currProjectShowing.getTotalProgress() * 100) + "%", Misc.getTextColor(), null, Alignment.MID, mainPanel.getPosition().getWidth() - 110, -18f);
             HologramViewer viewer = BlackSiteProjectManager.createHologramViewer(currProjectShowing.getProjectSpec(), 95);

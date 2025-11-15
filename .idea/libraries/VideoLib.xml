@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="VideoLib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../VideoLib/jars/VideoLib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../VideoLib/jars/VideoLib.jar!/" />
+    </SOURCES>
+  </library>
+</component>

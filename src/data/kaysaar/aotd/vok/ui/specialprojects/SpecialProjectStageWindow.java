@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.ui.specialprojects;
 import ashlib.data.plugins.info.FighterInfoGenerator;
 import ashlib.data.plugins.info.ShipInfoGenerator;
 import ashlib.data.plugins.info.WeaponInfoGenerator;
+import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
@@ -11,7 +12,6 @@ import com.fs.starfarer.api.loading.FormationType;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.scripts.specialprojects.*;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStage;
@@ -144,8 +144,8 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
             tooltip.addCustom(getItemLabel(s, stage), 5f);
         }
         tooltip.addSectionHeading("Progress", Alignment.MID, 5f);
-        ProgressBarComponent component = new ProgressBarComponent(panelInfoOfStage.getPosition().getWidth() - 15, 21, stage.getProgressComputed(), Misc.getBasePlayerColor().darker().darker());
-        tooltip.addCustom(component.getRenderingPanel(), 5f);
+        ProgressBarComponentV2 component = new ProgressBarComponentV2(panelInfoOfStage.getPosition().getWidth() - 15, 21, stage.getProgressComputed(), Misc.getBasePlayerColor().darker().darker());
+        tooltip.addCustom(component.getMainPanel(), 5f);
         LabelAPI label = tooltip.addPara("Current progress of stage :" + (int) (stage.getProgressComputed() * 100f) + "%", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
         buttonOfStage = tooltip.addButton("Start stage", "start_stage", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.ALL, panelInfoOfStage.getPosition().getWidth() - 10, 20, 5f);
         if (project.getCurrentlyAttemptedStages().contains(stage.getSpec().getId())) {

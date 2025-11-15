@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui.research;
 
+import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
@@ -11,7 +12,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
+
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.plugins.AoTDSettingsManager;
@@ -215,7 +216,7 @@ public class ResearchInfoUI extends PopUpUI {
 
     public CustomPanelAPI getProgressionBarTooltip(CustomPanelAPI originPanel) {
         CustomPanelAPI progression = originPanel.createCustomPanel(originPanel.getPosition().getWidth(), 50, null);
-        ProgressBarComponent component = new ProgressBarComponent(progression.getPosition().getWidth() - 10, 21, option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
+        ProgressBarComponentV2 component = new ProgressBarComponentV2(progression.getPosition().getWidth() - 10, 21, option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
         TooltipMakerAPI tooltip = progression.createUIElement(originPanel.getPosition().getWidth(), 50, false);
         int defaultDays = (int) AoDUtilis.getDaysFromResearch(option);
 
