@@ -1,5 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs;
 
+
+import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.Fonts;
@@ -8,12 +10,11 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.sections.WormholeGenerator;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 
 import java.awt.*;
 import java.util.List;
 
-public class RangeIncreaseDialog extends BaseSliderDialog{
+public class RangeIncreaseDialog extends BaseSliderDialog {
     WormholeGenerator sectionToRestore;
 
     public RangeIncreaseDialog(WormholeGenerator section, BaseMegastrucutreMenu menu, String headerTitle) {
@@ -32,7 +33,7 @@ public class RangeIncreaseDialog extends BaseSliderDialog{
        createConfirmAndCancelSection(panelAPI);
     }
     public void createUIForFirstTime(){
-        component = new ProgressBarComponent(panelToUpdate.getPosition().getWidth()-10,barHeight,currentSegment,maxSegment,Misc.getDarkPlayerColor().brighter().brighter(),1);
+        component = new ProgressBarComponentV2(panelToUpdate.getPosition().getWidth()-10,barHeight,currentSegment,maxSegment,Misc.getDarkPlayerColor().brighter().brighter(),1);
         panelToUpdate.addComponent(component.getRenderingPanel()).inTL(getBarX(),getBarY());
         createTooltipUI();
 

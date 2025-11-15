@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs;
 
+import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -12,7 +13,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
 
-public class RestorationDialog extends BasePopUpDialog{
+public class RestorationDialog extends BasePopUpDialog {
     BaseMegastrucutreMenu menu;
     GPMegaStructureSection sectionToRestore;
     String restoration;

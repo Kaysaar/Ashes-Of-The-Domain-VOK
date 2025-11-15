@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.ui;
 
+import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
@@ -10,7 +11,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
+
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.LaserStengthDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.ResourceAllocationDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;

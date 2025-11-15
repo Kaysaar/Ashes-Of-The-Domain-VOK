@@ -1,7 +1,8 @@
 package data.kaysaar.aotd.vok.ui.scientist;
 
+import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.BasePopUpDialog;
+
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
 import data.kaysaar.aotd.vok.ui.research.HeadOfResearchShowcase;

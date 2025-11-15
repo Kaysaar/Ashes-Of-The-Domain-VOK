@@ -1,11 +1,12 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs;
 
+import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.NidavelirBaseSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
 
-public class AutomationDialog  extends BasePopUpDialog{
+public class AutomationDialog  extends BasePopUpDialog {
     NidavelirBaseSection section;
     BaseMegastrucutreMenu menu;
 
