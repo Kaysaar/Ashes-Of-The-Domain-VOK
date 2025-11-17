@@ -91,7 +91,6 @@ import data.listeners.timeline.MiscEventListener;
 import data.listeners.timeline.models.FirstIndustryListener;
 import data.memory.AoTDSopMemFlags;
 import data.scripts.managers.TimelineListenerManager;
-import data.scripts.util.TexReflection;
 import kaysaar.bmo.buildingmenu.additionalreq.AdditionalReqManager;
 import kaysaar.bmo.buildingmenu.upgradepaths.CustomUpgradePath;
 import kaysaar.bmo.buildingmenu.upgradepaths.UpgradePathManager;
@@ -156,7 +155,9 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
             AdditionalReqManager.getInstance().addReq(industry.one, req);
         }
 
-
+        if (!LunaSettingsLoader.INSTANCE.getHasLoaded()) {
+            LunaSettingsLoader.INSTANCE.load();
+        }
 
         addSetting();
         LunaSettings.addSettingsListener(new LunaSettingsListener() {

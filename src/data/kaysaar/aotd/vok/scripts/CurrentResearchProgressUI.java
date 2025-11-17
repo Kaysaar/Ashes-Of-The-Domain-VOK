@@ -43,7 +43,9 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
     transient SpriteAPI progressionBarFull = Global.getSettings().getSprite("ui_campaign_components", "tech_progression");
     ;
     transient SpriteAPI progressionBarChanged = Global.getSettings().getSprite("ui_campaign_components", "tech_progression");
-    ;
+
+    public static boolean ashPadEnabled = Global.getSettings().getModManager().isModEnabled("aotd_ashpad");
+    public float buttonHideHeight, ashPadExtraY;
     boolean isHidden = true;
 
     public CurrentResearchProgressUI() throws FontException {
@@ -80,6 +82,14 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
 
     @Override
     public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
+        if (ashPadEnabled) {
+            buttonHideHeight = 78f;
+            ashPadExtraY = 27f;
+        }
+        else {
+            buttonHideHeight = 82f;
+            ashPadExtraY = 0;
+        }
 
         final CampaignUIAPI campaignUI = Global.getSector().getCampaignUI();
         if (campaignUI.isShowingDialog() || campaignUI.isShowingMenu() || campaignUI.getCurrentCoreTab() != null)
@@ -93,7 +103,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
         int x1 = 0;
         if (!isHidden) {
             sprite.render(x1, getYForRender());
-            float x = sprite.getWidth()-2;
+            float x = sprite.getWidth()-20;
             float y = (getYForRender()) + sprite.getHeight();
             if (techString == null) {
                 techString = loader.createText();
@@ -105,18 +115,20 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 progressionString = loader.createText();
             }
 
-            if (detector.determineIfHoversOverButton(x, y, x + buttonHide.getWidth(), y - 11, x, y - sprite.getHeight(), x + buttonHide.getWidth(), y - sprite.getHeight() + 11, Global.getSettings().getMouseX(), (float) (Global.getSettings().getMouseY()))) {
-                buttonHideHighlighted.setHeight(sprite.getHeight());
-                buttonHideHighlighted.render(sprite.getWidth()-2, getYForRender());
+            if (detector.determineIfHoversOverButton(x, y, x + buttonHide.getWidth(), y - 11, x, y + ashPadExtraY - sprite.getHeight(), x + buttonHide.getWidth(), y + ashPadExtraY - sprite.getHeight() + 11, Global.getSettings().getMouseX(), (float) (Global.getSettings().getMouseY()))) {
+                buttonHideHighlighted.setHeight(buttonHideHeight);
+                if (ashPadEnabled) buttonHideHighlighted.render(sprite.getWidth()-20, getYForRender()+27);
+                else buttonHideHighlighted.render(sprite.getWidth()-2, getYForRender());
             } else {
-                buttonHide.setHeight(sprite.getHeight());
-                buttonHide.render(sprite.getWidth()-2, getYForRender());
+                buttonHide.setHeight(buttonHideHeight);
+                if (ashPadEnabled) buttonHide.render(sprite.getWidth()-20, getYForRender()+27);
+                else buttonHide.render(sprite.getWidth()-2, getYForRender());
             }
             if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus() != null) {
                 spriteOfCurrentlyResearched = Global.getSettings().getSprite("ui_icons_tech_tree", AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getIconId());
                 spriteOfCurrentlyResearched.setWidth(80);
                 spriteOfCurrentlyResearched.setHeight(80);
-                spriteOfCurrentlyResearched.render(8, getYForRender() +3);
+                spriteOfCurrentlyResearched.render(8, getYForRender() +3 + ashPadExtraY);
 
                 techString.setText("Researching : " + AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getName());
                 techString.setMaxWidth(sprite.getWidth() - 98);
@@ -124,16 +136,17 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 techString.setBaseColor(Misc.getTextColor());
                 techString.setBlendSrc(GL11.GL_SRC_ALPHA);
                 techString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
-                techString.draw(95, getYForRender() + 75);
+                techString.draw(95, getYForRender() + 75 + ashPadExtraY);
                 progressionBarChanged.setWidth(progressionBarFull.getWidth() * AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()));
-                progressionBarChanged.render(7, y - sprite.getHeight() + 2);
+                progressionBarChanged.render(7, y - sprite.getHeight() + 2 + ashPadExtraY);
             } else {
                 techString.setText("Currently nothing is being\nresearched!");
                 techString.setFontSize(12);
                 techString.setBaseColor(Misc.getTextColor());
                 techString.setBlendSrc(GL11.GL_SRC_ALPHA);
                 techString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
-                techString.draw(95, getYForRender() + 75);
+                if (ashPadEnabled) techString.draw(95, getYForRender() + 102);
+                else techString.draw(95, getYForRender() + 75);
             }
 
             buttonTech.setWidth(170);
@@ -142,7 +155,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             buttonTechHighlighted.setHeight(20);
             float buttonXBeginning = 95;
             float buttonYBeginning = getYForRender() + 14 + buttonTech.getHeight();
-            if (detector.determineIfHoversOverButton(buttonXBeginning, buttonYBeginning, buttonXBeginning + 170, buttonYBeginning, buttonXBeginning, buttonYBeginning - 20, buttonXBeginning + 170, buttonYBeginning - 20, Global.getSettings().getMouseX(), Global.getSettings().getMouseY())) {
+            if (detector.determineIfHoversOverButton(buttonXBeginning, buttonYBeginning + ashPadExtraY, buttonXBeginning + 170, buttonYBeginning + ashPadExtraY, buttonXBeginning, buttonYBeginning + ashPadExtraY - 20, buttonXBeginning + 170, buttonYBeginning + ashPadExtraY - 20, Global.getSettings().getMouseX(), Global.getSettings().getMouseY())) {
                 buttonTechHighlighted.render(95, getSecondY());
 
             } else {
@@ -155,7 +168,8 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             buttonString.setBaseColor(Misc.getTextColor());
             buttonString.setBlendSrc(GL11.GL_SRC_ALPHA);
             buttonString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
-            buttonString.draw(130, getYForRender() +30);
+            if (ashPadEnabled) buttonString.draw(130, getYForRender() +57);
+            else buttonString.draw(130, getYForRender() +30);
             if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()!=null){
                 progressionString.setText((int) (AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()) * 100) + "%");
                 progressionString.setFontSize(10);
@@ -168,25 +182,28 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 }
                 progressionString.setBlendSrc(GL11.GL_SRC_ALPHA);
                 progressionString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
-                progressionString.draw(125, getYForRender() +11);
+                progressionString.draw(125, getYForRender() +11 + ashPadExtraY);
             }
             
 
         } else {
             float x = x1;
             float y = (getYForRender()) + sprite.getHeight();
-            if (detector.determineIfHoversOverButton(x, y, x + buttonHide.getWidth(), y - 11, x, y - sprite.getHeight(), x + buttonHide.getWidth(), y - sprite.getHeight() + 11, Global.getSettings().getMouseX(), (float) (Global.getSettings().getMouseY()))) {
-                buttonHideHighlighted.setHeight(sprite.getHeight());
-                buttonHideHighlighted.render(x1, getYForRender());
+            if (detector.determineIfHoversOverButton(x, y, x + buttonHide.getWidth(), y - 11, x, y + ashPadExtraY - sprite.getHeight(), x + buttonHide.getWidth(), y + ashPadExtraY - sprite.getHeight() + 11, Global.getSettings().getMouseX(), (float) (Global.getSettings().getMouseY()))) {
+                buttonHideHighlighted.setHeight(buttonHideHeight);
+                if (ashPadEnabled) buttonHideHighlighted.render(x1, getYForRender()+27);
+                else buttonHideHighlighted.render(x1, getYForRender());
             } else {
-                buttonHide.setHeight(sprite.getHeight());
-                buttonHide.render(x1, getYForRender());
+                buttonHide.setHeight(buttonHideHeight);
+                if (ashPadEnabled) buttonHide.render(x1, getYForRender()+27);
+                else buttonHide.render(x1, getYForRender());
             }
         }
 
     }
 
     private  float getSecondY() {
+        if (ashPadEnabled) return getYForRender()+ 41;
         return getYForRender()+ 14;
     }
 
@@ -213,7 +230,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
         if (buttonTech == null) return;
         if (buttonTechHighlighted == null) return;
         for (InputEventAPI event : events) {
-            float x = sprite.getWidth()-2;
+            float x = sprite.getWidth()-20;
             float y = (getYForRender()) + sprite.getHeight();
             if (isHidden) {
                 x = 1;
@@ -227,7 +244,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 }
                 float buttonXBeginning = 95;
                 float buttonYBeginning = getYForRender() + 14 + buttonTech.getHeight();
-                if (!isHidden&&detector.determineIfHoversOverButton(buttonXBeginning, buttonYBeginning, buttonXBeginning + 170, buttonYBeginning, buttonXBeginning, buttonYBeginning - 20, buttonXBeginning + 170, buttonYBeginning - 20, Global.getSettings().getMouseX(), Global.getSettings().getMouseY())) {
+                if (!isHidden&&detector.determineIfHoversOverButton(buttonXBeginning, buttonYBeginning + ashPadExtraY, buttonXBeginning + 170, buttonYBeginning + ashPadExtraY, buttonXBeginning, buttonYBeginning + ashPadExtraY - 20, buttonXBeginning + 170, buttonYBeginning + ashPadExtraY - 20, Global.getSettings().getMouseX(), Global.getSettings().getMouseY())) {
                     Global.getSoundPlayer().playUISound("ui_button_pressed", 1f, 1f);
                     CommandTabMemoryManager.getInstance().setLastCheckedTab("research & production");
                     CommandTabMemoryManager.getInstance().getTabStates().put("research & production","research");
