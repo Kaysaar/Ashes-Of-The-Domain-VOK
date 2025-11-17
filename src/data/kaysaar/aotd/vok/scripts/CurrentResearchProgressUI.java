@@ -103,7 +103,11 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
         int x1 = 0;
         if (!isHidden) {
             sprite.render(x1, getYForRender());
-            float x = sprite.getWidth()-20;
+
+            float x;
+            if (ashPadEnabled) x = sprite.getWidth()-20;
+            else x = sprite.getWidth()-2;
+
             float y = (getYForRender()) + sprite.getHeight();
             if (techString == null) {
                 techString = loader.createText();
@@ -231,7 +235,11 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
         if (buttonTech == null) return;
         if (buttonTechHighlighted == null) return;
         for (InputEventAPI event : events) {
-            float x = sprite.getWidth()-20;
+
+            float x;
+            if (ashPadEnabled) x = sprite.getWidth()-20;
+            else x = sprite.getWidth()-2;
+
             float y = (getYForRender()) + sprite.getHeight();
             if (isHidden) {
                 x = 1;
