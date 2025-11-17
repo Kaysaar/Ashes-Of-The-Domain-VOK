@@ -4,7 +4,6 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.ui.customprod.components.RowData;
 import data.kaysaar.aotd.vok.ui.customprod.components.SortingState;
 import data.kaysaar.aotd.vok.ui.customprod.components.UIData;

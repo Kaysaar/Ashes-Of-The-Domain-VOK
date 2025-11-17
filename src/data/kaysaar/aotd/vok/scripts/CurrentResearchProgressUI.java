@@ -74,14 +74,6 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
 
     @Override
     public void renderInUICoordsAboveUIBelowTooltips(ViewportAPI viewport) {
-
-    }
-
-
-
-
-    @Override
-    public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
         if (ashPadEnabled) {
             buttonHideHeight = 78f;
             ashPadExtraY = 27f;
@@ -188,7 +180,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 progressionString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
                 progressionString.draw(125, getYForRender() +11 + ashPadExtraY);
             }
-            
+
 
         } else {
             float x = x1;
@@ -203,6 +195,14 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 else buttonHide.render(x1, getYForRender());
             }
         }
+    }
+
+
+
+
+    @Override
+    public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
+
 
     }
 

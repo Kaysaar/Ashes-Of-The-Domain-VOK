@@ -1,10 +1,11 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components;
 
+import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 
-public class OtherInfoPopUp  extends PopUpUI{
+public class OtherInfoPopUp  extends PopUpUI {
     GPMegaStructureSection section;
     float lastYPos;
     CustomPanelAPI mainPanel;
