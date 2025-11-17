@@ -8,7 +8,6 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-
 import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import data.kaysaar.aotd.vok.ui.customprod.components.gatheringpoint.AoTDGatehringPointPlugin;
 
@@ -26,13 +25,12 @@ public class GatheringPointDialog extends BasePopUpDialog {
 
     @Override
     public void createContentForDialog(TooltipMakerAPI tooltip, float width) {
-        super.createContentForDialog(tooltip, width);
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
             Pair<CustomPanelAPI,ButtonAPI> pair = AoTDGatehringPointPlugin.getMarketEntitySpriteButton(width-5,75,75,playerMarket);
             buttons.add(pair.two);
             tooltip.addCustom(pair.one,5f);
-
         }
+        super.createContentForDialog(tooltip, width);
     }
 
     @Override

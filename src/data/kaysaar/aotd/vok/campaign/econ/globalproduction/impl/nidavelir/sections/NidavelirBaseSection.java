@@ -7,7 +7,7 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastrcutre;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
@@ -89,7 +89,7 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        if (!HypershuntMegastrcutre.isWithinReciverSystem(this.getMegastructureTiedTo().entityTiedTo)) {
+        if (!HypershuntMegastructure.isWithinReceiverSystem(this.getMegastructureTiedTo().entityTiedTo)) {
             isAutomated = false;
         }
     }
@@ -108,10 +108,10 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
         ButtonData data1 = new ButtonData("Assign Manpower", this, this.isRestored && !this.isAutomated, new Color(239, 60, 60, 255), "assignManpower", new OnHoverButtonTooltip(this, "assignManpower"), "assignManpower", this.getSpec().getSectionID());
         currentButtons.put("assignManpower", data1);
         if (!isAutomated) {
-            ButtonData data2 = new ButtonData("Automate Section", this, this.isRestored && HypershuntMegastrcutre.isWithinReciverSystem(this.getMegastructureTiedTo().getEntityTiedTo()), new Color(98, 231, 184, 255), "automateSection", new OnHoverButtonTooltip(this, "automateSection"), "automateSection", this.getSpec().getSectionID());
+            ButtonData data2 = new ButtonData("Automate Section", this, this.isRestored && HypershuntMegastructure.isWithinReceiverSystem(this.getMegastructureTiedTo().getEntityTiedTo()), new Color(98, 231, 184, 255), "automateSection", new OnHoverButtonTooltip(this, "automateSection"), "automateSection", this.getSpec().getSectionID());
             currentButtons.put("automateSection", data2);
         } else {
-            ButtonData data2 = new ButtonData("De-automate Section", this, this.isRestored && HypershuntMegastrcutre.isWithinReciverSystem(this.getMegastructureTiedTo().getEntityTiedTo()), new Color(98, 231, 184, 255), "automateSection", new OnHoverButtonTooltip(this, "automateSection"), "automateSection", this.getSpec().getSectionID());
+            ButtonData data2 = new ButtonData("De-automate Section", this, this.isRestored && HypershuntMegastructure.isWithinReceiverSystem(this.getMegastructureTiedTo().getEntityTiedTo()), new Color(98, 231, 184, 255), "automateSection", new OnHoverButtonTooltip(this, "automateSection"), "automateSection", this.getSpec().getSectionID());
             currentButtons.put("automateSection", data2);
         }
 

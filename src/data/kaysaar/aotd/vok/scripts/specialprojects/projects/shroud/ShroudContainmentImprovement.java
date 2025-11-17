@@ -15,7 +15,7 @@ public class ShroudContainmentImprovement  extends ShroudBasedProject {
 
     @Override
     public void projectCompleted() {
-        ShroudProjectMisc.setBoolean(ShroudProjectMisc.hasBetterContaimentMethods,true);
+        ShroudProjectMisc.setBoolean(ShroudProjectMisc.hasBetterContainmentMethods,true);
         super.projectCompleted();
     }
 }

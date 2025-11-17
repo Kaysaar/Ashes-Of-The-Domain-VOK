@@ -231,8 +231,8 @@ public class AoDUtilis {
         return null;
     }
 
-    public static ArrayList<SMSpecialItem> getSpecItemsForManufactoriumData() {
-        return (ArrayList<SMSpecialItem>) Global.getSector().getPersistentData().get("$stella_manufactorium_items");
+    public static ArrayList<SMSpecialItem> getSpecItemsForMacroIndustrialComplexData() {
+        return (ArrayList<SMSpecialItem>) Global.getSector().getPersistentData().get("$aotd_macro_industrial_complex_items");
     }
 
     public static BaseIndustry getTTShipyard(FactionAPI factionAPI) {

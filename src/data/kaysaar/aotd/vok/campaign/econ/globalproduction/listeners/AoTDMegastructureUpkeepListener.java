@@ -9,7 +9,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 
 public class AoTDMegastructureUpkeepListener implements EconomyTickListener {
-    public static String MegaNodeID = "node_id_megastuctures_";
+    public static String MegaNodeID = "node_id_megastructures_";
 
     @Override
     public void reportEconomyTick(int iterIndex) {
@@ -51,7 +51,7 @@ public class AoTDMegastructureUpkeepListener implements EconomyTickListener {
                     }
 
                     public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                        tooltip.addPara("Monthly upkeep of " + megastructure.getName(), 0f);
+                        tooltip.addPara("Monthly upkeep of the " + megastructure.getName(), 0f);
                     }
                 };
             }

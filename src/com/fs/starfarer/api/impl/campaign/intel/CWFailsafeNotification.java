@@ -20,7 +20,7 @@ public class CWFailsafeNotification extends BaseMegastuctureIntelPlugin {
 
 
     @Override
-    public SectorEntityToken getMapLocation(SectorMapAPI map) {
+    public SectorEntityToken getMapLocation(SectorMapAPI map) { // Redundant, same as super, maybe remove - Purple Nebula
         return data.getEntityTiedTo();   // The location on the map of the intel
     }
 
@@ -31,7 +31,7 @@ public class CWFailsafeNotification extends BaseMegastuctureIntelPlugin {
 
         // Title of the intel
         info.addPara(getName(), title, 0f);
-        info.addPara("Critical failure of Wormhole Stabilizator", 5f);
+        info.addPara("Critical failure of Wormhole Stabilizer", 5f);
         info.addPara("Reduced range of hypershunt to %s in %s", 5f,Color.ORANGE,"10 LY",data.getEntityTiedTo().getStarSystem().getBaseName());
 
     }
@@ -47,10 +47,11 @@ public class CWFailsafeNotification extends BaseMegastuctureIntelPlugin {
     @Override
     public String getIcon() {
         return data.getIcon();
-    }
+    } // Redundant, same as super, maybe remove - Purple Nebula
+
 
     @Override
-    protected String getName() {
+    protected String getName() { // Redundant, same as super, maybe remove - Purple Nebula
         return "Megastructure : " + data.getName();
     }
 

@@ -29,6 +29,8 @@ public class BifrostLocationSelector extends BasePopUpDialog {
         tooltip.addCustom(map.getMainPanel(),5f);
         tooltip.addCustom(panelOfInfoMain,10f);
         tooltip.setHeightSoFar(0f);
+
+        super.createContentForDialog(tooltip,width);
     }
     public void updateInfo(){
         panelOfInfoMain.removeComponent(contentForInfo);

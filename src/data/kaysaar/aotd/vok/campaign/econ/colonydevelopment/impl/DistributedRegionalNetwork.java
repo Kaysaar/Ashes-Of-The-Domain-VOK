@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
 public class DistributedRegionalNetwork extends BaseColonyDevelopment {
-    public static LinkedHashSet<String>extractiveIndustries = new LinkedHashSet<>();
+    public static LinkedHashSet<String> extractiveOperationIndustries = new LinkedHashSet<>();
     public static void addNewIndustries(ArrayList<String> industries){
-        extractiveIndustries.addAll(industries);
+        extractiveOperationIndustries.addAll(industries);
     }
     @Override
     public String getName() {
@@ -38,7 +38,7 @@ public class DistributedRegionalNetwork extends BaseColonyDevelopment {
         }
         for (Industry industry : market.getIndustries()) {
             industry.getUpkeep().modifyMult("aotd_distributed",val,getName());
-            if(DistributedRegionalNetwork.extractiveIndustries.contains(industry.getSpec().getId())){
+            if(DistributedRegionalNetwork.extractiveOperationIndustries.contains(industry.getSpec().getId())){
                 industry.getSupplyBonusFromOther().modifyFlat("aotd_distributed",Math.min(3,size-2),getName());
             }
             else{
@@ -81,7 +81,7 @@ public class DistributedRegionalNetwork extends BaseColonyDevelopment {
         tooltip.setParaFont(fontForSections);
         tooltip.addPara("Decentralized Industrial Complex", Misc.getTooltipTitleAndLightHighlightColor(),5f);
         tooltip.setParaFont(Fonts.DEFAULT_SMALL);
-        tooltip.addPara("All industries specializing in resource extraction: %s will get up to %s bonus towards production, depending on colony size",3f,Color.ORANGE, IndustrySynergiesMisc.getIndustriesListed(extractiveIndustries.stream().toList(),market),"3");
+        tooltip.addPara("All industries specializing in resource extraction: %s will get up to %s bonus towards production, depending on colony size",3f,Color.ORANGE, IndustrySynergiesMisc.getIndustriesListed(extractiveOperationIndustries.stream().toList(),market),"3");
         tooltip.addPara(
                 "All other industries will have their output reduced by up to %s, depending on colony size.",
                 3f,

@@ -40,12 +40,12 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
     static {
         industries.add(new Pair<>(Industries.AQUACULTURE,"aotd_tech_rudimentary_eq"));
         industries.add(new Pair<>(Industries.FARMING,"aotd_tech_agriculture"));
-        industries.add(new Pair<>(Industries.MINING,"aotd_tech_exosceletons"));
+        industries.add(new Pair<>(Industries.MINING,"aotd_tech_exoskeletons"));
         industries.add(new Pair<>(Industries.REFINING,"aotd_tech_nanometal"));
         industries.add(new Pair<>(Industries.HEAVYINDUSTRY,"aotd_tech_hull_manufacture"));
         industries.add(new Pair<>(Industries.ORBITALWORKS,"aotd_tech_orbital_assembly"));
         industries.add(new Pair<>(Industries.LIGHTINDUSTRY,"aotd_tech_nanometal"));
-        industries.add(new Pair<>(Industries.FUELPROD,"aotd_tech_antimater_production"));
+        industries.add(new Pair<>(Industries.FUELPROD,"aotd_tech_antimatter_production"));
         industries.add(new Pair<>(Industries.COMMERCE,"aotd_tech_dual_trade_system"));
         industries.add(new Pair<>(Industries.MEGAPORT,"aotd_tech_spaceport_expansion"));
     }

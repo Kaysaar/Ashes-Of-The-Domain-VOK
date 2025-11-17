@@ -4,7 +4,7 @@ import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastrcutre;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.PlutoMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
@@ -29,7 +29,7 @@ public class OpticCommandNexus extends GPMegaStructureSection {
 
     int supplyUnitsPerMagnitude = 5;
     public int getMaxMagnitude(){
-        if(HypershuntMegastrcutre.isWithinReciverSystem(this.getMega().getEntityTiedTo())){
+        if(HypershuntMegastructure.isWithinReceiverSystem(this.getMega().getEntityTiedTo())){
             return maxMagnitude;
         }
         return maxMagnitude-3;
@@ -94,15 +94,15 @@ public class OpticCommandNexus extends GPMegaStructureSection {
         super.createTooltipForButtons(tooltip, buttonId);
         if (buttonId.equals("adjustLaser")) {
             int percent = 70;
-            if (HypershuntMegastrcutre.isWithinReciverSystem(this.getMega().getEntityTiedTo())) {
+            if (HypershuntMegastructure.isWithinReceiverSystem(this.getMega().getEntityTiedTo())) {
                 percent = 100;
             }
             tooltip.addPara("We can adjust the strength of laser for optimal excavation of resources, currently we are able to use %s laser potential", 5f, Color.ORANGE, percent + "%");
-            if (!GPManager.getInstance().getMegastructuresBasedOnClass(HypershuntMegastrcutre.class).isEmpty()) {
-                if (HypershuntMegastrcutre.isWithinReciverSystem(this.getMega().getEntityTiedTo())) {
+            if (!GPManager.getInstance().getMegastructuresBasedOnClass(HypershuntMegastructure.class).isEmpty()) {
+                if (HypershuntMegastructure.isWithinReceiverSystem(this.getMega().getEntityTiedTo())) {
                     tooltip.addPara("Due to connection with hypershunt we are now able to access full potential of this structure", 5f);
                 } else {
-                    tooltip.addPara("With hypershunt under our control, it is advised to built Hypershunt Reciver in this system and extend range of hypershunt to this system, thanks to it, we will be able to unlock full potential of this megastructure.", 5f);
+                    tooltip.addPara("With hypershunt under our control, it is advised to built Hypershunt Receiver in this system and extend range of hypershunt to this system, thanks to it, we will be able to unlock full potential of this megastructure.", 5f);
 
                 }
             }
@@ -119,7 +119,7 @@ public class OpticCommandNexus extends GPMegaStructureSection {
     public void createTooltipForBenefits(TooltipMakerAPI tooltip) {
         super.createTooltipForBenefits(tooltip);
         tooltip.addPara("Allows extraction of ores and transplutonic ores by using laser", 5f);
-        if (HypershuntMegastrcutre.isWithinReciverSystem(this.getMegastructureTiedTo().getEntityTiedTo())) {
+        if (HypershuntMegastructure.isWithinReceiverSystem(this.getMegastructureTiedTo().getEntityTiedTo())) {
             tooltip.addPara("Due to connection with Hypershunt, power of laser is doubled, together with extraction yield", Misc.getPositiveHighlightColor(), 5f);
         }
         if (isRestored) {

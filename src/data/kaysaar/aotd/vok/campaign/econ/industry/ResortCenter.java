@@ -45,8 +45,8 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
             demand("alcoholism_tears_c",4);
             demand("alcoholism_absynth_c",4);
         }
-        market.getStability().modifyFlat(getModId(1), STAB_BONUS, "Tourism");
-        this.getIncome().modifyMult("tourism_access", accessMult, "Accessibility");
+        market.getStability().modifyFlat(getModId(1), STAB_BONUS, "Resort");
+        this.getIncome().modifyMult("resort_access", accessMult, "Accessibility");
     }
     @Override
     public void applyAICoreToIncomeAndUpkeep() {
@@ -60,10 +60,10 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
             int maxDeficit = market.getSize() - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
             if (deficitAlcohol.two > maxDeficit) deficitAlcohol.two = maxDeficit;
             if(deficitAlcohol.two<=0){
-                this.getIncome().modifyMult("tourism_alco", ALCOHOL_BOUNUS, alkoholism);
+                this.getIncome().modifyMult("resort_alco", ALCOHOL_BOUNUS, alkoholism);
             }
             else{
-                this.getIncome().unmodifyFlat("tourism_alco");
+                this.getIncome().unmodifyFlat("resort_alco");
             }
 
 

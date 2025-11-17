@@ -1,7 +1,7 @@
 {
 	
 	"aotd_tier_1_unlock":false, # Unlock vanilla tier of buildings by default
-	"aotd_tier_2_unlock":false, # Unlock tier 2 of industries ( such as fracking , orbital assembly etc etc) and all bellow this tier.
+	"aotd_tier_2_unlock":false, # Unlock tier 2 of industries ( such as the plasma harvester , orbital assembly etc etc) and all bellow this tier.
 	"aotd_tier_3_unlock":false, # Unlock tier 3 of industries (Benefication , sublimation and all using advanced resources) and all bellow this tier.
 	"aotd_tier_4_unlock":false, # Unlock tier 4 of industries (Skunkwork, Fleetwork , and Blast Processing Unit) and all bellow this tier.
 	"aotd_tier_experimental_unlock":false, #Unlock experimental tier of tech tree and all bellow this tier.
@@ -21,7 +21,7 @@
 		"intel": {
 			"respite40":"graphics/icons/markets/respite40.png",
 			"sp_unlock_finish":"graphics/icons/intel/dark_purple.png",
-			"sp_stage_finish":"graphics/icons/intel/purple.png",
+			"sp_stage_finish":"graphics/icons/intel/purple.png"
 		},
 		"ui_icons_tech_tree":{
 			"farming1":"graphics/icons/tech/farming1.png",
@@ -63,11 +63,11 @@
 			"dual_market":"graphics/icons/tech/dual_market_system.png",
 			"spaceportI":"graphics/icons/tech/spaceportI.png",
 			"specialmodifier":"graphics/icons/tech/specialmodifier.png",
-			"stellamanufactorum":"graphics/icons/tech/stellamanufactorum.png",
+			"macro_industrial_complex":"graphics/icons/tech/macro_industrial_complex.png",
 			"fuelsynth":"graphics/icons/tech/fuelsynth.png",
-			"tourism":"graphics/icons/tech/tourism.png",
+			"aotd_resort_center":"graphics/icons/tech/resort_center.png",
 			"hypershunt_energy_distribution":"graphics/icons/tech/hypershunt_energy_distribution.png",
-			"megastrcuture_analysis":"graphics/icons/tech/megastrcuture_analysis.png",
+			"megastructure_analysis":"graphics/icons/tech/megastructure_analysis.png",
 			"supertensile":"graphics/icons/tech/supertensile.png",
 			"ring":"graphics/icons/tech/ring.png",
 			"special":"graphics/icons/tech/specialmodifier.png",
@@ -78,35 +78,35 @@
 			"refining_sub":"graphics/icons/tech/subicon_refinery.png",
 			"heavyindustry_sub":"graphics/icons/tech/subicon_heavyindustry.png",
 			"orbitalworks_sub":"graphics/icons/tech/subicon_orbitalworks.png",
-			"artifarming_sub":"graphics/icons/tech/subicon_artisinal.png",
-			"subfarming_sub":"graphics/icons/tech/subicon_subsidized.png",
-			"monoculture_sub":"graphics/icons/tech/subicon_monoculture.png",
-			"fishery_sub":"graphics/icons/tech/subicon_fishery.png",
+			"aotd_artisanal_farming_sub":"graphics/icons/tech/subicon_artisinal.png",
+			"aotd_subsidised_farming_sub":"graphics/icons/tech/subicon_subsidised.png",
+			"aotd_monoculture_plots_sub":"graphics/icons/tech/subicon_monoculture.png",
+			"aotd_fishing_harbour_sub":"graphics/icons/tech/subicon_fishing_harbour.png",
 			"purification_sub":"graphics/icons/tech/subicon_purificaiton.png",
-			"extractive_sub":"graphics/icons/tech/subicon_extracting.png",
-			"fracking_sub":"graphics/icons/tech/subicon_fracking.png",
-			"tourism_sub":"graphics/icons/tech/subicon_tourism.png",
+			"aotd_extractive_operation_sub":"graphics/icons/tech/subicon_extractive_operation.png",
+			"aotd_plasma_harvester_sub":"graphics/icons/tech/subicon_plasma_harvester.png",
+			"aotd_resort_center_sub":"graphics/icons/tech/subicon_resort_center.png",
 			"commerce_sub":"graphics/icons/tech/subicon_commerce.png",
-			"smelting_sub":"graphics/icons/tech/subicon_smelting.png",
-			"isotope_separator_sub":"graphics/icons/tech/subicon_isotope.png",
-				"crystalizator_sub":"graphics/icons/tech/subicon_crystalizator.png",
-			"blast_processing_sub":"graphics/icons/tech/subicon_blast_processing.png",
-			"lightproduction_sub":"graphics/icons/tech/subicon_lightproduction.png",
+			"aotd_smelting_sub":"graphics/icons/tech/subicon_smelting.png",
+			"aotd_enrichment_facility_sub":"graphics/icons/tech/subicon_enrichment_facility.png",
+			"aotd_crystalizator_sub":"graphics/icons/tech/subicon_crystalizator.png",
+			"aotd_fuel_refinery_sub":"graphics/icons/tech/subicon_fuel_refinery.png",
+			"aotd_light_production_sub":"graphics/icons/tech/subicon_lightproduction.png",
 			"consumerindustry_sub":"graphics/icons/tech/subicon_consumerindustry.png",
-			"logisitcbureau_sub":"graphics/icons/tech/subicon_terminus.png",
-			"druglight_sub":"graphics/icons/tech/subicon_bio_drug.png",
-			"underworld_sub":"graphics/icons/tech/subicon_underworld.png",
+			"aotd_terminus_sub":"graphics/icons/tech/subicon_terminus.png",
+			"aotd_druglight_sub":"graphics/icons/tech/subicon_bio_drug.png",
+			"aotd_underworld_sub":"graphics/icons/tech/subicon_underworld.png",
 			"supplyheavy_sub":"graphics/icons/tech/subicon_civilianheavy.png",
 			"aotd_maglev_sub":"graphics/icons/tech/subicon_aotd_maglev.png",
 			"triheavy_sub":"graphics/icons/tech/subicon_triheavy.png",
 			"hegeheavy_sub":"graphics/icons/tech/subicon_hegeheavy.png",
 			"megaport_sub":"graphics/icons/tech/subicon_megaport.png",
-			"stella_manufactorium_sub":"graphics/icons/tech/subicon_stella.png",
+			"aotd_macro_industrial_complex_sub":"graphics/icons/tech/subicon_macro_industrial_complex.png",
 			"fuelprod_sub":"graphics/icons/tech/subicon_fuelprod.png",
-			"hightech_sub":"graphics/icons/tech/subicon_modula_program.png",
+			"aotd_hightech_industry_sub":"graphics/icons/tech/subicon_hightech_industry.png",
 			"none":"graphics/icons/tech/generic.png",
 			"researched":"graphics/icons/tech/researched.png",
-			"mining_megaplex_sub":"graphics/icons/tech/subicon_mining_megaplex.png",
+			"aotd_mining_megaplex_sub":"graphics/icons/tech/subicon_mining_megaplex.png",
 			"test":"graphics/icons/tech/test.png",
 
 		},
@@ -134,7 +134,7 @@
 			"shimmer":"graphics/fx/shimmer.png",
 			"diagonal":"graphics/fx/squareDiagonal.png",
 			"aotd_shadowlance":"graphics/icons/hud/aotd_shadowlance_icon.png",
-			"aotd_gungnirIcon":"graphics/icons/hud/Gungnir_icon.png",
+			"aotd_gungnirIcon":"graphics/icons/hud/Gungnir_icon.png"
 		},
 		"rendering":{
             "GlitchSquare":"graphics/fx/solid_square.png",
@@ -150,7 +150,7 @@
 			"aotd_beam4":"graphics/fx/aotd_beam4.png",
 			"aotd_planet_glow0":"graphics/fx/aotd_planet_glow0.png",
 			"aotd_planet_glow1":"graphics/fx/aotd_planet_glow1.png",
-			"aotd_planet_glow2":"graphics/fx/aotd_planet_glow2.png",
+			"aotd_planet_glow2":"graphics/fx/aotd_planet_glow2.png"
 
 
 		},
@@ -163,7 +163,7 @@
             "hypershunt":"graphics/icons/coronal_shunt.png",
 			"nidavelir":"graphics/icons/nidavelir.png",
 			"bifrost":"graphics/icons/bifrost.png",
-			"pluto":"graphics/icons/aotd_pluto_mining_station.png",
+			"pluto":"graphics/icons/aotd_pluto_mining_station.png"
 			
 		},
 		"aotd_icons":{
@@ -172,7 +172,7 @@
 			"compound_info":"graphics/icons/smoll_icon/comp_smol.png"
 		},
 		"sectionImage":{
-            "WormholeGenerator":"graphics/icons/megastructures/coronal_reciver.png",
+            "WormholeGenerator":"graphics/icons/megastructures/coronal_receiver.png",
 			"CoronalCollector":"graphics/icons/megastructures/plasma_shield_generator.png",
 			"AegisSystem":"graphics/icons/megastructures/coronal_port.png",
 			"NexusCore":"graphics/icons/megastructures/nexus_core_merged.png",
@@ -183,7 +183,7 @@
 			"BifrostGate":"graphics/icons/megastructures/bifrost.png",
 			"OpticCommandNexus":"graphics/icons/megastructures/optic_comand_nexus.png",
 			"PurificationCore":"graphics/icons/megastructures/purification_core.png",
-			"FusionForge":"graphics/icons/megastructures/fusion_forge.png",
+			"FusionForge":"graphics/icons/megastructures/fusion_forge.png"
 		}
 		,
 		"megastructureImage":{
@@ -191,12 +191,12 @@
 			"nidavelir":"graphics/illustrations/nidavelir.png",
 			"bifrost":"graphics/illustrations/active_gate.jpg",
 			"pluto":"graphics/illustrations/pluto.png",
-			"pluto_active":"graphics/illustrations/pluto_active.png",
+			"pluto_active":"graphics/illustrations/pluto_active.png"
 
 		},
 		"industry":{
 			"pluto_active":"graphics/icons/industry/aotd_pluto_industry_active.png",
-			"aotd_fuel_refinery_no_atmo":"graphics/icons/industry/aotd_fuel_refinery_no_atmo.png",
+			"aotd_fuel_refinery_no_atmo":"graphics/icons/industry/aotd_fuel_refinery_no_atmo.png"
 		},
 		
 		"illustrations":{
@@ -209,7 +209,7 @@
 	},
 	"designTypeColors": {
     "Abyss-Tech": [180, 0, 90, 255],
-	"Nidavellir Reliquary": [205, 173, 0, 255]
+	"Nidavelir Reliquary": [205, 173, 0, 255]
 }
 
 	

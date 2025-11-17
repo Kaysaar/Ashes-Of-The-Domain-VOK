@@ -5,7 +5,7 @@ import data.scripts.timelineevents.templates.FirstIndustryEvent;
 
 public class MiningMegaplexEvent extends FirstIndustryEvent {
     public MiningMegaplexEvent( String entityId) {
-        super("mining_megaplex", entityId);
+        super("aotd_mining_megaplex", entityId);
     }
 
     @Override

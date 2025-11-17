@@ -3,18 +3,18 @@ name,id,planetary,decivRemove,script,desc,icon,order
 AoDFoodDemand,AoDFoodDemand,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.AoDFoodDemand,,graphics/icons/markets/cryosanctum.png,1000
 aotd_industry_synergies,aotd_industry_synergies,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.IndustrySynergiesCond,,graphics/icons/markets/capital.png,19
 ,,,,,,,
-WaterMiningSupply,watterSupplyMining,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMinningCond,,graphics/icons/markets/capital.png,601
+WaterMiningSupply,watterSupplyMining,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMiningCond,,graphics/icons/markets/capital.png,601
 ,,,,,,,
 GP mod,aotd_gp_mod,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.GPModifiers,,graphics/icons/markets/capital.png,610
 BiFrostGateRemoving,bifrost_removal,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.BiFrostGateRemovingCondtion,,graphics/icons/markets/light_industrial.png,603
-Pre Collapse Facility,pre_collapse_facility,TRUE,,data.kaysaar.aotd.vok.campaign.econ.conditions.PreCollapseFacility,"This planet harbors numerous ancient Domain-marked facilities, rich with potential valuable data.",graphics/icons/markets/light_industrial.png,604
+Pre Collapse Facility,pre_collapse_facility,TRUE,,data.kaysaar.aotd.vok.campaign.econ.conditions.PreCollapseFacility,"This planet harbors numerous ancient Domain-marked facilities, teeming with potentially valuable data. ",graphics/icons/markets/light_industrial.png,604
 TechnologyBonusesApplier,TechnologyBonusesApplier,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.TechnologyBonusesApplier,,graphics/icons/markets/light_industrial.png,606
 AodUpkeep,aotd_tech_upkeep,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.ResearchedUpkeepModifier,,graphics/icons/markets/light_industrial.png,607
 Coronal Hypershunt,aotd_coronal_market_cond,,,data.kaysaar.aotd.vok.campaign.econ.conditions.CoronalHypershunt,"Former Domain gem, this megastructure is capable of harnessing power of the star.",graphics/icons/markets/coronal_hypershunt.png,608
 Nidavelir Complex,aotd_nidavelir_complex,TRUE,FALSE,data.kaysaar.aotd.vok.campaign.econ.conditions.NidavelirComplex,"Former Domain gem, this megastructure is capable of producing ships and weapons at scale, never seen in the Persean Sector.",graphics/icons/markets/nidavelir_complex.png,640
 Pluto Mining Station,aotd_pluto_station,TRUE,FALSE,data.kaysaar.aotd.vok.campaign.econ.conditions.PlutoStation,"Former Domain gem, this megastructure is capable of excavation and refining enormous amount of resources.",graphics/icons/markets/aotd_pluto.png,641
 aotd_growing_demand_applier,aotd_growing_demand_applier,,TRUE,data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandConditionEnforcer,,graphics/icons/markets/aotd_pluto.png,641
-Colony Development Program,aotd_colony_development_cond,,TRUE,data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentCondition,This settlement follows a defined development path that shapes the colony on multiple levels.,graphics/icons/markets/capital.png,50
+Colony Development Program,aotd_colony_development_cond,,TRUE,data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentCondition,This settlement follows a defined development path that shapes the colony's foundation and future.,graphics/icons/markets/capital.png,50
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,

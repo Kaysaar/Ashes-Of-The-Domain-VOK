@@ -14,7 +14,7 @@ public class ShroudBeacon extends ShroudBasedProject{
     public boolean checkIfProjectShouldUnlock() {
         return super.checkIfProjectShouldUnlock() &&
                 BlackSiteProjectManager.getInstance().getProject("aotd_shroud_analysis").checkIfProjectWasCompleted() &&
-                BlackSiteProjectManager.getInstance().getProject("aotd_shroud_better_contaiment").checkIfProjectWasCompleted();
+                BlackSiteProjectManager.getInstance().getProject("aotd_shroud_better_containment").checkIfProjectWasCompleted();
     }
 
     @Override
