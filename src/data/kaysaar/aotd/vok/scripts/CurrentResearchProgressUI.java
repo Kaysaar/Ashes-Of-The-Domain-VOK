@@ -72,15 +72,6 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
 
     @Override
     public void renderInUICoordsAboveUIBelowTooltips(ViewportAPI viewport) {
-
-    }
-
-
-
-
-    @Override
-    public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
-
         final CampaignUIAPI campaignUI = Global.getSector().getCampaignUI();
         if (campaignUI.isShowingDialog() || campaignUI.isShowingMenu() || campaignUI.getCurrentCoreTab() != null)
             return;
@@ -109,7 +100,6 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 buttonHideHighlighted.setHeight(sprite.getHeight());
                 buttonHideHighlighted.render(sprite.getWidth()-2, getYForRender());
             } else {
-                buttonHide.setHeight(sprite.getHeight());
                 buttonHide.render(sprite.getWidth()-2, getYForRender());
             }
             if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus() != null) {
@@ -170,7 +160,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 progressionString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
                 progressionString.draw(125, getYForRender() +11);
             }
-            
+
 
         } else {
             float x = x1;
@@ -183,6 +173,15 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 buttonHide.render(x1, getYForRender());
             }
         }
+
+    }
+
+
+
+
+    @Override
+    public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
+
 
     }
 
