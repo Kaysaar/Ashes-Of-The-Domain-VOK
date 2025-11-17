@@ -316,6 +316,7 @@ public class AoTDSpecialProject {
         }
 
         ProgressBarComponentV2 component = new ProgressBarComponentV2(width - 110, 18, getTotalProgress(), Misc.getBasePlayerColor().darker().darker());
+
         tooltip.addCustom(component.getRenderingPanel(), 5);
 
         LabelAPI labelAPI = tooltip.addSectionHeading(""+(int)(this.getTotalProgress()*100)+"%", Misc.getTextColor(), null, Alignment.MID, width - 110, -18f);

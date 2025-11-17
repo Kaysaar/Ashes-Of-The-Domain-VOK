@@ -160,6 +160,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         }
 
         addSetting();
+
         LunaSettings.addSettingsListener(new LunaSettingsListener() {
             @Override
             public void settingsChanged(@NotNull String s) {
@@ -552,12 +553,6 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
-        Global.getSector().addTransientScript(new DelayedActionScript(3f) {
-            @Override
-            public void doAction() {
-                new CutScenePlayer();
-            }
-        });
         MarketAPI chico = AoTDDataInserter.getMarketBasedOnName("Aztlan", "Chicomoztoc");
         if (chico != null) {
             chico.getMemory().set("$aotd_tier_4_bp_key", "aotd_citadel");
