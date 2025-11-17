@@ -1,11 +1,11 @@
 package data.kaysaar.aotd.vok.ui.customprod.components;
 
+import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 
 import java.awt.*;
