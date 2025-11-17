@@ -80,7 +80,7 @@ public class BifrostStarSystemSelectorDialog extends BasePopUpDialog {
         tooltip.getPrev().getPosition().inTL(5,-tooltip.getPrev().getPosition().getY()-tooltip.getPrev().getPosition().getHeight()-5f);
         tooltip.addCustom(GPUIMisc.createResourcePanel(width,40,40, BifrostMega.bifrostGateCost,Color.ORANGE),5f);
 
-        super.createContentForDialog(tooltip, width);
+
     }
 
     @Override

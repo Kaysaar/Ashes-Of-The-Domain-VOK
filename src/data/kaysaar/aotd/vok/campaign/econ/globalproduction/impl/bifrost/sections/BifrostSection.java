@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections;
 
+import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
@@ -13,7 +14,6 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dial
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
@@ -123,7 +123,7 @@ public class BifrostSection extends GPMegaStructureSection {
         createTooltipForBenefits(tooltip);
         if (isRestoring) {
             tooltip.addPara("Build progress : %s", 5f, Color.ORANGE, (int) (getProgressPercentage() * 100) + "%");
-            ProgressBarComponent component = new ProgressBarComponent(width-25,21,getProgressPercentage(), Misc.getDarkPlayerColor().brighter().brighter());
+            ProgressBarComponentV2 component = new ProgressBarComponentV2(width-25,21,getProgressPercentage(), Misc.getDarkPlayerColor().brighter().brighter());
             tooltip.addCustom(component.getRenderingPanel(),5f);
         }
         if(isRestored&&getGateTiedTo()!=null) {

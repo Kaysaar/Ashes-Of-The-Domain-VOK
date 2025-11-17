@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui.research;
 
+import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
@@ -12,7 +13,6 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -68,7 +68,7 @@ public class CurrentResearchShowcase implements CustomUIPanelPlugin {
             double multiplier = AoTDSettingsManager.getFloatValue(AoTDSettingsManager.AOTD_RESEARCH_SPEED_MULTIPLIER);
             float defaultDays = (option.TimeToResearch*(float) multiplier);
             float days = AoDUtilis.getDaysFromResearch(option)-option.daysSpentOnResearching;
-            ProgressBarComponent component = new ProgressBarComponent(width-15,25,option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
+            ProgressBarComponentV2 component = new ProgressBarComponentV2(width-15,25,option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
 
             tooltip.addCustom(component.getRenderingPanel(),0f).getPosition().inTL(10,currY+45);
             LabelAPI labelAPI = tooltip.addPara("Current progress : %s ( %s left till researched)",5f,Color.ORANGE,option.getPercentageProgress()+"%",""+AoTDMisc.convertDaysToString((int) (days)));
@@ -181,7 +181,7 @@ public class CurrentResearchShowcase implements CustomUIPanelPlugin {
                 currX += xSpacing+size;
             }
 
-            ProgressBarComponent component = new ProgressBarComponent(width-15,25,option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
+            ProgressBarComponentV2 component = new ProgressBarComponentV2(width-15,25,option.getPercentageProgress()/100f, Misc.getDarkPlayerColor().brighter().brighter());
 
             tooltip.addCustom(component.getRenderingPanel(),0f).getPosition().inTL(13,currY+45);
             LabelAPI labelAPI =                 tooltip.addPara("Current progress : %s ( %s left till researched)", 5f, Color.ORANGE, option.getPercentageProgress() + "%", AoTDMisc.convertDaysToString((int) (AoDUtilis.getDaysFromResearch(option)-option.daysSpentOnResearching)));

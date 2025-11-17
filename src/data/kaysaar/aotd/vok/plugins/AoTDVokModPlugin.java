@@ -2,12 +2,14 @@ package data.kaysaar.aotd.vok.plugins;
 
 
 import ashlib.data.plugins.misc.AshMisc;
+import com.fs.graphics.Sprite;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
+import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -56,6 +58,7 @@ import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.coreui.*;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.ColonyUIListener;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.MarketContextListenerInjector;
+import data.kaysaar.aotd.vok.scripts.cutscene.CutScenePlayer;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDFuelConsumptionScript;
@@ -88,11 +91,18 @@ import data.listeners.timeline.MiscEventListener;
 import data.listeners.timeline.models.FirstIndustryListener;
 import data.memory.AoTDSopMemFlags;
 import data.scripts.managers.TimelineListenerManager;
+import data.scripts.util.TexReflection;
 import kaysaar.bmo.buildingmenu.additionalreq.AdditionalReqManager;
 import kaysaar.bmo.buildingmenu.upgradepaths.CustomUpgradePath;
 import kaysaar.bmo.buildingmenu.upgradepaths.UpgradePathManager;
+import lunalib.backend.ui.settings.LunaSettingsData;
+import lunalib.backend.ui.settings.LunaSettingsLoader;
+import lunalib.lunaSettings.LunaSettings;
+import lunalib.lunaSettings.LunaSettingsListener;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
+import org.lazywizard.lazylib.JSONUtils;
 import org.lazywizard.lazylib.ui.FontException;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -106,7 +116,37 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
     private static Logger log = Global.getLogger(AoTDVokModPlugin.class);
     AoTDDataInserter aoTDDataInserter = new AoTDDataInserter();
     AoTDSpecialItemRepo aoTDSpecialItemRepo = new AoTDSpecialItemRepo();
+    public static final String subDirectoryName = "swappable";
     public static String fontInsigniaMedium = "graphics/fonts/insignia17LTaa.fnt";
+    public static String getModBasePath(String modId) {
+        String path =Global.getSettings().getModManager().getModSpec(modId).getPath();
+
+        return path.replace("\\","/");
+    }
+    public static boolean moveFileOneLevelUpInModGraphics(String modId, String absolutePath) {
+        try {
+            String modBase = Global.getSettings()
+                    .getModManager()
+                    .getModSpec(modId)
+                    .getPath(); // e.g. .../mods/YourMod/
+            modBase.replace("\\","/");
+            Object modGraphicsFile = ReflectionUtilis.getFile(modBase + "graphics");
+            String modGraphicsCanonical = ReflectionUtilis.getCanonicalPath(modGraphicsFile);
+
+            Object fileObj = ReflectionUtilis.getFile(absolutePath);
+            String fileCanonical = ReflectionUtilis.getCanonicalPath(fileObj);
+
+            // safety: ensure it's under /mods/YourMod/graphics
+            if (!fileCanonical.startsWith(modGraphicsCanonical)) {
+                // not our file, do nothing
+                return false;
+            }
+
+            return ReflectionUtilis.moveFileOneLevelUp(fileCanonical);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public void onApplicationLoad() throws Exception {
@@ -115,7 +155,97 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
             VanillaTechReq req = new VanillaTechReq(industry.two);
             AdditionalReqManager.getInstance().addReq(industry.one, req);
         }
+
+
+
+        addSetting();
+        LunaSettings.addSettingsListener(new LunaSettingsListener() {
+            @Override
+            public void settingsChanged(@NotNull String s) {
+                try {
+                    Boolean bool = LunaSettings.getBoolean("aotd_vok","aotd_vok_theme_swapper");
+                    JSONUtils.CommonDataJSONObject ob = JSONUtils.loadCommonJSON("aotd_hidden_settings.json");
+                    ob.put("aotd_vok_theme_swapper", bool);
+//                    SpriteAPI sprite = Global.getSettings().getSprite("graphics/cursors/cursor_blue.png");
+//                    SpriteAPI second = Global.getSettings().getSprite("graphics/cursors/" + subDirectoryName + "/cursor_blue.png");
+//
+//                    Object texObj1 = TexReflection.getSpriteTexObj((Sprite) sprite);
+//                    Object texObj2 = TexReflection.getSpriteTexObj((Sprite) second);
+//                    TexReflection.setTexObjId(texObj1,TexReflection.getTexObjId(texObj2));
+                    String base = getModBasePath("aotd_vok");
+
+
+                    if (bool) {
+                        String absolute = base + "/graphics/cursors/" + subDirectoryName + "/cursor_blue.png";
+                        boolean ok1 = ReflectionUtilis.moveFileOneLevelUpInModGraphics("aotd_vok", absolute);
+
+                        String absolute2 = base + "/graphics/cursors/" + subDirectoryName + "/cursor_blue_2x.png";
+                        boolean ok2 = ReflectionUtilis.moveFileOneLevelUpInModGraphics("aotd_vok", absolute2);
+
+                    } else {
+                        String absolute = base + "/graphics/cursors/cursor_blue.png";
+                        boolean ok1 = moveFileIntoStuffSubdirInModGraphics("aotd_vok", absolute);
+
+                        String absolute2 = base + "/graphics/cursors/cursor_blue_2x.png";
+                        boolean ok2 = moveFileIntoStuffSubdirInModGraphics("aotd_vok", absolute2);
+                    }
+
+                    ob.save();
+                } catch (IOException | JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }});
     }
+    public static boolean moveFileIntoStuffSubdirInModGraphics(String modId, String absolutePath) {
+        try {
+            String modBase = Global.getSettings()
+                    .getModManager()
+                    .getModSpec(modId)
+                    .getPath();  // .../mods/YourMod/
+            modBase= modBase.replace("\\","/");
+            Object modGraphicsFile = ReflectionUtilis.getFile(modBase + "/graphics");
+            String modGraphicsCanonical = ReflectionUtilis.getCanonicalPath(modGraphicsFile);
+
+            Object fileObj = ReflectionUtilis.getFile(absolutePath);
+            String fileCanonical = ReflectionUtilis.getCanonicalPath(fileObj);
+
+            // Only touch files under /mods/YourMod/graphics
+            if (!fileCanonical.startsWith(modGraphicsCanonical)) {
+                return false;
+            }
+
+            return ReflectionUtilis.moveFileIntoStuffSubdir(fileCanonical);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void addSetting(){
+        try {
+            JSONUtils.CommonDataJSONObject ob= JSONUtils.loadCommonJSON("aotd_hidden_settings.json");
+            if(!ob.has("aotd_vok_theme_swapper_valid")){
+                ob.put("aotd_vok_theme_swapper_valid",true);
+                ob.put("aotd_vok_theme_swapper",false);
+                ob.save();
+            }
+            if(ob.getBoolean("aotd_vok_theme_swapper_valid")){
+                Boolean bool = ob.getBoolean("aotd_vok_theme_swapper");
+                LunaSettingsLoader.getSettings().get("aotd_vok").put("aotd_vok_theme_swapper",ob.getBoolean("aotd_vok_theme_swapper"));
+                if(LunaSettingsLoader.getSettingsData().stream().noneMatch(x->x.getFieldID().equals("aotd_vok_hidden_header"))){
+                    LunaSettingsLoader.getSettingsData().add(new LunaSettingsData("aotd_vok","aotd_vok_hidden_header","Hidden Settings","Header","Hidden settings unlocked through game","Settings","",0.0f,0.0f,"Hidden Settings"));
+                    LunaSettingsLoader.getSettingsData().add(new LunaSettingsData("aotd_vok","aotd_vok_theme_swapper","Swap themes","Boolean","Hidden settings unlocked through game",bool,"",0.0f,0.0f,"Hidden Settings"));
+                }
+
+            }
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
 
     private void setListenersIfNeeded() {
@@ -421,6 +551,12 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 
         super.onGameLoad(newGame);
         aoTDDataInserter.setVanilaIndustriesDowngrades();
+        Global.getSector().addTransientScript(new DelayedActionScript(3f) {
+            @Override
+            public void doAction() {
+                new CutScenePlayer();
+            }
+        });
         MarketAPI chico = AoTDDataInserter.getMarketBasedOnName("Aztlan", "Chicomoztoc");
         if (chico != null) {
             chico.getMemory().set("$aotd_tier_4_bp_key", "aotd_citadel");

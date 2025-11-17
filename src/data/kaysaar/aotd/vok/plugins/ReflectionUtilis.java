@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.plugins;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
@@ -29,7 +30,16 @@ public class ReflectionUtilis {
     private static final MethodHandle  getParameterTypesHandle;
     private static final MethodHandle  getFieldTypeHandle;
     private static final MethodHandle getDeclaredConstructorsHandle;
-    private static final Class<?>fileClass;
+    private static final Class<?>  fileclass;
+    private static final Class<?>  fileWriterClass;
+    private static final Class<?> fileReaderClass;
+    private static final Class<?> bufferedReaderClass;
+    private static final Class<?> readerClass;
+    private static final MethodHandle fileGetParentFileHandle;
+    private static final MethodHandle fileGetNameHandle;
+    private static final MethodHandle fileCtorParentChildHandle;
+    private static final MethodHandle fileRenameToHandle;
+    private static final MethodHandle fileGetCanonicalPathHandle;
     static {
         try {
             fieldClass = Class.forName("java.lang.reflect.Field", false, Class.class.getClassLoader());
@@ -48,8 +58,117 @@ public class ReflectionUtilis {
 
             constructorClass = Class.forName("java.lang.reflect.Constructor", false, Class.class.getClassLoader());
             getDeclaredConstructorsHandle = lookup.findVirtual(constructorClass, "getParameterTypes", MethodType.methodType(Class[].class));
-            fileClass = Class.forName("java.io.File", false, Class.class.getClassLoader());
+            fileclass = Class.forName("java.io.File",false,Class.class.getClassLoader());
+            fileWriterClass = Class.forName("java.io.FileWriter",false,Class.class.getClassLoader());
+            fileReaderClass = Class.forName("java.io.FileReader", false, Class.class.getClassLoader());
+            bufferedReaderClass = Class.forName("java.io.BufferedReader", false, Class.class.getClassLoader());
+            readerClass = Class.forName("java.io.Reader", false, Class.class.getClassLoader());
+            fileGetParentFileHandle = lookup.findVirtual(
+                    fileclass, "getParentFile",
+                    MethodType.methodType(fileclass)
+            );
+            fileGetNameHandle = lookup.findVirtual(
+                    fileclass, "getName",
+                    MethodType.methodType(String.class)
+            );
+            fileCtorParentChildHandle = lookup.findConstructor(
+                    fileclass,
+                    MethodType.methodType(Void.TYPE, fileclass, String.class)
+            );
+            fileRenameToHandle = lookup.findVirtual(
+                    fileclass, "renameTo",
+                    MethodType.methodType(boolean.class, fileclass)
+            );
+            fileGetCanonicalPathHandle = lookup.findVirtual(
+                    fileclass, "getCanonicalPath",
+                    MethodType.methodType(String.class)
+            );
         } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static String getCanonicalPath(Object fileObj) {
+        try {
+            return (String) fileGetCanonicalPathHandle.invoke(fileObj);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static boolean moveFileOneLevelUp(String absolutePath) {
+        try {
+            // src: /mods/yourMod/graphics/cursors/stuff/foo.png
+            Object src = getFile(absolutePath);
+
+            // parent: /mods/yourMod/graphics/cursors/stuff
+            Object parent = fileGetParentFileHandle.invoke(src);
+            if (parent == null) return false;
+
+            // grandParent: /mods/yourMod/graphics/cursors
+            Object grandParent = fileGetParentFileHandle.invoke(parent);
+            if (grandParent == null) return false;
+
+            // name: "foo.png"
+            String name = (String) fileGetNameHandle.invoke(src);
+
+            // dest: /mods/yourMod/graphics/cursors/foo.png
+            Object dest = fileCtorParentChildHandle.invoke(grandParent, name);
+
+            // renameTo(dest)
+            return (boolean) fileRenameToHandle.invoke(src, dest);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static boolean moveFileOneLevelUpInModGraphics(String modId, String absolutePath) {
+        try {
+            String modBase = Global.getSettings()
+                    .getModManager()
+                    .getModSpec(modId)
+                    .getPath(); // e.g. .../mods/YourMod/
+            modBase = modBase.replace("\\","/");
+            Object modGraphicsFile = ReflectionUtilis.getFile(modBase + "/graphics");
+            String modGraphicsCanonical = ReflectionUtilis.getCanonicalPath(modGraphicsFile);
+
+            Object fileObj = ReflectionUtilis.getFile(absolutePath);
+            String fileCanonical = ReflectionUtilis.getCanonicalPath(fileObj);
+
+            // safety: ensure it's under /mods/YourMod/graphics
+            if (!fileCanonical.startsWith(modGraphicsCanonical)) {
+                // not our file, do nothing
+                return false;
+            }
+
+            return ReflectionUtilis.moveFileOneLevelUp(fileCanonical);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static boolean moveFileIntoStuffSubdir(String absolutePath) {
+        try {
+            // src: /mods/yourMod/graphics/cursors/foo.png
+            Object src = getFile(absolutePath);
+
+            // parent: /mods/yourMod/graphics/cursors
+            Object parent = fileGetParentFileHandle.invoke(src);
+            if (parent == null) return false;
+
+            // name: "foo.png"
+            String name = (String) fileGetNameHandle.invoke(src);
+
+            // stuffDir: /mods/yourMod/graphics/cursors/stuff
+            Object stuffDir = fileCtorParentChildHandle.invoke(parent, AoTDVokModPlugin.subDirectoryName);
+
+            // (optional, but harmless) ensure "stuff" exists
+            // MethodHandle mkdirsMH = lookup.findVirtual(
+            //         fileclass, "mkdirs", MethodType.methodType(boolean.class));
+            // mkdirsMH.invoke(stuffDir);
+
+            // dest: /mods/yourMod/graphics/cursors/stuff/foo.png
+            Object dest = fileCtorParentChildHandle.invoke(stuffDir, name);
+
+            // renameTo(dest)
+            return (boolean) fileRenameToHandle.invoke(src, dest);
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }
@@ -269,8 +388,8 @@ public class ReflectionUtilis {
 
         // File from String (constructed via our MethodHandles path, no direct "new File")
         try {
-            if (fileClass != null && fileClass.isAssignableFrom(targetType) && arg instanceof CharSequence) {
-                return instantiateExact(fileClass, new Class<?>[]{String.class}, arg.toString());
+            if (fileclass != null && fileclass.isAssignableFrom(targetType) && arg instanceof CharSequence) {
+                return instantiateExact(fileclass, new Class<?>[]{String.class}, arg.toString());
             }
         } catch (Throwable ignored) {}
 
@@ -287,6 +406,52 @@ public class ReflectionUtilis {
 
         // Let your original converter handle numbers, primitives, and normal casts
         return convertArgument(arg, targetType);
+    }
+    public static Object getFile(String pathAbsolute){
+        try {
+            MethodHandle mh = lookup.findConstructor(fileclass, MethodType.methodType(Void.TYPE, String.class));
+            Object fileObj = mh.invoke(pathAbsolute);
+            return fileObj;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    public static Object getFileWriter(String pathAbsolute,boolean append){
+        try {
+            MethodHandle mh = lookup.findConstructor(fileWriterClass, MethodType.methodType(Void.TYPE, String.class, boolean.class));
+            Object fileObj = mh.invoke(pathAbsolute,append);
+            return fileObj;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    public static Object getFileReader(String pathAbsolute) {
+        try {
+            MethodHandle ctor = lookup.findConstructor(fileReaderClass,
+                    MethodType.methodType(Void.TYPE, String.class));
+            return ctor.invoke(pathAbsolute);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Object getBufferedReader(Object reader) {
+        try {
+            MethodHandle ctor = lookup.findConstructor(bufferedReaderClass,
+                    MethodType.methodType(Void.TYPE, readerClass));
+            return ctor.invoke(reader);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Generic close() for any Closeable/Reader/Writer
+    public static void closeQuiet(Object closeable) {
+        try {
+            invokeMethodWithAutoProjection("close", closeable);
+        } catch (Throwable ignored) {}
     }
 
     /** Enum coercion helpers – no direct reflection; uses standard Enum APIs. */

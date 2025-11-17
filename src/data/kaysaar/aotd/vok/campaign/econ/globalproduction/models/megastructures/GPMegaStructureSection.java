@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures;
 
+import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
 import com.fs.starfarer.api.combat.MutableStat;
@@ -12,7 +13,6 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListen
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.OnHoverButtonTooltip;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
@@ -199,7 +199,7 @@ public class GPMegaStructureSection {
         createTooltipForBenefits(tooltip);
         if (isRestoring) {
             tooltip.addPara("Restored to %s capacity", 5f, Color.ORANGE, (int) (getProgressPercentage() * 100) + "%");
-            ProgressBarComponent component = new ProgressBarComponent(width-25,21,getProgressPercentage(), Misc.getDarkPlayerColor().brighter().brighter());
+            ProgressBarComponentV2 component = new ProgressBarComponentV2(width-25,21,getProgressPercentage(), Misc.getDarkPlayerColor().brighter().brighter());
             tooltip.addCustom(component.getRenderingPanel(),5f);
         }
         createUpkeepSection(tooltip,width);

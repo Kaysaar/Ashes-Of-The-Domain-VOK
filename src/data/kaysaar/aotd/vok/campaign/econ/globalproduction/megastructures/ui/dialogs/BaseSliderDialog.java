@@ -1,18 +1,21 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs;
 
 
+import ashlib.data.plugins.ui.models.BasePopUpDialog;
+import ashlib.data.plugins.ui.models.ProgressBarComponent;
+import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ProgressBarComponent;
+
 
 import java.util.List;
 
-public class BaseSliderDialog extends BasePopUpDialog{
-    ProgressBarComponent component;
+public class BaseSliderDialog extends BasePopUpDialog {
+    ProgressBarComponentV2 component;
     BaseMegastrucutreMenu menu;
     CustomPanelAPI panelToUpdate;
     CustomPanelAPI panelForTooltip;
@@ -40,7 +43,7 @@ public class BaseSliderDialog extends BasePopUpDialog{
         createConfirmAndCancelSection(panelAPI);
     }
     public void createUIForFirstTime(){
-        component = new ProgressBarComponent(panelToUpdate.getPosition().getWidth()-10,barHeight,currentSegment,maxSegment,Misc.getDarkPlayerColor().brighter().brighter(),minSection);
+        component = new ProgressBarComponentV2(panelToUpdate.getPosition().getWidth()-10,barHeight,currentSegment,maxSegment,Misc.getDarkPlayerColor().brighter().brighter(),minSection);
         panelToUpdate.addComponent(component.getRenderingPanel()).inTL(getBarX(),getBarY());
         createTooltipUI();
 
@@ -49,7 +52,8 @@ public class BaseSliderDialog extends BasePopUpDialog{
         panelForTooltip = panelToUpdate.createCustomPanel(panelToUpdate.getPosition().getWidth(),panelToUpdate.getPosition().getHeight()-50,null);
         TooltipMakerAPI tooltipBottom = panelForTooltip.createUIElement(panelForTooltip.getPosition().getWidth(),panelToUpdate.getPosition().getHeight()-70-(getBarY()+barHeight),true);
         TooltipMakerAPI tooltipTop = panelForTooltip.createUIElement(panelForTooltip.getPosition().getWidth(),getBarY(),true);
-
+        addTooltip(tooltipBottom);
+        addTooltip(tooltipTop);
         float centerX = (panelToUpdate.getPosition().getWidth()-20)/2;
         float centerY = barHeight/2;
         TooltipMakerAPI tooltipOfBar = panelForTooltip.createUIElement(panelToUpdate.getPosition().getWidth()-20,barHeight,false);
