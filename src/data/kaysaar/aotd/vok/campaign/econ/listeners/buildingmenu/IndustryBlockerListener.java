@@ -26,7 +26,7 @@ public class IndustryBlockerListener implements BuildingMenuListener {
         if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.BASE_SHIP_HULL_ASSEMBLY,marketAPI)){
             hiddenBuildings.add(Industries.HEAVYINDUSTRY);
         }
-        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket("aotd_tech_antimater_production",marketAPI)){
+        if(!AoTDMainResearchManager.getInstance().isAvailableForThisMarket("aotd_tech_antimatter_production",marketAPI)){
             hiddenBuildings.add(Industries.FUELPROD);
         }
         return hiddenBuildings;

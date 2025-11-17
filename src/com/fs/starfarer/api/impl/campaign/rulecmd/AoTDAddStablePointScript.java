@@ -7,7 +7,6 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Items;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.impl.campaign.procgen.StarSystemGenerator;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -22,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static data.kaysaar.aotd.vok.misc.AoTDMisc.createTooltipOfResorucesForDialog;
+import static data.kaysaar.aotd.vok.misc.AoTDMisc.createTooltipOfResourcesForDialog;
 
 public class AoTDAddStablePointScript extends  BaseCommandPlugin{
     public static String memKey = "$aotd_stable_point_janus";
@@ -59,7 +58,7 @@ public class AoTDAddStablePointScript extends  BaseCommandPlugin{
         if(command.equals("printReq")){
             TooltipMakerAPI tooltipMakerAPI = dialog.getTextPanel().beginTooltip();
             tooltipMakerAPI.addTitle("Resources: consumed (available)");
-            tooltipMakerAPI.addCustom(createTooltipOfResorucesForDialog(550,45,45,getCostForStablePoint(),false),5f);
+            tooltipMakerAPI.addCustom(createTooltipOfResourcesForDialog(550,45,45,getCostForStablePoint(),false),5f);
             for (Map.Entry<String, Integer> entry : getCostForStablePoint().entrySet()) {
                 if(AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey())<entry.getValue()){
                     dialog.getOptionPanel().setEnabled("aotd_stable_point_create",false);

@@ -27,7 +27,7 @@ public class OreToCore extends BaseIndustrySynergy {
     public boolean doesSynergyMetReq(MarketAPI market) {
         boolean tech = IndustrySynergiesMisc.didMarketMetTechCriteria(market, AoTDTechIds.NANOMETAL_FUSION_SYNTHESIS, AoTDTechIds.EXO_SKELETONS);
         ArrayList<String> paths = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.MINING);
-        paths.remove("fracking");
+        paths.remove("aotd_plasma_harvester");
         return tech && IndustrySynergiesMisc.isAtLeastOneIndustryFunctionalFromListIncludingUpgrades(market, Industries.REFINING) && IndustrySynergiesMisc.isAtLeastOneIndustryFunctionalFromList(market, paths.toArray(new String[0]));
     }
 
@@ -39,7 +39,7 @@ public class OreToCore extends BaseIndustrySynergy {
     @Override
     public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         ArrayList<String>ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.MINING);
-        ids.remove("fracking");
+        ids.remove("aotd_plasma_harvester");
 
         industries.addAll(ids);
         ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.REFINING);

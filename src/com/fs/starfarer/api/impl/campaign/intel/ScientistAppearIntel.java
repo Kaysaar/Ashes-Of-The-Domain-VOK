@@ -47,14 +47,14 @@ public class ScientistAppearIntel extends BaseIntelPlugin{
 
         // Title of the intel
         info.addPara(getName(), title,0f);
-        info.addPara("You have received unusual transmission.", 5f);
+        info.addPara("You have received an unusual transmission.", 5f);
 
 
     }
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara("Transmission has been received by our scanners. Someone wants to contact with you, currently this person is residing in "+getMapLocation(null).getName()+".", 5f);
+        info.addPara("A transmission has been received by our long range communications. Someone wants to contact you, currently this person is residing in "+getMapLocation(null).getName()+".", 5f);
     }
 
 

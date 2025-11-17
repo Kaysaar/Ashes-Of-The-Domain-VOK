@@ -7,7 +7,7 @@ import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
 import com.fs.starfarer.api.util.*;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastrcutre;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -198,7 +198,7 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
                 this.entity.getMemory().set("$used", false);
             }
         }
-        if(HypershuntMegastrcutre.isWithinReciverSystem(this.entity)){
+        if(HypershuntMegastructure.isWithinReceiverSystem(this.entity)){
             this.entity.getMemory().set("$cooldown", 0);
             this.entity.getMemory().set("$used", false);
             this.entity.getMemory().set("$connected",true);

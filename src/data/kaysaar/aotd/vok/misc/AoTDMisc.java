@@ -116,7 +116,7 @@ public class AoTDMisc {
         return false;
     }
 
-    public static CustomPanelAPI createTooltipOfResorucesForDialog(float width, float height, float iconSize, HashMap<String, Integer> costs, boolean isForSalvage) {
+    public static CustomPanelAPI createTooltipOfResourcesForDialog(float width, float height, float iconSize, HashMap<String, Integer> costs, boolean isForSalvage) {
         CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
         float totalSize = width;

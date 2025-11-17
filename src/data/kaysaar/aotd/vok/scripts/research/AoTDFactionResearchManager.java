@@ -168,9 +168,9 @@ public class AoTDFactionResearchManager {
 
         if (getFaction().isPlayerFaction()) {
             if (hadMetreq) {
-                Global.getSector().getMemory().set("$aotd_experimetnal_tier", true);
+                Global.getSector().getMemory().set("$aotd_experimental_tier", true);
             } else {
-                Global.getSector().getMemory().set("$aotd_experimetnal_tier", false);
+                Global.getSector().getMemory().set("$aotd_experimental_tier", false);
             }
         }
         executeResearchCouncilAdvance(amount);
@@ -416,7 +416,7 @@ public class AoTDFactionResearchManager {
 
     public int getAmountOfBlackSites() {
 
-        return getFacilities("blacksite").size();
+        return getFacilities(AoTDIndustries.BLACK_SITE).size();
     }
     public List<Industry> getFacilities(String facilityId) {
         ArrayList<Industry>industries = new ArrayList<>();
@@ -452,12 +452,12 @@ public class AoTDFactionResearchManager {
         int toReturn = 0;
         if (getFaction().isPlayerFaction()) {
             for (MarketAPI marketAPI : Misc.getPlayerMarkets(Global.getSettings().getModManager().isModEnabled("aotd_qol"))) {
-                if (isIndustryFunctional(marketAPI, AoTDIndustries.RESEARCH_CENTER) || isIndustryFunctional(marketAPI, "blacksite"))
+                if (isIndustryFunctional(marketAPI, AoTDIndustries.RESEARCH_CENTER) || isIndustryFunctional(marketAPI, AoTDIndustries.BLACK_SITE))
                     toReturn++;
             }
         } else {
             for (MarketAPI marketAPI : retrieveMarketsOfThatFaction()) {
-                if (isIndustryFunctional(marketAPI, AoTDIndustries.RESEARCH_CENTER) || isIndustryFunctional(marketAPI, "blacksite"))
+                if (isIndustryFunctional(marketAPI, AoTDIndustries.RESEARCH_CENTER) || isIndustryFunctional(marketAPI, AoTDIndustries.BLACK_SITE))
                     toReturn++;
             }
         }

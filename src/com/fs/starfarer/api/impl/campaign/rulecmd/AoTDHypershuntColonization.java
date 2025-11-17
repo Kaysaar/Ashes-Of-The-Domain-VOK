@@ -78,7 +78,7 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
         market.addIndustry("coronal_port");
         market.addIndustry("coronal_drones");
         market.addIndustry("coronal_wormhole");
-        market.addIndustry("coronal_reciver");
+        market.addIndustry("coronal_receiver");
         market.addIndustry("coronal_defender");
         market.addIndustry("coronal_shield_generator");
 

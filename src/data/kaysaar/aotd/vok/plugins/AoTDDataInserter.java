@@ -70,21 +70,21 @@ public class AoTDDataInserter {
         Global.getSector().getPersistentData().put(preCollapseFacList, planetsWithFac);
     }
 
-    public void insertSpecItemsForManufactoriumData() throws JSONException, IOException {
-        JSONArray json = Global.getSettings().getMergedSpreadsheetDataForMod("id", "data/campaign/stella_manufactorium.csv", "aod_core");
-        ArrayList<SMSpecialItem> insertedSpecItemForManufactorium = new ArrayList<SMSpecialItem>();
+    public void insertSpecItemsForMacroIndustrialComplexData() throws JSONException, IOException {
+        JSONArray json = Global.getSettings().getMergedSpreadsheetDataForMod("id", "data/campaign/macro_industrial_complex.csv", "aod_core");
+        ArrayList<SMSpecialItem> insertedSpecItemForMacroIndustrialComplex = new ArrayList<SMSpecialItem>();
         for (int i = 0; i < json.length(); i++) {
             JSONObject obj = json.getJSONObject(i);
             String id = obj.getString("id");
             if (id == null || id.isEmpty()) continue;
 
-            String itemCostRaw = obj.getString("resoruces_to_make_one");
+            String itemCostRaw = obj.getString("resources_to_make_one");
             float dayCost = Float.parseFloat(obj.getString("time_to_make_one"));
             HashMap<String, Integer> itemCost = getItemCost(itemCostRaw);
-            insertedSpecItemForManufactorium.add(new SMSpecialItem(itemCost, id, dayCost));
+            insertedSpecItemForMacroIndustrialComplex.add(new SMSpecialItem(itemCost, id, dayCost));
 
         }
-        Global.getSector().getPersistentData().put("$stella_manufactorium_items", insertedSpecItemForManufactorium);
+        Global.getSector().getPersistentData().put("$aotd_macro_industrial_complex_items", insertedSpecItemForMacroIndustrialComplex);
     }
 
     public void insertSophia() {
@@ -487,7 +487,7 @@ public class AoTDDataInserter {
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", Industries.MEGAPORT, Industries.MEGAPORT, null, true, null, null);
             setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.MINING_MEGAPLEX, null, null, true, null, null);
             setIndustryOnPlanet("Askonia", "Volturn", AoTDIndustries.SUBLIMATION, Industries.MINING, null, false, Commodities.GAMMA_CORE, null);
-            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ISOTOPE_SEPARATOR, Industries.REFINING, null, true, Commodities.ALPHA_CORE, null);
+            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ENRICHMENT_FACILITY, Industries.REFINING, null, true, Commodities.ALPHA_CORE, null);
             setIndustryOnPlanet("Hybrasil", "Culann", Industries.HEAVYBATTERIES, Industries.HEAVYBATTERIES, null, true, Commodities.ALPHA_CORE, null);
             setIndustryOnPlanet("Thule", "Kazeron", AoTDIndustries.MINING_MEGAPLEX, Industries.MINING, null, false, null, Items.MANTLE_BORE);
             setIndustryOnPlanet("Thule", "Kazeron", AoTDIndustries.TERMINUS, null, null, true, null, null);

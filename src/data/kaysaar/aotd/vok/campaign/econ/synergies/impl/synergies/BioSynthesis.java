@@ -23,7 +23,7 @@ public class BioSynthesis extends BaseIndustrySynergy {
     public boolean doesSynergyMetReq(MarketAPI market) {
         boolean tech =canShowSynergyInUI(market);
 
-        return  tech  && IndustrySynergiesMisc.isIndustryFunctionalAndExisting(market, AoTDIndustries.BIOSYNTH_LABORATORY,AoTDIndustries.SUBSIDISED_FARMING);
+        return  tech  && IndustrySynergiesMisc.isIndustryFunctionalAndExisting(market, AoTDIndustries.NEUROCHEMICAL_LABORATORY,AoTDIndustries.SUBSIDISED_FARMING);
     }
 
     @Override
@@ -34,14 +34,14 @@ public class BioSynthesis extends BaseIndustrySynergy {
     @Override
     public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
         industries.add(AoTDIndustries.SUBSIDISED_FARMING);
-        industries.add(AoTDIndustries.BIOSYNTH_LABORATORY);
+        industries.add(AoTDIndustries.NEUROCHEMICAL_LABORATORY);
     }
 
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
         int bonus = (int) (2*efficiency);
-        tooltip.addPara("Increase supply of %s, produced in %s by %s",3f,base,highLight,"Food","Subsidized Farming",bonus+"");
-        tooltip.addPara("Increase %s demand for %s by %s",3f, Misc.getNegativeHighlightColor(),highLight,"Recreational Drugs","Subsidized Farming","1");
+        tooltip.addPara("Increase supply of %s, produced in %s by %s",3f,base,highLight,"Food","Subsidised Farming",bonus+"");
+        tooltip.addPara("Increase %s demand for %s by %s",3f, Misc.getNegativeHighlightColor(),highLight,"Recreational Drugs","Subsidised Farming","1");
 
     }
 
@@ -49,7 +49,7 @@ public class BioSynthesis extends BaseIndustrySynergy {
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         tooltip.addPara("%s and %s must be functional!",3f,base,highLight,
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.SUBSIDISED_FARMING),
-                IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.BIOSYNTH_LABORATORY));
+                IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.NEUROCHEMICAL_LABORATORY));
 
     }
 

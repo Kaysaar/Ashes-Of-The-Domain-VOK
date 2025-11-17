@@ -24,8 +24,8 @@ public class TechnologyBonusesApplier extends BaseHazardCondition {
         if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.STREAMLINED_PRODUCTION,market)){
             market.getIndustries().forEach(x->x.getSupplyBonusFromOther().modifyFlat(AoTDTechIds.STREAMLINED_PRODUCTION,1,"Streamlined Production"));
         }
-        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.GEOTHERMAL_FRACKING,market)){
-            market.getIndustries().stream().filter(x->x.getSpec().hasTag(Industries.MINING)).forEach(x->x.getSupplyBonusFromOther().modifyFlat(AoTDTechIds.GEOTHERMAL_FRACKING,1,"Advanced Mining Equipment"));
+        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ADVANCED_MINING_EQUIPMENT,market)){
+            market.getIndustries().stream().filter(x->x.getSpec().hasTag(Industries.MINING)).forEach(x->x.getSupplyBonusFromOther().modifyFlat(AoTDTechIds.ADVANCED_MINING_EQUIPMENT,1,"Advanced Mining Equipment"));
         }
     }
 
@@ -35,7 +35,7 @@ public class TechnologyBonusesApplier extends BaseHazardCondition {
         market.getHazard().unmodifyFlat("tech_hazmmat");
         market.getHazard().unmodifyFlat("tech_aquatic");
         market.getIndustries().forEach(x->x.getSupplyBonusFromOther().unmodifyFlat(AoTDTechIds.STREAMLINED_PRODUCTION));
-        market.getIndustries().forEach(x->x.getSupplyBonusFromOther().unmodifyFlat(AoTDTechIds.GEOTHERMAL_FRACKING));
+        market.getIndustries().forEach(x->x.getSupplyBonusFromOther().unmodifyFlat(AoTDTechIds.ADVANCED_MINING_EQUIPMENT));
     }
     public static void applyRessourceCond(MarketAPI marketAPI) {
         if (marketAPI.isInEconomy() && !marketAPI.hasCondition("TechnologyBonusesApplier")){

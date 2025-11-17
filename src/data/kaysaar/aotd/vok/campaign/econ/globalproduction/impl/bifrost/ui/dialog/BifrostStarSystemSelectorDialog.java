@@ -13,7 +13,6 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.co
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.StarSystemSelector;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.StarSystemSelectorOtherInfoData;
-
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;

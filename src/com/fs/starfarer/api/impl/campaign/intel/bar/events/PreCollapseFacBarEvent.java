@@ -21,7 +21,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
 
     public static enum OptionId {
         GREETING,
-        GREETNG_CONTINUE_1,
+        GREETING_CONTINUE_1,
         WHAT_DO_YOU_HAVE,
         MORE_INFO,
         PRICE,
@@ -82,7 +82,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
     public void init(InteractionDialogAPI dialog, Map<String, MemoryAPI> memoryMap) {
         super.init(dialog, memoryMap);
 
-        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList);
+        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList); //Unchecked Cast Error -Zero
         Collections.shuffle(preCollapsePlanets);
         for (PlanetAPI preCollapsePlanet : preCollapsePlanets) {
             if(!preCollapsePlanet.getMarket().getSurveyLevel().equals(MarketAPI.SurveyLevel.FULL)){
@@ -102,7 +102,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
     public boolean shouldShowAtMarket(MarketAPI market) {
         if(!super.shouldShowAtMarket(market)) return false;
         if(market.getMemory().is("$aotd_pre_collapse",true))return false;
-        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList);
+        ArrayList<PlanetAPI> preCollapsePlanets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList); //Unchecked Cast Error -Zero
         ArrayList<PlanetAPI>validPlanets = new ArrayList<>();
         if(preCollapsePlanets!=null){
             for (PlanetAPI preCollapsePlanet : preCollapsePlanets) {
@@ -132,11 +132,11 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
                     + person.getHeOrShe() + " has demonstrated to you are just IFF identification equipment that was used to avoid trouble from automated systems,"+
                     "yet there is something arcane in how they operate and talk about them. After a few minutes of showing you rather useless but rare items, what you presume was a way for scavenger to establish" + person.getHisOrHer()
                     + " credibility, they offer to tell you about one of recently failed expeditions and what's more important, its target.");
-            options.addOption("Ask  "+ person.getHimOrHer()+" about the lost expedition that was looking for Pre-Collapse Domain technology.", OptionId.GREETNG_CONTINUE_1);
+            options.addOption("Ask  "+ person.getHimOrHer()+" about the lost expedition that was looking for Pre-Collapse Domain technology.", OptionId.GREETING_CONTINUE_1);
             options.addOption("Thank  "+ person.getHimOrHer()+" for the insights on Domain technology and politely end conversation.", OptionId.END_CONVERSATION_START);
             return;
         }
-        if (option == OptionId.GREETNG_CONTINUE_1) {
+        if (option == OptionId.GREETING_CONTINUE_1) {
             text.addPara("\"Robust and experienced people, all veterans.\" " + person.getHeOrShe()
                     + " said with a much more serious expression on their face. \"They weren't just some dumb meat from the Core. " +
                     "Fleet went dark after embarking from the last resupply point and we haven't received any signs of life from them for few cycles now. "+
@@ -183,7 +183,7 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
                     true, icon, null, tags);
 
             options.addOption("Finish your drink and leave with the information on the ancient research facility that already got one scavenger fleet killed.", OptionId.LEAVE);
-            ArrayList<PlanetAPI> planets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList);
+            ArrayList<PlanetAPI> planets = (ArrayList<PlanetAPI>) Global.getSector().getPersistentData().get(AoTDMemFlags.preCollapseFacList); //Unchecked Cast Error -Zero
             int index =0;
             for (PlanetAPI planet : planets) {
                 if(planet.getId().equals(targetPlanet.getId())){
