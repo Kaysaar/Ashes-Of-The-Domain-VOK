@@ -202,6 +202,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
 
     }
 
+
     private  float getSecondY() {
         if (ashPadEnabled) return getYForRender()+ 41;
         return getYForRender()+ 14;
