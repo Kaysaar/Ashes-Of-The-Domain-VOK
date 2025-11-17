@@ -22,5 +22,6 @@
     <orderEntry type="library" name="niko_morePlanetaryConditions" level="project" />
     <orderEntry type="library" name="sidebarLib1" level="project" />
     <orderEntry type="library" name="niko_stationAugments" level="project" />
+    <orderEntry type="library" name="VideoLib" level="project" />
   </component>
 </module>
