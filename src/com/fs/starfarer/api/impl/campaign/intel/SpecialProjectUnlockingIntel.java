@@ -40,13 +40,13 @@ public class SpecialProjectUnlockingIntel extends BaseIntelPlugin{
 
         // Title of the intel
         info.addPara(getName(), title,0f);
-        info.addPara("Due to recent actions a new project has been unlocked, to be undertaken by our specialist at Black Site",5f);
+        info.addPara("Due to recent actions a new project has been unlocked, to be undertaken by our specialists at a Black Site",5f);
 
     }
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara("Due to recent actions a new project has been unlocked, to be undertaken by our specialists at Black Site",5f);
+        info.addPara("Due to recent actions a new project has been unlocked, to be undertaken by our specialists at a Black Site",5f);
         info.addPara("New Project unlocked : %s",5f,Color.ORANGE,"Project:  "+project.getNameOverride());
         addGenericButton(info,width,"Access Black Site Projects",Button_SHIP);
     }

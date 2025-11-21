@@ -54,7 +54,7 @@ public class ScientistAppearIntel extends BaseIntelPlugin{
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara("A transmission has been received by our long range communications. Someone wants to contact you, currently this person is residing in "+getMapLocation(null).getName()+".", 5f);
+        info.addPara("A transmission has been received by our long range communications. Someone wants to contact you. They are residing in "+getMapLocation(null).getName()+".", 5f);
     }
 
 
