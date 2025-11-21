@@ -152,7 +152,7 @@ public class BeyondVeilBarEvent extends BaseBarEventWithPerson {
                 break;
             case WHERE_WAS_SYSTEM:
                 text.addPara(getHeOrShe() + " slides the tri-pad across the table, a blinking set of coordinates pointing in a direction well outside the Core Worlds. \n\"All the data I have is right there. This is the system where we were ambushed.\"");
-                String icon = Global.getSettings().getSpriteName("intel", "red_planet");
+                String icon = Global.getSettings().getSpriteName("intel", "red_planet"); // TO CHANGE: Custom Veil Icon Sprite
                 Set<String> tags = new LinkedHashSet<String>();
                 tags.add(Tags.INTEL_MISSIONS);
 
