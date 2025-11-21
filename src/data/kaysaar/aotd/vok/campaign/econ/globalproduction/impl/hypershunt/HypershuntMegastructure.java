@@ -39,8 +39,8 @@ public class HypershuntMegastructure extends GPBaseMegastructure {
     @Override
     public void createAdditionalInfoForMega(TooltipMakerAPI tooltip) {
         tooltip.addSectionHeading("Hypershunt Receivers", Alignment.MID, 5f);
-        tooltip.addPara("To distribute power of hypershunt, a receiver is needed to be built. It can be built in systems within effective range of Hypershunt and only on Stable Point. Will provide bonuses to all colonies located in system, where receiver is.",Misc.getTooltipTitleAndLightHighlightColor(),5f);
-        tooltip.addPara(getSectionById("coronal_collector").getName()+" must be restored in order for Hypershunt to work!", Color.ORANGE,5f);
+        tooltip.addPara("To distribute power of a hypershunt, a receiver needs to be built. It can be build in systems within effective range of a Hypershunt and only on a Stable Point. Will provide bonuses to all colonies located in the same system.",Misc.getTooltipTitleAndLightHighlightColor(),5f);
+        tooltip.addPara(getSectionById("coronal_collector").getName()+" must be restored in order for the Hypershunt to work!", Color.ORANGE,5f);
 
     }
     public static boolean isWithinReceiverSystem(SectorEntityToken target){

@@ -25,7 +25,7 @@ public class BulwarkFoundry extends NidavelirBaseSection {
         super.createTooltipForBenefits(tooltip);
         int manpowerAssigned = getEffectiveManpowerForEffects();
         int points = (int) (manpowerAssigned *effectivePercent*getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));;
-        tooltip.addPara("For each assigned manpower point to section:",5f);
+        tooltip.addPara("For each assigned manpower point to this section:",5f);
         createTooltipForMainSection(tooltip);
     }
     @Override
@@ -33,8 +33,8 @@ public class BulwarkFoundry extends NidavelirBaseSection {
 
         int manpowerAssigned = getEffectiveManpowerForEffects();
         int points = (int) (manpowerAssigned *effectivePercent*getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));;
-        tooltip.addPara("Production speed of %s is increased by %s",3f,Color.ORANGE,"cruisers and capitals",points+"%");
-        tooltip.addPara("All produced ships have built-in %s and %s",3f,Color.ORANGE,"Flux Distributor","Flux Coil Adjunct");
+        tooltip.addPara("- Production speed of %s is increased by %s",3f,Color.ORANGE,"cruisers and capitals",points+"%");
+        tooltip.addPara("- All produced ships have built-in %s and %s",3f,Color.ORANGE,"Flux Distributor","Flux Coil Adjunct");
 
     }
 

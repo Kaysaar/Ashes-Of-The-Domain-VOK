@@ -20,8 +20,8 @@ public class CoronalCollector extends GPMegaStructureSection {
     @Override
     public void createTooltipForBenefits(TooltipMakerAPI tooltip) {
         super.createTooltipForBenefits(tooltip);
-        tooltip.addPara("Allows building Hypershunt Receiver stable structure within effective range, that gives unique effects to markets and megastructures",5f);
-        tooltip.addPara("If demand for Domain-grade machinery is not met, effects of Hypershunt Receiver will be lowered by %s",5f,Color.ORANGE,"50%");
+        tooltip.addPara("Allows building a Hypershunt Receiver in a stable location within the effective range of the nearest Hypershunt, that gives unique effects to markets and megastructures.",5f);
+        tooltip.addPara("If demand for Domain-grade machinery is not met, effects of the Hypershunt Receiver will be lowered by %s",5f,Color.ORANGE,"50%");
     }
 
     @Override

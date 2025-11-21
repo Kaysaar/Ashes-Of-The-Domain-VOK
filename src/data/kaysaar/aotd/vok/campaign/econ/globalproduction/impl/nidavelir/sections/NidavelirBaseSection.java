@@ -50,12 +50,12 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
                 if (Global.getSector().getPlayerFaction().getProduction().getGatheringPoint() != null) {
                     MarketAPI market = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
                     market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addWeapons("gungnir_railgun", 1);
-                    Global.getSector().getCampaignUI().addMessage("We have found ancient weapon within Nidavelir, it has already been transported to " + market.getName());
+                    Global.getSector().getCampaignUI().addMessage("We have found an ancient weapon within Nidavelir, it has already been transported to " + market.getName());
 
                 } else {
                     MarketAPI market = Misc.getPlayerMarkets(true).get(0);
                     market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addWeapons("gungnir_railgun", 1);
-                    Global.getSector().getCampaignUI().addMessage("We have found ancient weapon within Nidavelir, it has already been transported to " + market.getName());
+                    Global.getSector().getCampaignUI().addMessage("We have found an ancient weapon within Nidavelir, it has already been transported to " + market.getName());
 
                 }
             }
@@ -70,17 +70,17 @@ public class NidavelirBaseSection extends GPMegaStructureSection {
     @Override
     public void createTooltipForButtonsBeforeRest(TooltipMakerAPI tooltip, String buttonId) {
         if (buttonId.equals("restore") && !isRestored && !isRestorationAllowed()) {
-            tooltip.addPara("Note! First %s must be restored, before we are able to restore this section!", 5f, Misc.getNegativeHighlightColor(), Color.ORANGE, "Nexus Ring");
+            tooltip.addPara("Note! The %s must be restored first, before we are able to restore this section!", 5f, Misc.getNegativeHighlightColor(), Color.ORANGE, "Nexus Ring");
         }
         if (buttonId.equals("assignManpower")) {
-            tooltip.addPara("We can assign to this megastructure certain amount of workers, to produce enormous amount of commodities", 5f);
+            tooltip.addPara("We can assign a certain amount of workers to this megastructure to produce enormous amount of commodities.", 5f);
         }
         if (buttonId.equals("automateSection")) {
             if (isAutomated) {
-                tooltip.addPara("We can deactivate automation systems and disconnect it from %s", 5f, Color.ORANGE, "Hypershunt Receiver");
+                tooltip.addPara("We can deactivate the automation systems and disconnect it from %s", 5f, Color.ORANGE, "Hypershunt Receiver");
 
             } else {
-                tooltip.addPara("Our engineers think it is possible to link %s directly with %s, allowing full automation of this section, as long as connection to Hypershunt remains.", 5f, Color.ORANGE, this.getName(), "Hypershunt Receiver");
+                tooltip.addPara("Our engineers think it is possible to link the %s directly to a %s, allowing full automation of this section, as long as the connection to a Hypershunt remains.", 5f, Color.ORANGE, this.getName(), "Hypershunt Receiver");
 
             }
         }
