@@ -49,15 +49,15 @@ public class OreToCore extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency,MarketAPI market) {
         int baseValue  = (int) (2*efficiency);
-        tooltip.addPara("Increase amount of metals, produced by %s by %s",3f,base,highLight,"Refining or one of it's upgrades",baseValue+"");
+        tooltip.addPara("Increases the amount of metals produced by %s by %s.",3f,base,highLight,"Refining or any of its upgrades",baseValue+"");
 
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s are required to be functional! ", 3f, base, highLight,
-                "Refining or one of it's upgrades",
-               "Mining or one of it's upgrades, excluding Plasma Harvester");
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
+                "Refining or any of its upgrades",
+                "Mining or any of its upgrades, except Plasma Harvester,");
     }
 
     @Override

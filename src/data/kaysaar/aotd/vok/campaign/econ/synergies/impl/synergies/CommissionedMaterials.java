@@ -78,15 +78,15 @@ public class CommissionedMaterials extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency,MarketAPI market) {
         int baseValue  = (int) (2*efficiency);
-        tooltip.addPara("Increase amount of ships and heavy weapons, produced by %s by %s",3f,base,highLight,"Heavy Industry or one of it's upgrades",baseValue+"");
-        tooltip.addPara("Decrease amount of metals , produced by %s by %s",3f,Misc.getNegativeHighlightColor(),highLight,"Refining or one of it's upgrades","1");
+        tooltip.addPara("Increases the production of ships and heavy weapons from %s by %s.",3f,base,highLight,"Heavy Industry or any of its upgrades",baseValue+"");
+        tooltip.addPara("Decreases the amount of metal from %s by %s.",3f,Misc.getNegativeHighlightColor(),highLight,"Refining or any of its upgrades","1");
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s are required to be functional! ", 3f, base, highLight,
-                "Heavy Industry or one of it's upgrades excluding Civilian Heavy Industry",
-                "Refining or one of it's upgrades");
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
+                "Heavy Industry or any of its upgrades, excluding Civilian Heavy Industry,",
+                "Refining or any of its upgrades");
     }
     @Override
     public Color getColorForWagons(String industry) {

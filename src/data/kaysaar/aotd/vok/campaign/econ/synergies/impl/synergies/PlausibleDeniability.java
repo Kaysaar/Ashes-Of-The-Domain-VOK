@@ -47,13 +47,13 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency,MarketAPI market) {
         float percent = 0.1f*efficiency;
-        tooltip.addPara("Reduces upkeep of %s by %s",3f,base,highLight,"Black Site", AoTDMisc.getPercentageString(percent));
-        tooltip.addPara("Slightly reduced pather interest on market!",Misc.getPositiveHighlightColor(),3f);
+        tooltip.addPara("Decreases %s upkeep by %s.",3f,base,highLight,"Black Site", AoTDMisc.getPercentageString(percent));
+        tooltip.addPara("Slightly decreases Luddic Path interest.",Misc.getPositiveHighlightColor(),3f);
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s are required to be functional! ",3f,base,highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.",3f,base,highLight,
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.BLACK_SITE),
                 IndustrySynergiesMisc.getIndustryName(market,Industries.TECHMINING));
     }

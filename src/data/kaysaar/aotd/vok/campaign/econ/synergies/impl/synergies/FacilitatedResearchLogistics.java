@@ -46,7 +46,7 @@ public class FacilitatedResearchLogistics extends BaseIndustrySynergy {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.MEGAPORT);
         ArrayList<String> ter = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.TERMINUS);
         ArrayList<String> re = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.RESEARCH_CENTER);
-        tooltip.addPara("%s, %s and %s are required to be functional", 3f, base, highLight,
+        tooltip.addPara("Requires %s, %s and %s on the same planet.", 3f, base, highLight,
                 getIndustriesListed(ids,market),
                 getIndustriesListed(ter,market),
                 getIndustriesListed(re,market));
@@ -55,9 +55,9 @@ public class FacilitatedResearchLogistics extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
         ArrayList<String> re = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.RESEARCH_CENTER);
-        tooltip.addPara("Decrease upkeep of %s by %s",3f,base,highLight,getIndustriesListed(re,market), AoTDMisc.getPercentageString(0.1f*efficiency));
-        tooltip.addPara("Increase research speed by %s",3f,base,highLight,AoTDMisc.getPercentageString(0.05f*efficiency));
-        tooltip.addPara("Increase accessibility by %s",3f,base,highLight,AoTDMisc.getPercentageString(0.05f*efficiency));
+        tooltip.addPara("Decreases %s upkeep by %s.",3f,base,highLight,getIndustriesListed(re,market), AoTDMisc.getPercentageString(0.1f*efficiency));
+        tooltip.addPara("Increases research speed by %s.",3f,base,highLight,AoTDMisc.getPercentageString(0.05f*efficiency));
+        tooltip.addPara("Increases accessibility by %s.",3f,base,highLight,AoTDMisc.getPercentageString(0.05f*efficiency));
     }
 
     @Override

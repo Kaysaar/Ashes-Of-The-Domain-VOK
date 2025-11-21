@@ -45,16 +45,16 @@ public class CoreToForge extends BaseIndustrySynergy {
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
         int baseValue  = (int) (1*efficiency);
         float effi = 0.15f*efficiency;
-        tooltip.addPara("Increase production of %s by %s",3f,base,highLight,IndustrySynergiesMisc.getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.HEAVYINDUSTRY),market),baseValue+"");
-        tooltip.addPara("Increase ship quality by %s",3f,base,highLight, AoTDMisc.getPercentageString(effi));
+        tooltip.addPara("Increases the production of %s by %s.",3f,base,highLight,IndustrySynergiesMisc.getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.HEAVYINDUSTRY),market),baseValue+"");
+        tooltip.addPara("Increases ship quality by %s.",3f,base,highLight, AoTDMisc.getPercentageString(effi));
 
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s are required to be functional! ", 3f, base, highLight,
-                "Refining or one of it's upgrades",
-                "Heavy Industry or one of it's upgrades");
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
+                "Refining or any of its upgrades",
+                "Heavy Industry or any of its upgrades");
     }
 
     @Override
