@@ -39,14 +39,14 @@ public class RapidTransportation extends BaseIndustrySynergy {
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.SPACEPORT);
         ArrayList<String> fuelIds = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.WAYSTATION);
-        tooltip.addPara("%s and %s are required to be functional", 3f, base, highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
                 getIndustriesListed(ids,market),
                 getIndustriesListed(fuelIds,market));
     }
 
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
-        tooltip.addPara("Increase accessibility by %s",3f,base,highLight, AoTDMisc.getPercentageString(0.1f*efficiency));
+        tooltip.addPara("Increase accessibility by %s.",3f,base,highLight, AoTDMisc.getPercentageString(0.1f*efficiency));
     }
 
     @Override

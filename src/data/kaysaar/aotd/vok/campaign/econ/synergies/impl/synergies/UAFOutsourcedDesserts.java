@@ -41,14 +41,14 @@ public class UAFOutsourcedDesserts extends BaseIndustrySynergy {
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry("uaf_bakery_branch");
         ArrayList<String> fuelIds = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.RESORT);
-        tooltip.addPara("%s and %s are required to be functional", 3f, base, highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
                 getIndustriesListed(ids,market),
                 getIndustriesListed(fuelIds,market));
     }
 
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
-        tooltip.addPara("Increase %s income by %s",3f,base,highLight,"Resort Center", AoTDMisc.getPercentageString(0.2f*efficiency));
+        tooltip.addPara("Increases %s income by %s.",3f,base,highLight,"Resort Center", AoTDMisc.getPercentageString(0.2f*efficiency));
     }
 
     @Override

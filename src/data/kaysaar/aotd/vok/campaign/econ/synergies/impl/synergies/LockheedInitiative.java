@@ -48,14 +48,14 @@ public class LockheedInitiative extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency,MarketAPI market) {
         float baseValue  =  (0.02f*efficiency);
-        tooltip.addPara("Increase speed of black site projects by %s",3f,base,highLight, AoTDMisc.getPercentageString(baseValue));
-        tooltip.addPara("Maximum speed bonus from synergy : %s",3f, base, highLight, AoTDMisc.getPercentageString(0.1f));
+        tooltip.addPara("Increases completion speed of black site projects by %s.",3f,base,highLight, AoTDMisc.getPercentageString(baseValue));
+        tooltip.addPara("Maximum completion speed bonus from synergy: %s.",3f, base, highLight, AoTDMisc.getPercentageString(0.1f));
 
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s are required to be functional! ", 3f, base, highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.ORBITAL_SKUNKWORK),
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.BLACK_SITE));
     }

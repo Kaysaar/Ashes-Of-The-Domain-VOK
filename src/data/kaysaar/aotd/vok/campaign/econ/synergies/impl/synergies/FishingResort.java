@@ -38,13 +38,13 @@ public class FishingResort extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
         float percent = 0.1f * efficiency;
-        tooltip.addPara("Increase income of %s by %s", 3f, base, highLight, "Resort Center", AoTDMisc.getPercentageString(percent));
-        tooltip.addPara("Increase production of %s, by %s", 3f,base,highLight,IndustrySynergiesMisc.getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE),market),"1");
+        tooltip.addPara("Increases %s income by %s.", 3f, base, highLight, "Resort Center", AoTDMisc.getPercentageString(percent));
+        tooltip.addPara("Increases the production of %s by %s.", 3f,base,highLight,IndustrySynergiesMisc.getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE),market),"1");
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s are required to be functional! ", 3f, base, highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
                 IndustrySynergiesMisc.getIndustryName(market, AoTDIndustries.RESORT),
                 IndustrySynergiesMisc.getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE),market));
     }
