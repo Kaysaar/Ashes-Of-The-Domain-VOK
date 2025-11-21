@@ -1,8 +1,9 @@
 package data.kaysaar.aotd.vok.ui.research;
 
+import ashlib.data.plugins.ui.models.InstantPopUpUI;
+import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 public class ModDropDown extends PopUpUI {
