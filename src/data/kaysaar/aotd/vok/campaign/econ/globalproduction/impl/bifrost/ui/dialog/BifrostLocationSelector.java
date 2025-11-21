@@ -16,7 +16,7 @@ public class BifrostLocationSelector extends BasePopUpDialog {
     boolean shouldUpdate = false;
     SectorEntityToken orbitFocus = null;
     public BifrostLocationSelector(BifrostStarSystemSelectorDialog selector) {
-        super("Choose location for Bifrost Gate");
+        super("Choose a location for a Bifrost Gate");
         this.selector = selector;
     }
 

@@ -110,7 +110,7 @@ public class BifrostSection extends GPMegaStructureSection {
 
     @Override
     public String getContentForPauseRestoration() {
-        return "By pausing construction efforts we wont be spending further money until project is resumed and it will free resources that is currently consuming";
+        return "By pausing construction efforts we wont be spending further money until the project is resumed and it will free resources that are currently being consumed";
     }
 
     @Override
@@ -130,10 +130,10 @@ public class BifrostSection extends GPMegaStructureSection {
             tooltip.addPara("Bifrost Gate Operational !",Misc.getPositiveHighlightColor(),5f);
             int cooldown = (int) this.getGateTiedTo().getMemory().getFloat("$cooldown");
             if(!HypershuntMegastructure.isWithinReceiverSystem(this.getGateTiedTo())){
-                tooltip.addPara("Cooldown of gate %s",5f,Color.ORANGE, AoTDMisc.convertDaysToString(cooldown));
+                tooltip.addPara("Gate cooldown : %s",5f,Color.ORANGE, AoTDMisc.convertDaysToString(cooldown));
             }
             else{
-                tooltip.addPara("Due to connection with Hypershunt Receiver, gate have no cooldown!",Misc.getPositiveHighlightColor(),5f);
+                tooltip.addPara("No cooldown between uses due to the connection with a Hypershunt Receiver!",Misc.getPositiveHighlightColor(),5f);
             }
 
 

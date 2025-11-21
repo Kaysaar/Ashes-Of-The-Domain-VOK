@@ -76,7 +76,7 @@ public class BifrostStarSystemSelectorDialog extends BasePopUpDialog {
         selector.init();
         tooltip.addCustom(selector.getMainPanel(),5f).getPosition().inTL((width-selector.getMainPanel().getPosition().getWidth())/2,-tooltip.getPrev().getPosition().getY()-selector.getMainPanel().getPosition().getHeight());
         tooltip.setParaInsigniaLarge();
-        tooltip.addPara("Building Bifrost Gate will take %s and require monthly income of %s, and it will require following resources for duration of construction",5f,Color.ORANGE, AoTDMisc.convertDaysToString(90),Misc.getDGSCredits(100000));
+        tooltip.addPara("Building a Bifrost Gate will take %s, requires a monthly income of %s, and it will require the following resources for the duration of construction",5f,Color.ORANGE, AoTDMisc.convertDaysToString(90),Misc.getDGSCredits(100000));
         tooltip.getPrev().getPosition().inTL(5,-tooltip.getPrev().getPosition().getY()-tooltip.getPrev().getPosition().getHeight()-5f);
         tooltip.addCustom(GPUIMisc.createResourcePanel(width,40,40, BifrostMega.bifrostGateCost,Color.ORANGE),5f);
 
