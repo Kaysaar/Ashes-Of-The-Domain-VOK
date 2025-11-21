@@ -1,12 +1,12 @@
 package data.kaysaar.aotd.vok.ui.buildingmenu.popup;
 
+import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.ui.buildingmenu.IndustryTagFilter;
 import data.kaysaar.aotd.vok.ui.buildingmenu.MarketDialog;
 import data.kaysaar.aotd.vok.ui.buildingmenu.industrytags.IndustryTagManager;

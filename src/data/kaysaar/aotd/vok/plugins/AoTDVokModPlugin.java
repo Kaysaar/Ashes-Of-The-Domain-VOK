@@ -623,26 +623,9 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 //
 //            }
 //        });
-//        LinkedHashMap<String,Integer> expectedShips = new LinkedHashMap<>();
-//        expectedShips.put("uaf_supercap_slv_core",1);
-//        expectedShips.put("onslaught",3);
-//        expectedShips.put("apogee",5);
-//        expectedShips.put("hermes",3);
-//        getTestingGroundSystem();
-//
-//        AoTDPatrolFleetData data = new AoTDPatrolFleetData("Test Name 1" );
-//        data.setExpectedVesselsInFleet(expectedShips);
-//        data.init(Global.getSettings().createPerson());
-//        FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().removeFleetMember( FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().getMembersListCopy().get(2));
-//        FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().removeFleetMember( FactionPatrolFleetManager.getInstance().getPatrolFleets().get(0).getFleet().getFleetData().getMembersListCopy().get(2));
-
         Global.getSector().removeTransientScriptsOfClass(AoTDCompoundUIScript.class);
         Global.getSector().removeTransientScriptsOfClass(AoTDCompoundUIInMarketScript.class);
-//        if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
-//            Global.getSector().addTransientScript(new CoreUITrackerSop());
-//        } else {
-//            Global.getSector().addTransientScript(new CoreUITracker());
-//        }
+
         Global.getSector().getListenerManager().addListener(new RnDTabListener(),true);
         Global.getSector().addTransientScript(new DelayedActionScript(0.1f) {
             @Override
