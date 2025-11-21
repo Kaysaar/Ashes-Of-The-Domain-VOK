@@ -46,11 +46,11 @@ public class AegisSystem extends GPMegaStructureSection {
     @Override
     public void createTooltipForBenefits(TooltipMakerAPI tooltip) {
         super.createTooltipForBenefits(tooltip);
-        tooltip.addPara("Reduces upkeep of all sections by %s as long as demand for resources is met, if not then upkeep reduction will be reduced.",5f,Color.ORANGE,"10%");
+        tooltip.addPara("Reduces upkeep of all sections by %s as long as the demand for resources is met, otherwise the upkeep reduction will be less.",5f,Color.ORANGE,"10%");
         if(!isRestored){
-            tooltip.addPara("Our scavenge team also reported weird readings coming from currently inaccessible sections of %s, " +
-                    "similar to those of ships we met when discovered Hypershunt for first time.",5f,Color.ORANGE,this.getName());
-            tooltip.addPara("Also primary  scans showcase that in this room there might be few Hypershunt taps, perhaps stored to be used once infrastructure was properly built.", Misc.getPositiveHighlightColor(),5f);
+            tooltip.addPara("Our scavenging team also reported weird readings coming from currently inaccessible sections of %s, " +
+                    "similar to those of ships we met when we discovered the Hypershunt for the first time.",5f,Color.ORANGE,this.getName());
+            tooltip.addPara("Primary scans also showcase that there might be few Hypershunt taps in this room, perhaps stored to be used once infrastructure was properly built.", Misc.getPositiveHighlightColor(),5f);
         }
         else{
             tooltip.addPara("Gained two %s weapon blueprints",5f,new Color(196, 32, 250),"[ULTRA-REDACTED]");
