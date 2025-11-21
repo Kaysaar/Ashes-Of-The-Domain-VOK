@@ -47,10 +47,10 @@ public class MegastructureUnlockIntel extends BaseMegastuctureIntelPlugin{
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
         if(!data.haveRecivedStoryPoint){
-            info.addPara("New Megastructure  : %s",5f,Color.ORANGE,data.getName());
+            info.addPara("New Megastructure : %s",5f,Color.ORANGE,data.getName());
         }
         else{
-            info.addPara("Reclaimed Megastructure  : %s",5f,Color.ORANGE,data.getName());
+            info.addPara("Reclaimed Megastructure : %s",5f,Color.ORANGE,data.getName());
         }
 
         addGenericButton(info,width,"Access Megastructure Tab", Button_Megastructure);
