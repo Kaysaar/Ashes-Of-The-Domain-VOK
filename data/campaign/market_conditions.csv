@@ -6,7 +6,7 @@ aotd_industry_synergies,aotd_industry_synergies,,TRUE,data.kaysaar.aotd.vok.camp
 WaterMiningSupply,watterSupplyMining,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.WaterMiningCond,,graphics/icons/markets/capital.png,601
 ,,,,,,,
 GP mod,aotd_gp_mod,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.GPModifiers,,graphics/icons/markets/capital.png,610
-BiFrostGateRemoving,bifrost_removal,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.BiFrostGateRemovingCondtion,,graphics/icons/markets/light_industrial.png,603
+BiFrostGateRemoving,bifrost_removal,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.BiFrostGateRemovingCondition,,graphics/icons/markets/light_industrial.png,603
 Pre Collapse Facility,pre_collapse_facility,TRUE,,data.kaysaar.aotd.vok.campaign.econ.conditions.PreCollapseFacility,"This planet harbors numerous ancient Domain-marked facilities, teeming with potentially valuable data. ",graphics/icons/markets/light_industrial.png,604
 TechnologyBonusesApplier,TechnologyBonusesApplier,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.TechnologyBonusesApplier,,graphics/icons/markets/light_industrial.png,606
 AodUpkeep,aotd_tech_upkeep,,TRUE,data.kaysaar.aotd.vok.campaign.econ.conditions.ResearchedUpkeepModifier,,graphics/icons/markets/light_industrial.png,607

@@ -28,7 +28,7 @@ public class AoDFoodDemand extends BaseMarketConditionPlugin {
         super.unapply(id);
         if (!market.hasIndustry(Industries.POPULATION)) return;
         Industry ind = market.getIndustry(Industries.POPULATION);
-        resetDemmand(ind);
+        resetDemand(ind);
         market.getStability().unmodifyFlat("aotd_water");
         market.getIncoming().set("aotd_water", 0);
         market.getAccessibilityMod().unmodifyFlat("aotd_water");
@@ -47,31 +47,31 @@ public class AoDFoodDemand extends BaseMarketConditionPlugin {
         switch (marketSize) {
             case 3:
             case 4:
-                resetDemmand(ind);
+                resetDemand(ind);
                 ind.getDemand(Commodities.FOOD).getQuantity().modifyFlat(AoTDMemFlags.POP_FOOD_DEMAND_3_AND_4, +1, FoodCostDesc);
                 break;
             case 5:
-                resetDemmand(ind);
+                resetDemand(ind);
                 ind.getDemand(Commodities.FOOD).getQuantity().modifyFlat(AoTDMemFlags.POP_FOOD_DEMAND_5, +2, FoodCostDesc + marketSize);
                 break;
             case 6:
             case 7:
-                resetDemmand(ind);
+                resetDemand(ind);
                 ind.getDemand(Commodities.FOOD).getQuantity().modifyFlat(AoTDMemFlags.POP_FOOD_DEMAND_6_AND_7, +1, FoodCostDesc + marketSize);
                 break;
             case 8:
             case 9:
-                resetDemmand(ind);
+                resetDemand(ind);
                 ind.getDemand(Commodities.FOOD).getQuantity().modifyFlat(AoTDMemFlags.POP_FOOD_DEMAND_8_AND_9, +2, FoodCostDesc + marketSize);
                 break;
             case 10:
-                resetDemmand(ind);
+                resetDemand(ind);
                 ind.getDemand(Commodities.FOOD).getQuantity().modifyFlat(AoTDMemFlags.POP_FOOD_DEMAND_10, +7, FoodCostDesc + marketSize);
                 break;
         }
     }
 
-    public int calcuateWaterDemand(MarketAPI market) {
+    public int calculateWaterDemand(MarketAPI market) {
         if (market.getPlanetEntity() == null) {
             return market.getSize();
         }
@@ -139,7 +139,7 @@ public class AoDFoodDemand extends BaseMarketConditionPlugin {
         return market.getSize();
     }
 
-    public int calcuateWaterSupply(MarketAPI market) {
+    public int calculateWaterSupply(MarketAPI market) {
         if (market.getPlanetEntity() == null) {
             return 0;
         }
@@ -171,11 +171,11 @@ public class AoDFoodDemand extends BaseMarketConditionPlugin {
         return 0;
     }
 
-    public void applyOtherDemmands(BaseIndustry ind) {
+    public void applyOtherDemands(BaseIndustry ind) {
         if(market.isHidden())return;
-        ind.demand(AoTDCommodities.WATER, calcuateWaterDemand(ind.getMarket()));
+        ind.demand(AoTDCommodities.WATER, calculateWaterDemand(ind.getMarket()));
         ind.getDemand(AoTDCommodities.WATER).getQuantity().unmodify(getModId());
-        ind.supply(AoTDCommodities.WATER, calcuateWaterSupply(ind.getMarket()));
+        ind.supply(AoTDCommodities.WATER, calculateWaterSupply(ind.getMarket()));
         ind.getSupply(AoTDCommodities.WATER).getQuantity().unmodify(getModId());
         Pair<String, Integer> deficit = ind.getMaxDeficit(AoTDCommodities.WATER);
         applyDeficitToIndustry(ind, 4, deficit,
@@ -204,13 +204,13 @@ public class AoDFoodDemand extends BaseMarketConditionPlugin {
         return false;
     }
 
-    public static void applyRessourceCond(MarketAPI marketAPI) {
+    public static void applyResourceCond(MarketAPI marketAPI) {
         if (marketAPI.isInEconomy() && !marketAPI.hasCondition(FoodCostDesc)) {
             marketAPI.addCondition(FoodCostDesc);
         }
     }
 
-    public void resetDemmand(Industry ind) {
+    public void resetDemand(Industry ind) {
         ind.getDemand(Commodities.FOOD).getQuantity().unmodifyFlat(AoTDMemFlags.POP_FOOD_DEMAND_3_AND_4);
         ind.getDemand(Commodities.FOOD).getQuantity().unmodifyFlat(AoTDMemFlags.POP_FOOD_DEMAND_5);
         ind.getDemand(Commodities.FOOD).getQuantity().unmodifyFlat(AoTDMemFlags.POP_FOOD_DEMAND_6_AND_7);

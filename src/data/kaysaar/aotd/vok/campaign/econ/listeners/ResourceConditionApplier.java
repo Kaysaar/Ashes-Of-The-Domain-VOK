@@ -13,7 +13,7 @@ public class ResourceConditionApplier implements PlayerColonizationListener, Eco
     public static void applyResourceConditionToAllMarkets() {
         for (MarketAPI m : Global.getSector().getEconomy().getMarketsCopy()) {
             WaterMiningCond.applyIndustryUpgradeCondition(m);
-            AoDFoodDemand.applyRessourceCond(m);
+            AoDFoodDemand.applyResourceCond(m);
         }
     }
 
@@ -21,7 +21,7 @@ public class ResourceConditionApplier implements PlayerColonizationListener, Eco
     public void reportPlayerColonizedPlanet(PlanetAPI planetAPI) {
         MarketAPI m = planetAPI.getMarket();
         WaterMiningCond.applyIndustryUpgradeCondition(m);
-        AoDFoodDemand.applyRessourceCond(m);
+        AoDFoodDemand.applyResourceCond(m);
 
     }
 
