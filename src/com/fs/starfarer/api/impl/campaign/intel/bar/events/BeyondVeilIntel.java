@@ -65,7 +65,7 @@ public class BeyondVeilIntel extends BaseIntelPlugin {
         float pad = 3f;
         float opad = 10f;
 
-        info.addPara("Data presented on Tri-pad of an old veteran points to "+planet.getName()+" located in "+ planet.getStarSystem().getName()+" Star system",10f);
+        info.addPara("Data presented on the Tri-pad of an old veteran points to " + planet.getName() + " located in " + planet.getStarSystem().getName() + " Star system",10f);
         addBulletPoints(info, ListInfoMode.IN_DESC);
 
 
@@ -81,7 +81,7 @@ public class BeyondVeilIntel extends BaseIntelPlugin {
         return "Beyond the Veil";
     }
     public String getIcon() {
-        return Global.getSettings().getSpriteName("intel", "red_planet");
+        return Global.getSettings().getSpriteName("intel", "red_planet"); // TO CHANGE: Custom Veil Icon Sprite
     }
 
     @Override

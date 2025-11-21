@@ -51,21 +51,21 @@ public class PreCollapseFacIntel extends BaseIntelPlugin {
         float pad = 3f;
         float opad = 10f;
 
-        info.addPara("Data presented on this old Tripad points to planet "+planet.getName()+" located in "+ planet.getStarSystem().getName()+" Star system",10f);
+        info.addPara("Data presented on this old Tri-pad points to the planet " + planet.getName() + " located in " + planet.getStarSystem().getName() + " Star system",10f);
         addBulletPoints(info, ListInfoMode.IN_DESC);
 
 
     }
     public String getSortString() {
-        return "Pre Collapse Facility - "+planet.getName();
+        return "Pre Collapse Facility - " + planet.getName();
     }
 
     public String getName() {
 
-        return "Pre Collapse Facility - "+planet.getName();
+        return "Pre Collapse Facility - " + planet.getName();
     }
     public String getIcon() {
-        return Global.getSettings().getSpriteName("intel", "red_planet");
+        return Global.getSettings().getSpriteName("intel", "red_planet"); // TO CHANGE: Custom PCF Icon Sprite
     }
 
     @Override
