@@ -1,8 +1,8 @@
 package data.kaysaar.aotd.vok.ui.research;
 
+import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.Fonts;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.PopUpUI;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.ui.basecomps.ButtonComponent;
 import data.kaysaar.aotd.vok.ui.basecomps.ImageViewer;
