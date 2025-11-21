@@ -6,7 +6,7 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.industry.BiFrostGate;
 
 
-public class BiFrostGateRemovingCondtion extends BaseMarketConditionPlugin {
+public class BiFrostGateRemovingCondition extends BaseMarketConditionPlugin {
     public SectorEntityToken gate = null;
     @Override
     public void apply(String id) {

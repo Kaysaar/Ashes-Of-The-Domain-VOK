@@ -108,7 +108,7 @@ public class DistributedRegionalNetwork extends BaseColonyDevelopment {
         tooltip.setParaFont(fontForSections);
         tooltip.addPara("Scattered Settlements", Misc.getTooltipTitleAndLightHighlightColor(),5f);
         tooltip.setParaFont(Fonts.DEFAULT_SMALL);
-        tooltip.addPara("Lowers synergy efficiency by %s and lowers significantly Pather interest, due to being harder to establish hidden base on this planet",3f,Color.ORANGE,"10%");
+        tooltip.addPara("Lowers synergy efficiency by %s and lowers Pather interest significantly, due to being harder to establish a hidden base on this planet",3f,Color.ORANGE,"10%");
 
     }
     @Override

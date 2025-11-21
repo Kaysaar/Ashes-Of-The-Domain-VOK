@@ -73,7 +73,7 @@ public class CentralizedCore extends BaseColonyDevelopment {
         tooltip.setParaFont(fontForSections);
         tooltip.addPara("Central Planning", Misc.getTooltipTitleAndLightHighlightColor(),5f);
         tooltip.setParaFont(Fonts.DEFAULT_SMALL);
-        tooltip.addPara("All industries, that dont specialised in resource extraction will get up to additional %s production bonus, depending on colony size",3f,Misc.getPositiveHighlightColor(),"2");
+        tooltip.addPara("All industries, that don't specialised in resource extraction will get up to additional %s production bonus, depending on colony size",3f,Misc.getPositiveHighlightColor(),"2");
         tooltip.addPara("Industries specializing in resource extraction will get their supply lowered by %s, depending on colony size ",3f,Misc.getNegativeHighlightColor(),"3");
         tooltip.setParaFont(fontForSections);
         tooltip.addPara("City Fortress", Misc.getTooltipTitleAndLightHighlightColor(),5f);

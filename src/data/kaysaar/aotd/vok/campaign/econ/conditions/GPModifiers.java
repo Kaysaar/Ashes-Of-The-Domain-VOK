@@ -15,7 +15,7 @@ public class GPModifiers extends BaseMarketConditionPlugin {
         if(AoTDMainResearchManager.getInstance().getSpecificFactionManager(market.getFaction()).haveResearched(AoTDTechIds.SOPHISTICATED_ELECTRONIC_SYSTEMS)){
             for (Industry industry : market.getIndustries()) {
                 if(industry instanceof HeavyIndustry) {
-                    industry.getSupply("advanced_components").getQuantity().modifyFlat("aotd_electronics",1,"Sophisticated electronics");
+                    industry.getSupply("advanced_components").getQuantity().modifyFlat("aotd_electronics",1,"Sophisticated Electronics");
                 }
             }
         }
