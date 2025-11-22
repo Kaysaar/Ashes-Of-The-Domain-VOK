@@ -6,7 +6,7 @@ import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -14,10 +14,10 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import java.awt.*;
 
 public class RestorationDialog extends BasePopUpDialog {
-    BaseMegastrucutreMenu menu;
+    BaseMegastructureMenu menu;
     GPMegaStructureSection sectionToRestore;
     String restoration;
-    public RestorationDialog(GPMegaStructureSection section, BaseMegastrucutreMenu menu, String headerTitle,String restoration) {
+    public RestorationDialog(GPMegaStructureSection section, BaseMegastructureMenu menu, String headerTitle, String restoration) {
         super(headerTitle);
         this.sectionToRestore = section;
         this.menu = menu;

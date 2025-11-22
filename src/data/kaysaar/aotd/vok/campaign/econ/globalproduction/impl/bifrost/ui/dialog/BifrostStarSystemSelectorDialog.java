@@ -9,7 +9,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.StarSystemSelector;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.StarSystemSelectorOtherInfoData;
@@ -20,13 +20,13 @@ import java.util.ArrayList;
 
 public class BifrostStarSystemSelectorDialog extends BasePopUpDialog {
     BifrostStarSystemSelector selector;
-    BaseMegastrucutreMenu menu ;
+    BaseMegastructureMenu menu ;
     BifrostLocationData data;
     public StarSystemSelector getSelector() {
         return selector;
     }
 
-    public BifrostStarSystemSelectorDialog(String headerTitle, BaseMegastrucutreMenu menu) {
+    public BifrostStarSystemSelectorDialog(String headerTitle, BaseMegastructureMenu menu) {
         super(headerTitle);
         this.menu = menu;
     }

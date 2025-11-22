@@ -7,7 +7,7 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.PlutoForgeSection;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 
 import java.awt.*;
 
@@ -15,7 +15,7 @@ public class ResourceAllocationDialog extends BaseSliderDialog{
     PlutoForgeSection section;
     String resource;
     CommoditySpecAPI specAPI;
-    public ResourceAllocationDialog(BaseMegastrucutreMenu menu, String headerTitle, int mult, int maxSegments, int currSegment, int minSection, PlutoForgeSection section,String resource) {
+    public ResourceAllocationDialog(BaseMegastructureMenu menu, String headerTitle, int mult, int maxSegments, int currSegment, int minSection, PlutoForgeSection section, String resource) {
         super(menu, headerTitle, mult, maxSegments, currSegment, minSection);
         this.section = section;
         this.resource = resource;

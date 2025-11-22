@@ -2,15 +2,12 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.d
 
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.NidavelirBaseSection;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
-
-import java.awt.*;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 
 public class ManpowerManagementDialog extends BaseSliderDialog{
     NidavelirBaseSection section;
-    public ManpowerManagementDialog(String headerTitle, NidavelirBaseSection section, BaseMegastrucutreMenu menu, int availableManpower) {
+    public ManpowerManagementDialog(String headerTitle, NidavelirBaseSection section, BaseMegastructureMenu menu, int availableManpower) {
 
         super(menu, headerTitle, 1, Math.max(availableManpower,section.getCurrentManpowerAssigned()+availableManpower), section.getCurrentManpowerAssigned(),0);
         this.section = section;
