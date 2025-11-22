@@ -57,9 +57,9 @@ public class EterniumCore extends NidavelirBaseSection {
     public void printMenu(TooltipMakerAPI tooltip, int manpowerToBeAssigned, boolean wantToAutomate) {
         int effective = effectivePercent * manpowerToBeAssigned;
 
-        if (!wantToAutomate) {
-            tooltip.addPara("Currently assigned manpower to this structure %s", 10f, Color.ORANGE, "" + (manpowerToBeAssigned));
-        }
+//        if (!wantToAutomate) {
+//            tooltip.addPara("Currently assigned manpower to this structure %s", 10f, Color.ORANGE, "" + (manpowerToBeAssigned));
+//        }
         tooltip.addPara("Increase speed of black site projects completion by %s", 3f, Color.ORANGE, effective + "%");
 
 

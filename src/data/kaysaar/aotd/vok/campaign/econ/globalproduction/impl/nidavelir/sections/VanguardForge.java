@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections;
 
+import com.fs.starfarer.api.impl.campaign.aotd_entities.PlutoMiningStation;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
@@ -57,8 +58,9 @@ public class VanguardForge  extends NidavelirBaseSection {
     public void printMenu(TooltipMakerAPI tooltip, int manpowerToBeAssigned, boolean wantToAutomate) {
         tooltip.addPara("- Increase speed of building frigates and destroyers by %s",3f,Color.ORANGE,(effectivePercent *manpowerToBeAssigned)+"%");
         tooltip.addPara("- All produced ships have increased amount of available S-mods by %S",3f,Color.ORANGE,"1");
-        if (!wantToAutomate) {
-            tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerToBeAssigned));
-        }
+//        if (!wantToAutomate) {
+//            tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerToBeAssigned));
+//        }
+
     }
 }

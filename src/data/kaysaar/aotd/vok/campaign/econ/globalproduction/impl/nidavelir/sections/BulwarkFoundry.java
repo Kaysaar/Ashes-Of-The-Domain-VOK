@@ -45,9 +45,9 @@ public class BulwarkFoundry extends NidavelirBaseSection {
     }
     @Override
     public void printMenu(TooltipMakerAPI tooltip, int manpowerToBeAssigned, boolean wantToAutomate) {
-        if (!wantToAutomate) {
-            tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerToBeAssigned));
-        }
+//        if (!wantToAutomate) {
+//            tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerToBeAssigned));
+//        }
         tooltip.addPara("Increase speed of building cruisers and capitals by %s",3f,Color.ORANGE,(effectivePercent*manpowerToBeAssigned)+"%");
         tooltip.addPara("All produced ships have built-in %s and %s",3f,Color.ORANGE,"Flux Distributor","Flux Coil Adjunct");
     }
