@@ -240,7 +240,7 @@ public class GPBaseMegastructure {
     public void unapplySupplyToIndustry(Industry ind){
 
     }
-    //This is UI plugin you wanna create to handle all things in Megastrucutres tab (for each instance of megastrucutre) because it is interface extending
+    //This is UI plugin you wanna create to handle all things in Megastructures tab (for each instance of megastructure) because it is interface extending
     //CustomUIPanelPlugin you should have there all components handled
     //clearUI is always called when switching to different megastructure while initUI initalizes UI
     public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {

@@ -356,7 +356,7 @@ public class BaseMegastructureIndustry extends BaseIndustry {
 
 
             }
-            tooltip.addPara("*Note: Megastrucutre contributes to market amount of supply that can be efficiently sold, increase accessibility for greater supply", gray, opad);
+            tooltip.addPara("*Note: Megastructure contributes to market amount of supply that can be efficiently sold, increase accessibility for greater supply", gray, opad);
 
 //			else if (!isFunctional() && mode == IndustryTooltipMode.NORMAL) {
 //				tooltip.addPara("Currently under construction and not producing anything or providing other benefits.", opad);
