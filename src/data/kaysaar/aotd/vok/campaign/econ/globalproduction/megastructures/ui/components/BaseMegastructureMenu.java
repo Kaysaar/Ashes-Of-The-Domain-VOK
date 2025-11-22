@@ -16,7 +16,7 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.util.*;
 
-public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
+public class BaseMegastructureMenu implements GPIndividualMegastructreMenu {
     public GPBaseMegastructure megastructureReferedTo;
     //This is where main panel is placed
     public CustomPanelAPI parentPanel;
@@ -32,7 +32,7 @@ public class BaseMegastrucutreMenu implements GPIndividualMegastructreMenu {
     public  float offset =0f;
     public float lastY = 0f;
     public float lastYForSection = 0f;
-    public BaseMegastrucutreMenu(GPBaseMegastructure megastructure, CustomPanelAPI parentPanel,GPMegasturcutreMenu menu) {
+    public BaseMegastructureMenu(GPBaseMegastructure megastructure, CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
         this.megastructureReferedTo = megastructure;
         this.parentPanel = parentPanel;
         this.mainMenu = menu;

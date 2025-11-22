@@ -9,7 +9,7 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.sections.WormholeGenerator;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 
 import java.awt.*;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 public class RangeIncreaseDialog extends BaseSliderDialog {
     WormholeGenerator sectionToRestore;
 
-    public RangeIncreaseDialog(WormholeGenerator section, BaseMegastrucutreMenu menu, String headerTitle) {
+    public RangeIncreaseDialog(WormholeGenerator section, BaseMegastructureMenu menu, String headerTitle) {
         super(menu,headerTitle,section.mult,section.sections,section.range,1);
         this.sectionToRestore = section;
         this.menu = menu;

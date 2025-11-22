@@ -4,13 +4,13 @@ import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.NidavelirBaseSection;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 
 public class AutomationDialog  extends BasePopUpDialog {
     NidavelirBaseSection section;
-    BaseMegastrucutreMenu menu;
+    BaseMegastructureMenu menu;
 
-    public AutomationDialog(String headerTitle, NidavelirBaseSection section, BaseMegastrucutreMenu menu) {
+    public AutomationDialog(String headerTitle, NidavelirBaseSection section, BaseMegastructureMenu menu) {
         super(headerTitle);
         this.section = section;
         this.menu = menu;

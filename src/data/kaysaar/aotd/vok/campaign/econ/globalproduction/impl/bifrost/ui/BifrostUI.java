@@ -15,11 +15,10 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.section
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog.BifrostGateActivationDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog.BifrostStarSystemSelectorDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonPackage;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
@@ -28,7 +27,7 @@ import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class BifrostUI extends BaseMegastrucutreMenu {
+public class BifrostUI extends BaseMegastructureMenu {
     public BifrostUI(GPBaseMegastructure megastructure, CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
         super(megastructure, parentPanel, menu);
     }

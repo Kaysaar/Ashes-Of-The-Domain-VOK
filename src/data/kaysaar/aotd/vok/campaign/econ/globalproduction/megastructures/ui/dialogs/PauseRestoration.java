@@ -5,16 +5,16 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 
 import java.awt.*;
 
 public class PauseRestoration extends BasePopUpDialog {
-    BaseMegastrucutreMenu menu;
+    BaseMegastructureMenu menu;
     GPMegaStructureSection sectionToRestore;
     String content;
-    public PauseRestoration(GPMegaStructureSection section, BaseMegastrucutreMenu menu, String headerTitle,String content) {
+    public PauseRestoration(GPMegaStructureSection section, BaseMegastructureMenu menu, String headerTitle, String content) {
         super(headerTitle);
         this.sectionToRestore = section;
         this.menu = menu;

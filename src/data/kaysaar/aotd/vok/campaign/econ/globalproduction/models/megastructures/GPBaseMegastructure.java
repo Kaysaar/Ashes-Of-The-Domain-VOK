@@ -9,7 +9,7 @@ import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -244,7 +244,7 @@ public class GPBaseMegastructure {
     //CustomUIPanelPlugin you should have there all components handled
     //clearUI is always called when switching to different megastructure while initUI initalizes UI
     public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
-        return new BaseMegastrucutreMenu(this,parentPanel,menu);
+        return new BaseMegastructureMenu(this,parentPanel,menu);
     }
 
 }
