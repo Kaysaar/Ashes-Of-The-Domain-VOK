@@ -295,7 +295,7 @@ public class GPMegaStructureSection {
             tooltip.addPara("Restoration will be halted, so we can use our resources elsewhere.", 5f);
         }
         if (buttonId.equals("moreInfo")) {
-            tooltip.addPara("Show more info about this section like progress of restoration etc.", 5f);
+            tooltip.addPara("Show more info about this section like current progress of the restoration etc.", 5f);
         }
         createTooltipForButtonsAfterRest(tooltip,buttonId);
     }

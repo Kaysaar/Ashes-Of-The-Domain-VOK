@@ -18,7 +18,7 @@ public class PurificationCore extends PlutoForgeSection {
     @Override
     public void createTooltipForButtonsBeforeRest(TooltipMakerAPI tooltip, String buttonId) {
         if(buttonId.equals("restore")&&!isRestored&&!isRestorationAllowed()){
-            tooltip.addPara("Note! First %s must be restored, before we are able to restore this section!",5f, Misc.getNegativeHighlightColor(), Color.ORANGE,"Optic Command Nexus");
+            tooltip.addPara("Note! The %s must be restored first, before we are able to restore this section!",5f, Misc.getNegativeHighlightColor(), Color.ORANGE,"Optic Command Nexus");
         }
     }
     @Override

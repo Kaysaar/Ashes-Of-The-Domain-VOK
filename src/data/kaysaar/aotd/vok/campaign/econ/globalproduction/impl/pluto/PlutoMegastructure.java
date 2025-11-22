@@ -157,7 +157,7 @@ public class PlutoMegastructure extends GPBaseMegastructure {
         tooltip.addPara("Current laser status : %s",5f,pair.two,pair.one);
         tooltip.addSectionHeading("Accessibility selling power",Alignment.MID,5f);
         int access = (int) Math.floor((getMarketTiedTo().getAccessibilityMod().getFlatBonus()*10));
-        tooltip.addPara("Maximum amount of %s units of supply can sold to %s accessibility",5f,Color.ORANGE,access+"",(int)(getMarketTiedTo().getAccessibilityMod().getFlatBonus()*100)+"%");
+        tooltip.addPara("A maximum amount of %s units of supply can be sold due to %s accessibility",5f,Color.ORANGE,access+"",(int)(getMarketTiedTo().getAccessibilityMod().getFlatBonus()*100)+"%");
         getLaserSection().createTooltipForOreMining(tooltip);
 
     }
@@ -167,7 +167,7 @@ public class PlutoMegastructure extends GPBaseMegastructure {
         }
         else{
             if(getLaserSection().isFiringLaser()){
-                return new Pair<>("operational: laser magnitude: "+getLaserSection().getCurrentMagnitude()*10+"%", Misc.getPositiveHighlightColor());
+                return new Pair<>("operational - laser magnitude is "+getLaserSection().getCurrentMagnitude()*10+"%", Misc.getPositiveHighlightColor());
             }
             else{
                 return new Pair<>("laser turned off", Misc.getTooltipTitleAndLightHighlightColor());

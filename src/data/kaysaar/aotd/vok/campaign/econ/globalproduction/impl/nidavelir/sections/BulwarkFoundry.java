@@ -35,6 +35,7 @@ public class BulwarkFoundry extends NidavelirBaseSection {
         int points = (int) (manpowerAssigned *effectivePercent*getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));;
         tooltip.addPara("- Production speed of %s is increased by %s",3f,Color.ORANGE,"cruisers and capitals",points+"%");
         tooltip.addPara("- All produced ships have built-in %s and %s",3f,Color.ORANGE,"Flux Distributor","Flux Coil Adjunct");
+        if (isRestored) tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerAssigned));
 
     }
 

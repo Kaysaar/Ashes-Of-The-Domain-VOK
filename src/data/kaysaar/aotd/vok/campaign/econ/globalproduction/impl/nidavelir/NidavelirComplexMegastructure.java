@@ -54,7 +54,7 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
         tooltip.addPara("Once fully restored : %s fleet size", 5f, Color.ORANGE, "400%");
         tooltip.addSectionHeading("Accessibility selling power", Alignment.MID, 5f);
         int access = (int) Math.floor((getEntityTiedTo().getMarket().getAccessibilityMod().getFlatBonus() * 10));
-        tooltip.addPara("Maximum amount of %s units of supply can sold due to %s accessibility", 5f, Color.ORANGE, access + "", (int) (getEntityTiedTo().getMarket().getAccessibilityMod().getFlatBonus() * 100) + "%");
+        tooltip.addPara("A maximum amount of %s units of supply can be sold due to %s accessibility", 5f, Color.ORANGE, access + "", (int) (getEntityTiedTo().getMarket().getAccessibilityMod().getFlatBonus() * 100) + "%");
 
 
     }
