@@ -37,7 +37,7 @@ public class HypercognitionTestSynergy extends BaseIndustrySynergySource {
 
     @Override
     public void addToTooltipForInfo(Industry industry, TooltipMakerAPI tooltip) {
-        tooltip.addPara("Admin skill : %s provides %s efficiency",3f, Color.ORANGE,"Hypercognition", AoTDMisc.getPercentageString(0.2f));
+        tooltip.addPara("Colony administrator skill: %s provides %s efficiency.",3f, Color.ORANGE,"Hypercognition", AoTDMisc.getPercentageString(0.2f));
     }
 
     @Override
