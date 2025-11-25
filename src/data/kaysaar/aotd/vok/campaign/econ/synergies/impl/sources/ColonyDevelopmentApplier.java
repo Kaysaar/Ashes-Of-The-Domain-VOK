@@ -43,7 +43,7 @@ public class ColonyDevelopmentApplier extends BaseIndustrySynergySource{
     public void addToTooltipForInfo(Industry industry, TooltipMakerAPI tooltip) {
         if(industry.getMarket().hasCondition(BaseColonyDevelopment.condIdApplier)){
             ColonyDevelopmentCondition cond  = (ColonyDevelopmentCondition) industry.getMarket().getCondition(BaseColonyDevelopment.condIdApplier).getPlugin();
-            tooltip.addPara("Colony Development Path : %s provides %s efficiency",3f, Color.ORANGE, ColonyDevelopmentManager.getInstance().getColonyDevelopment(cond.getIdOfDevelopment()).getName(), AoTDMisc.getPercentageString(values.getOrDefault(cond.getIdOfDevelopment(),0f)));
+            tooltip.addPara("Colony Development Path: %s provides %s efficiency.",3f, Color.ORANGE, ColonyDevelopmentManager.getInstance().getColonyDevelopment(cond.getIdOfDevelopment()).getName(), AoTDMisc.getPercentageString(values.getOrDefault(cond.getIdOfDevelopment(),0f)));
         }
 
     }
