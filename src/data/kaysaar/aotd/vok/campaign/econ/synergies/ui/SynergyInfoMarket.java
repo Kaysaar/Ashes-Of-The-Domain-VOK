@@ -82,11 +82,11 @@ public class SynergyInfoMarket implements ExtendedUIPanelPlugin {
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
                 tooltip.addTitle("Synergies");
-                tooltip.addPara("With well established logistical network on colony, certain structures/industries can benefit from each-other", 5f);
+                tooltip.addPara("With a well established logistical network, certain industries and structures can receive bonuses when built on the same planet.", 5f);
                 tooltip.addSectionHeading("Efficiency", Alignment.MID, 5f);
-                tooltip.addPara("Synergies are directly affected by efficiency of logistics, established throughout colony. More efficient logistics - more powerful synergies become.", 3f);
-                tooltip.addPara("Currently this market efficiency is %s", 3f, Color.ORANGE, percent);
-                tooltip.addPara("Minimum value of this stat is always %s and can't go below that.",3f,Color.ORANGE,"0%");
+                tooltip.addPara("Synergies are directly affected by efficiency of the planet's logistics. More efficient logistics will result in higher synergy bonuses.", 3f);
+                tooltip.addPara("Currently this planet's efficiency is %s.", 3f, Color.ORANGE, percent);
+                tooltip.addPara("The lowest efficiency value is %s and can't drop below that.",3f,Color.ORANGE,"0%");
                 tooltip.setBulletedListMode(BaseIntelPlugin.BULLET);
                 for (Map.Entry<String, IndustrySynergySourceAPI> entry : IndustrySynergiesManager.getInstance().getSourcesOfSynergy().entrySet()) {
                     if(tiedMarket.hasIndustry(entry.getValue().getId())&&entry.getValue().calculateEfficiencyFromIndustry(tiedMarket.getIndustry(entry.getValue().getId()),true)!=0){
@@ -97,9 +97,9 @@ public class SynergyInfoMarket implements ExtendedUIPanelPlugin {
 
                 tooltip.addSectionHeading("Synergies on " + tiedMarket.getName(), Alignment.MID, 5f);
                 if (synergies.isEmpty()) {
-                    tooltip.addPara("Currently this market has no synergies, you can see possible synergies in %s", 3f, Color.ORANGE, "Synergy List");
+                    tooltip.addPara("This planet has no synergies active. You can see possible synergies in the %s.", 3f, Color.ORANGE, "Synergy List");
                 } else {
-                    tooltip.addPara("Currently this market benefits from %s synergies, you can see their effect in %s", 3f, Color.ORANGE, "" + synergies.size(), "Synergy List");
+                    tooltip.addPara("This planet has %s synergies active. You can see their effect in the %s.", 3f, Color.ORANGE, "" + synergies.size(), "Synergy List");
 
                 }
 
