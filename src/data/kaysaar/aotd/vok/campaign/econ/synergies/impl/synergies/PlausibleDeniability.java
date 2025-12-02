@@ -48,7 +48,7 @@ public class PlausibleDeniability extends BaseIndustrySynergy {
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency,MarketAPI market) {
         float percent = 0.1f*efficiency;
         tooltip.addPara("Decreases %s upkeep by %s.",3f,base,highLight,"Black Site", AoTDMisc.getPercentageString(percent));
-        tooltip.addPara("Slightly decreases Luddic Path interest.",Misc.getPositiveHighlightColor(),3f);
+        tooltip.addPara("Slightly decreases Pather interest.",Misc.getPositiveHighlightColor(),3f);
     }
 
     @Override

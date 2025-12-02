@@ -59,7 +59,7 @@ public class DrumsInTheDeep extends BaseIndustrySynergy {
         ArrayList<String> ids3 = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE);
         tooltip.addPara("Reduces the upkeep of %s and %s by %s.",3f,base,highLight,getIndustriesListed(ids,market),getIndustriesListed(ids2,market), AoTDMisc.getPercentageString(0.1f*efficiency));
         tooltip.addPara("Increases the upkeep of %s by %s.",3f,Misc.getNegativeHighlightColor(),highLight,getIndustriesListed(ids3,market),AoTDMisc.getPercentageString(0.15f*efficiency));
-        tooltip.addPara("Reduces Luddic Path interest.", Misc.getPositiveHighlightColor(),3f);
+        tooltip.addPara("Reduces Pather interest.", Misc.getPositiveHighlightColor(),3f);
         tooltip.addPara("Reduces accessibility by %s.",3f,Misc.getNegativeHighlightColor(),highLight,AoTDMisc.getPercentageString(0.1f*efficiency));
 
     }

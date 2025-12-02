@@ -114,7 +114,7 @@ public class SynergyInfoDisplay implements ExtendedUIPanelPlugin {
             }
         }
         properTooltip.setBulletedListMode(null);
-        properTooltip.addPara("All bonuses are shown for market with %s efficiency, lower efficiency will yield lower bonuses, efficiency above >100% will yield even higher bonuses.",3f,Misc.getGrayColor(),Color.ORANGE,"100%");
+        properTooltip.addPara("All bonuses are shown for market with %s efficiency. Lower efficiency will yield lower bonuses, and efficiency above 100%% will yield even higher bonuses.",3f,Misc.getGrayColor(),Color.ORANGE,"100%");
         properTooltip.addSpacer(5f);
         synergyInfo.addUIElement(properTooltip).inTL(0,20);
         mainPanel.addComponent(synergyInfo).inTL(availableSynergyInfo.getPosition().getWidth()+10+unavailableSynergyList.getPosition().getWidth()+5,5);
