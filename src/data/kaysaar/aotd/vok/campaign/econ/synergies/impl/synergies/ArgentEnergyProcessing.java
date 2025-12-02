@@ -50,7 +50,7 @@ public class ArgentEnergyProcessing extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
         tooltip.addPara("Increases the production of %s by %s.",3f,base,highLight,IndustrySynergiesMisc.getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.FUELPROD),market),2+"");
-        tooltip.addPara("Heavily increases Luddic Path interest.", Misc.getNegativeHighlightColor(), 3f);
+        tooltip.addPara("Heavily increases Pather interest.", Misc.getNegativeHighlightColor(), 3f);
     }
 
     @Override
