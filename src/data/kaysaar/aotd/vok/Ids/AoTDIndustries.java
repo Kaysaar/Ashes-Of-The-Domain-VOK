@@ -34,8 +34,8 @@ public class AoTDIndustries {
     public static final String ORBITAL_FLEETWORK = "hegeheavy";
     public static final String HEAVY_PRODUCTION = "shityheavy";
     public static final String MILITARY_HEAVY = "weaponheavy";
-    public static final String SUPPLY_HEAVY = "supplyheavy";
-    public static final String CONSUMER_INDUSTRY = "consumerindustry";
+    public static final String CIVILIAN_HEAVY_PROD = "aotd_civilian_heavy_prod";
+    public static final String COMMERCIAL_MANUFACTORY = "aotd_commercial_manu";
     public static final String MACRO_INDUSTRIAL_COMPLEX = "aotd_macro_industrial_complex";
     public static final String FUEL_REFINERY = "aotd_fuel_refinery";
     public static final String NEUROCHEMICAL_LABORATORY = "aotd_druglight";
