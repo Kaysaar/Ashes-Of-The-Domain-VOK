@@ -22,7 +22,7 @@ aotd_tech_advanced_mining_equipment,Advanced Mining Equipment,2,60,aotd_tech_exo
 aotd_tech_alloy_production,Alloy Production Matrix,2,60,aotd_tech_nanometal,research_databank:6,alloy1,"aotd_crystalizator:industry
 aotd_enrichment_facility:industry",0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_orbital_assembly,Orbital Assembly,2,90,"aotd_tech_hull_manufacture,aotd_tech_antimatter_production",research_databank:12,heavyindustry2,orbitalworks:industry,1,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_consumer,Consumer Goods Production,2,45,aotd_tech_nanometal,research_databank:12,minorindustry2,consumerindustry:industry,0,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_consumer,Consumer Goods Production,2,45,aotd_tech_nanometal,research_databank:12,minorindustry2,aotd_commercial_manu:industry,0,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_drug_production,Drugs Amplification,2,25,aotd_tech_consumer,research_databank:8,minorindustry3,aotd_druglight:industry,1,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_maglev,Urban Throughput Systems,2,30,aotd_tech_alloy_production,research_databank:10,maglev,aotd_maglev:industry,1,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_resort_tech,Luxury Civic Planning,2,25,aotd_tech_spaceport_expansion,research_databank:5,aotd_resort_center,aotd_resort_center:industry,1,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -35,7 +35,7 @@ aotd_underworld:industry",0,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_streamlined_production,Streamlined Production,3,60,"aotd_tech_maglev,aotd_tech_orbital_assembly",research_databank:16,alloy2,"supplyheavy:industry
+aotd_tech_streamlined_production,Streamlined Production,3,60,"aotd_tech_maglev,aotd_tech_orbital_assembly",research_databank:16,alloy2,"aotd_civilian_heavy_prod:industry
 +1 towards production of all commodities:modifier",0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

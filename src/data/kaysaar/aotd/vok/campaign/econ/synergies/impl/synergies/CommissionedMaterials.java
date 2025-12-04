@@ -29,14 +29,14 @@ public class CommissionedMaterials extends BaseIndustrySynergy {
     @Override
     public boolean doesSynergyMetReq(MarketAPI market) {
         boolean tech = IndustrySynergiesMisc.didMarketMetTechCriteria(market, AoTDTechIds.NANOMETAL_FUSION_SYNTHESIS, AoTDTechIds.BASE_SHIP_HULL_ASSEMBLY);
-        ArrayList<String> paths = IndustrySynergiesMisc.getIdsOfTreeFromIndustryTrimmed(Industries.HEAVYINDUSTRY,IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.SUPPLY_HEAVY).toArray(new String[0]));
+        ArrayList<String> paths = IndustrySynergiesMisc.getIdsOfTreeFromIndustryTrimmed(Industries.HEAVYINDUSTRY,IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.CIVILIAN_HEAVY_PROD).toArray(new String[0]));
 
         return tech && IndustrySynergiesMisc.isAtLeastOneIndustryFunctionalFromListIncludingUpgrades(market, Industries.REFINING) && IndustrySynergiesMisc.isAtLeastOneIndustryFunctionalFromList(market, paths.toArray(new String[0]));
     }
 
     @Override
     public void apply(float efficiencyPercent, MarketAPI market) {
-        for (String ids : IndustrySynergiesMisc.getIdsOfTreeFromIndustryTrimmed(Industries.HEAVYINDUSTRY,IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.SUPPLY_HEAVY).toArray(new String[0]))) {
+        for (String ids : IndustrySynergiesMisc.getIdsOfTreeFromIndustryTrimmed(Industries.HEAVYINDUSTRY,IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.CIVILIAN_HEAVY_PROD).toArray(new String[0]))) {
             if(market.hasIndustry(ids)){
                 market.getIndustry(ids).getSupply(Commodities.SUPPLIES).getQuantity().modifyFlat(getIdForEffects(),2,"Commissioned Materials Synergy");
                 market.getIndustry(ids).getSupply(Commodities.HAND_WEAPONS).getQuantity().modifyFlat(getIdForEffects(),2,"Commissioned Materials Synergy");
@@ -52,7 +52,7 @@ public class CommissionedMaterials extends BaseIndustrySynergy {
 
     @Override
     public void unapply(MarketAPI market) {
-        for (String ids : IndustrySynergiesMisc.getIdsOfTreeFromIndustryTrimmed(Industries.HEAVYINDUSTRY,IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.SUPPLY_HEAVY).toArray(new String[0]))) {
+        for (String ids : IndustrySynergiesMisc.getIdsOfTreeFromIndustryTrimmed(Industries.HEAVYINDUSTRY,IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.CIVILIAN_HEAVY_PROD).toArray(new String[0]))) {
             if(market.hasIndustry(ids)){
                 market.getIndustry(ids).getSupply(Commodities.SUPPLIES).getQuantity().unmodifyFlat(getIdForEffects());
                 market.getIndustry(ids).getSupply(Commodities.HAND_WEAPONS).getQuantity().unmodifyFlat(getIdForEffects());
@@ -67,7 +67,7 @@ public class CommissionedMaterials extends BaseIndustrySynergy {
 
     @Override
     public void populateListForSynergies(HashSet<String> industries,MarketAPI market) {
-        industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustryTrimmed(Industries.HEAVYINDUSTRY,IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.SUPPLY_HEAVY).toArray(new String[0])));
+        industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustryTrimmed(Industries.HEAVYINDUSTRY,IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.CIVILIAN_HEAVY_PROD).toArray(new String[0])));
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.REFINING));
     }
 

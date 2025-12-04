@@ -9,7 +9,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import java.util.ArrayList;
 
 
-public class ConsumerIndustry extends LightIndustry {
+public class CommercialManufactory extends LightIndustry {
     @Override
     public void apply() {
         super.apply(true);

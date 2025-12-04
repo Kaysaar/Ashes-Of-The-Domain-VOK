@@ -10,8 +10,8 @@ import java.util.Comparator;
 import java.util.Map;
 
 public class GpOptionSorter {
-    public static ArrayList<GPOption> getShipPackagesBasedOnTags(ArrayList<String> manufacturues, ArrayList<String> sizes, ArrayList<String> types) {
-        boolean allMan = AoTDMisc.arrayContains(manufacturues, "All designs") || manufacturues.isEmpty();
+    public static ArrayList<GPOption> getShipPackagesBasedOnTags(ArrayList<String> manufacturers, ArrayList<String> sizes, ArrayList<String> types) {
+        boolean allMan = AoTDMisc.arrayContains(manufacturers, "All designs") || manufacturers.isEmpty();
         boolean allSizes = AoTDMisc.arrayContains(sizes, "All sizes") || sizes.isEmpty();
         boolean allTypes = AoTDMisc.arrayContains(types, "All types") || types.isEmpty();
         ArrayList<GPOption> options = new ArrayList<>();
@@ -21,8 +21,8 @@ public class GpOptionSorter {
             boolean valid = true;
             if (!allMan) {
                 valid = false;
-                for (String manufacturue : manufacturues) {
-                    if (learnedShipPackage.getSpec().getShipHullSpecAPI().getManufacturer().equals(manufacturue)) {
+                for (String manufacturer : manufacturers) {
+                    if (learnedShipPackage.getSpec().getShipHullSpecAPI().getManufacturer().equals(manufacturer)) {
                         valid = true;
                         break;
                     }
@@ -56,8 +56,8 @@ public class GpOptionSorter {
         return options;
     }
 
-    public static ArrayList<GPOption> getItemsBasedOnTag(ArrayList<String> manufacturues) {
-        boolean allMan = AoTDMisc.arrayContains(manufacturues, "All designs") || manufacturues.isEmpty();
+    public static ArrayList<GPOption> getItemsBasedOnTag(ArrayList<String> manufacturers) {
+        boolean allMan = AoTDMisc.arrayContains(manufacturers, "All designs") || manufacturers.isEmpty();
         ArrayList<GPOption> options = new ArrayList<>();
         if (allMan) return getItemSortedBasedOnData("Cost", SortingState.ASCENDING, GPManager.getInstance().getLearnedItems());
         for (GPOption learnedShipPackage : getItemSortedBasedOnData("Cost", SortingState.ASCENDING, GPManager.getInstance().getLearnedItems())) {
@@ -65,8 +65,8 @@ public class GpOptionSorter {
             boolean valid = true;
             if (!allMan) {
                 valid = false;
-                for (String manufacturue : manufacturues) {
-                    if (learnedShipPackage.getSpec().getItemSpecAPI().getManufacturer().equals(manufacturue)) {
+                for (String manufacturer : manufacturers) {
+                    if (learnedShipPackage.getSpec().getItemSpecAPI().getManufacturer().equals(manufacturer)) {
                         valid = true;
                         break;
                     }
@@ -77,14 +77,14 @@ public class GpOptionSorter {
             }
 
         }
-        if(AoTDMisc.arrayContains(manufacturues, "AI Cores")){
+        if(AoTDMisc.arrayContains(manufacturers, "AI Cores")){
             options.addAll(GPManager.getInstance().getAICores());
         }
         return options;
     }
 
-    public static ArrayList<GPOption> getWeaponPackagesBasedOnTags(ArrayList<String> manufacturues, ArrayList<String> sizes, ArrayList<String> types) {
-        boolean allMan = AoTDMisc.arrayContains(manufacturues, "All designs") || manufacturues.isEmpty();
+    public static ArrayList<GPOption> getWeaponPackagesBasedOnTags(ArrayList<String> manufacturers, ArrayList<String> sizes, ArrayList<String> types) {
+        boolean allMan = AoTDMisc.arrayContains(manufacturers, "All designs") || manufacturers.isEmpty();
         boolean allSizes = AoTDMisc.arrayContains(sizes, "All sizes") || sizes.isEmpty();
         boolean allTypes = AoTDMisc.arrayContains(types, "All types") || types.isEmpty();
         ArrayList<GPOption> options = new ArrayList<>();
@@ -94,8 +94,8 @@ public class GpOptionSorter {
             boolean valid = true;
             if (!allMan) {
                 valid = false;
-                for (String manufacturue : manufacturues) {
-                    if (option.getSpec().getWeaponSpec().getManufacturer().equals(manufacturue)) {
+                for (String manufacturer : manufacturers) {
+                    if (option.getSpec().getWeaponSpec().getManufacturer().equals(manufacturer)) {
                         valid = true;
                         break;
                     }
@@ -129,8 +129,8 @@ public class GpOptionSorter {
         return options;
     }
 
-    public static ArrayList<GPOption> getFighterPackagesBasedOnTags(ArrayList<String> manufacturues, ArrayList<String> sizes, ArrayList<String> types) {
-        boolean allMan = AoTDMisc.arrayContains(manufacturues, "All designs") || manufacturues.isEmpty();
+    public static ArrayList<GPOption> getFighterPackagesBasedOnTags(ArrayList<String> manufacturers, ArrayList<String> sizes, ArrayList<String> types) {
+        boolean allMan = AoTDMisc.arrayContains(manufacturers, "All designs") || manufacturers.isEmpty();
         boolean allSizes = AoTDMisc.arrayContains(sizes, "All sizes") || sizes.isEmpty();
         boolean allTypes = AoTDMisc.arrayContains(types, "All types") || types.isEmpty();
         ArrayList<GPOption> options = new ArrayList<>();
@@ -140,8 +140,8 @@ public class GpOptionSorter {
             boolean valid = true;
             if (!allMan) {
                 valid = false;
-                for (String manufacturue : manufacturues) {
-                    if (option.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer().equals(manufacturue)) {
+                for (String manufacturer : manufacturers) {
+                    if (option.getSpec().getWingSpecAPI().getVariant().getHullSpec().getManufacturer().equals(manufacturer)) {
                         valid = true;
                         break;
                     }
