@@ -52,13 +52,11 @@ import data.kaysaar.aotd.vok.hullmods.AoTDShroudedLensHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedMantleHullmod;
 import data.kaysaar.aotd.vok.hullmods.AoTDShroudedThunderHeadHullmod;
 import data.kaysaar.aotd.vok.listeners.*;
-import data.kaysaar.aotd.vok.plugins.bmo.VanillaTechReq;
 import data.kaysaar.aotd.vok.plugins.coreui.RnDTabListener;
 import data.kaysaar.aotd.vok.scripts.CurrentResearchProgressUI;
 import data.kaysaar.aotd.vok.scripts.coreui.*;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.ColonyUIListener;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.MarketContextListenerInjector;
-import data.kaysaar.aotd.vok.scripts.cutscene.CutScenePlayer;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIInMarketScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIScript;
 import data.kaysaar.aotd.vok.scripts.misc.AoTDFuelConsumptionScript;
@@ -151,52 +149,53 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
     public void onApplicationLoad() throws Exception {
         Global.getSettings().loadFont(fontInsigniaMedium);
         for (Pair<String, String> industry : AoTDIndButtonsListener.industries) {
-            VanillaTechReq req = new VanillaTechReq(industry.two);
-            AdditionalReqManager.getInstance().addReq(industry.one, req);
+            BMOTechReqListener listener = new BMOTechReqListener(industry.one,industry.two);
+            AdditionalReqManager.getInstance().addReq(listener);
         }
 
-        if (!LunaSettingsLoader.INSTANCE.getHasLoaded()) {
-            LunaSettingsLoader.INSTANCE.load();
-        }
-
-        addSetting();
-
-        LunaSettings.addSettingsListener(new LunaSettingsListener() {
-            @Override
-            public void settingsChanged(@NotNull String s) {
-                try {
-                    Boolean bool = LunaSettings.getBoolean("aotd_vok","aotd_vok_theme_swapper");
-                    JSONUtils.CommonDataJSONObject ob = JSONUtils.loadCommonJSON("aotd_hidden_settings.json");
-                    ob.put("aotd_vok_theme_swapper", bool);
-//                    SpriteAPI sprite = Global.getSettings().getSprite("graphics/cursors/cursor_blue.png");
-//                    SpriteAPI second = Global.getSettings().getSprite("graphics/cursors/" + subDirectoryName + "/cursor_blue.png");
+        Global.getSettings().loadFont("graphics/fonts/orbitron16.fnt");
+//        if (!LunaSettingsLoader.INSTANCE.getHasLoaded()) {
+//            LunaSettingsLoader.INSTANCE.load();
+//        }
 //
-//                    Object texObj1 = TexReflection.getSpriteTexObj((Sprite) sprite);
-//                    Object texObj2 = TexReflection.getSpriteTexObj((Sprite) second);
-//                    TexReflection.setTexObjId(texObj1,TexReflection.getTexObjId(texObj2));
-                    String base = getModBasePath("aotd_vok");
-
-
-                    if (bool) {
-                        String absolute = base + "/graphics/cursors/" + subDirectoryName + "/cursor_blue.png";
-                        boolean ok1 = ReflectionUtilis.moveFileOneLevelUpInModGraphics("aotd_vok", absolute);
-
-                        String absolute2 = base + "/graphics/cursors/" + subDirectoryName + "/cursor_blue_2x.png";
-                        boolean ok2 = ReflectionUtilis.moveFileOneLevelUpInModGraphics("aotd_vok", absolute2);
-
-                    } else {
-                        String absolute = base + "/graphics/cursors/cursor_blue.png";
-                        boolean ok1 = moveFileIntoStuffSubdirInModGraphics("aotd_vok", absolute);
-
-                        String absolute2 = base + "/graphics/cursors/cursor_blue_2x.png";
-                        boolean ok2 = moveFileIntoStuffSubdirInModGraphics("aotd_vok", absolute2);
-                    }
-
-                    ob.save();
-                } catch (IOException | JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }});
+//        addSetting();
+//
+//        LunaSettings.addSettingsListener(new LunaSettingsListener() {
+//            @Override
+//            public void settingsChanged(@NotNull String s) {
+//                try {
+//                    Boolean bool = LunaSettings.getBoolean("aotd_vok","aotd_vok_theme_swapper");
+//                    JSONUtils.CommonDataJSONObject ob = JSONUtils.loadCommonJSON("aotd_hidden_settings.json");
+//                    ob.put("aotd_vok_theme_swapper", bool);
+////                    SpriteAPI sprite = Global.getSettings().getSprite("graphics/cursors/cursor_blue.png");
+////                    SpriteAPI second = Global.getSettings().getSprite("graphics/cursors/" + subDirectoryName + "/cursor_blue.png");
+////
+////                    Object texObj1 = TexReflection.getSpriteTexObj((Sprite) sprite);
+////                    Object texObj2 = TexReflection.getSpriteTexObj((Sprite) second);
+////                    TexReflection.setTexObjId(texObj1,TexReflection.getTexObjId(texObj2));
+//                    String base = getModBasePath("aotd_vok");
+//
+//
+//                    if (bool) {
+//                        String absolute = base + "/graphics/cursors/" + subDirectoryName + "/cursor_blue.png";
+//                        boolean ok1 = ReflectionUtilis.moveFileOneLevelUpInModGraphics("aotd_vok", absolute);
+//
+//                        String absolute2 = base + "/graphics/cursors/" + subDirectoryName + "/cursor_blue_2x.png";
+//                        boolean ok2 = ReflectionUtilis.moveFileOneLevelUpInModGraphics("aotd_vok", absolute2);
+//
+//                    } else {
+//                        String absolute = base + "/graphics/cursors/cursor_blue.png";
+//                        boolean ok1 = moveFileIntoStuffSubdirInModGraphics("aotd_vok", absolute);
+//
+//                        String absolute2 = base + "/graphics/cursors/cursor_blue_2x.png";
+//                        boolean ok2 = moveFileIntoStuffSubdirInModGraphics("aotd_vok", absolute2);
+//                    }
+//
+//                    ob.save();
+//                } catch (IOException | JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }});
     }
     public static boolean moveFileIntoStuffSubdirInModGraphics(String modId, String absolutePath) {
         try {
@@ -254,7 +253,6 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         ListenerManagerAPI l = Global.getSector().getListenerManager();
         l.removeListenerOfClass(AoTDIndButtonsListener.class);
         AoTDIndButtonsListener listener = new AoTDIndButtonsListener();
-        listener.updateIndustryRepo();
         l.addListener(listener);
         if (!l.hasListenerOfClass(ScientistUpkeepListener.class))
             l.addListener(new ScientistUpkeepListener(), true);

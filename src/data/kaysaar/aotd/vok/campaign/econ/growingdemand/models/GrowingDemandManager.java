@@ -32,7 +32,7 @@ public class GrowingDemandManager {
 
     }
 
-    public static void setInstance() {
+    private static void setInstance() {
         Global.getSector().getPersistentData().put(permaDataKey, new GrowingDemandManager());
     }
 

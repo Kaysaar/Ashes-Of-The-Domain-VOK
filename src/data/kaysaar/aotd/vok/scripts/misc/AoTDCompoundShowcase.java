@@ -28,12 +28,10 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
 
         String rounded = Misc.getRoundedValue(progres*100f);
 
-        ProgressBarComponentV2 component = new ProgressBarComponentV2(width-15, height-5,rounded+"%" ,null,c, Misc.getBasePlayerColor(),progres){
+        ProgressBarComponentV2 component = new ProgressBarComponentV2(width-15, height-4,rounded+"%" ,null,c, Misc.getBasePlayerColor(),progres){
             @Override
             public void influenceLabel() {
                 LabelAPI label = getProgressLabel();
-                int fuel = (int) Global.getSector().getPlayerFleet().getCargo().getFuel();
-                int stuff = (int) AoTDFuelConsumptionScript.getCompound(Global.getSector().getPlayerFleet().getCargo());
                 float progres = AoTDFuelConsumptionScript.getCompound(Global.getSector().getPlayerFleet().getCargo()) / Global.getSector().getPlayerFleet().getCargo().getFuel();
                 if (progres >= 1) progres = 1;
                 String rounded = Misc.getRoundedValue(progres*100f);
