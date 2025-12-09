@@ -116,7 +116,7 @@ public class GPManager {
         return productionOrders;
     }
 
-    public static int scale = 70;
+    public static int scale = 10;
 
     public ArrayList<GPSpec> getSpecs() {
         return specs;

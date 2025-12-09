@@ -88,7 +88,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             ashPadExtraY = 27f;
         }
         else {
-            buttonHideHeight = 82f;
+            buttonHideHeight = 78;
             ashPadExtraY = 0;
         }
         buttonHide.setAlphaMult(viewport.getAlphaMult());
