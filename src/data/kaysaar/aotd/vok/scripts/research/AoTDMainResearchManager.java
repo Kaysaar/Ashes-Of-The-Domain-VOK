@@ -284,7 +284,7 @@ public class AoTDMainResearchManager {
 
     }
 
-    public static void setInstance() {
+    private static void setInstance() {
         AoTDMainResearchManager manager = new AoTDMainResearchManager();
         manager.researchOptionSpec = getSpecsFromFiles();
         manager.researchProjectSpec = getResearchProjectSpecFromFiles();

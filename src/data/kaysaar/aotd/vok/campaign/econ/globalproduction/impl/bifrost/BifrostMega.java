@@ -31,6 +31,22 @@ public class BifrostMega extends GPBaseMegastructure {
         bifrostGateCost.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY, 100);
     }
 
+    public boolean areStarSystemsConnected(StarSystemAPI from ,StarSystemAPI to){
+        boolean foundFrom = false;
+        boolean foundTo = false;
+        for (BifrostSection section : getWorkingSections()) {
+            if(section.getStarSystemAPI().getId().equals(from.getId())){
+                foundFrom = true;
+            }
+            if(section.getStarSystemAPI().getId().equals(to.getId())){
+                foundTo = true;
+            }
+            if(foundFrom && foundTo){
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public void createAdditionalInfoForMega(TooltipMakerAPI tooltip) {
         tooltip.addSectionHeading("Current effects", Alignment.MID, 5f);
@@ -120,6 +136,14 @@ public class BifrostMega extends GPBaseMegastructure {
             }
         }
         return section;
+    }
+    public SectorEntityToken getSectionEntityInStarSystem(StarSystemAPI system){
+        for (BifrostSection workingSection : getWorkingSections()) {
+            if(workingSection.getStarSystemAPI().getId().equals(system.getId())){
+                return workingSection.getGateTiedTo();
+            }
+        }
+        return null;
     }
 
     @Override
