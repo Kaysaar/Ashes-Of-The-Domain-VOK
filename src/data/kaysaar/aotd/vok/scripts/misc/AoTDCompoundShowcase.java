@@ -3,6 +3,9 @@ package data.kaysaar.aotd.vok.scripts.misc;
 import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
+import com.fs.starfarer.api.campaign.PersistentUIDataAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Abilities;
+import com.fs.starfarer.api.impl.campaign.rulecmd.AddAbility;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 
@@ -10,6 +13,7 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.ui.basecomps.ImageViewer;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
