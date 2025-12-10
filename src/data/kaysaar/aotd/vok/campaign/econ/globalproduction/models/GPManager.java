@@ -32,6 +32,8 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GPManager {
     public static final Logger log = Global.getLogger(GPManager.class);
@@ -41,6 +43,7 @@ public class GPManager {
     public static boolean isEnabled = true;
     GPUIData gpuiData;
     GpHistory history;
+    transient private ExecutorService executor = Executors.newSingleThreadExecutor();
     public GpHistory getProductionHistory(){
         if(history==null){
             history = new GpHistory();
@@ -219,7 +222,7 @@ public class GPManager {
         return penalty;
     }
 
-    public static GPManager setInstance() {
+    private static GPManager setInstance() {
         GPManager manager = new GPManager();
         Global.getSector().getPersistentData().put(memkey, manager);
         manager.history = new GpHistory();
@@ -791,14 +794,16 @@ public class GPManager {
         }
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {
-                advanceProductions(intervalUtil.getElapsed());
+            if(executor==null)executor= Executors.newSingleThreadExecutor();
+            executor.submit(()->advanceProductions(intervalUtil.getElapsed()));
+
         }
     }
     public static boolean hasSpecialProject(ProjectReward.ProjectRewardType type, String rewardId) {
         return !BlackSiteProjectManager.getInstance().getProjectMatchingReward(type, rewardId).isEmpty();
     }
     public void advanceProductions(float amount) {
-
+        log.info("Started GP advance");
         for (GPBaseMegastructure megastructure : megastructures) {
             megastructure.advance(amount);
         }
@@ -811,6 +816,7 @@ public class GPManager {
                 productionOrder.advance(amount);
             }
         }
+        log.info("Finished GP advance");
     }
 
     public HashMap<String, Float> advance(ArrayList<GPOrder> orders) {

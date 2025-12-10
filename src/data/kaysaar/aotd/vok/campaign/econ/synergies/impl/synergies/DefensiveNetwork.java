@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
@@ -34,6 +35,9 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
         industries.addAll(IndustrySynergiesMisc.getIdsOfIndustryWithSameTag(Industries.TAG_STARFORTRESS,market));
         industries.add(Industries.HEAVYBATTERIES);
         industries.add(Industries.HIGHCOMMAND);
+        if(Global.getSettings().getModManager().isModEnabled("aotd_sop")){
+            industries.add("aotd_hexagon");
+        }
 
     }
 

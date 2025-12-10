@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 
 public class ColonyDevelopmentManager {
     public static String permaDataKey = "$aotd_colony_development";
-    public static void setInstance() {
+    private static void setInstance() {
         Global.getSector().getPersistentData().put(permaDataKey, new ColonyDevelopmentManager());
     }
     LinkedHashMap<String,BaseColonyDevelopment>developmentScripts;

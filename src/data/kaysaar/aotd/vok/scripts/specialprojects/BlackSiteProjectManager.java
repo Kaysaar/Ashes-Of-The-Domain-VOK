@@ -80,7 +80,7 @@ public class BlackSiteProjectManager {
                 );
     }
 
-    public static void setInstance() {
+    private static void setInstance() {
 
         Global.getSector().getPersistentData().put(memflag, new BlackSiteProjectManager());
     }

@@ -31,7 +31,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
     transient SpriteAPI sprite = Global.getSettings().getSprite("ui_campaign_components", "tech_panel");
     transient SpriteAPI spriteOfCurrentlyResearched;
 
-    transient LazyFont loader = LazyFont.loadFont(Fonts.ORBITRON_24AABOLD);
+    transient LazyFont loader = LazyFont.loadFont(Fonts.ORBITRON_20AABOLD);
     transient LazyFont.DrawableString techString;
     transient LazyFont.DrawableString buttonString;
     transient LazyFont.DrawableString progressionString;
@@ -47,6 +47,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
     public static boolean ashPadEnabled = Global.getSettings().getModManager().isModEnabled("aotd_ashpad");
     public float buttonHideHeight, ashPadExtraY;
     boolean isHidden = true;
+
 
     public CurrentResearchProgressUI() throws FontException {
     }
@@ -74,14 +75,27 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
 
     @Override
     public void renderInUICoordsAboveUIBelowTooltips(ViewportAPI viewport) {
+
+    }
+
+
+
+
+    @Override
+    public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
         if (ashPadEnabled) {
             buttonHideHeight = 78f;
             ashPadExtraY = 27f;
         }
         else {
-            buttonHideHeight = 82f;
+            buttonHideHeight = 78;
             ashPadExtraY = 0;
         }
+        buttonHide.setAlphaMult(viewport.getAlphaMult());
+        buttonHideHighlighted.setAlphaMult(viewport.getAlphaMult());
+        buttonTech.setAlphaMult(viewport.getAlphaMult());
+        buttonTechHighlighted.setAlphaMult(viewport.getAlphaMult());
+        sprite.setAlphaMult(viewport.getAlphaMult());
 
         final CampaignUIAPI campaignUI = Global.getSector().getCampaignUI();
         if (campaignUI.isShowingDialog() || campaignUI.isShowingMenu() || campaignUI.getCurrentCoreTab() != null)
@@ -111,6 +125,7 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 progressionString = loader.createText();
             }
 
+
             if (detector.determineIfHoversOverButton(x, y, x + buttonHide.getWidth(), y - 11, x, y + ashPadExtraY - sprite.getHeight(), x + buttonHide.getWidth(), y + ashPadExtraY - sprite.getHeight() + 11, Global.getSettings().getMouseX(), (float) (Global.getSettings().getMouseY()))) {
                 buttonHideHighlighted.setHeight(buttonHideHeight);
                 if (ashPadEnabled) buttonHideHighlighted.render(sprite.getWidth()-20, getYForRender()+27);
@@ -124,25 +139,32 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 spriteOfCurrentlyResearched = Global.getSettings().getSprite("ui_icons_tech_tree", AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getIconId());
                 spriteOfCurrentlyResearched.setWidth(80);
                 spriteOfCurrentlyResearched.setHeight(80);
+                spriteOfCurrentlyResearched.setAlphaMult(viewport.getAlphaMult());
                 spriteOfCurrentlyResearched.render(8, getYForRender() +3 + ashPadExtraY);
 
-                techString.setText("Researching : " + AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getName());
-                techString.setMaxWidth(sprite.getWidth() - 98);
-                techString.setFontSize(12);
-                techString.setBaseColor(Misc.getTextColor());
+                techString.setText(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus().getSpec().getName());
+                techString.setMaxWidth(sprite.getWidth() - 110);
+                techString.setFontSize(14);
+                Color c = Misc.getTextColor();
+                techString.setBaseColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), Math.round(c.getAlpha()*viewport.getAlphaMult())));
                 techString.setBlendSrc(GL11.GL_SRC_ALPHA);
                 techString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
+
                 techString.draw(95, getYForRender() + 75 + ashPadExtraY);
+                progressionBarChanged.setAlphaMult(viewport.getAlphaMult());
                 progressionBarChanged.setWidth(progressionBarFull.getWidth() * AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()));
                 progressionBarChanged.render(7, y - sprite.getHeight() + 2 + ashPadExtraY);
             } else {
-                techString.setText("Currently nothing is being\nresearched!");
-                techString.setFontSize(12);
-                techString.setBaseColor(Misc.getTextColor());
+                techString.setText("Currently nothing is being researched!");
+                techString.setMaxWidth(sprite.getWidth() - 110);
+                techString.setFontSize(14);
+                Color c = Misc.getTextColor();
+                techString.setBaseColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), Math.round(c.getAlpha()*viewport.getAlphaMult())));
+
                 techString.setBlendSrc(GL11.GL_SRC_ALPHA);
                 techString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
-                if (ashPadEnabled) techString.draw(95, getYForRender() + 102);
-                else techString.draw(95, getYForRender() + 75);
+                if (ashPadEnabled) techString.draw(95, getYForRender() + 75+ashPadExtraY);
+                else techString.draw(98, getYForRender() + 75);
             }
 
             buttonTech.setWidth(170);
@@ -160,26 +182,13 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
             }
 
             buttonString.setText("Access Tech Tree");
-            buttonString.setFontSize(12);
-            buttonString.setBaseColor(Misc.getTextColor());
+            buttonString.setFontSize(14);
+            Color c = Misc.getTextColor();
+            buttonString.setBaseColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), Math.round(c.getAlpha()*viewport.getAlphaMult())));
             buttonString.setBlendSrc(GL11.GL_SRC_ALPHA);
             buttonString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
-            if (ashPadEnabled) buttonString.draw(130, getYForRender() +57);
-            else buttonString.draw(130, getYForRender() +30);
-            if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()!=null){
-                progressionString.setText((int) (AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()) * 100) + "%");
-                progressionString.setFontSize(10);
-                if((AoDUtilis.calculatePercentOfProgression(AoTDMainResearchManager.getInstance().getManagerForPlayer().getCurrentFocus()) * 100)>=50){
-                    progressionString.setBaseColor(new Color(31, 32, 33));
-                }
-                else{
-                    progressionString.setBaseColor(Misc.getTooltipTitleAndLightHighlightColor());
-
-                }
-                progressionString.setBlendSrc(GL11.GL_SRC_ALPHA);
-                progressionString.setBlendDest(GL11.GL_ONE_MINUS_SRC_ALPHA);
-                progressionString.draw(125, getYForRender() +11 + ashPadExtraY);
-            }
+            if (ashPadEnabled) buttonString.draw(118, getYForRender() +58);
+            else buttonString.draw(118, getYForRender() +31);
 
 
         } else {
@@ -195,14 +204,6 @@ public class CurrentResearchProgressUI implements CampaignUIRenderingListener, E
                 else buttonHide.render(x1, getYForRender());
             }
         }
-    }
-
-
-
-
-    @Override
-    public void renderInUICoordsAboveUIAndTooltips(ViewportAPI viewport) {
-
 
     }
 

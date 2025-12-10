@@ -75,6 +75,7 @@ public class CutScenePlayer implements ExtendedUIPanelPlugin {
             sprite.setSize(mainPanel.getPosition().getWidth(),mainPanel.getPosition().getHeight());
             sprite.setColor(Color.black);
             sprite.setAlphaMult(opacity);
+            Global.getSector().getViewport().setAlphaMult(1-opacity);
             sprite.renderAtCenter(mainPanel.getPosition().getCenterX(), mainPanel.getPosition().getCenterY());
         } else if (frames<maxFrames) {
 
@@ -94,6 +95,7 @@ public class CutScenePlayer implements ExtendedUIPanelPlugin {
                 sprite.setSize(mainPanel.getPosition().getWidth(),mainPanel.getPosition().getHeight());
                 sprite.setColor(Color.black);
                 sprite.setAlphaMult(opacity);
+                Global.getSector().getViewport().setAlphaMult(1-opacity);
                 sprite.renderAtCenter(mainPanel.getPosition().getCenterX(), mainPanel.getPosition().getCenterY());
             }
             else{
