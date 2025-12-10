@@ -795,7 +795,7 @@ public class GPManager {
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {
             if(executor==null)executor= Executors.newSingleThreadExecutor();
-            executor.submit(()->advanceProductions(amount));
+            executor.submit(()->advanceProductions(intervalUtil.getElapsed()));
 
         }
     }
