@@ -3,6 +3,9 @@ package data.kaysaar.aotd.vok.scripts.misc;
 import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
+import com.fs.starfarer.api.campaign.PersistentUIDataAPI;
+import com.fs.starfarer.api.impl.campaign.ids.Abilities;
+import com.fs.starfarer.api.impl.campaign.rulecmd.AddAbility;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 
@@ -10,6 +13,7 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.ui.basecomps.ImageViewer;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
@@ -28,12 +32,10 @@ public class AoTDCompoundShowcase implements CustomUIPanelPlugin {
 
         String rounded = Misc.getRoundedValue(progres*100f);
 
-        ProgressBarComponentV2 component = new ProgressBarComponentV2(width-15, height-5,rounded+"%" ,null,c, Misc.getBasePlayerColor(),progres){
+        ProgressBarComponentV2 component = new ProgressBarComponentV2(width-15, height-4,rounded+"%" ,null,c, Misc.getBasePlayerColor(),progres){
             @Override
             public void influenceLabel() {
                 LabelAPI label = getProgressLabel();
-                int fuel = (int) Global.getSector().getPlayerFleet().getCargo().getFuel();
-                int stuff = (int) AoTDFuelConsumptionScript.getCompound(Global.getSector().getPlayerFleet().getCargo());
                 float progres = AoTDFuelConsumptionScript.getCompound(Global.getSector().getPlayerFleet().getCargo()) / Global.getSector().getPlayerFleet().getCargo().getFuel();
                 if (progres >= 1) progres = 1;
                 String rounded = Misc.getRoundedValue(progres*100f);

@@ -143,7 +143,7 @@ public class GPMegaStructureSection {
                 progressOfRestoration = 0;
             }
             if(Global.getSettings().isDevMode()){
-                progressOfRestoration+= Global.getSector().getClock().convertToDays(amount) *100;
+                progressOfRestoration+= 100;
             }
             if (progressOfRestoration >= getSpec().daysForRenovation) {
                 isRestoring = false;

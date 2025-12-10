@@ -29,7 +29,7 @@ public class FactionPatrolFleetManager {
         }
         return (FactionPatrolFleetManager) Global.getSector().getPersistentData().get(memKey);
     }
-    public static void setInstance(){
+    private static void setInstance(){
         FactionPatrolFleetManager manager = new FactionPatrolFleetManager(Global.getSector().getPlayerFaction().getId());
         Global.getSector().getPersistentData().put(memKey, manager);
     }
