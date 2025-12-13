@@ -48,7 +48,7 @@ public class ResourceAllocationDialog extends BaseSliderDialog{
     @Override
     public void populateTooltipBelow(TooltipMakerAPI tooltip, int effectiveSegment) {
         tooltip.setParaFont(Fonts.ORBITRON_12);
-        tooltip.addPara("Note! Even when structure produces a lot of supply units, only effective amount will be sold, to sell more on market, increase accessibility!",Misc.getTooltipTitleAndLightHighlightColor(),5f);
+        tooltip.addPara("Note! Even when the structure produces a lot of supply units, only the effective amount will be sold. To sell more on the market, increase the accessibility!",Misc.getTooltipTitleAndLightHighlightColor(),5f);
     }
 
     @Override

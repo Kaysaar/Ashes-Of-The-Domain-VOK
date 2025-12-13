@@ -53,7 +53,7 @@ public class GPMegaStructureSection {
         this.progressOfRestoration = progressOfRestoration;
     }
     public String getContentForPauseRestoration(){
-        return "By pausing restoration efforts we wont be spending further money until project is resumed and it will free resources that is currently consuming";
+        return "By pausing restoration efforts we won't be spending money and required resources until the project is resumed.";
     }
     public String getRestorationStringForDialog(){
         return "Restoration";
@@ -295,7 +295,7 @@ public class GPMegaStructureSection {
             tooltip.addPara("Restoration will be halted, so we can use our resources elsewhere.", 5f);
         }
         if (buttonId.equals("moreInfo")) {
-            tooltip.addPara("Show more info about this section like current progress of the restoration etc.", 5f);
+            tooltip.addPara("Show more info about this section like the current progress of the restoration etc.", 5f);
         }
         createTooltipForButtonsAfterRest(tooltip,buttonId);
     }

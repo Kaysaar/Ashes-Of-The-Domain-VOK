@@ -42,7 +42,7 @@ public class RangeIncreaseDialog extends BaseSliderDialog {
     public void populateTooltipTop(TooltipMakerAPI tooltip, int effectiveSegment) {
         tooltip.setParaFont(Fonts.ORBITRON_16
         );
-        tooltip.addPara("Range of hypershunt: %s light years",5f, Color.ORANGE,""+(currentSegment*mult));
+        tooltip.addPara("Range of hypershunt : %s light years",5f, Color.ORANGE,""+(currentSegment*mult));
         tooltip.addPara("Upkeep : %s", 5f, Color.ORANGE, Misc.getDGSCredits(20000 * effectiveSegment));
         tooltip.addPara("Consumption of %s : %s",5f,Color.ORANGE,"purified transplutonics",""+(effectiveSegment *mult*2));
     }
@@ -60,11 +60,11 @@ public class RangeIncreaseDialog extends BaseSliderDialog {
     @Override
     public void populateTooltipBelow(TooltipMakerAPI tooltip, int effectiveSegment) {
         tooltip.setParaFont(Fonts.ORBITRON_12);
-        tooltip.addPara("Note! if demand of purified transplutonics won't be met, emergency systems of hypershunt will reduce effetive range to %s",10f,Color.ORANGE,"10 light years");
+        tooltip.addPara("Note! If the demand of purified transplutonics isn't met, the emergency systems of the hypershunt will reduce effective range to %s",10f,Color.ORANGE,"10 light years");
     }
 
     public LabelAPI createLabelForBar(TooltipMakerAPI tooltip){
-        return tooltip.addPara("Range of hypershunt : "+currentSegment*mult+" / "+maxSegment*mult+" LY",Misc.getTooltipTitleAndLightHighlightColor(),5f);
+        return tooltip.addPara("Range of the hypershunt : "+currentSegment*mult+" / "+maxSegment*mult+" LY",Misc.getTooltipTitleAndLightHighlightColor(),5f);
     }
 
     @Override
