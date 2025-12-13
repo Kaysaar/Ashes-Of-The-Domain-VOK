@@ -47,6 +47,7 @@ public class GPUIMisc {
             mapTooltip = titlePanel.createUIElement(sectionWidth,height,false);
             mapTooltip.addSectorMap(sectionWidth,height-20,mega.getEntityTiedTo().getStarSystem(), 0f);
             titlePanel.addUIElement(mapTooltip).inTL(imageSection+descriptionSection+10,0);
+
         }
 
         descriptionTooltip = titlePanel.createUIElement(descriptionSection,height,true);

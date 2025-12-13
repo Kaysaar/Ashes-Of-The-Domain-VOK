@@ -49,6 +49,7 @@ public class ResearchInfoUI extends PopUpUI {
     public void createUI(CustomPanelAPI panelAPI) {
         createUIMockup(panelAPI);
         panelAPI.addComponent(mainPanel).inTL(0, 0);
+        addPanel(mainPanel);
     }
 
     @Override
@@ -75,6 +76,7 @@ public class ResearchInfoUI extends PopUpUI {
             mainPanel.addComponent(widget2).inTL(0, lastY);
             lastY += widget2.getPosition().getHeight() + 5;
         }
+        addTooltip(tooltip);
         tooltip = mainPanel.createUIElement(mainPanel.getPosition().getWidth(), 20, false);
         if (option.otherReq != null || !option.ReqTechsToResearchFirst.isEmpty() || !option.ReqItemsToResearchFirst.isEmpty()) {
             tooltip.addSectionHeading("Requirements", Alignment.MID, 0f);
@@ -95,8 +97,9 @@ public class ResearchInfoUI extends PopUpUI {
                 mainPanel.addComponent(comp).inTL(0, lastY);
                 lastY += comp.getPosition().getHeight() + 5;
             }
-
         }
+        addTooltip(tooltip);
+
         CustomPanelAPI panelAPI1 = createButtonForResearchOrQueue(mainPanel);
         mainPanel.addComponent(panelAPI1).inTL(0, lastY);
         lastY += panelAPI1.getPosition().getHeight() + 5;

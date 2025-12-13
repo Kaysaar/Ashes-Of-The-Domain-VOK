@@ -20,7 +20,7 @@ public class AutomationDialog  extends BasePopUpDialog {
     public void createContentForDialog(TooltipMakerAPI tooltip, float width) {
         if(!section.isAutomated){
             tooltip.setParaInsigniaLarge();
-            tooltip.addPara("Automation of this section, will result in such bonuses:",5f);
+            tooltip.addPara("Automation of this section, will result in the following bonuses:",5f);
             section.printMenu(tooltip,12,true);
             tooltip.addPara("Note! We won't be able to use manpower points on this section after automation!", Misc.getNegativeHighlightColor(),5f);
             section.printEffects(tooltip,12,true);
