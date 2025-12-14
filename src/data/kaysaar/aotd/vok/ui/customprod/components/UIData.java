@@ -544,6 +544,7 @@ public class UIData {
 
         for (Map.Entry<String, Integer> entry : option.getSupplyCost().entrySet()) {
             if(GPManager.commodities.getOrDefault(entry.getKey(), GPManager.GPResourceType.COMMODITY).equals(GPManager.GPResourceType.COMMODITY)) {
+                if (Global.getSettings().getCommoditySpec(entry.getKey()) == null) continue; // null check for incorrect commodity
                 tooltip.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), iconSize, iconSize, 0f);
                 tooltip.getPrev().getPosition().inTL(beginX, iconSize / 2);
                 LabelAPI label = tooltip.addPara("x" + entry.getValue(), Color.ORANGE, 0f);
@@ -552,6 +553,7 @@ public class UIData {
 
             }
             else{
+                if (Global.getSettings().getSpecialItemSpec(entry.getKey()) == null) continue; // null check
                 tooltip.addImage(Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName(), iconSize, iconSize, 0f);
                 tooltip.getPrev().getPosition().inTL(beginX, iconSize / 2);
                 LabelAPI label = tooltip.addPara("x" + entry.getValue(),Misc.getDesignTypeColor("Abyss-Tech"), 0f);
