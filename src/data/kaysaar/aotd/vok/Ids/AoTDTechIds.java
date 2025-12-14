@@ -24,7 +24,7 @@ public class AoTDTechIds {
     public static final String ALLOY_PURIFICATION = "aotd_tech_alloy_purification";
     public static final String SOPHISTICATED_ELECTRONIC_SYSTEMS = "aotd_tech_sophisticated_electronics";
     public static final String ORBITAL_SKUNKWORK_FACILITIES = "aotd_tech_orbital_skunkwork";
-    public static final String ORBITAL_FLEETWORK_FACILITIES = "aotd_tech_orbital_skunkwork";
+    public static final String ORBITAL_FLEETWORK_FACILITIES = "aotd_tech_orbital_fleetwork";
     public static final String JANUS_DEVICE_ANALYSIS = "aotd_tech_janus_device_analysis";
     public static final String ANTIMATTER_SYNTHESIS = "aotd_tech_fuel_production_increase";
     public static final String HYPERSPACE_STABILIZATION = "aotd_tech_hyperspace_stabilization";
