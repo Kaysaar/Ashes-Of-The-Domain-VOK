@@ -44,7 +44,7 @@ public class AoTDFuelConsumptionScript implements EveryFrameScript {
             OUTER: for (int i = 0; i < 5; i++) {
                 slots.setCurrBarIndex(i);
                 for (PersistentUIDataAPI.AbilitySlotAPI slot : slots.getCurrSlotsCopy()) {
-                    if(slot.getAbilityId().equals(Abilities.DISTRESS_CALL)){
+                    if(slot.getAbilityId() != null && slot.getAbilityId().equals(Abilities.DISTRESS_CALL)){
                         slot.setInHyperAbilityId(id);
                         break OUTER;
                     }
