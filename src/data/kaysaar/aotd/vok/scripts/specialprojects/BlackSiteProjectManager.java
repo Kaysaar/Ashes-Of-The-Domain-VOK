@@ -120,7 +120,7 @@ public class BlackSiteProjectManager {
 
     public void advance(float amount) {
         if (intervalUtil == null) {
-            intervalUtil = new IntervalUtil(2.5f, 2.5f); //
+            intervalUtil = new IntervalUtil(10f, 10f); //
         }
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {
@@ -131,7 +131,7 @@ public class BlackSiteProjectManager {
                 if (AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites() > 0) {
                     Global.getSector().getPlayerMemoryWithoutUpdate().set(memflagBlacksite, true);
                     projects.values().forEach(AoTDSpecialProject::doCheckForProjectUnlock);
-                    GPManager.getInstance().advance(GPManager.getInstance().getProductionOrders());
+
                     if (currentlyOnGoingProject != null) {
                         currentlyOnGoingProject.advance(intervalUtil.getElapsed());
                     }

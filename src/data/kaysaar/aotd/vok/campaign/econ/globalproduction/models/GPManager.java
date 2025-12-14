@@ -339,7 +339,7 @@ public class GPManager {
         }
 
 
-        return totalResources;
+        return new LinkedHashMap<>(totalResources);
     }
 
 
@@ -398,7 +398,7 @@ public class GPManager {
             }
         }
         AoTDListenerUtilis.increaseDemand(reqResources);
-        return reqResources;
+        return new HashMap<>(reqResources);
     }
 
 

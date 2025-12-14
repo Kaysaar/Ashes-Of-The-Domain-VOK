@@ -38,19 +38,25 @@ public class AoTDFuelConsumptionScript implements EveryFrameScript {
         params.add(t); // don't want to assign it to a slot - will assign as hyper-only alternate later here
         new AddAbility().execute(null, null, params, null);
 
-
-        PersistentUIDataAPI.AbilitySlotsAPI slots = Global.getSector().getUIData().getAbilitySlotsAPI();
-        int curr = slots.getCurrBarIndex();
-        OUTER: for (int i = 0; i < 5; i++) {
-            slots.setCurrBarIndex(i);
-            for (PersistentUIDataAPI.AbilitySlotAPI slot : slots.getCurrSlotsCopy()) {
-                if(slot.getAbilityId().equals(Abilities.DISTRESS_CALL)){
-                    slot.setInHyperAbilityId(id);
-                    break OUTER;
+        try {
+            PersistentUIDataAPI.AbilitySlotsAPI slots = Global.getSector().getUIData().getAbilitySlotsAPI();
+            int curr = slots.getCurrBarIndex();
+            OUTER: for (int i = 0; i < 5; i++) {
+                slots.setCurrBarIndex(i);
+                for (PersistentUIDataAPI.AbilitySlotAPI slot : slots.getCurrSlotsCopy()) {
+                    if(slot.getAbilityId().equals(Abilities.DISTRESS_CALL)){
+                        slot.setInHyperAbilityId(id);
+                        break OUTER;
+                    }
                 }
             }
+            slots.setCurrBarIndex(curr);
         }
-        slots.setCurrBarIndex(curr);
+        catch (Exception e) {
+            //Trully most cursed and lazy route
+        }
+
+
     }
 
     @Override
