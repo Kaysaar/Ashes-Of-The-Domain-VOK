@@ -52,7 +52,7 @@ public class BifrostLocationSelector extends BasePopUpDialog {
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        if(map!=null&&map.getOrbitComponent().isLocked()&&map.getOrbitComponent().getCurrentlyCenteredAround()!=null){
+        if(map!=null && map.getOrbitComponent()!=null && map.getOrbitComponent().isLocked() && map.getOrbitComponent().getCurrentlyCenteredAround()!=null){
             if(!map.getOrbitComponent().getCurrentlyCenteredAround().getToken().equals(orbitFocus)){
                 orbitFocus = map.getOrbitComponent().getCurrentlyCenteredAround().getToken();
                 updateInfo();
@@ -63,7 +63,7 @@ public class BifrostLocationSelector extends BasePopUpDialog {
     @Override
     public void onExit() {
         super.onExit();
-        if(map.getOrbitComponent().isLocked()){
+        if(map.getOrbitComponent()!=null && map.getOrbitComponent().isLocked()){
             BifrostLocationData data = new BifrostLocationData(map.getOrbitComponent().getCurrentlyCenteredAround().getToken(),map.getOrbitComponent().getSavedRadiusWorld(),map.translateCoordinatesFromUIToWorld(map.getOrbitComponent().getSavedCordsOfGate()), (float) Math.toDegrees(map.getOrbitComponent().getSavedGateAngleRad()));
             selector.data = data;
             map.clearUI();
