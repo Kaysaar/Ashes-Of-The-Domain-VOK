@@ -16,7 +16,7 @@ public class BifrostMouseOnClick implements MapEntityOnClickHook {
     @Override
     public void onClick(MapEntityComponent token, InputEventAPI event, CustomPanelAPI anchor, MapMainComponent component) {
         if(anchor.getPosition().containsEvent(event)){
-            if(event.isLMBUpEvent()){
+            if(this.component != null && event.isLMBUpEvent()){
                 Global.getSoundPlayer().playUISound("ui_button_pressed", 1, 1);
                 this.component.setCurrentlyCenteredAround(token);
                 this.component.unlockFollow();
@@ -27,7 +27,7 @@ public class BifrostMouseOnClick implements MapEntityOnClickHook {
 
 
         }
-        if(event.getEventValue()==Keyboard.KEY_D&&event.isKeyUpEvent()){
+        if(this.component != null && event.getEventValue()==Keyboard.KEY_D && event.isKeyUpEvent()){
             Global.getSoundPlayer().playUISound("ui_button_pressed", 1, 1);
             if(this.component.getCurrentlyCenteredAround()!=null){
                 this.component.getCurrentlyCenteredAround().setForceHighlight(false);
