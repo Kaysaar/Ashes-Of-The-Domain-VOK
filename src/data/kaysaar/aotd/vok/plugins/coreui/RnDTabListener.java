@@ -47,8 +47,8 @@ public class RnDTabListener implements CommandTabListener {
 
             @Override
             public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                tooltip.addSectionHeading("Ashes of the Domain : Vaults of Knowledge", Alignment.MID,0f);
-                tooltip.addPara("In this tab, you can find the research tab to manage your technological advancement and special technology projects, the custom order tab to build new ships and weapons as well as launch special military projects, and the megastructure tab to manage the Domain-era marvels you've seized or built.",5f);
+                tooltip.addSectionHeading("Ashes of the Domain: Vaults of Knowledge", Alignment.MID,0f);
+                tooltip.addPara("In this tab you can find the research tree to manage your technological advancements, special projects available to you, the custom order tab to produce new ships and weapons, and megastructures currently under your control.",5f);
             }
         };
     }
