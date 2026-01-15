@@ -10,6 +10,7 @@ import com.fs.starfarer.api.campaign.CargoStackAPI;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
+import com.fs.starfarer.api.impl.campaign.shared.WormholeManager;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -95,7 +96,16 @@ public class ProducitonHoverInfo implements TooltipMakerAPI.TooltipCreator {
             }
         }
         if (spec.getType() == GPSpec.ProductionType.ITEM) {
-            final CargoStackAPI stack = Global.getFactory().createCargoStack(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(spec.getItemSpecAPI().getId(), null), null);
+            // Edge-case fix regarding Wormhole Anchor item requiring data when showing tooltip
+            final CargoStackAPI stack;
+            if (spec.getItemSpecAPI().getId().equals("wormhole_anchor")) {
+                WormholeManager.WormholeItemData itemData = new WormholeManager.WormholeItemData("standard", "unknown", "Unknown");
+                stack = Global.getFactory().createCargoStack(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(spec.getItemSpecAPI().getId(), itemData.toJsonStr()), null);
+
+            }
+            else {
+                stack = Global.getFactory().createCargoStack(CargoAPI.CargoItemType.SPECIAL, new SpecialItemData(spec.getItemSpecAPI().getId(), null), null);
+            }
             stack.getPlugin().createTooltip(tooltip, expanded, null, null);
 
         }
