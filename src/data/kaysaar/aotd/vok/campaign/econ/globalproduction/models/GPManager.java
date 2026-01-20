@@ -278,8 +278,7 @@ public class GPManager {
 
     public LinkedHashMap<String, Integer> getTotalResources() {
 
-        if (totalResources == null) totalResources = new LinkedHashMap<>();
-        totalResources.clear();
+        LinkedHashMap<String,Integer>totalResources = new LinkedHashMap<>();
         int amount = 0;
 //        if(Global.getSettings().isDevMode()){
 //            amount = 10000;
@@ -365,7 +364,7 @@ public class GPManager {
     }
 
     public HashMap<String, Integer> getReqResources(ArrayList<GPOrder> orders) {
-        if (reqResources == null) reqResources = new HashMap<>();
+        HashMap <String,Integer>reqResources = new HashMap<>();
         reqResources.clear();
         for (String s : commodities.keySet()) {
             reqResources.put(s, 0);
@@ -794,8 +793,7 @@ public class GPManager {
         }
         intervalUtil.advance(amount);
         if (intervalUtil.intervalElapsed()) {
-            if(executor==null)executor= Executors.newSingleThreadExecutor();
-            executor.submit(()->advanceProductions(intervalUtil.getElapsed()));
+            advanceProductions(intervalUtil.getElapsed());
 
         }
     }
