@@ -46,17 +46,21 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
         float baseValDR = 1.5f * efficiency;
         float baseValFS = 0.2f * efficiency;
         float baseValA = 0.1f * efficiency;
-        tooltip.addPara("Increases total defense rating by %s", 3f, base, highLight, "x" + Misc.getRoundedValueMaxOneAfterDecimal(baseValDR));
+        tooltip.addPara("Increases ground defenses by %s", 3f, base, highLight, "x" + Misc.getRoundedValueMaxOneAfterDecimal(baseValDR));
         tooltip.addPara("Increases fleet size by %s", 3f, base, highLight, AoTDMisc.getPercentageString(baseValFS));
         tooltip.addPara("Decreases accessibility by %s", 3f, Misc.getNegativeHighlightColor(), highLight, AoTDMisc.getPercentageString(baseValA));
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
+        String highCommandString = IndustrySynergiesMisc.getIndustryName(market,Industries.HIGHCOMMAND);
+        if(Global.getSettings().getModManager().isModEnabled("aotd_sop")){
+            highCommandString += "/" + IndustrySynergiesMisc.getIndustryName(market,"aotd_hexagon");
+        }
         tooltip.addPara("%s, %s and %s are required to be functional", 3f, base, highLight,
                 "A Starfortress of any type",
                 IndustrySynergiesMisc.getIndustryName(market,Industries.HEAVYBATTERIES),
-                IndustrySynergiesMisc.getIndustryName(market,Industries.HIGHCOMMAND));
+                IndustrySynergiesMisc.getIndustryName(market,Industries.HIGHCOMMAND),highCommandString);
     }
 
     @Override
