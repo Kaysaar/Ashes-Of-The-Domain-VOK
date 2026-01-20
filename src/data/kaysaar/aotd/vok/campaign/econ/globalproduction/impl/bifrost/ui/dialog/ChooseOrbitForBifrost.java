@@ -18,7 +18,7 @@ public class ChooseOrbitForBifrost extends MapMainComponent {
 
     @Override
     protected void afterAddOrbits() {
-        orbitComponent =new BifrostOrbitComponent(0f,this);
+        orbitComponent = new BifrostOrbitComponent(0f,this);
         getMapZoom().addComponent(orbitComponent,27000,27000);
 
     }
