@@ -53,10 +53,14 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
+        String highCommandString = IndustrySynergiesMisc.getIndustryName(market,Industries.HIGHCOMMAND);
+        if(Global.getSettings().getModManager().isModEnabled("aotd_sop")){
+            highCommandString += "/" + IndustrySynergiesMisc.getIndustryName(market,"aotd_hexagon");
+        }
         tooltip.addPara("%s, %s and %s are required to be functional", 3f, base, highLight,
                 "A Starfortress of any type",
                 IndustrySynergiesMisc.getIndustryName(market,Industries.HEAVYBATTERIES),
-                IndustrySynergiesMisc.getIndustryName(market,Industries.HIGHCOMMAND));
+                highCommandString);
     }
 
     @Override
