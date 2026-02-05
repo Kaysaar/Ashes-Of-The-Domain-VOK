@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui.research;
 
+import ashlib.data.plugins.ui.models.InstantPopUpUI;
 import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.Fonts;
@@ -43,7 +44,7 @@ public class TechTreeModButton extends ButtonComponent {
         if (isDropDown) {
             if(AoTDMainResearchManager.getInstance().getModIDsRepo().size()>1){
                 viewer.setAngle(0f);
-                PopUpUI ui = new ModDropDown(modID, plugin);
+                InstantPopUpUI ui = new ModDropDown(modID, plugin);
                 plugin.blockButtonsFromHover();
                 placePopUpUIUnder(ui, componentPanel, 500, 150);
             }
