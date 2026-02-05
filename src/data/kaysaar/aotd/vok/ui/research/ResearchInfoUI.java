@@ -458,13 +458,13 @@ public class ResearchInfoUI extends PopUpUI {
         if (Global.getSettings().getCommoditySpec(entry.getKey()) != null) {
             tooltipMakerAPI.addImage(Global.getSettings().getCommoditySpec(entry.getKey()).getIconName(), 60, 60, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getCommoditySpec(entry.getKey()).getName() + " : " + entry.getValue(), 10f);
-            labelTooltip.addPara("You have %s located in Research Storages", 10f, Color.ORANGE, "" + (int) manager.retrieveAmountOfItems(entry.getKey()));
+            labelTooltip.addPara("You have %s stored in Research Storages", 10f, Color.ORANGE, "" + (int) manager.retrieveAmountOfItems(entry.getKey()));
 
         }
         if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
             tooltipMakerAPI.addImage(Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName(), 60, 60, 10f);
             labelAPI1 = labelTooltip.addPara(Global.getSettings().getSpecialItemSpec(entry.getKey()).getName() + " : " + entry.getValue(), 10f);
-            labelTooltip.addPara("You have %s located in Research Storages", 10f, Color.ORANGE, "" + (int) manager.retrieveAmountOfItems(entry.getKey()));
+            labelTooltip.addPara("You have %s stored in Research Storages", 10f, Color.ORANGE, "" + (int) manager.retrieveAmountOfItems(entry.getKey()));
 
         }
         if (manager.haveMetReqForItem(entry.getKey(), entry.getValue()) || manager.getResearchOptionFromRepo(option.Id).havePaidForResearch) {
