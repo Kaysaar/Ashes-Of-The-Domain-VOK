@@ -26,13 +26,13 @@ public class NidavelirUI extends BaseMegastructureMenu {
             BasePopUpDialog dialog = new ManpowerManagementDialog("Manpower Management",(NidavelirBaseSection) data.getCustomData(),this,mega.getRemainingManpowerPoints());
             CustomPanelAPI panelAPI = Global.getSettings().createCustom(700,440,dialog);
             UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);
+            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()-(panelAPI.getPosition().getHeight()/2),true);
         }
         if(data.getCustomCommand().contains("automateSection")){
             BasePopUpDialog dialog = new AutomationDialog("Section Automation",(NidavelirBaseSection) data.getCustomData(),this);
             CustomPanelAPI panelAPI = Global.getSettings().createCustom(720,390,dialog);
             UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);
+            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()-(panelAPI.getPosition().getHeight()/2),true);
         }
     }
 }
