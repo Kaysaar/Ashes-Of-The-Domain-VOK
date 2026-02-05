@@ -227,7 +227,7 @@ public class AoTDMisc {
     public static void initPopUpDialog(BasePopUpDialog dialog, float width, float height){
         CustomPanelAPI panelAPI = Global.getSettings().createCustom(width, height, dialog);
         UIPanelAPI panelAPI1 = ProductionUtil.getCoreUI();
-        dialog.init(panelAPI, panelAPI1.getPosition().getCenterX() - (panelAPI.getPosition().getWidth() / 2), panelAPI1.getPosition().getCenterY() + (panelAPI.getPosition().getHeight() / 2), true);
+        dialog.init(panelAPI, panelAPI1.getPosition().getCenterX() - (panelAPI.getPosition().getWidth() / 2), panelAPI1.getPosition().getCenterY() - (panelAPI.getPosition().getHeight() / 2), true);
     }
     public static boolean doesPlayerHaveTuringEngine() {
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
