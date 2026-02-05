@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.misc;
 
 import ashlib.data.plugins.misc.AshMisc;
 import ashlib.data.plugins.ui.models.BasePopUpDialog;
+import ashlib.data.plugins.ui.models.InstantPopUpUI;
 import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
@@ -227,7 +228,7 @@ public class AoTDMisc {
     public static void initPopUpDialog(BasePopUpDialog dialog, float width, float height){
         CustomPanelAPI panelAPI = Global.getSettings().createCustom(width, height, dialog);
         UIPanelAPI panelAPI1 = ProductionUtil.getCoreUI();
-        dialog.init(panelAPI, panelAPI1.getPosition().getCenterX() - (panelAPI.getPosition().getWidth() / 2), panelAPI1.getPosition().getCenterY() + (panelAPI.getPosition().getHeight() / 2), true);
+        dialog.init(panelAPI, panelAPI1.getPosition().getCenterX() - (panelAPI.getPosition().getWidth() / 2), panelAPI1.getPosition().getCenterY() - (panelAPI.getPosition().getHeight() / 2), true);
     }
     public static boolean doesPlayerHaveTuringEngine() {
         for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
@@ -363,6 +364,29 @@ public class AoTDMisc {
 
         ui.init(panelAPI, x, y, false);
     }
+    public static void placePopUpUIUnder(InstantPopUpUI ui, UIComponentAPI button, float initWidth, float initHeight) {
+
+        float width1 = initWidth;
+        float height1 = ui.createUIMockup(Global.getSettings().createCustom(initWidth, initHeight, null));
+        CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, ui);
+
+        float x = button.getPosition().getX();
+        float y = button.getPosition().getY();
+        if (x + width1 >= Global.getSettings().getScreenWidth()) {
+            float diff = x + width1 - Global.getSettings().getScreenWidth();
+            x = x - diff - 5;
+
+        }
+        if (y - height1 <= 0) {
+            y = height1;
+        }
+        if (y > Global.getSettings().getScreenHeight()) {
+            y = Global.getSettings().getScreenHeight() - 10;
+        }
+
+        ui.init(panelAPI, x, y, false);
+    }
+
     public static ButtonAPI tryToGetButtonProd(String name) {
         ButtonAPI button = null;
         try {
