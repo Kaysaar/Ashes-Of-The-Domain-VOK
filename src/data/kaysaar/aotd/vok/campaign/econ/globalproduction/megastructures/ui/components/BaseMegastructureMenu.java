@@ -175,7 +175,7 @@ public class BaseMegastructureMenu implements GPIndividualMegastructreMenu {
                             float height1 = dialog.createUIMockup(Global.getSettings().createCustom(width1, 200, null));
                             CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, dialog);
                             float x = button.getPosition().getX()-(width1/4);
-                            float y = button.getPosition().getY();
+                            float y = Global.getSettings().getScreenHeight() - button.getPosition().getY();
                             if (x + width1 >= Global.getSettings().getScreenWidth()) {
                                 float diff = x + width1 - Global.getSettings().getScreenWidth();
                                 x = x - diff - 5;
@@ -184,8 +184,8 @@ public class BaseMegastructureMenu implements GPIndividualMegastructreMenu {
                             if (y - height1 <= 0) {
                                 y = height1;
                             }
-                            if (y > Global.getSettings().getScreenHeight()) {
-                                y = Global.getSettings().getScreenHeight() - 10;
+                            if (y+height1 > Global.getSettings().getScreenHeight()) {
+                                y = Global.getSettings().getScreenHeight() - height1;
                             }
 
                             dialog.init(panelAPI, x, y, false);

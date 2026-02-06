@@ -46,9 +46,9 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
         float baseValDR = 1.5f * efficiency;
         float baseValFS = 0.2f * efficiency;
         float baseValA = 0.1f * efficiency;
-        tooltip.addPara("Increases ground defenses by %s.", 3f, base, highLight, "x" + Misc.getRoundedValueMaxOneAfterDecimal(baseValDR));
-        tooltip.addPara("Increases fleet size by %s.", 3f, base, highLight, AoTDMisc.getPercentageString(baseValFS));
-        tooltip.addPara("Decreases accessibility by %s.", 3f, Misc.getNegativeHighlightColor(), highLight, AoTDMisc.getPercentageString(baseValA));
+        tooltip.addPara("Increases ground defenses by %s", 3f, base, highLight, "x" + Misc.getRoundedValueMaxOneAfterDecimal(baseValDR));
+        tooltip.addPara("Increases fleet size by %s", 3f, base, highLight, AoTDMisc.getPercentageString(baseValFS));
+        tooltip.addPara("Decreases accessibility by %s", 3f, Misc.getNegativeHighlightColor(), highLight, AoTDMisc.getPercentageString(baseValA));
     }
 
     @Override
