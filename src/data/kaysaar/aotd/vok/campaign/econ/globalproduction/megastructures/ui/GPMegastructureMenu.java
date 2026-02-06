@@ -21,7 +21,7 @@ import java.util.Map;
 
 import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
-public class GPMegasturcutreMenu implements CustomUIPanelPlugin, SoundUIManager {
+public class GPMegastructureMenu implements CustomUIPanelPlugin, SoundUIManager {
     public CustomPanelAPI panel;
     public ArrayList<ButtonAPI> buttonsOfMegastructures;
     public GPManager manager;

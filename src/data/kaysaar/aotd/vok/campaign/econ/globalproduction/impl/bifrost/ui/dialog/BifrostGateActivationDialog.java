@@ -4,14 +4,14 @@ import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 
 import java.awt.*;
 
 public class BifrostGateActivationDialog extends BasePopUpDialog {
     BifrostSection section;
-    BaseMegastrucutreMenu menu;
-    public BifrostGateActivationDialog(String headerTitle,BifrostSection section,BaseMegastrucutreMenu menu) {
+    BaseMegastructureMenu menu;
+    public BifrostGateActivationDialog(String headerTitle, BifrostSection section, BaseMegastructureMenu menu) {
         super(headerTitle);
         this.section = section;
         this.menu = menu;

@@ -10,7 +10,7 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.sections.WormholeGenerator;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.ui.HypershuntUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
@@ -19,7 +19,7 @@ import java.awt.*;
 
 public class HypershuntMegastructure extends GPBaseMegastructure {
     @Override
-    public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
+    public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegastructureMenu menu) {
         return new HypershuntUI(this,parentPanel, menu);
     }
     public static boolean isWithinRangeOfAtLeastOneHypershunt(SectorEntityToken target){

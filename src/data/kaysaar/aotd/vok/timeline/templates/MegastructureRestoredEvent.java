@@ -11,17 +11,17 @@ import data.scripts.models.TimelineEventType;
 import java.awt.*;
 
 public class MegastructureRestoredEvent extends BaseFactionTimelineEvent {
-    String megastrucutreID;
+    String megastructureID;
     String title;
     String imageName;
 
     @Override
     public String getID() {
-        return super.getID()+megastrucutreID;
+        return super.getID()+ megastructureID;
     }
 
     public MegastructureRestoredEvent(String megastructureID, String title, String imageName){
-        this.megastrucutreID = megastructureID;
+        this.megastructureID = megastructureID;
         this.title = title;
         this.imageName = imageName;
     }
@@ -38,18 +38,18 @@ public class MegastructureRestoredEvent extends BaseFactionTimelineEvent {
 
     @Override
     public boolean checkForCondition() {
-        return GPManager.getInstance().getMegastructures().stream().anyMatch(x->x.getSpec().getMegastructureID().equals(megastrucutreID)&&x.isFullyRestored());
+        return GPManager.getInstance().getMegastructures().stream().anyMatch(x->x.getSpec().getMegastructureID().equals(megastructureID)&&x.isFullyRestored());
     }
 
     @Override
     public void createSmallNoteForEvent(TooltipMakerAPI tooltip) {
-        tooltip.addPara("%s has been fully restored by "+ Global.getSector().getPlayerFaction().getDisplayNameLong(),0f, Color.ORANGE,GPManager.getInstance().getMegaSpecFromList(megastrucutreID).getName()).setAlignment(Alignment.MID);;
+        tooltip.addPara("%s has been fully restored by "+ Global.getSector().getPlayerFaction().getDisplayNameLong(),0f, Color.ORANGE,GPManager.getInstance().getMegaSpecFromList(megastructureID).getName()).setAlignment(Alignment.MID);;
     }
 
     @Override
     public void createDetailedTooltipOnHover(TooltipMakerAPI tooltip) {
         super.createDetailedTooltipOnHover(tooltip);
-        String megaName = GPManager.getInstance().getMegaSpecFromList(megastrucutreID).getName();
+        String megaName = GPManager.getInstance().getMegaSpecFromList(megastructureID).getName();
         String factionName = Global.getSector().getPlayerFaction().getDisplayNameLong();
 
         tooltip.addPara(

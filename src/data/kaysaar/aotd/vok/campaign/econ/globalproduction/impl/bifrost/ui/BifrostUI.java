@@ -1,6 +1,5 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui;
 
-import ashlib.data.plugins.misc.AshMisc;
 import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
@@ -15,12 +14,11 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.Bifrost
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog.BifrostGateActivationDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog.BifrostStarSystemSelectorDialog;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegastructureMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.ButtonPackage;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.*;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
@@ -29,8 +27,8 @@ import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class BifrostUI extends BaseMegastrucutreMenu {
-    public BifrostUI(GPBaseMegastructure megastructure, CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
+public class BifrostUI extends BaseMegastructureMenu {
+    public BifrostUI(GPBaseMegastructure megastructure, CustomPanelAPI parentPanel, GPMegastructureMenu menu) {
         super(megastructure, parentPanel, menu);
     }
 

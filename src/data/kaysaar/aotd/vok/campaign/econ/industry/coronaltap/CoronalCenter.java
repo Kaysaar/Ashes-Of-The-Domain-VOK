@@ -59,7 +59,7 @@ public class CoronalCenter extends BaseIndustry {
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         super.addPostDemandSection(tooltip, hasDemand, mode);
-        tooltip.addSectionHeading("Megastrucutre State", Alignment.MID, 10f);
+        tooltip.addSectionHeading("Megastructure State", Alignment.MID, 10f);
         boolean fixedAll = true;
         for (Industry industry : market.getIndustries()) {
             if (industry instanceof CoronalSegment) {
@@ -70,7 +70,7 @@ public class CoronalCenter extends BaseIndustry {
             }
         }
         if(fixedAll){
-            tooltip.addPara("Megastrucutre fully functional!", Misc.getPositiveHighlightColor(),10f);
+            tooltip.addPara("Megastructure fully functional!", Misc.getPositiveHighlightColor(),10f);
 
         }
 
