@@ -14,7 +14,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.section
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.BifrostUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.ui.dialog.BifrostLocationData;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
@@ -200,7 +200,7 @@ public class BifrostMega extends GPBaseMegastructure {
     }
 
     @Override
-    public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
+    public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegastructureMenu menu) {
         return new BifrostUI(this, parentPanel, menu);
     }
 }

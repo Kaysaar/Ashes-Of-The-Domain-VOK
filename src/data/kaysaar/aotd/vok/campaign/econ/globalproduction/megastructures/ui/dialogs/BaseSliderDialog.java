@@ -2,21 +2,20 @@ package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.d
 
 
 import ashlib.data.plugins.ui.models.BasePopUpDialog;
-import ashlib.data.plugins.ui.models.ProgressBarComponent;
 import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 
 
 import java.util.List;
 
 public class BaseSliderDialog extends BasePopUpDialog {
     ProgressBarComponentV2 component;
-    BaseMegastrucutreMenu menu;
+    BaseMegastructureMenu menu;
     CustomPanelAPI panelToUpdate;
     CustomPanelAPI panelForTooltip;
     int currentSegment;
@@ -25,7 +24,7 @@ public class BaseSliderDialog extends BasePopUpDialog {
     int minSection;
     float barHeight = 27;
 
-    public BaseSliderDialog(BaseMegastrucutreMenu menu, String headerTitle,int mult,int maxSegments,int currSegment, int minSection) {
+    public BaseSliderDialog(BaseMegastructureMenu menu, String headerTitle, int mult, int maxSegments, int currSegment, int minSection) {
         super(headerTitle);
         this.menu = menu;
         this.mult = mult;

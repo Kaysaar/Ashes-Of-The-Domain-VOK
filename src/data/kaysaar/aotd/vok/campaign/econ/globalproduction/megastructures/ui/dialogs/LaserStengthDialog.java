@@ -5,13 +5,13 @@ import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.OpticCommandNexus;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastrucutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 
 import java.awt.*;
 
 public class LaserStengthDialog extends BaseSliderDialog{
     public OpticCommandNexus section;
-    public LaserStengthDialog(BaseMegastrucutreMenu menu, String headerTitle, int mult, int maxSegments, int currSegment, int minSection,OpticCommandNexus section) {
+    public LaserStengthDialog(BaseMegastructureMenu menu, String headerTitle, int mult, int maxSegments, int currSegment, int minSection, OpticCommandNexus section) {
         super(menu, headerTitle, mult, maxSegments, currSegment, minSection);
         this.section = section;
     }
