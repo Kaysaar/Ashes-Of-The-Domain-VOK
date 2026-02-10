@@ -6,7 +6,7 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
-public class ModDropDown extends PopUpUI {
+public class ModDropDown extends InstantPopUpUI {
     AoTDResearchNewPlugin researchUI;
     String currId;
     CustomPanelAPI mainPanel;
