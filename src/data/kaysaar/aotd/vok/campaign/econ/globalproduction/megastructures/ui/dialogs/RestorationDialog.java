@@ -27,7 +27,7 @@ public class RestorationDialog extends BasePopUpDialog {
     @Override
     public void createContentForDialog(TooltipMakerAPI tooltip, float width) {
         tooltip.setParaFont(Fonts.INSIGNIA_LARGE);
-        tooltip.addPara(restoration+" of %s will cost us %s monthly and require a constant flow of the following resources till completion:",2f, Color.ORANGE,sectionToRestore.getSpec().getName(),
+        tooltip.addPara(restoration + " of the %s will monthly cost us %s and require a constant flow of the following resources until completion:",2f, Color.ORANGE,sectionToRestore.getSpec().getName(),
                 Misc.getDGSCredits(sectionToRestore.getSpec().getRenovationCost()));
         tooltip.addSectionHeading(restoration+" Cost", Alignment.MID,10f);
         tooltip.addCustom(GPUIMisc.createResourcePanel(width,40,40,sectionToRestore.getSpec().getGpRestorationCost(),Color.ORANGE),10f);

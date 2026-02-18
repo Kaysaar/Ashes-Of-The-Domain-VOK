@@ -39,7 +39,7 @@ public class BaseMegastuctureIntelPlugin extends BaseIntelPlugin {
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara("New Megastructure  : %s", 5f, Color.ORANGE, data.getName());
+        info.addPara("New Megastructure : %s", 5f, Color.ORANGE, data.getName());
         addGenericButton(info, width, "Access Megastructure Tab", Button_Megastructure);
     }
 

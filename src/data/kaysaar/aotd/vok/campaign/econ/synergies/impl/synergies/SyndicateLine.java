@@ -46,17 +46,17 @@ public class SyndicateLine extends BaseIndustrySynergy {
         float baseValue = 0.1f*efficiency;
         float highLightValue = 0.6f*efficiency;
         int bonus = (int) (3*efficiency);
-        tooltip.addPara("If %s is present: Increase production of organs, produced in %s by %s",3f,base,highLight,"Cryosanctum","Cryosanctum",bonus+"");
-        tooltip.addPara("If %s is present: Increase market income multiplier by %s",3f,base,highLight,"Light Industry", AoTDMisc.getPercentageString(baseValue));
-        tooltip.addPara("If %s is present: Increase market income multiplier by %s",3f,base,highLight,"Neurochemical Laboratory", AoTDMisc.getPercentageString(highLightValue));
+        tooltip.addPara("If %s is present: Increases the production of organs from %s by %s.",3f,base,highLight,"Cryosanctum","Cryosanctum",bonus+"");
+        tooltip.addPara("If %s is present: Increases market income multiplier by %s.",3f,base,highLight,"Light Industry", AoTDMisc.getPercentageString(baseValue));
+        tooltip.addPara("If %s is present: Increases market income multiplier by %s.",3f,base,highLight,"Neurochemical Laboratory", AoTDMisc.getPercentageString(highLightValue));
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s must be functional!",3f,base,highLight,
+        tooltip.addPara("Requires %s to be present.",3f,base,highLight,
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.UNDERWORLD));
-        tooltip.addPara("Market must have Free Port!",base,3f);
-        tooltip.addPara("One of following must be functional:",Misc.getTooltipTitleAndLightHighlightColor(),3f);
+        tooltip.addPara("Market must be a Free Port.",base,3f);
+        tooltip.addPara("Requires one of the following:",Misc.getTooltipTitleAndLightHighlightColor(),3f);
         for (String string : getIndustriesForSynergy(market)) {
             if(string.equals(AoTDIndustries.UNDERWORLD))continue;
             Color high = Misc.getNegativeHighlightColor();

@@ -40,14 +40,14 @@ public class BioSynthesis extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
         int bonus = (int) (2*efficiency);
-        tooltip.addPara("Increase supply of %s, produced in %s by %s",3f,base,highLight,"Food","Subsidised Farming",bonus+"");
-        tooltip.addPara("Increase %s demand for %s by %s",3f, Misc.getNegativeHighlightColor(),highLight,"Recreational Drugs","Subsidised Farming","1");
+        tooltip.addPara("Increases the production of %s from %s by %s.",3f,base,highLight,"Food","Subsidised Farming",bonus+"");
+        tooltip.addPara("Increases the demand for %s for %s by %s.",3f, Misc.getNegativeHighlightColor(),highLight,"Recreational Drugs","Subsidised Farming","1");
 
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s must be functional!",3f,base,highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.",3f,base,highLight,
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.SUBSIDISED_FARMING),
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.NEUROCHEMICAL_LABORATORY));
 

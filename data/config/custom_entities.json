@@ -83,7 +83,7 @@
 	},
 	"nid_shipyards":{
 		"defaultName":"Nid Shipyards", # used if name=null in addCustomEntity()
-		"nameInText":"You shouldn't be seeing this!",
+		"nameInText":"Nid Shipyards",
 		"aOrAn":"an",
 		"defaultRadius":1, # used if radius<0 in addCustomEntity()
 		"interactionImage":"graphics/illustrations/dead_gate.jpg",
@@ -97,7 +97,7 @@
 		"useLightColor":true,
 		"showInCampaign":true,
 		"showIconOnMap":true,
-		"showNameOnMap":true,
+		"showNameOnMap":false,
 		"scaleNameWithZoom":false,
 		"scaleIconWithZoom":true,
 		"nameColor":[70,200,255,255],
@@ -111,7 +111,7 @@
 	},
 	"nid_shipyards_damaged":{
 		"defaultName":"Nid Shipyards", # used if name=null in addCustomEntity()
-		"nameInText":"You shouldn't be seeing this!",
+		"nameInText":"Nid Shipyards",
 		"aOrAn":"an",
 		"defaultRadius":1, # used if radius<0 in addCustomEntity()
 		"interactionImage":"graphics/illustrations/dead_gate.jpg",
@@ -125,7 +125,7 @@
 		"useLightColor":true,
 		"showInCampaign":true,
 		"showIconOnMap":true,
-		"showNameOnMap":true,
+		"showNameOnMap":false,
 		"scaleNameWithZoom":false,
 		"scaleIconWithZoom":true,
 		"nameColor":[70,200,255,255],

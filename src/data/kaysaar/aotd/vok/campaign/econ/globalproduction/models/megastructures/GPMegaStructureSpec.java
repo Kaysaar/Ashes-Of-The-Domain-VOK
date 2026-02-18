@@ -144,7 +144,7 @@ public class GPMegaStructureSpec {
                 String image = jsonObject.getString("image");
                 for (String sectionId : sectionIds) {
                     if(GPManager.getInstance().getMegaSectionSpecFromList(sectionId)==null){
-                        throw new RuntimeException("Section spec of id "+sectionId+" not found, check  aotd_megastructure_sections.csv ");
+                        throw new RuntimeException("Section spec of id "+sectionId+" not found, check aotd_megastructure_sections.csv ");
                     }
                 }
                 GPMegaStructureSpec spec = new GPMegaStructureSpec();

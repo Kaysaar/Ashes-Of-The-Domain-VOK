@@ -22,9 +22,9 @@ public class WormholeGenerator extends GPMegaStructureSection {
     @Override
     public void createTooltipForBenefits(TooltipMakerAPI tooltip) {
         super.createTooltipForBenefits(tooltip);
-        tooltip.addPara("Allow to increase effective range of Hypershunt up to %s, as long as upkeep of purified transplutonics is met.",5f,Color.ORANGE,"70 LY");
+        tooltip.addPara("Allows increasing the effective range of the Hypershunt up to %s, as long as the upkeep of purified transplutonics is met.",5f,Color.ORANGE,"70 LY");
         tooltip.addSectionHeading("Effective range",Alignment.MID,5f);
-        tooltip.addPara("Current effective range is %s LY which costs us %s purified transplutonics",5f,Color.ORANGE,""+getCalculatedRange(),""+getPurifiedTransplutonicsPerRange());
+        tooltip.addPara("Current effective range is %s LY which costs us %s purified transplutonics.",5f,Color.ORANGE,""+getCalculatedRange(),""+getPurifiedTransplutonicsPerRange());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class WormholeGenerator extends GPMegaStructureSection {
     public void createTooltipForButtons(TooltipMakerAPI tooltip, String buttonId) {
         super.createTooltipForButtons(tooltip, buttonId);
         if(buttonId.equals("adjustRange")) {
-            tooltip.addPara("Once restored we can adjust effective range of hypershunt",5f);
+            tooltip.addPara("Once restored we can adjust the effective range of the Hypershunt",5f);
         }
     }
 }

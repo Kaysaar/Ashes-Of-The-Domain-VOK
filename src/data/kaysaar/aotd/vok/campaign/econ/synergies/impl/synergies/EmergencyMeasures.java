@@ -44,22 +44,22 @@ public class EmergencyMeasures extends BaseIndustrySynergy {
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.WAYSTATION);
         ArrayList<String> fuelIds = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.HEAVYINDUSTRY);
-        tooltip.addPara("%s and %s are required to be functional", 3f, base, highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
                 getIndustriesListed(ids,market),
                 getIndustriesListed(fuelIds,market));
         if(market.isUseStockpilesForShortages()){
-            tooltip.addPara("\"Use Stockpiles During Shortage\" must be active", Misc.getPositiveHighlightColor(),3f);
+            tooltip.addPara("\"Use Stockpiles During Shortage\" must be active.", Misc.getPositiveHighlightColor(),3f);
         }
         else{
-            tooltip.addPara("\"Use Stockpiles During Shortage\" must be active",Misc.getNegativeHighlightColor(),3f);
+            tooltip.addPara("\"Use Stockpiles During Shortage\" must be active.",Misc.getNegativeHighlightColor(),3f);
         }
 
     }
 
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
-        tooltip.addPara("Every day for each disrupted industry consumes %s %s and %s %s from stockpiles",3f,base,highLight,"5","Supplies","2","Heavy Machinery");
-        tooltip.addPara("As long as there are enough %s and %s in stockpile : Reduce disrupted time for all structures on market by %s",3f,base,highLight,"Supplies","Heavy Machinery","66%");
+        tooltip.addPara("Disrupted industries consume %s %s and %s %s from the stockpiles every day.",3f,base,highLight,"5","Supplies","2","Heavy Machinery");
+        tooltip.addPara("As long as there are %s and %s in the stockpile, reduces industry disruption time by %s.",3f,base,highLight,"Supplies","Heavy Machinery","66%");
 
     }
 

@@ -39,13 +39,13 @@ public class UAFAddictivePastries extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
         float bonus =  0.15f*efficiency;
-        tooltip.addPara("Increase market income by %s and increase stability by %s",3f,base,highLight, AoTDMisc.getPercentageString(bonus),"1");
+        tooltip.addPara("Increases market income by %s, increases stability by %s.",3f,base,highLight, AoTDMisc.getPercentageString(bonus),"1");
 
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s must be functional!",3f,base,highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.",3f,base,highLight,
                 IndustrySynergiesMisc.getIndustryName(market,"uaf_bakery_branch"),
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.NEUROCHEMICAL_LABORATORY));
 

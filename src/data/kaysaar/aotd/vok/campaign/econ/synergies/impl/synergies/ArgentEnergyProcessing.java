@@ -42,15 +42,15 @@ public class ArgentEnergyProcessing extends BaseIndustrySynergy {
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.EXOMATTER_PROCESSING);
         ArrayList<String> fuelIds = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.FUELPROD);
-        tooltip.addPara("%s and %s are required to be functional", 3f, base, highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
                 getIndustriesListed(ids,market),
                 getIndustriesListed(fuelIds,market));
     }
 
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
-        tooltip.addPara("Increase production of %s by %s",3f,base,highLight,IndustrySynergiesMisc.getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.FUELPROD),market),2+"");
-        tooltip.addPara("Heavily increases Pather interest", Misc.getNegativeHighlightColor(), 3f);
+        tooltip.addPara("Increases the production of %s by %s.",3f,base,highLight,IndustrySynergiesMisc.getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.FUELPROD),market),2+"");
+        tooltip.addPara("Heavily increases Pather interest.", Misc.getNegativeHighlightColor(), 3f);
     }
 
     @Override

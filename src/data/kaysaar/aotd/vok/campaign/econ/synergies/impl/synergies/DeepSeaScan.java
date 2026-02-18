@@ -50,14 +50,14 @@ public class DeepSeaScan extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
         float baseVal = 0.3f * efficiency;
-        tooltip.addPara("Slows down degradation of ruins by %s", 3f, base, highLight, AoTDMisc.getPercentageString(baseVal));
+        tooltip.addPara("Slows down the rate at which Techmining depletes ruins by %s.", 3f, base, highLight, AoTDMisc.getPercentageString(baseVal));
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE);
         ArrayList<String> fuelIds = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.TECHMINING);
-        tooltip.addPara("%s and %s are required to be functional", 3f, base, highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
                 getIndustriesListed(ids, market),
                 getIndustriesListed(fuelIds, market));
     }

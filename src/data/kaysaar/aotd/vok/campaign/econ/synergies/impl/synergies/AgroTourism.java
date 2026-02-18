@@ -35,7 +35,7 @@ public class AgroTourism extends BaseIndustrySynergy {
 
     @Override
     public String getSynergyName() {
-        return "Agro Tourism";
+        return "Agro-Tourism";
     }
 
     @Override
@@ -47,12 +47,12 @@ public class AgroTourism extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency,MarketAPI market) {
         float baseValue = 0.3f * efficiency;
-        tooltip.addPara("Increase income of %s by %s", 3f, base, highLight, Global.getSettings().getIndustrySpec(AoTDIndustries.RESORT).getName(), AoTDMisc.getPercentageString(baseValue));
+        tooltip.addPara("Increases the income of %s by %s.", 3f, base, highLight, Global.getSettings().getIndustrySpec(AoTDIndustries.RESORT).getName(), AoTDMisc.getPercentageString(baseValue));
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
-        tooltip.addPara("%s and %s are required to be functional",3f,base,highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.",3f,base,highLight,
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.RESORT),
                 IndustrySynergiesMisc.getIndustryName(market,AoTDIndustries.ARTISANAL_FARMING));
     }

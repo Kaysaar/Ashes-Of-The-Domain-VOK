@@ -50,7 +50,7 @@ public class BifrostMega extends GPBaseMegastructure {
     @Override
     public void createAdditionalInfoForMega(TooltipMakerAPI tooltip) {
         tooltip.addSectionHeading("Current effects", Alignment.MID, 5f);
-        tooltip.addPara("Accessibility bonus to all colonies with Bifrost gate in system : %s", 5f, Color.ORANGE, Misc.getRoundedValue(getTotalAccessibility() * 100) + "%");
+        tooltip.addPara("Accessibility bonus to all colonies with a Bifrost gate in system : %s", 5f, Color.ORANGE, Misc.getRoundedValue(getTotalAccessibility() * 100) + "%");
     }
 
     public static SectorEntityToken spawnGate(MarketAPI market) {

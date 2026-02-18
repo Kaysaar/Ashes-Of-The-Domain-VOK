@@ -97,12 +97,12 @@ public class OpticCommandNexus extends GPMegaStructureSection {
             if (HypershuntMegastructure.isWithinReceiverSystem(this.getMega().getEntityTiedTo())) {
                 percent = 100;
             }
-            tooltip.addPara("We can adjust the strength of laser for optimal excavation of resources, currently we are able to use %s laser potential", 5f, Color.ORANGE, percent + "%");
+            tooltip.addPara("We can adjust the strength of the laser for optimal excavation of resources. Currently we are able to use %s of the laser's potential.", 5f, Color.ORANGE, percent + "%");
             if (!GPManager.getInstance().getMegastructuresBasedOnClass(HypershuntMegastructure.class).isEmpty()) {
                 if (HypershuntMegastructure.isWithinReceiverSystem(this.getMega().getEntityTiedTo())) {
-                    tooltip.addPara("Due to connection with hypershunt we are now able to access full potential of this structure", 5f);
+                    tooltip.addPara("Due to the connection with a hypershunt we are now able to access the full potential of this structure.", 5f);
                 } else {
-                    tooltip.addPara("With hypershunt under our control, it is advised to built Hypershunt Receiver in this system and extend range of hypershunt to this system, thanks to it, we will be able to unlock full potential of this megastructure.", 5f);
+                    tooltip.addPara("With a hypershunt under our control, it is advised to build a Hypershunt Receiver in this system to make use of its vast energy. Thanks to this, we will be able to unlock the full potential of this megastructure.", 5f);
 
                 }
             }
@@ -118,9 +118,9 @@ public class OpticCommandNexus extends GPMegaStructureSection {
     @Override
     public void createTooltipForBenefits(TooltipMakerAPI tooltip) {
         super.createTooltipForBenefits(tooltip);
-        tooltip.addPara("Allows extraction of ores and transplutonic ores by using laser", 5f);
+        tooltip.addPara("Allows the extraction of ores and transplutonic ores by using the laser", 5f);
         if (HypershuntMegastructure.isWithinReceiverSystem(this.getMegastructureTiedTo().getEntityTiedTo())) {
-            tooltip.addPara("Due to connection with Hypershunt, power of laser is doubled, together with extraction yield", Misc.getPositiveHighlightColor(), 5f);
+            tooltip.addPara("Due to the connection with a Hypershunt, the power of the laser and the extraction yield are both doubled.", Misc.getPositiveHighlightColor(), 5f);
         }
         if (isRestored) {
             int amount = 30;
