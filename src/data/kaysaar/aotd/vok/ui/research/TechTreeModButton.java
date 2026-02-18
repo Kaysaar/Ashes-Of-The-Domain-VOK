@@ -4,6 +4,7 @@ import ashlib.data.plugins.ui.models.InstantPopUpUI;
 import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.Fonts;
+import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.ui.basecomps.ButtonComponent;
 import data.kaysaar.aotd.vok.ui.basecomps.ImageViewer;
@@ -28,7 +29,7 @@ public class TechTreeModButton extends ButtonComponent {
         this.plugin = referencePlugin;
         this.modID = modID;
         this.modList = modList;
-        component = (new LabelComponent(Fonts.ORBITRON_20AA, 20, Global.getSettings().getModManager().getModSpec(modID).getName(), Color.cyan, width - 10, height / 3));
+        component = (new LabelComponent(Fonts.ORBITRON_20AA, 20, Global.getSettings().getModManager().getModSpec(modID).getName(), Misc.getButtonTextColor(), width - 10, height / 3));
         addComponent(component, ((width / 2) - (component.getTextWidth() / 2)), (height / 2) - (component.draw.getHeight() / 2));
         viewer = new ImageViewer(height-10,height-20,Global.getSettings().getSpriteName("ui","sortIcon"));
         if(modList==null&& AoTDMainResearchManager.getInstance().getModIDsRepo().size()>1){
@@ -63,7 +64,7 @@ public class TechTreeModButton extends ButtonComponent {
         this.modID = id;
         removeComponent(component);
         component.clearUI();
-        component = (new LabelComponent(Fonts.ORBITRON_20AA, 20, Global.getSettings().getModManager().getModSpec(modID).getName(), Color.cyan, originalWidth - 10, originalHeight / 3));
+        component = (new LabelComponent(Fonts.ORBITRON_20AA, 20, Global.getSettings().getModManager().getModSpec(modID).getName(), Misc.getButtonTextColor(), originalWidth - 10, originalHeight / 3));
         addComponent(component, ((originalWidth / 2) - (component.getTextWidth() / 2)), (originalHeight / 2) - (component.draw.getHeight() / 2));
 
     }
