@@ -32,7 +32,7 @@ public class AoTDRaidListener implements GroundRaidObjectivesListener {
             }
             if(market.getMemory().is("$uaf_novaeria_bp",true)&&market.getFactionId().equals("uaf")){
                 market.getMemory().set("$bp_value","$uaf_novaeria_bp");
-                SpecialProjectBlueprintPluginImpl curr = new SpecialProjectBlueprintPluginImpl(market, AoTDItems.BASE_SHIP_BLUEPRINT,"uaf_novaeria:$uaf_aqq_nova");
+                SpecialProjectBlueprintPluginImpl curr = new SpecialProjectBlueprintPluginImpl(market, AoTDItems.BASE_SHIP_BLUEPRINT,"uaf_supercap_nvi_core:$uaf_aqq_nova");
                 for (GroundRaidObjectivePlugin objective : objectives) {
                     if(objective instanceof SpecialProjectBlueprintPluginImpl){
                         return;

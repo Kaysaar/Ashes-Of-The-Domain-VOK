@@ -8,7 +8,7 @@ import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.BaseMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
@@ -240,10 +240,10 @@ public class GPBaseMegastructure {
     public void unapplySupplyToIndustry(Industry ind){
 
     }
-    //This is UI plugin you wanna create to handle all things in Megastructures tab (for each instance of megastructure) because it is interface extending
+    //This is UI plugin you wanna create to handle all things in Megastructures tab (for each instance of Megastructure) because it is interface extending
     //CustomUIPanelPlugin you should have there all components handled
     //clearUI is always called when switching to different megastructure while initUI initalizes UI
-    public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
+    public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegastructureMenu menu) {
         return new BaseMegastructureMenu(this,parentPanel,menu);
     }
 

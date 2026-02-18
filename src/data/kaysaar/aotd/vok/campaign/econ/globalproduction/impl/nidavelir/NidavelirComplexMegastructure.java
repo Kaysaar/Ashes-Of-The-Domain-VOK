@@ -13,7 +13,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.NidavelirBaseSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.ui.NidavelirUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 
@@ -79,7 +79,7 @@ public class NidavelirComplexMegastructure extends GPBaseMegastructure {
     }
 
     @Override
-    public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
+    public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegastructureMenu menu) {
         return new NidavelirUI(this, parentPanel, menu);
     }
 

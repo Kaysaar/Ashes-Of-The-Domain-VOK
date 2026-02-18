@@ -8,7 +8,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -29,7 +29,7 @@ import static data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectMana
 public class TechnologyCoreUI extends CommandUIPlugin {
     NidavelirMainPanelPlugin customProdPlugin = null;
     AoTDResearchNewPlugin pluginResearch = null;
-    GPMegasturcutreMenu pluginMega = null;
+    GPMegastructureMenu pluginMega = null;
     SpecialProjectUIManager projectUIManager = null;
     boolean pausedMusic = true;
 
@@ -257,7 +257,7 @@ public class TechnologyCoreUI extends CommandUIPlugin {
 
     private void insertNewMegastructuresPanel(ButtonAPI tiedButton) {
         if (pluginMega == null) {
-            pluginMega = new GPMegasturcutreMenu();
+            pluginMega = new GPMegastructureMenu();
             pluginMega.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, pluginMega));
         }
 
