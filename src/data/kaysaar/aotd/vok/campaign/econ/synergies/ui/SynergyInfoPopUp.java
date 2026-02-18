@@ -29,6 +29,7 @@ public class SynergyInfoPopUp extends PopUpUI {
         tooltip.addCustom(history.getMainPanel(),1f);
         mainPanel.getPosition().setSize(panelAPI.getPosition().getWidth(),tooltip.getHeightSoFar());
         mainPanel.addUIElement(tooltip).inTL(-3,0);
+        addTooltip(tooltip);
         return tooltip.getHeightSoFar();
 
 

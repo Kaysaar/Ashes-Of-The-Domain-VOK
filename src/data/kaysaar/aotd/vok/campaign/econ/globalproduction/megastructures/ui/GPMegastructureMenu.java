@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui;
 
+import ashlib.data.plugins.misc.AshMisc;
 import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
@@ -155,7 +156,7 @@ public class GPMegastructureMenu implements CustomUIPanelPlugin, SoundUIManager 
             if(helpButton.isChecked()){
                 helpButton.setChecked(false);
                 HelpPopUpUINid nid = new HelpPopUpUINid(false);
-                AoTDMisc.placePopUpUI(nid,helpButton,700,400);
+                AshMisc.placePopUpUI(nid,helpButton,700,400);
             }
         }
         if(buttonsOfMegastructures!=null){

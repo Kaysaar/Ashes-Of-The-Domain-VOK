@@ -536,7 +536,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
             if(helpButton.isChecked()){
                 helpButton.setChecked(false);
                 HelpPopUpUINid nid = new HelpPopUpUINid(true);
-                AoTDMisc.placePopUpUI(nid,helpButton,700,400);
+                AshMisc.placePopUpUI(nid,helpButton,700,400);
             }
         }
         if(historyButton!=null){
