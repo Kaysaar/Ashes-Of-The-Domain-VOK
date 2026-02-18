@@ -19,6 +19,7 @@ import java.awt.*;
 import java.util.Map;
 
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.placePopUpUI;
+import static data.kaysaar.aotd.vok.misc.AoTDMisc.placeResearchInfoUI;
 
 public class ResearchPanelComponent extends ButtonComponent {
     public ResearchOptionSpec spec;
@@ -117,6 +118,6 @@ public class ResearchPanelComponent extends ButtonComponent {
     public void performActionOnClick(boolean isRightClick) {
         PopUpUI ui = new ResearchInfoUI(AoTDMainResearchManager.getInstance().getManagerForPlayer().getResearchOptionFromRepo(spec.getId()),panel);
         panel.blockButtonsFromHover();
-        placePopUpUI(ui, componentPanel,410,660);
+        placeResearchInfoUI(ui, componentPanel,410,660);
     }
 }

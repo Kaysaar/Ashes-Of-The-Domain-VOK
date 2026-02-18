@@ -327,14 +327,14 @@ public class AoTDMisc {
         CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, ui);
 
         float x = button.getPosition().getX() + button.getPosition().getWidth();
-        float y = Global.getSettings().getScreenHeight()-(button.getPosition().getY() + button.getPosition().getHeight());
+        float y = button.getPosition().getY() + button.getPosition().getHeight();
         if (x + width1 >= Global.getSettings().getScreenWidth()) {
             float diff = x + width1 - Global.getSettings().getScreenWidth();
             x = x - diff - 5;
 
         }
-        if (height1 - y <= 0) {
-            y = Global.getSettings().getScreenHeight()-height1;
+        if (y - height1 <= 0) {
+            y = height1;
         }
         if (y > Global.getSettings().getScreenHeight()) {
             y = Global.getSettings().getScreenHeight() - 10;
@@ -342,6 +342,34 @@ public class AoTDMisc {
 
         ui.init(panelAPI, x, y, false);
     }
+
+    public static void placeResearchInfoUI(PopUpUI ui, UIComponentAPI button, float initWidth, float initHeight) {
+
+        float width1 = initWidth;
+        float height1 = ui.createUIMockup(Global.getSettings().createCustom(initWidth, initHeight, null));
+        CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, ui);
+
+        float x = button.getPosition().getX() + button.getPosition().getWidth();
+        float y = Global.getSettings().getScreenHeight()-(button.getPosition().getY() + button.getPosition().getHeight());
+        if (x + width1 >= Global.getSettings().getScreenWidth()) {
+            float diff = x + width1 - Global.getSettings().getScreenWidth();
+            x = x - diff - 5;
+
+        }
+        if (y + height1 > Global.getSettings().getScreenHeight()) {
+            float v = Global.getSettings().getScreenHeight() - (y + height1);
+            y = y+v;
+        }
+//        if (height1 - y <= 0) {
+//            y = Global.getSettings().getScreenHeight()-height1-50;
+//        }
+        if (y > Global.getSettings().getScreenHeight()) {
+            y = Global.getSettings().getScreenHeight() - 10;
+        }
+
+        ui.init(panelAPI, x, y, false);
+    }
+
     public static void placePopUpUIUnder(PopUpUI ui, UIComponentAPI button, float initWidth, float initHeight) {
 
         float width1 = initWidth;
