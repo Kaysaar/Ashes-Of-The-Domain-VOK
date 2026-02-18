@@ -327,14 +327,14 @@ public class AoTDMisc {
         CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, ui);
 
         float x = button.getPosition().getX() + button.getPosition().getWidth();
-        float y = button.getPosition().getY() + button.getPosition().getHeight();
+        float y = Global.getSettings().getScreenHeight()-(button.getPosition().getY() + button.getPosition().getHeight());
         if (x + width1 >= Global.getSettings().getScreenWidth()) {
             float diff = x + width1 - Global.getSettings().getScreenWidth();
             x = x - diff - 5;
 
         }
-        if (y - height1 <= 0) {
-            y = height1;
+        if (height1 - y <= 0) {
+            y = Global.getSettings().getScreenHeight()-height1;
         }
         if (y > Global.getSettings().getScreenHeight()) {
             y = Global.getSettings().getScreenHeight() - 10;
@@ -350,28 +350,6 @@ public class AoTDMisc {
 
         float x = button.getPosition().getX();
         float y = Global.getSettings().getScreenHeight()-button.getPosition().getY();
-        if (x + width1 >= Global.getSettings().getScreenWidth()) {
-            float diff = x + width1 - Global.getSettings().getScreenWidth();
-            x = x - diff - 5;
-
-        }
-        if (y - height1 <= 0) {
-            y = height1;
-        }
-        if (y > Global.getSettings().getScreenHeight()) {
-            y = Global.getSettings().getScreenHeight() - 10;
-        }
-
-        ui.init(panelAPI, x, y, false);
-    }
-    public static void placePopUpUIUnder(InstantPopUpUI ui, UIComponentAPI button, float initWidth, float initHeight) {
-
-        float width1 = initWidth;
-        float height1 = ui.createUIMockup(Global.getSettings().createCustom(initWidth, initHeight, null));
-        CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, ui);
-
-        float x = button.getPosition().getX();
-        float y = button.getPosition().getY();
         if (x + width1 >= Global.getSettings().getScreenWidth()) {
             float diff = x + width1 - Global.getSettings().getScreenWidth();
             x = x - diff - 5;
