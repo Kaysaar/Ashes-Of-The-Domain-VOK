@@ -14,7 +14,7 @@ import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.PlutoForgeSection;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.ui.PlutoUI;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
 import data.kaysaar.aotd.vok.campaign.econ.industry.BaseMegastructureIndustry;
@@ -42,7 +42,7 @@ public class PlutoMegastructure extends GPBaseMegastructure {
     }
 
     @Override
-    public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
+    public GPIndividualMegastructreMenu createUIPlugin(CustomPanelAPI parentPanel, GPMegastructureMenu menu) {
         return new PlutoUI(this,parentPanel,menu);
     }
 

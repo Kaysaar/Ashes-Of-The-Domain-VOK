@@ -7,7 +7,6 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.scripts.models.BaseFactionTimelineEvent;
 import data.scripts.models.TimelineEventType;
-import org.lazywizard.console.Console;
 
 import java.awt.*;
 
@@ -23,7 +22,6 @@ public class MegastructureClaimEvent extends BaseFactionTimelineEvent {
 
     public MegastructureClaimEvent(String megastructureID, String title, String imageName){
         this.megastructureID = megastructureID;
-//        Console.showMessage("MegastructureClaimEvent - Megastructure ID = "+this.megastructureID);
         this.title = title;
         this.imageName = imageName;
     }

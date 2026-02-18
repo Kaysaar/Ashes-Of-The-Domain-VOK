@@ -6,7 +6,7 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPIndividualMegastructreMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegasturcutreMenu;
+import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegastructureMenu;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.PauseRestoration;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.dialogs.RestorationDialog;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
@@ -22,7 +22,7 @@ public class BaseMegastructureMenu implements GPIndividualMegastructreMenu {
     public CustomPanelAPI parentPanel;
     public CustomPanelAPI mainPanel;
     public  float width,height;
-    public GPMegasturcutreMenu mainMenu;
+    public GPMegastructureMenu mainMenu;
     public LinkedHashMap<String,CustomPanelAPI>panelsOfSections = new LinkedHashMap<>();
     public CustomPanelAPI titlePanel;
     public CustomPanelAPI mainTitlePanel;
@@ -32,7 +32,7 @@ public class BaseMegastructureMenu implements GPIndividualMegastructreMenu {
     public  float offset =0f;
     public float lastY = 0f;
     public float lastYForSection = 0f;
-    public BaseMegastructureMenu(GPBaseMegastructure megastructure, CustomPanelAPI parentPanel, GPMegasturcutreMenu menu) {
+    public BaseMegastructureMenu(GPBaseMegastructure megastructure, CustomPanelAPI parentPanel, GPMegastructureMenu menu) {
         this.megastructureReferedTo = megastructure;
         this.parentPanel = parentPanel;
         this.mainMenu = menu;
