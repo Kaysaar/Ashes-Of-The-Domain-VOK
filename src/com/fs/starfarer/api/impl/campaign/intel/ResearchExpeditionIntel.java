@@ -132,11 +132,11 @@ public class ResearchExpeditionIntel extends BaseIntelPlugin {
         // Create the small description here, you can place images, multiple paragraphs, anything
         info.addImage(factionAPI.getLogo(), width, 96, 5);
         if (counter >= 0) {
-            info.addPara("Strange activity has been recently reported in " + factionAPI.getDisplayName() + ". Their exploration fleets are being mobilized and from what intel we can gather, it seems that a massive exploration fleet is being prepared and it is set to embark in ", 10);
+            info.addPara("Strange activity has recently been reported in " + factionAPI.getDisplayName() + ". Their exploration fleets are being mobilized and from what intel we can gather, it seems that a massive exploration fleet is being prepared that is set to embark in ", 10);
             info.addPara((int) counter + " days.", 10f);
         } else {
             if (launchMarket != null) {
-                info.addPara("Given current intel, expedition has been launched from " + launchMarket.getName(), 10);
+                info.addPara("Given current intel, an expedition has been launched from " + launchMarket.getName(), 10);
             }
             if(!finished){
                 if(!success&&failed){
@@ -150,7 +150,7 @@ public class ResearchExpeditionIntel extends BaseIntelPlugin {
                 }
             }
             if(success){
-                info.addPara("The expedition has been successful and it has boosted faction's technological capabilities.",10f);
+                info.addPara("The expedition has been successful and it has boosted the faction's technological capabilities.",10f);
             }
 
         }

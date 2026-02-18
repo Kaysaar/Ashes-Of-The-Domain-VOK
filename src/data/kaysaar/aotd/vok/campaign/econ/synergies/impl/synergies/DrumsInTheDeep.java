@@ -46,7 +46,7 @@ public class DrumsInTheDeep extends BaseIndustrySynergy {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.RESEARCH_CENTER);
         ArrayList<String> ids2 = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.HEAVYINDUSTRY);
         ArrayList<String> ids3 = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE);
-        tooltip.addPara("%s, %s and %s are required to be functional", 3f, base, highLight,
+        tooltip.addPara("Requires %s, %s and %s on the same planet.", 3f, base, highLight,
                 getIndustriesListed(ids,market),
                 getIndustriesListed(ids2,market),
                 getIndustriesListed(ids3,market));
@@ -57,10 +57,10 @@ public class DrumsInTheDeep extends BaseIndustrySynergy {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.RESEARCH_CENTER);
         ArrayList<String> ids2 = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.HEAVYINDUSTRY);
         ArrayList<String> ids3 = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE);
-        tooltip.addPara("Reduce upkeep of %s and %s by %s",3f,base,highLight,getIndustriesListed(ids,market),getIndustriesListed(ids2,market), AoTDMisc.getPercentageString(0.1f*efficiency));
-        tooltip.addPara("Increase upkeep of %s by %s",3f,Misc.getNegativeHighlightColor(),highLight,getIndustriesListed(ids3,market),AoTDMisc.getPercentageString(0.15f*efficiency));
-        tooltip.addPara("Reduce Pather interest", Misc.getPositiveHighlightColor(),3f);
-        tooltip.addPara("Reduce accessibility by %s",3f,Misc.getNegativeHighlightColor(),highLight,AoTDMisc.getPercentageString(0.1f*efficiency));
+        tooltip.addPara("Reduces the upkeep of %s and %s by %s.",3f,base,highLight,getIndustriesListed(ids,market),getIndustriesListed(ids2,market), AoTDMisc.getPercentageString(0.1f*efficiency));
+        tooltip.addPara("Increases the upkeep of %s by %s.",3f,Misc.getNegativeHighlightColor(),highLight,getIndustriesListed(ids3,market),AoTDMisc.getPercentageString(0.15f*efficiency));
+        tooltip.addPara("Reduces Pather interest.", Misc.getPositiveHighlightColor(),3f);
+        tooltip.addPara("Reduces accessibility by %s.",3f,Misc.getNegativeHighlightColor(),highLight,AoTDMisc.getPercentageString(0.1f*efficiency));
 
     }
 

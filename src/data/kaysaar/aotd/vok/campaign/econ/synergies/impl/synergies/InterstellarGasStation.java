@@ -49,8 +49,8 @@ public class InterstellarGasStation extends BaseIndustrySynergy {
     @Override
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency,MarketAPI market) {
         float baseVal = 0.1f*efficiency;
-        tooltip.addPara("Lowers %s demand in %s by %s",3f,base,highLight,"Fuel",   getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.WAYSTATION),market),"1");
-        tooltip.addPara("Increase accessibility by %s",3f,base,highLight, AoTDMisc.getPercentageString(baseVal));
+        tooltip.addPara("Decreases %s demand for %s by %s.",3f,base,highLight,"Fuel",   getIndustriesListed(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.WAYSTATION),market),"1");
+        tooltip.addPara("Increases accessibility by %s.",3f,base,highLight, AoTDMisc.getPercentageString(baseVal));
     }
 
 
@@ -59,14 +59,14 @@ public class InterstellarGasStation extends BaseIndustrySynergy {
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.WAYSTATION);
         ArrayList<String> fuelIds = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.FUELPROD);
-        tooltip.addPara("%s and %s are required to be functional", 3f, base, highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
                 getIndustriesListed(ids,market),
                 getIndustriesListed(fuelIds,market));
         if(market.hasCondition(Conditions.EXTREME_WEATHER)) {
-            tooltip.addPara("No Extreme Weather", Misc.getNegativeHighlightColor(),3f);
+            tooltip.addPara("Planet must not have Extreme Weather.", Misc.getNegativeHighlightColor(),3f);
         }
         else{
-            tooltip.addPara("No Extreme Weather",Misc.getPositiveHighlightColor(),3f);
+            tooltip.addPara("Planet must not have Extreme Weather.",Misc.getPositiveHighlightColor(),3f);
         }
 
     }

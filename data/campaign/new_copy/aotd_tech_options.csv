@@ -23,7 +23,7 @@ aotd_tech_advanced_mining_equipment,Advanced Mining Equipment,2,60,aotd_tech_exo
 aotd_tech_alloy_production,Alloy Production Matrix,2,60,aotd_tech_nanometal,research_databank:6,alloy1,"aotd_crystalizator:industry
 aotd_enrichment_facility:industry",0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_orbital_assembly,Orbital Assembly,2,90,aotd_tech_hull_manufacture,research_databank:12,heavyindustry2,orbitalworks:industry,1,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_consumer,Consumer Goods Production,2,45,aotd_tech_nanometal,research_databank:12,minorindustry2,consumerindustry:industry,0,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_consumer,Consumer Goods Production,2,45,aotd_tech_nanometal,research_databank:12,minorindustry2,aotd_commercial_manu:industry,0,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_drug_production,Drugs Amplification,2,25,aotd_tech_consumer,research_databank:8,minorindustry3,aotd_druglight:industry,1,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_lobster,Lobster Breeding Program,2,45,"aotd_tech_improved_fertilizers,aotd_tech_aquatic_agriculture","research_databank:10,lobster:500",lobsters_farming,Grants ability for Fishing Harbour to produce lobsters:modifier,1,7,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_patrol_drills,Patrol Drills,2,25,aotd_tech_hull_manufacture,research_databank:8,military1,Allow to claim megastructures:modifier,0,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -35,7 +35,7 @@ aotd_tech_station_3,Space Siege theory,2,25,aotd_tech_reinforced_defences,resear
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_streamlined_production,Streamlined Production,3,60,"aotd_tech_alloy_production,aotd_tech_orbital_assembly",research_databank:16,alloy2,"supplyheavy:industry
+aotd_tech_streamlined_production,Streamlined Production,3,60,"aotd_tech_alloy_production,aotd_tech_orbital_assembly",research_databank:16,alloy2,"aotd_civilian_heavy_prod:industry
 
 orbitalheavy:industry",0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

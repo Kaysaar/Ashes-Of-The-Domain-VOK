@@ -33,14 +33,14 @@ public class BlackSiteIntel extends BaseIntelPlugin{
 
         // Title of the intel
         info.addPara(getName(), title,0f);
-        info.addPara("Our scientists have achieved a major breakthrough—but its very nature risks drawing unwanted attention. There is solution proposed for this problem...", 5f);
+        info.addPara("Our scientists have achieved a major breakthrough — but its very nature risks drawing unwanted attention. A solution has been proposed for this problem...", 5f);
 
 
     }
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara("Our scientists have achieved a major breakthrough—but its very nature risks drawing unwanted attention. R&D advises setting up a Black Site before pursuing this or any related endeavors.", 5f);
+        info.addPara("Our scientists have achieved a major breakthrough — but its very nature risks drawing unwanted attention. R&D advises setting up a Black Site before pursuing this or any related endeavors.", 5f);
         info.addPara("Unlocked new upgrade for %s : %s",3f,new Color[]{Color.ORANGE,Global.getSector().getFaction(Factions.PIRATES).getBaseUIColor()},"Research Facility", "Black Site");
     }
 

@@ -39,6 +39,7 @@ public class ColonyDevelopmentDialog extends BasePopUpDialog {
         nameComponent =new ColonyDevelopmentNameComponent(550,30);
         tooltip.addCustom(nameComponent.getMainPanel(),0f);
         mainPanel.addUIElement(tooltip).inTL(10.0F, mainPanel.getPosition().getHeight() - 40.0F);
+        addTooltip(tooltip);
     }
 
     @Override

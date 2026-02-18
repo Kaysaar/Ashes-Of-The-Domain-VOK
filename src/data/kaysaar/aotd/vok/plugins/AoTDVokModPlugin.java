@@ -2,14 +2,12 @@ package data.kaysaar.aotd.vok.plugins;
 
 
 import ashlib.data.plugins.misc.AshMisc;
-import com.fs.graphics.Sprite;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
-import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -317,10 +315,10 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         aoTDSpecialItemRepo.putInfoForSpecialItems();
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.SOIL_NANITES, "aotd_subsidised_farming");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.MANTLE_BORE, "aotd_mining_megaplex");
-        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.BIOFACTORY_EMBRYO, "aotd_light_production,consumerindustry");
-        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,aotd_macro_industrial_complex");
-        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,aotd_macro_industrial_complex");
-        aoTDSpecialItemRepo.setSpecialItemNewIndustries(AoTDItems.TENEBRIUM_NANOFORGE, "supplyheavy,weaponheavy,triheavy,hegeheavy,aotd_macro_industrial_complex");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.BIOFACTORY_EMBRYO, "aotd_light_production,aotd_commercial_manu");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.PRISTINE_NANOFORGE, "aotd_civilian_heavy_prod,weaponheavy,triheavy,hegeheavy,aotd_macro_industrial_complex");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CORRUPTED_NANOFORGE, "aotd_civilian_heavy_prod,weaponheavy,triheavy,hegeheavy,aotd_macro_industrial_complex");
+        aoTDSpecialItemRepo.setSpecialItemNewIndustries(AoTDItems.TENEBRIUM_NANOFORGE, "aotd_civilian_heavy_prod,weaponheavy,triheavy,hegeheavy,aotd_macro_industrial_complex");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(Items.CATALYTIC_CORE, "aotd_crystalizator,aotd_enrichment_facility");
         aoTDSpecialItemRepo.setSpecialItemNewIndustries(AoTDItems.TENEBRIUM_CATALYTIC_CORE, "aotd_crystalizator,aotd_enrichment_facility");
 
@@ -341,7 +339,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker", "aotd_subsidised_farming");
-            aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_dimen_nanoforge", "supplyheavy,weaponheavy,triheavy,hegeheavy,aotd_macro_industrial_complex");
+            aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_dimen_nanoforge", "aotd_civilian_heavy_prod,weaponheavy,triheavy,hegeheavy,aotd_macro_industrial_complex");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_modular_purifier", "aotd_crystalizator,aotd_enrichment_facility");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_servosync_pump", "aotd_fuel_refinery");
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_garrison_transmitter", AoTDIndustries.TERMINUS);
@@ -381,7 +379,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         map.put("lightindustry", new Vector2f(1,1));
         map.put("aotd_hightech_industry", new Vector2f(0,2));
         map.put("aotd_druglight", new Vector2f(1,2));
-        map.put("consumerindustry", new Vector2f(2,2));
+        map.put("aotd_commercial_manu", new Vector2f(2,2));
         path.setIndustryCoordinates(map);
         UpgradePathManager.getInstance().addNewCustomPath(path,"aotd_light_production");
 
@@ -450,7 +448,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         map = new LinkedHashMap<>();
         map.put("heavyindustry", new Vector2f(2,0));
         map.put("orbitalworks", new Vector2f(1,1));
-        map.put("supplyheavy", new Vector2f(3,1));
+        map.put("aotd_civilian_heavy_prod", new Vector2f(3,1));
         map.put("triheavy",new Vector2f(2,2));
         map.put("hegeheavy",new Vector2f(0,2));
         map.put("aotd_macro_industrial_complex",new Vector2f(3,2));
@@ -721,14 +719,14 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         TimelineListenerManager manager = TimelineListenerManager.getInstance();
         GPManager.getInstance().getMegaStructureSpecs().stream().filter(x -> !x.hasTag("ignore_timeline")).forEach(
                 x -> {
-                    manager.addNewListener(new MiscEventListener(AoTDMemFlags.MEGASTRUCUTRE_FLAG_DISCOVERY,
+                    manager.addNewListener(new MiscEventListener(AoTDMemFlags.MEGASTRUCTURE_FLAG_DISCOVERY,
                             new MegastructureClaimEvent(x.getMegastructureID(), x.getName(), Global.getSettings().getSpriteName("megastructureImage", x.getImageForMegastructure()))));
-                    manager.addNewListener(new MiscEventListener(AoTDMemFlags.MEGASTRUCUTRE_FLAG_RESTORE, new MegastructureRestoredEvent(x.getMegastructureID(), x.getName(), Global.getSettings().getSpriteName("megastructureImage", x.getImageForMegastructure()))));
+                    manager.addNewListener(new MiscEventListener(AoTDMemFlags.MEGASTRUCTURE_FLAG_RESTORE, new MegastructureRestoredEvent(x.getMegastructureID(), x.getName(), Global.getSettings().getSpriteName("megastructureImage", x.getImageForMegastructure()))));
                     ;
                 }
         );
         BlackSiteProjectManager.getInstance().getProjects().values().forEach(x -> manager.addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_PROJECT_EVENT, new SpecialProjectCompletionEvent(x.getProjectSpec().getId()))));
-        TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.MEGASTRUCUTRE_FLAG_DISCOVERY, new BifrostNetworkEstablished()));
+        TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.MEGASTRUCTURE_FLAG_DISCOVERY, new BifrostNetworkEstablished()));
         TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDSopMemFlags.FIRST_ITEM, new HyperdimensionalProcessorEvent()));
         TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_TECH_EVENT, new StreamlinedProductionResearch()));
         TimelineListenerManager.getInstance().addNewListener(new MiscEventListener(AoTDMemFlags.RESEARCH_TECH_EVENT, new MacroIndustrialComplexResearch()));

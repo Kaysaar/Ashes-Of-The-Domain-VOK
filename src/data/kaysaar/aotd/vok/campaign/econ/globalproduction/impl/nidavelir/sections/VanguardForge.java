@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections;
 
+import com.fs.starfarer.api.impl.campaign.aotd_entities.PlutoMiningStation;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
@@ -34,8 +35,9 @@ public class VanguardForge  extends NidavelirBaseSection {
 
         int manpowerAssigned = getEffectiveManpowerForEffects();
         int points = (int) (manpowerAssigned * effectivePercent * getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));
-        tooltip.addPara("Production speed of %s is increased by %s", 3f, Color.ORANGE, "frigates and destroyers", points + "%");
-        tooltip.addPara("All produced ships have increased amount of available S-mods by %S",3f,Color.ORANGE,"1");
+        tooltip.addPara("- Production speed of %s is increased by %s", 3f, Color.ORANGE, "frigates and destroyers", points + "%");
+        tooltip.addPara("- All produced ships have increased amount of available S-mods by %S",3f,Color.ORANGE,"1");
+        if (isRestored) tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerAssigned));
 
     }
 
@@ -45,7 +47,6 @@ public class VanguardForge  extends NidavelirBaseSection {
         int manpowerAssigned = getEffectiveManpowerForEffects();
         int points = (int) (manpowerAssigned * effectivePercent *getPenaltyFromManager(NidavelirComplexMegastructure.commoditiesDemand.keySet().toArray(new String[0])));;
         tooltip.addPara("For each assigned manpower point to section:",5f);
-        tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerAssigned));
          createTooltipForMainSection(tooltip);
     }
     @Override
@@ -55,10 +56,11 @@ public class VanguardForge  extends NidavelirBaseSection {
 
     @Override
     public void printMenu(TooltipMakerAPI tooltip, int manpowerToBeAssigned, boolean wantToAutomate) {
-        if (!wantToAutomate) {
-            tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerToBeAssigned));
-        }
-        tooltip.addPara("Increase speed of building frigates and destroyers by %s",3f,Color.ORANGE,(effectivePercent *manpowerToBeAssigned)+"%");
-        tooltip.addPara("All produced ships have increased amount of available S-mods by %S",3f,Color.ORANGE,"1");
+        tooltip.addPara("- Increase speed of building frigates and destroyers by %s",3f,Color.ORANGE,(effectivePercent *manpowerToBeAssigned)+"%");
+        tooltip.addPara("- All produced ships have increased amount of available S-mods by %S",3f,Color.ORANGE,"1");
+//        if (!wantToAutomate) {
+//            tooltip.addPara("Currently assigned manpower to this structure %s",10f, Color.ORANGE,""+(manpowerToBeAssigned));
+//        }
+
     }
 }

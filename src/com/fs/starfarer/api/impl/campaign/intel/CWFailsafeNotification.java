@@ -31,7 +31,7 @@ public class CWFailsafeNotification extends BaseMegastuctureIntelPlugin {
 
         // Title of the intel
         info.addPara(getName(), title, 0f);
-        info.addPara("Critical failure of Wormhole Stabilizer", 5f);
+        info.addPara("Critical failure of the Wormhole Stabilizer", 5f);
         info.addPara("Reduced range of hypershunt to %s in %s", 5f,Color.ORANGE,"10 LY",data.getEntityTiedTo().getStarSystem().getBaseName());
 
     }

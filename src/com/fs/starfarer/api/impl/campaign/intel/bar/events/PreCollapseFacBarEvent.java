@@ -69,12 +69,12 @@ public class PreCollapseFacBarEvent extends BaseBarEvent {
 
     protected String getPrompt() {
         return "A veteran spacer with some ornamental pre-Collapse relics scattered like ancient wards all over their clothes sits at a table. " + person.getHeOrShe() +
-                "is casually scrolling through an odd looking TriPad that looks more dated than anything else in this bar and its construction is sturdy enough to outlive everyone in the bar as well.";
+                "is casually scrolling through an odd looking TriPad that looks more dated than anything else in this bar, and the bar's construction is sturdy enough to outlive everyone within.";
     }
 
 
     protected String getOptionText() {
-        return "Sit next to scavenger with an old TriPad and listen to "
+        return "Sit next to the scavenger with an old TriPad and listen to "
                 + person.getHisOrHer() + " stories about pre-Collapse relics.";
     }
 

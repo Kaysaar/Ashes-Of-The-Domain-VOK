@@ -39,9 +39,9 @@ public class PlutoForgeSection extends GPMegaStructureSection {
     }
     @Override
     public void addButtonsToList(LinkedHashMap<String, ButtonData> currentButtons) {
-        ButtonData data1 = new ButtonData("Assign ore", this, this.isRestored,new Color(119, 119, 119,255), "assignO", new OnHoverButtonTooltip(this, "assignO"), "assignO", this.getSpec().getSectionID());
+        ButtonData data1 = new ButtonData("Assign ore", this, this.isRestored,new Color(255,227,210,255), "assignO", new OnHoverButtonTooltip(this, "assignO"), "assignO", this.getSpec().getSectionID());
         currentButtons.put("assignO", data1);
-         data1 = new ButtonData("Assign transplutonic ore", this, this.isRestored,new Color(252, 245, 240,255), "assignTO", new OnHoverButtonTooltip(this, "assignTO"), "assignTO", this.getSpec().getSectionID());
+         data1 = new ButtonData("Assign transplutonic ore", this, this.isRestored,new Color(206,227,253,255), "assignTO", new OnHoverButtonTooltip(this, "assignTO"), "assignTO", this.getSpec().getSectionID());
         currentButtons.put("assignTO", data1);
     }
     @Override
@@ -52,7 +52,7 @@ public class PlutoForgeSection extends GPMegaStructureSection {
     @Override
     public void createTooltipForButtonsAfterRest(TooltipMakerAPI tooltip, String buttonId) {
         if(buttonId.equals("assignO")||buttonId.equals("assignTO")) {
-            tooltip.addPara("With resources excavated by using station's powerful laser, we can refine them, to different resources",5f);
+            tooltip.addPara("With resources excavated by using the station's powerful laser, we can refine them into different resources.",5f);
         }
     }
     public int getAmountOfResources(String key){

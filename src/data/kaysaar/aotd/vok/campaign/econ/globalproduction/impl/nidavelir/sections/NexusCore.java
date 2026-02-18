@@ -37,11 +37,11 @@ public class NexusCore extends GPMegaStructureSection {
     @Override
     public void createTooltipForBenefits(TooltipMakerAPI tooltip) {
         super.createTooltipForBenefits(tooltip);
-        tooltip.addPara("Allows restoration of rest sections",Misc.getTooltipTitleAndLightHighlightColor(),5f);
-        tooltip.addPara("Colony with Nidavelir complex will start producing ship hulls, weapons, advanced components and domain heavy machinery",Misc.getTooltipTitleAndLightHighlightColor(),5f);
-        tooltip.addPara("Each section restored will provide colony with ability to produce more",Misc.getTooltipTitleAndLightHighlightColor(),5f);
-        tooltip.addPara("Once entire megastructure is restored : ",5f);
-        tooltip.addPara("Increase fleet size on market by %s",5f, Color.ORANGE,"400%");
+        tooltip.addPara("- Allows restoration of the other sections.",Misc.getTooltipTitleAndLightHighlightColor(),5f);
+        tooltip.addPara("- The colony with the Nidavelir Complex will start producing ship hulls, weapons, advanced components and domain heavy machinery.",Misc.getTooltipTitleAndLightHighlightColor(),5f);
+        tooltip.addPara("- Each restored section will provide the colony with the ability to produce more.",Misc.getTooltipTitleAndLightHighlightColor(),5f);
+        tooltip.addPara("Once the entire megastructure is restored : ",5f);
+        tooltip.addPara("- Increase fleet size on the market by %s",5f, Color.ORANGE,"400%");
     }
 
     @Override

@@ -30,7 +30,7 @@ public class MegastructureSectionCompletedIntel extends BaseIntelPlugin{
 
         // Title of the intel
         info.addPara(getName(), title,0f);
-        info.addPara("Megastructure section has been restored!",5f);
+        info.addPara("A Megastructure section has been restored!",5f);
         info.addPara("Received a story point!", Misc.getPositiveHighlightColor(),5f);
 
     }

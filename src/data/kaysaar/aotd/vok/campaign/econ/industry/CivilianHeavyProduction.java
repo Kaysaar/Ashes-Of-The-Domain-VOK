@@ -9,7 +9,7 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.util.ArrayList;
 
-public class CivilianHI extends AoTDHeavyIndustry {
+public class CivilianHeavyProduction extends AoTDHeavyIndustry {
 
     @Override
     public void apply() {

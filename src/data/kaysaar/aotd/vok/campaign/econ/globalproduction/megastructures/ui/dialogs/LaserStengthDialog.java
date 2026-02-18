@@ -18,7 +18,7 @@ public class LaserStengthDialog extends BaseSliderDialog{
     @Override
     public void populateTooltipTop(TooltipMakerAPI tooltip, int effectiveSegment) {
         tooltip.setParaFont(Fonts.ORBITRON_16);
-        tooltip.addPara("Laser Strength %s",5f, Color.ORANGE,(currentSegment*mult)+"%");
+        tooltip.addPara("Laser Strength : %s",5f, Color.ORANGE,(currentSegment*mult)+"%");
         tooltip.addPara("Additional Upkeep : %s", 5f, Color.ORANGE, Misc.getDGSCredits(OpticCommandNexus.upkeepMulter * currentSegment));
         tooltip.addPara("Supply units of %s and %s : %s",5f, Color.ORANGE,"ore","transplutonic ore",(currentSegment*5)+"");
     }
@@ -37,10 +37,10 @@ public class LaserStengthDialog extends BaseSliderDialog{
     public void populateTooltipBelow(TooltipMakerAPI tooltip, int effectiveSegment) {
         tooltip.setParaFont(Fonts.ORBITRON_12);
         if(currentSegment==0&&section.isFiringLaser()){
-            tooltip.addPara("Setting to 0% will result in shutdown of laser!",Misc.getTooltipTitleAndLightHighlightColor(),5f);
+            tooltip.addPara("Setting it to 0% will result in the shutdown of the laser!",Misc.getTooltipTitleAndLightHighlightColor(),5f);
         }
         else if(currentSegment!=0&&!section.isFiringLaser()){
-            tooltip.addPara("Laser firing sequence will commence once strength of laser is confirmed",Misc.getPositiveHighlightColor(),5f);
+            tooltip.addPara("Laser firing sequence will commence once the strength of the laser is confirmed",Misc.getPositiveHighlightColor(),5f);
         }
         else{
             tooltip.addPara("Adjusting laser range can help maximize profits",Misc.getTooltipTitleAndLightHighlightColor(),5f);
@@ -51,7 +51,7 @@ public class LaserStengthDialog extends BaseSliderDialog{
 
     public LabelAPI createLabelForBar(TooltipMakerAPI tooltip){
         int percent = currentSegment*mult;
-        return tooltip.addPara("Laser strength %s",5f,Color.RED,percent+"%");
+        return tooltip.addPara("Laser strength : %s",5f,Color.RED,percent+"%");
     }
     @Override
     public void applyConfirmScript() {

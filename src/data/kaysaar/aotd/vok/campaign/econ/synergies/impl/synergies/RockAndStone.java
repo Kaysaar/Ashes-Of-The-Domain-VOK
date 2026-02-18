@@ -56,8 +56,8 @@ public class RockAndStone extends BaseIndustrySynergy {
     public void printEffectsImpl(TooltipMakerAPI tooltip, Color base, Color highLight, float efficiency, MarketAPI market) {
         float percent = 0.1f*efficiency;
         float bPercent = 0.3f*efficiency;
-        tooltip.addPara("If %s is functional : Increase chance to find rare items by %s  ",3f,base,highLight,"Mining", AoTDMisc.getPercentageString(percent));
-        tooltip.addPara("If %s is functional : Increase chance to find rare items by %s ",3f,base,highLight,"Mining Megaplex", AoTDMisc.getPercentageString(bPercent));
+        tooltip.addPara("If %s is functional: Increases the chance of finding rare items by %s.",3f,base,highLight,"Mining", AoTDMisc.getPercentageString(percent));
+        tooltip.addPara("If %s is functional: Increases the chance of finding rare items by %s.",3f,base,highLight,"Mining Megaplex", AoTDMisc.getPercentageString(bPercent));
     }
 
     @Override
@@ -66,7 +66,7 @@ public class RockAndStone extends BaseIndustrySynergy {
         ids.add(Industries.MINING);
         ids.add(AoTDIndustries.MINING_MEGAPLEX);
 
-        tooltip.addPara("%s and %s are required to be functional! ",3f,base,highLight,
+        tooltip.addPara("Requires %s and %s on the same planet.",3f,base,highLight,
                 IndustrySynergiesMisc.getIndustryName(market,Industries.TECHMINING),
                 IndustrySynergiesMisc.getIndustriesListed(ids,market)
                );

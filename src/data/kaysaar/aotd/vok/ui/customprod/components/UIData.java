@@ -560,7 +560,6 @@ public class UIData {
                 label.getPosition().inTL(beginX + iconSize, (height / 2) - (label.computeTextHeight(label.getText()) / 2));
                 beginX += iconSize + label.computeTextWidth(label.getText()) + padding;
             }
-    ;
 
         }
         panel.addUIElement(tooltip).inTL(-5, 0);

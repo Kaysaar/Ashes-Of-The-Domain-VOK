@@ -1,0 +1,17 @@
+name,id,type,tags,activationDays,activationCooldown,durationDays,deactivationDays,deactivationCooldown,unlockedAtStart,defaultForAIFleet,musicSuppression,uiOn,uiOff,uiLoop,worldOn,worldOff,worldLoop,icon,plugin,ai,desc,sortOrder
+Compound Infusion,aotd_compound_toggle,TOGGLE,codex_unlockable,0.05,,,0.05,,,,,ui_sustained_burn_on,ui_sustained_burn_off,ui_sustained_burn_loop,world_sustained_burn_on,world_sustained_burn_off,,graphics/icons/abilities/aotd_compound_infusion.png,data.kaysaar.aotd.vok.abilities.CompoundActivation,,Infuses Compound with Antimatter fuel.,550
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
