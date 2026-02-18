@@ -5,7 +5,7 @@ import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 
-public class GPHistoryPopUp extends InstantPopUpUI {
+public class GPHistoryPopUp extends PopUpUI {
     CustomPanelAPI mainPanel;
     GpMainHistoryComponent history;
     @Override
