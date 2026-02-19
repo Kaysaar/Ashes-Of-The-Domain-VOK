@@ -126,6 +126,7 @@
 			"dmg_type_other":"graphics/ui/icons/damagetype_other.png",
 						"question":"graphics/ui/more_info.png"
 		},
+
 		"ui":{
 			"aotd_text_glow":"graphics/ui/buttons/text_glow.png",
 			"aotd_holder":"graphics/ui/holder.png",
@@ -136,6 +137,7 @@
 			"aotd_shadowlance":"graphics/icons/hud/aotd_shadowlance_icon.png",
 			"aotd_gungnirIcon":"graphics/icons/hud/Gungnir_icon.png"
 		},
+
 		"rendering":{
             "GlitchSquare":"graphics/fx/solid_square.png",
 			"aotd_pluto_general_glow":"graphics/fx/aotd_pluto_general_glow.png",
@@ -151,14 +153,14 @@
 			"aotd_planet_glow0":"graphics/fx/aotd_planet_glow0.png",
 			"aotd_planet_glow1":"graphics/fx/aotd_planet_glow1.png",
 			"aotd_planet_glow2":"graphics/fx/aotd_planet_glow2.png"
-
-
 		},
+
 		"fx": {#for magictrails
 			"aotd_gungnir_trail1":"graphics/fx/aotd_gungnir_core_trail.png",
 			"aotd_gungnir_trail2":"graphics/fx/aotd_gungnir_star_trail.png",
 			"aotd_gungnir_trail3":"graphics/fx/aotd_gungnir_stripes_trail.png"
 		},
+
 		"megastructures":{
             "hypershunt":"graphics/icons/coronal_shunt.png",
 			"nidavelir":"graphics/icons/nidavelir.png",
@@ -166,26 +168,28 @@
 			"pluto":"graphics/icons/aotd_pluto_mining_station.png"
 			
 		},
+
 		"aotd_icons":{
             "fleet_ai":"graphics/icons/fleet_ai.png",
 			"fleet_merc":"graphics/icons/fleet_merc.png",
 			"compound_info":"graphics/icons/smoll_icon/comp_smol.png"
 		},
+
 		"sectionImage":{
-            "WormholeGenerator":"graphics/icons/megastructures/coronal_receiver.png",
-			"CoronalCollector":"graphics/icons/megastructures/plasma_shield_generator.png",
+			"WormholeGenerator":"graphics/icons/megastructures/aotd_coronal_wormhole.jpg",
+			"CoronalCollector":"graphics/icons/megastructures/aotd_coronal_collector.jpg",
 			"AegisSystem":"graphics/icons/megastructures/coronal_port.png",
 			"NexusCore":"graphics/icons/megastructures/nexus_core_merged.png",
 			"VanguardForge":"graphics/icons/megastructures/vanguard_forge.png",
-			"BulwarkFoundry":"graphics/icons/megastructures/bulawrk_foundry.png",
+			"BulwarkFoundry":"graphics/icons/megastructures/bulwark_foundry.png",
 			"EterniumCore":"graphics/icons/megastructures/nid_1.png",
 			"SentinelCore":"graphics/icons/megastructures/nid_5.png",
 			"BifrostGate":"graphics/icons/megastructures/bifrost.png",
-			"OpticCommandNexus":"graphics/icons/megastructures/optic_comand_nexus.png",
-			"PurificationCore":"graphics/icons/megastructures/purification_core.png",
-			"FusionForge":"graphics/icons/megastructures/fusion_forge.png"
-		}
-		,
+			"OpticCommandNexus":"graphics/icons/megastructures/aotd_optic_command_nexus.jpg",
+			"PurificationCore":"graphics/icons/megastructures/aotd_purification_core.jpg",
+			"FusionForge":"graphics/icons/megastructures/aotd_fusion_forge.jpg"
+		},
+
 		"megastructureImage":{
             "hypershunt":"graphics/illustrations/coronal_tap.jpg",
 			"nidavelir":"graphics/illustrations/nidavelir.png",
