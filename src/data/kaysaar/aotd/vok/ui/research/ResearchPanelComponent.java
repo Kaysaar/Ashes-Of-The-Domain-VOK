@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui.research;
 
+import ashlib.data.plugins.misc.AshMisc;
 import ashlib.data.plugins.ui.models.PopUpUI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.Alignment;
@@ -118,6 +119,6 @@ public class ResearchPanelComponent extends ButtonComponent {
     public void performActionOnClick(boolean isRightClick) {
         PopUpUI ui = new ResearchInfoUI(AoTDMainResearchManager.getInstance().getManagerForPlayer().getResearchOptionFromRepo(spec.getId()),panel);
         panel.blockButtonsFromHover();
-        placeResearchInfoUI(ui, componentPanel,410,660);
+        AshMisc.placePopUpUI(ui, componentPanel,410,660);
     }
 }

@@ -81,6 +81,7 @@ public class AoTDMisc {
     }
     public static NidavelirComplexMegastructure getNidavelir(){
        StarSystemAPI system = Global.getSector().getStarSystem(Global.getSector().getPlayerMemoryWithoutUpdate().getString("$aotd_mega_system_id_aotd_nidavelir"));
+       if(system==null)return null;
        PlanetAPI planet  = system.getPlanets().stream().filter(x->x.hasCondition("aotd_nidavelir_complex")).findFirst().orElse(null);
 
        if(planet == null) return null;
