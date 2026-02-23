@@ -2,7 +2,7 @@
   <artifact type="jar" name="AodResearch">
     <output-path>$PROJECT_DIR$/../Ashes of  The Domain- Vaults of Knowledge/jars</output-path>
     <root id="archive" name="Vok.jar">
-      <element id="module-output" name="Ashes-of-The-Domain-Research" />
+      <element id="module-output" name="AoTDToolboxTheory" />
     </root>
   </artifact>
 </component>
