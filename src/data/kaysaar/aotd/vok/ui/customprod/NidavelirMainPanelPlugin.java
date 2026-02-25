@@ -553,7 +553,7 @@ public class NidavelirMainPanelPlugin implements CustomUIPanelPlugin, SoundUIMan
             if(gatheringPoint.isChecked()){
                 gatheringPoint.setChecked(false);
                 GatheringPointDialog dialogGather = new GatheringPointDialog("Choose gathering point",this);
-                BasePopUpDialog.popUpDialog(dialogGather,400,400);
+                AshMisc.initPopUpDialog(dialogGather,400,400);
             }
         }
 //        for (ButtonAPI coreUITab : coreUITabs) {
