@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.ui;
 
+import ashlib.data.plugins.misc.AshMisc;
 import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
@@ -24,15 +25,11 @@ public class NidavelirUI extends BaseMegastructureMenu {
         if(data.getCustomCommand().contains("assignManpower")){
             NidavelirComplexMegastructure mega = (NidavelirComplexMegastructure) megastructureReferedTo;
             BasePopUpDialog dialog = new ManpowerManagementDialog("Manpower Management",(NidavelirBaseSection) data.getCustomData(),this,mega.getRemainingManpowerPoints());
-            CustomPanelAPI panelAPI = Global.getSettings().createCustom(700,440,dialog);
-            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()-(panelAPI.getPosition().getHeight()/2),true);
+            AshMisc.initPopUpDialog(dialog,700,440);
         }
         if(data.getCustomCommand().contains("automateSection")){
             BasePopUpDialog dialog = new AutomationDialog("Section Automation",(NidavelirBaseSection) data.getCustomData(),this);
-            CustomPanelAPI panelAPI = Global.getSettings().createCustom(720,390,dialog);
-            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()+(panelAPI.getPosition().getHeight()/2),true);
+            AshMisc.initPopUpDialog(dialog,720,390);
         }
     }
 }

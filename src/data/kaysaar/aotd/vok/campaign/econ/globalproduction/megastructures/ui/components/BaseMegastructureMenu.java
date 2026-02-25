@@ -160,38 +160,17 @@ public class BaseMegastructureMenu implements GPIndividualMegastructreMenu {
                     if(AoTDMisc.isStringValid(buttonData.getCustomCommand())){
                         if(buttonData.getCustomCommand().contains("restore")){
                             BasePopUpDialog dialog = new RestorationDialog((GPMegaStructureSection) buttonData.getCustomData(),this,"Megastructure "+((GPMegaStructureSection) buttonData.getCustomData()).getRestorationStringForDialog(), ((GPMegaStructureSection) buttonData.getCustomData()).getRestorationStringForDialog());
-//                            CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,360,dialog);
-//                            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-//                            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()-(panelAPI.getPosition().getHeight()/2),true);
                             AshMisc.initPopUpDialog(dialog,800,360);
                         }
                         if(buttonData.getCustomCommand().contains("pauseRestore")){
                             BasePopUpDialog dialog = new PauseRestoration((GPMegaStructureSection) buttonData.getCustomData(),this,null,((GPMegaStructureSection) buttonData.getCustomData()).getContentForPauseRestoration());
-//                            CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,200,dialog);
-//                            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-//                            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()-(panelAPI.getPosition().getHeight()/2),true);
-                            AshMisc.initPopUpDialog(dialog,800,200);
+                            AshMisc.initPopUpDialog(dialog,800,200);;
                         }
                         if(buttonData.getCustomCommand().contains("moreInfo")){
                             OtherInfoPopUp dialog = new OtherInfoPopUp((GPMegaStructureSection) buttonData.getCustomData());
-                            float width1 = 500;
-                            float height1 = dialog.createUIMockup(Global.getSettings().createCustom(width1, 200, null));
-                            CustomPanelAPI panelAPI = Global.getSettings().createCustom(width1, height1, dialog);
-                            float x = button.getPosition().getX()-(width1/4);
-                            float y = Global.getSettings().getScreenHeight() - button.getPosition().getY();
-                            if (x + width1 >= Global.getSettings().getScreenWidth()) {
-                                float diff = x + width1 - Global.getSettings().getScreenWidth();
-                                x = x - diff - 5;
+                            AshMisc.placePopUpUI(dialog,button,500,200);
 
-                            }
-                            if (y - height1 <= 0) {
-                                y = height1;
-                            }
-                            if (y+height1 > Global.getSettings().getScreenHeight()) {
-                                y = Global.getSettings().getScreenHeight() - height1;
-                            }
 
-                            dialog.init(panelAPI, x, y, false);
 
                         }
                         buttonHasBeenPressed(buttonData);

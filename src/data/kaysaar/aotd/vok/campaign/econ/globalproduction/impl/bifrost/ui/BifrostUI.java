@@ -91,11 +91,7 @@ public class BifrostUI extends BaseMegastructureMenu {
                 title = "Gate activation";
             }
             BasePopUpDialog dialog = new BifrostGateActivationDialog(title,section,this);
-            CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,200,dialog);
-            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()-(panelAPI.getPosition().getHeight()/2),true);
-//            AshMisc.initPopUpDialog(new BifrostGateActivationDialog(title,section,this),800,200);
-
+            AshMisc.initPopUpDialog(dialog,800,200);
         }
     }
 
@@ -105,10 +101,7 @@ public class BifrostUI extends BaseMegastructureMenu {
         if (addGate != null && addGate.isChecked()) {
             addGate.setChecked(false);
             BifrostStarSystemSelectorDialog dialog = new BifrostStarSystemSelectorDialog("Choose system to build Bifrost Gate", this);
-//            CustomPanelAPI panelAPI = Global.getSettings().createCustom(800, 420, dialog);
-//            UIPanelAPI panelAPI1 = ProductionUtil.getCoreUI();
-//            dialog.init(panelAPI, panelAPI1.getPosition().getCenterX() - (panelAPI.getPosition().getWidth() / 2), panelAPI1.getPosition().getCenterY() - (panelAPI.getPosition().getHeight() / 2), true);
-            AshMisc.initPopUpDialog(dialog,800, 420);
+            AshMisc.initPopUpDialog(dialog,800,420);
         }
 
     }
