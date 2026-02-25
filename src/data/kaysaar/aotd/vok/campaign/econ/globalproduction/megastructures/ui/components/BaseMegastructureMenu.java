@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components;
 
+import ashlib.data.plugins.misc.AshMisc;
 import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.input.InputEventAPI;
@@ -159,15 +160,17 @@ public class BaseMegastructureMenu implements GPIndividualMegastructreMenu {
                     if(AoTDMisc.isStringValid(buttonData.getCustomCommand())){
                         if(buttonData.getCustomCommand().contains("restore")){
                             BasePopUpDialog dialog = new RestorationDialog((GPMegaStructureSection) buttonData.getCustomData(),this,"Megastructure "+((GPMegaStructureSection) buttonData.getCustomData()).getRestorationStringForDialog(), ((GPMegaStructureSection) buttonData.getCustomData()).getRestorationStringForDialog());
-                            CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,360,dialog);
-                            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-                            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()-(panelAPI.getPosition().getHeight()/2),true);
+//                            CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,360,dialog);
+//                            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
+//                            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()-(panelAPI.getPosition().getHeight()/2),true);
+                            AshMisc.initPopUpDialog(dialog,800,360);
                         }
                         if(buttonData.getCustomCommand().contains("pauseRestore")){
                             BasePopUpDialog dialog = new PauseRestoration((GPMegaStructureSection) buttonData.getCustomData(),this,null,((GPMegaStructureSection) buttonData.getCustomData()).getContentForPauseRestoration());
-                            CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,200,dialog);
-                            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
-                            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()-(panelAPI.getPosition().getHeight()/2),true);
+//                            CustomPanelAPI panelAPI = Global.getSettings().createCustom(800,200,dialog);
+//                            UIPanelAPI panelAPI1  = ProductionUtil.getCoreUI();
+//                            dialog.init(panelAPI,panelAPI1.getPosition().getCenterX()-(panelAPI.getPosition().getWidth()/2),panelAPI1.getPosition().getCenterY()-(panelAPI.getPosition().getHeight()/2),true);
+                            AshMisc.initPopUpDialog(dialog,800,200);
                         }
                         if(buttonData.getCustomCommand().contains("moreInfo")){
                             OtherInfoPopUp dialog = new OtherInfoPopUp((GPMegaStructureSection) buttonData.getCustomData());
