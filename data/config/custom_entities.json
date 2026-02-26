@@ -74,7 +74,7 @@
 		"iconHeight":24,
 		"sprite":"graphics/stations/aotd_coronal_receiver.png",
 		"spriteWidth":86,
-		"spriteHeight":86,
+		"spriteHeight":136,
 		"customDescriptionId":"aotd_hypershunt_receiver",
 		"interactionImage":"graphics/illustrations/sensor_array.jpg",
 		"tags":["aotd_hypershunt_receiver", "neutrino_high", "objective"],
