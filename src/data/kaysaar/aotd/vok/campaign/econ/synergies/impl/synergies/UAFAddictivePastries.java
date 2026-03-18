@@ -59,7 +59,7 @@ public class UAFAddictivePastries extends BaseIndustrySynergy {
 
     @Override
     public void unapply(MarketAPI market) {
-        market.getIncomeMult().unmodifyFlat(getIdForEffects());
+        market.getIncomeMult().unmodifyPercent(getIdForEffects());
         market.getStability().unmodifyFlat(getIdForEffects());
 
     }
