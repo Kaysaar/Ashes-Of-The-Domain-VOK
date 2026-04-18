@@ -12,6 +12,9 @@ import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.*;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.MegastructureSpecManager;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.CoronalHypershuntMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.models.BaseMegastructureScript;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +30,6 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
         m.setFactionId(Factions.PLAYER);
         dialog.getInteractionTarget().removeTag("salvageable");
         dialog.getInteractionTarget().addTag("station");
-        dialog.getInteractionTarget().getMemory().set("$usable",true);
         Global.getSector().getPlayerFleet().getCargo().removeCommodity(Commodities.CREW,100);
         Global.getSector().getPlayerFleet().getCargo().removeCommodity(Commodities.HEAVY_MACHINERY,1500);
         dialog.getInteractionTarget().setFaction(Factions.PLAYER);
@@ -60,46 +62,39 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
     public  MarketAPI createCoronalColony(SectorAPI sector, String factionId, final SectorEntityToken entity,String command) {
         MarketAPI market;
         if(factionId == null)factionId = Factions.INDEPENDENT;
-        market = Global.getFactory().createMarket(Misc.genUID(), "Coronal Network Center", 3);
+        if(entity.getMarket()==null){
+            market = Global.getFactory().createMarket(Misc.genUID(), "Coronal Network Center", 3);
+            BaseMegastructureScript script = MegastructureSpecManager.getSpecForMegastructure("coronal_hypershunt").getScript();
+            script.trueInit("coronal_hypershunt",entity,market);
+        }
+        else{
+            market = entity.getMarket();
+        }
         market.getMemoryWithoutUpdate().set(MemFlags.STATION_MARKET,true);
-        //market.getMemoryWithoutUpdate().set(MemFlags.FLEET_IGNORED_BY_OTHER_FLEETS,true);
-        market.getMemoryWithoutUpdate().set("$nex_uninvadable",true);
         market.setSurveyLevel(MarketAPI.SurveyLevel.FULL);
         market.setFactionId(factionId);
         market.setSize(2);
+        market.addCondition("aotd_coronal_market_cond");
         market.addTag("aotd_hypershunt");
+        market.getStats().getDynamic().getMod(
+                Stats.MAX_MARKET_SIZE).modifyFlat("aotd_correction",-Misc.getMaxMarketSize(market)+2,"Coronal Hypershunt");
         market.addCondition(Conditions.POPULATION_2);//a few thousand homies in a boat
-        market.addIndustry(Industries.POPULATION);
+        market.addIndustry("aotd_coronal_control");
         market.addIndustry(Industries.MEGAPORT);
         market.getIndustry(Industries.MEGAPORT).setHidden(true);
-        market.addIndustry(AoTDIndustries.TERMINUS);
-        market.getIndustry(AoTDIndustries.TERMINUS).setHidden(true);
-        market.addCondition("aotd_coronal_market_cond");
-        market.addIndustry("coronal_port");
-        market.addIndustry("coronal_drones");
-        market.addIndustry("coronal_wormhole");
-        market.addIndustry("coronal_receiver");
-        market.addIndustry("coronal_defender");
-        market.addIndustry("coronal_shield_generator");
-
+        market.addIndustry("aotd_coronal_wormhole_ind");
+        market.addIndustry("aotd_coronal_collector_ind");
+        if(!market.hasIndustry("starfortress_high")){
+            market.addIndustry("starfortress_high");
+            market.getIndustry("starfortress_high").setHidden(true);
+        }
         market.addSubmarket(Submarkets.SUBMARKET_STORAGE);
-        Industry ind = market.getIndustry(Industries.POPULATION);
-        ind.setHidden(true);
-        market.addIndustry("coronal_network");
         market.getTariff().modifyFlat("default_tariff", market.getFaction().getTariffFraction());
         market.setPrimaryEntity(entity);
         entity.setMarket(market);
         if(command.equals("TascColonizataion")){
-            for (Industry industry : market.getIndustries()) {
-                if(industry instanceof CoronalSegment){
-                    ((CoronalSegment) industry).haveCompletedRestoration=true;
-                }
-
-            }
-            if(!market.hasIndustry("starfortress_high")){
-                market.addIndustry("starfortress_high");
-                market.getIndustry("starfortress_high").setHidden(true);
-            }
+            CoronalHypershuntMegastructure mega = (CoronalHypershuntMegastructure) BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(entity,"coronal_hypershunt");
+            mega.getMegaStructureSections().forEach(x->x.setRestored(true));
         }
 
         entity.addScript(new EveryFrameScript() {
@@ -115,7 +110,7 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
 
             @Override
             public void advance(float amount) {
-                if(Misc.getDistance(Global.getSector().getPlayerFleet().getLocation(),entity.getLocation())<=entity.getRadius()*5.5F){
+                if(Misc.getDistance(Global.getSector().getPlayerFleet().getLocation(),entity.getLocation())<=entity.getRadius()*6.5F){
                     if(Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager()!=null){
                         if(Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare()!=null){
                             Misc.getCoronaFor(entity.getStarSystem().getStar()).getFlareManager().getActiveFlare().arc=1;

@@ -20,17 +20,19 @@ import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.loading.WingRole;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.tot.plugins.AoTDCommodityEconSpecManager;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+import data.kaysaar.aotd.vok.campaign.econ.conditions.NidavelirComplex;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.NidavelirMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.models.BaseMegastructureScript;
+import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchRewardType;
+import data.misc.ProductionUtil;
 import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
@@ -43,9 +45,218 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
-import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
 public class AoTDMisc {
+    public static int getMonthsRemaining(float daysLeft) {
+        if (daysLeft <= 0f) return 0;
+
+        GregorianCalendar cal = (GregorianCalendar) Global.getSector().getClock().getCal().clone();
+
+        int months = 0;
+        float remainingDays = daysLeft;
+
+        while (remainingDays > 0f) {
+            int daysInCurrentMonth = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+            int currentDay = cal.get(GregorianCalendar.DAY_OF_MONTH);
+
+            // How many days are left in this month, including today
+            int daysLeftInMonth = daysInCurrentMonth - currentDay + 1;
+
+            remainingDays -= daysLeftInMonth;
+            months++;
+
+            // Move to first day of next month
+            cal.add(GregorianCalendar.MONTH, 1);
+            cal.set(GregorianCalendar.DAY_OF_MONTH, 1);
+        }
+
+        return Math.max(1,months);
+    }
+    public static NidavelirMegastructure getNidavelirIfOwned(){
+        for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+            if(NidavelirComplex.getComplexCondition(playerMarket)!=null){
+                return (NidavelirMegastructure) BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(playerMarket.getPrimaryEntity(),"aotd_nidavelir");
+            }
+        }
+        return null;
+    }
+    public static LinkedHashMap<String,Integer>getTransformedCommodityMap(LinkedHashMap<String,Integer>map,boolean isDemand,int externalMult){
+        LinkedHashMap<String,Integer>newOne = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            newOne.put(entry.getKey(), AoTDCommodityEconSpecManager.getCargoAmountFromSupplyOrDemand(entry.getValue(),isDemand,entry.getKey())*externalMult);
+        }
+        return newOne;
+    }
+    public static int getMonthsFromNextMonth(float daysLeft) {
+        if (daysLeft <= 0f) return 0;
+
+        GregorianCalendar cal = (GregorianCalendar) Global.getSector().getClock().getCal().clone();
+
+        // Move to first day of NEXT month (skip current month entirely)
+        cal.add(GregorianCalendar.MONTH, 1);
+        cal.set(GregorianCalendar.DAY_OF_MONTH, 1);
+
+        int months = 0;
+        float remainingDays = daysLeft;
+
+        while (remainingDays > 0f) {
+            int daysInMonth = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+
+            remainingDays -= daysInMonth;
+            months++;
+
+            // Move to next month
+            cal.add(GregorianCalendar.MONTH, 1);
+            cal.set(GregorianCalendar.DAY_OF_MONTH, 1);
+        }
+
+        return months;
+    }
+    public static CustomPanelAPI createCostSection(float width, float height, float iconSize, Map<String,Integer> resources,boolean trim) {
+        LinkedHashMap<String, Integer> orderedResources = getOrderedResourceMap(resources);
+        CustomPanelAPI mainPanel = Global.getSettings().createCustom(width, height, null);
+
+        ArrayList<CustomPanelAPI> panels = new ArrayList<>();
+        float separatorX = 3f;
+        float y = 0f;
+
+        orderedResources.forEach((commodityId, amount) ->
+                panels.add(createRowForItem(iconSize, commodityId, amount,trim))
+        );
+
+        CustomPanelAPI centralized = Global.getSettings().createCustom(1, 1, null);
+        mainPanel.addComponent(centralized).inTL(mainPanel.getPosition().getWidth() / 2f, 0);
+
+        float totalWidth = 0f;
+        for (CustomPanelAPI panel : panels) {
+            totalWidth += panel.getPosition().getWidth();
+        }
+        totalWidth += separatorX * (panels.size() - 1);
+
+        float startX = Math.max(0f, (width - totalWidth) * 0.5f);
+
+        float currX = startX;
+        for (CustomPanelAPI panel : panels) {
+            mainPanel.addComponent(panel).inTL(currX, y);
+            currX += panel.getPosition().getWidth() + separatorX;
+        }
+
+        return mainPanel;
+    }
+    public static String formatCompactAmount(int amount) {
+        if (amount < 1000) {
+            return String.valueOf(amount);
+        }
+
+        if (amount < 1_000_000) {
+            return formatWithSuffix(amount / 1000f, "k");
+        }
+
+        return formatWithSuffix(amount / 1_000_000f, "m");
+    }
+    public static String formatWithSuffix(float value, String suffix) {
+        String formatted;
+
+        if (value >= 100f) {
+            formatted = String.valueOf((int) value);
+        } else if (value >= 10f) {
+            formatted = trimTrailingZeros(String.format(java.util.Locale.US, "%.1f", value));
+        } else {
+            formatted = trimTrailingZeros(String.format(java.util.Locale.US, "%.2f", value));
+        }
+
+        return formatted + suffix;
+    }
+
+    public static String trimTrailingZeros(String value) {
+        if (!value.contains(".")) return value;
+
+        while (value.endsWith("0")) {
+            value = value.substring(0, value.length() - 1);
+        }
+        if (value.endsWith(".")) {
+            value = value.substring(0, value.length() - 1);
+        }
+        return value;
+    }
+
+    public static CustomPanelAPI createRowForItem(float iconSize, String commodityId, int amount,boolean trim) {
+        String displayAmount = amount+"";
+        if(trim){
+            formatCompactAmount(amount);
+        }
+
+        if (Global.getSettings().getCommoditySpec(commodityId) != null) {
+            CustomPanelAPI main = Global.getSettings().createCustom(iconSize * 3, iconSize, null);
+            ashlib.data.plugins.ui.models.resizable.ImageViewer viewer = new ashlib.data.plugins.ui.models.resizable.ImageViewer(iconSize, iconSize, Global.getSettings().getCommoditySpec(commodityId).getIconName());
+            main.addComponent(viewer.getComponentPanel()).inTL(0, 0);
+
+            String toHighlight = displayAmount;
+            LabelAPI label = Global.getSettings().createLabel(toHighlight, Fonts.DEFAULT_SMALL);
+            label.setHighlight(toHighlight);
+            label.setHighlightColor(Color.ORANGE);
+            label.getPosition().setSize(label.computeTextWidth(label.getText()), label.computeTextHeight(label.getText()));
+
+            float newWidth = iconSize + 2 + label.getPosition().getWidth();
+            main.getPosition().setSize(newWidth, main.getPosition().getHeight());
+            main.addComponent((UIComponentAPI) label).rightOfMid(viewer.getComponentPanel(), 2);
+
+            return main;
+        } else {
+            CustomPanelAPI main = Global.getSettings().createCustom(iconSize * 3, iconSize, null);
+            ashlib.data.plugins.ui.models.resizable.ImageViewer viewer =  new ashlib.data.plugins.ui.models.resizable.ImageViewer(iconSize, iconSize, Global.getSettings().getSpecialItemSpec(commodityId).getIconName());
+            main.addComponent(viewer.getComponentPanel()).inTL(0, 0);
+
+            String toHighlight =   displayAmount;
+            LabelAPI label = Global.getSettings().createLabel(toHighlight, Fonts.DEFAULT_SMALL);
+            label.setHighlight(toHighlight);
+            label.setHighlightColor(Misc.getDesignTypeColor(Global.getSettings().getSpecialItemSpec(commodityId).getManufacturer()));
+            label.getPosition().setSize(label.computeTextWidth(label.getText()), label.computeTextHeight(label.getText()));
+
+            float newWidth = iconSize + 2 + label.getPosition().getWidth();
+            main.getPosition().setSize(newWidth, main.getPosition().getHeight());
+            main.addComponent((UIComponentAPI) label).rightOfMid(viewer.getComponentPanel(), 2);
+
+            return main;
+        }
+    }
+    public static LinkedHashMap<String, Integer> getOrderedResourceMap(Map<String, Integer> input) {
+        LinkedHashMap<String, Integer> ordered = new LinkedHashMap<>();
+        if (input == null || input.isEmpty()) return ordered;
+
+        // First: explicitly ordered items
+        for (String orderedId : AoTDProductionSpecManager.orderedItemsForUI) {
+            Integer amount = input.get(orderedId);
+            if (amount != null && amount > 0) {
+                ordered.put(orderedId, amount);
+            }
+        }
+
+        // Then: everything else, stable and predictable
+        input.entrySet().stream()
+                .filter(e -> e.getValue() != null && e.getValue() > 0)
+                .filter(e -> !ordered.containsKey(e.getKey()))
+                .sorted((a, b) -> {
+                    String nameA = getDisplayNameForResource(a.getKey());
+                    String nameB = getDisplayNameForResource(b.getKey());
+                    return nameA.compareToIgnoreCase(nameB);
+                })
+                .forEach(e -> ordered.put(e.getKey(), e.getValue()));
+
+        return ordered;
+    }
+    public static String getDisplayNameForResource(String commodityId) {
+        if (commodityId == null) return "";
+
+        if (Global.getSettings().getCommoditySpec(commodityId) != null) {
+            return Global.getSettings().getCommoditySpec(commodityId).getName();
+        }
+        if (Global.getSettings().getSpecialItemSpec(commodityId) != null) {
+            return Global.getSettings().getSpecialItemSpec(commodityId).getName();
+        }
+
+        return commodityId;
+    }
     @Nullable
     public static String getVaraint(ShipHullSpecAPI allShipHullSpec) {
         String variantId = null;
@@ -76,17 +287,6 @@ public class AoTDMisc {
     public static List<MarketAPI>getPlayerFactionMarkets(){
         return Misc.getPlayerMarkets(true).stream().filter(x -> !x.hasTag("nex_playerOutpost")).toList();
     }
-    public static NidavelirComplexMegastructure getNidavelirIfOwned(){
-        return (NidavelirComplexMegastructure) GPManager.getInstance().getMegastructure("aotd_nidavelir");
-    }
-    public static NidavelirComplexMegastructure getNidavelir(){
-       StarSystemAPI system = Global.getSector().getStarSystem(Global.getSector().getPlayerMemoryWithoutUpdate().getString("$aotd_mega_system_id_aotd_nidavelir"));
-       if(system==null)return null;
-       PlanetAPI planet  = system.getPlanets().stream().filter(x->x.hasCondition("aotd_nidavelir_complex")).findFirst().orElse(null);
-
-       if(planet == null) return null;
-       return (NidavelirComplexMegastructure) planet.getMemoryWithoutUpdate().get(GPBaseMegastructure.memKey);
-    }
     public static List<MarketAPI> retrieveFactionMarkets(FactionAPI faction) {
         ArrayList<MarketAPI> marketsToReturn = new ArrayList<>();
         if (faction.isPlayerFaction()) {
@@ -101,7 +301,31 @@ public class AoTDMisc {
 
         return marketsToReturn;
     }
+    public static String extractManufacturer(String input) {
+        String[] parts = input.split("\\(");
+        StringBuilder result = new StringBuilder(parts[0].trim());
 
+        // List to store extracted sections
+        ArrayList<String> extractedParts = new ArrayList<>();
+
+        // Process all sections inside parentheses
+        for (int i = 1; i < parts.length; i++) {
+            String section = parts[i].replace(")", "").trim();
+            extractedParts.add(section);
+        }
+
+        // Check the last section; remove it if it's purely numeric
+        if (!extractedParts.isEmpty() && extractedParts.get(extractedParts.size() - 1).matches("\\d+")) {
+            extractedParts.remove(extractedParts.size() - 1);
+        }
+
+        // Rebuild the string with valid sections
+        for (String part : extractedParts) {
+            result.append(" (").append(part).append(")");
+        }
+
+        return result.toString();
+    }
     public static boolean doesMarketBelongToFaction(FactionAPI faction, MarketAPI marketAPI) {
         if (marketAPI.getFaction() == null) return false;
         if (checkForQolEnabled() && faction.isPlayerFaction()) {
@@ -123,7 +347,7 @@ public class AoTDMisc {
         CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
         float totalSize = width;
-        float positions = totalSize / (commodities.size() * 4);
+        float positions = totalSize / (12* 4);
         float iconsize = iconSize;
         float topYImage = 0;
         LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
@@ -545,7 +769,89 @@ public class AoTDMisc {
             }
         }
     }
+    public static int eatItems(String id, int amount, String submarketId, List<MarketAPI> affectedMarkets) {
+        if (id == null || amount <= 0 || affectedMarkets == null || affectedMarkets.isEmpty()) {
+            return 0;
+        }
 
+        int numberRemaining = amount;
+        int consumed = 0;
+
+        for (MarketAPI marketAPI : affectedMarkets) {
+            if (marketAPI == null) continue;
+
+            SubmarketAPI subMarket = marketAPI.getSubmarket(submarketId);
+            if (subMarket == null) continue;
+
+            // Commodity
+            if (Global.getSettings().getCommoditySpec(id) != null) {
+                float onMarketFloat = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);
+                int onMarket = (int) onMarketFloat;
+
+                if (onMarket > 0) {
+                    int toRemove = Math.min(numberRemaining, onMarket);
+                    subMarket.getCargo().removeItems(CargoAPI.CargoItemType.RESOURCES, id, toRemove);
+                    numberRemaining -= toRemove;
+                    consumed += toRemove;
+                }
+            }
+
+            if (numberRemaining <= 0) {
+                break;
+            }
+
+            // Special item
+            if (Global.getSettings().getSpecialItemSpec(id) != null) {
+                SpecialItemData specialItemData = new SpecialItemData(id, null);
+                float onMarketFloat = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, specialItemData);
+                int onMarket = (int) onMarketFloat;
+
+                if (onMarket > 0) {
+                    int toRemove = Math.min(numberRemaining, onMarket);
+                    subMarket.getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL, specialItemData, toRemove);
+                    numberRemaining -= toRemove;
+                    consumed += toRemove;
+                }
+            }
+
+            if (numberRemaining <= 0) {
+                break;
+            }
+
+            // Ship hulls
+            try {
+                if (Global.getSettings().getHullSpec(id) != null) {
+                    ArrayList<FleetMemberAPI> toRemove = new ArrayList<>();
+
+                    for (FleetMemberAPI fleetMemberAPI : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
+                        if (fleetMemberAPI.getHullSpec().getHullId().equals(id)) {
+                            toRemove.add(fleetMemberAPI);
+                            if (toRemove.size() >= numberRemaining) {
+                                break;
+                            }
+                        }
+                    }
+
+                    for (FleetMemberAPI fleetMemberAPI : toRemove) {
+                        subMarket.getCargo().getMothballedShips().removeFleetMember(fleetMemberAPI);
+                        numberRemaining--;
+                        consumed++;
+
+                        if (numberRemaining <= 0) {
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+
+            if (numberRemaining <= 0) {
+                break;
+            }
+        }
+
+        return consumed;
+    }
     public static void eatItems(Map.Entry<String, Integer> entry, String submarketId, List<MarketAPI> affectedMarkets) {
         float numberRemaining = entry.getValue();
         for (MarketAPI marketAPI : affectedMarkets) {

@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui.specialprojects;
 
+import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
@@ -8,7 +9,6 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.specialprojects.*;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.HologramViewer;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 
 import java.util.HashMap;
 import java.util.List;

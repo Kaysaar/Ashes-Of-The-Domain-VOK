@@ -1,26 +1,101 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
-import com.fs.starfarer.api.impl.campaign.ids.Stats;
-import com.fs.starfarer.api.util.Misc;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.econ.Industry;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.models.BaseMegastructureScript;
 
-public class NidavelirMegastructureInd extends BaseMegastructureIndustry{
+public class NidavelirMegastructureInd extends BaseIndustry implements MegastructureIndAPI {
     @Override
-    public void applyInMega() {
-        if(megastructure.isFullyRestored()){
-            this.getMarket().getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT)
-                    .modifyFlat(spec.getId(), 4f, Misc.ucFirst(spec.getName().toLowerCase()));
-            market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(getModId(), 2f,"Nidavelir Megastructure");
+    public void init(String id, MarketAPI market) {
+        super.init(id, market);
+    }
 
+    @Override
+    public void apply() {
+        super.apply(true);
+        if(market.getPrimaryEntity()!=null){
+            BaseMegastructureScript script = getMegastructureScript(market.getPrimaryEntity());
+            script.getRestoredSections().forEach(x->x.applySectionOnIndustry(this));
         }
 
     }
 
+
+    @Override
+    public boolean canInstallAICores() {
+        return false;
+    }
     @Override
     public void unapply() {
         super.unapply();
-        this.getMarket().getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT)
-                .unmodifyFlat(spec.getId());
-        market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).unmodifyFlat(getModId());
+        if(market.getPrimaryEntity()!=null){
+            BaseMegastructureScript script = getMegastructureScript(market.getPrimaryEntity());
+            script.getRestoredSections().forEach(x->x.unApplySectionOnIndustry(this));
+        }
     }
 
+    @Override
+    public SectorEntityToken getEntityOfMegastructure(Industry industry) {
+        if(industry.getMarket()!=null){
+            return industry.getMarket().getPrimaryEntity();
+        }
+        return null;
+    }
+
+    @Override
+    public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
+        super.notifyBeingRemoved(mode, forUpgrade);
+        if(market!=null&&market.getPrimaryEntity()!=null){
+            getMegastructureScript(market.getPrimaryEntity()).advance(-1f);
+
+        }
+    }
+
+    @Override
+    public void advance(float amount) {
+        super.advance(amount);
+        if(market!=null&&market.getPrimaryEntity()!=null){
+            getMegastructureScript(market.getPrimaryEntity()).advance(amount);
+
+        }
+    }
+
+    @Override
+    public BaseMegastructureScript getMegastructureScript(SectorEntityToken token) {
+        return BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(token,"aotd_nidavelir");
+    }
+
+    @Override
+    public boolean canShutDown() {
+        return false;
+    }
+
+    @Override
+    public boolean canDowngrade() {
+        return false;
+    }
+
+    @Override
+    public boolean isAvailableToBuild() {
+        return false;
+    }
+
+    @Override
+    public boolean showWhenUnavailable() {
+        return false;
+    }
+
+    @Override
+    public boolean showShutDown() {
+        return false;
+    }
+
+    @Override
+    public boolean canImprove() {
+        return false;
+    }
 }

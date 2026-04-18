@@ -1,29 +1,20 @@
 package data.kaysaar.aotd.vok.campaign.econ.listeners;
 
 
-import ashlib.data.plugins.coreui.CommandTabMemoryManager;
+import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.BaseCustomDialogDelegate;
-import com.fs.starfarer.api.campaign.CoreUITabId;
-import com.fs.starfarer.api.campaign.CustomDialogDelegate;
 import com.fs.starfarer.api.campaign.econ.Industry;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.DialogCreatorUI;
 import com.fs.starfarer.api.campaign.listeners.IndustryOptionProvider;
-import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
-import com.fs.starfarer.api.loading.IndustrySpecAPI;
-import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
-import data.kaysaar.aotd.vok.campaign.econ.industry.BaseMegastructureIndustry;
-import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.CoronalSegment;
+
+import data.kaysaar.aotd.vok.campaign.econ.industry.MegastructureIndAPI;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.dialogs.base.BaseMegastructureTestDialog;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.ui.bifrost.BifrostManagmentDialog;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergySourceAPI;
-import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
-import data.kaysaar.aotd.vok.ui.UpgradeListUI;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,9 +24,7 @@ import java.util.Map;
 
 public class AoTDIndButtonsListener implements IndustryOptionProvider {
     public HashMap<String, ArrayList<String>> upgradeForIndustryRepo = new HashMap<>();
-    public Object AOTD_VOK_UPGRADE = new Object();
-    public Object AOTD_VOK_CANCEL_UPGRADE = new Object();
-    public static Object STELLA = new Object();
+    public static Object BIFROST = new Object();
     public static Object CORONAL = new Object();
     public static Object RESEARCH_CENTER = new Object();
     public static Object MEGA = new Object();
@@ -54,10 +43,17 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
     }
     @Override
     public List<IndustryOptionData> getIndustryOptions(Industry ind) {
-        if (ind instanceof BaseMegastructureIndustry industry) {
+        if (ind instanceof MegastructureIndAPI industry) {
             ArrayList<IndustryOptionData> data = new ArrayList<>();
-            IndustryOptionData data1 = new IndustryOptionData("Manage Megastructure", MEGA, ind, this);
+            IndustryOptionData data1 = new IndustryOptionData(industry.getMegastructureButtonText(ind), MEGA, ind, this);
             data1.color = Color.magenta;
+            data.add(data1);
+            return data;
+        }
+        if(ind.getSpec().getId().equals("aotd_bfc_ind")){
+            ArrayList<IndustryOptionData> data = new ArrayList<>();
+            IndustryOptionData data1 = new IndustryOptionData("Manage Bifrost Network", BIFROST, ind, this);
+            data1.color = Color.cyan;
             data.add(data1);
             return data;
         }
@@ -74,9 +70,13 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
     @Override
     public void optionSelected(IndustryOptionData opt, DialogCreatorUI ui) {
         if (opt.id.equals(MEGA)) {
-            CommandTabMemoryManager.getInstance().setLastCheckedTab("research & production");
-            CommandTabMemoryManager.getInstance().getTabStates().put("research & production","megastructures");
-            Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
+            MegastructureIndAPI api = (MegastructureIndAPI) opt.ind;
+            AshMisc.initPopUpDialog(new BaseMegastructureTestDialog("Manage Megastructure - "+api.getMegastructureScript(opt.ind.getMarket().getPrimaryEntity()).getName(),api.getMegastructureScript(opt.ind.getMarket().getPrimaryEntity()),ui,opt),BaseMegastructureTestDialog.width,BaseMegastructureTestDialog.height+55);
+            Global.getSoundPlayer().playCustomMusic(1, 1, "aotd_mega", true);
+        }
+        if(opt.id.equals(BIFROST)){
+            AshMisc.initPopUpDialog(new BifrostManagmentDialog(ui),BaseMegastructureTestDialog.width,BaseMegastructureTestDialog.height+55);
+            Global.getSoundPlayer().playCustomMusic(1, 1, "aotd_mega", true);
         }
 
     }

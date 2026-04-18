@@ -11,8 +11,9 @@ import static data.kaysaar.aotd.vok.scripts.specialprojects.projects.shroud.Tene
 public class ShroudEnergyUsage extends ShroudBasedProject{
     @Override
     public void createRewardSection(TooltipMakerAPI tooltip, float width) {
-        tooltip.addPara("Gain access to a new industry: Exomatter Processing. Converts Shrouded Substrate into Tenebrium Cells — refined, stable power sources that unlock a new generation of weapons, colony items, and more! On top of that, new hullmods will be unlocked as well!", Misc.getPositiveHighlightColor(), 5f);
-        
+        tooltip.addPara("Gain access to a new industry: Exomatter Processing. Converts Shrouded Substrate into Tenebrium Cells — refined, stable power sources that unlock a new generation of weapons, colony items, and more!", Misc.getPositiveHighlightColor(), 5f);
+        tooltip.addPara("Unlock new hullmods, that utilize Tenebrium Cells.", Misc.getPositiveHighlightColor(), 3f);
+
     }
 
     @Override

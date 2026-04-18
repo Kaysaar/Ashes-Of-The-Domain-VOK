@@ -1,5 +1,6 @@
 package com.fs.starfarer.api.impl.campaign.rulecmd;
 
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.aotd_entities.BiFrostGateEntity;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
@@ -7,10 +8,8 @@ import com.fs.starfarer.api.campaign.listeners.ListenerUtil;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.BifrostMegastructureManager;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.bifrost.BifrostSection;
 
 
 import java.awt.*;
@@ -51,18 +50,30 @@ public class BiFrostCMD extends BaseCommandPlugin {
         if (command.equals("selectDestination")) {
             selectDestination();
         }
+        if(command.equals("doesHaveControlCenter")){
+            return doesHaveControlCenter();
+        }
+        if (command.equals("printReqControlCenter")) {
+            if(!doesHaveControlCenter()){
+                dialog.getTextPanel().addPara("To use this gate %s must be operational",Color.ORANGE,"Bifrost Control Center");
+            }
+
+        }
         return true;
     }
-
-    public static ArrayList<SectorEntityToken>getAllBifrostGates(){
-        ArrayList<GPBaseMegastructure> megastructures = GPManager.getInstance().getMegastructuresBasedOnClass(BifrostMega.class);
-        ArrayList<SectorEntityToken>toReturn = new ArrayList<>();
-        for (GPBaseMegastructure megastructure : megastructures) {
-            BifrostMega mega = (BifrostMega) megastructure;
-            for (BifrostSection section : mega.getSections()) {
-                if(section.getGateTiedTo()==null)continue;
-                toReturn.add(section.getGateTiedTo());
+    public boolean doesHaveControlCenter(){
+        for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+            if(playerMarket.hasIndustry("aotd_bfc_ind")){
+                return true;
             }
+        }
+        return false;
+    }
+    public static ArrayList<SectorEntityToken>getAllBifrostGates(){
+
+        ArrayList<SectorEntityToken>toReturn = new ArrayList<>();
+        for (BifrostSection builtSection : BifrostMegastructureManager.getInstance().getMegastructure().getBuiltSections()) {
+            toReturn.add(builtSection.getGateTiedTo());
         }
 
         return toReturn;
@@ -70,7 +81,7 @@ public class BiFrostCMD extends BaseCommandPlugin {
 
     protected void selectDestination() {
         final ArrayList<SectorEntityToken> gates =
-                new ArrayList<>(getAllBifrostGates());
+                new ArrayList<>();
         gates.remove(entity);
         Iterator<SectorEntityToken>iterator = gates.iterator();
         while (iterator.hasNext()) {

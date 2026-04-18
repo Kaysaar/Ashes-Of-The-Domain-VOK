@@ -4,6 +4,7 @@ import ashlib.data.plugins.info.FighterInfoGenerator;
 import ashlib.data.plugins.info.ShipInfoGenerator;
 import ashlib.data.plugins.info.WeaponInfoGenerator;
 import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
+import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.graphics.SpriteAPI;
@@ -11,13 +12,14 @@ import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.loading.FormationType;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc;
+import data.kaysaar.aotd.tot.scripts.trade.contracts.AoTDTradeContractManager;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.specialprojects.*;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStage;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProjectStageSpec;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.OtherCostData;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
+import data.kaysaar.aotd.vok.scripts.specialprojects.trade.BlackSiteTradeContract;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
@@ -27,9 +29,9 @@ import java.util.*;
 import java.util.List;
 
 public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
-    public class SpecialProjectPointOfInterest {
-        CustomPanelAPI panel;
-        boolean rightDirectionSpin;
+    public static class SpecialProjectPointOfInterest {
+        public CustomPanelAPI panel;
+        public boolean rightDirectionSpin;
         public float angle;
 
         public SpecialProjectPointOfInterest(CustomPanelAPI panel, boolean rightDirectionSpin) {
@@ -130,15 +132,17 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         AoTDSpecialProjectStageSpec spec = stage.getSpec();
         tooltip.addTitle(spec.getName());
 
-        tooltip.addSectionHeading("GP Resource cost", Alignment.MID, 5f);
-        CustomPanelAPI custom = GPUIMisc.createResourcePanelForSmallTooltipCondensed(panelInfoOfStage.getPosition().getWidth() + 40, 20, 20, spec.getGpCost(), new HashMap<>());
-        tooltip.addCustom(custom, 5f);
+        tooltip.addSectionHeading("Total Resource cost", Alignment.MID, 5f);
+        tooltip.addCustom(AoTDMisc.createCostSection(panelInfoOfStage.getPosition().getWidth(), 20, 20, spec.getGpCost(), false), 5f);
+        tooltip.addSectionHeading("Delivered so far ", Alignment.MID, 5f);
+        tooltip.addCustom(AoTDMisc.createCostSection(panelInfoOfStage.getPosition().getWidth(), 20, 20, stage.getDelivered(), false), 5f);
+
+
         tooltip.addSectionHeading("Stage starting cost", Alignment.MID, 5f);
-        if(Global.getSector().getPlayerFleet().getCargo().getCredits().get()>=spec.getCreditCosts()){
-            tooltip.addPara("Credits : %s" , 5f,Color.ORANGE, Misc.getDGSCredits(spec.getCreditCosts()));
-        }
-        else{
-            tooltip.addPara("Credits : %s" , 5f,Misc.getNegativeHighlightColor(), Misc.getDGSCredits(spec.getCreditCosts()));
+        if (Global.getSector().getPlayerFleet().getCargo().getCredits().get() >= spec.getCreditCosts()) {
+            tooltip.addPara("Credits : %s", 5f, Color.ORANGE, Misc.getDGSCredits(spec.getCreditCosts()));
+        } else {
+            tooltip.addPara("Credits : %s", 5f, Misc.getNegativeHighlightColor(), Misc.getDGSCredits(spec.getCreditCosts()));
         }
         for (OtherCostData s : spec.getOtherCosts()) {
             tooltip.addCustom(getItemLabel(s, stage), 5f);
@@ -152,17 +156,16 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
             buttonOfStage.setText("Pause stage");
             buttonOfStage.setCustomData("pause_stage");
 
-        }
-        else if (project.getStage(stage.getSpec().getId()).isPaidForStage()){
+        } else if (project.getStage(stage.getSpec().getId()).isPaidForStage()) {
             buttonOfStage.setText("Resume stage");
 
         }
         buttonOfStage.setEnabled(stage.haveMetCriteriaToStartOrResumeStage());
-        if(stage.isCompleted()||!BlackSiteProjectManager.getInstance().isCurrentOnGoing(project)||!project.canAttemptStage(stage.getSpec().getId())){
+        if (stage.isCompleted() || !BlackSiteProjectManager.getInstance().isCurrentOnGoing(project) || !project.canAttemptStage(stage.getSpec().getId())) {
             buttonOfStage.setEnabled(false);
         }
-        if(!project.canAttemptStage(stage.getSpec().getId())){
-            project.printAdditionalReqForStage(tooltip,stage.getSpec().getId());
+        if (!project.canAttemptStage(stage.getSpec().getId())) {
+            project.printAdditionalReqForStage(tooltip, stage.getSpec().getId());
         }
         label.getPosition().setXAlignOffset(panelInfoOfStage.getPosition().getWidth() / 2 - (label.computeTextWidth(label.getText()) / 2));
         buttonOfStage.getPosition().inTL(5, -buttonOfStage.getPosition().getY() - 20);
@@ -191,11 +194,10 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         spriteToRender2.setSize(50, 50);
         spriteToRender2.setAlphaMult(alphaMult); // Fully opaque for mask write
         spriteToRender2.setColor(new Color(191, 253, 245));
-        if(stage.isCompleted()){
+        if (stage.isCompleted()) {
             spriteToRender2.setColor(Misc.getPositiveHighlightColor());
-        }
-        else{
-            if(project.getCurrentlyAttemptedStages().contains(stage.getSpec().getId())){
+        } else {
+            if (project.getCurrentlyAttemptedStages().contains(stage.getSpec().getId())) {
                 spriteToRender2.setColor(Misc.getDarkHighlightColor());
             }
         }
@@ -303,8 +305,15 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
             if (data.equals("start_stage")) {
                 project.getStage(this.stage.getSpec().getId()).payForStage();
                 project.getCurrentlyAttemptedStages().add(this.stage.getSpec().getId());
+                BlackSiteTradeContract contract = BlackSiteProjectManager.getInstance().getContract();
+                contract.reApplyChanges();
+                if(!AoTDTradeContractManager.getInstance().getActiveContracts().containsKey(contract.getId())){
+                    AoTDTradeContractManager.getInstance().addContract(contract);
+                }
             } else {
+                BlackSiteTradeContract contract = BlackSiteProjectManager.getInstance().getContract();
                 project.getCurrentlyAttemptedStages().remove(this.stage.getSpec().getId());
+                contract.reApplyChanges();
             }
             manager.refreshMarketPanel();
             manager.getCurrProjectShowcase().setNeedsToUpdate(true);

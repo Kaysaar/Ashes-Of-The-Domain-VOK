@@ -39,7 +39,7 @@ public class BiFrostGate extends BaseIndustry {
 
     @Override
     public boolean showWhenUnavailable() {
-        //TODO - implement research later
+
         return false;
     }
 

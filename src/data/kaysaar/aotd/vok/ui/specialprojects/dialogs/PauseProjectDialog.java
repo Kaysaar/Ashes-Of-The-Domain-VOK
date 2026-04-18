@@ -37,6 +37,7 @@ public class PauseProjectDialog extends BasePopUpDialog {
         for (String currentlyAttemptedStage : project.getCurrentlyAttemptedStages()) {
             if(project.getStage(currentlyAttemptedStage).getProgressComputed()!=1){
                 project.getStage(currentlyAttemptedStage).setProgress(0);
+                project.getStage(currentlyAttemptedStage).getDelivered().clear();
             }
         }
         BlackSiteProjectManager.getInstance().setCurrentlyOnGoingProject(null);

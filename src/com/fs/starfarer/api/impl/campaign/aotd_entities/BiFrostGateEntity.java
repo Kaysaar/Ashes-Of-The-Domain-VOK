@@ -7,7 +7,7 @@ import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
 import com.fs.starfarer.api.util.*;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.CoronalHypershuntMegastructure;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -50,7 +50,7 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
 
 
     public void render(CampaignEngineLayers layer, ViewportAPI viewport) {
-        if(scannedGlow==null){
+        if (scannedGlow == null) {
             scannedGlow = Global.getSettings().getSprite("gates", "glow_scanned");
             activeGlow = Global.getSettings().getSprite("gates", "glow_ring_active");
             concentric = Global.getSettings().getSprite("gates", "glow_concentric");
@@ -118,8 +118,8 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
             Vector2f loc = entity.getLocation();
 
 
-            Color scannedGlowColor = new Color(255,200,0,255);
-            Color activeGlowColor = new Color(200,50,255,255);
+            Color scannedGlowColor = new Color(255, 200, 0, 255);
+            Color activeGlowColor = new Color(200, 50, 255, 255);
 
             scannedGlowColor = Color.white;
             activeGlowColor = Color.white;
@@ -135,28 +135,28 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
 
             if (jitterFader != null && jitter != null) {
                 Color c = jitterColor;
-                if (c == null) c = new Color(255,255,255,255);
+                if (c == null) c = new Color(255, 255, 255, 255);
                 baseSprite.setColor(c);
                 baseSprite.setAlphaMult(alphaMult * jitterFader.getBrightness());
                 baseSprite.setAdditiveBlend();
                 jitter.render(baseSprite, loc.x, loc.y, 30f * jitterFader.getBrightness(), 10);
                 baseSprite.renderAtCenter(loc.x, loc.y);
             }
-                activeGlow.setColor(activeGlowColor);
-                //activeGlow.setSize(w * scale, h * scale);
-                activeGlow.setAlphaMult(alphaMult * glowAlpha * glowMod2);
-                activeGlow.setAdditiveBlend();
-                activeGlow.renderAtCenter(loc.x, loc.y);
+            activeGlow.setColor(activeGlowColor);
+            //activeGlow.setSize(w * scale, h * scale);
+            activeGlow.setAlphaMult(alphaMult * glowAlpha * glowMod2);
+            activeGlow.setAdditiveBlend();
+            activeGlow.renderAtCenter(loc.x, loc.y);
 
 
 //			beingUsed = true;
 //			showBeingUsedDur = 10f;
             if (beingUsed) {
-                    activeGlow.setColor(activeGlowColor);
-                    //activeGlow.setSize(w + 20, h + 20);
-                    activeGlow.setAlphaMult(alphaMult * glowAlpha * beingUsedFader.getBrightness() * glowMod2);
-                    activeGlow.setAdditiveBlend();
-                    activeGlow.renderAtCenter(loc.x, loc.y);
+                activeGlow.setColor(activeGlowColor);
+                //activeGlow.setSize(w + 20, h + 20);
+                activeGlow.setAlphaMult(alphaMult * glowAlpha * beingUsedFader.getBrightness() * glowMod2);
+                activeGlow.setAdditiveBlend();
+                activeGlow.renderAtCenter(loc.x, loc.y);
 
                 glowAlpha *= beingUsedFader.getBrightness();
                 float angle;
@@ -198,13 +198,15 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
                 this.entity.getMemory().set("$used", false);
             }
         }
-        if(HypershuntMegastructure.isWithinReceiverSystem(this.entity)){
+
+
+        if(CoronalHypershuntMegastructure.isWithinReceiverSystem(this.entity)){
             this.entity.getMemory().set("$cooldown", 0);
             this.entity.getMemory().set("$used", false);
             this.entity.getMemory().set("$connected",true);
         }
-        else{
-            this.entity.getMemory().set("$connected",false);
+        else {
+            this.entity.getMemory().set("$connected", false);
         }
         if (showBeingUsedDur > 0 || !beingUsedFader.isIdle()) {
             showBeingUsedDur -= amount;

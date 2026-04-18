@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui.research;
 
+import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
@@ -12,7 +13,6 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import data.ui.basecomps.ExtendUIPanelPlugin;
 
 import java.awt.*;

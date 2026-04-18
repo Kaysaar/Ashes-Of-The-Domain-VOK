@@ -1,6 +1,5 @@
 package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPSpec;
 
 public class ProjectReward {
 
@@ -26,7 +25,5 @@ public class ProjectReward {
         this.amount = amount;
     }
 
-    public static ProjectRewardType translateGPTypeToRewardType(GPSpec.ProductionType type) {
-        return ProjectRewardType.valueOf(type.toString());
-    }
+
 }

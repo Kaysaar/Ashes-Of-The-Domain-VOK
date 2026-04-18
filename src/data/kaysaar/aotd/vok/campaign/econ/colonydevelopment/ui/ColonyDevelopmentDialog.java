@@ -14,7 +14,7 @@ public class ColonyDevelopmentDialog extends BasePopUpDialog {
     UIPanelAPI panelRemoved;
     MarketAPI market;
     int returnValue = 1;
-    ColonyDevelopmentNameComponent nameComponent;
+    ColonyDevelopmentNameComponent listComponent;
     ColonyDevelopmentMainContent content;
     public ColonyDevelopmentDialog(String headerTitle,UIPanelAPI surveyPanel,MarketAPI market) {
         super(headerTitle);
@@ -36,8 +36,8 @@ public class ColonyDevelopmentDialog extends BasePopUpDialog {
         super.createConfirmAndCancelSection(mainPanel);
         float totalWidth =400f;
         TooltipMakerAPI tooltip = mainPanel.createUIElement(totalWidth, 25.0F, false);
-        nameComponent =new ColonyDevelopmentNameComponent(550,30);
-        tooltip.addCustom(nameComponent.getMainPanel(),0f);
+        listComponent =new ColonyDevelopmentNameComponent(550,30);
+        tooltip.addCustom(listComponent.getMainPanel(),0f);
         mainPanel.addUIElement(tooltip).inTL(10.0F, mainPanel.getPosition().getHeight() - 40.0F);
         addTooltip(tooltip);
     }
@@ -45,7 +45,7 @@ public class ColonyDevelopmentDialog extends BasePopUpDialog {
     @Override
     public void applyConfirmScript() {
         TextFieldAPI field = (TextFieldAPI) ReflectionUtilis.findFieldOfClass(panelRemoved, TextFieldAPI.class);
-        field.setText(nameComponent.field.getText());
+        field.setText(listComponent.field.getText());
         market.addCondition(BaseColonyDevelopment.condIdApplier);
         ColonyDevelopmentCondition cond = (ColonyDevelopmentCondition) market.getCondition(BaseColonyDevelopment.condIdApplier).getPlugin();
         cond.setIdOfDevelopment((String) content.list.chosen.getCustomData());

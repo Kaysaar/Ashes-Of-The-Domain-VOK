@@ -23,5 +23,6 @@
     <orderEntry type="library" name="sidebarLib1" level="project" />
     <orderEntry type="library" name="niko_stationAugments" level="project" />
     <orderEntry type="library" name="VideoLib" level="project" />
+    <orderEntry type="library" name="AoTDToolboxTheory" level="project" />
   </component>
 </module>

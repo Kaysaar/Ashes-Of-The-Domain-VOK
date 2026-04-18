@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.scripts.specialprojects;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CargoAPI;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
@@ -11,14 +12,12 @@ import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.intel.BlackSiteIntel;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.tot.scripts.trade.contracts.AoTDTradeContractManager;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.*;
-import data.kaysaar.aotd.vok.ui.basecomps.holograms.BaseImageHologram;
-import data.kaysaar.aotd.vok.ui.basecomps.holograms.HologramViewer;
-import data.kaysaar.aotd.vok.ui.basecomps.holograms.ShipHologram;
-import data.kaysaar.aotd.vok.ui.basecomps.holograms.WeaponHologram;
+import data.kaysaar.aotd.vok.scripts.specialprojects.trade.BlackSiteTradeContract;
+import data.kaysaar.aotd.vok.ui.basecomps.holograms.*;
 
 import java.awt.*;
 import java.util.List;
@@ -45,6 +44,11 @@ public class BlackSiteProjectManager {
             BlackSiteProjectManager.getInstance().advance(amount);
         }
     }
+    BlackSiteTradeContract contract;
+
+    public BlackSiteTradeContract getContract() {
+        return contract;
+    }
 
     public LinkedHashMap<String, AoTDSpecialProject> projects = new LinkedHashMap<>();
     public AoTDSpecialProject currentlyOnGoingProject;
@@ -62,7 +66,28 @@ public class BlackSiteProjectManager {
     }
 
     public void setCurrentlyOnGoingProject(AoTDSpecialProject currentlyOnGoingProject) {
+        if(currentlyOnGoingProject==null){
+            if(this.currentlyOnGoingProject!=null){
+                AoTDTradeContractManager.getInstance().terminateContract(getContract().getId());
+                contract = null;
+
+            }
+
+        }
+        else{
+            if(this.currentlyOnGoingProject!=null){
+                AoTDTradeContractManager.getInstance().terminateContract(this.currentlyOnGoingProject.getProjectSpec().getId());
+                AoTDTradeContractManager.getInstance().terminateContract(getContract().getId());
+                contract = null;
+            }
+        }
         this.currentlyOnGoingProject = currentlyOnGoingProject;
+        if(currentlyOnGoingProject!=null){
+            contract = new BlackSiteTradeContract(this.currentlyOnGoingProject);
+            contract.reApplyChanges();
+            AoTDTradeContractManager.getInstance().addContract(contract);
+        }
+
     }
 
     public void addScriptInstance() {
@@ -167,7 +192,7 @@ public class BlackSiteProjectManager {
         }
         SpecialProjectIconData data = spec.getIconData();
         HologramViewer viewer = null;
-        Color color = Color.cyan;
+        Color color = Misc.interpolateColor(Color.cyan,Misc.getBasePlayerColor(),0.55f);
         if (spec.hasTag("dangerous")) {
             color = (Global.getSector().getFaction(Factions.DWELLER).getBrightUIColor().brighter());
         }
@@ -189,12 +214,15 @@ public class BlackSiteProjectManager {
 
         return viewer;
     }
+    public static HologramViewer createEntityViewHologram(SectorEntityToken token, float width,float height) {
 
+        return new HologramViewer(width,height,new EntityHologram(token,width,height));
+    }
     public static HologramViewer createHologramViewer(AoTDSpecialProjectSpec spec, float overrideSize) {
         float iconSize = overrideSize;
         SpecialProjectIconData data = spec.getIconData();
         HologramViewer viewer = null;
-        Color color = Color.cyan;
+        Color color = Misc.interpolateColor(Color.cyan,Misc.getBasePlayerColor(),0.55f);
         if (spec.hasTag("dangerous")) {
             color = (Global.getSector().getFaction(Factions.DWELLER).getBrightUIColor());
         }

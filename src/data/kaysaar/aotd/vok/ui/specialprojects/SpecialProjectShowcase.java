@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.ui.specialprojects;
 
+import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
@@ -7,9 +8,9 @@ import com.fs.starfarer.api.ui.*;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.specialprojects.*;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
+import data.kaysaar.aotd.vok.ui.RightMouseTooltipMover;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.HologramViewer;
-import data.kaysaar.aotd.vok.ui.customprod.components.RightMouseTooltipMover;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,7 @@ public class SpecialProjectShowcase implements CustomUIPanelPlugin {
             mover.init(subMainPanel, tooltip);
             float leftX = widthExpected - mainPanel.getPosition().getWidth();
             objectOfInterest.addComponent(mainObject.getComponentPanel()).inTL(objectOfInterest.getPosition().getWidth() / 2 - (mainObject.componentPanel.getPosition().getWidth() / 2), objectOfInterest.getPosition().getHeight() / 2 - (mainObject.componentPanel.getPosition().getHeight() / 2));
-           windows.addAll( project.getStagesForUI(objectOfInterest,manager));
+            windows.addAll( project.getStagesForUI(objectOfInterest,manager));
 
             tooltip.addCustomDoNotSetPosition(objectOfInterest).getPosition().inTL(-leftX / 2, 0);
             float border = -leftX / 2 - 5;

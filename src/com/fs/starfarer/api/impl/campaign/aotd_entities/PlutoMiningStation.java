@@ -7,8 +7,9 @@ import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.PlutoMegastructure;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
+
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.PlutoMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.models.BaseMegastructureScript;
 import org.lwjgl.util.vector.Vector2f;
 import org.shmo.lib.aotd.campaign.api.*;
 import org.shmo.lib.aotd.campaign.impl.BaseShmoStateScript;
@@ -155,7 +156,7 @@ public class PlutoMiningStation extends BaseCustomEntityPlugin {
 
     @Override
     public void advance(float amount) {
-        PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(GPBaseMegastructure.memKey);
+        PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(BaseMegastructureScript.memKey+"aotd_pluto_station");
         if(megastructure!=null){
             if(megastructure.getLaserSection().isFiringLaser()){
                 this.entity.setInteractionImage("megastructureImage","pluto_active");
@@ -236,6 +237,7 @@ public class PlutoMiningStation extends BaseCustomEntityPlugin {
 
     @Override
     public void render(CampaignEngineLayers layer, ViewportAPI viewport) {
+
         if (layer.equals(CampaignEngineLayers.STATIONS)) {
             final SpriteAPI plutoGeneralGlow = Global.getSettings().getSprite("rendering", "aotd_pluto_general_glow");
             final SpriteAPI plutoLaserGlow = Global.getSettings().getSprite("rendering", "aotd_pluto_laser_glow");
@@ -256,15 +258,15 @@ public class PlutoMiningStation extends BaseCustomEntityPlugin {
                     break;
                 }
                 case INACTIVE:
-                    PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(GPBaseMegastructure.memKey);
-                    if(megastructure!=null&&megastructure.isClaimed()){
+                    PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(BaseMegastructureScript.memKey+"aotd_pluto_station");
+                    if(megastructure!=null&&megastructure.isOwnedByPLayerFaction()){
                         renderAtCenter(plutoGeneralGlow);
                         plutoGeneralGlow.setAlphaMult(1f);
                     }
                     return;
             }
-            PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(GPBaseMegastructure.memKey);
-            if(megastructure!=null&&megastructure.isClaimed()){
+            PlutoMegastructure megastructure = (PlutoMegastructure) entity.getOrbitFocus().getMemory().get(BaseMegastructureScript.memKey+"aotd_pluto_station");
+            if(megastructure!=null&&megastructure.isOwnedByPLayerFaction()){
                 plutoGeneralGlow.setAlphaMult(1f);
                 renderAtCenter(plutoGeneralGlow);
             }

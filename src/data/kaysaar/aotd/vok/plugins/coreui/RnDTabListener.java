@@ -11,7 +11,8 @@ import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.campaign.econ.industry.MiscHiddenIndustry;
 import data.kaysaar.aotd.vok.scripts.ui.TechnologyCoreUI;
-import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
+
+import data.kaysaar.aotd.vok.ui.UIData;
 import org.lwjgl.input.Keyboard;
 
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.tryToGetButtonProd;
@@ -78,7 +79,6 @@ public class RnDTabListener implements CommandTabListener {
         UIData.WIDTH = Global.getSettings().getScreenWidth() - button.getPosition().getX();
         UIData.HEIGHT = uiPanelAPI.getPosition().getHeight();
 
-        UIData.recompute();
     }
 
     @Override
