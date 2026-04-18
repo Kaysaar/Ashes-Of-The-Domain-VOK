@@ -66,14 +66,14 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
     @Override
     public void apply(float efficiencyPercent, MarketAPI market) { /* ADD FUNCTIONALITY */
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).modifyMult(getIdForEffects(),1.5f,"Defensive Network");
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyPercent(getIdForEffects(),20f,"Defensive Network");
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).modifyFlat(getIdForEffects(),0.2f,"Defensive Network");
         market.getAccessibilityMod().modifyPercent(getIdForEffects(),-10f,"Defensive Network");
     }
 
     @Override
     public void unapply(MarketAPI market) {
         market.getStats().getDynamic().getMod(Stats.GROUND_DEFENSES_MOD).unmodifyMult(getIdForEffects());
-        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyPercent(getIdForEffects());
+        market.getStats().getDynamic().getMod(Stats.COMBAT_FLEET_SIZE_MULT).unmodifyFlat(getIdForEffects());
         market.getAccessibilityMod().unmodifyPercent(getIdForEffects());
     }
 

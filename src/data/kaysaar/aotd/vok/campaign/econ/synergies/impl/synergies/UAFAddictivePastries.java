@@ -20,7 +20,7 @@ public class UAFAddictivePastries extends BaseIndustrySynergy {
 
     @Override
     public boolean doesSynergyMetReq(MarketAPI market) {
-        boolean tech =canShowSynergyInUI(market);
+        boolean tech = canShowSynergyInUI(market);
 
         return  tech  && IndustrySynergiesMisc.isIndustryFunctionalAndExisting(market, AoTDIndustries.NEUROCHEMICAL_LABORATORY,"uaf_bakery_branch");
     }
@@ -53,13 +53,13 @@ public class UAFAddictivePastries extends BaseIndustrySynergy {
 
     @Override
     public void apply(float efficiencyPercent, MarketAPI market) {
-        market.getIncomeMult().modifyFlat(getIdForEffects(),0.15f*efficiencyPercent,getSynergyName());
+        market.getIncomeMult().modifyPercent(getIdForEffects(),15f*efficiencyPercent,getSynergyName());
         market.getStability().modifyFlat(getIdForEffects(),1f,getSynergyName());
     }
 
     @Override
     public void unapply(MarketAPI market) {
-        market.getIncomeMult().unmodifyFlat(getIdForEffects());
+        market.getIncomeMult().unmodifyPercent(getIdForEffects());
         market.getStability().unmodifyFlat(getIdForEffects());
 
     }
