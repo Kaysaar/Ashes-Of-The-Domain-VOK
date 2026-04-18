@@ -8,13 +8,13 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.GPMegastructureMenu;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
-import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
-import data.kaysaar.aotd.vok.ui.customprod.components.UIData;
+
+import data.kaysaar.aotd.vok.ui.UIData;
+import data.kaysaar.aotd.vok.ui.customprod.ProductionMainPanel;
 import data.kaysaar.aotd.vok.ui.research.AoTDResearchNewPlugin;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectUIManager;
 import org.lwjgl.input.Keyboard;
@@ -23,14 +23,12 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager.memflagBlacksite;
 
 public class TechnologyCoreUI extends CommandUIPlugin {
-    NidavelirMainPanelPlugin customProdPlugin = null;
     AoTDResearchNewPlugin pluginResearch = null;
-    GPMegastructureMenu pluginMega = null;
-    SpecialProjectUIManager projectUIManager = null;
+    ProductionMainPanel productionMainPanel = null;
+    SpecialProjectUIManager specialProjectUIManager = null;
     boolean pausedMusic = true;
 
     public TechnologyCoreUI(float width, float height) {
@@ -51,7 +49,7 @@ public class TechnologyCoreUI extends CommandUIPlugin {
     }
 
     public void init(String panelToShowcase, Object data) {
-        GPManager.reloadCommoditiesMap();
+
         this.panelForPlugins = mainPanel.createCustomPanel(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight() - 45, null);
         if (panelToShowcase == null) {
             panelToShowcase = "production";
@@ -61,7 +59,6 @@ public class TechnologyCoreUI extends CommandUIPlugin {
 
         UIData.WIDTH = panelForPlugins.getPosition().getWidth();
         UIData.HEIGHT = panelForPlugins.getPosition().getHeight();
-        UIData.recompute();
         createButtonsAndMainPanels();
 
         for (Map.Entry<ButtonAPI, CustomPanelAPI> buttons : panelMap.entrySet()) {
@@ -108,10 +105,8 @@ public class TechnologyCoreUI extends CommandUIPlugin {
     }
 
     public void clearUI(boolean clearMusic) {
-        customProdPlugin.clearUI(false);
-        pluginMega.clearUI();
+
         panelMap.clear();
-        projectUIManager.clear();
         if(clearMusic){
             pauseSound();
         }
@@ -128,15 +123,15 @@ public class TechnologyCoreUI extends CommandUIPlugin {
         Color base, bg;
         base = Global.getSector().getPlayerFaction().getBaseUIColor();
         bg = Global.getSector().getPlayerFaction().getDarkUIColor();
-        customProd = buttonTooltip.addButton("Production", customProdPlugin, base, bg, Alignment.MID, CutStyle.TOP, 140, 20, 0f);
         research = buttonTooltip.addButton("Research", pluginResearch, base, bg, Alignment.MID, CutStyle.TOP, 140, 20, 0f);
-        megastructures = buttonTooltip.addButton("Megastructures", pluginMega, base, bg, Alignment.MID, CutStyle.TOP, 170, 20, 0f);
+        customProd = buttonTooltip.addButton("Production", productionMainPanel, base, bg, Alignment.MID, CutStyle.TOP, 140, 20, 0f);
+
         sp = null;
         if(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites()>0){
             Global.getSector().getPlayerMemoryWithoutUpdate().set(memflagBlacksite,true);
         }
         if(BlackSiteProjectManager.getInstance().canEngageInBlackSite()){
-            sp = buttonTooltip.addButton("Black Site Projects", projectUIManager, Global.getSector().getFaction(Factions.PIRATES).getBaseUIColor(), Global.getSector().getFaction(Factions.PIRATES).getDarkUIColor(), Alignment.MID, CutStyle.TOP, 210, 20, 0f);
+            sp = buttonTooltip.addButton("Black Site Projects", specialProjectUIManager, Global.getSector().getFaction(Factions.PIRATES).getBaseUIColor(), Global.getSector().getFaction(Factions.PIRATES).getDarkUIColor(), Alignment.MID, CutStyle.TOP, 210, 20, 0f);
             sp.setEnabled(AoTDMainResearchManager.getInstance().getManagerForPlayer().getAmountOfBlackSites()>0);
             if(!sp.isEnabled()){
                 buttonTooltip.addTooltipTo(new TooltipMakerAPI.TooltipCreator() {
@@ -159,24 +154,19 @@ public class TechnologyCoreUI extends CommandUIPlugin {
             sp.setShortcut(Keyboard.KEY_S,false);
         }
         else{
-            sp = buttonTooltip.addButton("?????", projectUIManager, base, bg, Alignment.MID, CutStyle.TOP, 210, 20, 0f);
+            sp = buttonTooltip.addButton("?????", specialProjectUIManager, base, bg, Alignment.MID, CutStyle.TOP, 210, 20, 0f);
             sp.setEnabled(false);
 
         }
+
         customProd.setShortcut(Keyboard.KEY_Q, false);
         research.setShortcut(Keyboard.KEY_R, false);
-        megastructures.setShortcut(Keyboard.KEY_T, false);
-
         customProd.getPosition().inTL(0, 0);
-        research.getPosition().inTL(141, 0);
-        sp.getPosition().inTL(453, 0);
-        megastructures.getPosition().inTL(282, 0);
-
-        insertCustomProdPanel(customProd);
+        research.getPosition().rightOfMid(customProd,1);
+        sp.getPosition().rightOfMid(research,1);
         insertNewResearchPanel(research);
-        insertNewMegastructuresPanel(megastructures);
+        insertCustomProdPanel(customProd);
         insertSpecialProjectPanel(sp);
-        megastructures.setEnabled(!GPManager.getInstance().getMegastructures().isEmpty());
         buttonPanel.addUIElement(buttonTooltip).inTL(0, 0);
         buttonPanel.addComponent(panelHelper).inTL(0, 20);
         mainPanel.addComponent(buttonPanel).inTL(0, 10);
@@ -239,12 +229,11 @@ public class TechnologyCoreUI extends CommandUIPlugin {
     }
 
     private void insertCustomProdPanel(ButtonAPI tiedButton) {
-        if (customProdPlugin == null) {
-            customProdPlugin = new NidavelirMainPanelPlugin(false, Global.getSector().getCampaignUI().getCurrentCoreTab(), null);
-            customProdPlugin.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, customProdPlugin), null, null);
+        if (productionMainPanel == null) {
+            productionMainPanel = new ProductionMainPanel(UIData.WIDTH, UIData.HEIGHT);
         }
 
-        panelMap.put(tiedButton, customProdPlugin.getPanel());
+        panelMap.put(tiedButton, productionMainPanel.getMainPanel());
     }
 
     private void insertNewResearchPanel(ButtonAPI tiedButton) {
@@ -256,19 +245,19 @@ public class TechnologyCoreUI extends CommandUIPlugin {
     }
 
     private void insertNewMegastructuresPanel(ButtonAPI tiedButton) {
-        if (pluginMega == null) {
-            pluginMega = new GPMegastructureMenu();
-            pluginMega.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, pluginMega));
-        }
-
-        panelMap.put(tiedButton, pluginMega.getMainPanel());
+//        if (pluginMega == null) {
+//            pluginMega = new GPMegastructureMenu();
+//            pluginMega.init(Global.getSettings().createCustom(UIData.WIDTH, UIData.HEIGHT, pluginMega));
+//        }
+//
+//        panelMap.put(tiedButton, pluginMega.getMainPanel());
     }
     private void insertSpecialProjectPanel(ButtonAPI tiedButton) {
-        if (projectUIManager == null) {
-            projectUIManager = new SpecialProjectUIManager(UIData.WIDTH, UIData.HEIGHT);
+        if (specialProjectUIManager == null) {
+            specialProjectUIManager = new SpecialProjectUIManager(UIData.WIDTH, UIData.HEIGHT);
         }
 
-        panelMap.put(tiedButton, projectUIManager.getMainPanel());
+        panelMap.put(tiedButton, specialProjectUIManager.getMainPanel());
     }
     public void pauseSound() {
         Global.getSoundPlayer().pauseCustomMusic();
@@ -283,17 +272,17 @@ public class TechnologyCoreUI extends CommandUIPlugin {
 
     public void playSoundButton(ButtonAPI button) {
         if (button.getText().toLowerCase().contains("production")) {
-            customProdPlugin.playSound();
+            productionMainPanel.playSound();
         }
         if (button.getText().toLowerCase().contains("research")) {
             pluginResearch.playSound();
         }
 
-        if (button.getText().toLowerCase().contains("megastructures")) {
-            pluginMega.playSound();
-        }
+//        if (button.getText().toLowerCase().contains("megastructures")) {
+//            pluginMega.playSound();
+//        }
         if (button.getText().toLowerCase().contains("black site projects")) {
-            projectUIManager.playSound();
+            specialProjectUIManager.playSound();
         }
     }
 

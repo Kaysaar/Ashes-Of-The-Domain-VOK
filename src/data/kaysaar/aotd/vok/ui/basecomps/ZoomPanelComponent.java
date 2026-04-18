@@ -1,11 +1,12 @@
 package data.kaysaar.aotd.vok.ui.basecomps;
 
+
+import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
@@ -20,7 +21,7 @@ public class ZoomPanelComponent implements CustomUIPanelPlugin {
     public CustomPanelAPI mainPanel;
     public float currScale = 1f;
     public float width, height;
-    public  UILinesRenderer renderer = new UILinesRenderer(-1f);
+    public UILinesRenderer renderer = new UILinesRenderer(-1f);
     public float posX = 0;
     public float poxY = 0;
     public CustomPanelAPI mainPanelBlockerPlugin;

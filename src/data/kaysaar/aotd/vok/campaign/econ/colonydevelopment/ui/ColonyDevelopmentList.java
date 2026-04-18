@@ -103,5 +103,6 @@ public class ColonyDevelopmentList implements ExtendedUIPanelPlugin {
     }
     public void clearUI(){
 
+        buttons.clear();
     }
 }

@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.scripts.misc;
 
+import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CoreUITabId;
@@ -8,9 +9,9 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
+import data.misc.ProductionUtil;
 import lunalib.LunaLibPlugin;
 import lunalib.backend.ui.settings.LunaSettingsData;
 import lunalib.backend.ui.settings.LunaSettingsLoader;

@@ -10,7 +10,7 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.SalvageEntity;
 import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BaseSalvageSpecial;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDItems;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+
 import org.magiclib.achievements.MagicAchievementManager;
 
 import java.util.ArrayList;
@@ -108,7 +108,8 @@ public class PreCollapseFacLoot extends BaseCommandPlugin {
 
         if(rand<2){
             for (int i = 0; i < rand; i++) {
-                salvage.addSpecial(new SpecialItemData(AoTDItems.BASE_ITEM_BLUEPRINT,GPManager.getInstance().getItemsProductionWithoutAICores().get(getRandomNumber(0,GPManager.getInstance().getItemProductionOptionFiltered().size()-1)).getSpec().getItemSpecAPI().getId()),1);
+                /// TODO - Implement this later down the line
+//                salvage.addSpecial(new SpecialItemData(AoTDItems.BASE_ITEM_BLUEPRINT,GPManager.getInstance().getItemsProductionWithoutAICores().get(getRandomNumber(0,GPManager.getInstance().getItemProductionOptionFiltered().size()-1)).getSpec().getItemSpecAPI().getId()),1);
             }
         }
         BaseSalvageSpecial.clearExtraSalvage(memoryMap);

@@ -37,7 +37,6 @@ public class ResearchZoomPanel extends ZoomPanelComponent {
     public void createTechTree(String modId){
         this.currentModID = modId;
         clearPanel();
-        this.renderer.alphaMultiplier = 0f;
 
 
         float xForEra = 20;
@@ -166,5 +165,10 @@ public class ResearchZoomPanel extends ZoomPanelComponent {
                         x -> !AoTDMainResearchManager.getInstance().isResearchedForPlayer(x.spec.getId())
                 ));
         return parents;
+    }
+
+    @Override
+    public void renderBelow(float alphaMult) {
+
     }
 }

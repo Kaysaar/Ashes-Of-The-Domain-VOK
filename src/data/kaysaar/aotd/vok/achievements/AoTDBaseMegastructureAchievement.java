@@ -1,8 +1,6 @@
 package data.kaysaar.aotd.vok.achievements;
 
 import com.fs.starfarer.api.Global;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import org.magiclib.achievements.MagicAchievement;
 
 import java.util.ArrayList;
@@ -16,6 +14,7 @@ public class AoTDBaseMegastructureAchievement extends MagicAchievement {
         if (isComplete) return;
         Global.getSector().getListenerManager().addListener(this, true);
     }
+    /// TODO - Implement this later down the line
 
     @Override
     public void advanceAfterInterval(float amount) {
@@ -23,12 +22,13 @@ public class AoTDBaseMegastructureAchievement extends MagicAchievement {
             boolean allCompleted  = true;
             for (Class<?> aClass : classes) {
                 boolean classCompleted = false;
-                for (GPBaseMegastructure megastructuresBasedOnClass : GPManager.getInstance().getMegastructuresBasedOnClass(aClass)) {
-                    if(megastructuresBasedOnClass.isFullyRestored()){
-                      classCompleted = true;
-                      break;
-                    }
-                }
+
+//                for (GPBaseMegastructure megastructuresBasedOnClass : GPManager.getInstance().getMegastructuresBasedOnClass(aClass)) {
+//                    if(megastructuresBasedOnClass.isFullyRestored()){
+//                      classCompleted = true;
+//                      break;
+//                    }
+//                }
                 if(!classCompleted){
                     allCompleted = false;
                     break;
@@ -40,11 +40,11 @@ public class AoTDBaseMegastructureAchievement extends MagicAchievement {
 
         }
         else{
-            for (GPBaseMegastructure megastructuresBasedOnClass : GPManager.getInstance().getMegastructures()) {
-                if(megastructuresBasedOnClass.isFullyRestored()){
-                    completeAchievement();
-                }
-            }
+//            for (GPBaseMegastructure megastructuresBasedOnClass : GPManager.getInstance().getMegastructures()) {
+//                if(megastructuresBasedOnClass.isFullyRestored()){
+//                    completeAchievement();
+//                }
+//            }
         }
 
 

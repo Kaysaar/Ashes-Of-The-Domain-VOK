@@ -2,10 +2,12 @@ package data.kaysaar.aotd.vok.ui.research;
 
 import ashlib.data.plugins.ui.models.PopUpUI;
 import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
+import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.CommodityOnMarketAPI;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
@@ -20,7 +22,8 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchRewardType;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
+import kaysaar.bmo.buildingmenu.BuildingMenuMisc;
+
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -324,6 +327,7 @@ public class ResearchInfoUI extends PopUpUI {
                 MarketAPI marketAPI = initalizeMarket();
                 marketAPI.addIndustry(Industries.POPULATION);
                 marketAPI.addIndustry(Industries.SPACEPORT);
+                marketAPI.addCondition("aotd_toolbox_food_corrector");
                 marketAPI.reapplyConditions();
                 marketAPI.addIndustry(industryId);
                 Industry ind =marketAPI.getIndustry(industryId);
@@ -340,14 +344,10 @@ public class ResearchInfoUI extends PopUpUI {
                     ind.getSupply(Commodities.VOLATILES).getQuantity().modifyFlat("test", 4);
                 }
 
-                ind.createTooltip(Industry.IndustryTooltipMode.NORMAL, tooltip, true);
-                tooltip.addPara("*Size of example market is 6 and all resource conditions are set to give none of bonuses to any industry.", Misc.getTooltipTitleAndLightHighlightColor(), 3f);
+                BuildingMenuMisc.createTooltipForIndustry((BaseIndustry) ind, Industry.IndustryTooltipMode.ADD_INDUSTRY,tooltip,expanded,true,getTooltipWidth(tooltipParam),true,true,false);
+                tooltip.addPara("*Size of example market is 6 and all resource conditions are set to give none of bonuses to any industry.", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
 
-                if (ind.getSpec().getDowngrade() != null) {
-                    tooltip.addSectionHeading("Upgrades from ", Alignment.MID, 10f);
-                    tooltip.addPara("This industry upgrades from : %s ", 10f, Color.ORANGE, "" + Global.getSettings().getIndustrySpec(ind.getSpec().getDowngrade()).getName());
 
-                }
                 marketAPI.removeIndustry(industryId, MarketAPI.MarketInteractionMode.REMOTE,false);
                 clearListenersFromTemporaryMarket();
 

@@ -1,10 +1,12 @@
 package data.kaysaar.aotd.vok.timeline.templates;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.MegastructureSpecManager;
 import data.scripts.models.BaseFactionTimelineEvent;
 import data.scripts.models.TimelineEventType;
 
@@ -14,13 +16,12 @@ public class MegastructureClaimEvent extends BaseFactionTimelineEvent {
     String megastructureID;
     String title;
     String imageName;
-    
     @Override
     public String getID() {
-        return super.getID()+ megastructureID;
+        return super.getID() + megastructureID;
     }
 
-    public MegastructureClaimEvent(String megastructureID, String title, String imageName){
+    public MegastructureClaimEvent(String megastructureID, String title, String imageName) {
         this.megastructureID = megastructureID;
         this.title = title;
         this.imageName = imageName;
@@ -36,20 +37,16 @@ public class MegastructureClaimEvent extends BaseFactionTimelineEvent {
         return title;
     }
 
-    @Override
-    public boolean checkForCondition() {
-        return GPManager.getInstance().getMegastructures().stream().anyMatch(x->x.getSpec().getMegastructureID().equals(megastructureID));
-    }
 
     @Override
     public void createSmallNoteForEvent(TooltipMakerAPI tooltip) {
-        tooltip.addPara("%s has been claimed by "+Global.getSector().getPlayerFaction().getDisplayNameLong(),0f, Color.ORANGE,GPManager.getInstance().getMegaSpecFromList(megastructureID).getName()).setAlignment(Alignment.MID);;
+        tooltip.addPara("%s has been claimed by "+Global.getSector().getPlayerFaction().getDisplayNameLong(),0f, Color.ORANGE,MegastructureSpecManager.getSpecForMegastructure(megastructureID).getName()).setAlignment(Alignment.MID);;
     }
 
     @Override
     public void createDetailedTooltipOnHover(TooltipMakerAPI tooltip) {
         super.createDetailedTooltipOnHover(tooltip);
-        String megaName = GPManager.getInstance().getMegaSpecFromList(megastructureID).getName();
+        String megaName = MegastructureSpecManager.getSpecForMegastructure(megastructureID).getName();
         String factionName = Global.getSector().getPlayerFaction().getDisplayNameLong();
 
         tooltip.addPara(

@@ -1,9 +1,6 @@
 package data.kaysaar.aotd.vok.achievements;
 
 import com.fs.starfarer.api.Global;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
 import org.magiclib.achievements.MagicAchievement;
 
 public class AoTDNickelAchievement extends MagicAchievement {
@@ -18,11 +15,13 @@ public class AoTDNickelAchievement extends MagicAchievement {
     @Override
     public void advanceAfterInterval(float amount) {
         int amounts =2;
-        for (GPBaseMegastructure megastructuresBasedOnClass : GPManager.getInstance().getMegastructuresBasedOnClass(HypershuntMegastructure.class)) {
-            if(megastructuresBasedOnClass.isFullyRestored()){
-                amounts --;
-            }
-        }
+        /// TODO - Implement this later down the line
+
+//        for (GPBaseMegastructure megastructuresBasedOnClass : GPManager.getInstance().getMegastructuresBasedOnClass(HypershuntMegastructure.class)) {
+//            if(megastructuresBasedOnClass.isFullyRestored()){
+//                amounts --;
+//            }
+//        }
         if(amounts <= 0){
             completeAchievement();
         }

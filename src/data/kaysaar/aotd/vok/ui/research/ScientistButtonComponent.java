@@ -1,8 +1,9 @@
 package data.kaysaar.aotd.vok.ui.research;
 
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.ui.Fonts;
+import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
@@ -10,6 +11,13 @@ import data.kaysaar.aotd.vok.ui.basecomps.ButtonComponent;
 import data.kaysaar.aotd.vok.ui.basecomps.ImageViewer;
 import data.kaysaar.aotd.vok.ui.basecomps.LabelComponent;
 import data.kaysaar.aotd.vok.ui.scientist.HeadOfResearchDialog;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static data.kaysaar.aotd.vok.ui.customprod.components.ProductionCustomButton.getOrderedResourceMap;
 
 public class ScientistButtonComponent extends ButtonComponent {
     public ScientistPerson currentScientist;

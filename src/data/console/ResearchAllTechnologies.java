@@ -1,6 +1,7 @@
 package data.console;
 
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
+
+import data.kaysaar.aotd.vok.campaign.econ.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;

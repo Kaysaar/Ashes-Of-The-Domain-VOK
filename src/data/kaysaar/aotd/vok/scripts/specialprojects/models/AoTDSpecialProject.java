@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
 import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CampaignClockAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.intel.ProjectStageCompletionIntel;
 import com.fs.starfarer.api.impl.campaign.intel.SpecialProjectFinishedIntel;
@@ -13,14 +14,12 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectCompletionListener;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
+import data.kaysaar.aotd.vok.ui.customprod.components.ProductionCustomButton;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectStageWindow;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectUIManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
-import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc.createResourcePanelForSmallTooltipCondensed;
 
 public class AoTDSpecialProject {
 
@@ -127,14 +126,45 @@ public class AoTDSpecialProject {
             stages.add(new AoTDSpecialProjectStage(s));
         }
     }
-
     public HashMap<String, Integer> getGpCostFromStages() {
-        HashMap<String, Integer> comodities = new HashMap<>();
-        for (String currentlyAttemptedStage : currentlyAttemptedStages) {
-            getStage(currentlyAttemptedStage).getSpec().getGpCost().forEach((key, value) -> AoTDMisc.putCommoditiesIntoMap(comodities, key, value));
+        HashMap<String, Integer> commodities = new HashMap<>();
 
+        for (String currentlyAttemptedStage : currentlyAttemptedStages) {
+            AoTDSpecialProjectStage stage = getStage(currentlyAttemptedStage);
+            int months = getMonthsRemaining(stage.getDaysLeft(), Global.getSector().getClock());
+
+            stage.getSpec().getGpCost().forEach((key, value) -> {
+                AoTDMisc.putCommoditiesIntoMap(commodities, key, value/ months);
+            });
         }
-        return comodities;
+
+        return commodities;
+    }
+
+    private int getMonthsRemaining(float daysLeft, CampaignClockAPI clock) {
+        if (daysLeft <= 0f) return 0;
+
+        GregorianCalendar cal = (GregorianCalendar) clock.getCal().clone();
+
+        int months = 0;
+        float remainingDays = daysLeft;
+
+        while (remainingDays > 0f) {
+            int daysInCurrentMonth = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+            int currentDay = cal.get(GregorianCalendar.DAY_OF_MONTH);
+
+            // How many days are left in this month, including today
+            int daysLeftInMonth = daysInCurrentMonth - currentDay + 1;
+
+            remainingDays -= daysLeftInMonth;
+            months++;
+
+            // Move to first day of next month
+            cal.add(GregorianCalendar.MONTH, 1);
+            cal.set(GregorianCalendar.DAY_OF_MONTH, 1);
+        }
+
+        return Math.max(1,months);
     }
     public void applyBonusesFromSkills(HashMap<String,Integer>gpCost){
 
@@ -290,8 +320,11 @@ public class AoTDSpecialProject {
         if(market==null)market = Misc.getPlayerMarkets(true).get(0);
         tooltip.addPara("Price is located in local storage of "+market.getName(),5f);
     }
-    public void printSpecialization(TooltipMakerAPI tooltip){
+    public void printSpecialization(TooltipMakerAPI tooltip,boolean smallButton){
         AoTDSpecializationSpec spec = getSpecialization();
+
+            tooltip.setParaFont(Fonts.ORBITRON_12);
+
         if(spec!=null){
             tooltip.addPara("Project type : %s",5f, spec.getColorOfString(),spec.getName());
         }
@@ -306,14 +339,8 @@ public class AoTDSpecialProject {
         tooltip.setTitleFont(Fonts.ORBITRON_16);
 
         tooltip.addTitle(this.getNameOverride());
-        if(!smallButton){
-            tooltip.addSectionHeading("Upkeep", Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, width - 110, 5f);
+        printSpecialization(tooltip,smallButton);
 
-            tooltip.addCustom(createResourcePanelForSmallTooltipCondensed(width - 110, 20, 20, new HashMap<>(), new HashMap<>()), 5f);
-        }
-        else{
-            printSpecialization(tooltip);
-        }
 
         ProgressBarComponentV2 component = new ProgressBarComponentV2(width - 110, 18, getTotalProgress(), Misc.getBasePlayerColor().darker().darker());
 

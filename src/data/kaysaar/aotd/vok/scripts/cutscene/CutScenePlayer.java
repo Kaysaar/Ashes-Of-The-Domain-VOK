@@ -8,8 +8,9 @@ import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+
 import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
+import data.misc.ProductionUtil;
 import data.scripts.VideoModes;
 import data.scripts.VideoPlayerFactory;
 import data.scripts.playerui.VideoPlayer;

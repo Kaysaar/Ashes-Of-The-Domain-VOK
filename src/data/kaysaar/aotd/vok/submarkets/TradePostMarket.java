@@ -12,11 +12,12 @@ import com.fs.starfarer.api.impl.campaign.submarkets.OpenMarketPlugin;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.tot.scripts.submarket.aotd.AoTDOpenMarketPlugin;
 import data.kaysaar.aotd.vok.campaign.econ.industry.TradePostIndustry;
 
 import java.awt.*;
 
-public class TradePostMarket extends OpenMarketPlugin {
+public class TradePostMarket extends AoTDOpenMarketPlugin {
     @Override
     public boolean isEnabled(CoreUIAPI ui) {
         int currDay = Global.getSector().getClock().getDay();

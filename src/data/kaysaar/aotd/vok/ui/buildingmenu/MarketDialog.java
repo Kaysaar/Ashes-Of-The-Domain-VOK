@@ -12,10 +12,10 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.MutableValue;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.misc.TrapezoidButtonDetector;
-import data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin;
+
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -66,14 +66,14 @@ public class MarketDialog extends BasePopUpDialog {
     }
 @Override
     public ButtonAPI generateConfirmButton(TooltipMakerAPI tooltip){
-        ButtonAPI button = tooltip.addButton("Build","confirm", NidavelirMainPanelPlugin.base,NidavelirMainPanelPlugin.bg, Alignment.MID, CutStyle.TL_BR,160,25,0f);
+        ButtonAPI button = tooltip.addButton("Build","confirm", Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR,160,25,0f);
         button.setShortcut(Keyboard.KEY_G,true);
         confirmButton = button;
         return button;
     }
     @Override
     public ButtonAPI generateCancelButton(TooltipMakerAPI tooltip){
-        ButtonAPI button = tooltip.addButton("Dismiss","cancel", NidavelirMainPanelPlugin.base,NidavelirMainPanelPlugin.bg,Alignment.MID,CutStyle.TL_BR,buttonConfirmWidth,25,0f);
+        ButtonAPI button = tooltip.addButton("Dismiss","cancel", Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.TL_BR,buttonConfirmWidth,25,0f);
         button.setShortcut(Keyboard.KEY_A,true);
         cancelButton = button;
         return button;
