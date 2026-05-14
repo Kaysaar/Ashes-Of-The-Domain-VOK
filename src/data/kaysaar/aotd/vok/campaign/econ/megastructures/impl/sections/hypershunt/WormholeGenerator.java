@@ -25,7 +25,7 @@ public class WormholeGenerator extends BaseMegastructureSection {
 
     @Override
     public float getUpkeepOfSection() {
-        return 20000 * (effectiveRange - 1);
+        return 20000 * (getEffectiveRange() - 1);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class WormholeGenerator extends BaseMegastructureSection {
     }
 
     public int getEffectiveRange() {
-        return Math.min(1, effectiveRange);
+        return Math.max(1, effectiveRange);
     }
 
     public int getCalculatedRange() {
@@ -64,7 +64,6 @@ public class WormholeGenerator extends BaseMegastructureSection {
             int range = getRange();
             int expectedRange = range - deficit;
             setEffectiveRange(expectedRange);
-
             ind.getUpkeep().modifyFlat("upkeep_def", getUpkeepOfSection(), getName());
 
         }
@@ -74,8 +73,8 @@ public class WormholeGenerator extends BaseMegastructureSection {
 
     public void setEffectiveRange(int effectiveRange) {
         this.effectiveRange = effectiveRange;
-        if (effectiveRange <= 0) {
-            effectiveRange = 1;
+        if (this.effectiveRange <= 0) {
+            this.effectiveRange = 1;
         }
     }
 
@@ -97,7 +96,7 @@ public class WormholeGenerator extends BaseMegastructureSection {
 
     @Override
     public void addAdditionalButtonsForSection(ArrayList<ButtonAPI> bt, float width, float heightOfButtons, TooltipMakerAPI tooltip) {
-        ButtonAPI button = tooltip.addButton("Adjust effective range", "adjustRange", Misc.getBasePlayerColor(), Color.cyan.darker(), Alignment.MID, CutStyle.TL_BR, width, heightOfButtons, 5f);
+        ButtonAPI button = tooltip.addButton("Adjust effective range", "adjustRange", Misc.getBasePlayerColor(), Color.cyan.darker().darker().darker(), Alignment.MID, CutStyle.TL_BR, width, heightOfButtons, 5f);
         bt.add(button);
         button.setEnabled(isRestored);
         tooltip.addTooltipTo(new TooltipMakerAPI.TooltipCreator() {

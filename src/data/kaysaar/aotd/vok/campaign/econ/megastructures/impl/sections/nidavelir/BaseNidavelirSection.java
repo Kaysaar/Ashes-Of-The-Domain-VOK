@@ -147,19 +147,19 @@ public class BaseNidavelirSection extends BaseMegastructureSection {
     @Override
     public LinkedHashMap<String, Integer> getDemandMap() {
         LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
-        map.put(Commodities.METALS, 15);
-        map.put(Commodities.RARE_METALS, 8);
-        map.put(AoTDCommodities.REFINED_METAL, 10);
-        map.put(AoTDCommodities.PURIFIED_TRANSPLUTONICS, 4);
+        map.put(Commodities.METALS, 10);
+        map.put(Commodities.RARE_METALS, 6);
+        map.put(AoTDCommodities.REFINED_METAL, 8);
+        map.put(AoTDCommodities.PURIFIED_TRANSPLUTONICS, 3);
         return map;
     }
 
     @Override
     public LinkedHashMap<String, Integer> getProductionMap() {
         LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
-        map.put(Commodities.SHIPS, 25);
-        map.put(Commodities.SUPPLIES, 10);
-        map.put(Commodities.HAND_WEAPONS, 20);
+        map.put(Commodities.SHIPS, 10);
+        map.put(Commodities.SUPPLIES, 8);
+        map.put(Commodities.HAND_WEAPONS, 10);
         return map;
     }
 
@@ -172,16 +172,16 @@ public class BaseNidavelirSection extends BaseMegastructureSection {
     }
 
     public int getDeficitIndex() {
-        return 3;
+        return 4;
     }
 
     @Override
     public void applySectionOnIndustry(BaseIndustry ind) {
         for (Map.Entry<String, Integer> entry : getProductionMap().entrySet()) {
-            ind.supply(entry.getKey(), entry.getValue() * getManpowerUsed());
+            ind.getSupply(entry.getKey()).getQuantity().modifyFlat(this.getSpec().getId(), entry.getValue() * getManpowerUsed());
         }
         for (Map.Entry<String, Integer> entry : getDemandMap().entrySet()) {
-            ind.demand(entry.getKey(), entry.getValue() * getManpowerUsed());
+            ind.getDemand(entry.getKey()).getQuantity().modifyFlat(this.getSpec().getId(), entry.getValue() * getManpowerUsed());
         }
         applyDeficitToProduction(getDeficitIndex(), ind, ind.getMaxDeficit(getDemandMap().keySet().toArray(new String[0])), getProductionMap().keySet().toArray(new String[0]));
         ind.getUpkeep().modifyFlat(this.getSpec().getId(), getUpkeepOfSection(), getName());
@@ -190,6 +190,7 @@ public class BaseNidavelirSection extends BaseMegastructureSection {
     @Override
     public void unApplySectionOnIndustry(BaseIndustry ind) {
         super.unApplySectionOnIndustry(ind);
+
         ind.getUpkeep().unmodifyFlat(this.getSpec().getId());
     }
 

@@ -32,6 +32,7 @@ public class PlutoMegastructureInd extends BaseIndustry implements Megastructure
         if(market.getPrimaryEntity()!=null){
             BaseMegastructureScript script = getMegastructureScript(market.getPrimaryEntity());
             script.getRestoredSections().forEach(x->x.applySectionOnIndustry(this));
+            script.tiedMarket = market;
         }
 
     }

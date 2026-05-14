@@ -39,4 +39,15 @@ public class AoTDIndustries {
     public static final String MACRO_INDUSTRIAL_COMPLEX = "aotd_macro_industrial_complex";
     public static final String FUEL_REFINERY = "aotd_fuel_refinery";
     public static final String NEUROCHEMICAL_LABORATORY = "aotd_druglight";
+    public static final String DAEDALUS_ARRAY = "aotd_daedalus_array";
+    public static final String SHRINE_OF_GILEAD = "aotd_shrine_of_gilead";
+    public static final String GARDEN_OF_ELYSIUM = "aotd_garden_of_elysium";
+    public static final String NIDAVELIR_COMPLEX = "nidavelir_complex";
+    public static final String PLUTO_STATION = "pluto_station";
+    public static final String HYPERSHUNT_CONTROL = "aotd_coronal_control";
+    public static final String CORONAL_WORMHOLE = "aotd_coronal_wormhole_ind";
+    public static final String CORONAL_COLLECTOR = "aotd_coronal_collector_ind";
+    public static final String BIFROST_CONTROL_CENTER = "aotd_bfc_ind";
+    public static final String HIDDEN_INDUSTRY = "aotd_misc_hidden_industry";
+    public static final String DUMMY_INDUSTRY = "dummy_industry";
 }

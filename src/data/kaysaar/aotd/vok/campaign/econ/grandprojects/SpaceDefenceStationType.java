@@ -30,7 +30,7 @@ public class SpaceDefenceStationType implements GrandWonderTypeSpecAPI {
 
     @Override
     public boolean canBuildAdditionalWonderOfType(String s, MarketAPI marketAPI) {
-        return GrandWonderManager.getInstance().getAmountOfWondersOfSameType(this.getId())<getMaxAmountOfWonderOfType(s,marketAPI);
+        return GrandWonderManager.getInstance().getBuiltSoFar(s)<getMaxAmountOfWonderOfType(s,marketAPI);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class GrowingDemandMover implements EveryFrameScript {
     public void advance(float amount) {
         util.advance(amount);
         if(util.intervalElapsed()){
-            GrowingDemandManager.getInstance().advance(util.getElapsed());
+//            GrowingDemandManager.getInstance().advance(util.getElapsed());
         }
     }
 }

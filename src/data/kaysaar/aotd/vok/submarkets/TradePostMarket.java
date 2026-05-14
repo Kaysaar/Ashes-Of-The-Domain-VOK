@@ -85,10 +85,13 @@ public class TradePostMarket extends AoTDOpenMarketPlugin {
         else{
             tooltip.addPara("Market opened!", Misc.getPositiveHighlightColor(),10f);
         }
-        TradePostIndustry industry = (TradePostIndustry) market.getIndustry("aotd_trade_outpost");
-        tooltip.addSectionHeading("Protective measures",Alignment.MID,10f);
-        tooltip.addPara("Due to imposed limitations you can only sell cargo of maximum worth of %s each month!",5f, Color.ORANGE,Misc.getDGSCredits(100000));
-        tooltip.addPara("Local demand is limited — you may only receive up to %s from selling commodities this month. Further sales will not be accepted.",
-                10f, Color.ORANGE, Misc.getDGSCredits(industry.getAmountOfCreditsYouCanSpent()));
+        if(market.hasIndustry("aotd_trade_outpost")){
+            TradePostIndustry industry = (TradePostIndustry) market.getIndustry("aotd_trade_outpost");
+            tooltip.addSectionHeading("Protective measures",Alignment.MID,10f);
+            tooltip.addPara("Due to imposed limitations you can only sell cargo of maximum worth of %s each month!",5f, Color.ORANGE,Misc.getDGSCredits(100000));
+            tooltip.addPara("Local demand is limited — you may only receive up to %s from selling commodities this month. Further sales will not be accepted.",
+                    10f, Color.ORANGE, Misc.getDGSCredits(industry.getAmountOfCreditsYouCanSpent()));
+        }
+
     }
 }

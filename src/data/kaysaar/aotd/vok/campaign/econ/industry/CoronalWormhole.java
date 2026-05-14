@@ -24,7 +24,7 @@ public class CoronalWormhole extends BaseIndustry implements MegastructureIndAPI
     @Override
     public void apply() {
         if(market.getPrimaryEntity()!=null){
-            getMegastructureScript(market.getPrimaryEntity()).getSectionById("coronal_collector").applySectionOnIndustry(this);
+            getMegastructureScript(market.getPrimaryEntity()).getSectionById("coronal_wormhole").applySectionOnIndustry(this);
 
         }
     }
@@ -33,7 +33,7 @@ public class CoronalWormhole extends BaseIndustry implements MegastructureIndAPI
     public void unapply() {
         super.unapply();
         if(market.getPrimaryEntity()!=null){
-            getMegastructureScript(market.getPrimaryEntity()).getSectionById("coronal_collector").unApplySectionOnIndustry(this);
+            getMegastructureScript(market.getPrimaryEntity()).getSectionById("coronal_wormhole").unApplySectionOnIndustry(this);
 
         }
     }

@@ -319,7 +319,7 @@ public class ResearchInfoUI extends PopUpUI {
 
             @Override
             public float getTooltipWidth(Object tooltipParam) {
-                return 400;
+                return 500;
             }
 
             @Override
@@ -327,10 +327,16 @@ public class ResearchInfoUI extends PopUpUI {
                 MarketAPI marketAPI = initalizeMarket();
                 marketAPI.addIndustry(Industries.POPULATION);
                 marketAPI.addIndustry(Industries.SPACEPORT);
+                marketAPI.getStability().modifyFlat("test",1000,"test");
+                marketAPI.getIncomeMult().modifyFlat("test",1,"test");
                 marketAPI.addCondition("aotd_toolbox_food_corrector");
                 marketAPI.reapplyConditions();
-                marketAPI.addIndustry(industryId);
-                Industry ind =marketAPI.getIndustry(industryId);
+                marketAPI.reapplyIndustries();
+
+                Industry ind = marketAPI.instantiateIndustry(industryId);
+                marketAPI.reapplyConditions();
+                marketAPI.reapplyIndustries();
+                ind.reapply();
                 if (ind.getId().equals(Industries.FARMING)) {
                     ind.getSupply(Commodities.FOOD).getQuantity().modifyFlat("test", 6);
                 }
@@ -356,8 +362,8 @@ public class ResearchInfoUI extends PopUpUI {
     }
 
     public CustomPanelAPI createSectionForSpecialEffects(CustomPanelAPI originPanel) {
-        CustomPanelAPI other = originPanel.createCustomPanel(originPanel.getPosition().getWidth(), 20, null);
-        TooltipMakerAPI tooltip = other.createUIElement(originPanel.getPosition().getWidth(), 20, true);
+        CustomPanelAPI other = originPanel.createCustomPanel(originPanel.getPosition().getWidth(), 50, null);
+        TooltipMakerAPI tooltip = other.createUIElement(originPanel.getPosition().getWidth(), 50, false);
         boolean addedSth = false;
         float pad = 3f;
         for (Map.Entry<String, ResearchRewardType> entry : option.Rewards.entrySet()) {
@@ -368,9 +374,11 @@ public class ResearchInfoUI extends PopUpUI {
             }
         }
         if (addedSth) {
+            other.getPosition().setSize(other.getPosition().getWidth(),tooltip.getHeightSoFar());
             other.addUIElement(tooltip).inTL(0, 0);
             return other;
         }
+
         return null;
 
     }
@@ -519,6 +527,7 @@ public class ResearchInfoUI extends PopUpUI {
             marketToShowTooltip.setFactionId(Global.getSector().getPlayerFaction().getId());
             marketToShowTooltip.reapplyConditions();
             marketToShowTooltip.setFreePort(true);
+
             for (CommodityOnMarketAPI allCommodity : marketToShowTooltip.getAllCommodities()) {
                 allCommodity.getAvailableStat().addTemporaryModFlat(10000, "src", 30);
             }

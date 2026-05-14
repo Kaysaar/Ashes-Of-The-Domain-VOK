@@ -42,8 +42,8 @@ public class HegemonyHeavy extends AoTDHeavyIndustry {
         }
         else{
             demand(AoTDCommodities.REFINED_METAL, size+2);
+            demand(AoTDCommodities.ADVANCED_COMPONENTS, size-1);
         }
-
         demand(Commodities.RARE_METALS, size - 2);
 
         supply(Commodities.HEAVY_MACHINERY, size + 4);

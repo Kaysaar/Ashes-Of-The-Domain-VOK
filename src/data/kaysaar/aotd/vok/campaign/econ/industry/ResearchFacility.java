@@ -24,9 +24,12 @@ public class ResearchFacility extends BaseIndustry  {
     @Override
     public void apply() {
         super.apply(true);
-        if(!market.hasSubmarket(subMarketId)) {
-            market.addSubmarket(subMarketId);
+        if(currTooltipMode==null||currTooltipMode.equals(IndustryTooltipMode.NORMAL)){
+            if(!market.hasSubmarket(subMarketId)) {
+                market.addSubmarket(subMarketId);
+            }
         }
+
         float reductionMult = 1;
         if(getAICoreId()!=null){
             if(getAICoreId().equals(Commodities.ALPHA_CORE)){

@@ -21,9 +21,14 @@ import data.kaysaar.aotd.tot.grandwonders.GrandWonderAPI;
 import data.kaysaar.aotd.tot.grandwonders.GrandWonderManager;
 import data.kaysaar.aotd.tot.grandwonders.GrandWonderTypeManager;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
+import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
@@ -33,9 +38,13 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
     @Override
     public LinkedHashMap<String, Integer> getDemandCostForRestoration() {
         LinkedHashMap<String, Integer> demand = new LinkedHashMap<>();
-        demand.put(Commodities.METALS, 1);
+        demand.put(Commodities.METALS, 10);
+        demand.put(AoTDCommodities.REFINED_METAL, 5);
+        demand.put(Commodities.HEAVY_MACHINERY, 10);
+        demand.put(Commodities.SUPPLIES, 5);
         return demand;
     }
+
     public static float ACC_BONUS = 2f;
 
     @Override
@@ -51,7 +60,7 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
         demand(Commodities.SUPPLIES, size - 2 + extraSize);
         demand(Commodities.SHIPS, size - 2 + extraSize);
 
-        supply(Commodities.CREW, size +2 + extraSize);
+        supply(Commodities.CREW, size + 2 + extraSize);
 
 
         String desc = getNameForModifier();
@@ -89,25 +98,25 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
 //			}
         }
 
-            if(HyperspaceTopographyEventIntel.get()!=null&&HyperspaceTopographyEventIntel.get().isStageActive(Stage.SLIPSTREAM_DETECTION)){
-                String id1 = "hypertopology1_aotd";
-                String id2 = "hypertopology2_aotd";
-                String id3 = "hypertopology3_aotd";
-                String id4 = "hypertopology4_aotd";
-                StatBonus mod = market.getStats().getDynamic().getMod(Stats.SLIPSTREAM_REVEAL_RANGE_LY_MOD);
-                if(!market.hasIndustry(Industries.SPACEPORT)&&!market.hasIndustry(Industries.MEGAPORT)){
-                    mod.modifyFlat(id1, BASE_DETECTION_RANGE_LY, "Base detection range");
-                    mod.modifyFlat(id2, market.getSize(), "Colony size");
+        if (HyperspaceTopographyEventIntel.get() != null && HyperspaceTopographyEventIntel.get().isStageActive(Stage.SLIPSTREAM_DETECTION)) {
+            String id1 = "hypertopology1_aotd";
+            String id2 = "hypertopology2_aotd";
+            String id3 = "hypertopology3_aotd";
+            String id4 = "hypertopology4_aotd";
+            StatBonus mod = market.getStats().getDynamic().getMod(Stats.SLIPSTREAM_REVEAL_RANGE_LY_MOD);
+            if (!market.hasIndustry(Industries.SPACEPORT) && !market.hasIndustry(Industries.MEGAPORT)) {
+                mod.modifyFlat(id1, BASE_DETECTION_RANGE_LY, "Base detection range");
+                mod.modifyFlat(id2, market.getSize(), "Colony size");
 
-                    float arraysBonus = gerSensorArrayBonusFor(market, RANGE_WITHIN_WHICH_SENSOR_ARRAYS_HELP_LY);
+                float arraysBonus = gerSensorArrayBonusFor(market, RANGE_WITHIN_WHICH_SENSOR_ARRAYS_HELP_LY);
 
-                    mod.modifyFlatAlways(id3, arraysBonus,
-                            "Claimed sensor arrays within " + (int) RANGE_WITHIN_WHICH_SENSOR_ARRAYS_HELP_LY +
-                                    " ly (max: " + (int) MAX_SENSOR_ARRAYS + " arrays)");
-                }
-
-                mod.modifyFlat(id4, 10, "Daedalus Array Antenna");
+                mod.modifyFlatAlways(id3, arraysBonus,
+                        "Claimed sensor arrays within " + (int) RANGE_WITHIN_WHICH_SENSOR_ARRAYS_HELP_LY +
+                                " ly (max: " + (int) MAX_SENSOR_ARRAYS + " arrays)");
             }
+
+            mod.modifyFlat(id4, 10, "Daedalus Array Antenna");
+        }
 
 
     }
@@ -128,7 +137,7 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
 
     public float gerSensorArrayBonusFor(MarketAPI market, float range) {
         int countDomain = 0;
-        int countMakeshift= 0;
+        int countMakeshift = 0;
         Vector2f locInHyper = market.getLocationInHyperspace();
         for (StarSystemAPI system : Global.getSector().getStarSystems()) {
             float dist = Misc.getDistanceLY(locInHyper, system.getLocation());
@@ -156,6 +165,7 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
 
         return bonus;
     }
+
     @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         //if (mode == IndustryTooltipMode.NORMAL && isFunctional()) {
@@ -164,7 +174,7 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
 
 
             String desc = getNameForModifier();
-            float a =ACC_BONUS;
+            float a = ACC_BONUS;
             if (a > 0) {
                 fake.modifyFlat(getModId(0), a, desc);
             }
@@ -176,11 +186,11 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
 //			}
 //
 //			float total = a - loss;
-            String totalStr = "+" + (int)Math.round(total * 100f) + "%";
+            String totalStr = "+" + (int) Math.round(total * 100f) + "%";
             Color h = Misc.getHighlightColor();
             if (total < 0) {
                 h = Misc.getNegativeHighlightColor();
-                totalStr = "" + (int)Math.round(total * 100f) + "%";
+                totalStr = "" + (int) Math.round(total * 100f) + "%";
             }
             float opad = 10f;
             float pad = 3f;
@@ -191,7 +201,7 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
             }
 
             float bonus = getPopulationGrowthBonus();
-            tooltip.addPara("Population growth: %s", opad, h, "+" + (int)bonus);
+            tooltip.addPara("Population growth: %s", opad, h, "+" + (int) bonus);
 
             HyperspaceTopographyEventIntel intel = HyperspaceTopographyEventIntel.get();
             if (intel != null && intel.isStageActive(HyperspaceTopographyEventIntel.Stage.SLIPSTREAM_DETECTION)) {
@@ -206,6 +216,8 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
                 }
 
             }
+            tooltip.addSectionHeading("Adaptive Logistics Array", Alignment.MID, opad);
+            tooltip.addPara("This wonder gives the ability to call in supply fleets from anywhere in the sector, without requiring a comm array. Due to abnormal properties, no communications can be received from the Abyss.", 3f);
 
 //			tooltip.addStatModGrid(400, 50, opad, pad, fake, new StatModValueGetter() {
 //				public String getPercentValue(StatMod mod) {
@@ -225,7 +237,15 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
 //			});
 
         }
+        if (IndustryTooltipMode.ADD_INDUSTRY.equals(mode)) {
+            tooltip.addSectionHeading("Industries that will be removed upon construction", Alignment.MID, 5f);
+            ArrayList<String> ids = new ArrayList<>(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.SPACEPORT));
+            tooltip.addPara("%s", 5f, Color.ORANGE, IndustrySynergiesMisc.getIndustriesListed(ids, market));
+
+
+        }
     }
+
     protected void applyImproveModifiers() {
         // have to use a custom id - "spaceport_improve" - so that it's the same modifier when upgraded to megaport
         if (isImproved()) {
@@ -240,7 +260,7 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
     public boolean isAvailableToBuild() {
         if (GrandWonderTypeManager.getSpec(getWonderTypeId()).canBuildAdditionalWonderOfType(this.getSpec().getId(), this.market)) {
             for (String s : getRequirementsToBuildWonder().keySet()) {
-                if(!hasReqBeenMetOnMarket(s)){
+                if (!hasReqBeenMetOnMarket(s)) {
                     return false;
                 }
             }
@@ -256,20 +276,20 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
     @Override
     public void finishedConstruction(MarketAPI marketAPI) {
         Industry ind = marketAPI.getIndustry(Industries.SPACEPORT);
-        if(ind==null)ind = marketAPI.getIndustry(Industries.MEGAPORT);
+        if (ind == null) ind = marketAPI.getIndustry(Industries.MEGAPORT);
         SpecialItemData data = ind.getSpecialItem();
         String ai = ind.getAICoreId();
         boolean wasImproved = ind.isImproved();
-        if(wasImproved){
+        if (wasImproved) {
             this.setImproved(true);
         }
-        if(AshMisc.isStringValid(ai)){
+        if (AshMisc.isStringValid(ai)) {
             this.setAICoreId(ai);
         }
-        if(data!=null){
-            market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addSpecial(data,1);
+        if (data != null) {
+            market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addSpecial(data, 1);
         }
-        market.removeIndustry(ind.getId(), MarketAPI.MarketInteractionMode.REMOTE,false);
+        market.removeIndustry(ind.getId(), MarketAPI.MarketInteractionMode.REMOTE, false);
         this.apply();
     }
 
@@ -316,11 +336,11 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
 
     @Override
     public boolean hasReqBeenMetOnMarket(String s) {
-        if(s.equals("first")){
-            return market.getSize()>=6;
+        if (s.equals("first")) {
+            return market.getSize() >= 6;
         }
-        if(s.equals("second")){
-            return !market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY)&&!market.hasCondition(Conditions.TECTONIC_ACTIVITY)&&!market.hasCondition(Conditions.EXTREME_WEATHER);
+        if (s.equals("second")) {
+            return !market.hasCondition(Conditions.EXTREME_TECTONIC_ACTIVITY) && !market.hasCondition(Conditions.TECTONIC_ACTIVITY) && !market.hasCondition(Conditions.EXTREME_WEATHER);
         }
         return true;
     }
@@ -334,6 +354,6 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
 
     @Override
     public boolean shouldShowInListOfWonders(MarketAPI marketAPI) {
-        return GrandWonderTypeManager.getSpec(getWonderTypeId()).canBuildAdditionalWonderOfType(this.getSpec().getId(), marketAPI);
+        return  AoTDMainResearchManager.getInstance().isAvailableForThisMarket( AoTDTechIds.DAEDALUS_PROJECT,marketAPI)&&GrandWonderTypeManager.getSpec(getWonderTypeId()).canBuildAdditionalWonderOfType(this.getSpec().getId(), marketAPI);
     }
 }

@@ -17,6 +17,7 @@ import data.kaysaar.aotd.tot.scripts.trade.contracts.AoTDTradeContractManager;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.MegastructureSectionSpec;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.MegastructureSpecManager;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.MegastructureStatManager;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.dialogs.base.BaseMegastructureDialogContent;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.dialogs.restoration.MegastructureSectionRestorationDialog;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.tradecontracts.BaseRestorationContract;
@@ -48,6 +49,15 @@ public class BaseMegastructureSection {
     public float getDaysSpentRestoring() {
         return daysSpentRestoring;
     }
+    public MutableStat restorationSpeedStat = new MutableStat(1f);
+
+    public MutableStat getRestorationSpeedStat() {
+        if(restorationSpeedStat == null){
+            restorationSpeedStat = new MutableStat(1f);
+        }
+        return restorationSpeedStat;
+    }
+
     public boolean isOwnedByPLayerFaction(){
         if(megastructureTiedTo.getEntityTiedTo()==null)return true;
         return megastructureTiedTo.getEntityTiedTo().getFaction().isPlayerFaction();
@@ -92,6 +102,7 @@ public class BaseMegastructureSection {
 
         for (String commodityId : required.keySet()) {
             int requiredAmount = required.get(commodityId);
+            requiredAmount = Math.round(requiredAmount * MegastructureStatManager.getInstance().getMegastructureResourceCostMult().getModifiedValue());
             if (requiredAmount <= 0) {
                 continue;
             }
@@ -169,19 +180,27 @@ public class BaseMegastructureSection {
     public HashMap<String, Integer> getMonthlyResNeeded() {
         HashMap<String, Integer> commodities = new HashMap<>();
 
-        int months = Math.max(1, getMonthsFromNextMonth(getDaysLeft())); // prevent division by 0
-
         LinkedHashMap<String, Integer> required = getSpec().getResourceRestorationCost();
+        if (required == null || required.isEmpty()) {
+            return commodities;
+        }
 
-        required.forEach((key, totalRequired) -> {
+        float costMult = MegastructureStatManager.getInstance()
+                .getMegastructureResourceCostMult()
+                .getModifiedValue();
+
+        int totalMonths = Math.max(1, (int) Math.ceil(getSpec().getDaysNeededForRestoration() / 30f));
+
+        required.forEach((key, baseRequired) -> {
+            int totalRequired = Math.round(baseRequired * costMult);
             int alreadySpent = getResourcesSpentOnRestoration().getOrDefault(key, 0);
 
-            int remaining = Math.max(0, totalRequired - alreadySpent);
+            if (alreadySpent >= totalRequired) return;
 
-            if (remaining <= 0) return;
+            int perMonth = (int) Math.ceil((float) totalRequired / (float) totalMonths);
 
-            // ceil division so we don't "lose" resources over time
-            int perMonth = (int) Math.ceil((float) remaining / (float) months);
+            int remaining = totalRequired - alreadySpent;
+            perMonth = Math.min(perMonth, remaining);
 
             AoTDMisc.putCommoditiesIntoMap(commodities, key, perMonth);
         });

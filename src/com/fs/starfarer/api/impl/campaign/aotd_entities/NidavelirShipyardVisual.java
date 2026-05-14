@@ -61,9 +61,8 @@ public class NidavelirShipyardVisual extends BaseCustomEntityPlugin {
             PlanetSpecAPI spec = tiedToPlanet.getSpec();
             spec.setIconColor(new Color(246, 202, 125));
             spec.getShieldColor();
-            ((PlanetSpec) spec).name = "Shipyard";
-            tiedToPlanet.applySpecChanges();
             ((PlanetSpec) spec).iconTexture = "graphics/icons/nidavelir.png";
+            tiedToPlanet.applySpecChanges();
 //            graphics.advance(amount);
 //            graphics.getLocation().set(tiedToPlanet.getLocation());
             for (Planet layer : layers.keySet()) {

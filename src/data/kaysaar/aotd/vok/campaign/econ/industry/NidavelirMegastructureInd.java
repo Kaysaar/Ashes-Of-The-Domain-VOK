@@ -4,11 +4,12 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.models.BaseMegastructureScript;
 
-public class NidavelirMegastructureInd extends BaseIndustry implements MegastructureIndAPI {
+public class NidavelirMegastructureInd extends HeavyIndustry implements MegastructureIndAPI {
     @Override
     public void init(String id, MarketAPI market) {
         super.init(id, market);
@@ -19,6 +20,7 @@ public class NidavelirMegastructureInd extends BaseIndustry implements Megastruc
         super.apply(true);
         if(market.getPrimaryEntity()!=null){
             BaseMegastructureScript script = getMegastructureScript(market.getPrimaryEntity());
+            script.tiedMarket = market;
             script.getRestoredSections().forEach(x->x.applySectionOnIndustry(this));
         }
 

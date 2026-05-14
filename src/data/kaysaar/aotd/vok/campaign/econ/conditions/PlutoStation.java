@@ -41,11 +41,5 @@ public class PlutoStation extends BaseMarketConditionPlugin2 {
         if(!market.hasIndustry("pluto_station")&&market.getFaction()!=null&&!market.getFactionId().equals(Factions.NEUTRAL)){
             market.addIndustry("pluto_station");
         }
-        try {
-            if(BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(market.getPrimaryEntity(),"aotd_pluto_station")!=null){
-                BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(market.getPrimaryEntity(),"aotd_pluto_station").tiedMarket = market;
-            }
-        } catch (Exception ignored) {
-        }
     }
 }

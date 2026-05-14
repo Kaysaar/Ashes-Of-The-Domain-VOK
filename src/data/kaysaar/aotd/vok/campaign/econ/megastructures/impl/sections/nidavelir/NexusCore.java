@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyardVisual;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -42,9 +43,9 @@ public class NexusCore extends BaseNidavelirSection {
     @Override
     public LinkedHashMap<String, Integer> getProductionMap() {
         LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
-        map.put(Commodities.HEAVY_MACHINERY, 15);
+        map.put(Commodities.HEAVY_MACHINERY, 12);
         map.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,10);
-        map.put(AoTDCommodities.ADVANCED_COMPONENTS, 12);
+        map.put(AoTDCommodities.ADVANCED_COMPONENTS, 8);
         return map;
     }
 
@@ -60,6 +61,7 @@ public class NexusCore extends BaseNidavelirSection {
             effect = "Section Automation";
         }
         ind.getUpkeep().modifyMult(this.getSpec().getId()+"_red",total,getName()+"- "+effect);
+        ind.getMarket().getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat("aotd_quality_bonus", 2f, "Nidavelir Shipyards Blueprints");
     }
     public int getDeficitIndex(){
         return 6;

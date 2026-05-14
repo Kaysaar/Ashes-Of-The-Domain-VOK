@@ -3,6 +3,8 @@ package data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
+import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.BaseIndustrySynergy;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
@@ -32,12 +34,13 @@ public class RapidTransportation extends BaseIndustrySynergy {
 
     @Override
     public boolean doesSynergyMetReq(MarketAPI market) {
-        return IndustrySynergiesMisc.isIndustryFunctionalAndExistingIncludingUpgrades(market,Industries.SPACEPORT,Industries.WAYSTATION);
+        return IndustrySynergiesMisc.isIndustryFunctionalAndExistingIncludingUpgrades(market,Industries.SPACEPORT,Industries.WAYSTATION)||IndustrySynergiesMisc.isIndustryFunctionalAndExistingIncludingUpgrades(market, AoTDIndustries.DAEDALUS_ARRAY,Industries.WAYSTATION);
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.SPACEPORT);
+        ids.add(AoTDIndustries.DAEDALUS_ARRAY);
         ArrayList<String> fuelIds = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.WAYSTATION);
         tooltip.addPara("Requires %s and %s on the same planet.", 3f, base, highLight,
                 getIndustriesListed(ids,market),

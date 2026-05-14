@@ -14,7 +14,7 @@ public class VanguardForge extends BaseNidavelirSection {
     @Override
     public void printEffectSectionPerManpowerPoint(int manpowerAssigned, TooltipMakerAPI tl) {
         int total = percentageUpkeepModifierPerManpower*manpowerAssigned;
-        tl.addPara("Increase production speed of %s and %s by %s", 5f, Color.ORANGE, "Frigates","Destroyers",total+"%");
+//        tl.addPara("Increase production speed of %s and %s by %s", 5f, Color.ORANGE, "Frigates","Destroyers",total+"%");
         tl.addPara("All produced ships have increased amount of available S-mods by %s",3f,Color.ORANGE,"1");
     }
     public int getDeficitIndex(){

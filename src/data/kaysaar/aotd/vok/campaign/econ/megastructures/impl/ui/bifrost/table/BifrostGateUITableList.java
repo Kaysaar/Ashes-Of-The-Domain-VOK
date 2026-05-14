@@ -22,9 +22,9 @@ public class BifrostGateUITableList extends UITableImpl {
     public static LinkedHashMap<String, Integer> widthMap = new LinkedHashMap<>();
     static {
         widthMap.put("name", 246);
-        widthMap.put("status", 250);
+        widthMap.put("status", 260);
         widthMap.put("demand", 200);
-        widthMap.put("bonus", 100);
+        widthMap.put("bonus", 90);
     }
 
 
