@@ -16,9 +16,10 @@ public class EnrichmentFacility extends BaseIndustry {
 
         demand(Commodities.ORE, 7 + size);
         demand(Commodities.RARE_ORE, 10 + size); // have to keep it low since it can be circular
-
+        demand(Commodities.HEAVY_MACHINERY, size + 2);
         if (AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PURIFICATION, this.getMarket())) {
             supply(AoTDCommodities.PURIFIED_TRANSPLUTONICS, market.getSize() + 1);
+            demand(AoTDCommodities.DOMAIN_GRADE_MACHINERY, market.getSize() - 3);
         } else {
             supply(AoTDCommodities.PURIFIED_TRANSPLUTONICS, market.getSize() - 2);
         }
@@ -27,7 +28,7 @@ public class EnrichmentFacility extends BaseIndustry {
         supply(Commodities.METALS, market.getSize() - 2);
 
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORE, Commodities.RARE_ORE);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORE, Commodities.RARE_ORE, Commodities.HEAVY_MACHINERY, AoTDCommodities.DOMAIN_GRADE_MACHINERY);
         applyDeficitToProduction(1, deficit, AoTDCommodities.PURIFIED_TRANSPLUTONICS, Commodities.RARE_METALS, Commodities.METALS);
         if (!isFunctional()) {
             supply.clear();

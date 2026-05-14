@@ -6,6 +6,7 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.FuelProduction;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
@@ -19,11 +20,13 @@ public class FuelRefinery extends FuelProduction {
         demand(Commodities.VOLATILES, size-2);
         demand(Commodities.HEAVY_MACHINERY, size);
         supply(Commodities.FUEL, size +4);
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.VOLATILES,Commodities.HEAVY_MACHINERY);
+        demand(AoTDCommodities.ADVANCED_COMPONENTS, size-2);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.VOLATILES,Commodities.HEAVY_MACHINERY,AoTDCommodities.DOMAIN_GRADE_MACHINERY);
         if(Global.getSector().getMemory().is("$aotd_compound_unlocked",true)){
             supply("compound",Math.floorDiv(size,2));
         }
-        applyDeficitToProduction(1, deficit, Commodities.FUEL,"compound");
+
+        applyDeficitToProduction(1, deficit, Commodities.FUEL,"compound", AoTDCommodities.DOMAIN_GRADE_MACHINERY);
 
         if (!isFunctional()) {
             supply.clear();

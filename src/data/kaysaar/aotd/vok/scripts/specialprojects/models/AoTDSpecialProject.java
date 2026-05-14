@@ -222,7 +222,7 @@ public class AoTDSpecialProject {
         return false;
     }
     public void advance(float amount) {
-        float days = amount*penalty;
+        float days = amount;
         float additionalDays = days* AoTDMainResearchManager.getInstance().getManagerForPlayer().getBlackSiteSpecialProjBonus().getModifiedValue();
         for (String currentlyAttemptedStage : currentlyAttemptedStages) {
             getStage(currentlyAttemptedStage).advance(days+additionalDays);

@@ -82,6 +82,7 @@ public class BiFrostCMD extends BaseCommandPlugin {
     protected void selectDestination() {
         final ArrayList<SectorEntityToken> gates =
                 new ArrayList<>();
+        BifrostMegastructureManager.getInstance().getMegastructure().getActiveSections().forEach(x->gates.add(x.getGateTiedTo()));
         gates.remove(entity);
         Iterator<SectorEntityToken>iterator = gates.iterator();
         while (iterator.hasNext()) {

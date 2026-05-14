@@ -8,6 +8,8 @@ import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.tot.plugins.AoTDCommodityEconSpecManager;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.dialogs.base.BaseSliderDialog;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.dialogs.components.SectionShowcaseSection;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.hypershunt.WormholeGenerator;
@@ -46,7 +48,8 @@ public class RangeIncreaseDialog extends BaseSliderDialog {
         );
         tooltip.addPara("Range of hypershunt : %s light years",5f, Color.ORANGE,""+(currentSegment*mult));
         tooltip.addPara("Upkeep : %s", 5f, Color.ORANGE, Misc.getDGSCredits(20000 * effectiveSegment));
-        tooltip.addPara("Consumption of %s : %s",5f,Color.ORANGE,"purified transplutonics",""+(effectiveSegment *mult*2));
+        int total  = AoTDCommodityEconSpecManager.getCargoAmountFromSupplyOrDemand(effectiveSegment*2,true, AoTDCommodities.PURIFIED_TRANSPLUTONICS);
+        tooltip.addPara("Consumption of %s : %s",5f,Color.ORANGE,"purified transplutonics",""+total);
     }
 
     @Override

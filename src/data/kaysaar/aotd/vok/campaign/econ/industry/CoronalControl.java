@@ -3,6 +3,7 @@ package data.kaysaar.aotd.vok.campaign.econ.industry;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.Industry;
+import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.MarketConditionSpecAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
@@ -45,6 +46,21 @@ public class CoronalControl extends AoTDToolboxPopAndInfra implements Megastruct
     @Override
     public String getId() {
         return Industries.POPULATION;
+    }
+
+    @Override
+    public void advance(float amount) {
+        super.advance(amount);
+        getMegastructureScript(market.getPrimaryEntity()).advance(amount);
+    }
+
+    @Override
+    public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
+        super.notifyBeingRemoved(mode, forUpgrade);
+        if(market!=null&&market.getPrimaryEntity()!=null){
+            getMegastructureScript(market.getPrimaryEntity()).advance(-1f);
+
+        }
     }
 
     @Override

@@ -16,32 +16,35 @@ import com.fs.starfarer.api.impl.campaign.intel.bar.events.ScientistAICoreBarEve
 import com.fs.starfarer.api.util.DelayedActionScript;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.tot.grandwonders.GrandWonderTypeManager;
+import data.kaysaar.aotd.tot.scripts.trade.contracts.rewards.creators.impl.playercontracts.PlayerIssuedSupplyContract;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDItems;
 import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
 import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.CentralizedCore;
 import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.DistributedRegionalNetwork;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.HypershuntQuaters;
 import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.PerseanStandardized;
 import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentManager;
 
+
+import data.kaysaar.aotd.vok.campaign.econ.grandprojects.BiosphereType;
 import data.kaysaar.aotd.vok.campaign.econ.grandprojects.SpaceDefenceStationType;
 import data.kaysaar.aotd.vok.campaign.econ.grandprojects.SpaceTransportationType;
+import data.kaysaar.aotd.vok.campaign.econ.grandprojects.TechnologyType;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.SpaceDrugsDemand;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandManager;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMover;
 import data.kaysaar.aotd.vok.campaign.econ.industry.AoTDHeavyIndustry;
-import data.kaysaar.aotd.vok.campaign.econ.industry.TierFourStation;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.buildingmenu.IndustryBlockerListener;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.MegastructureSpecManager;
+import data.kaysaar.aotd.vok.campaign.econ.produciton.SpecialItemRecipeInfluencer;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.listeners.AoTDProdListener;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.manager.AoTDProductionManager;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
-import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.ColonyDevelopmentApplier;
-import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.HypercognitionTestSynergy;
-import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.MaglevSource;
-import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.SpaceportSource;
+import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.*;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies.*;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesManager;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.ui.SynergyUiInjector;
@@ -77,8 +80,6 @@ import data.kaysaar.aotd.vok.timeline.research.JanusDeviceEvent;
 import data.kaysaar.aotd.vok.timeline.research.ResearchFacilityEvent;
 import data.kaysaar.aotd.vok.timeline.research.MacroIndustrialComplexResearch;
 import data.kaysaar.aotd.vok.timeline.research.StreamlinedProductionResearch;
-import data.kaysaar.aotd.vok.timeline.templates.MegastructureClaimEvent;
-import data.kaysaar.aotd.vok.timeline.templates.MegastructureRestoredEvent;
 import data.kaysaar.aotd.vok.timeline.templates.SpecialProjectCompletionEvent;
 import data.kaysaar.aotd.vok.timeline.unique.BifrostNetworkEstablished;
 import data.kaysaar.aotd.vok.timeline.unique.HyperdimensionalProcessorEvent;
@@ -197,6 +198,9 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         MegastructureSpecManager.init();
         GrandWonderTypeManager.addNewSpec(new SpaceTransportationType());
         GrandWonderTypeManager.addNewSpec(new SpaceDefenceStationType());
+        GrandWonderTypeManager.addNewSpec(new BiosphereType());
+        GrandWonderTypeManager.addNewSpec(new TechnologyType());
+        AoTDProductionSpecManager.addListener("item_influence",new SpecialItemRecipeInfluencer());
     }
     public static boolean moveFileIntoStuffSubdirInModGraphics(String modId, String absolutePath) {
         try {
@@ -299,7 +303,8 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 //        l.addListener(new AoTDMegastructureUpkeepListener(), true);
 //        l.addListener(new NidavelirClaimMegastructure(), true);
 //        l.addListener(new AoTDSupertencileListener(), true);
-        l.addListener(new BifrostReesarchListener(), true);
+        l.addListener(new AoTDSupertensileResearchListener(), true);
+        l.addListener(new SkyTetherListener(), true);
         l.addListener(new AoDIndustrialMightListener(),true);
         l.addListener(new EconomyTickListener() {
             @Override
@@ -339,7 +344,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         Global.getSettings().getHullModSpec("shrouded_lens").setEffectClass(AoTDShroudedLensHullmod.class.getName());
         Global.getSettings().getIndustrySpec(Industries.HEAVYINDUSTRY).setPluginClass(AoTDHeavyIndustry.class.getName());
         Global.getSettings().getIndustrySpec(Industries.ORBITALWORKS).setPluginClass(AoTDHeavyIndustry.class.getName());
-
+        Global.getSettings().getIndustrySpec(Industries.AQUACULTURE).addTag("aquaculture");
 
         if (Global.getSettings().getModManager().isModEnabled("uaf")) {
             aoTDSpecialItemRepo.setSpecialItemNewIndustries("uaf_rice_cooker", "aotd_subsidised_farming");
@@ -491,12 +496,12 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("core",new CentralizedCore());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("standard",new PerseanStandardized());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("distributed",new DistributedRegionalNetwork());
-
+        ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("hypershunt",new HypershuntQuaters());
         // Change required : breaks with modded buildings that aren't part of the tech trees, including the Megastructures
         DistributedRegionalNetwork.addNewIndustries(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.MONOCULTURE));
         DistributedRegionalNetwork.addNewIndustries(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE));
         DistributedRegionalNetwork.addNewIndustries(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.EXTRACTIVE_OPERATION));
-
+        DistributedRegionalNetwork.extractiveOperationIndustries.add("aotd_garden_of_elysium");
 
 
     }
@@ -521,6 +526,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
             }
         }
         IndustrySynergiesManager.getInstance().addSynergySource(AoTDIndustries.MAGLEV_CENTRAL_HUB,new MaglevSource(0.7f,AoTDIndustries.MAGLEV_CENTRAL_HUB));
+        IndustrySynergiesManager.getInstance().addSynergySource(AoTDIndustries.DAEDALUS_ARRAY,new SpaceportSource(0.5f,AoTDIndustries.DAEDALUS_ARRAY));
         IndustrySynergiesManager.getInstance().addSynergySource("test",new HypercognitionTestSynergy(0.2f,Industries.POPULATION));
         IndustrySynergiesManager.getInstance().addSynergySource("colonyDevelopmentMan",new ColonyDevelopmentApplier(0.2f,Industries.POPULATION));
 
@@ -556,6 +562,11 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         if(Global.getSettings().isDevMode()){
             MegastructureSpecManager.init();
         }
+        PlayerIssuedSupplyContract.fullProdCommodities.add(AoTDCommodities.COMPOUND);
+        for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
+            marketAPI.removeCondition("aotd_growing_demand_applier");
+        }
+
         aoTDDataInserter.setVanilaIndustriesDowngrades();
         MarketAPI chico = AoTDDataInserter.getMarketBasedOnName("Aztlan", "Chicomoztoc");
         if (chico != null) {
@@ -663,11 +674,6 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
                 aoTDDataInserter.initalizeEconomy(false);
             }
         }
-        if (!Global.getSector().getMemory().is("$aotd_2.2.1_fix", true)) {
-            Global.getSector().getMemory().set("$aotd_2.2.1_fix", true);
-            aoTDDataInserter.initalizeEconomy(false);
-        }
-
         Global.getSector().addTransientScript(new AoTDCollabSpScript());
         Global.getSector().addTransientListener(new AoTDxUafAfterCombatListener());
         Global.getSector().addTransientListener(new AoTDSPListener());
@@ -696,6 +702,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         populateSynergies();
         populateColonyDevelopment();
         AoTDProductionSpecManager.generateSpecsForAllStuff();
+
         AoTDProductionManager.getInstance().ensureScriptExists();
         if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {
             addEvents();

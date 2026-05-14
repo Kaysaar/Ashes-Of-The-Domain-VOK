@@ -14,9 +14,13 @@ import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDItems;
+import data.kaysaar.aotd.vok.campaign.econ.produciton.AoTDProducitonSpecListener;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.models.AoTDProductionManData;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.ProjectReward;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -24,6 +28,7 @@ public class AoTDProductionSpecManager {
     public static LinkedHashSet<WeaponAPI.WeaponType> blackListedTypes = new LinkedHashSet<>();
     public static boolean loaded = false;
 
+    public static LinkedHashMap<String, AoTDProducitonSpecListener>listeners = new LinkedHashMap<>();
     public static void makeSureBlackListInitialized() {
         blackListedTypes.add(WeaponAPI.WeaponType.LAUNCH_BAY);
         blackListedTypes.add(WeaponAPI.WeaponType.BUILT_IN);
@@ -31,7 +36,9 @@ public class AoTDProductionSpecManager {
         blackListedTypes.add(WeaponAPI.WeaponType.SYSTEM);
         blackListedTypes.add(WeaponAPI.WeaponType.STATION_MODULE);
     }
-
+    public static void addListener(String id,AoTDProducitonSpecListener listener) {
+        listeners.put(id, listener);
+    }
     public static LinkedHashMap<String, AoTDProductionSpec> shipProdSpecs = new LinkedHashMap<>();
     public static LinkedHashMap<String, AoTDProductionSpec> weaponProdSpecs = new LinkedHashMap<>();
 
@@ -103,20 +110,33 @@ public class AoTDProductionSpecManager {
             if(hasSpecialProject(ProjectReward.ProjectRewardType.FIGHTER,allFighterWingSpec.getId()))continue;
             fighterProdSpecs.put(allFighterWingSpec.getId(), new AoTDProductionSpec(allFighterWingSpec.getId(), allFighterWingSpec));
         }
+        ArrayList<String>allowedItems =    new ArrayList<>();
+        try {
+            JSONArray array = Global.getSettings().getJSONArray("aotd_item_prod");
+            for (int i = 0; i < array.length(); i++) {
+                String obj = array.getString(i);
+                allowedItems.add(obj);
+
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         for (SpecialItemSpecAPI allSpecialItemSpec : Global.getSettings().getAllSpecialItemSpecs()) {
             if (allSpecialItemSpec.hasTag(Tags.MISSION_ITEM)) continue;
             if (allSpecialItemSpec.hasTag("aotd_ignore_gp")) continue;
             if(!ItemEffectsRepo.ITEM_EFFECTS.containsKey(allSpecialItemSpec.getId()))continue;
+            if(!allowedItems.contains(allSpecialItemSpec.getId()))continue;
             if(hasSpecialProject(ProjectReward.ProjectRewardType.ITEM,allSpecialItemSpec.getId()))continue;
             specialItemProdSpecs.put(allSpecialItemSpec.getId(), new AoTDProductionSpec(allSpecialItemSpec.getId(), allSpecialItemSpec));
         }
         for (CommoditySpecAPI s : Global.getSettings().getAllCommoditySpecs()) {
             if(hasSpecialProject(ProjectReward.ProjectRewardType.AICORE,s.getId()))continue;
+            if(!allowedItems.contains(s.getId()))continue;
             if (s.hasTag("ai_core") && !s.hasTag("no_drop") && !s.getId().equals("ai_cores") && s.hasTag("aotd_ai_core")) {
                 specialItemProdSpecs.put(s.getId(), new AoTDProductionSpec(s.getId(), s));
             }
         }
-
+        listeners.values().forEach(AoTDProducitonSpecListener::specsCreated);
         loaded = true;
     }
     public static AoTDProductionManData getManDataIfPresent(String manufacturer){

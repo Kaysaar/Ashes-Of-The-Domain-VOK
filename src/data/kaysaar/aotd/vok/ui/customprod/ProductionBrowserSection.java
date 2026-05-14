@@ -378,7 +378,7 @@ public class ProductionBrowserSection implements ExtendedUIPanelPlugin {
                             if (chooseTypeInfo != null && !chooseTypeInfo.isTypeChosen(spec.getTypeString())) {
                                 return true;
                             }
-                            if (chooseSizePanel != null && !chooseSizePanel.isSizeChosen(spec.getManufacturer())) {
+                            if (chooseSizePanel != null && !chooseSizePanel.isSizeChosen(spec.getSize())) {
                                 return true;
                             }
                             return false;

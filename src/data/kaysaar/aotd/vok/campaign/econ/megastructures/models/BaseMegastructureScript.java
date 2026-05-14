@@ -246,7 +246,9 @@ public class BaseMegastructureScript {
             megaStructureSection.advance(amount);
         }
         if (tiedMarket != null && getEntityTiedTo() != null) {
-            getEntityTiedTo().setFaction(tiedMarket.getFactionId());
+            if(tiedMarket.getPrimaryEntity()!=null&&!tiedMarket.getPrimaryEntity().equals(getEntityTiedTo())) {
+                getEntityTiedTo().setFaction(tiedMarket.getFactionId());
+            }
             if (tiedMarket.getFaction().isPlayerFaction()) {
                 if (!wasClaimed) {
                     wasClaimed = true;

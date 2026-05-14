@@ -16,7 +16,7 @@ public class BulwarkFoundry extends BaseNidavelirSection {
     @Override
     public void printEffectSectionPerManpowerPoint(int manpowerAssigned, TooltipMakerAPI tl) {
         int total = percentageUpkeepModifierPerManpower*manpowerAssigned;
-        tl.addPara("Increase production speed of %s and %s by %s", 5f, Color.ORANGE, "Cruisers","Capitals",total+"%");
+//        tl.addPara("Increase production speed of %s and %s by %s", 5f, Color.ORANGE, "Cruisers","Capitals",total+"%");
         tl.addPara("All produced ships have built-in %s and %s",3f,Color.ORANGE,"Flux Distributor","Flux Coil Adjunct");
     }
     public int getDeficitIndex(){

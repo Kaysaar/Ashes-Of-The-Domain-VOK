@@ -57,12 +57,6 @@ public class NidavelirComplex extends BaseMarketConditionPlugin2 {
         if(!market.hasIndustry("nidavelir_complex")&&market.getFaction()!=null&&!market.getFactionId().equals(Factions.NEUTRAL)){
             market.addIndustry("nidavelir_complex");
         }
-        try {
-            if(BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(market.getPrimaryEntity(),"nidavelir_complex")!=null){
-                BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(market.getPrimaryEntity(),"nidavelir_complex").tiedMarket = market;
-            }
-        } catch (Exception ignored) {
-        }
     }
 
     @Override

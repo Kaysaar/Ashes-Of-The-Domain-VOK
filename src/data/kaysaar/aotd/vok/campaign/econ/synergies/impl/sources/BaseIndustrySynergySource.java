@@ -10,6 +10,7 @@ import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergySourc
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class BaseIndustrySynergySource implements IndustrySynergySourceAPI {
     public float baseEfficiency = 0f;
@@ -25,14 +26,9 @@ public abstract class BaseIndustrySynergySource implements IndustrySynergySource
         }
         int demandMisisng = 0;
         if(includeDemand){
-            for (MutableCommodityQuantity curr : ind.getAllDemand()) {
-                CommodityOnMarketAPI com = ind.getMarket().getCommodityData(curr.getCommodityId());
-                int available = com.getAvailable();
-                int qty = curr.getQuantity().getModifiedInt();
-                if (qty <= 0) continue;
-                int red = Math.max(0, qty - available);
-                demandMisisng+=red;
-            }
+            ArrayList<String>demands = new ArrayList<>();
+            ind.getAllDemand().forEach(x->demands.add(x.getCommodityId()));
+            demandMisisng = ind.getMaxDeficit(demands.toArray(new String[0])).two;
         }
 
         float improved = 0f;

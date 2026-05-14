@@ -10,4 +10,7 @@ public interface ColonyDevelopmentAPI {
     boolean canBeAppliedOnMarket(MarketAPI market);
     void apply(MarketAPI market);
     void unapply(MarketAPI market);
+    default boolean canShowOnMarket(MarketAPI market){
+        return true;
+    }
 }

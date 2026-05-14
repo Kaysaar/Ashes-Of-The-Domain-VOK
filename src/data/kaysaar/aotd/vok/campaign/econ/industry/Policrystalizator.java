@@ -19,8 +19,11 @@ public class Policrystalizator extends BaseIndustry {
         }
         demand(Commodities.ORE, 9 + size);
         demand(Commodities.RARE_ORE, 6 + size); // have to keep it low since it can be circular
-            if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PURIFICATION,this.getMarket())){
+        demand(Commodities.HEAVY_MACHINERY, size);
+
+        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ALLOY_PURIFICATION,this.getMarket())){
                 supply(AoTDCommodities.REFINED_METAL, market.getSize()+2);
+            demand(AoTDCommodities.DOMAIN_GRADE_MACHINERY, market.getSize() -3);
             }
             else{
                 supply(AoTDCommodities.REFINED_METAL, market.getSize()-2);
@@ -28,7 +31,7 @@ public class Policrystalizator extends BaseIndustry {
 
         supply(Commodities.METALS, market.getSize()+2);
         supply(Commodities.RARE_METALS, market.getSize()-2);
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORE, Commodities.RARE_ORE);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORE, Commodities.RARE_ORE,Commodities.HEAVY_MACHINERY,AoTDCommodities.DOMAIN_GRADE_MACHINERY);
         applyDeficitToProduction(3, deficit, AoTDCommodities.REFINED_METAL,Commodities.METALS,Commodities.RARE_METALS);
 
         if (!isFunctional()) {

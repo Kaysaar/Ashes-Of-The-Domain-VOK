@@ -136,7 +136,6 @@ public class CoreUiInterceptor implements CoreUITabListener, PlayerColonizationL
     public void reportPlayerColonizedPlanet(PlanetAPI planet) {
         MarketAPI market = planet.getMarket();
         if(NidavelirComplex.getComplexCondition(market)!=null){
-            NidavelirComplex.getComplexCondition(market).init(market,NidavelirComplex.getComplexCondition(market).getConditionAPI());
             Global.getSector().addTransientScript(new DelayedActionScript(0.005f) {
                 @Override
                 public boolean runWhilePaused() {

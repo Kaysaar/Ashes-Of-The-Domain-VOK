@@ -16,10 +16,6 @@ public class MegastructureSpecManager {
     public static LinkedHashMap<String, MegastructureSpec> megastructuresSpec = new LinkedHashMap<>();
     public static LinkedHashMap<String, MegastructureSectionSpec> megastructuresSectionSpec = new LinkedHashMap<>();
 
-
-
-
-
     public static void init() {
         try {
             for (JSONObject jsonObject : AoTDMisc.getObjectListFromArray(Global.getSettings().getMergedSpreadsheetDataForMod("id", "data/campaign/aotd_megastructure_sections.csv", "aotd_vok"))) {

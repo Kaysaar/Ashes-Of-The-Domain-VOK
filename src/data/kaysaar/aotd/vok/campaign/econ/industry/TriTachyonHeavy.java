@@ -26,6 +26,10 @@ public class TriTachyonHeavy extends AoTDHeavyIndustry {
         float qualityBonus = QUALITY_BONUS;
         demand(Commodities.METALS, size+2);
         demand(AoTDCommodities.PURIFIED_TRANSPLUTONICS, size+1);
+        if(!market.getId().equals("culann")){
+            demand(AoTDCommodities.ADVANCED_COMPONENTS, size-1);
+        }
+
 
         supply(Commodities.HEAVY_MACHINERY, size+3);
         supply(Commodities.SUPPLIES, size+3);
@@ -36,7 +40,7 @@ public class TriTachyonHeavy extends AoTDHeavyIndustry {
         market.getStats().getDynamic().getMod(Stats.PRODUCTION_QUALITY_MOD).modifyFlat(getModId(1), qualityBonus, "Orbital Skunkworks Facility");
 
 
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.METALS, Commodities.RARE_METALS, AoTDCommodities.PURIFIED_TRANSPLUTONICS);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.METALS, Commodities.RARE_METALS, AoTDCommodities.PURIFIED_TRANSPLUTONICS,AoTDCommodities.ADVANCED_COMPONENTS);
         applyDeficitToProduction(2, deficit,
                 Commodities.HEAVY_MACHINERY,
                 Commodities.SUPPLIES,

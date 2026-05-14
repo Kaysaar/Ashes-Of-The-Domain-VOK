@@ -23,7 +23,7 @@ public class DefensiveNetwork extends BaseIndustrySynergy {
     public boolean doesSynergyMetReq(MarketAPI market) {
         boolean max_tier_station = market.getIndustries().stream().anyMatch(x->x.getSpec().hasTag(Industries.TAG_STARFORTRESS));
         return max_tier_station &&
-                market.hasIndustry(Industries.HEAVYBATTERIES) && market.hasIndustry(Industries.HIGHCOMMAND);
+                market.hasIndustry(Industries.HEAVYBATTERIES) && (market.hasIndustry(Industries.HIGHCOMMAND)||market.hasIndustry("aotd_hexagon"));
     }
     @Override
     public String getSynergyName() {

@@ -90,6 +90,12 @@ public class BifrostControlCenter extends BaseIndustry {
     }
 
     @Override
+    public void advance(float amount) {
+        super.advance(amount);
+        BifrostMegastructureManager.getInstance().getMegastructure().advance(amount);
+    }
+
+    @Override
     protected void addPostDemandSection(TooltipMakerAPI tooltip, boolean hasDemand, IndustryTooltipMode mode) {
         tooltip.addSectionHeading("Bifrost Network Maintenance", Alignment.MID,10f);
         tooltip.addPara("This structure is necessary for proper work of Bifrost Gates. Without this structure none of gates will work!",3f);

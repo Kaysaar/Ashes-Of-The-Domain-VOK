@@ -28,9 +28,10 @@ public class MacroIndustrialComplex extends AoTDHeavyIndustry {
         demand(Commodities.RARE_METALS, size);
         demand(AoTDCommodities.REFINED_METAL, size+2);
         demand(AoTDCommodities.PURIFIED_TRANSPLUTONICS, size + 1);
+        demand(AoTDCommodities.ADVANCED_COMPONENTS, size-2);
         supply(Commodities.HEAVY_MACHINERY, size+2);
         supply(Commodities.SUPPLIES, size+4);
-        supply("domain_heavy_machinery", size);
+        supply("domain_heavy_machinery", size+1);
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.METALS,Commodities.RARE_ORE);
         Pair<String, Integer> deficit2 = getMaxDeficit(AoTDCommodities.REFINED_METAL,AoTDCommodities.PURIFIED_TRANSPLUTONICS);
 

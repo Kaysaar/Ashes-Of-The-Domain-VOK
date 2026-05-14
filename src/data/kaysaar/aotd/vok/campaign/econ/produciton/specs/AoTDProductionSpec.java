@@ -93,8 +93,8 @@ public class AoTDProductionSpec {
             int needed = Math.round(basePrice*0.1f);
             float newDays = basePrice/daysMult;
             setDaysToBeCreated((int) newDays);
-            mapOfResourcesNeeded.put("advanced_components",  Math.max(1, needed/200));
-            mapOfResourcesNeeded.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,  Math.max(1, needed/600));
+            mapOfResourcesNeeded.put("advanced_components",  Math.max(1, needed/20));
+            mapOfResourcesNeeded.put(AoTDCommodities.DOMAIN_GRADE_MACHINERY,  Math.max(1, needed/100));
             if(specAPI.getManufacturer().equals("Abyss-Tech")){
                 mapOfResourcesNeeded.put(AoTDItems.TENEBRIUM_CELL,  Math.max(1, basePrice/tenebriumMult));
             }

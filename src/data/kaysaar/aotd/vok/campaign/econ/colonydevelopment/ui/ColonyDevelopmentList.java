@@ -44,6 +44,7 @@ public class ColonyDevelopmentList implements ExtendedUIPanelPlugin {
         componentPanel.addUIElement(tooltipHeader).inTL(0,0);
         float opad = 0f;
         for (Map.Entry<String, BaseColonyDevelopment> entry : ColonyDevelopmentManager.getInstance().getDevelopmentScripts().entrySet()) {
+            if(!entry.getValue().canShowOnMarket(market))continue;
             ButtonAPI button = tooltipButton.addButton(entry.getValue().getName(),entry.getKey(), Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.NONE, componentPanel.getPosition().getWidth()-9,40,opad);
             button.setEnabled(entry.getValue().canBeAppliedOnMarket(market));
             buttons.add(button);
