@@ -40,6 +40,7 @@ public class GardensOfElysium extends ResortCenter implements GrandWonderAPI {
         demand.put(Commodities.SUPPLIES, 5);
         return demand;
     }
+    public static String memKeyForEffect = "$aotd_elysian_hullmod_enfrocer";
 
     public float daysLeftForBuff = 0f;
 
@@ -114,21 +115,20 @@ public class GardensOfElysium extends ResortCenter implements GrandWonderAPI {
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        if(daysLeftForBuff>0){
+        if (daysLeftForBuff > 0) {
             daysLeftForBuff -= Global.getSector().getClock().convertToDays(amount);
             for (FleetMemberAPI memberAPI : Global.getSector().getPlayerFleet().getFleetData().getMembersListCopy()) {
-                if(memberAPI.isFighterWing())continue;
-                if(Misc.isAutomated(memberAPI))continue;
-                memberAPI.getStats().getMaxCombatReadiness().modifyFlatAlways("aotd_elysian",0.2f,"Elysian Wonders");
+                if (memberAPI.isFighterWing()) continue;
+                if (Misc.isAutomated(memberAPI)) continue;
+                if(!memberAPI.getVariant().hasHullMod("aotd_elysian_hullmod_enfrocer")){
+                    memberAPI.getVariant().addPermaMod("aotd_elysian_hullmod_enfrocer");
+                }
             }
+            Global.getSector().getPlayerMemoryWithoutUpdate().set(memKeyForEffect, true);
+        } else {
+            Global.getSector().getPlayerMemoryWithoutUpdate().set(memKeyForEffect, false);
+
         }
-        else{
-            for (FleetMemberAPI memberAPI : Global.getSector().getPlayerFleet().getFleetData().getMembersListCopy()) {
-                if(memberAPI.isFighterWing())continue;
-                if(Misc.isAutomated(memberAPI))continue;
-                memberAPI.getStats().getMaxCombatReadiness().unmodify("aotd_elysian");
-        }
-            }
     }
 
     @Override
@@ -141,7 +141,7 @@ public class GardensOfElysium extends ResortCenter implements GrandWonderAPI {
 
     @Override
     public boolean shouldShowInListOfWonders(MarketAPI marketAPI) {
-        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket( AoTDTechIds.ELYSIAN_PROJECT,marketAPI)&&GrandWonderTypeManager.getSpec(getWonderTypeId()).canBuildAdditionalWonderOfType(this.getSpec().getId(), marketAPI);
+        return AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ELYSIAN_PROJECT, marketAPI) && GrandWonderTypeManager.getSpec(getWonderTypeId()).canBuildAdditionalWonderOfType(this.getSpec().getId(), marketAPI);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class GardensOfElysium extends ResortCenter implements GrandWonderAPI {
             tooltip.addSectionHeading("Industries that will be removed upon construction", Alignment.MID, 5f);
             ArrayList<String> ids = new ArrayList<>(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.MONOCULTURE));
             ids.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.RESORT));
-            tooltip.addPara("%s",5f,Color.ORANGE,IndustrySynergiesMisc.getIndustriesListed(ids,market));
+            tooltip.addPara("%s", 5f, Color.ORANGE, IndustrySynergiesMisc.getIndustriesListed(ids, market));
 
         }
     }

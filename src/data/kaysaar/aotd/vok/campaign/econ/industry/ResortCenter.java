@@ -45,7 +45,7 @@ public class ResortCenter extends BaseIndustry implements MarketImmigrationModif
             demand("alcoholism_tears_c",4);
             demand("alcoholism_absynth_c",4);
         }
-        market.getStability().modifyFlat(getModId(1), STAB_BONUS, "Resort");
+        market.getStability().modifyFlat(getModId(3), STAB_BONUS, "Resort");
         this.getIncome().modifyMult("resort_access", accessMult, "Accessibility");
     }
     @Override

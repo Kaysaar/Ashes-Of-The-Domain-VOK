@@ -187,11 +187,11 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
                         if(s.getPerson().isAICore())continue;
                         if(s.getPerson().getMemoryWithoutUpdate().is("$aotd_gardens",true))continue;
                         OfficerLevelupPlugin plugin = (OfficerLevelupPlugin) Global.getSettings().getPlugin("officerLevelUp");
-                        if(plugin.getMaxLevel(s.getPerson())<=s.getPerson().getStats().getLevel()){
-                            s.getPerson().getStats().setLevel(s.getPerson().getStats().getLevel()+1);
-                            s.getPerson().getMemoryWithoutUpdate().set("$aotd_gardens",true);
-                        }
+                        s.getPerson().getStats().setLevel(s.getPerson().getStats().getLevel()+1);
+                        s.getPerson().getMemoryWithoutUpdate().set("$aotd_gardens",true);
+
                     }
+
                     Global.getSoundPlayer().playUISound("ui_char_gained_story_point",0.9f,1);
                 }
 

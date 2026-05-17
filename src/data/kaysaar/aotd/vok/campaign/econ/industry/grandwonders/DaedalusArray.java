@@ -216,8 +216,8 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
                 }
 
             }
-            tooltip.addSectionHeading("Adaptive Logistics Array", Alignment.MID, opad);
-            tooltip.addPara("This wonder gives the ability to call in supply fleets from anywhere in the sector, without requiring a comm array. Due to abnormal properties, no communications can be received from the Abyss.", 3f);
+//            tooltip.addSectionHeading("Adaptive Logistics Array", Alignment.MID, opad);
+//            tooltip.addPara("This wonder gives the ability to call in supply fleets from anywhere in the sector, without requiring a comm array. Due to abnormal properties, no communications can be received from the Abyss.", 3f);
 
 //			tooltip.addStatModGrid(400, 50, opad, pad, fake, new StatModValueGetter() {
 //				public String getPercentValue(StatMod mod) {
