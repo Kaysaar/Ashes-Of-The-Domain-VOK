@@ -7,7 +7,11 @@ import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
 import com.fs.starfarer.api.util.*;
+import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.CoronalHypershuntMegastructure;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -186,6 +190,10 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
         }
     }
 
+    public static boolean canUseBifrostGates() {
+        return AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.BIFROST_GATE)&& AoTDMisc.isPLayerHavingIndustry(AoTDIndustries.BIFROST_CONTROL_CENTER);
+    }
+
     @Override
     public void advance(float amount) {
         super.advance(amount);
@@ -200,12 +208,11 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
         }
 
 
-        if(CoronalHypershuntMegastructure.isWithinReceiverSystem(this.entity)){
+        if (CoronalHypershuntMegastructure.isWithinReceiverSystem(this.entity)) {
             this.entity.getMemory().set("$cooldown", 0);
             this.entity.getMemory().set("$used", false);
-            this.entity.getMemory().set("$connected",true);
-        }
-        else {
+            this.entity.getMemory().set("$connected", true);
+        } else {
             this.entity.getMemory().set("$connected", false);
         }
         if (showBeingUsedDur > 0 || !beingUsedFader.isIdle()) {

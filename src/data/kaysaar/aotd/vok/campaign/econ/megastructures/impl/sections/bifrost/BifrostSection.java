@@ -135,7 +135,7 @@ public class BifrostSection extends BaseMegastructureSection {
         else{
             if(isRestored){
                 if(CoronalHypershuntMegastructure.isWithinReceiverSystem(starSystemAPI)){
-                    tooltip.addPara("Operational! Connected to %s",yForLabel,Misc.getPositiveHighlightColor(),Color.cyan,"Coronal Hypershunt").setAlignment(Alignment.MID);
+                    tooltip.addPara("Operational! Connected to %s",yForLabel,Misc.getPositiveHighlightColor(),Color.cyan,"Hypershunt").setAlignment(Alignment.MID);
                 }
                 else{
                     if(getCooldown()!=0){

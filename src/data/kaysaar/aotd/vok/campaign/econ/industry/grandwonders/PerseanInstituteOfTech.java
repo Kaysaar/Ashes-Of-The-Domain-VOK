@@ -30,6 +30,11 @@ public class PerseanInstituteOfTech extends BaseIndustry implements GrandWonderA
     }
 
     @Override
+    public boolean isAvailableToBuild() {
+        return false;
+    }
+
+    @Override
     public LinkedHashMap<String, String> getRequirementsToBuildWonder() {
         return new LinkedHashMap<>();
     }
@@ -46,7 +51,7 @@ public class PerseanInstituteOfTech extends BaseIndustry implements GrandWonderA
 
     @Override
     public boolean shouldShowInListOfWonders(MarketAPI marketAPI) {
-        return true;
+        return false;
     }
 
     @Override
