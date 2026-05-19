@@ -133,7 +133,8 @@ public class SpecialProjectStageWindow implements CustomUIPanelPlugin {
         tooltip.addTitle(spec.getName());
 
         tooltip.addSectionHeading("Total Resource cost", Alignment.MID, 5f);
-        tooltip.addCustom(AoTDMisc.createCostSection(panelInfoOfStage.getPosition().getWidth(), 20, 20, spec.getGpCost(), false), 5f);
+
+        tooltip.addCustom(AoTDMisc.createCostSection(panelInfoOfStage.getPosition().getWidth(), 20, 20, stage.getTotalGPCostFromStage(), false), 5f);
         tooltip.addSectionHeading("Delivered so far ", Alignment.MID, 5f);
         tooltip.addCustom(AoTDMisc.createCostSection(panelInfoOfStage.getPosition().getWidth(), 20, 20, stage.getDelivered(), false), 5f);
 

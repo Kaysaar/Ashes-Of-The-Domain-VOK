@@ -2,9 +2,11 @@ package data.kaysaar.aotd.vok.scripts.specialprojects.models;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -50,11 +52,20 @@ public class AoTDSpecialProjectStage {
         delivered.put(commodityId, alreadyDelivered + taken);
         return taken;
     }
+    public HashMap<String, Integer> getTotalGPCostFromStage() {
+        HashMap<String, Integer> commodities = new HashMap<>();
+            this.getSpec().getGpCost().forEach((key, value) -> {
+                float valueTotal = value*BlackSiteProjectManager.getInstance().getProductionMultCost().getModifiedValue();
+                AoTDMisc.putCommoditiesIntoMap(commodities, key, Math.round(valueTotal));
+            });
+        return commodities;
+    }
     public float getMinAllowedProgress(){
         float curr = 1f;
         for (Map.Entry<String, Integer> entry : getSpec().getGpCost().entrySet()) {
             int amDelivered = delivered.getOrDefault(entry.getKey(), 0);
-            float progress = (float) amDelivered /entry.getValue();
+            float total = Math.round(entry.getValue()*BlackSiteProjectManager.getInstance().getProductionMultCost().getModifiedValue());
+            float progress = (float) amDelivered /total;
             if(amDelivered>=entry.getValue()){
                 amDelivered = 1;
             }
@@ -108,7 +119,7 @@ public class AoTDSpecialProjectStage {
         if(!paidForStage){
             setPaidForStage(true);
             Global.getSector().getPlayerFleet().getCargo().getCredits().subtract(getSpec().getCreditCosts());
-            getSpec().getOtherCosts().stream().forEach(x-> BlackSiteProjectManager.eatItems(x, BlackSiteProjectManager.marketId, Misc.getPlayerMarkets(false)));
+            getSpec().getOtherCosts().forEach(x-> BlackSiteProjectManager.eatItems(x, BlackSiteProjectManager.marketId, Misc.getPlayerMarkets(true)));
         }
     }
 }

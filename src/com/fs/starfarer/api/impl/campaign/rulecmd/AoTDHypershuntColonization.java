@@ -82,6 +82,8 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
         market.addIndustry("aotd_coronal_control");
         market.addIndustry(Industries.MEGAPORT);
         market.getIndustry(Industries.MEGAPORT).setHidden(true);
+        market.addIndustry(Industries.PATROLHQ);
+        market.getIndustry(Industries.PATROLHQ).setHidden(true);
         market.addIndustry("aotd_coronal_wormhole_ind");
         market.addIndustry("aotd_coronal_collector_ind");
         if(!market.hasIndustry("starfortress_high")){

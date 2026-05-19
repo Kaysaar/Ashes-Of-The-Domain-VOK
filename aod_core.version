@@ -1,12 +1,12 @@
 {
     "masterVersionFile":"https://raw.githubusercontent.com/Kaysaar/Ashes-Of-The-Domain-VOK/master/aod_core.version",
     "modName":"Ashes of The Domain - Vaults of Knowledge",
-    "directDownloadURL":"https://drive.google.com/uc?export=download&id=1gvck8DcbYSy_GHHp7_VFEqoRtdt9DXz5",
+    "directDownloadURL":"https://drive.google.com/uc?export=download&id=1qk2eWFLuhuisVAddUCxA7C6eVOw3OnpZ",
     "modThreadId":26307,
     "modVersion":
     {
-        "major":4,
-        "minor":2,
-        "patch":3
+        "major":5,
+        "minor":0,
+        "patch":0
      }
 }

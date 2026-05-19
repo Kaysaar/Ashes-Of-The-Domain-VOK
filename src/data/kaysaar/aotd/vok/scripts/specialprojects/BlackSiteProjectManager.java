@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.SubmarketAPI;
+import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.impl.campaign.intel.BlackSiteIntel;
@@ -55,6 +56,13 @@ public class BlackSiteProjectManager {
     public static String memflag = "$aotd_special_proj_manager";
     public static String memflagBlacksite = "$aotd_black_site";
     public static String marketId = AoTDSubmarkets.RESEARCH_FACILITY_MARKET;
+     MutableStat productionMultCost = new MutableStat(1f);
+
+    public MutableStat getProductionMultCost() {
+        if(productionMultCost==null) productionMultCost = new MutableStat(1f);
+        return productionMultCost;
+    }
+
     public transient ArrayList<AoTDSpecializationSpec> specializationSpecs = new ArrayList<>();
     float daysSinceBuiltFacility = 0;
 
