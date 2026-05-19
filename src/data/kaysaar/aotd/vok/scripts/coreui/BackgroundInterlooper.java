@@ -10,9 +10,10 @@ import com.fs.starfarer.campaign.CampaignPlanet;
 import com.fs.starfarer.combat.CombatViewport;
 import com.fs.starfarer.combat.entities.terrain.Planet;
 
+import data.kaysaar.aotd.vok.plugins.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
-import data.misc.ProductionUtil;
+
 import org.lwjgl.util.vector.Vector2f;
 
 import java.util.ArrayList;
