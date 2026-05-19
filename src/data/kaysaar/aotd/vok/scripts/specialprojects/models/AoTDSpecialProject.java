@@ -134,7 +134,8 @@ public class AoTDSpecialProject {
             int months = getMonthsRemaining(stage.getDaysLeft(), Global.getSector().getClock());
 
             stage.getSpec().getGpCost().forEach((key, value) -> {
-                AoTDMisc.putCommoditiesIntoMap(commodities, key, value/ months);
+                float valueTotal = value*BlackSiteProjectManager.getInstance().getProductionMultCost().getModifiedValue();
+                AoTDMisc.putCommoditiesIntoMap(commodities, key, Math.round(valueTotal/ months));
             });
         }
 
