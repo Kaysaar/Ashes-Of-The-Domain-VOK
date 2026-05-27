@@ -14,6 +14,7 @@ import com.fs.starfarer.api.impl.campaign.shared.SharedData;
 import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.campaign.econ.produciton.ProductionMonthlyHistoryManager;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.listeners.AoTDProductionListenerUtils;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.manager.AoTDProductionManager;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
@@ -73,7 +74,6 @@ public class AoTDProductionOrderData {
     public AoTDProductionOrderData(String id, AoTDProductionSpec spec) {
         this(id, spec, 1);
     }
-
     public AoTDProductionOrderData(String id, AoTDProductionSpec spec, int amountToProduce) {
         this.id = id;
         if (spec != null) {
@@ -258,6 +258,7 @@ public class AoTDProductionOrderData {
         node.name = getSpec().getName()+" x "+curr;
         node.upkeep +=getSpec().getProductionCost()*amount;
         node.icon = Global.getSettings().getSpriteName("income_report", "generic_expense");
+        ProductionMonthlyHistoryManager.getInstance().addToCurrentProduction(id,amount,type);
         if (type == AoTDProductionSpec.AoTDProductionSpecType.WEAPON) {
             local.addWeapons(id, amount);
             return;
@@ -321,6 +322,7 @@ public class AoTDProductionOrderData {
                 ships.despawn();
             }
         }
+
 
     }
 

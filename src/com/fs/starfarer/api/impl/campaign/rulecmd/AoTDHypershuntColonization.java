@@ -9,6 +9,7 @@ import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.impl.campaign.ids.*;
+import com.fs.starfarer.api.impl.campaign.submarkets.StoragePlugin;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.*;
@@ -62,13 +63,16 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
     public  MarketAPI createCoronalColony(SectorAPI sector, String factionId, final SectorEntityToken entity,String command) {
         MarketAPI market;
         if(factionId == null)factionId = Factions.INDEPENDENT;
-        if(entity.getMarket()==null){
-            market = Global.getFactory().createMarket(Misc.genUID(), "Coronal Network Center", 3);
+        entity.getMemoryWithoutUpdate().unset("$abandoned");
+        market = Global.getFactory().createMarket(Misc.genUID(), "Coronal Network Center", 3);
+        if(BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(entity,"coronal_hypershunt")==null){
             BaseMegastructureScript script = MegastructureSpecManager.getSpecForMegastructure("coronal_hypershunt").getScript();
             script.trueInit("coronal_hypershunt",entity,market);
         }
         else{
-            market = entity.getMarket();
+           BaseMegastructureScript script =  BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(entity,"coronal_hypershunt");
+           script.tiedMarket = market;
+
         }
         market.getMemoryWithoutUpdate().set(MemFlags.STATION_MARKET,true);
         market.setSurveyLevel(MarketAPI.SurveyLevel.FULL);
@@ -93,6 +97,9 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
         market.addSubmarket(Submarkets.SUBMARKET_STORAGE);
         market.getTariff().modifyFlat("default_tariff", market.getFaction().getTariffFraction());
         market.setPrimaryEntity(entity);
+        market.setFactionId(Factions.PLAYER);
+        StoragePlugin plugin = (StoragePlugin) market.getSubmarket(Submarkets.SUBMARKET_STORAGE).getPlugin();
+        plugin.setPlayerPaidToUnlock(true);
         entity.setMarket(market);
         if(command.equals("TascColonizataion")){
             CoronalHypershuntMegastructure mega = (CoronalHypershuntMegastructure) BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(entity,"coronal_hypershunt");

@@ -223,14 +223,14 @@ public class OnGoingOrderButton extends CustomButton {
         return true;
     }
 
-    private void placeEllipsis(CustomPanelAPI panel,CustomPanelAPI prev) {
+    public static void placeEllipsis(CustomPanelAPI panel,CustomPanelAPI prev) {
         LabelAPI label = Global.getSettings().createLabel("...", Fonts.DEFAULT_SMALL);
         label.setColor(Misc.getHighlightColor());
         label.getPosition().setSize(label.computeTextWidth(label.getText()), label.computeTextHeight(label.getText()));
         panel.addComponent((UIComponentAPI) label).rightOfMid(prev,5);
     }
 
-    private CustomPanelAPI createProductionIconPanel(float size, AoTDProductionSpec spec) {
+    public static CustomPanelAPI createProductionIconPanel(float size, AoTDProductionSpec spec) {
         CustomPanelAPI container = Global.getSettings().createCustom(size, size, null);
 
         if (spec.getProductionType() == AoTDProductionSpec.AoTDProductionSpecType.FIGHTER) {

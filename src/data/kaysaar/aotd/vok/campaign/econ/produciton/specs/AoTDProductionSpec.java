@@ -74,7 +74,7 @@ public class AoTDProductionSpec {
             // Remember to do commodity cost
             int basePrice = (int) getMoneyPrice();
             float newDays = basePrice/daysMult;
-            mapOfResourcesNeeded.put("advanced_components",  Math.max(1, needed/200));
+            mapOfResourcesNeeded.put("advanced_components",  Math.max(1, needed/5));
             setDaysToBeCreated((int) newDays);
         }
         if(spec instanceof SpecialItemSpecAPI specAPI){

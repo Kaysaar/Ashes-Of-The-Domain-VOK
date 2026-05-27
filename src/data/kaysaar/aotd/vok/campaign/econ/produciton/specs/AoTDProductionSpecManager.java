@@ -162,7 +162,16 @@ public class AoTDProductionSpecManager {
     public static AoTDProductionSpec getFighterSpec(String id) {
         return fighterProdSpecs.get(id);
     }
+    public static AoTDProductionSpec getSpec(String id, AoTDProductionSpec.AoTDProductionSpecType type) {
+        if (id == null || type == null) return null;
 
+        return switch (type) {
+            case SHIP -> shipProdSpecs.get(id);
+            case WEAPON -> weaponProdSpecs.get(id);
+            case FIGHTER -> fighterProdSpecs.get(id);
+            case SPECIAL_ITEM, COMMODITY_ITEM -> specialItemProdSpecs.get(id);
+        };
+    }
     public static AoTDProductionSpec getSpecialItemSpec(String id) {
         return specialItemProdSpecs.get(id);
     }

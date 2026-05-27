@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.CoreUITabListener;
 import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
 import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyardVisual;
+import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
@@ -14,6 +15,7 @@ import com.fs.starfarer.api.util.DelayedActionScript;
 import com.fs.starfarer.campaign.CampaignPlanet;
 
 import data.kaysaar.aotd.tot.plugins.ProductionUtil;
+import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.conditions.NidavelirComplex;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.AoDIndustrialMightListener;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.NidavelirMegastructure;
@@ -156,6 +158,11 @@ public class CoreUiInterceptor implements CoreUITabListener, PlayerColonizationL
 
     @Override
     public void reportPlayerAbandonedColony(MarketAPI colony) {
-
+        if(colony.getPrimaryEntity().hasTag(Tags.CORONAL_TAP)){
+            colony.getPrimaryEntity().getMemory().unset("$usable");
+            colony.getPrimaryEntity().getMemory().unset("$colonized");
+            colony.getPrimaryEntity().getMemory().set("$abandoned",true);
+            colony.getPrimaryEntity().setMarket(null);
+        }
     }
 }

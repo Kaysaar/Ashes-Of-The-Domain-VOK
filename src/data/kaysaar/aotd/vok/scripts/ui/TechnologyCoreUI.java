@@ -86,17 +86,7 @@ public class TechnologyCoreUI extends CommandUIPlugin {
     }
 
     public void resetCurrentPlugin(ButtonAPI newButton) {
-        currentlyChosen = newButton;
-        for (Map.Entry<ButtonAPI, CustomPanelAPI> entry : panelMap.entrySet()) {
-            Fader fader = (Fader) ReflectionUtilis.invokeMethodWithAutoProjection("getFader",entry.getValue());
-            if(entry.getKey().equals(currentlyChosen)) {
-                fader.forceIn();
-            }
-            else{
-                fader.forceOut();
-            }
-        }
-        playSound(currentlyChosen);
+        super.resetCurrentPlugin(newButton);
     }
 
     @Override

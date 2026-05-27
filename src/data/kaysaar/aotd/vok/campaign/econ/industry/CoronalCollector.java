@@ -10,7 +10,9 @@ public class CoronalCollector extends BaseIndustry implements MegastructureIndAP
     public void apply() {
         if(market.getPrimaryEntity()!=null){
             getMegastructureScript(market.getPrimaryEntity()).getSectionById("coronal_collector").applySectionOnIndustry(this);
-
+            if(getMegastructureScript(market.getPrimaryEntity()).getSectionById("coronal_collector").isRestored()){
+                market.getPrimaryEntity().getMemoryWithoutUpdate().set("$usable",false);
+            }
         }
     }
 
