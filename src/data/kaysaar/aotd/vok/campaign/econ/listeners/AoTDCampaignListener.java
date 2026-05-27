@@ -6,6 +6,7 @@ import com.fs.starfarer.api.characters.AbilityPlugin;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import data.kaysaar.aotd.vok.campaign.econ.industry.TradePostIndustry;
+import data.kaysaar.aotd.vok.campaign.econ.produciton.ProductionMonthlyHistoryManager;
 
 public class AoTDCampaignListener implements CampaignEventListener {
     @Override
@@ -115,6 +116,6 @@ public class AoTDCampaignListener implements CampaignEventListener {
 
     @Override
     public void reportEconomyMonthEnd() {
-
+        ProductionMonthlyHistoryManager.getInstance().executeMonthEnd();
     }
 }

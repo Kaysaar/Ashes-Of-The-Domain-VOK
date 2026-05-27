@@ -12,6 +12,7 @@ import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderS
 import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
 import data.kaysaar.aotd.vok.ui.customprod.components.ProductionCustomButton;
 import data.kaysaar.aotd.vok.ui.customprod.components.ProductionDynamicPanelForScroll;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,13 +21,15 @@ import java.util.List;
 import java.util.Map;
 
 public class CurrentOrderList implements ExtendedUIPanelPlugin {
-    CustomPanelAPI mainPanel, componentPanel, buttonPanel, headerPanel,confirmPanel;
+    CustomPanelAPI mainPanel, componentPanel, buttonPanel, headerPanel, confirmPanel;
     LinkedHashMap<String, AoTDProductionOrderData> confirmedOrders = new LinkedHashMap<>();
     ProductionDynamicPanelForScroll scrollBarV2;
-    ButtonAPI name, costs, days,confirm,cancel;
+    ButtonAPI name, costs, days, confirm, cancel;
     public float buttonHeight = 40f;
     public boolean needsToUpdateAnotherList = false;
     public AoTDProductionOrderSnapshot currentSnapshot;
+    Boolean isPressingShift = false;
+    Boolean isPressingCtrl = false;
 
     public LinkedHashMap<String, AoTDProductionOrderData> getConfirmedOrders() {
         return confirmedOrders;
@@ -45,22 +48,37 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
 
         createUI();
     }
-    public CurrentOrderList(float width, float height,AoTDProductionOrderSnapshot snapshot) {
+
+    public CurrentOrderList(float width, float height, AoTDProductionOrderSnapshot snapshot) {
         mainPanel = Global.getSettings().createCustom(width, height, this);
         currentSnapshot = snapshot;
-        snapshot.productionData.forEach(x->confirmedOrders.put(x.getId(),x));
+        snapshot.productionData.forEach(x -> confirmedOrders.put(x.getId(), x));
         createUI();
     }
+
     public void addOrder(String id, AoTDProductionSpec spec) {
-        if(confirmedOrders.containsKey(id)) {
-            confirmedOrders.get(id).setAmount(confirmedOrders.get(id).amountToProduce+1);
-        }
-        else{
-            confirmedOrders.put(id,new AoTDProductionOrderData(id,spec));
+        if (confirmedOrders.containsKey(id)) {
+            confirmedOrders.get(id).setAmount(confirmedOrders.get(id).amountToProduce + 1);
+        } else {
+            confirmedOrders.put(id, new AoTDProductionOrderData(id, spec));
         }
 
         createListSection();
-        if(currentSnapshot==null){
+        if (currentSnapshot == null) {
+            createConfirmSection();
+        }
+
+    }
+
+    public void addOrder(String id, AoTDProductionSpec spec, int am) {
+        if (confirmedOrders.containsKey(id)) {
+            confirmedOrders.get(id).setAmount(confirmedOrders.get(id).amountToProduce + am);
+        } else {
+            confirmedOrders.put(id, new AoTDProductionOrderData(id, spec, am));
+        }
+
+        createListSection();
+        if (currentSnapshot == null) {
             createConfirmSection();
         }
 
@@ -169,7 +187,7 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
                 false
         );
         String header = "Order Draft";
-        if(currentSnapshot!=null){
+        if (currentSnapshot != null) {
             header = "Current Order";
         }
         tlHeader.addSectionHeading(header, Alignment.MID, 0f);
@@ -185,7 +203,6 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
                 buttonPanel.getPosition().getHeight(),
                 false
         );
-
 
 
         int gap = 1;
@@ -229,19 +246,21 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
         mainPanel.addComponent(buttonPanel).inTL(0, 21);
 
         createListSection();
-        if(currentSnapshot==null){
+        if (currentSnapshot == null) {
             createConfirmSection();
         }
 
 
     }
-    public int calculateTotalCostOfOrder(){
+
+    public int calculateTotalCostOfOrder() {
         int am = 0;
         for (AoTDProductionOrderData value : confirmedOrders.values()) {
-            am+=value.getMoneyForAllUnits();
+            am += value.getMoneyForAllUnits();
         }
         return am;
     }
+
     public void createConfirmSection() {
         if (confirmPanel != null) {
             mainPanel.removeComponent(confirmPanel);
@@ -263,8 +282,8 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
             tl.addCustom(resourceCostPanel, 8f);
         }
         tl.setButtonFontOrbitron20();
-        confirm = tl.addButton("Confirm Order",null,Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.TL_BR,(confirmPanel.getPosition().getWidth()-10)/2,25,15);
-        if(AshMisc.getMarketsUnderPlayer().isEmpty()){
+        confirm = tl.addButton("Confirm Order", null, Misc.getBasePlayerColor(), Misc.getDarkPlayerColor(), Alignment.MID, CutStyle.TL_BR, (confirmPanel.getPosition().getWidth() - 10) / 2, 25, 15);
+        if (AshMisc.getMarketsUnderPlayer().isEmpty()) {
             tl.addTooltipToPrevious(new TooltipMakerAPI.TooltipCreator() {
                 @Override
                 public boolean isTooltipExpandable(Object tooltipParam) {
@@ -278,14 +297,14 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
 
                 @Override
                 public void createTooltip(TooltipMakerAPI tooltip, boolean expanded, Object tooltipParam) {
-                    tooltip.addPara("You need to establish your own faction first to use custom production!",3f);
+                    tooltip.addPara("You need to establish your own faction first to use custom production!", 3f);
                 }
-            }, TooltipMakerAPI.TooltipLocation.RIGHT,false);
+            }, TooltipMakerAPI.TooltipLocation.RIGHT, false);
         }
-        confirm.getPosition().inTL(0,confirmPanel.getPosition().getHeight()-confirm.getPosition().getHeight());
-        cancel = tl.addButton("Cancel",null,Misc.getBasePlayerColor(),Misc.getNegativeHighlightColor().darker().darker(),Alignment.MID,CutStyle.TL_BR,(confirmPanel.getPosition().getWidth()-10)/2,25,5f);
-        cancel.getPosition().rightOfMid(confirm,10);
-        confirm.setEnabled(!confirmedOrders.isEmpty()&& !AshMisc.getMarketsUnderPlayer().isEmpty());
+        confirm.getPosition().inTL(0, confirmPanel.getPosition().getHeight() - confirm.getPosition().getHeight());
+        cancel = tl.addButton("Cancel", null, Misc.getBasePlayerColor(), Misc.getNegativeHighlightColor().darker().darker(), Alignment.MID, CutStyle.TL_BR, (confirmPanel.getPosition().getWidth() - 10) / 2, 25, 5f);
+        cancel.getPosition().rightOfMid(confirm, 10);
+        confirm.setEnabled(!confirmedOrders.isEmpty() && !AshMisc.getMarketsUnderPlayer().isEmpty());
         cancel.setEnabled(!confirmedOrders.isEmpty());
         confirmPanel.addUIElement(tl).inTL(0, 0);
         mainPanel.addComponent(confirmPanel).inTL(0, mainPanel.getPosition().getHeight() - panelHeight);
@@ -392,8 +411,9 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
 
         return wrapper;
     }
+
     private void createListSection() {
-        if(componentPanel!=null){
+        if (componentPanel != null) {
             componentPanel.removeComponent(componentPanel);
         }
         componentPanel = Global.getSettings().createCustom(
@@ -423,7 +443,7 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
         }
 
         TooltipMakerAPI tl = componentPanel.createUIElement(
-                componentPanel.getPosition().getWidth()+9,
+                componentPanel.getPosition().getWidth() + 9,
                 componentPanel.getPosition().getHeight(),
                 true
         );
@@ -437,7 +457,18 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
             bt.setListener(new CustomButton.ButtonEventListener() {
                 @Override
                 public void onButtonClicked() {
-                    removeOrder(bt.getData().getId());
+                    int am = 1;
+                    if (isPressingShift) {
+                        am = 5;
+                    }
+                    if (isPressingCtrl) {
+                        am = 10;
+                    }
+                    if (isPressingShift && isPressingCtrl) {
+                        am = 50;
+                    }
+
+                    removeOrder(bt.getData().getId(), am);
                 }
             });
             scrollBarV2.addItem(bt.getMainPanel());
@@ -446,7 +477,7 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
         scrollBarV2.createUI();
 
         tl.addCustom(scrollBarV2.getMainPanel(), 0f).getPosition().inTL(0, 2);
-        if(tl.getHeightSoFar()>componentPanel.getPosition().getHeight()){
+        if (tl.getHeightSoFar() > componentPanel.getPosition().getHeight()) {
             tl.addSpacer(2f);
         }
         componentPanel.addUIElement(tl).inTL(0, 0);
@@ -457,23 +488,24 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
     public void clearUI() {
 
     }
-    public void removeOrder(String id ){
-        if(confirmedOrders.containsKey(id)){
+
+    public void removeOrder(String id, int am) {
+        if (confirmedOrders.containsKey(id)) {
             AoTDProductionOrderData data = confirmedOrders.get(id);
-            int newAm = data.amountToProduce-1;
-            if(newAm<=0){
+            int newAm = data.amountToProduce - am;
+            if (newAm <= 0) {
                 confirmedOrders.remove(id);
-            }
-            else{
+            } else {
                 data.setAmount(newAm);
             }
             createListSection();
-            if(currentSnapshot==null){
+            if (currentSnapshot == null) {
                 createConfirmSection();
             }
 
         }
     }
+
     @Override
     public void positionChanged(PositionAPI position) {
 
@@ -491,13 +523,13 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
 
     @Override
     public void advance(float amount) {
-        if(cancel!=null&&cancel.isChecked()){
+        if (cancel != null && cancel.isChecked()) {
             cancel.setChecked(false);
             confirmedOrders.clear();
             createListSection();
             createConfirmSection();
         }
-        if(confirm!=null&&confirm.isChecked()){
+        if (confirm != null && confirm.isChecked()) {
             confirm.setChecked(false);
             AoTDProductionOrderSnapshot snapshot = new AoTDProductionOrderSnapshot();
             snapshot.productionData.addAll(confirmedOrders.values());
@@ -517,10 +549,31 @@ public class CurrentOrderList implements ExtendedUIPanelPlugin {
         return needsToUpdateAnotherList;
     }
 
+
     @Override
     public void processInput(List<InputEventAPI> events) {
+        for (InputEventAPI event : events) {
+            if (event.isConsumed()) continue;
+            if (event.isKeyUpEvent()) {
+                if (event.getEventValue() == Keyboard.KEY_LSHIFT) {
+                    isPressingShift = false;
+                }
+                if (event.getEventValue() == Keyboard.KEY_LCONTROL) {
+                    isPressingCtrl = false;
+                }
 
+            }
+            if (event.isKeyDownEvent()) {
+                if (event.getEventValue() == Keyboard.KEY_LSHIFT) {
+                    isPressingShift = true;
+                }
+                if (event.getEventValue() == Keyboard.KEY_LCONTROL) {
+                    isPressingCtrl = true;
+                }
+            }
+        }
     }
+
 
     @Override
     public void buttonPressed(Object buttonId) {

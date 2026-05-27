@@ -15,6 +15,7 @@ import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.trade.ProductionTradeContract;
 import data.kaysaar.aotd.vok.ui.customprod.components.ProductionDynamicPanelForScroll;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -52,7 +53,8 @@ public class ChangeOrderProductList implements ExtendedUIPanelPlugin {
         }
         return x;
     }
-
+    Boolean isPressingShift = false;
+    Boolean isPressingCtrl = false;
     private ProductionDynamicPanelForScroll scrollBarV2;
     private CustomPanelAPI mainPanel;
     private CustomPanelAPI contentPanel;
@@ -228,7 +230,17 @@ public class ChangeOrderProductList implements ExtendedUIPanelPlugin {
                 if (hasAssignedResources) {
                     addWarningOrder(orderData.getId(),orderData.getType());
                 }
-                decreaseOrder(orderData);
+                int am = 1;
+                if(isPressingShift){
+                    am = 5;
+                }
+                if(isPressingCtrl){
+                    am = 10;
+                }
+                if(isPressingShift&&isPressingCtrl){
+                    am = 50;
+                }
+                decreaseOrder(orderData,am);
                 bt.createUI();
                 float headerHeight1 = 20f;
                 float warningHeight1 = 20f;
@@ -291,16 +303,16 @@ public class ChangeOrderProductList implements ExtendedUIPanelPlugin {
         }
     }
 
-    private void decreaseOrder(AoTDProductionOrderData data) {
+
+    private void decreaseOrder(AoTDProductionOrderData data,int am) {
         if (data == null) return;
 
         int idx = copyOfDataOrder.indexOf(data);
         if (idx < 0) return;
 
         AoTDProductionOrderData current = copyOfDataOrder.get(idx);
-        current.setAmount(Math.max(0, current.amountToProduce - 1));
+        current.setAmount(Math.max(0, current.amountToProduce - am));
     }
-
     private AoTDProductionOrderData copyOf(AoTDProductionOrderData original) {
         AoTDProductionSpec spec = original.getSpec();
         AoTDProductionOrderData copy = new AoTDProductionOrderData(original.getId(), spec, original.amountToProduce);
@@ -349,6 +361,26 @@ public class ChangeOrderProductList implements ExtendedUIPanelPlugin {
 
     @Override
     public void processInput(List<InputEventAPI> events) {
+        for (InputEventAPI event : events) {
+            if(event.isConsumed())continue;
+            if(event.isKeyUpEvent()){
+                if(event.getEventValue()== Keyboard.KEY_LSHIFT){
+                    isPressingShift = false;
+                }
+                if(event.getEventValue()== Keyboard.KEY_LCONTROL){
+                    isPressingCtrl = false;
+                }
+
+            }
+            if(event.isKeyDownEvent()){
+                if(event.getEventValue()== Keyboard.KEY_LSHIFT){
+                    isPressingShift = true;
+                }
+                if(event.getEventValue()== Keyboard.KEY_LCONTROL){
+                    isPressingCtrl = true;
+                }
+            }
+        }
     }
 
     @Override

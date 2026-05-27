@@ -18,6 +18,7 @@ import data.kaysaar.aotd.vok.campaign.econ.produciton.AoTDProductionUIData;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.ui.customprod.common.*;
 import data.kaysaar.aotd.vok.ui.customprod.components.ProductionCustomButton;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -40,7 +41,8 @@ public class ProductionBrowserSection implements ExtendedUIPanelPlugin {
     public static final LinkedHashMap<String, Float> FULL_WIDTHS = new LinkedHashMap<>();
     public static final LinkedHashMap<String, Float> FIGHTER_WIDTHS = new LinkedHashMap<>();
     public static final LinkedHashMap<String, Float> ITEM_WIDTHS = new LinkedHashMap<>();
-
+    Boolean isPressingShift = false;
+    Boolean isPressingCtrl = false;
     static {
         // Ships / Weapons
         FULL_WIDTHS.put("name", 0.28f);
@@ -398,7 +400,19 @@ public class ProductionBrowserSection implements ExtendedUIPanelPlugin {
         list.getButtonsStorage().forEach(x->x.setListener(new CustomButton.ButtonEventListener() {
             @Override
             public void onButtonClicked() {
-                parent.orderList.addOrder(x.getSpec().getId(),x.getSpec());
+                int am = 1;
+                if(isPressingShift){
+                    am = 5;
+                }
+                if(isPressingCtrl){
+                    am = 10;
+                }
+                if(isPressingShift&&isPressingCtrl){
+                    am = 50;
+                }
+
+                parent.orderList.addOrder(x.getSpec().getId(),x.getSpec(),am);
+
                 parent.swapPanels(false);
             }
         }));
@@ -454,6 +468,7 @@ public class ProductionBrowserSection implements ExtendedUIPanelPlugin {
     @Override
     public void render(float alphaMult) {
     }
+
 
     @Override
     public void advance(float amount) {
@@ -542,6 +557,26 @@ public class ProductionBrowserSection implements ExtendedUIPanelPlugin {
 
     @Override
     public void processInput(List<InputEventAPI> events) {
+        for (InputEventAPI event : events) {
+            if(event.isConsumed())continue;
+            if(event.isKeyUpEvent()){
+                if(event.getEventValue()== Keyboard.KEY_LSHIFT){
+                    isPressingShift = false;
+                }
+                if(event.getEventValue()== Keyboard.KEY_LCONTROL){
+                    isPressingCtrl = false;
+                }
+
+            }
+            if(event.isKeyDownEvent()){
+                if(event.getEventValue()== Keyboard.KEY_LSHIFT){
+                    isPressingShift = true;
+                }
+                if(event.getEventValue()== Keyboard.KEY_LCONTROL){
+                    isPressingCtrl = true;
+                }
+            }
+        }
     }
 
     @Override
