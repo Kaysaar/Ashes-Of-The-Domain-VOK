@@ -114,7 +114,7 @@ public class PreCollapseFacLoot extends BaseCommandPlugin {
         }
         BaseSalvageSpecial.clearExtraSalvage(memoryMap);
         salvage.sort();
-        if(Global.getSettings().getModManager().isModEnabled("MagicLib")){
+        if(Global.getSettings().getModManager().isModEnabled("MagicLib") && MagicAchievementManager.getInstance().areAchievementsEnabled()){
             try {
                 MagicAchievementManager.getInstance().getAchievement("aotd_pcf").completeAchievement();
             }
