@@ -3,9 +3,13 @@ package com.fs.starfarer.api.impl.campaign.aotd_entities;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignEngineLayers;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
+import com.fs.starfarer.api.ui.Fonts;
+import com.fs.starfarer.api.ui.LabelAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.*;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
@@ -18,6 +22,8 @@ import org.lwjgl.util.vector.Vector2f;
 import java.awt.*;
 
 public class BiFrostGateEntity extends BaseCustomEntityPlugin {
+    private static final float MIN_TOOLTIP_WIDTH = Global.getSettings().createLabel("Offline. Cooldown remaining: 00D", Fonts.DEFAULT_SMALL).computeTextWidth("Offline. Cooldown remaining: 00D") + 5f;
+    private static final LabelAPI MEASURE_LABEL = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
 
     transient protected SpriteAPI baseSprite;
     transient protected SpriteAPI scannedGlow;
@@ -256,5 +262,24 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
 //		if (withSound && entity.isInCurrentLocation()) {
 //			Global.getSoundPlayer().playSound("gate_being_used", 1, 1, entity.getLocation(), entity.getVelocity());
 //		}
+    }
+
+    public boolean hasCustomMapTooltip() {
+        return true;
+    }
+
+    public float getMapTooltipWidth() {
+        return Math.max(MEASURE_LABEL.computeTextWidth(entity.getName()) + 5f, MIN_TOOLTIP_WIDTH);
+    }
+
+    public void createMapTooltip(TooltipMakerAPI tooltip, boolean expanded) {
+        tooltip.addPara(entity.getName(), entity.getFaction().getBaseUIColor(), 0f);
+
+        float cd = entity.getMemory().getFloat("$cooldown");
+        tooltip.addPara(
+            cd > 0f ? "Offline. Cooldown remaining: " + String.valueOf((int)cd) + "D" : "Usable",
+            Misc.getGrayColor(),
+            3f
+        );
     }
 }
