@@ -4,10 +4,13 @@ package data.kaysaar.aotd.vok.plugins;
 import ashlib.data.plugins.misc.AshMisc;
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.CustomCampaignEntityPlugin;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.StarSystemAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.EconomyTickListener;
 import com.fs.starfarer.api.campaign.listeners.ListenerManagerAPI;
+import com.fs.starfarer.api.impl.campaign.aotd_entities.BiFrostGateEntity;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.intel.bar.events.AoTDAiScientistEventCreator;
@@ -708,6 +711,13 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
             addEvents();
         }
 
+        // save backwards compatible bifrost map tooltip fix
+        for (SectorEntityToken entity : Global.getSector().getEntitiesWithTag("bifrost")) {
+            CustomCampaignEntityPlugin plugin = entity.getCustomPlugin();
+            if (plugin instanceof BiFrostGateEntity) {
+                entity.setMarket(null);
+            }
+        }
     }
 
     public static StarSystemAPI getTestingGroundSystem() {
