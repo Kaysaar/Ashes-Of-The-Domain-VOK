@@ -4,6 +4,7 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignEngineLayers;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
@@ -22,8 +23,10 @@ import org.lwjgl.util.vector.Vector2f;
 import java.awt.*;
 
 public class BiFrostGateEntity extends BaseCustomEntityPlugin {
-    private static final float MIN_TOOLTIP_WIDTH = Global.getSettings().createLabel("Offline. Cooldown remaining: 00D", Fonts.DEFAULT_SMALL).computeTextWidth("Offline. Cooldown remaining: 00D") + 5f;
     private static final LabelAPI MEASURE_LABEL = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
+    private static final float USABLE_MIN_TOOLTIP_WIDTH = MEASURE_LABEL.computeTextHeight("Operational") + 5f;
+    private static final float CD_MIN_TOOLTIP_WIDTH = MEASURE_LABEL.computeTextWidth("Inactive - Cooldown remaining: 00D") + 5f;
+    private static final float SUPPLIES_MIN_TOOLTIP_WIDTH = MEASURE_LABEL.computeTextWidth("Inactive - Supplies required");
 
     transient protected SpriteAPI baseSprite;
     transient protected SpriteAPI scannedGlow;
@@ -269,17 +272,35 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
     }
 
     public float getMapTooltipWidth() {
-        return Math.max(MEASURE_LABEL.computeTextWidth(entity.getName()) + 5f, MIN_TOOLTIP_WIDTH);
+        MemoryAPI mem = entity.getMemory();
+        float nameLength = MEASURE_LABEL.computeTextWidth(entity.getName()) + 5f;
+
+        if (mem.getBoolean("$used")) {
+            return Math.max(CD_MIN_TOOLTIP_WIDTH, nameLength);
+        } else if (!mem.getBoolean("$supplied")) {
+            return Math.max(USABLE_MIN_TOOLTIP_WIDTH, nameLength);
+        }  else {
+            return Math.max(USABLE_MIN_TOOLTIP_WIDTH, nameLength);
+        }
     }
 
     public void createMapTooltip(TooltipMakerAPI tooltip, boolean expanded) {
         tooltip.addPara(entity.getName(), entity.getFaction().getBaseUIColor(), 0f);
 
-        float cd = entity.getMemory().getFloat("$cooldown");
-        tooltip.addPara(
-            cd > 0f ? "Offline. Cooldown remaining: " + String.valueOf((int)cd) + "D" : "Usable",
-            Misc.getGrayColor(),
-            3f
-        );
+       if (entity.getMemory().getBoolean("$used")) {
+            float cd = entity.getMemory().getFloat("$cooldown");
+            tooltip.addPara(
+                "Inactive - Cooldown remaining: " + String.valueOf(Math.round(cd)) + "D",
+                Misc.getGrayColor(),
+                3f
+            );
+            return;
+        }
+
+        if (!entity.getMemory().getBoolean("$supplied")) {
+            tooltip.addPara("Inactive - Supplies required", Misc.getGrayColor(), 3f);
+        } else {
+            tooltip.addPara("Operational", Misc.getGrayColor(), 3f);
+        }
     }
 }
