@@ -139,7 +139,7 @@ public class BifrostMegastructure extends BaseMegastructureScript {
         SectorEntityToken test = market.getContainingLocation().addCustomEntity((String) null, market.getName() + " Bifrost Gate", "bifrost_gate", market.getFactionId());
         test.setCircularOrbitWithSpin(primary, (float) Math.random() * 360.0F, orbitRadius, orbitRadius / 10.0F, 5.0F, 5.0F);
         market.getConnectedEntities().add(test);
-        test.setMarket(market);
+        // test.setMarket(market);
         test.setDiscoverable(false);
         market.addCondition("bifrost_removal");
         test.getMemory().set("$used", false);
@@ -163,7 +163,7 @@ public class BifrostMegastructure extends BaseMegastructureScript {
         MarketAPI market = data.center.getMarket();
         if(market!=null){
             market.getConnectedEntities().add(test);
-            test.setMarket(market);
+            // test.setMarket(market);
 
         }
 
