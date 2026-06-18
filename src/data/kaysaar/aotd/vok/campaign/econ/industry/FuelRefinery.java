@@ -6,8 +6,10 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.FuelProduction;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.Conditions;
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.tot.misc.AoTDToolboxMisc;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
 import java.util.ArrayList;
@@ -20,13 +22,14 @@ public class FuelRefinery extends FuelProduction {
         demand(Commodities.VOLATILES, size-2);
         demand(Commodities.HEAVY_MACHINERY, size);
         supply(Commodities.FUEL, size +4);
-        demand(AoTDCommodities.ADVANCED_COMPONENTS, size-2);
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.VOLATILES,Commodities.HEAVY_MACHINERY,AoTDCommodities.DOMAIN_GRADE_MACHINERY);
-        if(Global.getSector().getMemory().is("$aotd_compound_unlocked",true)){
-            supply("compound",Math.floorDiv(size,2));
+        demand(AoTDCommodities.ADVANCED_COMPONENTS, size-1);
+        demand(AoTDCommodities.DOMAIN_GRADE_MACHINERY, size-2);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.VOLATILES,Commodities.HEAVY_MACHINERY,AoTDCommodities.ADVANCED_COMPONENTS,AoTDCommodities.DOMAIN_GRADE_MACHINERY);
+        if(Global.getSector().getMemoryWithoutUpdate().is("$aotd_compound_unlocked",true)&&(market.isPlayerOwned()||market.getFaction().isPlayerFaction())){
+            supply(AoTDCommodities.COMPOUND,size/2);
         }
 
-        applyDeficitToProduction(1, deficit, Commodities.FUEL,"compound", AoTDCommodities.DOMAIN_GRADE_MACHINERY);
+        applyDeficitToProduction(2, deficit, Commodities.FUEL,"compound");
 
         if (!isFunctional()) {
             supply.clear();

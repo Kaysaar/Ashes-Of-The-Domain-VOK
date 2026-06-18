@@ -122,9 +122,6 @@ public class AoTDProductionSpecManager {
             throw new RuntimeException(e);
         }
         for (SpecialItemSpecAPI allSpecialItemSpec : Global.getSettings().getAllSpecialItemSpecs()) {
-            if (allSpecialItemSpec.hasTag(Tags.MISSION_ITEM)) continue;
-            if (allSpecialItemSpec.hasTag("aotd_ignore_gp")) continue;
-            if(!ItemEffectsRepo.ITEM_EFFECTS.containsKey(allSpecialItemSpec.getId()))continue;
             if(!allowedItems.contains(allSpecialItemSpec.getId()))continue;
             if(hasSpecialProject(ProjectReward.ProjectRewardType.ITEM,allSpecialItemSpec.getId()))continue;
             specialItemProdSpecs.put(allSpecialItemSpec.getId(), new AoTDProductionSpec(allSpecialItemSpec.getId(), allSpecialItemSpec));
