@@ -77,6 +77,10 @@ import data.kaysaar.aotd.vok.scripts.specialprojects.projects.shroud.ShroudProje
 import data.kaysaar.aotd.vok.scripts.specialprojects.projects.shroud.listeners.ShroudCommodityUpdater;
 import data.kaysaar.aotd.vok.timeline.military.LockheedDomainEvent;
 import data.kaysaar.aotd.vok.timeline.military.OrbitalFleetworkEvent;
+import data.kaysaar.aotd.vok.timeline.military.TierFourStationHighTechEvent;
+import data.kaysaar.aotd.vok.timeline.military.TierFourStationLowTechEvent;
+import data.kaysaar.aotd.vok.timeline.prosperity.DadelousArrayEvent;
+import data.kaysaar.aotd.vok.timeline.prosperity.GardensOfElysiumEvent;
 import data.kaysaar.aotd.vok.timeline.prosperity.MiningMegaplexEvent;
 import data.kaysaar.aotd.vok.timeline.prosperity.ResortCenterWorld;
 import data.kaysaar.aotd.vok.timeline.research.JanusDeviceEvent;
@@ -426,24 +430,22 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         path.setIndustryCoordinates(map);
         UpgradePathManager.getInstance().addNewCustomPath(path,"aquaculture");
 
-        path = new CustomUpgradePath(1,4);
+        path = new CustomUpgradePath(1,3);
         map = new LinkedHashMap<>();
 
         map.put(Industries.ORBITALSTATION, new Vector2f(0,0));
         map.put(Industries.BATTLESTATION, new Vector2f(0,1));
         map.put(Industries.STARFORTRESS, new Vector2f(0,2));
-        map.put(AoTDIndustries.STAR_CITADEL_LOW, new Vector2f(0,3));
         path.setIndustryCoordinates(map);
 
         UpgradePathManager.getInstance().addNewCustomPath(path,Industries.ORBITALSTATION);
 
-        path = new CustomUpgradePath(1,4);
+        path = new CustomUpgradePath(1,3);
         map = new LinkedHashMap<>();
 
         map.put(Industries.ORBITALSTATION_HIGH, new Vector2f(0,0));
         map.put(Industries.BATTLESTATION_HIGH, new Vector2f(0,1));
         map.put(Industries.STARFORTRESS_HIGH, new Vector2f(0,2));
-        map.put(AoTDIndustries.STAR_CITADEL_HIGH, new Vector2f(0,3));
         path.setIndustryCoordinates(map);
 
         UpgradePathManager.getInstance().addNewCustomPath(path,Industries.ORBITALSTATION_HIGH);
@@ -753,6 +755,12 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 
         TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new LockheedDomainEvent(null)));
         TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new OrbitalFleetworkEvent(null)));
+
+        TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new TierFourStationLowTechEvent(null)));
+        TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new TierFourStationHighTechEvent(null)));
+        TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new DadelousArrayEvent(null)));
+        TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new GardensOfElysiumEvent(null)));
+
         TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new ResortCenterWorld(null)));
         TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new MiningMegaplexEvent(null)));
         TimelineListenerManager.getInstance().addNewListener(new FirstIndustryListener(AoTDSopMemFlags.FIRST_INDUSTRY, new ResearchFacilityEvent(null)));

@@ -278,6 +278,9 @@ public class ProductionTradeContract extends AoTDTradeContract {
 
             for (Map.Entry<String, Integer> reqResource : order.getReqResources().entrySet()) {
                 String commodityId = reqResource.getKey();
+                if (AoTDProductionOrderSnapshot.isItemSpecial(commodityId)) {
+                    continue;
+                }
                 int amountNeeded = reqResource.getValue();
 
                 if (amountNeeded <= 0) continue;

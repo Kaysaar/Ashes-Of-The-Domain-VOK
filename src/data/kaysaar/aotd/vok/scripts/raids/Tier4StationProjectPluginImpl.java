@@ -99,7 +99,7 @@ public class Tier4StationProjectPluginImpl extends BaseGroundRaidObjectivePlugin
     }
     @Override
     public int performRaid(CargoAPI loot, Random random, float lootMult, TextPanelAPI text) {
-        market.getMemory().removeAllRequired("$aotd_tier_4_bp_key");
+        market.getMemory().unset("$aotd_tier_4_bp_key");
         loot.addSpecial(new SpecialItemData(getId(), getData()), 1);
         int xpGained = (int) (90000);
         return xpGained;

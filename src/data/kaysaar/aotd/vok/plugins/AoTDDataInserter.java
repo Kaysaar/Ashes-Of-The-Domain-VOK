@@ -473,13 +473,10 @@ public class AoTDDataInserter {
             setIndustryOnPlanet("Galatia", "Ancyra", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null, null);
             setIndustryOnPlanet("Mayasura", "Mairaath", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_BIOTICS, false, null, null);
             setIndustryOnPlanet("Corvus", "Asharu", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_RECITIFICATES, false, null, null);
-            setIndustryOnPlanet("Eos Exodus", "Baetis", AoTDIndustries.SUBLIMATION, null, null, true, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.CRYSTALIZATOR, Industries.REFINING, null, false, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", Industries.MEGAPORT, Industries.MEGAPORT, null, true, null, null);
-            setIndustryOnPlanet("Askonia", "Volturn", AoTDIndustries.SUBLIMATION, Industries.MINING, null, false, Commodities.GAMMA_CORE, null);
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ENRICHMENT_FACILITY, Industries.REFINING, null, true, null, null);
             setIndustryOnPlanet("Hybrasil", "Culann", Industries.HEAVYBATTERIES, Industries.HEAVYBATTERIES, null, true, Commodities.ALPHA_CORE, null);
-            setIndustryOnPlanet("Thule", "Kazeron", AoTDIndustries.MINING_MEGAPLEX, Industries.MINING, null, false, null, Items.MANTLE_BORE);
             setIndustryOnPlanet("Thule", "Kazeron", AoTDIndustries.TERMINUS, null, null, true, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.TERMINUS, Industries.WAYSTATION, null, false, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.MAGLEV_CENTRAL_HUB, null, null, false, null, null);

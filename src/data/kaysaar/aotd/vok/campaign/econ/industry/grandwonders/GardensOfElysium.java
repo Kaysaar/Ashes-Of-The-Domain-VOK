@@ -34,9 +34,9 @@ public class GardensOfElysium extends ResortCenter implements GrandWonderAPI {
     @Override
     public LinkedHashMap<String, Integer> getDemandCostForRestoration() {
         LinkedHashMap<String, Integer> demand = new LinkedHashMap<>();
-        demand.put(Commodities.METALS, 10);
+        demand.put(Commodities.METALS, 9);
         demand.put(AoTDCommodities.REFINED_METAL, 5);
-        demand.put(Commodities.HEAVY_MACHINERY, 10);
+        demand.put(Commodities.HEAVY_MACHINERY, 7);
         demand.put(Commodities.SUPPLIES, 5);
         return demand;
     }
@@ -147,11 +147,23 @@ public class GardensOfElysium extends ResortCenter implements GrandWonderAPI {
     @Override
     public void apply() {
         super.apply();
-        int quantity = market.getSize() + 10;
+        int quantity = market.getSize() + 14;
         supply(Commodities.FOOD, quantity);
         supply(Commodities.LUXURY_GOODS, quantity - 2);
         demand(Commodities.HEAVY_MACHINERY, market.getSize() + 2);
+        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.FARMING_BOOST,market)){
+            demand(AoTDCommodities.DOMAIN_GRADE_MACHINERY,market.getSize()-2);
+            float bonus = 1.5f;
+            int expected = market.getSize()-2;
+            int total = expected-getMaxDeficit(AoTDCommodities.DOMAIN_GRADE_MACHINERY).two;
+            if(total!=0&&expected!=0){
+                float have = (float) total /expected;
+                bonus = Math.max(1f,bonus*have);
 
+            }
+
+            getSupply(Commodities.FOOD).getQuantity().modifyMultAlways("aotd_food_bonus",bonus,"bonus");
+        }
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.HEAVY_MACHINERY);
         //applyDeficitToProduction(0, deficit, Commodities.FOOD, Commodities.ORGANICS);
         applyDeficitToProduction(2, deficit, Commodities.FOOD, Commodities.LUXURY_GOODS);

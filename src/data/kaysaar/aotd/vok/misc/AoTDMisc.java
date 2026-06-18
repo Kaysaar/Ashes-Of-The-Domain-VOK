@@ -15,6 +15,7 @@ import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.loading.WingRole;
@@ -1177,6 +1178,11 @@ public class AoTDMisc {
             SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(id);
             if(spec.hasTag("aotd_ignore_standarization")){
                 return faction.getMemory().is("$aotd" + id, true);
+            }
+        }
+        else if (Global.getSettings().getCommoditySpec(id)!=null){
+            if(id.equals(Commodities.GAMMA_CORE)||id.equals(Commodities.BETA_CORE)){
+                return Global.getSector().getMemoryWithoutUpdate().getBoolean("$finished_basic_ai");
             }
         }
         return faction.getMemory().is("$aotd" + id, true) || AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).haveResearched(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION);

@@ -38,9 +38,9 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
     @Override
     public LinkedHashMap<String, Integer> getDemandCostForRestoration() {
         LinkedHashMap<String, Integer> demand = new LinkedHashMap<>();
-        demand.put(Commodities.METALS, 10);
+        demand.put(Commodities.METALS, 9);
         demand.put(AoTDCommodities.REFINED_METAL, 5);
-        demand.put(Commodities.HEAVY_MACHINERY, 10);
+        demand.put(Commodities.HEAVY_MACHINERY, 7);
         demand.put(Commodities.SUPPLIES, 5);
         return demand;
     }

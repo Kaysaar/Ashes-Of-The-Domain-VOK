@@ -87,6 +87,7 @@ public class TechnologyCoreUI extends CommandUIPlugin {
 
     public void resetCurrentPlugin(ButtonAPI newButton) {
         super.resetCurrentPlugin(newButton);
+        playSound(newButton);
     }
 
     @Override
