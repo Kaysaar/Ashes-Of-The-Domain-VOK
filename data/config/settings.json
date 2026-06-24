@@ -14,6 +14,38 @@
 	"aotd_titans_of_industry":true, # Disables/enables total rework of custom production mechanic for colonies NOTE! DEPRECEATED SETTING : DONT SET IT TO FALSE
 	"aotd_scale":10, # Increase/Decrease multiplier of Global Production commodities ( x amount of supply times scale)
 	"aotd_shipyard_pag_per_page":70, # Increase/Decrease amount of items displayed per page ( WARNING : INCREASING THIS NUMBER MIGHT RESULT IN PRODUCTION UI LAGGING )
+"aotd_item_prod": [
+  "corrupted_nanoforge",
+  "pristine_nanoforge",
+  "synchrotron",
+  "orbital_fusion_lamp",
+  "coronal_portal",
+  "mantle_bore",
+  "catalytic_core",
+  "soil_nanites",
+  "biofactory_embryo",
+  "fullerene_spool",
+  "plasma_dynamo",
+  "cryoarithmetic_engine",
+  "drone_replicator",
+  "dealmaker_holosuite",
+  "alpha_core",
+  "beta_core",
+  "gamma_core",
+
+  "uaf_modular_purifier",
+  "uaf_servosync_pump",
+  "uaf_dimen_nanoforge",
+  "uaf_dimen_microwave",
+  "uaf_access_router",
+  "uaf_garrison_transmitter",
+  "uaf_rice_cooker",
+
+  "aotd_shrouded_nanoforge",
+  "aotd_shrouded_synchrotron",
+  "aotd_atmospheric_driver",
+  "aotd_shrouded_catalytic_core"
+],
 	"graphics":{
 		"characters": {
 			"sophia":"graphics/portraits/characters/sophia.png"
@@ -27,6 +59,7 @@
 			"farming1":"graphics/icons/tech/farming1.png",
 			"farming2":"graphics/icons/tech/farming2.png",
 			"farming3":"graphics/icons/tech/farming3.png",
+			"farming4":"graphics/icons/tech/farming4.png",
 			"alloy1":"graphics/icons/tech/alloy1.png",
 			"alloy2":"graphics/icons/tech/alloy2.png",
 			"alloy3":"graphics/icons/tech/alloy3.png",
@@ -61,12 +94,15 @@
 			"maglev":"graphics/icons/tech/megalev logistics colorized.png",
 			"oceanology":"graphics/icons/tech/oceanology.png",
 			"dual_market":"graphics/icons/tech/dual_market_system.png",
+			"electronics":"graphics/icons/tech/electronics.png",
 			"spaceportI":"graphics/icons/tech/spaceportI.png",
 			"specialmodifier":"graphics/icons/tech/specialmodifier.png",
 			"macro_industrial_complex":"graphics/icons/tech/macro_industrial_complex.png",
 			"fuelsynth":"graphics/icons/tech/fuelsynth.png",
 			"aotd_resort_center":"graphics/icons/tech/resort_center.png",
 			"hypershunt_energy_distribution":"graphics/icons/tech/hypershunt_energy_distribution.png",
+			"elysium":"graphics/icons/tech/elysium.png",
+			"daedalus":"graphics/icons/tech/daedalus.png",
 			"megastructure_analysis":"graphics/icons/tech/megastructure_analysis.png",
 			"supertensile":"graphics/icons/tech/supertensile.png",
 			"ring":"graphics/icons/tech/ring.png",
@@ -95,6 +131,8 @@
 			"aotd_commercial_manu_sub":"graphics/icons/tech/subicon_commercial_manu.png",
 			"aotd_terminus_sub":"graphics/icons/tech/subicon_terminus.png",
 			"aotd_druglight_sub":"graphics/icons/tech/subicon_bio_drug.png",
+			"aotd_daedalus_array_sub":"graphics/icons/tech/subicon_aotd_daedalus_array.png",
+			"aotd_garden_of_elysium_sub":"graphics/icons/tech/subicon_aotd_garden_of_elysium.png",
 			"aotd_underworld_sub":"graphics/icons/tech/subicon_underworld.png",
 			"aotd_civilian_heavy_prod_sub":"graphics/icons/tech/subicon_civilian_heavy_prod.png",
 			"aotd_maglev_sub":"graphics/icons/tech/subicon_aotd_maglev.png",
@@ -126,7 +164,6 @@
 			"dmg_type_other":"graphics/ui/icons/damagetype_other.png",
 						"question":"graphics/ui/more_info.png"
 		},
-
 		"ui":{
 			"aotd_text_glow":"graphics/ui/buttons/text_glow.png",
 			"aotd_holder":"graphics/ui/holder.png",
@@ -137,7 +174,6 @@
 			"aotd_shadowlance":"graphics/icons/hud/aotd_shadowlance_icon.png",
 			"aotd_gungnirIcon":"graphics/icons/hud/Gungnir_icon.png"
 		},
-
 		"rendering":{
             "GlitchSquare":"graphics/fx/solid_square.png",
 			"aotd_pluto_general_glow":"graphics/fx/aotd_pluto_general_glow.png",
@@ -152,15 +188,16 @@
 			"aotd_beam4":"graphics/fx/aotd_beam4.png",
 			"aotd_planet_glow0":"graphics/fx/aotd_planet_glow0.png",
 			"aotd_planet_glow1":"graphics/fx/aotd_planet_glow1.png",
-			"aotd_planet_glow2":"graphics/fx/aotd_planet_glow2.png"
-		},
+			"aotd_planet_glow2":"graphics/fx/aotd_planet_glow2.png",
+			"rust_layer":"graphics/fx/rust_overlay.png",
 
+
+		},
 		"fx": {#for magictrails
 			"aotd_gungnir_trail1":"graphics/fx/aotd_gungnir_core_trail.png",
 			"aotd_gungnir_trail2":"graphics/fx/aotd_gungnir_star_trail.png",
 			"aotd_gungnir_trail3":"graphics/fx/aotd_gungnir_stripes_trail.png"
 		},
-
 		"megastructures":{
             "hypershunt":"graphics/icons/coronal_shunt.png",
 			"nidavelir":"graphics/icons/nidavelir.png",
@@ -168,7 +205,6 @@
 			"pluto":"graphics/icons/aotd_pluto_mining_station.png"
 			
 		},
-
 		"aotd_icons":{
             "fleet_ai":"graphics/icons/fleet_ai.png",
 			"fleet_merc":"graphics/icons/fleet_merc.png",
@@ -200,7 +236,8 @@
 		},
 		"industry":{
 			"pluto_active":"graphics/icons/industry/aotd_pluto_industry_active.png",
-			"aotd_fuel_refinery_no_atmo":"graphics/icons/industry/aotd_fuel_refinery_no_atmo.png"
+			"aotd_fuel_refinery_no_atmo":"graphics/icons/industry/aotd_fuel_refinery_no_atmo.png",
+			"aotd_daedalus_array_no_atmo":"graphics/icons/industry/aotd_daedalus_array_no_atmo.png"
 		},
 		
 		"illustrations":{
