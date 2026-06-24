@@ -8,9 +8,9 @@ aotd_tech_agriculture,Agriculture Industrialization,1,15,aotd_tech_rudimentary_e
 aotd_tech_exoskeletons,Exo-Skeletons,1,30,aotd_tech_ind_base_template,research_databank:4,mining1,mining:industry,0,0,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_nanometal,Nanometal Fusion Synthesis,1,30,aotd_tech_ind_base_template,research_databank:4,minorindustry1,"refining:industry
 lightindustry:industry",0,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_hull_manufacture,Base Ship Hull Assembly,1,60,"aotd_tech_rudimentary_eq,aotd_tech_nanometal",research_databank:10,heavyindustry1,heavyindustry:industry,1,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_aquatic_agriculture,Aquatic Biosphere Harvest,1,15,aotd_tech_agriculture,research_databank:10,oceanology,"aotd_fishing_harbour:industry
-Lowers hazard rating by 10% on water worlds:modifier",1,8,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_hull_manufacture,Base Heavy Production Assembly,1,60,"aotd_tech_rudimentary_eq,aotd_tech_nanometal",research_databank:10,heavyindustry1,heavyindustry:industry,1,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_aquatic_agriculture,Aquatic Biosphere Harvest,2,15,aotd_tech_agriculture,research_databank:10,oceanology,"aotd_fishing_harbour:industry
+Lowers hazard rating by 10% on water worlds:modifier",0,8,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_hazmat_equipment,Hazmat Working Equipment,1,90,"aotd_tech_rudimentary_eq,aotd_tech_ind_base_template",research_databank:15,hazmat,Lowers hazard rating by 10% on all worlds:modifier,0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_antimatter_production,Antimatter Production,1,45,aotd_tech_rudimentary_eq,research_databank:18,fuelprod,fuelprod:industry,1,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_spaceport_expansion,High-Capacity Docking,1,40,aotd_tech_rudimentary_eq,research_databank:10,spaceportI,megaport:industry,1,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -19,48 +19,51 @@ aotd_tech_spaceport_expansion,High-Capacity Docking,1,40,aotd_tech_rudimentary_e
 aotd_tech_improved_fertilizers,Improved Fertilizers,2,30,aotd_tech_agriculture,research_databank:6,farming3,"aotd_subsidised_farming:industry
 aotd_artisanal_farming:industry",0,7,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_advanced_mining_equipment,Advanced Mining Equipment,2,60,aotd_tech_exoskeletons,research_databank:8,mining2,+1 towards production of all ores:modifier,0,0,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_alloy_production,Alloy Production Matrix,2,60,aotd_tech_nanometal,research_databank:6,alloy1,"aotd_crystalizator:industry
-aotd_enrichment_facility:industry",0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_orbital_assembly,Orbital Assembly,2,90,"aotd_tech_hull_manufacture,aotd_tech_antimatter_production",research_databank:12,heavyindustry2,orbitalworks:industry,1,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_alloy_production,Alloy Production Matrix,2,60,"aotd_tech_maglev,aotd_tech_orbital_assembly",research_databank:6,alloy1,"aotd_crystalizator:industry
+aotd_enrichment_facility:industry",1,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_orbital_assembly,Orbital Assembly,2,90,"aotd_tech_hull_manufacture,aotd_tech_antimatter_production",research_databank:12,heavyindustry2,orbitalworks:industry,0,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_consumer,Consumer Goods Production,2,45,aotd_tech_nanometal,research_databank:12,minorindustry2,aotd_commercial_manu:industry,0,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_drug_production,Drugs Amplification,2,25,aotd_tech_consumer,research_databank:8,minorindustry3,aotd_druglight:industry,1,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_maglev,Urban Throughput Systems,2,30,aotd_tech_alloy_production,research_databank:10,maglev,aotd_maglev:industry,1,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_resort_tech,Luxury Civic Planning,2,25,aotd_tech_spaceport_expansion,research_databank:5,aotd_resort_center,aotd_resort_center:industry,1,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_maglev,Urban Throughput Systems,2,30,aotd_tech_nanometal,research_databank:10,maglev,aotd_maglev:industry,0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_resort_tech,Luxury Civic Planning,2,25,aotd_tech_spaceport_expansion,research_databank:5,aotd_resort_center,aotd_resort_center:industry,1,6,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_advanced_logistic,Interstellar Logistics,2,60,"aotd_tech_spaceport_expansion,aotd_tech_orbital_assembly",research_databank:14,logistics,aotd_terminus:industry,1,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_dual_trade_system,Twin Economy Protocols,2,30,aotd_tech_spaceport_expansion,research_databank10,dual_market,"commerce:industry
-aotd_underworld:industry",0,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_underworld:industry",0,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_streamlined_production,Streamlined Production,2,60,aotd_tech_alloy_production,research_databank:16,alloy2,"aotd_civilian_heavy_prod:industry
++1 towards production of all commodities:modifier",2,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_elysian_project,Biosphere Shaping,2,30,"aotd_tech_resort_tech,aotd_tech_improved_fertilizers,aotd_tech_aquatic_agriculture",research_databank:5,elysium,"Fishing Harbors will produce small amount of Lobsters:modifier
+aotd_garden_of_elysium:industry",2,7,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_daedalus,Sky Tether,2,35,"aotd_tech_streamlined_production,aotd_tech_advanced_logistic",research_databank:10,daedalus,"Allows produciton of Fullerene Spool:modifier
+aotd_daedalus_array:industry",3,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_manufacturer_boost,Production Line Optimization,3,20,aotd_tech_streamlined_production,research_databank:5,minorindustry4,"Increase Production of goods produced by Light Industry upgrades, as long as additional demand of Domain-Grade Machinery is satisfied.:modifier",0,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_farming_boost,Farming Equipment Modernization,3,25,aotd_tech_streamlined_production,research_databank:12,farming4,"Increase Production of goods produced by Farming upgrades, as long as additional demand of Domain-Grade Machinery is satisfied.:modifier",0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_streamlined_production,Streamlined Production,3,60,"aotd_tech_maglev,aotd_tech_orbital_assembly",research_databank:16,alloy2,"aotd_civilian_heavy_prod:industry
-+1 towards production of all commodities:modifier",0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_megastructure_analysis,Megastructure Analysis,3,60,aotd_tech_daedalus,research_databank:14,megastructure_analysis,Allow to restore megastructures:modifier,1,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_megastructure_analysis,Megastructure Analysis,3,60,aotd_tech_streamlined_production,research_databank:14,megastructure_analysis,Allow to restore megastructures:modifier,1,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_advanced_logistic,Interstellar Logistics,3,60,aotd_tech_streamlined_production,research_databank:14,logistics,aotd_terminus:industry,1,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_deep_mining_methods,Mass Extraction,3,120,aotd_tech_advanced_mining_equipment,research_databank:16,mining3,"aotd_mining_megaplex:industry
-aotd_plasma_harvester:industry",0,0,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_alloy_purification,Alloy Purification,3,60,aotd_tech_streamlined_production,research_databank:8,alloy3,Increases yields of refined metals and purified transplutonics:modifier,1,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_sophisticated_electronics,Sophisticated Electronic Systems,3,90,aotd_tech_streamlined_production,research_databank:22,minorindustry4,"aotd_hightech_industry:industry
-Unlocks the AI Algorithm Analysis Project:modifier",1,0,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_orbital_skunkwork,Orbital Skunkwork Facilities,4,80,"aotd_tech_sophisticated_electronics,aotd_tech_alloy_purification","research_databank:25,alpha_core:1",heavyindustry3,triheavy:industry,0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_orbital_fleetwork,Orbital Fleetwork Facilities,4,80,"aotd_tech_alloy_purification,aotd_tech_sophisticated_electronics","research_databank:25,alpha_core:1",heavyindustry4,hegeheavy:industry,0,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_janus_device_analysis,Janus Device Analysis,4,30,aotd_tech_advanced_logistic,,gateanalysis,Gain the ability to create an additional stable point in star systems:modifier,0,3,false,$playerCanUseGates:Must aqquire Janus Device.,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_fuel_production_increase,Advanced Antimatter Synthesis,4,30,aotd_tech_streamlined_production,research_databank:9,fuelsynth,aotd_fuel_refinery:industry,0,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_hp_distribution,Hypershunt Energy Distribution,4,60,aotd_tech_megastructure_analysis,research_databank:14,hypershunt_energy_distribution,Allow construction of Hypershunt Receivers:modifier,0,5,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_deep_mining_methods,Mass Extraction,2,120,"aotd_tech_advanced_mining_equipment,aotd_tech_streamlined_production",research_databank:16,mining3,"aotd_mining_megaplex:industry
+aotd_plasma_harvester:industry",3,0,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_alloy_purification,Alloy Purification,3,60,aotd_tech_deep_mining_methods,research_databank:8,alloy3,"Increase production of refined metals and purified transplutonics, provided the additional demand for Domain-Grade Machinery is met.:modifier",0,0,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_sophisticated_electronics,Sophisticated Electronic Systems,3,90,aotd_tech_streamlined_production,research_databank:22,electronics,"aotd_hightech_industry:industry
+Unlocks the AI Algorithm Analysis Project:modifier",1,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_orbital_skunkwork,Orbital Skunkwork Facilities,4,80,aotd_tech_sophisticated_electronics,"research_databank:25,alpha_core:1",heavyindustry3,triheavy:industry,0,2,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_orbital_fleetwork,Orbital Fleetwork Facilities,4,80,aotd_tech_sophisticated_electronics,"research_databank:25,alpha_core:1",heavyindustry4,hegeheavy:industry,0,1,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_janus_device_analysis,Janus Device Analysis,3,30,aotd_tech_advanced_logistic,,gateanalysis,Gain the ability to create an additional stable point in star systems:modifier,0,5,false,$playerCanUseGates:Must aqquire Janus Device.,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_fuel_production_increase,Advanced Antimatter Synthesis,4,30,aotd_tech_sophisticated_electronics,research_databank:9,fuelsynth,"aotd_fuel_refinery:industry
+Unlocks the Exotic-Mass Repolarisation Project:modifier",0,3,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_hp_distribution,Hypershunt Energy Distribution,4,60,aotd_tech_megastructure_analysis,research_databank:14,hypershunt_energy_distribution,Allow construction of Hypershunt Receivers:modifier,0,4,false,,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_ai_core_application,Core Directive Engineering,4,60,aotd_tech_sophisticated_electronics,research_databank:10,ai_core_thesis,Unlocks Corrupted Nanoforge Restoration project :modifier,0,0,false,$finished_basic_ai:Must finish the AI Algorithm Analysis project,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_supertensile,Supertensile Materials,5,60,aotd_tech_hp_distribution,research_databank:20,supertensile,Lowers cost of resources for megastructure by 20%:modifier,0,5,false,$aotd_experimental_tier:Requires obtaining a Hyperdimensional Processor and installing it into a Research Facility,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_supertensile,Supertensile Materials,5,60,aotd_tech_hp_distribution,research_databank:20,supertensile,Lowers cost of resources for megastructure by 20%:modifier,0,4,false,$aotd_experimental_tier:Requires obtaining a Hyperdimensional Processor and installing it into a Research Facility,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_mega_assembly,Mega-Assembly Systems,5,100,"aotd_tech_orbital_fleetwork,aotd_tech_ai_core_application","catalytic_core:1,drone_replicator:1",mega_assembly,Speeds up black site projects by 20%:modifier,0,1,false,$aotd_experimental_tier:Requires obtaining a Hyperdimensional processor and installing it Into a Research Facility,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_domain_template_construct,Domain Blueprint Standardization,5,100,aotd_tech_orbital_skunkwork,"pristine_nanoforge:1,synchrotron:1,biofactory_embryo:1",domaintype,Unlocks all blueprints for colony items:modifier,0,2,false,$aotd_experimental_tier:Requires obtaining a Hyperdimensional processor and installing it Into a Research Facility,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_hyperspace_stabilization,Hyperspace Stabilization,5,60,aotd_tech_janus_device_analysis,"research_databank:4,fullerene_spool:1",hyperspace,Increases accessibility of all worlds by 10%:modifier,0,4,false,$aotd_experimental_tier:Requires obtaining a Hyperdimensional processor and installing it Into a Research Facility,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_hyperspace_stabilization,Hyperspace Stabilization,5,60,aotd_tech_janus_device_analysis,"research_databank:4,fullerene_spool:1",hyperspace,Increases accessibility of all worlds by 10%:modifier,0,5,false,$aotd_experimental_tier:Requires obtaining a Hyperdimensional processor and installing it Into a Research Facility,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 aotd_tech_macro_industrial_complex,Macro-Industrial Complex,5,15,"aotd_tech_mega_assembly,aotd_tech_domain_template_construct",research_databank:15,macro_industrial_complex,aotd_macro_industrial_complex:industry,1,3,false,$aotd_experimental_tier:Requires obtaining a Hyperdimensional processor and installing it Into a Research Facility,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-aotd_tech_bifrost_gate,Bifrost Gate,5,10,"aotd_tech_hyperspace_stabilization,aotd_tech_supertensile",research_databank:20,bifrostgate,Allow construction of Bifrost Network megastructures:modifier,1,4,false,$aotd_experimental_tier:Requires obtaining a Hyperdimensional processor and installing it Into a Research Facility,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+aotd_tech_bifrost_gate,Bifrost Gate,5,10,"aotd_tech_hyperspace_stabilization,aotd_tech_supertensile",research_databank:20,bifrostgate,"Allows construction of Bifrost Network megastructures. Unlocks the Bifrost Control Center planetary building, which provides access to the network and means to expand it.:modifier",1,5,false,$aotd_experimental_tier:Requires obtaining a Hyperdimensional processor and installing it Into a Research Facility,,aotd_vok,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

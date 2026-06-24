@@ -1,14 +1,16 @@
-id,name,baseUpkeepAfterRestoration,baseUpkeepBeforeRestoration,baseGPUpkeep,gPRestorationCost,gPRestoredCost,daysTillRestored,renovationCost,script,icon,description
-coronal_wormhole,Coronal Wormhole,50000,0,,"domain_heavy_machinery:20,refined_metal:150,purified_rare_metal:120",,200,1400000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.sections.WormholeGenerator,WormholeGenerator,test
-coronal_collector,Coronal Collector,100000,0,,"domain_heavy_machinery:50,refined_metal:200,purified_rare_metal:250",,220,1800000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.sections.CoronalCollector,CoronalCollector,test
-coronal_aegis,Aegis System,10000,0,,"domain_heavy_machinery:40,refined_metal:200",,140,400000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.sections.AegisSystem,AegisSystem,test
-nidavelir_nexus,Nexus Ring,10000,0,,"domain_heavy_machinery:60,refined_metal:600,purified_rare_metal:400",,100,4000000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.NexusCore,NexusCore,test
-nidavelir_vanguard,Vanguard Forge,20000,0,,"domain_heavy_machinery:40,refined_metal:200",,220,1000000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.VanguardForge,VanguardForge,test
-nidavelir_bulwark,Bulwark Foundry,20000,0,,"domain_heavy_machinery:40,refined_metal:200",,160,1250000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.BulwarkFoundry,BulwarkFoundry,test
-nidavelir_eternium,Eternium Core,50000,0,,"domain_heavy_machinery:40,refined_metal:200",,280,1500000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.EterniumCore,EterniumCore,test
-nidavelir_sentinel,Sentinel Grid,50000,0,,"domain_heavy_machinery:40,refined_metal:200",,200,200000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.sections.SentinelCore,SentinelCore,test
-bifrost_section,Bifrost Gate,10000,0,,"domain_heavy_machinery:100,refined_metal:200",purified_rare_metal:5,90,100000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.sections.BifrostSection,BifrostGate,test
-pluto_ocn,Optic Command Nexus,15000,0,,"domain_heavy_machinery:20,refined_metal:100,purified_rare_metal:60",,200,1800000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.OpticCommandNexus,OpticCommandNexus,test
-pluto_pc,Purification Core,50000,0,,"domain_heavy_machinery:40,refined_metal:150",,200,1200000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.PurificationCore,PurificationCore,test
-pluto_ff,Fusion Forge,30000,0,,"domain_heavy_machinery:40,refined_metal:200",,200,900000,data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.pluto.sections.FusionForge,FusionForge,test
-,,,,,,,,,,,
+id,name,baseUpkeepAfterRestoration,baseUpkeepBeforeRestoration,baseGPUpkeep,gPRestorationCost,gPRestoredCost,daysTillRestored,renovationCost,script,icon,description,lineRenderMode,lineOriginMode,uiCordOfStageComponent,uiCordsOfPointsOnHologram,
+coronal_wormhole,Coronal Wormhole,50000,0,,"domain_heavy_machinery:1200,refined_metal:15000,purified_rare_metal:12000",,90,1400000,data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.hypershunt.WormholeGenerator,WormholeGenerator,test,STEPPED,HORIZONTAL,"605,255","401,100",
+coronal_collector,Coronal Collector,100000,0,,"heavy_machinery:9000,metals:120000,rare_metals:30000",,60,1800000,data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.hypershunt.CoronalCollector,CoronalCollector,test,STEPPED,HORIZONTAL,"5,255","401,200",
+,,,,,,,,,,,,,,,,
+nidavelir_nexus,Nexus Ring,100000,0,,"metals:450000,rare_metals:40000,domain_heavy_machinery:1600,heavy_machinery:20000,advanced_components:3500",,120,4000000,data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.nidavelir.NexusCore,NexusCore,test,STEPPED,VERTICAL,"305,15","275,380;525,230",
+nidavelir_vanguard,Vanguard Forge,40000,0,,"domain_heavy_machinery:6000,refined_metal:20000,purified_rare_metal:15000,advanced_components:10000",,50,1000000,data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.nidavelir.VanguardForge,VanguardForge,test,STRAIGHT,HORIZONTAL,"605,255","470,255",
+nidavelir_bulwark,Bulwark Foundry,40000,0,,"domain_heavy_machinery:6000,refined_metal:20000,purified_rare_metal:15000,advanced_components:10000",,40,1250000,data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.nidavelir.BulwarkFoundry,BulwarkFoundry,test,STRAIGHT,HORIZONTAL,"5,255","320,345",
+nidavelir_eternium,Eternium Core,80000,0,,"domain_heavy_machinery:6000,refined_metal:20000,purified_rare_metal:15000,advanced_components:10000",,60,1500000,data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.nidavelir.EterniumCore,EterniumCore,test,STRAIGHT,VERTICAL,"305,495","400,300",
+,,,,,,,,,,,,,,,,
+bifrost_section,Bifrost Gate,10000,0,,"domain_heavy_machinery:600,refined_metal:2100,purified_rare_metal:900",purified_rare_metal:5,90,100000,data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.bifrost.BifrostSection,BifrostGate,test,STEPPED,HORIZONTAL,"5,350","330,735",
+pluto_ocn,Command Nexus,30000,0,,"refined_metal:5500,purified_rare_metal:4500,heavy_machinery:1500,domain_heavy_machinery:300,advanced_components:1500",,30,1800000,data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.pluto.OpticCommandNexus,OpticCommandNexus,test,STEPPED,HORIZONTAL,"5,495","400,380",
+pluto_ff,Fusion Forge,60000,0,,"refined_metal:12000,domain_heavy_machinery:1000,heavy_machinery:2000",,40,900000,data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.pluto.FusionForge,FusionForge,test,STEPPED,HORIZONTAL,"605,235","400,300",
+pluto_pc,Purification Core,90000,0,,"refined_metal:12000,domain_heavy_machinery:1000,heavy_machinery:2000",,35,1200000,data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.pluto.PurificationCore,PurificationCore,test,STEPPED,HORIZONTAL,"5,15","400,150",
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,, ,

@@ -69,12 +69,12 @@
 		"defaultName":"Hypershunt Receiver", # used if name=null in addCustomEntity()
 		"nameInText":"hypershunt receiver",
 		"shortName":"receiver",
-		"icon":"graphics/icons/sensor_array.png",
+		"icon":"graphics/icons/hypershunt_reciver_icon.png",
 		"iconWidth":24,
 		"iconHeight":24,
 		"sprite":"graphics/stations/aotd_coronal_receiver.png",
-		"spriteWidth":86,
-		"spriteHeight":136,
+		"spriteWidth":71,
+		"spriteHeight":111,
 		"customDescriptionId":"aotd_hypershunt_receiver",
 		"interactionImage":"graphics/illustrations/sensor_array.jpg",
 		"tags":["aotd_hypershunt_receiver", "neutrino_high", "objective"],
@@ -107,7 +107,7 @@
 		"customDescriptionId":"inactive_gate",
 		"tags":["non_clickable", "neutrino"],
 		"layers":[TERRAIN_3], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
-		"pluginClass":"com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyard",
+		"pluginClass":"com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyardVisual",
 	},
 	"nid_shipyards_damaged":{
 		"defaultName":"Nid Shipyards", # used if name=null in addCustomEntity()
@@ -135,7 +135,7 @@
 		"customDescriptionId":"inactive_gate",
 		"tags":["non_clickable", "neutrino"],
 		"layers":[TERRAIN_3], # what layer(s) to render in. See CampaignEngineLayers.java for possible values
-		"pluginClass":"com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirDestroyedShipyard",
+		"pluginClass":"com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirDestroyedShipyardVisual",
 	},
 
 }
