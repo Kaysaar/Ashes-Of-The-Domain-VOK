@@ -72,7 +72,7 @@ public class RnDTabListener implements CommandTabListener {
 
     @Override
     public void performRecalculations(UIComponentAPI uiPanelAPI) {
-        ButtonAPI button = tryToGetButtonProd("holdings");
+        ButtonAPI button = tryToGetButtonProd("domain");
         if(button==null){
             button = tryToGetButtonProd("colonies");
         }
