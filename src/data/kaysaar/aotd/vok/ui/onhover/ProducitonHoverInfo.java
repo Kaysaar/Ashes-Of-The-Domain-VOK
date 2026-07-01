@@ -21,7 +21,8 @@ public class ProducitonHoverInfo implements TooltipMakerAPI.TooltipCreator {
     Set<String> weapons;
     boolean embraced = false;
     boolean currentMode = false;
-    public ProducitonHoverInfo(AoTDProductionSpec spec) {
+    public
+    ProducitonHoverInfo(AoTDProductionSpec spec) {
         this.spec = spec;
         if(spec.getProductionType().equals(AoTDProductionSpec.AoTDProductionSpecType.FIGHTER)){
             weapons = FighterInfoGenerator.getFighterWeapons((FighterWingSpecAPI) spec.getUnderlyingSpec());
