@@ -14,11 +14,11 @@ import com.fs.starfarer.api.impl.campaign.shared.SharedData;
 import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.tot.produciton.listeners.AoTDProductionListenerUtils;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpec;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.ProductionMonthlyHistoryManager;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.listeners.AoTDProductionListenerUtils;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.manager.AoTDProductionManager;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.util.LinkedHashMap;

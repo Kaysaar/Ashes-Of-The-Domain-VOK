@@ -17,9 +17,9 @@ import com.fs.starfarer.api.loading.FormationType;
 import com.fs.starfarer.api.loading.WeaponSpecAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpec;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderData;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderSnapshot;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
 import data.kaysaar.aotd.vok.ui.UIData;
 import data.kaysaar.aotd.vok.ui.onhover.ProducitonHoverInfo;
 
@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static data.kaysaar.aotd.tot.ui.customprod.components.ProductionCustomButton.getOrderedResourceMap;
 import static data.kaysaar.aotd.vok.ui.UIData.createFighterTooltip;
-import static data.kaysaar.aotd.vok.ui.customprod.components.ProductionCustomButton.getOrderedResourceMap;
 
 public class OnGoingOrderButton extends CustomButton {
 

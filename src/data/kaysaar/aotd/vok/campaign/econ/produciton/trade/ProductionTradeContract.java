@@ -19,13 +19,15 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpec;
 import data.kaysaar.aotd.tot.scripts.trade.contracts.AoTDTradeContract;
+import data.kaysaar.aotd.tot.ui.customprod.components.ProductionCustomButton;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderData;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderSnapshot;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
+
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.ui.UIData;
-import data.kaysaar.aotd.vok.ui.customprod.components.ProductionCustomButton;
+
 
 import java.util.LinkedHashMap;
 import java.util.Map;

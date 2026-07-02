@@ -390,11 +390,13 @@ public class BlackSiteProjectManager {
     public static boolean haveMetReqForItem(String id, float value, OtherCostData.ItemType tyoe) {
         return value <= retrieveAmountOfItems(id, marketId, tyoe);
     }
-
     public List<AoTDSpecialProject> getProjectMatchingReward(ProjectReward.ProjectRewardType type, String id) {
         ArrayList<AoTDSpecialProject> projects = new ArrayList<>();
         return getProjects().values().stream().filter(x -> x.getProjectSpec().getRewards().stream().anyMatch(y -> y.type == type && y.id.equals(id))).toList();
 
+    }
+    public static List<AoTDSpecialProjectSpec> getProjectMatchingRewardThroughSpec(ProjectReward.ProjectRewardType type,String rewardId){
+       return SpecialProjectSpecManager.getSpecs().values().stream().filter(x->x.getRewards().stream().anyMatch(y->y.type==type&&y.id.equals(rewardId))).toList();
     }
 
     public List<AoTDSpecializationSpec> getSpecializationSpecsOrdered() {

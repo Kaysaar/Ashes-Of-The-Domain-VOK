@@ -8,13 +8,14 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpec;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.tot.scripts.trade.contracts.AoTDTradeContractManager;
+import data.kaysaar.aotd.tot.ui.customprod.components.ProductionDynamicPanelForScroll;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderData;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderSnapshot;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpecManager;
+
 import data.kaysaar.aotd.vok.campaign.econ.produciton.trade.ProductionTradeContract;
-import data.kaysaar.aotd.vok.ui.customprod.components.ProductionDynamicPanelForScroll;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;

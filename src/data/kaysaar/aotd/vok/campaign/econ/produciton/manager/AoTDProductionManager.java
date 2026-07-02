@@ -4,9 +4,10 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.combat.ShipAPI;
 import com.fs.starfarer.api.combat.ShipHullSpecAPI;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpec;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderData;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderSnapshot;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
+
 
 import java.util.ArrayList;
 

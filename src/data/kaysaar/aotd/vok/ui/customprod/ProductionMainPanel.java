@@ -1,13 +1,22 @@
 package data.kaysaar.aotd.vok.ui.customprod;
 
+import ashlib.data.plugins.ui.models.CustomButton;
 import ashlib.data.plugins.ui.models.ExtendedUIPanelPlugin;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
 
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpec;
+import data.kaysaar.aotd.tot.ui.customprod.components.ProductionBrowserSection;
+import data.kaysaar.aotd.tot.ui.customprod.components.ProductionCustomButton;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
+import data.kaysaar.aotd.vok.scripts.specialprojects.models.ProjectReward;
 import data.kaysaar.aotd.vok.ui.SoundUIManager;
+import data.kaysaar.aotd.vok.ui.customprod.buttons.FighterProductionCustomButton;
+import data.kaysaar.aotd.vok.ui.customprod.buttons.ItemProductionCustomButton;
+import data.kaysaar.aotd.vok.ui.customprod.buttons.ShipProductionCustomButton;
+import data.kaysaar.aotd.vok.ui.customprod.buttons.WeaponProductionCustomButton;
 import data.kaysaar.aotd.vok.ui.customprod.components.ProductionGatheringComponent;
 import data.kaysaar.aotd.vok.ui.customprod.orders.CurrentOrderList;
 import data.kaysaar.aotd.vok.ui.customprod.orders.IssuedOrdersList;
@@ -54,7 +63,77 @@ public class ProductionMainPanel implements ExtendedUIPanelPlugin, SoundUIManage
         contentPanel.addComponent(orderList.getMainPanel()).inTL(0, contentPanel.getPosition().getHeight() - orderList.getMainPanel().getPosition().getHeight());
         contentPanel.addComponent(productionGatheringComponent.getMainPanel()).inTL(0, 5);
         list = new ProductionTypesSection();
-        section = new ProductionBrowserSection(contentPanel.getPosition().getWidth() - panelSize - 15, contentPanel.getPosition().getHeight(), currType, this);
+        final ProductionMainPanel parent = this;
+        section = new ProductionBrowserSection(contentPanel.getPosition().getWidth() - panelSize - 15, contentPanel.getPosition().getHeight(), currType){
+            @Override
+            protected ProductionCustomButton createProductionButtonForType(
+                    AoTDProductionSpec.AoTDProductionSpecType type,
+                    float width,
+                    float height,
+                    AoTDProductionSpec spec
+            )
+            {
+                switch (prodType) {
+                    case SHIP:
+                        if (!BlackSiteProjectManager.getProjectMatchingRewardThroughSpec(ProjectReward.ProjectRewardType.SHIP, spec.getId()).isEmpty()) {
+                            return null;
+                        }
+                        return new ShipProductionCustomButton(width, height, spec, getColumnLayout());
+
+                    case WEAPON:
+                        if (!BlackSiteProjectManager.getProjectMatchingRewardThroughSpec(ProjectReward.ProjectRewardType.WEAPON, spec.getId()).isEmpty()) {
+                            return null;
+                        }
+                        return new WeaponProductionCustomButton(width, height, spec, getColumnLayout());
+
+                    case FIGHTER:
+                        if (!BlackSiteProjectManager.getProjectMatchingRewardThroughSpec(ProjectReward.ProjectRewardType.FIGHTER, spec.getId()).isEmpty()) {
+                            return null;
+                        }
+                        return new FighterProductionCustomButton(width, height, spec, getColumnLayout());
+
+                    case SPECIAL_ITEM:
+                        if (!BlackSiteProjectManager.getProjectMatchingRewardThroughSpec(ProjectReward.ProjectRewardType.ITEM, spec.getId()).isEmpty()) {
+                            return null;
+                        }
+                        return new ItemProductionCustomButton(width, height, spec, getColumnLayout());
+
+                    case COMMODITY_ITEM:
+                        if (!BlackSiteProjectManager.getProjectMatchingRewardThroughSpec(ProjectReward.ProjectRewardType.AICORE, spec.getId()).isEmpty()) {
+                            return null;
+                        }
+                        return new ItemProductionCustomButton(width, height, spec, getColumnLayout());
+
+                    default:
+                        return new ProductionCustomButton(width, height, spec, getColumnLayout());
+                }
+            }
+
+            @Override
+            public CustomButton.ButtonEventListener createListenerForButton(ProductionCustomButton bt) {
+                return  new CustomButton.ButtonEventListener() {
+
+                    @Override
+                    public void onButtonClicked() {
+                        int am = 1;
+                        if(isPressingShift){
+                            am = 5;
+                        }
+                        if(isPressingCtrl){
+                            am = 10;
+                        }
+                        if(isPressingShift&&isPressingCtrl){
+                            am = 50;
+                        }
+
+                        parent.orderList.addOrder(bt.getSpec().getId(),bt.getSpec(),am);
+
+                        parent.swapPanels(false);
+                    }
+                };
+
+            }
+        };
         section.createUI();
         contentPanel.addComponent(section.getMainPanel()).inTL(contentPanel.getPosition().getWidth() - section.getMainPanel().getPosition().getWidth() - 5, 0);
         contentPanel.addComponent(list.getMainPanel()).inTL(contentPanel.getPosition().getWidth() - section.getMainPanel().getPosition().getWidth() - 5, 0);

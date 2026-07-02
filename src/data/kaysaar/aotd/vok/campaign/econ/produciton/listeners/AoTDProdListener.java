@@ -3,10 +3,11 @@ package data.kaysaar.aotd.vok.campaign.econ.produciton.listeners;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import com.fs.starfarer.api.loading.VariantSource;
+import data.kaysaar.aotd.tot.produciton.listeners.AoTDProductionListenerAPI;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.NidavelirMegastructure;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
-public class AoTDProdListener implements AoTDProductionListenerAPI{
+public class AoTDProdListener implements AoTDProductionListenerAPI {
     @Override
     public void onShipProductionFinished(FleetMemberAPI member) {
         if (AoTDMisc.getNidavelirIfOwned() != null) {
