@@ -22,12 +22,12 @@ import com.fs.starfarer.api.loading.WingRole;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.tot.plugins.AoTDCommodityEconSpecManager;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 
 import data.kaysaar.aotd.vok.campaign.econ.conditions.NidavelirComplex;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.NidavelirMegastructure;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.models.BaseMegastructureScript;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.vok.plugins.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;

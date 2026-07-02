@@ -22,7 +22,9 @@ public class UIData {
     public static float WIDTH = Global.getSettings().getScreenWidth();
     public static float HEIGHT = Global.getSettings().getScreenHeight()-10;
 
-
+    public static final LinkedHashMap<String, Float> FULL_WIDTHS = new LinkedHashMap<>();
+    public static final LinkedHashMap<String, Float> FIGHTER_WIDTHS = new LinkedHashMap<>();
+    public static final LinkedHashMap<String, Float> ITEM_WIDTHS = new LinkedHashMap<>();
 
     public static void createFighterTooltip(final FleetMemberAPI fleetMember, final FighterWingSpecAPI spec,final UIComponentAPI componentAPI) {
         final Object standardTooltipV2 = ReflectionUtilis.invokeMethodDirectly(ReflectionUtilis.findStaticMethodByParameterTypes(CargoTooltipFactory.class, FleetMember.class,FighterWingSpec.class,int.class, CharacterStats.class,boolean.class),null ,fleetMember,  spec, 0, null, false);

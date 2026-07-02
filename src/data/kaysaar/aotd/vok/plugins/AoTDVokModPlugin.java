@@ -19,6 +19,7 @@ import com.fs.starfarer.api.impl.campaign.intel.bar.events.ScientistAICoreBarEve
 import com.fs.starfarer.api.util.DelayedActionScript;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.tot.grandwonders.GrandWonderTypeManager;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.tot.scripts.trade.contracts.rewards.creators.impl.playercontracts.PlayerIssuedSupplyContract;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
@@ -42,10 +43,9 @@ import data.kaysaar.aotd.vok.campaign.econ.industry.AoTDHeavyIndustry;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.buildingmenu.IndustryBlockerListener;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.MegastructureSpecManager;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.SpecialItemRecipeInfluencer;
+import data.kaysaar.aotd.vok.campaign.econ.produciton.AoTDSpecInfluencer;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.listeners.AoTDProdListener;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.manager.AoTDProductionManager;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.IndustrySynergiesMisc;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.sources.*;
 import data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies.*;
@@ -207,7 +207,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         GrandWonderTypeManager.addNewSpec(new SpaceDefenceStationType());
         GrandWonderTypeManager.addNewSpec(new BiosphereType());
         GrandWonderTypeManager.addNewSpec(new TechnologyType());
-        AoTDProductionSpecManager.addListener("item_influence",new SpecialItemRecipeInfluencer());
+        AoTDProductionSpecManager.addListener("item_influence",new AoTDSpecInfluencer());
     }
     public static boolean moveFileIntoStuffSubdirInModGraphics(String modId, String absolutePath) {
         try {
@@ -706,7 +706,6 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         populatePaths();
         populateSynergies();
         populateColonyDevelopment();
-        AoTDProductionSpecManager.generateSpecsForAllStuff();
 
         AoTDProductionManager.getInstance().ensureScriptExists();
         if (Global.getSettings().getModManager().isModEnabled("aotd_sop")) {

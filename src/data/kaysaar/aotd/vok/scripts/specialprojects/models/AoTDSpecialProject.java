@@ -14,7 +14,6 @@ import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectCompletionListener;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.SpecialProjectSpecManager;
-import data.kaysaar.aotd.vok.ui.customprod.components.ProductionCustomButton;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectStageWindow;
 import data.kaysaar.aotd.vok.ui.specialprojects.SpecialProjectUIManager;
 

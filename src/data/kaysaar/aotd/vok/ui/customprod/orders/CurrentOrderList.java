@@ -7,11 +7,12 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.input.InputEventAPI;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpec;
+import data.kaysaar.aotd.tot.ui.customprod.components.ProductionCustomButton;
+import data.kaysaar.aotd.tot.ui.customprod.components.ProductionDynamicPanelForScroll;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderData;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.order.AoTDProductionOrderSnapshot;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
-import data.kaysaar.aotd.vok.ui.customprod.components.ProductionCustomButton;
-import data.kaysaar.aotd.vok.ui.customprod.components.ProductionDynamicPanelForScroll;
+
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;

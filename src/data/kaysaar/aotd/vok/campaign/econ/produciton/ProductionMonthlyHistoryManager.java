@@ -2,8 +2,9 @@ package data.kaysaar.aotd.vok.campaign.econ.produciton;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.impl.campaign.intel.misc.ProductionReportIntel;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpec;
 import data.kaysaar.aotd.vok.campaign.econ.produciton.intel.AoTDProductionReportIntel;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
+
 
 import java.util.ArrayList;
 import java.util.Comparator;

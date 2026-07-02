@@ -9,7 +9,8 @@ import com.fs.starfarer.api.impl.campaign.shared.WormholeManager;
 import com.fs.starfarer.api.loading.Description;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import data.kaysaar.aotd.vok.campaign.econ.produciton.specs.AoTDProductionSpec;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpec;
+
 
 import java.util.Set;
 
