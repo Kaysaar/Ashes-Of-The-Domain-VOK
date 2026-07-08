@@ -10,6 +10,7 @@ import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.impl.campaign.ids.HullMods;
 import com.fs.starfarer.api.impl.campaign.ids.Stats;
+import com.fs.starfarer.api.loading.Description;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 
 import java.util.ArrayList;

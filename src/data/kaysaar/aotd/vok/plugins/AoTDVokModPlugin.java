@@ -25,10 +25,7 @@ import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDItems;
 import data.kaysaar.aotd.vok.Ids.AoTDMemFlags;
-import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.CentralizedCore;
-import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.DistributedRegionalNetwork;
-import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.HypershuntQuaters;
-import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.PerseanStandardized;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl.*;
 import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentManager;
 
 
@@ -266,7 +263,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         l.removeListenerOfClass(AoTDIndButtonsListener.class);
         AoTDIndButtonsListener listener = new AoTDIndButtonsListener();
         l.addListener(listener);
-        l.addListener(new CoronalHypershuntBMOBlocker(),true);
+        l.addListener(new BMOIndustryBlocker(),true);
         l.addListener(new AoTDProdListener(),true);
         if (!l.hasListenerOfClass(ScientistUpkeepListener.class))
             l.addListener(new ScientistUpkeepListener(), true);
@@ -498,10 +495,12 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 
     }
     public void populateColonyDevelopment(){
+        ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("archeosite",new ArcheoSite());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("core",new CentralizedCore());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("standard",new PerseanStandardized());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("distributed",new DistributedRegionalNetwork());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("hypershunt",new HypershuntQuaters());
+
         // Change required : breaks with modded buildings that aren't part of the tech trees, including the Megastructures
         DistributedRegionalNetwork.addNewIndustries(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.MONOCULTURE));
         DistributedRegionalNetwork.addNewIndustries(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.AQUACULTURE));

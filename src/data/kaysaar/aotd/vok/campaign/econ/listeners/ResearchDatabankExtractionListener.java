@@ -24,13 +24,11 @@ public class ResearchDatabankExtractionListener implements EconomyTickListener {
                 if (x.hasCondition("pre_collapse_facility")) {
                     SubmarketAPI open = x.getSubmarket(subMarketId);
                     Industry research = x.getIndustries().stream().filter(y->y instanceof ResearchFacility).findFirst().orElse(null);
-                    if (open != null&&research!=null) {
-                        if(research.getAICoreId()!=null&&research.getAICoreId().equals(Commodities.ALPHA_CORE)){
-                            open.getCargo().addCommodity("research_databank", 1);
-                        }
-                        open.getCargo().addCommodity("research_databank", amountDatabanksMonthly);
+                    int am = x.getStats().getDynamic().getStat(ResearchFacility.researchFacilityModForDatabanks).getModifiedInt();
+                    if (open != null &&research!=null && research.isFunctional()) {
+                        open.getCargo().addCommodity("research_databank", am );
                     } else {
-                        x.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addCommodity("research_databank", amountDatabanksMonthly);
+                        x.getSubmarket(Submarkets.SUBMARKET_STORAGE).getCargo().addCommodity("research_databank", am );
                     }
                 }
             }

@@ -35,6 +35,7 @@ public class AoTDSpecialProject {
     }
     public void restartProject(){
         currentlyAttemptedStages.clear();
+        getStages().forEach(x->x.getDelivered().clear());
         wasCompleted = false;
         for (AoTDSpecialProjectStage stage : stages) {
             stage.setCompleted(false);
@@ -130,11 +131,10 @@ public class AoTDSpecialProject {
 
         for (String currentlyAttemptedStage : currentlyAttemptedStages) {
             AoTDSpecialProjectStage stage = getStage(currentlyAttemptedStage);
-            int months = getMonthsRemaining(stage.getDaysLeft(), Global.getSector().getClock());
+            int months = (int) Math.max(1,stage.getDaysLeft()/30);
 
-            stage.getSpec().getGpCost().forEach((key, value) -> {
-                float valueTotal = value*BlackSiteProjectManager.getInstance().getProductionMultCost().getModifiedValue();
-                AoTDMisc.putCommoditiesIntoMap(commodities, key, Math.round(valueTotal/ months));
+            stage.getTotalGPCostFromStageAfterDelivery().forEach((key, value) -> {
+                AoTDMisc.putCommoditiesIntoMap(commodities, key, Math.round((float) value / months));
             });
         }
 

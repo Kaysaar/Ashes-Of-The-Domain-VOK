@@ -8,6 +8,7 @@ import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDConditions;
 
 import java.awt.*;
 import java.util.Set;
@@ -102,7 +103,7 @@ public class PCFPlanetIntel extends BaseIntelPlugin {
     @Override
     public String getIcon() {
         // The icon of the intel
-        return Global.getSettings().getSpriteName("intel", "hostilities");
+        return Global.getSettings().getMarketConditionSpec(AoTDConditions.PRE_COLLAPSE_FACILITY).getIcon();
     }
 
     // Don't touch this one

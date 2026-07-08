@@ -9,9 +9,8 @@ import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.BaseColonyDe
 import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentManager;
 import data.kaysaar.aotd.vok.ui.basecomps.ExtendedUIPanelPlugin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ColonyDevelopmentList implements ExtendedUIPanelPlugin {
     CustomPanelAPI mainPanel;
@@ -43,9 +42,23 @@ public class ColonyDevelopmentList implements ExtendedUIPanelPlugin {
         TooltipMakerAPI tooltipButton = componentPanel.createUIElement(mainPanel.getPosition().getWidth(),mainPanel.getPosition().getHeight()-25,true);
         componentPanel.addUIElement(tooltipHeader).inTL(0,0);
         float opad = 0f;
-        for (Map.Entry<String, BaseColonyDevelopment> entry : ColonyDevelopmentManager.getInstance().getDevelopmentScripts().entrySet()) {
+        LinkedHashMap<String, BaseColonyDevelopment> developments =
+                ColonyDevelopmentManager.getInstance()
+                        .getDevelopmentScripts()
+                        .entrySet()
+                        .stream()
+                        .sorted(Map.Entry.comparingByValue(
+                                Comparator.comparing(BaseColonyDevelopment::getOrder)
+                        ))
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (a, b) -> a,
+                                LinkedHashMap::new
+                        ));
+        for (Map.Entry<String, BaseColonyDevelopment> entry :developments.entrySet()) {
             if(!entry.getValue().canShowOnMarket(market))continue;
-            ButtonAPI button = tooltipButton.addButton(entry.getValue().getName(),entry.getKey(), Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.NONE, componentPanel.getPosition().getWidth()-9,40,opad);
+            ButtonAPI button = tooltipButton.addButton(entry.getValue().getName(),entry.getKey(), entry.getValue().getBrightButtonColour(market),entry.getValue().getDarkButtonColour(market),Alignment.MID,CutStyle.NONE, componentPanel.getPosition().getWidth()-9,40,opad);
             button.setEnabled(entry.getValue().canBeAppliedOnMarket(market));
             buttons.add(button);
             opad =5f;

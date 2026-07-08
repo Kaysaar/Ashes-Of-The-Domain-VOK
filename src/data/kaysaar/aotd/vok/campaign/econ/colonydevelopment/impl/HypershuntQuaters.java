@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -13,7 +14,7 @@ import java.awt.*;
 public class HypershuntQuaters extends BaseColonyDevelopment {
     @Override
     public String getName() {
-        return "Hypershunt Makeshift Quarters";
+        return "Hypershunt Emergency Mode";
     }
 
     @Override
@@ -28,39 +29,43 @@ public class HypershuntQuaters extends BaseColonyDevelopment {
     @Override
     public void generateEffects(MarketAPI market, TooltipMakerAPI tooltip, String fontForSections) {
         tooltip.setParaFont(fontForSections);
-        tooltip.addPara("Decentralized Industrial Complex", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
+        tooltip.addPara("Hypershunt Makeshift Quarters", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
         tooltip.setParaFont(Fonts.DEFAULT_SMALL);
         tooltip.addPara(
-                "All other industries will have their output reduced by up to %s, depending on colony size.",
-                3f,
+                "Colony size is capped at 2, and no industry / structure is allowed ",
                 Misc.getNegativeHighlightColor(),
-                "4 units"
+                3f
         );
         tooltip.setParaFont(fontForSections);
-        tooltip.addPara("Planetwide Transport Network", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
+        tooltip.addPara("Hyperspecialized Mega Engineering", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
         tooltip.setParaFont(Fonts.DEFAULT_SMALL);
         tooltip.addPara(
-                "Maintenance costs are increased by %s across the board on all industries, infrastructure, and facilities on this world.",
-                3f,
-                Misc.getNegativeHighlightColor(),
-                "+50%"
+                "Allows restoration and control over Coronal Hypershunt internal systems",
+                Misc.getPositiveHighlightColor(),
+                3f
         );
 
-        tooltip.addPara(
-                "If the %s is built and operational, this penalty is reduced to %s due to improved logistical efficiency.",
-                3f,
-                Misc.getPositiveHighlightColor(),
-                "Maglev Network", "+30%"
-        );
-        tooltip.addPara("Resort Center receives %s income bonus!", 3f, Misc.getPositiveHighlightColor(), "10%");
         tooltip.setParaFont(fontForSections);
-        tooltip.addPara("Scattered Settlements", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
-        tooltip.setParaFont(Fonts.DEFAULT_SMALL);
-        tooltip.addPara("Lowers synergy efficiency by %s and lowers Pather interest significantly, due to being harder to establish a hidden base on this planet", 3f, Color.ORANGE, "10%");
+        if(Global.getSettings().getModManager().isModEnabled("aotd_sop")){
+            tooltip.addPara("Docking Shrouds", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
+            tooltip.setParaFont(Fonts.DEFAULT_SMALL);
+            tooltip.addPara("Market has capacity to host patrol fleets, that will guard said megastructure",Misc.getPositiveHighlightColor(),3f);
+        }
+
     }
     @Override
     public void unapply(MarketAPI market) {
 
+    }
+
+    @Override
+    public void generateDescriptionSection(MarketAPI market, TooltipMakerAPI tooltip) {
+       tooltip.addPara("An emergency control protocol created by your scientists after the original controlling intelligence disappeared. Taking advantage of the numerous failsafes and redundant systems, a small crew of engineers and scientists keep this venerable megastructure running at a level, while quite not the same as it was in its prime, still vastly outmatches anything in the modern sector.",5f);
+    }
+
+    @Override
+    public void generateOtherInfo(MarketAPI market, TooltipMakerAPI tooltip) {
+        tooltip.addPara("The hypershunts were never meant to be operated like this and one slip up will probably NOT END WELL.",Misc.getNegativeHighlightColor(),5f);
     }
 
     @Override
