@@ -60,6 +60,18 @@ public class AoTDSpecialProjectStage {
             });
         return commodities;
     }
+    public HashMap<String, Integer> getTotalGPCostFromStageAfterDelivery() {
+        HashMap<String, Integer> commodities = new HashMap<>();
+        this.getSpec().getGpCost().forEach((key, value) -> {
+            float valueTotal = value*BlackSiteProjectManager.getInstance().getProductionMultCost().getModifiedValue();
+            valueTotal-=getDelivered().getOrDefault(key, 0);
+            if(valueTotal>0){
+                AoTDMisc.putCommoditiesIntoMap(commodities, key, Math.round(valueTotal));
+            }
+
+        });
+        return commodities;
+    }
     public float getMinAllowedProgress(){
         float curr = 1f;
         for (Map.Entry<String, Integer> entry : getSpec().getGpCost().entrySet()) {

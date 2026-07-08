@@ -6,10 +6,13 @@ import com.fs.starfarer.api.campaign.econ.CommoditySpecAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
+import com.fs.starfarer.api.impl.campaign.ids.Conditions;
+import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.ids.Submarkets;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.vok.Ids.AoTDConditions;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import kaysaar.aotd_question_of_loyalty.data.misc.QoLMisc;
 
@@ -20,6 +23,7 @@ public class ResearchFacility extends BaseIndustry  {
     public static String subMarketId = "researchfacil";
     public static Float COST_PER_TIER = 10000F;
     public static int amountDatabanksMonthly = 1;
+    public static String researchFacilityModForDatabanks = "aotd_research_databank_bonus";
 
     @Override
     public void apply() {
@@ -28,6 +32,14 @@ public class ResearchFacility extends BaseIndustry  {
             if(!market.hasSubmarket(subMarketId)) {
                 market.addSubmarket(subMarketId);
             }
+        }
+        market.getStats().getDynamic().getStat(ResearchFacility.researchFacilityModForDatabanks).setBaseValue(0f);
+        if(!market.hasCondition(AoTDConditions.PRE_COLLAPSE_FACILITY)){
+            market.getStats().getDynamic().getMod(researchFacilityModForDatabanks).modifyMult("preventer",0);
+        }
+        else{
+            market.getStats().getDynamic().getMod(researchFacilityModForDatabanks).unmodifyMult("preventer");
+
         }
 
         float reductionMult = 1;
@@ -135,6 +147,17 @@ public class ResearchFacility extends BaseIndustry  {
     protected void applyAICoreToIncomeAndUpkeep() {
 
     }
+    @Override
+    protected void applyNoAICoreModifiers() {
+        market.getStats().getDynamic().getStat(researchFacilityModForDatabanks).unmodifyFlat(getModId(0));
+    }
+    @Override
+    protected void applyAlphaCoreModifiers() {
+        if(market.hasCondition(AoTDConditions.PRE_COLLAPSE_FACILITY)){
+            market.getStats().getDynamic().getStat(researchFacilityModForDatabanks).modifyFlat(getModId(0),1);
+        }
+    }
+
 
     @Override
     protected void addGammaCoreDescription(TooltipMakerAPI tooltip, AICoreDescriptionMode mode) {

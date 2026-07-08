@@ -6,10 +6,14 @@ import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
+import java.awt.*;
+
 public abstract class BaseColonyDevelopment implements ColonyDevelopmentAPI{
     public static String condIdApplier = "aotd_colony_development_cond";
     //Maybe gonna expand this later?
-
+    public float getOrder(){
+        return 500f;
+    }
     @Override
     public void generateDetailingTooltip(MarketAPI market, TooltipMakerAPI tooltip) {
         tooltip.setTitleOrbitronLarge();
@@ -22,7 +26,12 @@ public abstract class BaseColonyDevelopment implements ColonyDevelopmentAPI{
         generateOtherInfo(market, tooltip);
 
     }
-
+    public Color getBrightButtonColour(MarketAPI market){
+        return Misc.getBasePlayerColor();
+    }
+    public Color getDarkButtonColour(MarketAPI market){
+        return Misc.getDarkPlayerColor();
+    }
     @Override
     public void generateTooltipForMarketCond(MarketAPI market, TooltipMakerAPI tooltip, boolean expanded) {
         tooltip.setParaFont(Fonts.ORBITRON_12);

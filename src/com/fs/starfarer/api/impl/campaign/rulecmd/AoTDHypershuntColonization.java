@@ -12,6 +12,9 @@ import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.submarkets.StoragePlugin;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.BaseColonyDevelopment;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentCondition;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentManager;
 import data.kaysaar.aotd.vok.campaign.econ.industry.coronaltap.*;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.MegastructureSpecManager;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.CoronalHypershuntMegastructure;
@@ -40,6 +43,9 @@ public class AoTDHypershuntColonization extends BaseCommandPlugin{
         m.setPlayerOwned(true);
         m.addTag(Tags.MARKET_NO_INDUSTRIES_ALLOWED);
         m.setAdmin(Global.getSector().getPlayerPerson());
+        m.addCondition(BaseColonyDevelopment.condIdApplier);
+        ColonyDevelopmentCondition cond = (ColonyDevelopmentCondition) m.getCondition(BaseColonyDevelopment.condIdApplier).getPlugin();
+        cond.setIdOfDevelopment("hypershunt");
         if(!Misc.isPlayerFactionSetUp())Global.getSector().addScript(new EveryFrameScript() {
             @Override
             public boolean isDone() {
