@@ -15,7 +15,7 @@ Nidavelir Complex,aotd_nidavelir_complex,TRUE,FALSE,data.kaysaar.aotd.vok.campai
 Pluto Mining Station,aotd_pluto_station,TRUE,FALSE,data.kaysaar.aotd.vok.campaign.econ.conditions.PlutoStation,"Former Domain gem, this megastructure is capable of excavation and refining enormous amount of resources.",graphics/icons/markets/aotd_pluto.png,641
 aotd_growing_demand_applier,aotd_growing_demand_applier,,TRUE,data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandConditionEnforcer,,graphics/icons/markets/aotd_pluto.png,641
 Colony Development Program,aotd_colony_development_cond,,TRUE,data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentCondition,This settlement follows a defined development path that shapes the colony's foundation and future.,graphics/icons/markets/aotd_colony_development_plan_icon.png,50
-,,,,,,,
+Nutritious Wildlife,aotd_nutritious_wildlife,TRUE,FALSE,data.kaysaar.aotd.vok.campaign.econ.conditions.AoTDNutritiousWildlife,The fauna of this world is very compatible and nutritional to humans.,graphics/icons/markets/aotd_nutritious_wildlife.png,310
 ,,,,,,,
 ,,,,,,,
 ,,,,,,,
