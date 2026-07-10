@@ -69,7 +69,7 @@ public class TradeOutpostAndSurveyInterceptor implements MarketUIListener {
                 if(!fader.getState().equals(Fader.State.OUT)){
                     fader.forceOut();
                     ColonyDevelopmentDialog dialog = new ColonyDevelopmentDialog("Choose Colony Development Plan", (UIPanelAPI) comp,ctx.market);
-                    AshMisc.initPopUpDialog(dialog,1000,600);
+                    AshMisc.initPopUpDialog(dialog,1000,640);
                 }
 
             }

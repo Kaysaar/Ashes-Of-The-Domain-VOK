@@ -18,7 +18,7 @@ import java.awt.*;
 
 public class ArcheoSite extends BaseColonyDevelopment {
 
-    private String sourceIdString;
+    private String   sourceIdString = "aotd_correction";
 
     @Override
     public String getName() {
@@ -28,7 +28,7 @@ public class ArcheoSite extends BaseColonyDevelopment {
     @Override
     public void generateDescriptionSection(MarketAPI market, TooltipMakerAPI tooltip) {
         tooltip.addPara(
-                "Amongst the most enigmatic of ruins from the Domain, its original function is an ongoing debate by those working onsite. No matter how deep or far expeditions and tech excavations, crews continue to uncover troves of technology and research data with no end in sight.",
+                "Amongst the most enigmatic of ruins from the Domain, its original function is an ongoing debate by those working onsite. No matter how deep or far expeditions and tech excavations go, crews continue to uncover troves of technology and research data with no end in sight.",
                 5f
         );
     }
@@ -104,7 +104,7 @@ public class ArcheoSite extends BaseColonyDevelopment {
             market.addIndustry(Industries.PATROLHQ);
             market.getIndustry(Industries.PATROLHQ).setHidden(true);
         }
-        sourceIdString = "aotd_correction";
+
         market.getStats().getDynamic().getMod(
                 Stats.MAX_MARKET_SIZE).modifyFlat(sourceIdString,-Misc.getMaxMarketSize(market)+2,"Archeo-Site");
         market.getStats().getDynamic().getStat(Stats.TECH_MINING_MULT).modifyMult(sourceIdString, 1.7f,"Archeo-Site");
@@ -146,6 +146,7 @@ public class ArcheoSite extends BaseColonyDevelopment {
 
     @Override
     public boolean canShowOnMarket(MarketAPI market) {
-        return Misc.hasRuins(market)||market.hasCondition(AoTDConditions.PRE_COLLAPSE_FACILITY);
+        boolean gasGiant = market.getPlanetEntity()!=null&&market.getPlanetEntity().isGasGiant();
+        return (Misc.hasRuins(market)||market.hasCondition(AoTDConditions.PRE_COLLAPSE_FACILITY))&&!gasGiant;
     }
 }

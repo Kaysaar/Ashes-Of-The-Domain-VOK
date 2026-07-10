@@ -26,12 +26,19 @@ public abstract class BaseColonyDevelopment implements ColonyDevelopmentAPI{
         generateOtherInfo(market, tooltip);
 
     }
+    public boolean doesMeetAdditionalCriteriaForDevelopment(MarketAPI market) {
+        return true;
+    }
+    public void executePlanBeforeColonization(MarketAPI market) {
+
+    }
     public Color getBrightButtonColour(MarketAPI market){
         return Misc.getBasePlayerColor();
     }
     public Color getDarkButtonColour(MarketAPI market){
         return Misc.getDarkPlayerColor();
     }
+
     @Override
     public void generateTooltipForMarketCond(MarketAPI market, TooltipMakerAPI tooltip, boolean expanded) {
         tooltip.setParaFont(Fonts.ORBITRON_12);
