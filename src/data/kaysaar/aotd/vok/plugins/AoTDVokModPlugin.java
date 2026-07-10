@@ -496,6 +496,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
     }
     public void populateColonyDevelopment(){
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("archeosite",new ArcheoSite());
+        ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("floatingcity",new FloatingCity());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("core",new CentralizedCore());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("standard",new PerseanStandardized());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("distributed",new DistributedRegionalNetwork());

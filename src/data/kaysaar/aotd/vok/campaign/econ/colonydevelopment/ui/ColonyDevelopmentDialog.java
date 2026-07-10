@@ -8,6 +8,7 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
 import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.BaseColonyDevelopment;
 import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentCondition;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentManager;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 
 public class ColonyDevelopmentDialog extends BasePopUpDialog {
@@ -49,7 +50,8 @@ public class ColonyDevelopmentDialog extends BasePopUpDialog {
         market.addCondition(BaseColonyDevelopment.condIdApplier);
         ColonyDevelopmentCondition cond = (ColonyDevelopmentCondition) market.getCondition(BaseColonyDevelopment.condIdApplier).getPlugin();
         cond.setIdOfDevelopment((String) content.list.chosen.getCustomData());
-
+        BaseColonyDevelopment development = ColonyDevelopmentManager.getInstance().getColonyDevelopment((String) content.list.chosen.getCustomData());
+        development.executePlanBeforeColonization(market);
         returnValue = 0;
     }
 
@@ -57,7 +59,17 @@ public class ColonyDevelopmentDialog extends BasePopUpDialog {
     public void advance(float amount) {
         super.advance(amount);
         if(content!=null&&content.list!=null){
-            confirmButton.setEnabled(content.list.chosen != null);
+            if(content.list.chosen!=null){
+                BaseColonyDevelopment development = ColonyDevelopmentManager.getInstance().getColonyDevelopment((String) content.list.chosen.getCustomData());
+                if(development.doesMeetAdditionalCriteriaForDevelopment(market)!=confirmButton.isEnabled()){
+                    confirmButton.setEnabled(development.doesMeetAdditionalCriteriaForDevelopment(market));
+
+                }
+            }
+            else if (confirmButton.isEnabled()){
+                confirmButton.setEnabled(false);
+            }
+
         }
 
     }

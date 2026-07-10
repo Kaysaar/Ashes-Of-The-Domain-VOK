@@ -343,24 +343,161 @@ public class AoTDMisc {
         }
         return false;
     }
+    public static CustomPanelAPI createTooltipOfResourcesForDialogConsumed(
+            float width,
+            float height,
+            float iconSize,
+            HashMap<String, Integer> costs,
+            boolean isForSalvage
+    ) {
+        float gap = 5f;
+        float rowGap = 5f;
 
-    public static CustomPanelAPI createTooltipOfResourcesForDialog(float width, float height, float iconSize, HashMap<String, Integer> costs, boolean isForSalvage) {
         CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
-        float totalSize = width;
-        float positions = totalSize / (12* 4);
-        float iconsize = iconSize;
-        float topYImage = 0;
+
         LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
 
+        ArrayList<CustomPanelAPI> allItems = new ArrayList<>();
 
-        float x = positions;
-        ArrayList<CustomPanelAPI> panelsWithImage = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : costs.entrySet()) {
-            float widthTempPanel = iconsize;
             int number = entry.getValue();
             int owned = (int) AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey());
-            String icon = null;
+
+            String icon;
+            if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
+                icon = Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName();
+            } else {
+                icon = Global.getSettings().getCommoditySpec(entry.getKey()).getIconName();
+            }
+
+            String text = "x" + number;
+            String text2 = isForSalvage ? "" : "(" + owned + ")";
+            String fullText = text + (text2.isEmpty() ? "" : " " + text2);
+
+            String consumedText = "Consumed";
+
+            float numberTextWidth = test.computeTextWidth(fullText);
+            float consumedTextWidth = test.computeTextWidth(consumedText);
+
+            float textBlockWidth = Math.max(numberTextWidth, consumedTextWidth);
+            float itemWidth = iconSize + gap + textBlockWidth;
+
+            float numberTextHeight = test.computeTextHeight(fullText);
+            float consumedTextHeight = test.computeTextHeight(consumedText);
+            float textBlockHeight = numberTextHeight + consumedTextHeight;
+
+            float itemHeight = Math.max(iconSize, textBlockHeight);
+
+            CustomPanelAPI itemPanel = Global.getSettings().createCustom(itemWidth, itemHeight, null);
+            TooltipMakerAPI itemTooltip = itemPanel.createUIElement(itemWidth, itemHeight, false);
+
+            itemTooltip.addImage(icon, iconSize, iconSize, 0f);
+            itemTooltip.getPrev().getPosition().inTL(
+                    0f,
+                    (itemHeight / 2f) - (iconSize / 2f)
+            );
+
+            Color col = Misc.getBasePlayerColor();
+            if (number > owned && !isForSalvage) {
+                col = Misc.getNegativeHighlightColor();
+            }
+
+            float textStartX = iconSize + gap;
+            float textStartY = (itemHeight / 2f) - (textBlockHeight / 2f);
+
+            LabelAPI numberLabel = itemTooltip.addPara("%s %s", 0f, col, col, text, text2);
+            numberLabel.getPosition().inTL(textStartX, textStartY);
+
+            LabelAPI consumedLabel = itemTooltip.addPara(consumedText, col, 0f);
+            consumedLabel.getPosition().inTL(
+                    textStartX,
+                    textStartY + numberTextHeight
+            );
+
+            itemPanel.addUIElement(itemTooltip).inTL(0, 0);
+            allItems.add(itemPanel);
+        }
+
+        ArrayList<CustomPanelAPI> firstRow = new ArrayList<>();
+        ArrayList<CustomPanelAPI> secondRow = new ArrayList<>();
+
+        float firstRowWidth = 0f;
+
+        for (CustomPanelAPI item : allItems) {
+            float itemWidth = item.getPosition().getWidth();
+            float nextWidth = firstRow.isEmpty() ? itemWidth : firstRowWidth + gap + itemWidth;
+
+            if (nextWidth <= width || firstRow.isEmpty()) {
+                firstRow.add(item);
+                firstRowWidth = nextWidth;
+            } else {
+                secondRow.add(item);
+            }
+        }
+
+        float secondRowWidth = 0f;
+        for (CustomPanelAPI item : secondRow) {
+            if (secondRowWidth > 0f) secondRowWidth += gap;
+            secondRowWidth += item.getPosition().getWidth();
+        }
+
+        float itemHeight = iconSize;
+        if (!allItems.isEmpty()) {
+            itemHeight = allItems.get(0).getPosition().getHeight();
+        }
+
+        float neededHeight = itemHeight;
+        if (!secondRow.isEmpty()) {
+            neededHeight = itemHeight * 2f + rowGap;
+        }
+
+        neededHeight = Math.max(height, neededHeight);
+
+        tooltip.getPosition().setSize(width, neededHeight);
+        customPanel.getPosition().setSize(width, neededHeight);
+
+        float startXFirst = Math.max(0f, (width - firstRowWidth) / 2f);
+        float x = startXFirst;
+
+        for (CustomPanelAPI item : firstRow) {
+            tooltip.addCustom(item, 0f).getPosition().inTL(x, 0f);
+            x += item.getPosition().getWidth() + gap;
+        }
+
+        float startXSecond = Math.max(0f, (width - secondRowWidth) / 2f);
+        x = startXSecond;
+
+        for (CustomPanelAPI item : secondRow) {
+            tooltip.addCustom(item, 0f).getPosition().inTL(x, itemHeight + rowGap);
+            x += item.getPosition().getWidth() + gap;
+        }
+
+        customPanel.addUIElement(tooltip).inTL(0, 0);
+        return customPanel;
+    }
+    public static CustomPanelAPI createTooltipOfResourcesForDialog(
+            float width,
+            float height,
+            float iconSize,
+            HashMap<String, Integer> costs,
+            boolean isForSalvage
+    ) {
+        float gap = 5f;
+        float rowGap = 5f;
+
+        CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
+        TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
+
+        LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
+
+        ArrayList<CustomPanelAPI> allItems = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : costs.entrySet()) {
+            int number = entry.getValue();
+            int owned = (int) AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey());
+
+            String icon;
             if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
                 icon = Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName();
             } else {
@@ -368,62 +505,80 @@ public class AoTDMisc {
             }
 
             String text = "" + number;
-            String text2 = "(" + owned + ")";
-            if (isForSalvage) {
-                text2 = "";
-            }
-            widthTempPanel += test.computeTextWidth(text + text2);
-            CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel + iconSize + 5, iconSize, null);
-            TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel + iconSize + 5, iconSize, false);
-            tooltipMakerAPI.addImage(icon, iconsize, iconsize, 0f);
-            UIComponentAPI image = tooltipMakerAPI.getPrev();
-            image.getPosition().inTL(x, topYImage);
+            String text2 = isForSalvage ? "" : "(" + owned + ")";
+            String fullText = text + (text2.isEmpty() ? "" : " " + text2);
+
+            float textWidth = test.computeTextWidth(fullText);
+            float itemWidth = iconSize + gap + textWidth;
+
+            CustomPanelAPI itemPanel = Global.getSettings().createCustom(itemWidth, iconSize, null);
+            TooltipMakerAPI itemTooltip = itemPanel.createUIElement(itemWidth, iconSize, false);
+
+            itemTooltip.addImage(icon, iconSize, iconSize, 0f);
+            itemTooltip.getPrev().getPosition().inTL(0, 0);
 
             Color col = Misc.getTooltipTitleAndLightHighlightColor();
             if (number > owned && !isForSalvage) {
                 col = Misc.getNegativeHighlightColor();
             }
 
-            tooltipMakerAPI.addPara("%s %s", 0f, col, col, text, text2).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
-            panelTemp.addUIElement(tooltipMakerAPI).inTL(0, 0);
-            panelsWithImage.add(panelTemp);
+            LabelAPI label = itemTooltip.addPara("%s %s", 0f, col, col, text, text2);
+            label.getPosition().inTL(
+                    iconSize + gap,
+                    (iconSize / 2f) - (label.computeTextHeight(label.getText()) / 2f)
+            );
+
+            itemPanel.addUIElement(itemTooltip).inTL(0, 0);
+            allItems.add(itemPanel);
         }
 
+        ArrayList<CustomPanelAPI> firstRow = new ArrayList<>();
+        ArrayList<CustomPanelAPI> secondRow = new ArrayList<>();
 
-        float totalWidth = 0f;
-        float secondRowWidth = 0f;
-        float left;
-        for (CustomPanelAPI panelAPI : panelsWithImage) {
-            totalWidth += panelAPI.getPosition().getWidth() + 15;
-        }
-        left = totalWidth;
-        ArrayList<CustomPanelAPI> panelsSecondRow = new ArrayList<>();
-        if (totalWidth >= width) {
-            for (int i = panelsWithImage.size() - 1; i >= 0; i--) {
-                left -= panelsWithImage.get(i).getPosition().getWidth() - 15;
-                panelsSecondRow.add(panelsWithImage.get(i));
-                if (left < width) {
-                    break;
-                }
-                panelsWithImage.remove(i);
+        float firstRowWidth = 0f;
+
+        for (CustomPanelAPI item : allItems) {
+            float itemWidth = item.getPosition().getWidth();
+            float nextWidth = firstRow.isEmpty() ? itemWidth : firstRowWidth + gap + itemWidth;
+
+            if (nextWidth <= width || firstRow.isEmpty()) {
+                firstRow.add(item);
+                firstRowWidth = nextWidth;
+            } else {
+                secondRow.add(item);
             }
         }
-        for (CustomPanelAPI panelAPI : panelsSecondRow) {
-            secondRowWidth += panelAPI.getPosition().getWidth() + 15;
+
+        float secondRowWidth = 0f;
+        for (CustomPanelAPI item : secondRow) {
+            if (secondRowWidth > 0f) secondRowWidth += gap;
+            secondRowWidth += item.getPosition().getWidth();
         }
-        float startingXFirstRow = 0;
-        float startingXSecondRow = 0;
-        if (!panelsSecondRow.isEmpty()) {
-            tooltip.getPosition().setSize(width, height * 2 + 5);
-            customPanel.getPosition().setSize(width, height * 2 + 5);
+
+        float neededHeight = iconSize;
+        if (!secondRow.isEmpty()) {
+            neededHeight = iconSize * 2f + rowGap;
         }
-        for (CustomPanelAPI panelAPI : panelsWithImage) {
-            tooltip.addCustom(panelAPI, 0f).getPosition().inTL(startingXFirstRow, 0);
-            startingXFirstRow += panelAPI.getPosition().getWidth() + 5;
+
+        neededHeight = Math.max(height, neededHeight);
+
+        tooltip.getPosition().setSize(width, neededHeight);
+        customPanel.getPosition().setSize(width, neededHeight);
+
+        float startXFirst = Math.max(0f, (width - firstRowWidth) / 2f);
+        float x = startXFirst;
+
+        for (CustomPanelAPI item : firstRow) {
+            tooltip.addCustom(item, 0f).getPosition().inTL(x, 0f);
+            x += item.getPosition().getWidth() + gap;
         }
-        for (CustomPanelAPI panelAPI : panelsSecondRow) {
-            tooltip.addCustom(panelAPI, 0f).getPosition().inTL(startingXSecondRow, iconSize + 5);
-            startingXSecondRow += panelAPI.getPosition().getWidth() + 5;
+
+        float startXSecond = Math.max(0f, (width - secondRowWidth) / 2f);
+        x = startXSecond;
+
+        for (CustomPanelAPI item : secondRow) {
+            tooltip.addCustom(item, 0f).getPosition().inTL(x, iconSize + rowGap);
+            x += item.getPosition().getWidth() + gap;
         }
 
         customPanel.addUIElement(tooltip).inTL(0, 0);

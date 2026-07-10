@@ -13,6 +13,7 @@ import com.fs.starfarer.api.characters.OfficerDataAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
+import com.fs.starfarer.api.impl.campaign.ids.MemFlags;
 import com.fs.starfarer.api.plugins.OfficerLevelupPlugin;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -188,6 +189,7 @@ public class AoTDIndButtonsListener implements IndustryOptionProvider {
                         if(s.getPerson().getMemoryWithoutUpdate().is("$aotd_gardens",true))continue;
                         OfficerLevelupPlugin plugin = (OfficerLevelupPlugin) Global.getSettings().getPlugin("officerLevelUp");
                         s.getPerson().getMemoryWithoutUpdate().set("$aotd_gardens",true);
+                        s.getPerson().getMemoryWithoutUpdate().set(MemFlags.EXCEPTIONAL_SLEEPER_POD_OFFICER,true);
                         List<String> list = plugin.pickLevelupSkills(s.getPerson(),Misc.random);
                         if( !list.isEmpty()){
                             s.levelUp(list.get(0));
