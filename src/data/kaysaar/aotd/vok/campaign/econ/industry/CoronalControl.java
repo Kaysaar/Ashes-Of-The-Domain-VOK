@@ -51,16 +51,13 @@ public class CoronalControl extends AoTDToolboxPopAndInfra implements Megastruct
     @Override
     public void advance(float amount) {
         super.advance(amount);
-        getMegastructureScript(market.getPrimaryEntity()).advance(amount);
+        // Restoration/megastructure advancing is driven by CoronalCollector (a non-replaceable
+        // hypershunt industry) instead of this population industry, which other mods can swap out.
     }
 
     @Override
     public void notifyBeingRemoved(MarketAPI.MarketInteractionMode mode, boolean forUpgrade) {
         super.notifyBeingRemoved(mode, forUpgrade);
-        if(market!=null&&market.getPrimaryEntity()!=null){
-            getMegastructureScript(market.getPrimaryEntity()).advance(-1f);
-
-        }
     }
 
     @Override
