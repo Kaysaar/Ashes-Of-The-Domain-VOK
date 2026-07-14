@@ -11,7 +11,9 @@ import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.tot.plugins.AoTDCommodityEconSpecManager;
+import data.kaysaar.aotd.tot.scripts.commoditydata.AoTDCommodityOnMarket;
 import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.BaseColonyDevelopment;
+import data.kaysaar.aotd.vok.campaign.econ.conditions.FloatingCityCondition;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
@@ -21,7 +23,7 @@ import static data.kaysaar.aotd.vok.misc.AoTDMisc.createTooltipOfResourcesForDia
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.createTooltipOfResourcesForDialogConsumed;
 
 public class FloatingCity extends BaseColonyDevelopment {
-    private String   sourceIdString = "aotd_floating_city";
+    private String sourceIdString = "aotd_floating_city";
     @Override
     public String getName() {
         return "Floating City";
@@ -72,7 +74,7 @@ public class FloatingCity extends BaseColonyDevelopment {
         tooltip.setParaFont(fontForSections);
         tooltip.addPara("Massive Anti-Matter Thrusters", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
         tooltip.setParaFont(Fonts.DEFAULT_SMALL);
-        tooltip.addPara("%s now has base fuel demand that scales with amount of structures",3f,Color.ORANGE,"Population and Infrastructure");
+        tooltip.addPara("Market now has base fuel demand that scales with amount of structures",3f);
         tooltip.addSectionHeading("Fuel Consumption Information", Alignment.MID,5f);
         tooltip.addPara("For each structure / industry ",5f);
         tooltip.setBulletedListMode(BaseIntelPlugin.BULLET);
@@ -80,7 +82,7 @@ public class FloatingCity extends BaseColonyDevelopment {
         tooltip.addPara("If structure is industry: %s demand units of fuel ",3f,Color.ORANGE,"4");
         tooltip.addPara("If structure is heavy industry type: %s demand units of fuel",3f,Color.ORANGE,"5");
         tooltip.setBulletedListMode(null);
-        tooltip.addPara("Warning! Not meeting fuel demand will cause platform to lower more and more each month, if demand of fuel will not be met for 3 months entire colony will decivilize! ",Misc.getNegativeHighlightColor(),5f);
+        tooltip.addPara("Warning! Not meeting fuel demand will cause platform to lower more and more each day. Prolonged deficits will lead to colony's destruction!",Misc.getNegativeHighlightColor(),5f);
 
         tooltip.setParaFont(fontForSections);
         tooltip.addPara("Limited Expansion Space", Misc.getTooltipTitleAndLightHighlightColor(), 5f);
@@ -136,6 +138,25 @@ public class FloatingCity extends BaseColonyDevelopment {
         if(market.getSize()>5){
             market.setSize(5);
         }
+        if(!market.hasCondition("aotd_floating_city")){
+            market.addCondition("aotd_floating_city");
+        }
+        if(!market.hasIndustry("aotd_city_thrusters")){
+            market.addIndustry("aotd_city_thrusters");
+            AoTDCommodityOnMarket comFuel = AoTDCommodityOnMarket.getComMarketInstanceSave(market,Commodities.FUEL);
+            int fuel = AoTDCommodityEconSpecManager.getCargoAmountFromSupplyOrDemand(amFuel,true,Commodities.FUEL);
+            comFuel.getExcDefData().setDeficit(-fuel,comFuel,30,"aotd_floating_city");
+        }
+        if(!market.hasIndustry("aotd_city_thrusters_reserve")){
+            market.addIndustry("aotd_city_thrusters_reserve");
+        }
+
+    }
+
+    @Override
+    public void executePlanBeforeColonization(MarketAPI market) {
+        market.getMemoryWithoutUpdate().unset(FloatingCityCondition.keyForLevel);
+        Global.getSector().getPlayerFleet().getCargo().removeFuel(AoTDCommodityEconSpecManager.getCargoAmountFromSupplyOrDemand(amFuel,true,Commodities.FUEL));
     }
 
     @Override
