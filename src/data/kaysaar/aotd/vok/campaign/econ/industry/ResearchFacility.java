@@ -221,13 +221,15 @@ public class ResearchFacility extends BaseIndustry  {
         if (mode == AICoreDescriptionMode.INDUSTRY_TOOLTIP || mode == AICoreDescriptionMode.MANAGE_CORE_TOOLTIP) {
             CommoditySpecAPI coreSpec = Global.getSettings().getCommoditySpec(aiCoreId);
             TooltipMakerAPI text = tooltip.beginImageWithText(coreSpec.getIconName(), 48);
-            text.addPara(pre + "Reduces upkeep cost by %s. Increase amount of databanks being generated monthly by %s", opad, highlight,
+            text.addPara(pre + "Reduces upkeep cost by %s. Increase amount of databanks being generated monthly by %s " +
+                            "if a pre-collapse facility is present.", opad, highlight,
                     "" + 50 + "%","1");
             tooltip.addImageWithText(opad);
             return;
         }
 
-        tooltip.addPara(pre + "Reduces upkeep cost by %s. Increase amount of databanks being generated monthly by %s", opad, highlight,
+        tooltip.addPara(pre + "Reduces upkeep cost by %s. Increase amount of databanks being generated monthly by %s " +
+                        "if a pre-collapse facility is present.", opad, highlight,
                 "" + 50 + "%","1");
     }
 
