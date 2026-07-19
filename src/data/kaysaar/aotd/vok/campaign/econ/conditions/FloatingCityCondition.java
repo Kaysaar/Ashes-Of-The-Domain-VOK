@@ -30,6 +30,7 @@ public class FloatingCityCondition extends BaseMarketConditionPlugin2 {
         if (!market.getMemoryWithoutUpdate().contains(keyForLevel)) {
             market.getMemoryWithoutUpdate().set(keyForLevel, maxLevel);
         }
+
         return market.getMemoryWithoutUpdate().getFloat(keyForLevel);
     }
 
