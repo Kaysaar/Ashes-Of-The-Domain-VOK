@@ -17,7 +17,7 @@ public class FishingHarbour extends BaseIndustry {
         super.apply(true);
         supply(Commodities.FOOD, market.getSize()+3);
         demand(Commodities.HEAVY_MACHINERY, 3);
-        if(market.hasCondition(Conditions.VOLTURNIAN_LOBSTER_PENS)){
+        if(market.hasCondition(Conditions.VOLTURNIAN_LOBSTER_PENS)||AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.ELYSIAN_PROJECT,market)){
             supply(Commodities.LOBSTER,market.getSize()-1);
         }
 

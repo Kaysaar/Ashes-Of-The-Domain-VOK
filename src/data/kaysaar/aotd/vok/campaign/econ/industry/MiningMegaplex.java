@@ -9,6 +9,7 @@ import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -26,6 +27,7 @@ public class MiningMegaplex extends BaseIndustry {
 
     @Override
     public void apply() {
+        super.apply(true);
         int bonus  = -4;
         if(this.special!=null&&this.special.getId().equals(Items.MANTLE_BORE)){
             bonus=3;
@@ -43,12 +45,12 @@ public class MiningMegaplex extends BaseIndustry {
         if(AoDUtilis.getVolatilesAmount(market)>=-1){
             supply(Commodities.VOLATILES,AoDUtilis.getVolatilesAmount(market)+(market.getSize()+3)+bonus);
         }
-        Pair<String, Integer> deficit = getMaxDeficit(Commodities.DRUGS, Commodities.HEAVY_MACHINERY);
-        int maxDeficit = size - 3; // to allow *some* production so economy doesn't get into an unrecoverable state
-        if (deficit.two > maxDeficit) deficit.two = maxDeficit;
+        demand(Commodities.HEAVY_MACHINERY,market.getSize()+4);
+        demand(AoTDCommodities.DOMAIN_GRADE_MACHINERY,Math.max(1,market.getSize()-4));
+        demand(Commodities.DRUGS,market.getSize()+2);
+        Pair<String, Integer> deficit = getMaxDeficit(Commodities.DRUGS, Commodities.HEAVY_MACHINERY,AoTDCommodities.DOMAIN_GRADE_MACHINERY);
         applyDeficitToProduction(2, deficit,
                 Commodities.ORE,Commodities.ORGANICS,Commodities.RARE_ORE,Commodities.VOLATILES);
-        super.apply(true);
 
     }
 

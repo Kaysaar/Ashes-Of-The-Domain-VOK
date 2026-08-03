@@ -7,7 +7,7 @@ Disgusting Resilience 2,disgusting_resilience2,0,0,,,Special,0,TRUE,TRUE,,0,0,0,
 
 ",Ballistic/Missile Weaponry have the chance to be Deflected.,,graphics/hullmods/over_armored.png
 Commanding Presence,commanding_presence,0,0,,,Special,0,TRUE,TRUE,,0,0,0,0,data.kaysaar.aotd.vok.hullmods.CommandingPresence,"The Citadel stands as an unyielding against its foes, entire fleets will know her power.",Resilience Aura Buff.,,graphics/hullmods/aura.png
-,,,,,,,,,,,,,,,,,,,
+aotd_elysian_hullmod_enfrocer,aotd_elysian_hullmod_enfrocer,0,0,,hide_in_codex,Special,0,TRUE,TRUE,TRUE,0,0,0,0,data.kaysaar.aotd.vok.hullmods.AoTDCRHullmod,,,,graphics/hullmods/accelerated_shields.png
 ,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,

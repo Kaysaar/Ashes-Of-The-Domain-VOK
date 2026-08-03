@@ -5,17 +5,17 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.loading.IndustrySpecAPI;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
-import data.kaysaar.aotd.vok.ui.customprod.components.SortingState;
+import data.kaysaar.aotd.vok.ui.SortingState;
 import data.kaysaar.aotd.vok.ui.buildingmenu.industrytags.IndustryTagManager;
 import data.kaysaar.aotd.vok.ui.buildingmenu.industrytags.IndustryTagSpec;
 import data.kaysaar.aotd.vok.ui.buildingmenu.industrytags.IndustryTagType;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static data.kaysaar.aotd.vok.ui.customprod.NidavelirMainPanelPlugin.*;
 
 public class IndustryTable extends UITableImpl {
     ArrayList<IndustrySpecAPI> specs;
@@ -25,6 +25,7 @@ public class IndustryTable extends UITableImpl {
     public ButtonAPI buttonName, buttonType, buttonDays, buttonCosts;
     ButtonAPI lastCheckedState;
     float currYPos = 0;
+    Color base,bg,bright;
     public LinkedHashMap<String, IndustryTagSpec> activeTags = new LinkedHashMap<>();
     public IndustrySpecAPI specToBuilt;
     public IndustryTable(float width, float height, CustomPanelAPI panelToPlace, boolean doesHaveScroller, float xCord, float yCord,MarketDialog dialog) {

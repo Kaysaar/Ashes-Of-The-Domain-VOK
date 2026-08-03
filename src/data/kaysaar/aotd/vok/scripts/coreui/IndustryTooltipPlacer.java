@@ -7,7 +7,8 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+
+import data.kaysaar.aotd.vok.plugins.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.CargoPanelContextUI;
 import data.kaysaar.aotd.vok.scripts.coreui.listeners.ColonyUIListener;

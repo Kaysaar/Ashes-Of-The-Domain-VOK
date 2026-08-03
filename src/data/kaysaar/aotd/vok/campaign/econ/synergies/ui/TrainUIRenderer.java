@@ -149,11 +149,11 @@ public class TrainUIRenderer implements ExtendedUIPanelPlugin {
     }
 
     private static int getSecondValueForY() {
-        return getValueForY()-22;
+        return getValueForY()-18;
     }
 
     private static int getValueForY() {
-        return 25;
+        return 23;
     }
 
     @Override

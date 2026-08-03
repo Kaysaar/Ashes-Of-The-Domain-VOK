@@ -10,6 +10,9 @@ public class AoTDTechIds {
     public static final String AQUATIC_BIOSPHERE_HARVEST = "aotd_tech_aquatic_agriculture";
     public static final String HAZMAT_WORKING_EQUIPMENT = "aotd_tech_hazmat_equipment";
 
+    public static final String ANTIMATTER_PRODUCTION = "aotd_tech_antimatter_production";
+    public static final String SPACEPORT_EXPANSION = "aotd_tech_spaceport_expansion";
+
     public static final String LOBSTER_BREEDING_PROGRAM = "aotd_tech_lobster_breeding";
     public static final String LUXURY_CIVIC_PLANNING = "aotd_tech_resort_tech";
     public static final String IMPROVED_FERTILIZERS = "aotd_tech_improved_fertilizers";
@@ -36,8 +39,12 @@ public class AoTDTechIds {
     public static final String MEGA_ANALYSIS = "aotd_tech_megastructure_analysis";
     public static final String DUAL_TRADE = "aotd_tech_dual_trade_system";
 
-    public static final String HP_ENERGY_DISTRIB = "aotd_tech_hp_distribution";
-    public static final String SUPERTENCILES = "aotd_tech_supertensile";
-    public static final String CORE_DIRECTIVE_ENGINEERING = "aotd_tech_ai_core_application";
+    public static final String ELYSIAN_PROJECT = "aotd_tech_elysian_project";
+    public static final String DAEDALUS_PROJECT = "aotd_tech_daedalus";
+    public static final String MANUFACTURER_BOOST = "aotd_tech_manufacturer_boost";
+    public static final String FARMING_BOOST = "aotd_tech_farming_boost";
 
+    public static final String HP_ENERGY_DISTRIB = "aotd_tech_hp_distribution";
+    public static final String SUPERTENSILES = "aotd_tech_supertensile";
+    public static final String CORE_DIRECTIVE_ENGINEERING = "aotd_tech_ai_core_application";
 }

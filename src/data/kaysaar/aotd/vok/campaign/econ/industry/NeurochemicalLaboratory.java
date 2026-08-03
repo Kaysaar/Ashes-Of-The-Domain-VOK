@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.SpecialItemData;
 import com.fs.starfarer.api.impl.campaign.econ.impl.LightIndustry;
 import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.util.Pair;
+import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.scripts.campaign.econ.conditions.terrain.hyperspace.niko_MPC_hyperspaceLinked;
@@ -40,6 +41,20 @@ public class NeurochemicalLaboratory extends LightIndustry {
                 }
             }
         }
+        if(AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.MANUFACTURER_BOOST,market)){
+            demand(AoTDCommodities.DOMAIN_GRADE_MACHINERY,market.getSize()-2);
+            float bonus = 1.5f;
+            int expected = market.getSize()-2;
+            int total = expected-getMaxDeficit(AoTDCommodities.DOMAIN_GRADE_MACHINERY).two;
+            if(total!=0&&expected!=0){
+                float have = (float) total /expected;
+                bonus = Math.max(1f,bonus*have);
+
+            }
+            getSupply(Commodities.DRUGS).getQuantity().modifyMultAlways("aotd_bonus",bonus,"bonus");
+            getSupply("wwlb_cerulean_vapors").getQuantity().modifyMultAlways("aotd_bonus",bonus,"bonus");
+        }
+
         //if (!market.getFaction().isIllegal(Commodities.DRUGS)) {
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.ORGANICS,Commodities.HEAVY_MACHINERY);

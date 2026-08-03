@@ -18,20 +18,11 @@ public class CoronalHypershunt extends LCAttractorLow implements MarketImmigrati
     @Override
     public void apply(String id) {
         super.apply(id);
-        for (Industry industry : market.getIndustries()) {
-            if(!industry.getId().contains("coronal")&&!industry.isHidden()){
-                industry.getUpkeep().modifyFlat("penalty",1000000,"Lack of living space");
-            }
-        }
     }
 
     @Override
     public void unapply(String id) {
-        for (Industry industry : market.getIndustries()) {
-            if(!industry.getId().contains("coronal")){
-                industry.getUpkeep().unmodifyFlat("penalty");
-            }
-        }
+
         super.unapply(id);
     }
 
@@ -39,7 +30,7 @@ public class CoronalHypershunt extends LCAttractorLow implements MarketImmigrati
     protected void createTooltipAfterDescription(TooltipMakerAPI tooltip, boolean expanded) {
         super.createTooltipAfterDescription(tooltip, expanded);
         tooltip.addPara("Maximum size of this colony : %s", 10f,Misc.getNegativeHighlightColor(),""+"2");
-        tooltip.addPara("Building any industry / structure on this market will result in an increase of upkeep costs by 1000%    ", Misc.getNegativeHighlightColor(),10f);
+        tooltip.addPara("Due to limited living space, we can't build any additional structure! ", Misc.getNegativeHighlightColor(),10f);
     }
 
     @Override

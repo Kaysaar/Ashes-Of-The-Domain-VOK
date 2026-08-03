@@ -7,10 +7,12 @@ import java.util.LinkedHashMap;
 
 public class ColonyDevelopmentManager {
     public static String permaDataKey = "$aotd_colony_development";
+
     private static void setInstance() {
         Global.getSector().getPersistentData().put(permaDataKey, new ColonyDevelopmentManager());
     }
-    LinkedHashMap<String,BaseColonyDevelopment>developmentScripts;
+
+    LinkedHashMap<String, BaseColonyDevelopment> developmentScripts;
 
     public static ColonyDevelopmentManager getInstance() {
         if (Global.getSector().getPersistentData().get(permaDataKey) == null) {
@@ -20,6 +22,15 @@ public class ColonyDevelopmentManager {
         manager.ensureListsAreInitalized();
         return manager;
     }
+
+    public static ColonyDevelopmentCondition getColonyDevelopmentConditionIfPresent(MarketAPI market) {
+        if (market.hasCondition(BaseColonyDevelopment.condIdApplier)) {
+            return (ColonyDevelopmentCondition) market.getCondition(BaseColonyDevelopment.condIdApplier).getPlugin();
+
+        }
+        return null;
+    }
+
     public BaseColonyDevelopment getColonyDevelopment(String id) {
         return developmentScripts.get(id);
     }
@@ -28,19 +39,21 @@ public class ColonyDevelopmentManager {
         return developmentScripts;
     }
 
-    public float getDaysOnMarket(MarketAPI market){
-        if(!market.hasCondition(BaseColonyDevelopment.condIdApplier)){
+    public float getDaysOnMarket(MarketAPI market) {
+        if (!market.hasCondition(BaseColonyDevelopment.condIdApplier)) {
             return 0f;
         }
         ColonyDevelopmentCondition cond = (ColonyDevelopmentCondition) market.getCondition(BaseColonyDevelopment.condIdApplier).getPlugin();
         return cond.getTooltipWidth();
 
     }
-    protected void ensureListsAreInitalized(){
-        if(developmentScripts==null)developmentScripts = new LinkedHashMap<>();
+
+    protected void ensureListsAreInitalized() {
+        if (developmentScripts == null) developmentScripts = new LinkedHashMap<>();
     }
+
     public void addDevelopmentScriptBase(String id, BaseColonyDevelopment script) {
-        if(developmentScripts==null)developmentScripts = new LinkedHashMap<>();
+        if (developmentScripts == null) developmentScripts = new LinkedHashMap<>();
         developmentScripts.put(id, script);
     }
 }

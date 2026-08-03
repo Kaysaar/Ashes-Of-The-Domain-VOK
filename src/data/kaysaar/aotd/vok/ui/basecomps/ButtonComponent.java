@@ -1,5 +1,7 @@
 package data.kaysaar.aotd.vok.ui.basecomps;
 
+import ashlib.data.plugins.ui.models.TiledTextureRenderer;
+import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.input.InputEventAPI;
@@ -7,8 +9,7 @@ import com.fs.starfarer.api.ui.CustomPanelAPI;
 import com.fs.starfarer.api.ui.PositionAPI;
 import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.TiledTextureRenderer;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
+
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;

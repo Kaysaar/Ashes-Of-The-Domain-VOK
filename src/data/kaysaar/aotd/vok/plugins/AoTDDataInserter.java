@@ -22,7 +22,8 @@ import com.fs.starfarer.api.util.WeightedRandomPicker;
 import data.kaysaar.aotd.vok.Ids.AoTDConditions;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.campaign.econ.SMSpecialItem;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
+
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.models.BaseMegastructureScript;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.AoTDFactionResearchManager;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -204,7 +205,6 @@ public class AoTDDataInserter {
     public boolean spawnNidavleir(List<StarSystemAPI> systems) {
         SectorEntityToken planet = getEntityWithCriteria(systems);
         if (planet == null) return false;
-        GPBaseMegastructure mega = AoTDMegastructureRules.putMegastructure(planet, "aotd_nidavelir");
         planet.addTag(Tags.NOT_RANDOM_MISSION_TARGET);
         String token = planet.getMarket().addCondition("aotd_nidavelir_complex");
         planet.getMarket().getSpecificCondition(token).setSurveyed(false);
@@ -214,7 +214,8 @@ public class AoTDDataInserter {
         if (!planet.getMarket().hasCondition(Conditions.RUINS_VAST)) {
             planet.getMarket().addCondition(Conditions.RUINS_VAST);
         }
-        Global.getSector().getPlayerMemoryWithoutUpdate().set("$aotd_mega_system_id_"+mega.getSpec().getMegastructureID(),planet.getStarSystem().getId());
+        planet.getMemoryWithoutUpdate().set("$aotd_mega_already", true);
+//        Global.getSector().getPlayerMemoryWithoutUpdate().set("$aotd_mega_system_id_"+mega.getSpec().getMegastructureID(),planet.getStarSystem().getId());
         return true;
 
 
@@ -223,7 +224,7 @@ public class AoTDDataInserter {
     private SectorEntityToken getEntityWithCriteria(List<StarSystemAPI> availableStarSystems, String... criteria) {
         WeightedRandomPicker<StarSystemAPI> systemAPIWeightedRandomPicker = new WeightedRandomPicker<>(Misc.random);
         availableStarSystems.forEach(x -> {
-                    if (x.getAllEntities().stream().filter(y-> AshMisc.isStringValid(y.getCustomEntityType())).anyMatch(y -> y.getCustomEntityType().equals(Entities.CORONAL_TAP)) || x.getPlanets().stream().anyMatch(y -> y.getMemory().contains(GPBaseMegastructure.memKey))) {
+                    if (x.getAllEntities().stream().filter(y -> AshMisc.isStringValid(y.getCustomEntityType())).anyMatch(y -> y.getCustomEntityType().equals(Entities.CORONAL_TAP)) || x.getPlanets().stream().anyMatch(y -> !BaseMegastructureScript.getAllMegasFromEntity(y).isEmpty())) {
                         systemAPIWeightedRandomPicker.add(x, 1);
                     } else {
                         systemAPIWeightedRandomPicker.add(x, 1000000);
@@ -241,9 +242,10 @@ public class AoTDDataInserter {
                     if (planet.hasTag(Tags.MISSION_ITEM)) continue;
                     if (planet.isStar()) continue;
                     if (planet.isGasGiant()) continue;
-                    if (planet.getRadius() <= 50) continue;
+                    if (planet.getRadius() <= 40) continue;
+                    if (planet.getMemoryWithoutUpdate().is("$aotd_mega_already", true)) continue;
                     if (planet.getMemory().contains("$IndEvo_ArtilleryStation")) continue;
-                    if (planet.getMemory().contains(GPBaseMegastructure.memKey)) continue;
+//                    if (planet.getMemory().contains(GPBaseMegastructure.memKey)) continue;
                     if (criteria != null) {
                         for (String criterion : criteria) {
                             if (planet.getTypeId().equals(criterion)) return planet;
@@ -260,26 +262,17 @@ public class AoTDDataInserter {
 
     public void spawnMegas() {
         ArrayList<StarSystemAPI> hypershuntSystems = AoTDMisc.getStarSystemWithMegastructure("coronal_tap");
-        Constellation cons = null;
+        List<StarSystemAPI> systems = new ArrayList<>();
+        int maxSize = 0;
         for (StarSystemAPI hypershuntSystem : hypershuntSystems) {
-            if (cons == null) {
-                cons = hypershuntSystem.getConstellation();
-            } else {
-                int amount = cons.getSystems().stream().filter(x -> !x.hasPulsar() && !x.isNebula()).toList().size();
-                if(hypershuntSystem.getConstellation()!=null){
-                    int contender = hypershuntSystem.getConstellation().getSystems().stream().filter(x -> !x.hasPulsar() && !x.isNebula()).toList().size();
-                    if (contender > amount) {
-                        cons = hypershuntSystem.getConstellation();
-                    }
-                }
-
+            int size = Misc.getNearbyStarSystems(hypershuntSystem.getCenter(), 10).stream().filter(x -> !x.hasPulsar() && !x.isNebula()).toList().size();
+            if (size > maxSize) {
+                maxSize = size;
+                systems = Misc.getNearbyStarSystems(hypershuntSystem.getCenter(), 10).stream().filter(x -> !x.hasPulsar() && !x.isNebula()).toList();
             }
         }
-        if (cons != null) {
-            List<StarSystemAPI> systems = cons.getSystems().stream().filter(x -> !x.hasPulsar() && !x.isNebula()).toList();
-            spawnPluto(systems);
-            spawnNidavleir(systems);
-        }
+        spawnPluto(systems);
+        spawnNidavleir(systems);
 
 
     }
@@ -303,16 +296,16 @@ public class AoTDDataInserter {
         planet.getMarket().removeCondition(Conditions.VERY_COLD);
         planet.getMarket().addCondition(Conditions.RARE_ORE_ULTRARICH);
         planet.getMarket().addCondition(Conditions.ORE_ULTRARICH);
-
+        planet.getMemoryWithoutUpdate().set("$aotd_mega_already", true);
         String t = planet.getMarket().addCondition("aotd_pluto_station");
         planet.getMarket().getSpecificCondition(t).setSurveyed(false);
-        GPBaseMegastructure mega = AoTDMegastructureRules.putMegastructure(planet, "aotd_pluto_station");
-        SectorEntityToken token = planet.getMarket().getStarSystem().addCustomEntity("aotd_pluto_station", "Pluto Mining Station", "aotd_pluto_station", Factions.NEUTRAL);
-        float angle = planet.getCircularOrbitAngle();
-        float period = planet.getCircularOrbitPeriod(); // 270 : height
-        token.setCircularOrbitPointingDown(planet, angle, planet.getRadius() + 270 + 70, period);
-        token.getMemoryWithoutUpdate().set(MusicPlayerPluginImpl.MUSIC_SET_MEM_KEY, "aotd_mega");
-        MiscellaneousThemeGenerator.makeDiscoverable(token, 40000, 3000f);
+//        GPBaseMegastructure mega = AoTDMegastructureRules.putMegastructure(planet, "aotd_pluto_station");
+//        SectorEntityToken token = planet.getMarket().getStarSystem().addCustomEntity("aotd_pluto_station", "Pluto Mining Station", "aotd_pluto_station", Factions.NEUTRAL);
+//        float angle = planet.getCircularOrbitAngle();
+//        float period = planet.getCircularOrbitPeriod(); // 270 : height
+//        token.setCircularOrbitPointingDown(planet, angle, planet.getRadius() + 270 + 70, period);
+//        token.getMemoryWithoutUpdate().set(MusicPlayerPluginImpl.MUSIC_SET_MEM_KEY, "aotd_mega");
+//        MiscellaneousThemeGenerator.makeDiscoverable(token, 40000, 3000f);
 
     }
 
@@ -467,10 +460,8 @@ public class AoTDDataInserter {
             setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ORBITAL_SKUNKWORK, Industries.ORBITALWORKS, null, false, Commodities.ALPHA_CORE, null);
             setIndustryOnPlanet("Hybrasil", "Culann", Industries.MEGAPORT, Industries.SPACEPORT, null, true, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.ORBITAL_FLEETWORK, Industries.ORBITALWORKS, null, false, null, Items.PRISTINE_NANOFORGE);
-            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.STAR_CITADEL_LOW,Industries.STARFORTRESS, null, false, null, null);
-            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.STAR_CITADEL_HIGH,Industries.BATTLESTATION_HIGH, null, false, null, null);
-
-            setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null, null);
+            setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.STAR_CITADEL_LOW, Industries.STARFORTRESS, null, false, null, null);
+            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.STAR_CITADEL_HIGH, Industries.BATTLESTATION_HIGH, null, false, null, null);
             setIndustryOnPlanet("Hybrasil", "Eouchu Bres", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null, null);
             setIndustryOnPlanet("Zagan", "Mazalot", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, AoTDConditions.SWITCH_RECITIFICATES, false, null, null);
             setIndustryOnPlanet("Samarra", "Tartessus", AoTDIndustries.ARTISANAL_FARMING, Industries.FARMING, null, false, null, null);
@@ -482,18 +473,13 @@ public class AoTDDataInserter {
             setIndustryOnPlanet("Galatia", "Ancyra", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, null, false, null, null);
             setIndustryOnPlanet("Mayasura", "Mairaath", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_BIOTICS, false, null, null);
             setIndustryOnPlanet("Corvus", "Asharu", AoTDIndustries.SUBSIDISED_FARMING, Industries.FARMING, AoTDConditions.SWITCH_RECITIFICATES, false, null, null);
-            setIndustryOnPlanet("Eos Exodus", "Baetis", AoTDIndustries.SUBLIMATION, null, null, true, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.CRYSTALIZATOR, Industries.REFINING, null, false, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", Industries.MEGAPORT, Industries.MEGAPORT, null, true, null, null);
-            setIndustryOnPlanet("Canaan", "Gilead", AoTDIndustries.MINING_MEGAPLEX, null, null, true, null, null);
-            setIndustryOnPlanet("Askonia", "Volturn", AoTDIndustries.SUBLIMATION, Industries.MINING, null, false, Commodities.GAMMA_CORE, null);
-            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ENRICHMENT_FACILITY, Industries.REFINING, null, true, Commodities.ALPHA_CORE, null);
+            setIndustryOnPlanet("Hybrasil", "Culann", AoTDIndustries.ENRICHMENT_FACILITY, Industries.REFINING, null, true, null, null);
             setIndustryOnPlanet("Hybrasil", "Culann", Industries.HEAVYBATTERIES, Industries.HEAVYBATTERIES, null, true, Commodities.ALPHA_CORE, null);
-            setIndustryOnPlanet("Thule", "Kazeron", AoTDIndustries.MINING_MEGAPLEX, Industries.MINING, null, false, null, Items.MANTLE_BORE);
             setIndustryOnPlanet("Thule", "Kazeron", AoTDIndustries.TERMINUS, null, null, true, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.TERMINUS, Industries.WAYSTATION, null, false, null, null);
             setIndustryOnPlanet("Aztlan", "Chicomoztoc", AoTDIndustries.MAGLEV_CENTRAL_HUB, null, null, false, null, null);
-
         }
 
         setIndustriesOnModdedPlanets();

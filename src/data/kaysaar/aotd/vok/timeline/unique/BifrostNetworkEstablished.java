@@ -4,18 +4,20 @@ import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.bifrost.BifrostMega;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
+
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.BifrostMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.BifrostMegastructureManager;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.timeline.templates.MegastructureClaimEvent;
 import data.scripts.models.TimelineEventType;
 
 public class BifrostNetworkEstablished extends MegastructureClaimEvent {
     public BifrostNetworkEstablished() {
         super(
-                "aotd_bifrost",
-                GPManager.getInstance().getMegaSpecFromList("aotd_bifrost").getName(),
-                Global.getSettings().getSpriteName("megastructureImage", GPManager.getInstance().getMegaSpecFromList("aotd_bifrost").getImageForMegastructure())
+                "aotd_bifrost", BifrostMegastructureManager.getInstance().getMegastructure().getName(), BifrostMegastructureManager.getInstance().getMegastructure().getCurrentImage()
         );
+
     }
 
     @Override
@@ -58,9 +60,8 @@ public class BifrostNetworkEstablished extends MegastructureClaimEvent {
 
     @Override
     public boolean checkForCondition() {
-        BifrostMega mega = (BifrostMega) GPManager.getInstance().getMegastructure("aotd_bifrost");
-        if(mega!=null) {
-            return mega.getSections().stream().filter(x->x.isRestored).toList().size()>=2;
+        if(AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.BIFROST_GATE)){
+            return BifrostMegastructureManager.getInstance().getMegastructure().getBuiltSections().size() >= 2;
         }
         return false;
     }

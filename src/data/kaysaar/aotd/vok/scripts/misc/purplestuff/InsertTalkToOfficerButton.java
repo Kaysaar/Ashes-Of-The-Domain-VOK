@@ -7,7 +7,8 @@ import com.fs.starfarer.api.campaign.CoreUITabId;
 import com.fs.starfarer.api.ui.ButtonAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import com.fs.starfarer.api.ui.UIPanelAPI;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+
+import data.kaysaar.aotd.vok.plugins.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 
 public class InsertTalkToOfficerButton implements EveryFrameScript {

@@ -3,17 +3,30 @@ package com.fs.starfarer.api.impl.campaign.aotd_entities;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignEngineLayers;
 import com.fs.starfarer.api.campaign.CustomEntitySpecAPI;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
+import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.graphics.SpriteAPI;
 import com.fs.starfarer.api.impl.campaign.BaseCustomEntityPlugin;
+import com.fs.starfarer.api.ui.Fonts;
+import com.fs.starfarer.api.ui.LabelAPI;
+import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.*;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
+import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
+import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.CoronalHypershuntMegastructure;
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
+import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
 import java.awt.*;
 
 public class BiFrostGateEntity extends BaseCustomEntityPlugin {
+    private static final LabelAPI MEASURE_LABEL = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
+    private static final float USABLE_MIN_TOOLTIP_WIDTH = MEASURE_LABEL.computeTextHeight("Operational") + 5f;
+    private static final float CD_MIN_TOOLTIP_WIDTH = MEASURE_LABEL.computeTextWidth("Inactive - Cooldown remaining: 00D") + 5f;
+    private static final float SUPPLIES_MIN_TOOLTIP_WIDTH = MEASURE_LABEL.computeTextWidth("Inactive - Supplies required");
 
     transient protected SpriteAPI baseSprite;
     transient protected SpriteAPI scannedGlow;
@@ -50,7 +63,7 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
 
 
     public void render(CampaignEngineLayers layer, ViewportAPI viewport) {
-        if(scannedGlow==null){
+        if (scannedGlow == null) {
             scannedGlow = Global.getSettings().getSprite("gates", "glow_scanned");
             activeGlow = Global.getSettings().getSprite("gates", "glow_ring_active");
             concentric = Global.getSettings().getSprite("gates", "glow_concentric");
@@ -118,8 +131,8 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
             Vector2f loc = entity.getLocation();
 
 
-            Color scannedGlowColor = new Color(255,200,0,255);
-            Color activeGlowColor = new Color(200,50,255,255);
+            Color scannedGlowColor = new Color(255, 200, 0, 255);
+            Color activeGlowColor = new Color(200, 50, 255, 255);
 
             scannedGlowColor = Color.white;
             activeGlowColor = Color.white;
@@ -135,28 +148,28 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
 
             if (jitterFader != null && jitter != null) {
                 Color c = jitterColor;
-                if (c == null) c = new Color(255,255,255,255);
+                if (c == null) c = new Color(255, 255, 255, 255);
                 baseSprite.setColor(c);
                 baseSprite.setAlphaMult(alphaMult * jitterFader.getBrightness());
                 baseSprite.setAdditiveBlend();
                 jitter.render(baseSprite, loc.x, loc.y, 30f * jitterFader.getBrightness(), 10);
                 baseSprite.renderAtCenter(loc.x, loc.y);
             }
-                activeGlow.setColor(activeGlowColor);
-                //activeGlow.setSize(w * scale, h * scale);
-                activeGlow.setAlphaMult(alphaMult * glowAlpha * glowMod2);
-                activeGlow.setAdditiveBlend();
-                activeGlow.renderAtCenter(loc.x, loc.y);
+            activeGlow.setColor(activeGlowColor);
+            //activeGlow.setSize(w * scale, h * scale);
+            activeGlow.setAlphaMult(alphaMult * glowAlpha * glowMod2);
+            activeGlow.setAdditiveBlend();
+            activeGlow.renderAtCenter(loc.x, loc.y);
 
 
 //			beingUsed = true;
 //			showBeingUsedDur = 10f;
             if (beingUsed) {
-                    activeGlow.setColor(activeGlowColor);
-                    //activeGlow.setSize(w + 20, h + 20);
-                    activeGlow.setAlphaMult(alphaMult * glowAlpha * beingUsedFader.getBrightness() * glowMod2);
-                    activeGlow.setAdditiveBlend();
-                    activeGlow.renderAtCenter(loc.x, loc.y);
+                activeGlow.setColor(activeGlowColor);
+                //activeGlow.setSize(w + 20, h + 20);
+                activeGlow.setAlphaMult(alphaMult * glowAlpha * beingUsedFader.getBrightness() * glowMod2);
+                activeGlow.setAdditiveBlend();
+                activeGlow.renderAtCenter(loc.x, loc.y);
 
                 glowAlpha *= beingUsedFader.getBrightness();
                 float angle;
@@ -186,6 +199,10 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
         }
     }
 
+    public static boolean canUseBifrostGates() {
+        return AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.BIFROST_GATE)&& AoTDMisc.isPLayerHavingIndustry(AoTDIndustries.BIFROST_CONTROL_CENTER);
+    }
+
     @Override
     public void advance(float amount) {
         super.advance(amount);
@@ -198,13 +215,14 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
                 this.entity.getMemory().set("$used", false);
             }
         }
-        if(HypershuntMegastructure.isWithinReceiverSystem(this.entity)){
+
+
+        if (CoronalHypershuntMegastructure.isWithinReceiverSystem(this.entity)) {
             this.entity.getMemory().set("$cooldown", 0);
             this.entity.getMemory().set("$used", false);
-            this.entity.getMemory().set("$connected",true);
-        }
-        else{
-            this.entity.getMemory().set("$connected",false);
+            this.entity.getMemory().set("$connected", true);
+        } else {
+            this.entity.getMemory().set("$connected", false);
         }
         if (showBeingUsedDur > 0 || !beingUsedFader.isIdle()) {
             showBeingUsedDur -= amount;
@@ -247,5 +265,42 @@ public class BiFrostGateEntity extends BaseCustomEntityPlugin {
 //		if (withSound && entity.isInCurrentLocation()) {
 //			Global.getSoundPlayer().playSound("gate_being_used", 1, 1, entity.getLocation(), entity.getVelocity());
 //		}
+    }
+
+    public boolean hasCustomMapTooltip() {
+        return true;
+    }
+
+    public float getMapTooltipWidth() {
+        MemoryAPI mem = entity.getMemory();
+        float nameLength = MEASURE_LABEL.computeTextWidth(entity.getName()) + 5f;
+
+        if (mem.getBoolean("$used")) {
+            return Math.max(CD_MIN_TOOLTIP_WIDTH, nameLength);
+        } else if (!mem.getBoolean("$supplied")) {
+            return Math.max(USABLE_MIN_TOOLTIP_WIDTH, nameLength);
+        }  else {
+            return Math.max(USABLE_MIN_TOOLTIP_WIDTH, nameLength);
+        }
+    }
+
+    public void createMapTooltip(TooltipMakerAPI tooltip, boolean expanded) {
+        tooltip.addPara(entity.getName(), entity.getFaction().getBaseUIColor(), 0f);
+
+       if (entity.getMemory().getBoolean("$used")) {
+            float cd = entity.getMemory().getFloat("$cooldown");
+            tooltip.addPara(
+                "Inactive - Cooldown remaining: " + String.valueOf(Math.round(cd)) + "D",
+                Misc.getGrayColor(),
+                3f
+            );
+            return;
+        }
+
+        if (!entity.getMemory().getBoolean("$supplied")) {
+            tooltip.addPara("Inactive - Supplies required", Misc.getGrayColor(), 3f);
+        } else {
+            tooltip.addPara("Operational", Misc.getGrayColor(), 3f);
+        }
     }
 }

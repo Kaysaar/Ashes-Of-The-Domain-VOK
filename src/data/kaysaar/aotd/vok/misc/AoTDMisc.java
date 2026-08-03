@@ -15,17 +15,20 @@ import com.fs.starfarer.api.combat.ShipVariantAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.fleet.FleetMemberType;
 import com.fs.starfarer.api.impl.campaign.econ.impl.HeavyIndustry;
+import com.fs.starfarer.api.impl.campaign.ids.Commodities;
 import com.fs.starfarer.api.loading.FighterWingSpecAPI;
 import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.loading.WingRole;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
+import data.kaysaar.aotd.tot.plugins.AoTDCommodityEconSpecManager;
+import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.nidavelir.NidavelirComplexMegastructure;
 
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.scripts.ProductionUtil;
+import data.kaysaar.aotd.vok.campaign.econ.conditions.NidavelirComplex;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.NidavelirMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.models.BaseMegastructureScript;
+import data.kaysaar.aotd.vok.plugins.ProductionUtil;
 import data.kaysaar.aotd.vok.plugins.ReflectionUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDAIStance;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
@@ -43,9 +46,218 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
-import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager.commodities;
 
 public class AoTDMisc {
+    public static int getMonthsRemaining(float daysLeft) {
+        if (daysLeft <= 0f) return 0;
+
+        GregorianCalendar cal = (GregorianCalendar) Global.getSector().getClock().getCal().clone();
+
+        int months = 0;
+        float remainingDays = daysLeft;
+
+        while (remainingDays > 0f) {
+            int daysInCurrentMonth = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+            int currentDay = cal.get(GregorianCalendar.DAY_OF_MONTH);
+
+            // How many days are left in this month, including today
+            int daysLeftInMonth = daysInCurrentMonth - currentDay + 1;
+
+            remainingDays -= daysLeftInMonth;
+            months++;
+
+            // Move to first day of next month
+            cal.add(GregorianCalendar.MONTH, 1);
+            cal.set(GregorianCalendar.DAY_OF_MONTH, 1);
+        }
+
+        return Math.max(1,months);
+    }
+    public static NidavelirMegastructure getNidavelirIfOwned(){
+        for (MarketAPI playerMarket : Misc.getPlayerMarkets(true)) {
+            if(NidavelirComplex.getComplexCondition(playerMarket)!=null){
+                return (NidavelirMegastructure) BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(playerMarket.getPrimaryEntity(),"aotd_nidavelir");
+            }
+        }
+        return null;
+    }
+    public static LinkedHashMap<String,Integer>getTransformedCommodityMap(LinkedHashMap<String,Integer>map,boolean isDemand,int externalMult){
+        LinkedHashMap<String,Integer>newOne = new LinkedHashMap<>();
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            newOne.put(entry.getKey(), AoTDCommodityEconSpecManager.getCargoAmountFromSupplyOrDemand(entry.getValue(),isDemand,entry.getKey())*externalMult);
+        }
+        return newOne;
+    }
+    public static int getMonthsFromNextMonth(float daysLeft) {
+        if (daysLeft <= 0f) return 0;
+
+        GregorianCalendar cal = (GregorianCalendar) Global.getSector().getClock().getCal().clone();
+
+        // Move to first day of NEXT month (skip current month entirely)
+        cal.add(GregorianCalendar.MONTH, 1);
+        cal.set(GregorianCalendar.DAY_OF_MONTH, 1);
+
+        int months = 0;
+        float remainingDays = daysLeft;
+
+        while (remainingDays > 0f) {
+            int daysInMonth = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+
+            remainingDays -= daysInMonth;
+            months++;
+
+            // Move to next month
+            cal.add(GregorianCalendar.MONTH, 1);
+            cal.set(GregorianCalendar.DAY_OF_MONTH, 1);
+        }
+
+        return months;
+    }
+    public static CustomPanelAPI createCostSection(float width, float height, float iconSize, Map<String,Integer> resources,boolean trim) {
+        LinkedHashMap<String, Integer> orderedResources = getOrderedResourceMap(resources);
+        CustomPanelAPI mainPanel = Global.getSettings().createCustom(width, height, null);
+
+        ArrayList<CustomPanelAPI> panels = new ArrayList<>();
+        float separatorX = 3f;
+        float y = 0f;
+
+        orderedResources.forEach((commodityId, amount) ->
+                panels.add(createRowForItem(iconSize, commodityId, amount,trim))
+        );
+
+        CustomPanelAPI centralized = Global.getSettings().createCustom(1, 1, null);
+        mainPanel.addComponent(centralized).inTL(mainPanel.getPosition().getWidth() / 2f, 0);
+
+        float totalWidth = 0f;
+        for (CustomPanelAPI panel : panels) {
+            totalWidth += panel.getPosition().getWidth();
+        }
+        totalWidth += separatorX * (panels.size() - 1);
+
+        float startX = Math.max(0f, (width - totalWidth) * 0.5f);
+
+        float currX = startX;
+        for (CustomPanelAPI panel : panels) {
+            mainPanel.addComponent(panel).inTL(currX, y);
+            currX += panel.getPosition().getWidth() + separatorX;
+        }
+
+        return mainPanel;
+    }
+    public static String formatCompactAmount(int amount) {
+        if (amount < 1000) {
+            return String.valueOf(amount);
+        }
+
+        if (amount < 1_000_000) {
+            return formatWithSuffix(amount / 1000f, "k");
+        }
+
+        return formatWithSuffix(amount / 1_000_000f, "m");
+    }
+    public static String formatWithSuffix(float value, String suffix) {
+        String formatted;
+
+        if (value >= 100f) {
+            formatted = String.valueOf((int) value);
+        } else if (value >= 10f) {
+            formatted = trimTrailingZeros(String.format(java.util.Locale.US, "%.1f", value));
+        } else {
+            formatted = trimTrailingZeros(String.format(java.util.Locale.US, "%.2f", value));
+        }
+
+        return formatted + suffix;
+    }
+
+    public static String trimTrailingZeros(String value) {
+        if (!value.contains(".")) return value;
+
+        while (value.endsWith("0")) {
+            value = value.substring(0, value.length() - 1);
+        }
+        if (value.endsWith(".")) {
+            value = value.substring(0, value.length() - 1);
+        }
+        return value;
+    }
+
+    public static CustomPanelAPI createRowForItem(float iconSize, String commodityId, int amount,boolean trim) {
+        String displayAmount = amount+"";
+        if(trim){
+            formatCompactAmount(amount);
+        }
+
+        if (Global.getSettings().getCommoditySpec(commodityId) != null) {
+            CustomPanelAPI main = Global.getSettings().createCustom(iconSize * 3, iconSize, null);
+            ashlib.data.plugins.ui.models.resizable.ImageViewer viewer = new ashlib.data.plugins.ui.models.resizable.ImageViewer(iconSize, iconSize, Global.getSettings().getCommoditySpec(commodityId).getIconName());
+            main.addComponent(viewer.getComponentPanel()).inTL(0, 0);
+
+            String toHighlight = displayAmount;
+            LabelAPI label = Global.getSettings().createLabel(toHighlight, Fonts.DEFAULT_SMALL);
+            label.setHighlight(toHighlight);
+            label.setHighlightColor(Color.ORANGE);
+            label.getPosition().setSize(label.computeTextWidth(label.getText()), label.computeTextHeight(label.getText()));
+
+            float newWidth = iconSize + 2 + label.getPosition().getWidth();
+            main.getPosition().setSize(newWidth, main.getPosition().getHeight());
+            main.addComponent((UIComponentAPI) label).rightOfMid(viewer.getComponentPanel(), 2);
+
+            return main;
+        } else {
+            CustomPanelAPI main = Global.getSettings().createCustom(iconSize * 3, iconSize, null);
+            ashlib.data.plugins.ui.models.resizable.ImageViewer viewer =  new ashlib.data.plugins.ui.models.resizable.ImageViewer(iconSize, iconSize, Global.getSettings().getSpecialItemSpec(commodityId).getIconName());
+            main.addComponent(viewer.getComponentPanel()).inTL(0, 0);
+
+            String toHighlight =   displayAmount;
+            LabelAPI label = Global.getSettings().createLabel(toHighlight, Fonts.DEFAULT_SMALL);
+            label.setHighlight(toHighlight);
+            label.setHighlightColor(Misc.getDesignTypeColor(Global.getSettings().getSpecialItemSpec(commodityId).getManufacturer()));
+            label.getPosition().setSize(label.computeTextWidth(label.getText()), label.computeTextHeight(label.getText()));
+
+            float newWidth = iconSize + 2 + label.getPosition().getWidth();
+            main.getPosition().setSize(newWidth, main.getPosition().getHeight());
+            main.addComponent((UIComponentAPI) label).rightOfMid(viewer.getComponentPanel(), 2);
+
+            return main;
+        }
+    }
+    public static LinkedHashMap<String, Integer> getOrderedResourceMap(Map<String, Integer> input) {
+        LinkedHashMap<String, Integer> ordered = new LinkedHashMap<>();
+        if (input == null || input.isEmpty()) return ordered;
+
+        // First: explicitly ordered items
+        for (String orderedId : AoTDProductionSpecManager.orderedItemsForUI) {
+            Integer amount = input.get(orderedId);
+            if (amount != null && amount > 0) {
+                ordered.put(orderedId, amount);
+            }
+        }
+
+        // Then: everything else, stable and predictable
+        input.entrySet().stream()
+                .filter(e -> e.getValue() != null && e.getValue() > 0)
+                .filter(e -> !ordered.containsKey(e.getKey()))
+                .sorted((a, b) -> {
+                    String nameA = getDisplayNameForResource(a.getKey());
+                    String nameB = getDisplayNameForResource(b.getKey());
+                    return nameA.compareToIgnoreCase(nameB);
+                })
+                .forEach(e -> ordered.put(e.getKey(), e.getValue()));
+
+        return ordered;
+    }
+    public static String getDisplayNameForResource(String commodityId) {
+        if (commodityId == null) return "";
+
+        if (Global.getSettings().getCommoditySpec(commodityId) != null) {
+            return Global.getSettings().getCommoditySpec(commodityId).getName();
+        }
+        if (Global.getSettings().getSpecialItemSpec(commodityId) != null) {
+            return Global.getSettings().getSpecialItemSpec(commodityId).getName();
+        }
+
+        return commodityId;
+    }
     @Nullable
     public static String getVaraint(ShipHullSpecAPI allShipHullSpec) {
         String variantId = null;
@@ -76,17 +288,6 @@ public class AoTDMisc {
     public static List<MarketAPI>getPlayerFactionMarkets(){
         return Misc.getPlayerMarkets(true).stream().filter(x -> !x.hasTag("nex_playerOutpost")).toList();
     }
-    public static NidavelirComplexMegastructure getNidavelirIfOwned(){
-        return (NidavelirComplexMegastructure) GPManager.getInstance().getMegastructure("aotd_nidavelir");
-    }
-    public static NidavelirComplexMegastructure getNidavelir(){
-       StarSystemAPI system = Global.getSector().getStarSystem(Global.getSector().getPlayerMemoryWithoutUpdate().getString("$aotd_mega_system_id_aotd_nidavelir"));
-       if(system==null)return null;
-       PlanetAPI planet  = system.getPlanets().stream().filter(x->x.hasCondition("aotd_nidavelir_complex")).findFirst().orElse(null);
-
-       if(planet == null) return null;
-       return (NidavelirComplexMegastructure) planet.getMemoryWithoutUpdate().get(GPBaseMegastructure.memKey);
-    }
     public static List<MarketAPI> retrieveFactionMarkets(FactionAPI faction) {
         ArrayList<MarketAPI> marketsToReturn = new ArrayList<>();
         if (faction.isPlayerFaction()) {
@@ -101,7 +302,31 @@ public class AoTDMisc {
 
         return marketsToReturn;
     }
+    public static String extractManufacturer(String input) {
+        String[] parts = input.split("\\(");
+        StringBuilder result = new StringBuilder(parts[0].trim());
 
+        // List to store extracted sections
+        ArrayList<String> extractedParts = new ArrayList<>();
+
+        // Process all sections inside parentheses
+        for (int i = 1; i < parts.length; i++) {
+            String section = parts[i].replace(")", "").trim();
+            extractedParts.add(section);
+        }
+
+        // Check the last section; remove it if it's purely numeric
+        if (!extractedParts.isEmpty() && extractedParts.get(extractedParts.size() - 1).matches("\\d+")) {
+            extractedParts.remove(extractedParts.size() - 1);
+        }
+
+        // Rebuild the string with valid sections
+        for (String part : extractedParts) {
+            result.append(" (").append(part).append(")");
+        }
+
+        return result.toString();
+    }
     public static boolean doesMarketBelongToFaction(FactionAPI faction, MarketAPI marketAPI) {
         if (marketAPI.getFaction() == null) return false;
         if (checkForQolEnabled() && faction.isPlayerFaction()) {
@@ -118,24 +343,161 @@ public class AoTDMisc {
         }
         return false;
     }
+    public static CustomPanelAPI createTooltipOfResourcesForDialogConsumed(
+            float width,
+            float height,
+            float iconSize,
+            HashMap<String, Integer> costs,
+            boolean isForSalvage
+    ) {
+        float gap = 5f;
+        float rowGap = 5f;
 
-    public static CustomPanelAPI createTooltipOfResourcesForDialog(float width, float height, float iconSize, HashMap<String, Integer> costs, boolean isForSalvage) {
         CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
         TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
-        float totalSize = width;
-        float positions = totalSize / (commodities.size() * 4);
-        float iconsize = iconSize;
-        float topYImage = 0;
+
         LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
 
+        ArrayList<CustomPanelAPI> allItems = new ArrayList<>();
 
-        float x = positions;
-        ArrayList<CustomPanelAPI> panelsWithImage = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : costs.entrySet()) {
-            float widthTempPanel = iconsize;
             int number = entry.getValue();
             int owned = (int) AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey());
-            String icon = null;
+
+            String icon;
+            if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
+                icon = Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName();
+            } else {
+                icon = Global.getSettings().getCommoditySpec(entry.getKey()).getIconName();
+            }
+
+            String text = "x" + number;
+            String text2 = isForSalvage ? "" : "(" + owned + ")";
+            String fullText = text + (text2.isEmpty() ? "" : " " + text2);
+
+            String consumedText = "Consumed";
+
+            float numberTextWidth = test.computeTextWidth(fullText);
+            float consumedTextWidth = test.computeTextWidth(consumedText);
+
+            float textBlockWidth = Math.max(numberTextWidth, consumedTextWidth);
+            float itemWidth = iconSize + gap + textBlockWidth;
+
+            float numberTextHeight = test.computeTextHeight(fullText);
+            float consumedTextHeight = test.computeTextHeight(consumedText);
+            float textBlockHeight = numberTextHeight + consumedTextHeight;
+
+            float itemHeight = Math.max(iconSize, textBlockHeight);
+
+            CustomPanelAPI itemPanel = Global.getSettings().createCustom(itemWidth, itemHeight, null);
+            TooltipMakerAPI itemTooltip = itemPanel.createUIElement(itemWidth, itemHeight, false);
+
+            itemTooltip.addImage(icon, iconSize, iconSize, 0f);
+            itemTooltip.getPrev().getPosition().inTL(
+                    0f,
+                    (itemHeight / 2f) - (iconSize / 2f)
+            );
+
+            Color col = Misc.getBasePlayerColor();
+            if (number > owned && !isForSalvage) {
+                col = Misc.getNegativeHighlightColor();
+            }
+
+            float textStartX = iconSize + gap;
+            float textStartY = (itemHeight / 2f) - (textBlockHeight / 2f);
+
+            LabelAPI numberLabel = itemTooltip.addPara("%s %s", 0f, col, col, text, text2);
+            numberLabel.getPosition().inTL(textStartX, textStartY);
+
+            LabelAPI consumedLabel = itemTooltip.addPara(consumedText, col, 0f);
+            consumedLabel.getPosition().inTL(
+                    textStartX,
+                    textStartY + numberTextHeight
+            );
+
+            itemPanel.addUIElement(itemTooltip).inTL(0, 0);
+            allItems.add(itemPanel);
+        }
+
+        ArrayList<CustomPanelAPI> firstRow = new ArrayList<>();
+        ArrayList<CustomPanelAPI> secondRow = new ArrayList<>();
+
+        float firstRowWidth = 0f;
+
+        for (CustomPanelAPI item : allItems) {
+            float itemWidth = item.getPosition().getWidth();
+            float nextWidth = firstRow.isEmpty() ? itemWidth : firstRowWidth + gap + itemWidth;
+
+            if (nextWidth <= width || firstRow.isEmpty()) {
+                firstRow.add(item);
+                firstRowWidth = nextWidth;
+            } else {
+                secondRow.add(item);
+            }
+        }
+
+        float secondRowWidth = 0f;
+        for (CustomPanelAPI item : secondRow) {
+            if (secondRowWidth > 0f) secondRowWidth += gap;
+            secondRowWidth += item.getPosition().getWidth();
+        }
+
+        float itemHeight = iconSize;
+        if (!allItems.isEmpty()) {
+            itemHeight = allItems.get(0).getPosition().getHeight();
+        }
+
+        float neededHeight = itemHeight;
+        if (!secondRow.isEmpty()) {
+            neededHeight = itemHeight * 2f + rowGap;
+        }
+
+        neededHeight = Math.max(height, neededHeight);
+
+        tooltip.getPosition().setSize(width, neededHeight);
+        customPanel.getPosition().setSize(width, neededHeight);
+
+        float startXFirst = Math.max(0f, (width - firstRowWidth) / 2f);
+        float x = startXFirst;
+
+        for (CustomPanelAPI item : firstRow) {
+            tooltip.addCustom(item, 0f).getPosition().inTL(x, 0f);
+            x += item.getPosition().getWidth() + gap;
+        }
+
+        float startXSecond = Math.max(0f, (width - secondRowWidth) / 2f);
+        x = startXSecond;
+
+        for (CustomPanelAPI item : secondRow) {
+            tooltip.addCustom(item, 0f).getPosition().inTL(x, itemHeight + rowGap);
+            x += item.getPosition().getWidth() + gap;
+        }
+
+        customPanel.addUIElement(tooltip).inTL(0, 0);
+        return customPanel;
+    }
+    public static CustomPanelAPI createTooltipOfResourcesForDialog(
+            float width,
+            float height,
+            float iconSize,
+            HashMap<String, Integer> costs,
+            boolean isForSalvage
+    ) {
+        float gap = 5f;
+        float rowGap = 5f;
+
+        CustomPanelAPI customPanel = Global.getSettings().createCustom(width, height, null);
+        TooltipMakerAPI tooltip = customPanel.createUIElement(width, height, false);
+
+        LabelAPI test = Global.getSettings().createLabel("", Fonts.DEFAULT_SMALL);
+
+        ArrayList<CustomPanelAPI> allItems = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : costs.entrySet()) {
+            int number = entry.getValue();
+            int owned = (int) AoTDMisc.retrieveAmountOfItemsFromPlayer(entry.getKey());
+
+            String icon;
             if (Global.getSettings().getSpecialItemSpec(entry.getKey()) != null) {
                 icon = Global.getSettings().getSpecialItemSpec(entry.getKey()).getIconName();
             } else {
@@ -143,62 +505,80 @@ public class AoTDMisc {
             }
 
             String text = "" + number;
-            String text2 = "(" + owned + ")";
-            if (isForSalvage) {
-                text2 = "";
-            }
-            widthTempPanel += test.computeTextWidth(text + text2);
-            CustomPanelAPI panelTemp = Global.getSettings().createCustom(widthTempPanel + iconSize + 5, iconSize, null);
-            TooltipMakerAPI tooltipMakerAPI = panelTemp.createUIElement(widthTempPanel + iconSize + 5, iconSize, false);
-            tooltipMakerAPI.addImage(icon, iconsize, iconsize, 0f);
-            UIComponentAPI image = tooltipMakerAPI.getPrev();
-            image.getPosition().inTL(x, topYImage);
+            String text2 = isForSalvage ? "" : "(" + owned + ")";
+            String fullText = text + (text2.isEmpty() ? "" : " " + text2);
+
+            float textWidth = test.computeTextWidth(fullText);
+            float itemWidth = iconSize + gap + textWidth;
+
+            CustomPanelAPI itemPanel = Global.getSettings().createCustom(itemWidth, iconSize, null);
+            TooltipMakerAPI itemTooltip = itemPanel.createUIElement(itemWidth, iconSize, false);
+
+            itemTooltip.addImage(icon, iconSize, iconSize, 0f);
+            itemTooltip.getPrev().getPosition().inTL(0, 0);
 
             Color col = Misc.getTooltipTitleAndLightHighlightColor();
             if (number > owned && !isForSalvage) {
                 col = Misc.getNegativeHighlightColor();
             }
 
-            tooltipMakerAPI.addPara("%s %s", 0f, col, col, text, text2).getPosition().inTL(x + iconsize + 5, (topYImage + (iconsize / 2)) - (test.computeTextHeight(text2) / 3));
-            panelTemp.addUIElement(tooltipMakerAPI).inTL(0, 0);
-            panelsWithImage.add(panelTemp);
+            LabelAPI label = itemTooltip.addPara("%s %s", 0f, col, col, text, text2);
+            label.getPosition().inTL(
+                    iconSize + gap,
+                    (iconSize / 2f) - (label.computeTextHeight(label.getText()) / 2f)
+            );
+
+            itemPanel.addUIElement(itemTooltip).inTL(0, 0);
+            allItems.add(itemPanel);
         }
 
+        ArrayList<CustomPanelAPI> firstRow = new ArrayList<>();
+        ArrayList<CustomPanelAPI> secondRow = new ArrayList<>();
 
-        float totalWidth = 0f;
-        float secondRowWidth = 0f;
-        float left;
-        for (CustomPanelAPI panelAPI : panelsWithImage) {
-            totalWidth += panelAPI.getPosition().getWidth() + 15;
-        }
-        left = totalWidth;
-        ArrayList<CustomPanelAPI> panelsSecondRow = new ArrayList<>();
-        if (totalWidth >= width) {
-            for (int i = panelsWithImage.size() - 1; i >= 0; i--) {
-                left -= panelsWithImage.get(i).getPosition().getWidth() - 15;
-                panelsSecondRow.add(panelsWithImage.get(i));
-                if (left < width) {
-                    break;
-                }
-                panelsWithImage.remove(i);
+        float firstRowWidth = 0f;
+
+        for (CustomPanelAPI item : allItems) {
+            float itemWidth = item.getPosition().getWidth();
+            float nextWidth = firstRow.isEmpty() ? itemWidth : firstRowWidth + gap + itemWidth;
+
+            if (nextWidth <= width || firstRow.isEmpty()) {
+                firstRow.add(item);
+                firstRowWidth = nextWidth;
+            } else {
+                secondRow.add(item);
             }
         }
-        for (CustomPanelAPI panelAPI : panelsSecondRow) {
-            secondRowWidth += panelAPI.getPosition().getWidth() + 15;
+
+        float secondRowWidth = 0f;
+        for (CustomPanelAPI item : secondRow) {
+            if (secondRowWidth > 0f) secondRowWidth += gap;
+            secondRowWidth += item.getPosition().getWidth();
         }
-        float startingXFirstRow = 0;
-        float startingXSecondRow = 0;
-        if (!panelsSecondRow.isEmpty()) {
-            tooltip.getPosition().setSize(width, height * 2 + 5);
-            customPanel.getPosition().setSize(width, height * 2 + 5);
+
+        float neededHeight = iconSize;
+        if (!secondRow.isEmpty()) {
+            neededHeight = iconSize * 2f + rowGap;
         }
-        for (CustomPanelAPI panelAPI : panelsWithImage) {
-            tooltip.addCustom(panelAPI, 0f).getPosition().inTL(startingXFirstRow, 0);
-            startingXFirstRow += panelAPI.getPosition().getWidth() + 5;
+
+        neededHeight = Math.max(height, neededHeight);
+
+        tooltip.getPosition().setSize(width, neededHeight);
+        customPanel.getPosition().setSize(width, neededHeight);
+
+        float startXFirst = Math.max(0f, (width - firstRowWidth) / 2f);
+        float x = startXFirst;
+
+        for (CustomPanelAPI item : firstRow) {
+            tooltip.addCustom(item, 0f).getPosition().inTL(x, 0f);
+            x += item.getPosition().getWidth() + gap;
         }
-        for (CustomPanelAPI panelAPI : panelsSecondRow) {
-            tooltip.addCustom(panelAPI, 0f).getPosition().inTL(startingXSecondRow, iconSize + 5);
-            startingXSecondRow += panelAPI.getPosition().getWidth() + 5;
+
+        float startXSecond = Math.max(0f, (width - secondRowWidth) / 2f);
+        x = startXSecond;
+
+        for (CustomPanelAPI item : secondRow) {
+            tooltip.addCustom(item, 0f).getPosition().inTL(x, iconSize + rowGap);
+            x += item.getPosition().getWidth() + gap;
         }
 
         customPanel.addUIElement(tooltip).inTL(0, 0);
@@ -545,7 +925,89 @@ public class AoTDMisc {
             }
         }
     }
+    public static int eatItems(String id, int amount, String submarketId, List<MarketAPI> affectedMarkets) {
+        if (id == null || amount <= 0 || affectedMarkets == null || affectedMarkets.isEmpty()) {
+            return 0;
+        }
 
+        int numberRemaining = amount;
+        int consumed = 0;
+
+        for (MarketAPI marketAPI : affectedMarkets) {
+            if (marketAPI == null) continue;
+
+            SubmarketAPI subMarket = marketAPI.getSubmarket(submarketId);
+            if (subMarket == null) continue;
+
+            // Commodity
+            if (Global.getSettings().getCommoditySpec(id) != null) {
+                float onMarketFloat = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.RESOURCES, id);
+                int onMarket = (int) onMarketFloat;
+
+                if (onMarket > 0) {
+                    int toRemove = Math.min(numberRemaining, onMarket);
+                    subMarket.getCargo().removeItems(CargoAPI.CargoItemType.RESOURCES, id, toRemove);
+                    numberRemaining -= toRemove;
+                    consumed += toRemove;
+                }
+            }
+
+            if (numberRemaining <= 0) {
+                break;
+            }
+
+            // Special item
+            if (Global.getSettings().getSpecialItemSpec(id) != null) {
+                SpecialItemData specialItemData = new SpecialItemData(id, null);
+                float onMarketFloat = subMarket.getCargo().getQuantity(CargoAPI.CargoItemType.SPECIAL, specialItemData);
+                int onMarket = (int) onMarketFloat;
+
+                if (onMarket > 0) {
+                    int toRemove = Math.min(numberRemaining, onMarket);
+                    subMarket.getCargo().removeItems(CargoAPI.CargoItemType.SPECIAL, specialItemData, toRemove);
+                    numberRemaining -= toRemove;
+                    consumed += toRemove;
+                }
+            }
+
+            if (numberRemaining <= 0) {
+                break;
+            }
+
+            // Ship hulls
+            try {
+                if (Global.getSettings().getHullSpec(id) != null) {
+                    ArrayList<FleetMemberAPI> toRemove = new ArrayList<>();
+
+                    for (FleetMemberAPI fleetMemberAPI : subMarket.getCargo().getMothballedShips().getMembersListCopy()) {
+                        if (fleetMemberAPI.getHullSpec().getHullId().equals(id)) {
+                            toRemove.add(fleetMemberAPI);
+                            if (toRemove.size() >= numberRemaining) {
+                                break;
+                            }
+                        }
+                    }
+
+                    for (FleetMemberAPI fleetMemberAPI : toRemove) {
+                        subMarket.getCargo().getMothballedShips().removeFleetMember(fleetMemberAPI);
+                        numberRemaining--;
+                        consumed++;
+
+                        if (numberRemaining <= 0) {
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+
+            if (numberRemaining <= 0) {
+                break;
+            }
+        }
+
+        return consumed;
+    }
     public static void eatItems(Map.Entry<String, Integer> entry, String submarketId, List<MarketAPI> affectedMarkets) {
         float numberRemaining = entry.getValue();
         for (MarketAPI marketAPI : affectedMarkets) {
@@ -871,6 +1333,11 @@ public class AoTDMisc {
             SpecialItemSpecAPI spec = Global.getSettings().getSpecialItemSpec(id);
             if(spec.hasTag("aotd_ignore_standarization")){
                 return faction.getMemory().is("$aotd" + id, true);
+            }
+        }
+        else if (Global.getSettings().getCommoditySpec(id)!=null){
+            if(id.equals(Commodities.GAMMA_CORE)||id.equals(Commodities.BETA_CORE)){
+                return Global.getSector().getMemoryWithoutUpdate().getBoolean("$finished_basic_ai");
             }
         }
         return faction.getMemory().is("$aotd" + id, true) || AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).haveResearched(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION);

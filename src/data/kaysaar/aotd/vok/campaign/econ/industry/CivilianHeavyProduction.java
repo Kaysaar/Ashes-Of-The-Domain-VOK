@@ -23,10 +23,7 @@ public class CivilianHeavyProduction extends AoTDHeavyIndustry {
 
         supply(Commodities.HEAVY_MACHINERY, size);
         supply(Commodities.SUPPLIES, size+2);
-        if(size-4>0){
-            supply(AoTDCommodities.DOMAIN_GRADE_MACHINERY, size  - 4);
-        }
-
+        supply(AoTDCommodities.DOMAIN_GRADE_MACHINERY, size  - 2);
 
         Pair<String, Integer> deficit = getMaxDeficit(Commodities.METALS,Commodities.RARE_ORE);
 

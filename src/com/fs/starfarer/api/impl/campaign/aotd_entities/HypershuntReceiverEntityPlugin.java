@@ -7,7 +7,8 @@ import com.fs.starfarer.api.impl.campaign.ids.Stats;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.impl.hypershunt.HypershuntMegastructure;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.CoronalHypershuntMegastructure;
+
 
 import java.awt.*;
 
@@ -34,7 +35,8 @@ public class HypershuntReceiverEntityPlugin extends BaseCampaignObjectivePlugin 
 
     }
     public boolean isWithinRange(){
-        return HypershuntMegastructure.isWithinRangeOfAtLeastOneHypershunt(entity);
+
+        return CoronalHypershuntMegastructure.isWithinRangeOfAtLeastOneHypershunt(entity);
     }
     public void unmodify(){
         for (MarketAPI market : Global.getSector().getEconomy().getMarkets(this.entity.getStarSystem())) {

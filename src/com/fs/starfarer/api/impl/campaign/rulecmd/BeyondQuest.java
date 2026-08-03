@@ -129,7 +129,7 @@ public class BeyondQuest  extends BaseCommandPlugin {
                 planet.getMemoryWithoutUpdate().unset("$aotd_quest_veil");
                 Global.getSector().getPersistentData().remove("$aotd_v_planet");
                 Global.getSector().getMemory().set("$aotd_veil_done",true);
-                if(Global.getSettings().getModManager().isModEnabled("MagicLib")){
+                if(Global.getSettings().getModManager().isModEnabled("MagicLib") && MagicAchievementManager.getInstance().areAchievementsEnabled()){
                     Objects.requireNonNull(MagicAchievementManager.getInstance().getAchievement("aotd_veil_of_knowledge")).completeAchievement();
                 }
                 long xp = BeyondVeilIntel.FINISHED_XP;

@@ -6,6 +6,7 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
+import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 
 import java.awt.*;
 
@@ -36,7 +37,18 @@ public class ForbiddenKnowledgeScientist extends ScientistPerson {
 
     @Override
     public void createActiveSkillDescription(TooltipMakerAPI tooltip) {
-        tooltip.addPara("Reduces amount of GP resources needed for projects by %s",2f,Misc.getTooltipTitleAndLightHighlightColor(), Color.ORANGE,"20%");
+        tooltip.addPara("Reduces amount of resources needed for projects by %s",2f,Misc.getTooltipTitleAndLightHighlightColor(), Color.ORANGE,"20%");
+    }
+
+    @Override
+    public void applyActiveSkill() {
+        BlackSiteProjectManager.getInstance().getProductionMultCost().modifyMult("black_site_guy_ai_core",0.8f);
+    }
+
+    @Override
+    public void unapplyActiveSkill() {
+        BlackSiteProjectManager.getInstance().getProductionMultCost().unmodifyMult("black_site_guy_ai_core");
+
     }
 
     @Override

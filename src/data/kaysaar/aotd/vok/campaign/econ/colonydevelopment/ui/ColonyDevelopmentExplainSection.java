@@ -45,7 +45,7 @@ public class ColonyDevelopmentExplainSection implements ExtendedUIPanelPlugin {
         tooltipHeader.addSectionHeading("Development Details", Alignment.MID,0f);
 
         componentPanel.addUIElement(tooltipHeader).inTL(0,0);
-        TooltipMakerAPI tooltipButton = componentPanel.createUIElement(mainPanel.getPosition().getWidth(),mainPanel.getPosition().getHeight()-25,true);
+        TooltipMakerAPI tooltipButton = componentPanel.createUIElement(mainPanel.getPosition().getWidth(),mainPanel.getPosition().getHeight()-55,true);
         if(AshMisc.isStringValid(id)&&ColonyDevelopmentManager.getInstance().getColonyDevelopment(id)!=null){
             ColonyDevelopmentManager.getInstance().getColonyDevelopment(id).generateDetailingTooltip(market,tooltipButton);
         }

@@ -2,6 +2,7 @@ package data.kaysaar.aotd.vok.ui.specialprojects;
 
 import ashlib.data.plugins.ui.models.BasePopUpDialog;
 import ashlib.data.plugins.ui.models.ProgressBarComponentV2;
+import ashlib.data.plugins.ui.plugins.UILinesRenderer;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CustomUIPanelPlugin;
 import com.fs.starfarer.api.input.InputEventAPI;
@@ -13,13 +14,12 @@ import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.specialprojects.BlackSiteProjectManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import data.kaysaar.aotd.vok.ui.basecomps.holograms.HologramViewer;
-import data.kaysaar.aotd.vok.ui.customprod.components.UILinesRenderer;
+
 import data.kaysaar.aotd.vok.ui.specialprojects.dialogs.PauseProjectDialog;
 
 import java.util.HashMap;
 import java.util.List;
 
-import static data.kaysaar.aotd.vok.campaign.econ.globalproduction.megastructures.ui.components.GPUIMisc.createResourcePanelForSmallTooltipCondensed;
 
 public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
     public CustomPanelAPI mainPanel;
@@ -49,7 +49,8 @@ public class CurrentSpecialProjectShowcase implements CustomUIPanelPlugin {
             TooltipMakerAPI tooltip = insiderPanel.createUIElement(mainPanel.getPosition().getWidth(), mainPanel.getPosition().getHeight(), false);
             tooltip.setTitleFont(Fonts.ORBITRON_20AA);
             tooltip.addTitle(currProjectShowing.getNameOverride());
-            tooltip.addCustom(createResourcePanelForSmallTooltipCondensed(mainPanel.getPosition().getWidth() - 95, 24, 24, currProjectShowing.getGpCostFromStages(), new HashMap<>()), 2f);
+//            tooltip.addCustom(createResourcePanelForSmallTooltipCondensed(mainPanel.getPosition().getWidth() - 95, 24, 24, currProjectShowing.getGpCostFromStages(), new HashMap<>()), 2f);
+            tooltip.addCustom(AoTDMisc.createCostSection(mainPanel.getPosition().getWidth()-110,24,24,currProjectShowing.getGpCostFromStages(),false),5f);
 
             ProgressBarComponentV2 component = new ProgressBarComponentV2(mainPanel.getPosition().getWidth() - 110, 18, currProjectShowing.getTotalProgress(), Misc.getBasePlayerColor().darker());
             tooltip.addCustom(component.getRenderingPanel(), 3f);

@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.synergies.impl.synergies;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.ids.Industries;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -25,6 +26,7 @@ public class FacilitatedResearchLogistics extends BaseIndustrySynergy {
     @Override
     public void populateListForSynergies(HashSet<String> industries, MarketAPI market) {
         industries.add(Industries.MEGAPORT);
+        industries.add(AoTDIndustries.DAEDALUS_ARRAY);
         industries.add(AoTDIndustries.TERMINUS);
         industries.addAll(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.RESEARCH_CENTER));
 
@@ -38,12 +40,15 @@ public class FacilitatedResearchLogistics extends BaseIndustrySynergy {
 
     @Override
     public boolean doesSynergyMetReq(MarketAPI market) {
-        return IndustrySynergiesMisc.isIndustryFunctionalAndExistingIncludingUpgrades(market,Industries.MEGAPORT,AoTDIndustries.TERMINUS,AoTDIndustries.RESEARCH_CENTER);
+        String portOrDaedalus = Industries.MEGAPORT;
+        if (market.hasIndustry(AoTDIndustries.DAEDALUS_ARRAY)) portOrDaedalus = AoTDIndustries.DAEDALUS_ARRAY;
+        return IndustrySynergiesMisc.isIndustryFunctionalAndExistingIncludingUpgrades(market,portOrDaedalus,AoTDIndustries.TERMINUS,AoTDIndustries.RESEARCH_CENTER);
     }
 
     @Override
     public void printReqImpl(TooltipMakerAPI tooltip, MarketAPI market, Color base, Color highLight) {
         ArrayList<String> ids = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(Industries.MEGAPORT);
+        if (!ids.contains(AoTDIndustries.DAEDALUS_ARRAY)) ids.add(AoTDIndustries.DAEDALUS_ARRAY);
         ArrayList<String> ter = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.TERMINUS);
         ArrayList<String> re = IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.RESEARCH_CENTER);
         tooltip.addPara("Requires %s, %s and %s on the same planet.", 3f, base, highLight,

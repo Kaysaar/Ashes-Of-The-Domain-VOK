@@ -18,7 +18,8 @@ import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDIndustries;
 import data.kaysaar.aotd.vok.Ids.AoTDSubmarkets;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.listeners.AoTDListenerUtilis;
+
+import data.kaysaar.aotd.vok.campaign.econ.listeners.AoTDListenerUtilis;
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.research.attitude.FactionResearchAttitudeData;
 import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;

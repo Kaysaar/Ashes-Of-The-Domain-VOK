@@ -7,8 +7,8 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.submarkets.StoragePlugin;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.GPManager;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPBaseMegastructure;
+
+import data.kaysaar.aotd.vok.misc.AoTDMisc;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 import data.scripts.ass_ModPlugin;
 
@@ -31,8 +31,8 @@ public class ASSArkoshipProject extends AoTDSpecialProject {
 
     @Override
     public boolean checkIfProjectShouldUnlock() {
-        GPBaseMegastructure megastructure = GPManager.getInstance().getMegastructure("aotd_nidavelir");
-        return (megastructure != null && megastructure.getSectionById("nidavelir_nexus").isRestored && megastructure.getSectionById("nidavelir_eternium").isRestored);
+
+        return AoTDMisc.getNidavelirIfOwned() != null;
     }
 
     @Override

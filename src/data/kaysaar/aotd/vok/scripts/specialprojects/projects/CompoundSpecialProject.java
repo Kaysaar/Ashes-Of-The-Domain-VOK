@@ -17,6 +17,7 @@ import data.kaysaar.aotd.vok.scripts.misc.AoTDCompoundUIScript;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 import data.kaysaar.aotd.vok.scripts.specialprojects.models.AoTDSpecialProject;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +28,18 @@ public class CompoundSpecialProject extends AoTDSpecialProject {
     public void createRewardSection(TooltipMakerAPI tooltip, float width) {
         tooltip.addPara("Gain access to produce new commodity : Compound, that can enhance efficiency of fuel.", Misc.getPositiveHighlightColor(),5f);
         tooltip.addPara("Each Fuel Refinery will have a supply of compound equal to half of the market size.", Misc.getPositiveHighlightColor(),5f);
+        if(!wasCompleted){
+            tooltip.addPara("This project can only be started if our faction has at least one %s under control.",5f, Color.ORANGE,"Fuel Refinery");
+        }
     }
     @Override
     public boolean checkIfProjectShouldUnlock() {
-        return AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.ANTIMATTER_SYNTHESIS)&& AoTDMisc.isPLayerHavingIndustry(AoTDIndustries.FUEL_REFINERY);
+        return AoTDMainResearchManager.getInstance().isResearchedForPlayer(AoTDTechIds.ANTIMATTER_SYNTHESIS);
+    }
+
+    @Override
+    public boolean canDoProject() {
+        return super.canDoProject()&&AoTDMisc.isPLayerHavingIndustry(AoTDIndustries.FUEL_REFINERY);
     }
 
     @Override

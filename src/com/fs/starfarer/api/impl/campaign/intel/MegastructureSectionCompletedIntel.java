@@ -8,14 +8,14 @@ import com.fs.starfarer.api.ui.IntelUIAPI;
 import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.vok.campaign.econ.globalproduction.models.megastructures.GPMegaStructureSection;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.models.BaseMegastructureSection;
 
 import java.awt.*;
 
 public class MegastructureSectionCompletedIntel extends BaseIntelPlugin{
-    public GPMegaStructureSection data;
+    public BaseMegastructureSection data;
     public static Object Button_Megastructure = new Object();
-    public MegastructureSectionCompletedIntel(GPMegaStructureSection unlockedProj){
+    public MegastructureSectionCompletedIntel(BaseMegastructureSection unlockedProj){
         this.data=unlockedProj;
     }
     @Override
@@ -30,15 +30,28 @@ public class MegastructureSectionCompletedIntel extends BaseIntelPlugin{
 
         // Title of the intel
         info.addPara(getName(), title,0f);
-        info.addPara("A Megastructure section has been restored!",5f);
+        if(data.isBuildable()){
+            info.addPara(data.getName()+" has been constructed!",5f);
+
+        }
+        else{
+            info.addPara(data.getName()+" has been restored!",5f);
+
+        }
         info.addPara("Received a story point!", Misc.getPositiveHighlightColor(),5f);
 
     }
 
     @Override
     public void createSmallDescription(TooltipMakerAPI info, float width, float height) {
-        info.addPara("%s section : %s has been restored",5f,Color.ORANGE,data.getMegastructureTiedTo().getName(),data.getName());
-        addGenericButton(info,width,"Access Megastructure Tab", Button_Megastructure);
+        if(data.isBuildable()){
+            info.addPara("%s has been build",5f,Color.ORANGE,data.getName());
+
+        }
+        else{
+            info.addPara("%s section : %s has been restored",5f,Color.ORANGE,data.getMegastructureTiedTo().getName(),data.getName());
+
+        }
     }
 
 
@@ -60,11 +73,6 @@ public class MegastructureSectionCompletedIntel extends BaseIntelPlugin{
 
     @Override
     public void buttonPressConfirmed(Object buttonId, IntelUIAPI ui) {
-        if(buttonId== Button_Megastructure){
-            CommandTabMemoryManager.getInstance().setLastCheckedTab("research & production");
-            CommandTabMemoryManager.getInstance().getTabStates().put("research & production","megastructures");
-            Global.getSector().getCampaignUI().showCoreUITab(CoreUITabId.OUTPOSTS);
-        }
 
     }
 }
