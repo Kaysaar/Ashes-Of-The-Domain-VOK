@@ -26,14 +26,38 @@ import data.kaysaar.aotd.vok.scripts.research.models.ResearchOption;
 import data.kaysaar.aotd.vok.scripts.research.scientist.models.ScientistPerson;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.checkForQolEnabled;
 
 public class AoTDFactionResearchManager {
+    public static LinkedHashSet<String>AI_FACTION_TECHS_START = new LinkedHashSet<>();
+
+    static {
+        AI_FACTION_TECHS_START.add("aotd_tech_ind_base_template");
+        AI_FACTION_TECHS_START.add("aotd_tech_rudimentary_eq");
+        AI_FACTION_TECHS_START.add("aotd_tech_agriculture");
+        AI_FACTION_TECHS_START.add("aotd_tech_exoskeletons");
+        AI_FACTION_TECHS_START.add("aotd_tech_nanometal");
+        AI_FACTION_TECHS_START.add("aotd_tech_hull_manufacture");
+        AI_FACTION_TECHS_START.add("aotd_tech_aquatic_agriculture");
+        AI_FACTION_TECHS_START.add("aotd_tech_hazmat_equipment");
+        AI_FACTION_TECHS_START.add("aotd_tech_antimatter_production");
+        AI_FACTION_TECHS_START.add("aotd_tech_spaceport_expansion");
+
+        AI_FACTION_TECHS_START.add("aotd_tech_improved_fertilizers");
+        AI_FACTION_TECHS_START.add("aotd_tech_advanced_mining_equipment");
+        AI_FACTION_TECHS_START.add("aotd_tech_alloy_production");
+        AI_FACTION_TECHS_START.add("aotd_tech_orbital_assembly");
+        AI_FACTION_TECHS_START.add("aotd_tech_consumer");
+        AI_FACTION_TECHS_START.add("aotd_tech_drug_production");
+        AI_FACTION_TECHS_START.add("aotd_tech_maglev");
+        AI_FACTION_TECHS_START.add("aotd_tech_resort_tech");
+        AI_FACTION_TECHS_START.add("aotd_tech_advanced_logistic");
+        AI_FACTION_TECHS_START.add("aotd_tech_dual_trade_system");
+
+        AI_FACTION_TECHS_START.add("aotd_tech_streamlined_production");
+    }
     private static final Logger logger = Global.getLogger(AoTDMainResearchManager.class);
     private float AIChrages = 0f;
     public MutableStat researchSpeedBonus = new MutableStat(0f);
@@ -305,6 +329,9 @@ public class AoTDFactionResearchManager {
     }
 
     public boolean haveResearched(String id) {
+        if(!getFaction().isPlayerFaction()){
+            return AI_FACTION_TECHS_START.contains(id);
+        }
         for (ResearchOption researchOption : researchRepoOfFaction) {
             if (researchOption.getSpec().getId().equals(id)) {
                 return researchOption.isResearched();

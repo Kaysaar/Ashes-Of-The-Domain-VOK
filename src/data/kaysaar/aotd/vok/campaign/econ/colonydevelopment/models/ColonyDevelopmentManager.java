@@ -30,7 +30,13 @@ public class ColonyDevelopmentManager {
         }
         return null;
     }
+    public static String getColonyDevPlanIfPresent(MarketAPI market) {
+        if (market.hasCondition(BaseColonyDevelopment.condIdApplier)) {
+            return ((ColonyDevelopmentCondition) market.getCondition(BaseColonyDevelopment.condIdApplier).getPlugin()).getIdOfDevelopment();
 
+        }
+        return "standard";
+    }
     public BaseColonyDevelopment getColonyDevelopment(String id) {
         return developmentScripts.get(id);
     }

@@ -51,11 +51,14 @@ public class AoTDSpecialItemRepo {
             @Override
             public void apply(Industry industry) {
                 industry.getSupply(AoTDCommodities.ADVANCED_COMPONENTS).getQuantity().modifyFlat("aotd_turing",6);
+                Global.getSector().getMemoryWithoutUpdate().set("$aotd_turing_enabled",true);
             }
 
             @Override
             public void unapply(Industry industry) {
                 industry.getSupply(AoTDCommodities.ADVANCED_COMPONENTS).getQuantity().unmodifyFlat("aotd_turing");
+                Global.getSector().getMemoryWithoutUpdate().set("$aotd_turing_enabled",false);
+
             }
         });
         ItemEffectsRepo.CORONAL_TAP_RANGE = "Coronal Network Center in 10 LY radius, 50 LY if Wormhole Stabilizer has been repaired.";

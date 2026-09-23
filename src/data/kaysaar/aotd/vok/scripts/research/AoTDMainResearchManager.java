@@ -128,6 +128,7 @@ public class AoTDMainResearchManager {
         for (ResearchOptionSpec value : specs.values()) {
             try {
                 ResearchOption researchOption = new ResearchOption(value);
+
                 newResearchOptionsIds.add(researchOption);
                 researchOptions.add(researchOption);
             } catch (Exception e) {

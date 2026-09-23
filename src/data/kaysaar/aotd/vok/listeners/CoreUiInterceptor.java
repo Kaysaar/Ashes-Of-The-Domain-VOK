@@ -6,6 +6,7 @@ import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.listeners.CoreUITabListener;
 import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
+import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirDestroyedShipyardVisual;
 import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyardVisual;
 import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.ui.CustomPanelAPI;
@@ -138,6 +139,14 @@ public class CoreUiInterceptor implements CoreUITabListener, PlayerColonizationL
     public void reportPlayerColonizedPlanet(PlanetAPI planet) {
         MarketAPI market = planet.getMarket();
         if(NidavelirComplex.getComplexCondition(market)!=null){
+            NidavelirShipyardVisual visual = NidavelirComplex.getComplexCondition(market).getShipyardVisual();
+            if(visual instanceof NidavelirDestroyedShipyardVisual){
+                market.getPrimaryEntity().setInteractionImage("illustrations","nidavelir_destroyed");
+            }
+            else{
+                market.getPrimaryEntity().setInteractionImage("illustrations","nidavelir");
+            }
+
             Global.getSector().addTransientScript(new DelayedActionScript(0.005f) {
                 @Override
                 public boolean runWhilePaused() {
@@ -146,7 +155,7 @@ public class CoreUiInterceptor implements CoreUITabListener, PlayerColonizationL
 
                 @Override
                 public void doAction() {
-                    initalizeBackgroundPLanet(NidavelirComplex.getComplexCondition(market).getShipyardVisual());
+                    initalizeBackgroundPLanet(visual);
                 }
             });
         }

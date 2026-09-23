@@ -37,6 +37,7 @@ import data.kaysaar.aotd.vok.campaign.econ.growingdemand.SpaceDrugsDemand;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandManager;
 import data.kaysaar.aotd.vok.campaign.econ.growingdemand.models.GrowingDemandMover;
 import data.kaysaar.aotd.vok.campaign.econ.industry.AoTDHeavyIndustry;
+import data.kaysaar.aotd.vok.campaign.econ.industry.BlackSite;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.*;
 import data.kaysaar.aotd.vok.campaign.econ.listeners.buildingmenu.IndustryBlockerListener;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.MegastructureSpecManager;
@@ -263,7 +264,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         l.removeListenerOfClass(AoTDIndButtonsListener.class);
         AoTDIndButtonsListener listener = new AoTDIndButtonsListener();
         l.addListener(listener);
-        l.addListener(new BMOIndustryBlocker(),true);
+        l.addListener(new BMOVoKMultiPurpouseListener(),true);
         l.addListener(new AoTDProdListener(),true);
         if (!l.hasListenerOfClass(ScientistUpkeepListener.class))
             l.addListener(new ScientistUpkeepListener(), true);
@@ -501,6 +502,8 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("standard",new PerseanStandardized());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("distributed",new DistributedRegionalNetwork());
         ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("hypershunt",new HypershuntQuaters());
+        ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("borecity",new BoreCity());
+        ColonyDevelopmentManager.getInstance().addDevelopmentScriptBase("abyss_colony",new AbyssalFrontier());
 
         // Change required : breaks with modded buildings that aren't part of the tech trees, including the Megastructures
         DistributedRegionalNetwork.addNewIndustries(IndustrySynergiesMisc.getIdsOfTreeFromIndustry(AoTDIndustries.MONOCULTURE));
@@ -567,6 +570,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         if(Global.getSettings().isDevMode()){
             MegastructureSpecManager.init();
         }
+
         PlayerIssuedSupplyContract.fullProdCommodities.add(AoTDCommodities.COMPOUND);
         for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarketsCopy()) {
             marketAPI.removeCondition("aotd_growing_demand_applier");
@@ -718,6 +722,9 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
             if (plugin instanceof BiFrostGateEntity) {
                 entity.setMarket(null);
             }
+        }
+        if(BlackSiteProjectManager.getInstance().getProject("aotd_ai_core_basic_algorithms").checkIfProjectWasCompleted()){
+            Global.getSector().getMemory().set("$finished_basic_ai", true);
         }
     }
 

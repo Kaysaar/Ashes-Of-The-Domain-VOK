@@ -23,7 +23,7 @@ public class PlutoStation extends BaseMarketConditionPlugin2 {
     public void apply(String id) {
         if(!hasInitalized){
             hasInitalized = true;
-            if(market.getPrimaryEntity() instanceof PlanetAPI planet){
+            if(market.getPrimaryEntity() instanceof PlanetAPI planet&&market.getStarSystem()!=null){
                 if(market.getPrimaryEntity().getMemory()!=null&&!market.getPrimaryEntity().getMemory().getKeys().isEmpty()){
                     if(BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(planet,"aotd_pluto_station")==null){
                         PlutoMegastructure section = (PlutoMegastructure) MegastructureSpecManager.getSpecForMegastructure("aotd_pluto_station").getScript();
@@ -38,7 +38,7 @@ public class PlutoStation extends BaseMarketConditionPlugin2 {
 
             }
         }
-        if(!market.hasIndustry("pluto_station")&&market.getFaction()!=null&&!market.getFactionId().equals(Factions.NEUTRAL)){
+        if(!market.hasIndustry("pluto_station")&&market.getFaction()!=null&&!market.getFactionId().equals(Factions.NEUTRAL)&&market.getStarSystem()!=null){
             market.addIndustry("pluto_station");
         }
     }

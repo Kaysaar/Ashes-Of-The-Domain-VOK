@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.conditions;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.econ.MarketConditionAPI;
@@ -34,11 +35,22 @@ public class NidavelirComplex extends BaseMarketConditionPlugin2 {
         NidavelirMegastructure megastructure = (NidavelirMegastructure) BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(market.getPrimaryEntity(),"aotd_nidavelir");
         return megastructure.getVisual();
     }
+
+    @Override
+    public String getIconName() {
+        if(BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(market.getPrimaryEntity(),"aotd_nidavelir")!=null){
+            if(!BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(market.getPrimaryEntity(),"aotd_nidavelir").getSectionById("nidavelir_nexus").isRestored()){
+                return Global.getSettings().getSpriteName("aotd_market","aotd_nid_destroyted");
+            }
+        }
+        return super.getIconName();
+    }
+
     @Override
     public void apply(String id) {
         if(!hasInitalized){
             hasInitalized = true;
-            if(market.getPrimaryEntity() instanceof PlanetAPI planet){
+            if(market.getPrimaryEntity() instanceof PlanetAPI planet&&market.getPrimaryEntity().getStarSystem()!=null){
                 if(market.getPrimaryEntity().getMemory()!=null&&!market.getPrimaryEntity().getMemory().getKeys().isEmpty()){
                     if(BaseMegastructureScript.getInstanceOfScriptFromEntityIfPresent(planet,"aotd_nidavelir")==null){
                         NidavelirMegastructure section = (NidavelirMegastructure) MegastructureSpecManager.getSpecForMegastructure("aotd_nidavelir").getScript();
@@ -54,7 +66,7 @@ public class NidavelirComplex extends BaseMarketConditionPlugin2 {
             }
 
         }
-        if(!market.hasIndustry("nidavelir_complex")&&market.getFaction()!=null&&!market.getFactionId().equals(Factions.NEUTRAL)){
+        if(!market.hasIndustry("nidavelir_complex")&&market.getFaction()!=null&&!market.getFactionId().equals(Factions.NEUTRAL)&&market.getStarSystem()!=null){
             market.addIndustry("nidavelir_complex");
         }
     }

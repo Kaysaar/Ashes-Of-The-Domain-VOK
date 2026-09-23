@@ -92,7 +92,7 @@ public class BaseMegastructureSection {
         getResourcesSpentOnRestoration().put(resource, curr+value);
     }
     public float getAllowedProgressOnRestoration() {
-        LinkedHashMap<String, Integer> required = getSpec().getResourceRestorationCost();
+        LinkedHashMap<String, Integer> required = getResourceRestorationCost();
 
         if (required == null || required.isEmpty()) {
             return 1f;
@@ -177,10 +177,13 @@ public class BaseMegastructureSection {
             contract.setFrozen(true);
         }
     }
+    public LinkedHashMap<String,Integer>getResourceRestorationCost(){
+        return getSpec().getResourceRestorationCost();
+    }
     public HashMap<String, Integer> getMonthlyResNeeded() {
         HashMap<String, Integer> commodities = new HashMap<>();
 
-        LinkedHashMap<String, Integer> required = getSpec().getResourceRestorationCost();
+        LinkedHashMap<String, Integer> required = getResourceRestorationCost();
         if (required == null || required.isEmpty()) {
             return commodities;
         }

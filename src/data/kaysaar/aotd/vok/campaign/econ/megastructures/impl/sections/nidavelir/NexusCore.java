@@ -50,6 +50,19 @@ public class NexusCore extends BaseNidavelirSection {
     }
 
     @Override
+    public LinkedHashMap<String, Integer> getResourceRestorationCost() {
+        LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
+        int mult =1;
+        if(!getMegastructureTiedTo().getTiedMarket().hasCondition("aotd_crashed_ring_segmnets")){
+            mult=10;
+        }
+        for (Map.Entry<String, Integer> entry : super.getResourceRestorationCost().entrySet()) {
+            map.put(entry.getKey(), entry.getValue()*mult);
+        }
+        return map;
+    }
+
+    @Override
     public void applySectionOnIndustry(BaseIndustry ind) {
         super.applySectionOnIndustry(ind);
         float total = 1;
@@ -81,9 +94,11 @@ public class NexusCore extends BaseNidavelirSection {
         nid.getVisual().elapsed = 0;
         Misc.fadeAndExpire(token);
         nid.setVisual(null);
+        getMegastructureTiedTo().getTiedMarket().removeCondition("aotd_crashed_ring_segmnets");
         NidavelirShipyardVisual visual = (NidavelirShipyardVisual) nid.getEntityTiedTo().getStarSystem().addCustomEntity(null, "Nid", "nid_shipyards", null).getCustomPlugin();
         visual.trueInit("aotd_nidavelir", "aotd_nidavelir_shadow", (PlanetAPI) nid.getEntityTiedTo());
         visual.waitingTime = 0.8f;
+        getMegastructureTiedTo().getTiedMarket().getPrimaryEntity().setInteractionImage("illustrations","nidavelir");
         nid.setVisual(visual);
         if (Global.getSector().getPlayerFaction().getProduction().getGatheringPoint() != null) {
             MarketAPI market = Global.getSector().getPlayerFaction().getProduction().getGatheringPoint();
