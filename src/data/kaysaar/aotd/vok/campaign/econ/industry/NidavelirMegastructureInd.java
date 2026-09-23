@@ -1,5 +1,6 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -26,6 +27,15 @@ public class NidavelirMegastructureInd extends HeavyIndustry implements Megastru
 
     }
 
+    @Override
+    public String getCurrentImage() {
+        if(getMegastructureScript(market.getPrimaryEntity())!=null){
+            if(!getMegastructureScript(market.getPrimaryEntity()).getSectionById("nidavelir_nexus").isRestored()){
+                return Global.getSettings().getSpriteName("industry","aotd_nid_destroyed");
+            }
+        }
+        return super.getCurrentImage();
+    }
 
     @Override
     public boolean canInstallAICores() {

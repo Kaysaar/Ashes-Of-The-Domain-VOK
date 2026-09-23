@@ -12,6 +12,7 @@ import com.fs.starfarer.api.combat.MutableStat;
 import com.fs.starfarer.api.combat.StatBonus;
 import com.fs.starfarer.api.impl.campaign.econ.impl.Spaceport;
 import com.fs.starfarer.api.impl.campaign.ids.*;
+import com.fs.starfarer.api.impl.campaign.intel.deciv.DecivTracker;
 import com.fs.starfarer.api.impl.campaign.intel.events.ht.HyperspaceTopographyEventIntel;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
@@ -42,6 +43,7 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
         demand.put(AoTDCommodities.REFINED_METAL, 5);
         demand.put(Commodities.HEAVY_MACHINERY, 7);
         demand.put(Commodities.SUPPLIES, 5);
+
         return demand;
     }
 
@@ -258,6 +260,7 @@ public class DaedalusArray extends Spaceport implements GrandWonderAPI {
 
     @Override
     public boolean isAvailableToBuild() {
+        if(!market.isPlayerOwned())return false;
         if (GrandWonderTypeManager.getSpec(getWonderTypeId()).canBuildAdditionalWonderOfType(this.getSpec().getId(), this.market)) {
             for (String s : getRequirementsToBuildWonder().keySet()) {
                 if (!hasReqBeenMetOnMarket(s)) {

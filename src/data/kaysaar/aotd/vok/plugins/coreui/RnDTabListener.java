@@ -76,6 +76,7 @@ public class RnDTabListener implements CommandTabListener {
         if(button==null){
             button = tryToGetButtonProd("colonies");
         }
+        if(button==null)return;
         UIData.WIDTH = Global.getSettings().getScreenWidth() - button.getPosition().getX();
         UIData.HEIGHT = uiPanelAPI.getPosition().getHeight();
 

@@ -64,6 +64,7 @@ public class GardensOfElysium extends ResortCenter implements GrandWonderAPI {
 
     @Override
     public boolean isAvailableToBuild() {
+        if(!market.isPlayerOwned())return false;
         if (GrandWonderTypeManager.getSpec(getWonderTypeId()).canBuildAdditionalWonderOfType(this.getSpec().getId(), this.market)) {
             for (String s : getRequirementsToBuildWonder().keySet()) {
                 if (!hasReqBeenMetOnMarket(s)) {

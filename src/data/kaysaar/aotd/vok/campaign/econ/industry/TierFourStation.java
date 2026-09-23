@@ -111,6 +111,7 @@ public class TierFourStation extends OrbitalStation implements GrandWonderAPI {
     }
     @Override
     public boolean isAvailableToBuild() {
+        if(!market.isPlayerOwned())return false;
         if (this.getSpec().hasTag("starcitadel")) {
             if (market.isPlayerOwned()) {
                 return Global.getSector().getPlayerFaction().knowsIndustry(this.getSpec().getId());

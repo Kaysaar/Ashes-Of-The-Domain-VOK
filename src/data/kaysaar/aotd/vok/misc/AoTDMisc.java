@@ -1339,6 +1339,9 @@ public class AoTDMisc {
             if(id.equals(Commodities.GAMMA_CORE)||id.equals(Commodities.BETA_CORE)){
                 return Global.getSector().getMemoryWithoutUpdate().getBoolean("$finished_basic_ai");
             }
+            if(Global.getSector().getMemoryWithoutUpdate().getBoolean("$aotd_turing_enabled")){
+                return Global.getSettings().getCommoditySpec(id).hasTag(Commodities.AI_CORES);
+            }
         }
         return faction.getMemory().is("$aotd" + id, true) || AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).haveResearched(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION);
     }

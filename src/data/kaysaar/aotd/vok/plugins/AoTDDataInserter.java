@@ -211,6 +211,8 @@ public class AoTDDataInserter {
         planet.getMarket().removeCondition(Conditions.RUINS_EXTENSIVE);
         planet.getMarket().removeCondition(Conditions.RUINS_SCATTERED);
         planet.getMarket().removeCondition(Conditions.RUINS_WIDESPREAD);
+        planet.getMarket().getPrimaryEntity().setInteractionImage("illustrations","nidavelir_destroyed");
+
         if (!planet.getMarket().hasCondition(Conditions.RUINS_VAST)) {
             planet.getMarket().addCondition(Conditions.RUINS_VAST);
         }

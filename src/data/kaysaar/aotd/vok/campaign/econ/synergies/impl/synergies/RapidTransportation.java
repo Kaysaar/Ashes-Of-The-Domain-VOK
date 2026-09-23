@@ -54,7 +54,7 @@ public class RapidTransportation extends BaseIndustrySynergy {
 
     @Override
     public void apply(float efficiencyPercent, MarketAPI market) {
-        market.getAccessibilityMod().modifyFlat(getIdForEffects(),efficiencyPercent*0.1f,getSynergyName());
+        market.getAccessibilityMod().modifyFlat(getIdForEffects(),efficiencyPercent*0.1f*100f/100f,getSynergyName());
     }
 
     @Override

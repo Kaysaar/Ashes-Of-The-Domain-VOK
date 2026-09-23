@@ -11,6 +11,7 @@ import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
+import data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.models.ColonyDevelopmentManager;
 import data.kaysaar.aotd.vok.plugins.AoDUtilis;
 import data.kaysaar.aotd.vok.scripts.research.AoTDMainResearchManager;
 
@@ -62,7 +63,8 @@ public class MiningMegaplex extends BaseIndustry {
     @Override
     public boolean isAvailableToBuild() {
         boolean gasGiant = this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().getTypeId().equals(Planets.GAS_GIANT);
-        return  AoDUtilis.isMiningAvailable(market) &&!gasGiant&& AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&market.getSize()>=6;
+        boolean hasBoreCity = ColonyDevelopmentManager.getColonyDevPlanIfPresent(market).equals("borecity");
+        return  AoDUtilis.isMiningAvailable(market)&&!hasBoreCity &&!gasGiant&& AoTDMainResearchManager.getInstance().isAvailableForThisMarket(AoTDTechIds.DEEP_MINING_METHODS,market)&&market.getSize()>=6;
     }
 
     @Override
@@ -86,6 +88,11 @@ public class MiningMegaplex extends BaseIndustry {
         boolean gasGiant = this.market.getPlanetEntity()!=null&&this.getMarket().getPlanetEntity().getTypeId().equals(Planets.GAS_GIANT);
         if(market.getSize()<6){
             reasons.add("Market must be size 6 or greater");
+        }
+        boolean hasBoreCity = ColonyDevelopmentManager.getColonyDevPlanIfPresent(market).equals("borecity");
+
+        if(hasBoreCity){
+            reasons.add("Has Bore City development plan active");
         }
         if(gasGiant){
             reasons.add("Can't build it on gas giants");
