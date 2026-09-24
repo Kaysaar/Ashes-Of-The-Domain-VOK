@@ -1337,10 +1337,10 @@ public class AoTDMisc {
         }
         else if (Global.getSettings().getCommoditySpec(id)!=null){
             if(id.equals(Commodities.GAMMA_CORE)||id.equals(Commodities.BETA_CORE)){
-                return Global.getSector().getMemoryWithoutUpdate().getBoolean("$finished_basic_ai");
+                return Global.getSector().getMemoryWithoutUpdate().getBoolean("$finished_basic_ai")||faction.getMemory().is("$aotd" + id, true);
             }
-            if(Global.getSector().getMemoryWithoutUpdate().getBoolean("$aotd_turing_enabled")){
-                return Global.getSettings().getCommoditySpec(id).hasTag(Commodities.AI_CORES);
+            if(id.equals(Commodities.ALPHA_CORE)){
+                return Global.getSector().getMemoryWithoutUpdate().getBoolean("$finished_basic_ai") && doesPlayerHaveTuringEngine();
             }
         }
         return faction.getMemory().is("$aotd" + id, true) || AoTDMainResearchManager.getInstance().getSpecificFactionManager(faction).haveResearched(AoTDTechIds.DOMAIN_TYPE_MODEL_STANDARDIZATION);
