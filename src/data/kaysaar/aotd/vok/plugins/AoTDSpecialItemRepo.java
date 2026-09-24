@@ -44,8 +44,7 @@ public class AoTDSpecialItemRepo {
                                                   InstallableIndustryItemPlugin.InstallableItemDescriptionMode mode, String pre, float pad) {
                 List<String> commodities = new ArrayList<String>();
                 text.addPara("Increase production of advanced components by %s",5f,Color.ORANGE,""+6);
-                text.addPara( "Gain the ability to produce AI cores.",
-                        pad);
+                text.addPara("Gain the ability to produce %s when the %s black site project is researched.",5f,Color.ORANGE,"Alpha AI cores","AI Algorithm Analysis");
             }
 
             @Override
