@@ -121,10 +121,10 @@ public class ResearchFacility extends BaseIndustry  {
 
 
         if (IndustryTooltipMode.ADD_INDUSTRY.equals(mode)) {
-            tooltip.addPara("Building that structure will enable your faction to research new technologies.", Misc.getHighlightColor(), 10f);
+            tooltip.addPara("Building this structure will enable your faction to research new technologies.", Misc.getHighlightColor(), 10f);
         }
         tooltip.addSectionHeading("Research costs", Alignment.MID, 10f);
-        tooltip.addPara("Upkeep costs of the research facility are dependent on what is being currently researched.", 3f);
+        tooltip.addPara("Upkeep costs of the research facility are dependent on what is currently being researched.", 3f);
         tooltip.addPara("Each additional research facility (up to 8) provides +10% research speed bonus",Misc.getTooltipTitleAndLightHighlightColor(),3f );
 
         if (this.market.hasCondition("pre_collapse_facility")) {
