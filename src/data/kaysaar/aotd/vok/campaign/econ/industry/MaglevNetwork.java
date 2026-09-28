@@ -1,6 +1,7 @@
 package data.kaysaar.aotd.vok.campaign.econ.industry;
 
 import com.fs.starfarer.api.impl.campaign.econ.impl.BaseIndustry;
+import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
@@ -57,6 +58,16 @@ public class MaglevNetwork extends BaseIndustry {
             info.addPara("Increase Maglev's synergy efficiency by %s",3f, Color.ORANGE,"30%");
             info.addSpacer(-5f);
         }
+    }
+
+    @Override
+    protected void addRightAfterDescriptionSection(TooltipMakerAPI tooltip, IndustryTooltipMode mode) {
+        super.addRightAfterDescriptionSection(tooltip, mode);
+        
+        if (IndustryTooltipMode.ADD_INDUSTRY.equals(mode)) {
+            tooltip.addPara("Building this structure will significantly increase synergy efficiency on this planet.", Misc.getHighlightColor(), 10f);
+        }
+
     }
 
     @Override
