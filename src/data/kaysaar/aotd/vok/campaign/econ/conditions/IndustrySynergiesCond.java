@@ -11,7 +11,12 @@ import data.kaysaar.aotd.vok.campaign.econ.synergies.models.IndustrySynergiesMan
 ;
 
 public class IndustrySynergiesCond extends BaseMarketConditionPlugin {
+    private static final float SYNERGY_ADVANCE_INTERVAL_DAYS = 0.05f;
+
     IntervalUtil util = new IntervalUtil(Global.getSector().getClock().getSecondsPerDay(), Global.getSector().getClock().getSecondsPerDay());
+    private transient float pendingSynergyAmount;
+    private transient float nextSynergyAdvance;
+    private transient boolean synergyAdvanceStarted;
 
     public void apply(String id) {
         super.apply(id);
@@ -46,9 +51,18 @@ public class IndustrySynergiesCond extends BaseMarketConditionPlugin {
             util = new IntervalUtil(Global.getSector().getClock().getSecondsPerDay(), Global.getSector().getClock().getSecondsPerDay());
         }
 
-        IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x -> x.advance(market, amount, false));
+        pendingSynergyAmount += amount;
         util.advance(amount);
-        if (util.intervalElapsed()) {
+        final boolean dayEnded = util.intervalElapsed();
+        if (dayEnded || pendingSynergyAmount >= nextSynergyAdvance) {
+            final float advanced = pendingSynergyAmount;
+            pendingSynergyAmount = 0f;
+            final float interval = SYNERGY_ADVANCE_INTERVAL_DAYS * Global.getSector().getClock().getSecondsPerDay();
+            nextSynergyAdvance = synergyAdvanceStarted ? interval : interval * (0.25f + 0.75f * (float) Math.random());
+            synergyAdvanceStarted = true;
+            IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x -> x.advance(market, advanced, false));
+        }
+        if (dayEnded) {
             IndustrySynergiesManager.getInstance().getSynergyScripts().forEach(x -> x.endOfTheDay(market));
         }
 
