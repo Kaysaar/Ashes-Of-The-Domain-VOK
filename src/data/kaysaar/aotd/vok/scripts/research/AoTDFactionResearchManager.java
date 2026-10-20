@@ -332,6 +332,8 @@ public class AoTDFactionResearchManager {
         if(!getFaction().isPlayerFaction()){
             return AI_FACTION_TECHS_START.contains(id);
         }
+        ResearchOption indexed = getIndexedOption(id);
+        if (indexed != null) return indexed.isResearched();
         for (ResearchOption researchOption : researchRepoOfFaction) {
             if (researchOption.getSpec().getId().equals(id)) {
                 return researchOption.isResearched();
@@ -370,10 +372,54 @@ public class AoTDFactionResearchManager {
 
 
     public ResearchOption getResearchOptionFromRepo(String id) {
+        ResearchOption indexed = getIndexedOption(id);
+        if (indexed != null) return indexed;
         for (ResearchOption researchOption : researchRepoOfFaction) {
             if (researchOption.getSpec().getId().equals(id)) return researchOption;
         }
         return null;
+    }
+
+    private static final class RepoIndex {
+        final ArrayList<ResearchOption> repo;
+        final int size;
+        final HashMap<String, Integer> positions;
+
+        RepoIndex(ArrayList<ResearchOption> repo) {
+            this.repo = repo;
+            size = repo.size();
+            HashMap<String, Integer> positions = new HashMap<>();
+            for (int i = 0; i < size; i++) {
+                ResearchOption option = repo.get(i);
+                if (option == null || option.getSpec() == null || option.getSpec().getId() == null
+                        || positions.putIfAbsent(option.getSpec().getId(), i) != null) {
+                    positions = null;
+                    break;
+                }
+            }
+            this.positions = positions;
+        }
+
+        ResearchOption get(String id) {
+            if (positions == null) return null;
+            Integer index = positions.get(id);
+            if (index == null || index >= repo.size()) return null;
+            ResearchOption option = repo.get(index);
+            if (option != null && option.getSpec() != null && id.equals(option.getSpec().getId())) return option;
+            return null;
+        }
+    }
+
+    private transient RepoIndex repoIndex;
+
+    private ResearchOption getIndexedOption(String id) {
+        ArrayList<ResearchOption> repo = researchRepoOfFaction;
+        if (repo == null || id == null) return null;
+        RepoIndex index = repoIndex;
+        if (index == null || index.repo != repo || index.size != repo.size()) repoIndex = index = new RepoIndex(repo);
+        ResearchOption option = index.get(id);
+        if (option == null && index.positions != null && index.positions.containsKey(id)) repoIndex = null;
+        return option;
     }
 
     public ResearchOption findNameOfTech(String id) {
