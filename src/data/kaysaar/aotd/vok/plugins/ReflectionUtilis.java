@@ -12,6 +12,7 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ReflectionUtilis {
     // Code taken and modified from Grand Colonies
@@ -821,7 +822,20 @@ public class ReflectionUtilis {
         }
     }
 
+    private static final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Boolean>> methodNameCache = new ConcurrentHashMap<>();
+
     public static boolean hasMethodOfName(String name, Object instance) {
+        if (name == null || instance == null) return scanForMethodOfName(name, instance);
+        ConcurrentHashMap<String, Boolean> names = methodNameCache.computeIfAbsent(instance.getClass(), k -> new ConcurrentHashMap<>());
+        Boolean has = names.get(name);
+        if (has == null) {
+            has = scanForMethodOfName(name, instance);
+            names.put(name, has);
+        }
+        return has;
+    }
+
+    private static boolean scanForMethodOfName(String name, Object instance) {
         try {
             for (Object method : instance.getClass().getMethods()) {
                 if (getMethodNameHandle.invoke(method).equals(name)) {
