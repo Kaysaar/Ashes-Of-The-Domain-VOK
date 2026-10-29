@@ -367,6 +367,8 @@ public class AoTDMainResearchManager {
 
     public AoTDFactionResearchManager getSpecificFactionManager(FactionAPI factionAPI) {
         if (factionAPI == null) return null;
+        AoTDFactionResearchManager indexed = getIndexedManager(factionAPI.getId());
+        if (indexed != null) return indexed;
         for (AoTDFactionResearchManager factionResearchManager : factionResearchManagers) {
             if (factionResearchManager.getFaction().getId().equals(factionAPI.getId())) return factionResearchManager;
         }
@@ -376,12 +378,56 @@ public class AoTDMainResearchManager {
 
     public boolean haveFactionResearchedCertainTech(FactionAPI factionAPI, String id) {
         if (factionAPI == null) return false;
+        AoTDFactionResearchManager indexed = getIndexedManager(factionAPI.getId());
+        if (indexed != null) return indexed.haveResearched(id);
         for (AoTDFactionResearchManager factionResearchManager : factionResearchManagers) {
             if (factionResearchManager.getFaction().getId().equals(factionAPI.getId())) {
                 return factionResearchManager.haveResearched(id);
             }
         }
         return false;
+    }
+
+    private static final class ManagerIndex {
+        final ArrayList<AoTDFactionResearchManager> managers;
+        final int size;
+        final HashMap<String, Integer> positions;
+
+        ManagerIndex(ArrayList<AoTDFactionResearchManager> managers) {
+            this.managers = managers;
+            size = managers.size();
+            HashMap<String, Integer> positions = new HashMap<>();
+            for (int i = 0; i < size; i++) {
+                AoTDFactionResearchManager manager = managers.get(i);
+                if (manager == null || manager.getFaction() == null || manager.getFaction().getId() == null
+                        || positions.putIfAbsent(manager.getFaction().getId(), i) != null) {
+                    positions = null;
+                    break;
+                }
+            }
+            this.positions = positions;
+        }
+
+        AoTDFactionResearchManager get(String factionId) {
+            if (positions == null) return null;
+            Integer index = positions.get(factionId);
+            if (index == null || index >= managers.size()) return null;
+            AoTDFactionResearchManager manager = managers.get(index);
+            if (manager != null && manager.getFaction() != null && factionId.equals(manager.getFaction().getId())) return manager;
+            return null;
+        }
+    }
+
+    private transient ManagerIndex managerIndex;
+
+    private AoTDFactionResearchManager getIndexedManager(String factionId) {
+        ArrayList<AoTDFactionResearchManager> managers = factionResearchManagers;
+        if (managers == null || factionId == null) return null;
+        ManagerIndex index = managerIndex;
+        if (index == null || index.managers != managers || index.size != managers.size()) managerIndex = index = new ManagerIndex(managers);
+        AoTDFactionResearchManager manager = index.get(factionId);
+        if (manager == null && index.positions != null && index.positions.containsKey(factionId)) managerIndex = null;
+        return manager;
     }
 
     public boolean isResearchedForPlayer(String id) {
