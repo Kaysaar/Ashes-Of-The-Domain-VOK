@@ -22,7 +22,7 @@ public class FinishSpecialProject implements BaseCommand {
         }
         AoTDSpecialProject option;
         try {
-            option = BlackSiteProjectManager.getInstance().getProject(args);
+            option = BlackSiteProjectManager.getInstance().getCurrentlyOnGoingProject();
         }
         catch (NullPointerException exception){
             return CommandResult.ERROR;

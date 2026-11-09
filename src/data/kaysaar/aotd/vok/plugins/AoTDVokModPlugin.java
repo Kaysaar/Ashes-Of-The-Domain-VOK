@@ -19,6 +19,8 @@ import com.fs.starfarer.api.impl.campaign.intel.bar.events.ScientistAICoreBarEve
 import com.fs.starfarer.api.util.DelayedActionScript;
 import com.fs.starfarer.api.util.Pair;
 import data.kaysaar.aotd.tot.grandwonders.GrandWonderTypeManager;
+import data.kaysaar.aotd.tot.ids.AoTDTags;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.BifrostSystemStructure;
 import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpecManager;
 import data.kaysaar.aotd.tot.scripts.trade.contracts.rewards.creators.impl.playercontracts.PlayerIssuedSupplyContract;
 import data.kaysaar.aotd.vok.Ids.AoTDCommodities;
@@ -312,16 +314,16 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         l.addListener(new SkyTetherListener(), true);
         l.addListener(new AoDIndustrialMightListener(),true);
         l.addListener(new EconomyTickListener() {
-            @Override
-            public void reportEconomyTick(int iterIndex) {
+                          @Override
+                          public void reportEconomyTick(int iterIndex) {
 
-            }
+                          }
 
-            @Override
-            public void reportEconomyMonthEnd() {
+                          @Override
+                          public void reportEconomyMonthEnd() {
 //                GPManager.getInstance().getProductionHistory().endOfMonth();
-            }
-        },true
+                          }
+                      },true
         );
     }
 
@@ -537,6 +539,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         IndustrySynergiesManager.getInstance().addSynergySource(AoTDIndustries.DAEDALUS_ARRAY,new SpaceportSource(0.5f,AoTDIndustries.DAEDALUS_ARRAY));
         IndustrySynergiesManager.getInstance().addSynergySource("test",new HypercognitionTestSynergy(0.2f,Industries.POPULATION));
         IndustrySynergiesManager.getInstance().addSynergySource("colonyDevelopmentMan",new ColonyDevelopmentApplier(0.2f,Industries.POPULATION));
+        IndustrySynergiesManager.getInstance().addSynergySource(GnajidAICSynergySource.SOURCE_KEY,new GnajidAICSynergySource());
 
         IndustrySynergiesManager.getInstance().addSynergy("agro_tourism",new AgroTourism());
         IndustrySynergiesManager.getInstance().addSynergy("aotd_mining_feed",new OreToCore());
@@ -567,6 +570,9 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
     public void onGameLoad(boolean newGame) {
 
         super.onGameLoad(newGame);
+        if (Global.getSettings().getModManager().isModEnabled("aotd_theory_of_toolbox")) {
+            BifrostSystemStructure.restoreExistingGates();
+        }
         if(Global.getSettings().isDevMode()){
             MegastructureSpecManager.init();
         }
@@ -657,7 +663,7 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
                 BarEventManager bar = BarEventManager.getInstance();
                 if(bar.hasEventCreator(ScientistAICoreBarEventCreator.class)){
                     bar.getCreators().removeIf(x->x instanceof ScientistAICoreBarEventCreator);
-                        bar.addEventCreator(new AoTDAiScientistEventCreator());
+                    bar.addEventCreator(new AoTDAiScientistEventCreator());
                 }
             }
         });
@@ -677,6 +683,12 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
         ColonyUIListener.refresh();
         boolean haveNexerelin = Global.getSettings().getModManager().isModEnabled("nexerelin");
         if (newGame) {
+            for (StarSystemAPI system : Global.getSector().getStarSystems()) {
+                if ("limbo".equals(system.getId()) && system.hasTag(Tags.SYSTEM_ABYSSAL)) {
+                    system.addTag(AoTDTags.AOTD_ISOLATED_SYSTEM);
+                    break;
+                }
+            }
             if (haveNexerelin && Global.getSector().getMemoryWithoutUpdate().getBoolean("$nex_randomSector")) {
                 aoTDDataInserter.initalizeEconomy(true);
             } else {
@@ -781,7 +793,6 @@ public class AoTDVokModPlugin extends BaseModPlugin implements MarketContextList
 //        ColonyUIListener.addMarketListener(new GrandProjectLabelInjector());
     }
 }
-
 
 
 

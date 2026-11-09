@@ -79,6 +79,8 @@ public class FloatingCityThrusters extends BaseIndustry  implements MarketImmigr
         FloatingCityCondition.FloatingCityStage stage =FloatingCityCondition.getCurrentStage(market);
         if(deficitFuel==0){
             // add level till its max
+            float increaseBy = decreaseLevel*days*0.4f;
+            level+=increaseBy;
             if(level>=FloatingCityCondition.maxLevel){
                 level = FloatingCityCondition.maxLevel;
 

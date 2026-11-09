@@ -19,11 +19,14 @@ import data.kaysaar.aotd.vok.campaign.econ.megastructures.tradecontracts.BaseRes
 import data.kaysaar.aotd.vok.misc.AoTDMisc;
 
 import java.awt.*;
+import com.fs.starfarer.api.impl.campaign.aotd_entities.BiFrostGateEntity;
+import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts.BifrostSystemStructure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class BifrostSection extends BaseMegastructureSection {
     public SectorEntityToken gateTiedTo;
+    public BifrostSystemStructure constructionSite;
 
     public SectorEntityToken getGateTiedTo() {
         return gateTiedTo;
@@ -35,10 +38,12 @@ public class BifrostSection extends BaseMegastructureSection {
     }
     public boolean restorationStoppedDueToIndustryDelete = false;
     public void stopReconDueToLostOfControlCenter(){
+        if (constructionSite != null) return;
         AoTDTradeContractManager.getInstance().removeContract(getRestorationContractID());
         this.restorationStoppedDueToIndustryDelete = true;
     }
     public void restartReconDueToRegainingControlCenter(){
+        if (constructionSite != null) return;
         if(this.restorationStoppedDueToIndustryDelete){
             this.restorationStoppedDueToIndustryDelete = false;
             startRestoration();
@@ -86,6 +91,7 @@ public class BifrostSection extends BaseMegastructureSection {
         return (int) gateTiedTo.getMemory().getFloat("$cooldown");
     }
     public LinkedHashMap<String,Integer>getCurrentDemand(){
+        if (constructionSite != null) return AoTDMisc.getOrderedResourceMap(constructionSite.getMonthlyResNeeded());
         if(isRestored){
             LinkedHashMap<String,Integer>demand = new LinkedHashMap<>();
             for (Map.Entry<String, Integer> entry : getDemandForGateMaintenance().entrySet()) {
@@ -101,6 +107,7 @@ public class BifrostSection extends BaseMegastructureSection {
 
     @Override
     public void startRestoration() {
+        if (constructionSite != null) return;
         isRestoring = true;
         if(AoTDTradeContractManager.getInstance().getActiveContracts().get(getRestorationContractID())!=null){
             BaseRestorationContract contract = (BaseRestorationContract) AoTDTradeContractManager.getInstance().getActiveContracts().get(getRestorationContractID());
@@ -124,7 +131,20 @@ public class BifrostSection extends BaseMegastructureSection {
     public String getRestorationContractID(){
         return getMegastructureTiedTo().getUniqueGenId()+"_"+this.getSpec().getId()+"_"+getStarSystemAPI().getId();
     }
+    @Override
+    public float getProgressOfRestoration() {
+        return constructionSite == null ? super.getProgressOfRestoration() : constructionSite.getBuildOrUpgradeProgress();
+    }
+
     public void addStatusToGate(float totalWidth, float totalHeight, float yForLabel,TooltipMakerAPI tooltip){
+        if (constructionSite != null && !BiFrostGateEntity.canUseBifrostGates()) {
+            tooltip.addPara("Paused - Control Center required",Misc.getNegativeHighlightColor(),1f).setAlignment(Alignment.MID);
+            return;
+        }
+        if (isRestored && isDisabled) {
+            tooltip.addPara("Deactivated",Misc.getGrayColor(),1f).setAlignment(Alignment.MID);
+            return;
+        }
         if(isRestoring){
             String percent = Math.round(getProgressOfRestoration()*100f)+"%";
             tooltip.addPara("Under Construction ("+percent+")",Misc.getTooltipTitleAndLightHighlightColor(),1f).setAlignment(Alignment.MID);
@@ -173,6 +193,7 @@ public class BifrostSection extends BaseMegastructureSection {
 
     public void setDisabled(boolean disabled) {
         isDisabled = disabled;
+        ((BifrostMegastructure) getMegastructureTiedTo()).updateIsolation(starSystemAPI);
     }
 
     public boolean isDisabled() {
@@ -185,12 +206,14 @@ public class BifrostSection extends BaseMegastructureSection {
     @Override
     public void applyEffectOfSection() {
         super.applyEffectOfSection();
+        ((BifrostMegastructure) getMegastructureTiedTo()).updateIsolation(starSystemAPI);
     }
 
 
 
     @Override
     public void advance(float amount) {
+        if (constructionSite != null) return;
         super.advance(amount);
         MarketAPI market = null;
         for (MarketAPI marketAPI : Global.getSector().getEconomy().getMarkets(starSystemAPI)) {
@@ -236,7 +259,10 @@ public class BifrostSection extends BaseMegastructureSection {
             gateTiedTo = BifrostMegastructure.spawnGate(getData());
         }
 
-
+        if (Global.getSettings().getModManager().isModEnabled("aotd_theory_of_toolbox")) {
+            BifrostSystemStructure.attachExistingGate(gateTiedTo);
+        }
+        ((BifrostMegastructure) getMegastructureTiedTo()).updateIsolation(starSystemAPI);
     }
 
     @Override

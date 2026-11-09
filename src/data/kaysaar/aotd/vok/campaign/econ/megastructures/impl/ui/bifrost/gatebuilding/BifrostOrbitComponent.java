@@ -100,6 +100,13 @@ public class BifrostOrbitComponent extends MapOrbitRenderer {
         // Keep radius in WORLD units so it’s robust to zoom changes
         float radiusUI = Misc.getDistance(new Vector2f(cxUI, cyUI), new Vector2f(fxUI, fyUI));
         savedRadiusWorld = radiusUI / Math.max(1e-6f, scale);
+        if (currentlyCenteredAround.getToken() instanceof PlanetAPI planet) {
+            if (!planet.isStar() && !planet.isBlackHole()) {
+                savedRadiusWorld = Math.min(planet.getRadius() * 3f, Math.max(planet.getRadius() * 1.5f, savedRadiusWorld));
+            } else {
+                savedRadiusWorld = Math.min(25000f, Math.max(planet.getRadius() * 2f, savedRadiusWorld));
+            }
+        }
         savedCordsOfGate = mainComponent.getMapZoom().calculateMouseToWorldCords();
         followLocked = true;
     }

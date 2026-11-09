@@ -67,8 +67,14 @@ public class BifrostInfoSection implements ExtendedUIPanelPlugin {
             String per = Misc.getRoundedValueMaxOneAfterDecimal(bonus)+"%";
             tooltip.addPara("Total accessibility bonus across entire empire : %s",3f,Color.ORANGE,per);
         }
+        addGate = null;
+        if (Global.getSettings().getModManager().isModEnabled("aotd_theory_of_toolbox")) {
+            tooltip.addPara("New Bifrost Gates must be constructed through the %s menu in the selected star system.",10f,Misc.getHighlightColor(),"System Structures");
+            tooltip.addPara("Bifrost Gates connect isolated systems to the rest of the Sector. Removing the gate restores the system's isolation.",5f);
+        }
+        else {
         addGate = tooltip.addButton("Order construction of new gate",null,Misc.getBasePlayerColor(),Misc.getDarkPlayerColor(),Alignment.MID,CutStyle.TL_BR,componentPanel.getPosition().getWidth()-15,25,10f);
-
+        }
 
         componentPanel.addUIElement(tooltip).inTL(0,0);
         mainPanel.addComponent(componentPanel).inTL(0,0);

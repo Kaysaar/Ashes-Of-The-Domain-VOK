@@ -389,14 +389,17 @@ public class AoTDMainResearchManager {
 
         return haveFactionResearchedCertainTech(factionCommingPlayer, id) || haveFactionResearchedCertainTech(Global.getSector().getPlayerFaction(), id);
     }
-
+    public boolean isAvailableForFaction(String id, FactionAPI factionAPI) {
+        if(factionAPI==null)return false;
+        return getSpecificFactionManager(factionAPI).haveResearched(id);
+    }
     public boolean isAvailableForThisMarket(String id, MarketAPI market) {
         if(market==null)return true;
         if (getSpecificFactionManager(market.getFaction()) == null) return false;
         if (market.isPlayerOwned() || market.getFaction().isPlayerFaction()) {
             return isResearchedForPlayer(id);
         }
-        return getSpecificFactionManager(market.getFaction()).haveResearched(id);
+        return isAvailableForFaction(id, market.getFaction());
     }
 
     public AoTDFactionResearchManager getManagerForPlayer() {

@@ -16,8 +16,32 @@ import data.kaysaar.aotd.vok.campaign.econ.megastructures.models.BaseMegastructu
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import data.kaysaar.aotd.tot.ids.AoTDTags;
 
 public class BifrostMegastructure extends BaseMegastructureScript {
+    public static final String ISOLATION_REMOVED = "$aotd_bifrost_removed_isolation";
+
+    public void updateIsolation(StarSystemAPI system) {
+        if (system == null || !Global.getSettings().getModManager().isModEnabled("aotd_theory_of_toolbox")) return;
+        boolean connected = false;
+        for (BifrostSection section : getSections()) {
+            SectorEntityToken gate = section.getGateTiedTo();
+            if (section.getStarSystemAPI() == system && section.isRestored && !section.isDisabled()
+                    && gate != null && !gate.isExpired() && gate.getContainingLocation() == system) {
+                connected = true;
+                break;
+            }
+        }
+        if (connected && system.hasTag(AoTDTags.AOTD_ISOLATED_SYSTEM)) {
+            system.getMemoryWithoutUpdate().set(ISOLATION_REMOVED,true);
+            system.removeTag(AoTDTags.AOTD_ISOLATED_SYSTEM);
+        }
+        else if (!connected && system.getMemoryWithoutUpdate().getBoolean(ISOLATION_REMOVED)) {
+            system.addTag(AoTDTags.AOTD_ISOLATED_SYSTEM);
+            system.getMemoryWithoutUpdate().unset(ISOLATION_REMOVED);
+        }
+    }
+
     @Override
     public void trueInit(String specId, SectorEntityToken entityTiedTo, MarketAPI marketTiedTo) {
         this.specId = specId;
@@ -69,7 +93,7 @@ public class BifrostMegastructure extends BaseMegastructureScript {
     public ArrayList<BifrostSection> getActiveSections() {
         ArrayList<BifrostSection>sections =getSections();
         sections.removeIf(BifrostSection::isDisabled);
-        sections.removeIf(x->x.isRestoring);
+        sections.removeIf(x->!x.isRestored || x.getGateTiedTo() == null || x.getGateTiedTo().isExpired());
         return sections;
     }
     public ArrayList<BifrostSection> getBuiltSections() {
@@ -110,7 +134,7 @@ public class BifrostMegastructure extends BaseMegastructureScript {
     }
     @Override
     public void advance(float amount) {
-        for (BaseMegastructureSection megaStructureSection : megaStructureSections) {
+        for (BaseMegastructureSection megaStructureSection : new ArrayList<>(megaStructureSections)) {
             megaStructureSection.advance(amount);
         }
     }
@@ -126,11 +150,15 @@ public class BifrostMegastructure extends BaseMegastructureScript {
 
     public void removeBifrostGate(BifrostSection section) {
         if (section.getGateTiedTo() != null) {
-            Misc.fadeAndExpire(section.getGateTiedTo());
+            SectorEntityToken gate = section.getGateTiedTo();
+            SectorEntityToken focus = gate.getOrbitFocus();
+            if (focus != null && focus.getMarket() != null) focus.getMarket().getConnectedEntities().remove(gate);
+            Misc.fadeAndExpire(gate);
         }
         section.setGateTiedTo(null);
         section.aboutToGetRemoved();
         megaStructureSections.remove(section);
+        updateIsolation(section.getStarSystemAPI());
 
     }
     public static SectorEntityToken spawnGate(MarketAPI market) {

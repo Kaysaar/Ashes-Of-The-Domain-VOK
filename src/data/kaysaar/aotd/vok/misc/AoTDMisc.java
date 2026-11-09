@@ -21,8 +21,7 @@ import com.fs.starfarer.api.loading.VariantSource;
 import com.fs.starfarer.api.loading.WingRole;
 import com.fs.starfarer.api.ui.*;
 import com.fs.starfarer.api.util.Misc;
-import data.kaysaar.aotd.tot.plugins.AoTDCommodityEconSpecManager;
-import data.kaysaar.aotd.tot.produciton.specs.AoTDProductionSpecManager;
+
 import data.kaysaar.aotd.vok.Ids.AoTDTechIds;
 
 import data.kaysaar.aotd.vok.campaign.econ.conditions.NidavelirComplex;
@@ -81,13 +80,7 @@ public class AoTDMisc {
         }
         return null;
     }
-    public static LinkedHashMap<String,Integer>getTransformedCommodityMap(LinkedHashMap<String,Integer>map,boolean isDemand,int externalMult){
-        LinkedHashMap<String,Integer>newOne = new LinkedHashMap<>();
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            newOne.put(entry.getKey(), AoTDCommodityEconSpecManager.getCargoAmountFromSupplyOrDemand(entry.getValue(),isDemand,entry.getKey())*externalMult);
-        }
-        return newOne;
-    }
+
     public static int getMonthsFromNextMonth(float daysLeft) {
         if (daysLeft <= 0f) return 0;
 
@@ -226,12 +219,7 @@ public class AoTDMisc {
         if (input == null || input.isEmpty()) return ordered;
 
         // First: explicitly ordered items
-        for (String orderedId : AoTDProductionSpecManager.orderedItemsForUI) {
-            Integer amount = input.get(orderedId);
-            if (amount != null && amount > 0) {
-                ordered.put(orderedId, amount);
-            }
-        }
+
 
         // Then: everything else, stable and predictable
         input.entrySet().stream()

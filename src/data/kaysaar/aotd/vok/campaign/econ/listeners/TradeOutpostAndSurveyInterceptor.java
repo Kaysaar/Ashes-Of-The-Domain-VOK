@@ -67,28 +67,28 @@ public class TradeOutpostAndSurveyInterceptor implements MarketUIListener {
             }
             if(ctx.market.getContainingLocation()!=null&&ctx.market.getContainingLocation().hasTag(Tags.SYSTEM_ABYSSAL)&&ctx.market.getStarSystem().getId().equals("limbo")){
                 ///TODO- LATER
-//               Object plSurveyPanel = ReflectionUtilis.getChildrenCopy((UIPanelAPI) ReflectionUtilis.getChildrenCopy(ctx.surveyPanel).get(2)).get(0);
-//               if(plSurveyPanel instanceof TooltipMakerAPI tl){
-//                   if(tl.getPrev() instanceof LabelAPI label){
-//                       if(label.getText().contains("abyssal hyperspace")){
-//                           tl.addPara("Unless someone is willing to challenge that assumption.", Global.getSettings().getFactionSpec(Factions.DWELLER).getBaseUIColor(),5f);
-//                           ButtonAPI colonize = ReflectionUtilis.findButtonWithText(ctx.surveyPanel,"Establish colony...",true,true);
-//                           CargoAPI playerCargo = Global.getSector().getPlayerFleet().getCargo();
-//                           SurveyPlugin plugin = (SurveyPlugin) Global.getSettings().getNewPluginInstance("surveyPlugin");
-//                           boolean met = true;
-//                            if(!Global.getSettings().isDevMode()){
-//                                for (Map.Entry<String, Integer> entry : plugin.getOutpostConsumed().entrySet()) {
-//                                    if(playerCargo.getQuantity(CargoAPI.CargoItemType.RESOURCES,entry.getKey())<entry.getValue()){
-//                                        met = false;
-//                                        break;
-//                                    }
-//                                }
-//                            }
-//
-//                           colonize.setEnabled(met);
-//                       }
-//                   }
-//               }
+               Object plSurveyPanel = ReflectionUtilis.getChildrenCopy((UIPanelAPI) ReflectionUtilis.getChildrenCopy(ctx.surveyPanel).get(2)).get(0);
+               if(plSurveyPanel instanceof TooltipMakerAPI tl){
+                   if(tl.getPrev() instanceof LabelAPI label){
+                       if(label.getText().contains("abyssal hyperspace")){
+                           tl.addPara("Unless someone is willing to challenge that assumption.", Global.getSettings().getFactionSpec(Factions.DWELLER).getBaseUIColor(),5f);
+                           ButtonAPI colonize = ReflectionUtilis.findButtonWithText(ctx.surveyPanel,"Establish colony...",true,true);
+                           CargoAPI playerCargo = Global.getSector().getPlayerFleet().getCargo();
+                           SurveyPlugin plugin = (SurveyPlugin) Global.getSettings().getNewPluginInstance("surveyPlugin");
+                           boolean met = true;
+                            if(!Global.getSettings().isDevMode()){
+                                for (Map.Entry<String, Integer> entry : plugin.getOutpostConsumed().entrySet()) {
+                                    if(playerCargo.getQuantity(CargoAPI.CargoItemType.RESOURCES,entry.getKey())<entry.getValue()){
+                                        met = false;
+                                        break;
+                                    }
+                                }
+                            }
+
+                           colonize.setEnabled(met);
+                       }
+                   }
+               }
             }
         }
         UIComponentAPI comp;

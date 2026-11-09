@@ -1,11 +1,13 @@
 package data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.scripts;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.InteractionDialogAPI;
 import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.Industry;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.aotd_entities.NidavelirShipyardVisual;
+import com.fs.starfarer.api.impl.campaign.ids.Factions;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import data.kaysaar.aotd.vok.campaign.econ.megastructures.impl.sections.nidavelir.BaseNidavelirSection;
@@ -28,6 +30,14 @@ public class NidavelirMegastructure extends BaseMegastructureScript {
         }
         return curr;
 
+    }
+
+    @Override
+    public String getCurrentImage() {
+        if(!getSectionById("nidavelir_nexus").isRestored()){
+            return Global.getSettings().getSpriteName("illustrations","nidavelir_destroyed");
+        }
+        return super.getCurrentImage();
     }
 
 
@@ -73,6 +83,7 @@ public class NidavelirMegastructure extends BaseMegastructureScript {
         super.trueInit(specId, entityTiedTo,tiedMarket);
         visual = (NidavelirShipyardVisual) entityTiedTo.getStarSystem().addCustomEntity(null, "Nid", "nid_shipyards_damaged", null).getCustomPlugin();
         visual.getEntity().setLocation(0,30000);
+        visual.getEntity().setFaction(Factions.PLAYER);
         visual.trueInit("aotd_nidavelir_destroyed", null, (PlanetAPI) entityTiedTo);
     }
 

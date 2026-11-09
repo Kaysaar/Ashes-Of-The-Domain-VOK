@@ -1,11 +1,10 @@
 package data.kaysaar.aotd.vok.campaign.econ.colonydevelopment.impl;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.impl.campaign.ids.Commodities;
-import com.fs.starfarer.api.impl.campaign.ids.Factions;
-import com.fs.starfarer.api.impl.campaign.ids.Items;
-import com.fs.starfarer.api.impl.campaign.ids.Tags;
+import com.fs.starfarer.api.campaign.listeners.PlayerColonizationListener;
+import com.fs.starfarer.api.impl.campaign.ids.*;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.Fonts;
@@ -18,7 +17,7 @@ import java.util.LinkedHashMap;
 
 import static data.kaysaar.aotd.vok.misc.AoTDMisc.createTooltipOfResourcesForDialogConsumed;
 
-public class AbyssalFrontier extends BaseColonyDevelopment {
+public class AbyssalFrontier extends BaseColonyDevelopment implements PlayerColonizationListener {
     @Override
     public String getName() {
         return "Abyssal Frontier";
@@ -40,13 +39,24 @@ public class AbyssalFrontier extends BaseColonyDevelopment {
     }
 
     @Override
+    public void executePlanBeforeColonization(MarketAPI market) {
+    }
+
+    @Override
     public boolean canBeAppliedOnMarket(MarketAPI market) {
         return true;
     }
 
     @Override
     public void apply(MarketAPI market) {
-
+        if(market.getSize()!=4){
+            int curr = market.getSize();
+            market.setSize(4);
+            market.removeCondition("population_"+curr);
+            market.addCondition(Conditions.POPULATION_4);
+        }
+        market.getStats().getDynamic().getMod(
+                Stats.MAX_MARKET_SIZE).modifyFlat("aotd_abyssal",-Misc.getMaxMarketSize(market)+2,getName());
     }
 
     @Override
@@ -84,17 +94,24 @@ public class AbyssalFrontier extends BaseColonyDevelopment {
         tooltip.setParaFont(Fonts.DEFAULT_SMALL);
 
         tooltip.addPara(
-                "The colony %s trade with other markets unless a reliable means of circumventing the Abyss is established.",
+                "The colony %s trade with markets outside this star system until a reliable means of circumventing the Abyss is established.",
                 3f,
                 Misc.getNegativeHighlightColor(),
                 "cannot"
         );
 
         tooltip.addPara(
-                "The colony must remain largely %s to survive.",
+                "Until then, demand not met by local production or trade within the system is supplied through a special %s contract, drawing on your faction's available production elsewhere.",
+                3f,
+                Misc.getHighlightColor(),
+                "Colony Supply"
+        );
+
+        tooltip.addPara(
+                "These deliveries incur additional %s. Any demand the contract cannot fulfill remains a shortage.",
                 3f,
                 Misc.getNegativeHighlightColor(),
-                "self-reliant"
+                "transport costs"
         );
         tooltip.addPara(
                 "New unique structures will be available,in order to make this colony self-sufficient",
@@ -206,6 +223,16 @@ public class AbyssalFrontier extends BaseColonyDevelopment {
     }
     @Override
     public void unapply(MarketAPI market) {
+
+    }
+
+    @Override
+    public void reportPlayerColonizedPlanet(PlanetAPI planet) {
+
+    }
+
+    @Override
+    public void reportPlayerAbandonedColony(MarketAPI colony) {
 
     }
 }
