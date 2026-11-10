@@ -55,6 +55,10 @@ public class AbyssalFrontier extends BaseColonyDevelopment implements PlayerColo
             market.removeCondition("population_"+curr);
             market.addCondition(Conditions.POPULATION_4);
         }
+        if(market.hasIndustry(Industries.POPULATION)){
+            market.getIndustry(Industries.POPULATION).getIncome().modifyMult("aotd_abyssal",0,"Abyssal Frontier");
+        }
+
         market.getStats().getDynamic().getMod(
                 Stats.MAX_MARKET_SIZE).modifyFlat("aotd_abyssal",-Misc.getMaxMarketSize(market)+2,getName());
     }
